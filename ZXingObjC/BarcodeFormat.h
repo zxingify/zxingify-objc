@@ -1,91 +1,86 @@
 /**
  * Enumerates barcode formats known to this package. Please keep alphabetized.
- * 
+ *
  * @author Sean Owen
  */
+typedef enum {
+  /**
+   * Aztec 2D barcode format.
+   */
+  kBarcodeAztec,
 
-@interface BarcodeFormat : NSObject
+  /**
+   * CODABAR 1D format.
+   */
+  kBarcodeCodabar,
 
-- (id)initWithName:(NSString *)name;
+  /**
+   * Code 39 1D format.
+   */
+  kBarcodeCode39,
 
-/**
- * Aztec 2D barcode format.
- */
-+ (BarcodeFormat *)AZTEC;
+  /**
+   * Code 93 1D format.
+   */
+  kBarcodeCode93,
 
-/**
- * CODABAR 1D format.
- */
-+ (BarcodeFormat *)CODABAR;
+  /**
+   * Code 128 1D format.
+   */
+  kBarcodeCode128,
 
-/**
- * Code 39 1D format.
- */
-+ (BarcodeFormat *)CODE_39;
+  /**
+   * Data Matrix 2D barcode format.
+   */
+  kBarcodeDataMatrix,
 
-/**
- * Code 93 1D format.
- */
-+ (BarcodeFormat *)CODE_93;
+  /**
+   * EAN-8 1D format.
+   */
+  kBarcodeEan8,
 
-/**
- * Code 128 1D format.
- */
-+ (BarcodeFormat *)CODE_128;
+  /**
+   * EAN-13 1D format.
+   */
+  kBarcodeEan13,
 
-/**
- * Data Matrix 2D barcode format.
- */
-+ (BarcodeFormat *)DATA_MATRIX;
+  /**
+   * ITF (Interleaved Two of Five) 1D format.
+   */
+  kBarcodeEanITF,
 
-/**
- * EAN-8 1D format.
- */
-+ (BarcodeFormat *)EAN_8;
+  /**
+   * PDF417 format.
+   */
+  kBarcodePDF417,
 
-/**
- * EAN-13 1D format.
- */
-+ (BarcodeFormat *)EAN_13;
+  /**
+   * QR Code 2D barcode format.
+   */
+  kBarcodeQRCode,
 
-/**
- * ITF (Interleaved Two of Five) 1D format.
- */
-+ (BarcodeFormat *)ITF;
+  /**
+   * RSS 14
+   */
+  kBarcodeRSS14,
 
-/**
- * PDF417 format.
- */
-+ (BarcodeFormat *)PDF_417;
+  /**
+   * RSS EXPANDED
+   */
+  kBarcodeRSSExpanded,
 
-/**
- * QR Code 2D barcode format.
- */
-+ (BarcodeFormat *)QR_CODE;
+  /**
+   * UPC-A 1D format.
+   */
+  kBarcodeUPCA,
 
-/**
- * RSS 14
- */
-+ (BarcodeFormat *)RSS_14;
+  /**
+   * UPC-E 1D format.
+   */
+  kBarcodeUPCE,
 
-/**
- * RSS EXPANDED
- */
-+ (BarcodeFormat *)RSS_EXPANDED;
-
-/**
- * UPC-A 1D format.
- */
-+ (BarcodeFormat *)UPC_A;
-
-/**
- * UPC-E 1D format.
- */
-+ (BarcodeFormat *)UPC_E;
-
-/**
- * UPC/EAN extension format. Not a stand-alone format.
- */
-+ (BarcodeFormat *)UPC_EAN_EXTENSION;
-
-@end
+  /**
+   * UPC/EAN extension format. Not a stand-alone format.
+   */
+  kBarcodeUPCEANExtension
+} BarcodeFormat;

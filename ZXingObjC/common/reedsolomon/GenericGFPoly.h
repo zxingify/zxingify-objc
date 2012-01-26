@@ -1,3 +1,4 @@
+#import "GenericGF.h"
 
 /**
  * <p>Represents a polynomial whose coefficients are elements of a GF.

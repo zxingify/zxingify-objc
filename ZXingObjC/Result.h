@@ -1,5 +1,5 @@
-#import "NSEnumerator.h"
-#import "NSMutableDictionary.h"
+#import "BarcodeFormat.h"
+#import "ResultMetadataType.h"
 
 /**
  * <p>Encapsulates the result of decoding a barcode within an image.</p>
@@ -11,20 +11,20 @@
   NSString * text;
   NSArray * rawBytes;
   NSArray * resultPoints;
-  BarcodeFormat * format;
+  BarcodeFormat format;
   NSMutableDictionary * resultMetadata;
   long timestamp;
 }
 
-@property(nonatomic, retain, readonly) NSString * text;
-@property(nonatomic, retain, readonly) NSArray * rawBytes;
-@property(nonatomic, retain, readonly) NSArray * resultPoints;
-@property(nonatomic, retain, readonly) BarcodeFormat * barcodeFormat;
-@property(nonatomic, retain, readonly) NSMutableDictionary * resultMetadata;
+@property(nonatomic, copy) NSString * text;
+@property(nonatomic, retain) NSArray * rawBytes;
+@property(nonatomic, retain) NSArray * resultPoints;
+@property(nonatomic, assign) BarcodeFormat barcodeFormat;
+@property(nonatomic, retain) NSMutableDictionary * resultMetadata;
 @property(nonatomic, readonly) long timestamp;
-- (id) init:(NSString *)text rawBytes:(NSArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat *)format;
-- (id) init:(NSString *)text rawBytes:(NSArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat *)format timestamp:(long)timestamp;
-- (void) putMetadata:(ResultMetadataType *)type value:(NSObject *)value;
+- (id) init:(NSString *)text rawBytes:(NSArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat)format;
+- (id) init:(NSString *)text rawBytes:(NSArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat)format timestamp:(long)timestamp;
+- (void) putMetadata:(ResultMetadataType)type value:(id)value;
 - (void) putAllMetadata:(NSMutableDictionary *)metadata;
 - (void) addResultPoints:(NSArray *)newPoints;
 - (NSString *) description;

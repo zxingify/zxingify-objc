@@ -1,20 +1,16 @@
+#import "ParsedResult.h"
 
 /**
  * @author Sean Owen
  */
 
-@interface GeoParsedResult : ParsedResult {
-  double latitude;
-  double longitude;
-  double altitude;
-  NSString * query;
-}
+@interface GeoParsedResult : ParsedResult
 
-@property(nonatomic, retain, readonly) NSString * geoURI;
-@property(nonatomic, readonly) double latitude;
-@property(nonatomic, readonly) double longitude;
-@property(nonatomic, readonly) double altitude;
-@property(nonatomic, retain, readonly) NSString * query;
-@property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query;
+@property(nonatomic, assign) double latitude;
+@property(nonatomic, assign) double longitude;
+@property(nonatomic, assign) double altitude;
+@property(nonatomic, copy) NSString * query;
+
+- (id) initWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query;
+
 @end

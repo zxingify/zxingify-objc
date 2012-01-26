@@ -5,73 +5,65 @@
 @synthesize text;
 @synthesize rawBytes;
 @synthesize resultPoints;
-@synthesize barcodeFormat;
+@synthesize barcodeFormat=format;
 @synthesize resultMetadata;
 @synthesize timestamp;
 
-- (id) init:(NSString *)text rawBytes:(NSArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat *)format {
-  if (self = [self init:text rawBytes:rawBytes resultPoints:resultPoints format:format timestamp:[System currentTimeMillis]]) {
+- (id) init:(NSString *)aText rawBytes:(NSArray *)aRawBytes resultPoints:(NSArray *)aResultPoints format:(BarcodeFormat)aFormat {
+  if (self = [self init:aText rawBytes:aRawBytes resultPoints:aResultPoints format:aFormat timestamp:CFAbsoluteTimeGetCurrent()]) {
   }
   return self;
 }
 
-- (id) init:(NSString *)text rawBytes:(NSArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat *)format timestamp:(long)timestamp {
+- (id) init:(NSString *)aText rawBytes:(NSArray *)aRawBytes resultPoints:(NSArray *)aResultPoints format:(BarcodeFormat)aFormat timestamp:(long)aTimestamp {
   if (self = [super init]) {
-    if (text == nil && rawBytes == nil) {
-      @throw [[[IllegalArgumentException alloc] init:@"Text and bytes are null"] autorelease];
+    if (aText == nil && aRawBytes == nil) {
+      @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                     reason:@"Text and bytes are null"
+                                   userInfo:nil];
     }
-    text = text;
-    rawBytes = rawBytes;
-    resultPoints = resultPoints;
-    format = format;
-    resultMetadata = nil;
-    timestamp = timestamp;
+    self.text = aText;
+    self.rawBytes = aRawBytes;
+    self.resultPoints = aResultPoints;
+    self.barcodeFormat = aFormat;
+    self.resultMetadata = nil;
+    timestamp = aTimestamp;
   }
   return self;
 }
 
-- (void) putMetadata:(ResultMetadataType *)type value:(NSObject *)value {
+- (void) putMetadata:(ResultMetadataType)type value:(id)value {
   if (resultMetadata == nil) {
-    resultMetadata = [[[NSMutableDictionary alloc] init:3] autorelease];
+    self.resultMetadata = [[[NSMutableDictionary alloc] init] autorelease];
   }
-  [resultMetadata setObject:type param1:value];
+  [self.resultMetadata setObject:[NSNumber numberWithInt:type] forKey:value];
 }
 
 - (void) putAllMetadata:(NSMutableDictionary *)metadata {
   if (metadata != nil) {
-    if (resultMetadata == nil) {
-      resultMetadata = metadata;
-    }
-     else {
-      NSEnumerator * e = [metadata keys];
-
-      while ([e hasMoreElements]) {
-        ResultMetadataType * key = (ResultMetadataType *)[e nextObject];
-        NSObject * value = [metadata objectForKey:key];
-        [resultMetadata setObject:key param1:value];
+    if (self.resultMetadata == nil) {
+      self.resultMetadata = metadata;
+    } else {
+      for (id key in [metadata allKeys]) {
+        id value = [metadata objectForKey:key];
+        [resultMetadata setObject:value forKey:key];
       }
-
     }
   }
 }
 
 - (void) addResultPoints:(NSArray *)newPoints {
-  if (resultPoints == nil) {
-    resultPoints = newPoints;
-  }
-   else if (newPoints != nil && newPoints.length > 0) {
-    NSArray * allPoints = [NSArray array];
-    [System arraycopy:resultPoints param1:0 param2:allPoints param3:0 param4:resultPoints.length];
-    [System arraycopy:newPoints param1:0 param2:allPoints param3:resultPoints.length param4:newPoints.length];
-    resultPoints = allPoints;
+  if (self.resultPoints == nil) {
+    self.resultPoints = newPoints;
+  } else if (newPoints != nil && [newPoints count] > 0) {
+    self.resultPoints = [self.resultPoints arrayByAddingObjectsFromArray:newPoints];
   }
 }
 
 - (NSString *) description {
   if (text == nil) {
-    return [[@"[" stringByAppendingString:rawBytes.length] stringByAppendingString:@" bytes]"];
-  }
-   else {
+    return [NSString stringWithFormat:@"[%d]", [rawBytes count]];
+  } else {
     return text;
   }
 }
@@ -80,7 +72,6 @@
   [text release];
   [rawBytes release];
   [resultPoints release];
-  [format release];
   [resultMetadata release];
   [super dealloc];
 }

@@ -1,4 +1,3 @@
-#import "NSMutableDictionary.h"
 #import "BarcodeFormat.h"
 #import "WriterException.h"
 #import "BitMatrix.h"

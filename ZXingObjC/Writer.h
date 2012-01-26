@@ -1,5 +1,4 @@
 #import "BitMatrix.h"
-#import "NSMutableDictionary.h"
 
 /**
  * The base class for all objects which encode/generate a barcode image.

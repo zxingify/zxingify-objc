@@ -5,7 +5,6 @@
 #import "Result.h"
 #import "ResultPoint.h"
 #import "BitArray.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>

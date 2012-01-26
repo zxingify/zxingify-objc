@@ -1,5 +1,6 @@
+#import "EmailAddressParsedResult.h"
 #import "Result.h"
-#import "NSMutableDictionary.h"
+#import "ResultParser.h"
 
 /**
  * Represents a result that encodes an e-mail address, either as a plain address
@@ -8,8 +9,8 @@
  * @author Sean Owen
  */
 
-@interface EmailAddressResultParser : ResultParser {
-}
+@interface EmailAddressResultParser : ResultParser
 
 + (EmailAddressParsedResult *) parse:(Result *)result;
+
 @end

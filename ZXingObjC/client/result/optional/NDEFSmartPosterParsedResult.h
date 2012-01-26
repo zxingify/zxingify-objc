@@ -10,15 +10,13 @@ extern int const ACTION_DO;
 extern int const ACTION_SAVE;
 extern int const ACTION_OPEN;
 
-@interface NDEFSmartPosterParsedResult : ParsedResult {
-  NSString * title;
-  NSString * uri;
-  int action;
-}
+@interface NDEFSmartPosterParsedResult : ParsedResult
 
-@property(nonatomic, retain, readonly) NSString * title;
-@property(nonatomic, retain, readonly) NSString * uRI;
-@property(nonatomic, readonly) int action;
-@property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init:(int)action uri:(NSString *)uri title:(NSString *)title;
+@property(nonatomic, copy) NSString * title;
+@property(nonatomic, copy) NSString * uri;
+@property(nonatomic, assign) int action;
+
+- (id) initWithAction:(int)action uri:(NSString *)uri title:(NSString *)title;
+- (NSString *) displayResult;
+
 @end

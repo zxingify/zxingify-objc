@@ -2,9 +2,9 @@
 
 @implementation DecodedObject
 
-- (id) initWithNewPosition:(int)newPosition {
+- (id) initWithNewPosition:(int)aNewPosition {
   if (self = [super init]) {
-    newPosition = newPosition;
+    newPosition = aNewPosition;
   }
   return self;
 }

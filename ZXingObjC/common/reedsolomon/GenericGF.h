@@ -1,3 +1,4 @@
+#import "GenericGFPoly.h"
 
 /**
  * <p>This class contains utility methods for performing mathematical operations over
@@ -11,17 +12,9 @@
  * @author David Olivier
  */
 
-extern GenericGF * const AZTEC_DATA_12;
-extern GenericGF * const AZTEC_DATA_10;
-extern GenericGF * const AZTEC_DATA_6;
-extern GenericGF * const AZTEC_PARAM;
-extern GenericGF * const QR_CODE_FIELD_256;
-extern GenericGF * const DATA_MATRIX_FIELD_256;
-extern GenericGF * const AZTEC_DATA_8;
-
 @interface GenericGF : NSObject {
-  NSArray * expTable;
-  NSArray * logTable;
+  NSMutableArray * expTable;
+  NSMutableArray * logTable;
   GenericGFPoly * zero;
   GenericGFPoly * one;
   int size;
@@ -30,7 +23,16 @@ extern GenericGF * const AZTEC_DATA_8;
 }
 
 @property(nonatomic, readonly) int size;
-- (id) init:(int)primitive size:(int)size;
+
++ (GenericGF *)AztecData12;
++ (GenericGF *)AztecData10;
++ (GenericGF *)AztecData6;
++ (GenericGF *)AztecDataParam;
++ (GenericGF *)QrCodeField256;
++ (GenericGF *)DataMatrixField256;
++ (GenericGF *)AztecData8;
+
+- (id) initWithPrimitive:(int)primitive size:(int)size;
 - (GenericGFPoly *) getZero;
 - (GenericGFPoly *) getOne;
 - (GenericGFPoly *) buildMonomial:(int)degree coefficient:(int)coefficient;
@@ -39,4 +41,5 @@ extern GenericGF * const AZTEC_DATA_8;
 - (int) log:(int)a;
 - (int) inverse:(int)a;
 - (int) multiply:(int)a b:(int)b;
+
 @end

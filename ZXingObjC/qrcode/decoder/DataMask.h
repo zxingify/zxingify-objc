@@ -1,4 +1,5 @@
 #import "BitMatrix.h"
+#import "DataMask.h"
 
 /**
  * 000: mask bits for which (x + y) mod 2 == 0

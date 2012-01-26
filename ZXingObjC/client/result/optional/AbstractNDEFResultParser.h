@@ -1,5 +1,4 @@
 #import "ResultParser.h"
-#import "UnsupportedEncodingException.h"
 
 /**
  * <p>Superclass for classes encapsulating results in the NDEF format.

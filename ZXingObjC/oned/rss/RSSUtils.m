@@ -8,8 +8,8 @@
   return self;
 }
 
-+ (NSArray *) getRSSwidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
-  NSArray * widths = [NSArray array];
++ (int *) getRSSwidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
+  int widths[elements];
   int bar;
   int narrowMask = 0;
 

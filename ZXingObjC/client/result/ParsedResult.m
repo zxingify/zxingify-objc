@@ -5,47 +5,45 @@
 @synthesize type;
 @synthesize displayResult;
 
-- (id) initWithType:(ParsedResultType *)type {
+- (id) initWithType:(ParsedResultType)aType {
   if (self = [super init]) {
-    type = type;
+    self.type = aType;
   }
   return self;
 }
 
 - (NSString *) displayResult {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 - (NSString *) description {
   return [self displayResult];
 }
 
-+ (void) maybeAppend:(NSString *)value result:(StringBuffer *)result {
++ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result {
   if (value != nil && [value length] > 0) {
     if ([result length] > 0) {
-      [result append:'\n'];
+      [result appendString:@"\n"];
     }
-    [result append:value];
+    [result appendString:value];
   }
 }
 
-+ (void) maybeAppend:(NSArray *)value result:(StringBuffer *)result {
++ (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
 
-    for (int i = 0; i < value.length; i++) {
-      if (value[i] != nil && [value[i] count] > 0) {
+    for (int i = 0; i < [value count]; i++) {
+      if ([value objectAtIndex:i] && [[value objectAtIndex:i] length] > 0) {
         if ([result length] > 0) {
-          [result append:'\n'];
+          [result appendString:@"\n"];
         }
-        [result append:value[i]];
+        [result appendString:[value objectAtIndex:i]];
       }
     }
 
   }
-}
-
-- (void) dealloc {
-  [type release];
-  [super dealloc];
 }
 
 @end

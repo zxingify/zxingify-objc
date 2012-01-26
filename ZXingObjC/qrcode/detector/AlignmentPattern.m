@@ -2,9 +2,9 @@
 
 @implementation AlignmentPattern
 
-- (id) init:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize {
-  if (self = [super init:posX param1:posY]) {
-    estimatedModuleSize = estimatedModuleSize;
+- (id) init:(float)posX posY:(float)posY estimatedModuleSize:(float)anEstimatedModuleSize {
+  if (self = [super init:posX y:posY]) {
+    estimatedModuleSize = anEstimatedModuleSize;
   }
   return self;
 }
@@ -15,8 +15,8 @@
  * position and size -- meaning, it is at nearly the same center with nearly the same size.</p>
  */
 - (BOOL) aboutEquals:(float)moduleSize i:(float)i j:(float)j {
-  if ([Math abs:i - [self y]] <= moduleSize && [Math abs:j - [self x]] <= moduleSize) {
-    float moduleSizeDiff = [Math abs:moduleSize - estimatedModuleSize];
+  if (abs(i - y) <= moduleSize && abs(j - x) <= moduleSize) {
+    float moduleSizeDiff = abs(moduleSize - estimatedModuleSize);
     return moduleSizeDiff <= 1.0f || moduleSizeDiff / estimatedModuleSize <= 1.0f;
   }
   return NO;

@@ -8,10 +8,10 @@
 @synthesize cropSupported;
 @synthesize rotateSupported;
 
-- (id) init:(int)width height:(int)height {
+- (id) init:(int)aWidth height:(int)aHeight {
   if (self = [super init]) {
-    width = width;
-    height = height;
+    width = aWidth;
+    height = aHeight;
   }
   return self;
 }
@@ -30,6 +30,9 @@
  * @return An array containing the luminance data.
  */
 - (NSArray *) getRow:(int)y row:(NSArray *)row {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 
@@ -42,6 +45,9 @@
  * of the result.
  */
 - (NSArray *) matrix {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 
@@ -56,7 +62,9 @@
  * @return A cropped version of this object.
  */
 - (LuminanceSource *) crop:(int)left top:(int)top width:(int)width height:(int)height {
-  @throw [[[NSException alloc] init:@"This luminance source does not support cropping."] autorelease];
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:@"This luminance source does not support cropping."
+                               userInfo:nil];
 }
 
 
@@ -66,7 +74,9 @@
  * @return A rotated version of this object.
  */
 - (LuminanceSource *) rotateCounterClockwise {
-  @throw [[[NSException alloc] init:@"This luminance source does not support rotation."] autorelease];
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:@"This luminance source does not support rotation."
+                               userInfo:nil];
 }
 
 @end

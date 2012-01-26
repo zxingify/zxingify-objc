@@ -1,12 +1,13 @@
+#import "CharacterSetECI.h"
 #import "ECI.h"
 
 @implementation ECI
 
 @synthesize value;
 
-- (id) initWithValue:(int)value {
+- (id) initWithValue:(int)aValue {
   if (self = [super init]) {
-    value = value;
+    self.value = aValue;
   }
   return self;
 }
@@ -19,7 +20,9 @@
  */
 + (ECI *) getECIByValue:(int)value {
   if (value < 0 || value > 999999) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Bad ECI value: " stringByAppendingString:value]] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:[NSString stringWithFormat:@"Bad ECI value: %d", value]
+                                 userInfo:nil];
   }
   if (value < 900) {
     return [CharacterSetECI getCharacterSetECIByValue:value];

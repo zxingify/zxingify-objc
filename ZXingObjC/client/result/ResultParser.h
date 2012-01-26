@@ -1,3 +1,4 @@
+#import "ParsedResult.h"
 #import "Result.h"
 
 /**
@@ -15,8 +16,8 @@
 @interface ResultParser : NSObject
 
 + (ParsedResult *) parseResult:(Result *)theResult;
-+ (void) maybeAppend:(NSString *)value result:(StringBuffer *)result;
-+ (void) maybeAppend:(NSArray *)value result:(StringBuffer *)result;
++ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result;
++ (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
 + (NSArray *) maybeWrap:(NSString *)value;
 + (NSString *) unescapeBackslash:(NSString *)escaped;
 + (BOOL) isStringOfDigits:(NSString *)value length:(int)length;

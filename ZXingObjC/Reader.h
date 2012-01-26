@@ -1,4 +1,5 @@
-#import "NSMutableDictionary.h"
+#import "BinaryBitmap.h"
+#import "Result.h"
 
 /**
  * Implementations of this interface can decode an image of a barcode in some format into

@@ -6,11 +6,14 @@
 @synthesize startEnd;
 @synthesize resultPoints;
 
-- (id) init:(int)value startEnd:(NSArray *)startEnd start:(int)start end:(int)end rowNumber:(int)rowNumber {
+- (id) initWithValue:(int)aValue startEnd:(NSArray *)aStartEnd start:(int)aStart end:(int)anEnd rowNumber:(int)aRowNumber {
   if (self = [super init]) {
-    value = value;
-    startEnd = startEnd;
-    resultPoints = [NSArray arrayWithObjects:[[[ResultPoint alloc] init:(float)start param1:(float)rowNumber] autorelease], [[[ResultPoint alloc] init:(float)end param1:(float)rowNumber] autorelease], nil];
+    self.value = aValue;
+    self.startEnd = aStartEnd;
+    self.resultPoints = [NSArray arrayWithObjects:
+                         [[[ResultPoint alloc] init:(float)aStart y:(float)aRowNumber] autorelease],
+                         [[[ResultPoint alloc] init:(float)anEnd y:(float)aRowNumber] autorelease],
+                         nil];
   }
   return self;
 }

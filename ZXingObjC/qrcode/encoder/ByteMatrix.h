@@ -10,19 +10,18 @@
  */
 
 @interface ByteMatrix : NSObject {
-  NSArray * bytes;
+  char **bytes;
   int width;
   int height;
 }
 
-@property(nonatomic, readonly) int height;
-@property(nonatomic, readonly) int width;
-@property(nonatomic, retain, readonly) NSArray * array;
-- (id) init:(int)width height:(int)height;
+@property(nonatomic, assign) int height;
+@property(nonatomic, assign) int width;
+@property(nonatomic, readonly) char** array;
+- (id) initWithWidth:(int)width height:(int)height;
 - (char) get:(int)x y:(int)y;
-- (void) set:(int)x y:(int)y value:(char)value;
-- (void) set:(int)x y:(int)y value:(int)value;
-- (void) set:(int)x y:(int)y value:(BOOL)value;
+- (void) set:(int)x y:(int)y charValue:(char)value;
+- (void) set:(int)x y:(int)y intValue:(int)value;
+- (void) set:(int)x y:(int)y boolValue:(BOOL)value;
 - (void) clear:(char)value;
-- (NSString *) description;
 @end

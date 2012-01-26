@@ -2,7 +2,6 @@
 #import "Writer.h"
 #import "WriterException.h"
 #import "BitMatrix.h"
-#import "NSMutableDictionary.h"
 
 /**
  * This object renders a UPC-A code as a {@link BitMatrix}.

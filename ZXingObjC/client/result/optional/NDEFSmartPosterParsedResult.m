@@ -8,25 +8,24 @@ int const ACTION_OPEN = 2;
 @implementation NDEFSmartPosterParsedResult
 
 @synthesize title;
-@synthesize uRI;
+@synthesize uri;
 @synthesize action;
 @synthesize displayResult;
 
-- (id) init:(int)action uri:(NSString *)uri title:(NSString *)title {
-  if (self = [super init:ParsedResultType.NDEF_SMART_POSTER]) {
-    action = action;
-    uri = uri;
-    title = title;
+- (id) initWithAction:(int)anAction uri:(NSString *)aUri title:(NSString *)aTitle {
+  if (self = [super initWithType:kParsedResultTypeNDEFSMartPoster]) {
+    self.action = anAction;
+    self.uri = aUri;
+    self.title = aTitle;
   }
   return self;
 }
 
 - (NSString *) displayResult {
-  if (title == nil) {
-    return uri;
-  }
-   else {
-    return [[title stringByAppendingString:'\n'] stringByAppendingString:uri];
+  if (self.title == nil) {
+    return self.uri;
+  } else {
+    return [[self.title stringByAppendingString:@"\n"] stringByAppendingString:self.uri];
   }
 }
 

@@ -1,3 +1,4 @@
+#import "ParsedResultType.h"
 #import "Result.h"
 
 /**
@@ -12,14 +13,12 @@
  * @author Sean Owen
  */
 
-@interface ParsedResult : NSObject {
-  ParsedResultType * type;
-}
+@interface ParsedResult : NSObject
 
-@property(nonatomic, retain, readonly) ParsedResultType * type;
+@property(nonatomic, assign) ParsedResultType type;
 @property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) initWithType:(ParsedResultType *)type;
+- (id) initWithType:(ParsedResultType)type;
 - (NSString *) description;
-+ (void) maybeAppend:(NSString *)value result:(StringBuffer *)result;
-+ (void) maybeAppend:(NSArray *)value result:(StringBuffer *)result;
++ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result;
++ (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
 @end

@@ -1,4 +1,3 @@
-#import "NSMutableArray.h"
 #import "BitArray.h"
 
 /**

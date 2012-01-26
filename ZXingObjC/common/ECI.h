@@ -6,11 +6,11 @@
  * @author Sean Owen
  */
 
-@interface ECI : NSObject {
-  int value;
-}
+@interface ECI : NSObject
 
-@property(nonatomic, readonly) int value;
+@property(nonatomic, assign) int value;
+
 - (id) initWithValue:(int)value;
 + (ECI *) getECIByValue:(int)value;
+
 @end

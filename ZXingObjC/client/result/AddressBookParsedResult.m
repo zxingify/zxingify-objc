@@ -1,4 +1,5 @@
 #import "AddressBookParsedResult.h"
+#import "ParsedResultType.h"
 
 @implementation AddressBookParsedResult
 
@@ -14,35 +15,35 @@
 @synthesize birthday;
 @synthesize displayResult;
 
-- (id) init:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers emails:(NSArray *)emails note:(NSString *)note addresses:(NSArray *)addresses org:(NSString *)org birthday:(NSString *)birthday title:(NSString *)title url:(NSString *)url {
-  if (self = [super init:ParsedResultType.ADDRESSBOOK]) {
-    names = names;
-    pronunciation = pronunciation;
-    phoneNumbers = phoneNumbers;
-    emails = emails;
-    note = note;
-    addresses = addresses;
-    org = org;
-    birthday = birthday;
-    title = title;
-    url = url;
+- (id) init:(NSArray *)aNames pronunciation:(NSString *)aPronunciation phoneNumbers:(NSArray *)aPhoneNumbers emails:(NSArray *)aEmails note:(NSString *)aNote addresses:(NSArray *)anAddresses org:(NSString *)anOrg birthday:(NSString *)aBirthday title:(NSString *)aTitle url:(NSString *)aUrl {
+  if (self = [super initWithType:kParsedResultTypeAddressBook]) {
+    self.names = aNames;
+    self.pronunciation = aPronunciation;
+    self.phoneNumbers = aPhoneNumbers;
+    self.emails = aEmails;
+    self.note = aNote;
+    self.addresses = anAddresses;
+    self.org = anOrg;
+    self.birthday = aBirthday;
+    self.title = aTitle;
+    self.uRL = aUrl;
   }
   return self;
 }
 
 - (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:100] autorelease];
-  [self maybeAppend:names param1:result];
-  [self maybeAppend:pronunciation param1:result];
-  [self maybeAppend:title param1:result];
-  [self maybeAppend:org param1:result];
-  [self maybeAppend:addresses param1:result];
-  [self maybeAppend:phoneNumbers param1:result];
-  [self maybeAppend:emails param1:result];
-  [self maybeAppend:url param1:result];
-  [self maybeAppend:birthday param1:result];
-  [self maybeAppend:note param1:result];
-  return [result description];
+  NSMutableString * result = [NSMutableString string];
+  [ParsedResult maybeAppendArray:names result:result];
+  [ParsedResult maybeAppend:pronunciation result:result];
+  [ParsedResult maybeAppend:title result:result];
+  [ParsedResult maybeAppend:org result:result];
+  [ParsedResult maybeAppendArray:addresses result:result];
+  [ParsedResult maybeAppendArray:phoneNumbers result:result];
+  [ParsedResult maybeAppendArray:emails result:result];
+  [ParsedResult maybeAppend:uRL result:result];
+  [ParsedResult maybeAppend:birthday result:result];
+  [ParsedResult maybeAppend:note result:result];
+  return result;
 }
 
 - (void) dealloc {
@@ -55,7 +56,7 @@
   [org release];
   [birthday release];
   [title release];
-  [url release];
+  [uRL release];
   [super dealloc];
 }
 
