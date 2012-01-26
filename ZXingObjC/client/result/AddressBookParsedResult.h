@@ -16,8 +16,9 @@
 @property(nonatomic, copy) NSString * org;
 @property(nonatomic, copy) NSString * uRL;
 @property(nonatomic, copy) NSString * birthday;
-@property(nonatomic, copy) NSString * displayResult;
 
 - (id) init:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers emails:(NSArray *)emails note:(NSString *)note addresses:(NSArray *)addresses org:(NSString *)org birthday:(NSString *)birthday title:(NSString *)title url:(NSString *)url;
+
+- (NSString *) displayResult;
 
 @end

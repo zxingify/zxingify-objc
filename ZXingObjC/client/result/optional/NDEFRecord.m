@@ -7,14 +7,26 @@ NSString * const URI_WELL_KNOWN_TYPE = @"U";
 NSString * const SMART_POSTER_WELL_KNOWN_TYPE = @"Sp";
 NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
 
+@interface NDEFRecord () {
+  int header;
+  NSString * type;
+  NSArray * payload;
+  int totalRecordLength;
+}
+
+@property (nonatomic, copy) NSString *type;
+@property (nonatomic, retain) NSArray *payload;
+
+@end
+
 @implementation NDEFRecord
 
-- (id) init:(int)header type:(NSString *)type payload:(NSArray *)payload totalRecordLength:(int)totalRecordLength {
+- (id) init:(int)aHeader type:(NSString *)aType payload:(NSArray *)aPayload totalRecordLength:(int)aTotalRecordLength {
   if (self = [super init]) {
-    header = header;
-    type = type;
-    payload = payload;
-    totalRecordLength = totalRecordLength;
+    header = aHeader;
+    self.type = aType;
+    self.payload = aPayload;
+    totalRecordLength = aTotalRecordLength;
   }
   return self;
 }

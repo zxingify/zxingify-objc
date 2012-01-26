@@ -1,3 +1,4 @@
+#import "EmailAddressParsedResult.h"
 #import "SMTPResultParser.h"
 
 @implementation SMTPResultParser

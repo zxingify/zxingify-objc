@@ -1,4 +1,3 @@
-#import "NotFoundException.h"
 #import "ResultPoint.h"
 #import "BitMatrix.h"
 
@@ -13,17 +12,10 @@
  * @author David Olivier
  */
 
-@interface WhiteRectangleDetector : NSObject {
-  BitMatrix * image;
-  int height;
-  int width;
-  int leftInit;
-  int rightInit;
-  int downInit;
-  int upInit;
-}
+@interface WhiteRectangleDetector : NSObject 
 
 - (id) initWithImage:(BitMatrix *)image;
-- (id) init:(BitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y;
+- (id) initWithImage:(BitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y;
 - (NSArray *) detect;
+
 @end

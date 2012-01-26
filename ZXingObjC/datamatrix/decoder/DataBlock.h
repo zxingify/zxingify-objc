@@ -1,3 +1,4 @@
+#import "Version.h"
 
 /**
  * <p>Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into

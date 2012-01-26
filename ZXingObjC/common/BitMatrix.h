@@ -27,8 +27,10 @@
 @property(nonatomic, retain, readonly) NSArray * bottomRightOnBit;
 @property(nonatomic, readonly) int width;
 @property(nonatomic, readonly) int height;
+
 - (id) initWithDimension:(int)dimension;
-- (id) init:(int)width height:(int)height;
+- (id) initWithWidth:(int)width height:(int)height;
+
 - (BOOL) get:(int)x y:(int)y;
 - (void) set:(int)x y:(int)y;
 - (void) flip:(int)x y:(int)y;

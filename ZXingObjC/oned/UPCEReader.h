@@ -3,6 +3,7 @@
 #import "FormatException.h"
 #import "NotFoundException.h"
 #import "BitArray.h"
+#import "UPCEANReader.h"
 
 /**
  * <p>Implements decoding of the UPC-E format.</p>

@@ -6,15 +6,16 @@
  */
 
 @interface BitArray : NSObject {
-  NSArray * bits;
+  int* bits;
   int size;
 }
 
 @property(nonatomic, readonly) int size;
-@property(nonatomic, readonly) int sizeInBytes;
-@property(nonatomic, retain, readonly) NSArray * bitArray;
+@property(nonatomic, readonly) int* bits;
+
 - (id) init;
 - (id) initWithSize:(int)size;
+- (int) sizeInBytes;
 - (BOOL) get:(int)i;
 - (void) set:(int)i;
 - (void) flip:(int)i;
@@ -25,7 +26,8 @@
 - (void) appendBits:(int)value numBits:(int)numBits;
 - (void) appendBitArray:(BitArray *)other;
 - (void) xor:(BitArray *)other;
-- (void) toBytes:(int)bitOffset array:(NSArray *)array offset:(int)offset numBytes:(int)numBytes;
+- (void) toBytes:(int)bitOffset array:(char *)array offset:(int)offset numBytes:(int)numBytes;
+- (int*) bitArray;
 - (void) reverse;
-- (NSString *) description;
+
 @end

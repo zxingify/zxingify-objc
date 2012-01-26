@@ -1,23 +1,30 @@
 #import "BitArray.h"
 
+@interface BitArray ()
+
+@property (nonatomic, assign) int size;
+
+- (int *)makeArray:(int)size;
+
+@end
+
 @implementation BitArray
 
 @synthesize size;
-@synthesize sizeInBytes;
-@synthesize bitArray;
 
 - (id) init {
   if (self = [super init]) {
-    size = 0;
-    bits = [NSArray array];
+    self.size = 0;
+    bits = malloc(1);
+    bits[0] = 0;
   }
   return self;
 }
 
-- (id) initWithSize:(int)size {
+- (id) initWithSize:(int)aSize {
   if (self = [super init]) {
-    size = size;
-    bits = [self makeArray:size];
+    self.size = aSize;
+    bits = [self makeArray:aSize];
   }
   return self;
 }
@@ -26,10 +33,15 @@
   return (size + 7) >> 3;
 }
 
-- (void) ensureCapacity:(int)size {
-  if (size > bits.length << 5) {
-    NSArray * newBits = [self makeArray:size];
-    [System arraycopy:bits param1:0 param2:newBits param3:0 param4:bits.length];
+- (void) ensureCapacity:(int)aSize {
+  if (aSize > self.size << 5) {
+    int* newBits = [self makeArray:aSize];
+    
+    for (int i = 0; i < self.size; i++) {
+      newBits[i] = bits[i];
+    }
+
+    free(bits);
     bits = newBits;
   }
 }
@@ -80,9 +92,7 @@
  * Clears all bits (sets to false).
  */
 - (void) clear {
-  int max = bits.length;
-
-  for (int i = 0; i < max; i++) {
+  for (int i = 0; i < self.size; i++) {
     bits[i] = 0;
   }
 
@@ -100,7 +110,7 @@
  */
 - (BOOL) isRange:(int)start end:(int)end value:(BOOL)value {
   if (end < start) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Start greater than end" userInfo:nil];
   }
   if (end == start) {
     return YES;
@@ -148,7 +158,9 @@
  */
 - (void) appendBits:(int)value numBits:(int)numBits {
   if (numBits < 0 || numBits > 32) {
-    @throw [[[IllegalArgumentException alloc] init:@"Num bits must be between 0 and 32"] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:@"Num bits must be between 0 and 32"
+                                 userInfo:nil];
   }
   [self ensureCapacity:size + numBits];
 
@@ -169,11 +181,14 @@
 }
 
 - (void) xor:(BitArray *)other {
-  if (bits.length != other.bits.length) {
-    @throw [[[IllegalArgumentException alloc] init:@"Sizes don't match"] autorelease];
+  if (self.size != other.size) {
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:@"Sizes don't match"
+                                 userInfo:nil];
+    
   }
 
-  for (int i = 0; i < bits.length; i++) {
+  for (int i = 0; i < self.size; i++) {
     bits[i] ^= other.bits[i];
   }
 
@@ -188,7 +203,7 @@
  * @param offset position in array to start writing
  * @param numBytes how many bytes to write
  */
-- (void) toBytes:(int)bitOffset array:(NSArray *)array offset:(int)offset numBytes:(int)numBytes {
+- (void) toBytes:(int)bitOffset array:(char *)array offset:(int)offset numBytes:(int)numBytes {
 
   for (int i = 0; i < numBytes; i++) {
     int theByte = 0;
@@ -205,13 +220,15 @@
 
 }
 
+- (int*) bitArray {
+  return bits;
+}
 
 /**
  * Reverses all bits in the array.
  */
 - (void) reverse {
-  NSArray * newBits = [NSArray array];
-  int size = size;
+  int newBits[self.size];
 
   for (int i = 0; i < size; i++) {
     if ([self get:size - i - 1]) {
@@ -222,25 +239,25 @@
   bits = newBits;
 }
 
-+ (NSArray *) makeArray:(int)size {
-  return [NSArray array];
+- (int *) makeArray:(int)aSize {
+  return malloc((aSize + 31) >> 5);
 }
 
 - (NSString *) description {
-  StringBuffer * result = [[[StringBuffer alloc] init:size] autorelease];
+  NSMutableString* result = [NSMutableString string];
 
   for (int i = 0; i < size; i++) {
     if ((i & 0x07) == 0) {
-      [result append:' '];
+      [result appendString:@" "];
     }
-    [result append:[self get:i] ? 'X' : '.'];
+    [result appendString:[self get:i] ? @"X" : @"."];
   }
 
-  return [result description];
+  return result;
 }
 
 - (void) dealloc {
-  [bits release];
+  free(bits);
   [super dealloc];
 }
 

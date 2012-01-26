@@ -1,5 +1,5 @@
+#import "AbstractDoCoMoResultParser.h"
 #import "Result.h"
-#import "NSMutableArray.h"
 
 /**
  * Implements the "BIZCARD" address book entry format, though this has been
@@ -9,8 +9,8 @@
  * @author Sean Owen
  */
 
-@interface BizcardResultParser : AbstractDoCoMoResultParser {
-}
+@interface BizcardResultParser : AbstractDoCoMoResultParser
 
 + (AddressBookParsedResult *) parse:(Result *)result;
+
 @end

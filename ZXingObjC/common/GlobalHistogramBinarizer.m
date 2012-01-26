@@ -4,12 +4,18 @@ int const LUMINANCE_BITS = 5;
 int const LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
 int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
+@interface GlobalHistogramBinarizer ()
+
+- (void) initArrays:(int)luminanceSize;
+
+@end
+
 @implementation GlobalHistogramBinarizer
 
 @synthesize blackMatrix;
 
 - (id) initWithSource:(LuminanceSource *)source {
-  if (self = [super init:source]) {
+  if (self = [super initWithSource:source]) {
     luminances = nil;
     buckets = nil;
   }
@@ -20,7 +26,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   LuminanceSource * source = [self luminanceSource];
   int width = [source width];
   if (row == nil || [row size] < width) {
-    row = [[[BitArray alloc] init:width] autorelease];
+    row = [[[BitArray alloc] initWithSize:width] autorelease];
   }
    else {
     [row clear];

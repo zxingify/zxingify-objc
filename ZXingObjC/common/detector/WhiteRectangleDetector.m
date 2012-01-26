@@ -1,19 +1,39 @@
+#import "NotFoundException.h"
 #import "WhiteRectangleDetector.h"
+
+@interface WhiteRectangleDetector () {
+  int height;
+  int width;
+  int leftInit;
+  int rightInit;
+  int downInit;
+  int upInit;
+}
+
+@property (nonatomic, retain) BitMatrix *image;
+
+- (NSArray *) centerEdges:(ResultPoint *)y z:(ResultPoint *)z x:(ResultPoint *)x t:(ResultPoint *)t;
+- (BOOL) containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal;
+- (ResultPoint *) getBlackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
+- (int) distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
+
+@end
 
 int const INIT_SIZE = 30;
 int const CORR = 1;
 
 @implementation WhiteRectangleDetector
 
+@synthesize image;
 
 /**
  * @throws NotFoundException if image is too small
  */
-- (id) initWithImage:(BitMatrix *)image {
+- (id) initWithImage:(BitMatrix *)anImage {
   if (self = [super init]) {
-    image = image;
-    height = [image height];
-    width = [image width];
+    self.image = anImage;
+    height = [anImage height];
+    width = [anImage width];
     leftInit = (width - INIT_SIZE) >> 1;
     rightInit = (width + INIT_SIZE) >> 1;
     upInit = (height - INIT_SIZE) >> 1;
@@ -29,11 +49,11 @@ int const CORR = 1;
 /**
  * @throws NotFoundException if image is too small
  */
-- (id) init:(BitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y {
+- (id) initWithImage:(BitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y {
   if (self = [super init]) {
-    image = image;
-    height = [image height];
-    width = [image width];
+    self.image = anImage;
+    height = [anImage height];
+    width = [anImage width];
     int halfsize = initSize >> 1;
     leftInit = x - halfsize;
     rightInit = x + halfsize;
@@ -195,7 +215,7 @@ int const CORR = 1;
  * Ends up being a bit faster than Math.round(). This merely rounds its
  * argument to the nearest int, where x.5 rounds up.
  */
-+ (int) round:(float)d {
+- (int) round:(float)d {
   return (int)(d + 0.5f);
 }
 
@@ -207,18 +227,18 @@ int const CORR = 1;
   for (int i = 0; i < dist; i++) {
     int x = [self round:aX + i * xStep];
     int y = [self round:aY + i * yStep];
-    if ([image get:x param1:y]) {
-      return [[[ResultPoint alloc] init:x param1:y] autorelease];
+    if ([self.image get:x y:y]) {
+      return [[[ResultPoint alloc] init:x y:y] autorelease];
     }
   }
 
   return nil;
 }
 
-+ (int) distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
+- (int) distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
   float xDiff = aX - bX;
   float yDiff = aY - bY;
-  return [self round:(float)[Math sqrt:xDiff * xDiff + yDiff * yDiff]];
+  return [self round:(float)sqrt(xDiff * xDiff + yDiff * yDiff)];
 }
 
 
@@ -266,7 +286,7 @@ int const CORR = 1;
   if (horizontal) {
 
     for (int x = a; x <= b; x++) {
-      if ([image get:x param1:fixed]) {
+      if ([image get:x y:fixed]) {
         return YES;
       }
     }
@@ -275,7 +295,7 @@ int const CORR = 1;
    else {
 
     for (int y = a; y <= b; y++) {
-      if ([image get:fixed param1:y]) {
+      if ([image get:fixed y:y]) {
         return YES;
       }
     }

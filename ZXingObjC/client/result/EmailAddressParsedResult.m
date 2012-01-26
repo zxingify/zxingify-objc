@@ -1,4 +1,15 @@
 #import "EmailAddressParsedResult.h"
+#import "ParsedResultType.h"
+
+@interface EmailAddressParsedResult ()
+
+@property(nonatomic, retain) NSString * emailAddress;
+@property(nonatomic, retain) NSString * subject;
+@property(nonatomic, retain) NSString * body;
+@property(nonatomic, retain) NSString * mailtoURI;
+@property(nonatomic, retain) NSString * displayResult;
+
+@end
 
 @implementation EmailAddressParsedResult
 
@@ -8,12 +19,12 @@
 @synthesize mailtoURI;
 @synthesize displayResult;
 
-- (id) init:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI {
-  if (self = [super init:ParsedResultType.EMAIL_ADDRESS]) {
-    emailAddress = emailAddress;
-    subject = subject;
-    body = body;
-    mailtoURI = mailtoURI;
+- (id) init:(NSString *)anEmailAddress subject:(NSString *)aSubject body:(NSString *)aBody mailtoURI:(NSString *)aMailtoURI {
+  if (self = [super initWithType:kParsedResultTypeEmailAddress]) {
+    self.emailAddress = anEmailAddress;
+    self.subject = aSubject;
+    self.body = aBody;
+    self.mailtoURI = aMailtoURI;
   }
   return self;
 }

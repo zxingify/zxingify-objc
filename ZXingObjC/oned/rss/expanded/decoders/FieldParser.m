@@ -1,4 +1,5 @@
 #import "FieldParser.h"
+#import "NotFoundException.h"
 
 static NSObject* VARIABLE_LENGTH = nil;
 static NSArray* TWO_DIGIT_DATA_LENGTH = nil;
@@ -177,9 +178,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     return @"";
   }
   if ([rawInformation length] < 2) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Not found"]
-                                 userInfo:nil];
+    @throw [NotFoundException notFoundInstance];
   }
   NSString * firstTwoDigits = [rawInformation substringWithRange:NSMakeRange(0, 2)];
 
@@ -197,9 +196,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   }
 
   if ([rawInformation length] < 3) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Not found"]
-                                 userInfo:nil];
+    @throw [NotFoundException notFoundInstance];
   }
   NSString * firstThreeDigits = [rawInformation substringWithRange:NSMakeRange(0, 3)];
 
@@ -230,9 +227,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   }
 
   if ([rawInformation length] < 4) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Not found"]
-                                 userInfo:nil];
+    @throw [NotFoundException notFoundInstance];
   }
   NSString * firstFourDigits = [rawInformation substringWithRange:NSMakeRange(0, 4)];
 
@@ -249,22 +244,16 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     }
   }
 
-  @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                 reason:[NSString stringWithFormat:@"Not found"]
-                               userInfo:nil];
+  @throw [NotFoundException notFoundInstance];
 }
 
 + (NSString *) processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation {
   if ([rawInformation length] < aiSize) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Not found"]
-                                 userInfo:nil];
+    @throw [NotFoundException notFoundInstance];
   }
   NSString * ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   if ([rawInformation length] < aiSize + fieldSize) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Not found"]
-                                 userInfo:nil];
+    @throw [NotFoundException notFoundInstance];
   }
   NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, aiSize + fieldSize)];
   NSString * remaining = [rawInformation substringFromIndex:aiSize + fieldSize];

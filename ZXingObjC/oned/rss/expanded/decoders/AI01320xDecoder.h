@@ -1,3 +1,4 @@
+#import "AI013x0xDecoder.h"
 #import "BitArray.h"
 
 /**

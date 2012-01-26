@@ -1,3 +1,4 @@
+#import "BitMatrix.h"
 #import "NotFoundException.h"
 
 /**

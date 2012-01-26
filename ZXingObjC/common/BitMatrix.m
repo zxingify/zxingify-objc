@@ -13,10 +13,10 @@
   return self;
 }
 
-- (id) init:(int)width height:(int)height {
+- (id) initWithWidth:(int)aWidth height:(int)aHeight {
   if (self = [super init]) {
-    if (width < 1 || height < 1) {
-      @throw [[[IllegalArgumentException alloc] init:@"Both dimensions must be greater than 0"] autorelease];
+    if (aWidth < 1 || aHeight < 1) {
+      @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Both dimensions must be greater than 0" userInfo:nil];
     }
     width = width;
     height = height;

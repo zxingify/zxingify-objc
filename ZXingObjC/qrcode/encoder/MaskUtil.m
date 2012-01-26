@@ -1,5 +1,11 @@
 #import "MaskUtil.h"
 
+@interface MaskUtil
+
++ (int) applyMaskPenaltyRule1Internal:(ByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal;
+
+@end
+
 @implementation MaskUtil
 
 - (id) init {

@@ -12,12 +12,7 @@ extern NSString * const URI_WELL_KNOWN_TYPE;
 extern NSString * const SMART_POSTER_WELL_KNOWN_TYPE;
 extern NSString * const ACTION_WELL_KNOWN_TYPE;
 
-@interface NDEFRecord : NSObject {
-  int header;
-  NSString * type;
-  NSArray * payload;
-  int totalRecordLength;
-}
+@interface NDEFRecord : NSObject 
 
 + (NDEFRecord *) readRecord:(NSArray *)bytes offset:(int)offset;
 - (BOOL) isMessageBegin;

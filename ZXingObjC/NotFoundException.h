@@ -7,8 +7,8 @@
  * @author Sean Owen
  */
 
-@interface NotFoundException : ReaderException {
-}
+@interface NotFoundException : ReaderException
 
-@property(nonatomic, retain, readonly) NotFoundException * notFoundInstance;
++ (NotFoundException *)notFoundInstance;
+
 @end

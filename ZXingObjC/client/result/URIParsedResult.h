@@ -1,3 +1,4 @@
+#import "ParsedResult.h"
 
 /**
  * @author Sean Owen

@@ -1,6 +1,14 @@
 #import "BitMatrix.h"
 #import "DataMask.h"
 
+@interface DataMask : NSObject {
+}
+
+- (void) unmaskBitMatrix:(BitMatrix *)bits dimension:(int)dimension;
+- (BOOL) isMasked:(int)i j:(int)j;
++ (DataMask *) forReference:(int)reference;
+@end
+
 /**
  * 000: mask bits for which (x + y) mod 2 == 0
  */
@@ -93,10 +101,3 @@
  * @author Sean Owen
  */
 
-@interface DataMask : NSObject {
-}
-
-- (void) unmaskBitMatrix:(BitMatrix *)bits dimension:(int)dimension;
-- (BOOL) isMasked:(int)i j:(int)j;
-+ (DataMask *) forReference:(int)reference;
-@end

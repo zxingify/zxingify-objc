@@ -3,7 +3,7 @@
 @implementation Point
 
 - (ResultPoint *) toResultPoint {
-  return [[[ResultPoint alloc] init:x param1:y] autorelease];
+  return [[[ResultPoint alloc] init:x y:y] autorelease];
 }
 
 - (id) init:(int)x y:(int)y {

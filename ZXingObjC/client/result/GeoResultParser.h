@@ -1,3 +1,4 @@
+#import "ParsedResult.h"
 #import "Result.h"
 
 /**

@@ -1,3 +1,4 @@
+#import "ByteMatrix.h"
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator

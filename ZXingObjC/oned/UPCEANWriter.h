@@ -2,7 +2,6 @@
 #import "Writer.h"
 #import "WriterException.h"
 #import "BitMatrix.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>Encapsulates functionality and implementation that is common to UPC and EAN families

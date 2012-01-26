@@ -1,15 +1,15 @@
 #import "NotFoundException.h"
 
-NotFoundException * const instance = [[[NotFoundException alloc] init] autorelease];
+static NotFoundException* instance = nil;
 
 @implementation NotFoundException
 
-@synthesize notFoundInstance;
-
-- (id) init {
-  if (self = [super init]) {
++ (NotFoundException *)notFoundInstance {
+  if (instance == nil) {
+    instance = [[[NotFoundException alloc] init] autorelease];
   }
-  return self;
+
+  return instance;
 }
 
 @end

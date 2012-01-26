@@ -9,8 +9,8 @@
 }
 
 + (ISBNParsedResult *) parse:(Result *)result {
-  BarcodeFormat * format = [result barcodeFormat];
-  if (![BarcodeFormat.EAN_13 isEqualTo:format]) {
+  BarcodeFormat format = [result barcodeFormat];
+  if (format != kBarcodeEan13) {
     return nil;
   }
   NSString * rawText = [result text];
@@ -24,7 +24,7 @@
   if (![rawText hasPrefix:@"978"] && ![rawText hasPrefix:@"979"]) {
     return nil;
   }
-  return [[[ISBNParsedResult alloc] init:rawText] autorelease];
+  return [[[ISBNParsedResult alloc] initWithIsbn:rawText] autorelease];
 }
 
 @end
