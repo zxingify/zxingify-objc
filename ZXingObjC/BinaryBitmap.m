@@ -1,19 +1,27 @@
 #import "BinaryBitmap.h"
 
+@interface BinaryBitmap ()
+
+@property (nonatomic, retain) Binarizer* binarizer;
+
+@end
+
 @implementation BinaryBitmap
 
+@synthesize binarizer;
 @synthesize width;
 @synthesize height;
-@synthesize blackMatrix;
+@synthesize blackMatrix=matrix;
 @synthesize cropSupported;
 @synthesize rotateSupported;
 
-- (id) initWithBinarizer:(Binarizer *)binarizer {
+- (id) initWithBinarizer:(Binarizer *)aBinarizer {
   if (self = [super init]) {
-    if (binarizer == nil) {
-      @throw [[[IllegalArgumentException alloc] init:@"Binarizer must be non-null."] autorelease];
+    if (aBinarizer == nil) {
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"Binarizer must be non-null."];
     }
-    binarizer = binarizer;
+    self.binarizer = aBinarizer;
     matrix = nil;
   }
   return self;
@@ -47,7 +55,7 @@
  * @return The array of bits for this row (true means black).
  */
 - (BitArray *) getBlackRow:(int)y row:(BitArray *)row {
-  return [binarizer getBlackRow:y param1:row];
+  return [binarizer getBlackRow:y row:row];
 }
 
 
@@ -61,7 +69,7 @@
  */
 - (BitMatrix *) blackMatrix {
   if (matrix == nil) {
-    matrix = [binarizer blackMatrix];
+    matrix = [[binarizer blackMatrix] retain];
   }
   return matrix;
 }
@@ -85,9 +93,9 @@
  * @param height The height of the rectangle to crop.
  * @return A cropped version of this object.
  */
-- (BinaryBitmap *) crop:(int)left top:(int)top width:(int)width height:(int)height {
-  LuminanceSource * newSource = [[binarizer luminanceSource] crop:left param1:top param2:width param3:height];
-  return [[[BinaryBitmap alloc] init:[binarizer createBinarizer:newSource]] autorelease];
+- (BinaryBitmap *) crop:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
+  LuminanceSource * newSource = [[binarizer luminanceSource] crop:left top:top width:aWidth height:aHeight];
+  return [[[BinaryBitmap alloc] initWithBinarizer:[binarizer createBinarizer:newSource]] autorelease];
 }
 
 
@@ -106,7 +114,7 @@
  */
 - (BinaryBitmap *) rotateCounterClockwise {
   LuminanceSource * newSource = [[binarizer luminanceSource] rotateCounterClockwise];
-  return [[[BinaryBitmap alloc] init:[binarizer createBinarizer:newSource]] autorelease];
+  return [[[BinaryBitmap alloc] initWithBinarizer:[binarizer createBinarizer:newSource]] autorelease];
 }
 
 - (void) dealloc {

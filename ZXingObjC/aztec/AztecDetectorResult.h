@@ -11,5 +11,7 @@
 @property(nonatomic, readonly) int nbLayers;
 @property(nonatomic, readonly) int nbDatablocks;
 @property(nonatomic, readonly) BOOL compact;
-- (id) init:(BitMatrix *)bits points:(NSArray *)points compact:(BOOL)compact nbDatablocks:(int)nbDatablocks nbLayers:(int)nbLayers;
+
+- (id)initWithBits:(BitMatrix *)bits points:(NSArray *)points compact:(BOOL)compact nbDatablocks:(int)nbDatablocks nbLayers:(int)nbLayers;
+
 @end

@@ -1,3 +1,4 @@
+#import "BitMatrix.h"
 #import "ResultPoint.h"
 
 /**
@@ -15,5 +16,5 @@
 
 @property(nonatomic, retain, readonly) BitMatrix * bits;
 @property(nonatomic, retain, readonly) NSArray * points;
-- (id) init:(BitMatrix *)bits points:(NSArray *)points;
+- (id) initWithBits:(BitMatrix *)bits points:(NSArray *)points;
 @end

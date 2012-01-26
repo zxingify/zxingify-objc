@@ -8,9 +8,10 @@
 - (id) initWithSource:(LuminanceSource *)source {
   if (self = [super init]) {
     if (source == nil) {
-      @throw [[[IllegalArgumentException alloc] init:@"Source must be non-null."] autorelease];
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"Source must be non-null."];
     }
-    source = source;
+    self.luminanceSource = source;
   }
   return self;
 }
@@ -30,6 +31,9 @@
  * @return The array of bits for this row (true means black).
  */
 - (BitArray *) getBlackRow:(int)y row:(BitArray *)row {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 
@@ -42,6 +46,9 @@
  * @return The 2D array of bits for the image (true means black).
  */
 - (BitMatrix *) blackMatrix {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 
@@ -54,10 +61,13 @@
  * @return A new concrete Binarizer implementation object.
  */
 - (Binarizer *) createBinarizer:(LuminanceSource *)source {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 - (void) dealloc {
-  [source release];
+  [luminanceSource release];
   [super dealloc];
 }
 

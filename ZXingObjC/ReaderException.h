@@ -7,9 +7,5 @@
  * @author Sean Owen
  */
 
-@interface ReaderException : NSException {
-}
-
-- (id) init;
-- (NSException *) fillInStackTrace;
+@interface ReaderException : NSException
 @end

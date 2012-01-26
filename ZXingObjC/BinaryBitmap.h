@@ -1,3 +1,4 @@
+#import "Binarizer.h"
 #import "BitArray.h"
 #import "BitMatrix.h"
 
@@ -9,7 +10,6 @@
  */
 
 @interface BinaryBitmap : NSObject {
-  Binarizer * binarizer;
   BitMatrix * matrix;
 }
 

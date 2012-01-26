@@ -1,5 +1,6 @@
 #import "BitArray.h"
 #import "BitMatrix.h"
+#import "LuminanceSource.h"
 
 /**
  * This class hierarchy provides a set of methods to convert luminance data to 1 bit data.
@@ -10,13 +11,12 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
-@interface Binarizer : NSObject {
-  LuminanceSource * source;
-}
+@interface Binarizer : NSObject
 
-@property(nonatomic, retain, readonly) LuminanceSource * luminanceSource;
-@property(nonatomic, retain, readonly) BitMatrix * blackMatrix;
+@property(nonatomic, retain) LuminanceSource * luminanceSource;
+@property(nonatomic, retain) BitMatrix * blackMatrix;
 - (id) initWithSource:(LuminanceSource *)source;
 - (BitArray *) getBlackRow:(int)y row:(BitArray *)row;
 - (Binarizer *) createBinarizer:(LuminanceSource *)source;
+
 @end

@@ -1,3 +1,4 @@
+#import "ReaderException.h"
 
 /**
  * Thrown when a barcode was successfully detected and decoded, but
@@ -6,8 +7,6 @@
  * @author Sean Owen
  */
 
-@interface ChecksumException : ReaderException {
-}
+@interface ChecksumException : ReaderException
 
-@property(nonatomic, retain, readonly) ChecksumException * checksumInstance;
 @end

@@ -20,10 +20,10 @@
  * @author David Olivier
  */
 
-@interface AztecReader : NSObject <Reader> {
-}
+@interface AztecReader : NSObject <Reader>
 
 - (Result *) decode:(BinaryBitmap *)image;
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
 - (void) reset;
+
 @end

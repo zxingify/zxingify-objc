@@ -1,6 +1,4 @@
 #import "Result.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
@@ -14,8 +12,7 @@
  * @author Sean Owen
  */
 
-@interface ResultParser : NSObject {
-}
+@interface ResultParser : NSObject
 
 + (ParsedResult *) parseResult:(Result *)theResult;
 + (void) maybeAppend:(NSString *)value result:(StringBuffer *)result;
@@ -28,4 +25,5 @@
 + (NSArray *) matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSString *) matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSArray *) toStringArray:(NSMutableArray *)strings;
+
 @end
