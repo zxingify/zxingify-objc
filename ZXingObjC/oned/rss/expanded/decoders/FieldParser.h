@@ -5,8 +5,8 @@
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 
-@interface FieldParser : NSObject {
-}
+@interface FieldParser : NSObject
 
 + (NSString *) parseFieldsInGeneralPurpose:(NSString *)rawInformation;
+
 @end
