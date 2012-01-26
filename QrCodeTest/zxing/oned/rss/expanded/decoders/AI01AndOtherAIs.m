@@ -1,0 +1,23 @@
+#import "AI01AndOtherAIs.h"
+
+int const HEADER_SIZE = 1 + 1 + 2;
+
+@implementation AI01AndOtherAIs
+
+- (id) initWithInformation:(BitArray *)information {
+  if (self = [super init:information]) {
+  }
+  return self;
+}
+
+- (NSString *) parseInformation {
+  StringBuffer * buff = [[[StringBuffer alloc] init] autorelease];
+  [buff append:@"(01)"];
+  int initialGtinPosition = [buff length];
+  int firstGtinDigit = [generalDecoder extractNumericValueFromBitArray:HEADER_SIZE param1:4];
+  [buff append:firstGtinDigit];
+  [self encodeCompressedGtinWithoutAI:buff param1:HEADER_SIZE + 4 param2:initialGtinPosition];
+  return [generalDecoder decodeAllCodes:buff param1:HEADER_SIZE + 44];
+}
+
+@end
