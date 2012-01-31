@@ -22,7 +22,7 @@ NSString * const POUND = @"LB";
 @synthesize displayResult;
 
 - (id) init {
-  if (self = [super init:ParsedResultType.PRODUCT]) {
+  if (self = [super initWithType:kParsedResultTypeProduct]) {
     productID = @"";
     sscc = @"";
     lotNumber = @"";
@@ -41,35 +41,35 @@ NSString * const POUND = @"LB";
   return self;
 }
 
-- (id) init:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs {
-  if (self = [super init:ParsedResultType.PRODUCT]) {
-    productID = productID;
-    sscc = sscc;
-    lotNumber = lotNumber;
-    productionDate = productionDate;
-    packagingDate = packagingDate;
-    bestBeforeDate = bestBeforeDate;
-    expirationDate = expirationDate;
-    weight = weight;
-    weightType = weightType;
-    weightIncrement = weightIncrement;
-    price = price;
-    priceIncrement = priceIncrement;
-    priceCurrency = priceCurrency;
-    uncommonAIs = uncommonAIs;
+- (id) init:(NSString *)aProductID sscc:(NSString *)anSscc lotNumber:(NSString *)aLotNumber productionDate:(NSString *)aProductionDate packagingDate:(NSString *)aPackagingDate bestBeforeDate:(NSString *)aBestBeforeDate expirationDate:(NSString *)anExpirationDate weight:(NSString *)aWeight weightType:(NSString *)aWeightType weightIncrement:(NSString *)aWeightIncrement price:(NSString *)aPrice priceIncrement:(NSString *)aPriceIncrement priceCurrency:(NSString *)aPriceCurrency uncommonAIs:(NSMutableDictionary *)theUncommonAIs {
+  if (self = [super initWithType:kParsedResultTypeProduct]) {
+    productID = [aProductID copy];
+    sscc = [anSscc copy];
+    lotNumber = [aLotNumber copy];
+    productionDate = [aProductionDate copy];
+    packagingDate = [aPackagingDate copy];
+    bestBeforeDate = [aBestBeforeDate copy];
+    expirationDate = [anExpirationDate copy];
+    weight = [aWeight copy];
+    weightType = [aWeightType copy];
+    weightIncrement = [aWeightIncrement copy];
+    price = [aPrice copy];
+    priceIncrement = [aPriceIncrement copy];
+    priceCurrency = [aPriceCurrency copy];
+    uncommonAIs = [theUncommonAIs copy];
   }
   return self;
 }
 
-- (BOOL) isEqualTo:(NSObject *)o {
-  if (!([o conformsToProtocol:@protocol(ExpandedProductParsedResult)])) {
+- (BOOL)isEqual:(id)o {
+  if (![o isKindOfClass:[self class]]) {
     return NO;
   }
   ExpandedProductParsedResult * other = (ExpandedProductParsedResult *)o;
-  return [productID isEqualTo:other.productID] && [sscc isEqualTo:other.sscc] && [lotNumber isEqualTo:other.lotNumber] && [productionDate isEqualTo:other.productionDate] && [bestBeforeDate isEqualTo:other.bestBeforeDate] && [expirationDate isEqualTo:other.expirationDate] && [weight isEqualTo:other.weight] && [weightType isEqualTo:other.weightType] && [weightIncrement isEqualTo:other.weightIncrement] && [price isEqualTo:other.price] && [priceIncrement isEqualTo:other.priceIncrement] && [priceCurrency isEqualTo:other.priceCurrency] && [uncommonAIs isEqualTo:other.uncommonAIs];
+  return [productID isEqualToString:other.productID] && [sscc isEqualToString:other.sscc] && [lotNumber isEqualToString:other.lotNumber] && [productionDate isEqualToString:other.productionDate] && [bestBeforeDate isEqualToString:other.bestBeforeDate] && [expirationDate isEqualToString:other.expirationDate] && [weight isEqualToString:other.weight] && [weightType isEqualToString:other.weightType] && [weightIncrement isEqualToString:other.weightIncrement] && [price isEqualToString:other.price] && [priceIncrement isEqualToString:other.priceIncrement] && [priceCurrency isEqualToString:other.priceCurrency] && [uncommonAIs isEqual:other.uncommonAIs];
 }
 
-- (int) hash {
+- (NSUInteger) hash {
   int hash1 = [productID hash];
   hash1 = 31 * hash1 + [sscc hash];
   hash1 = 31 * hash1 + [lotNumber hash];

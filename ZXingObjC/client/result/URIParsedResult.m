@@ -1,16 +1,24 @@
 #import "URIParsedResult.h"
 
+@interface URIParsedResult ()
+
+- (BOOL) containsUser;
+- (BOOL) isColonFollowedByPortNumber:(NSString *)uri protocolEnd:(int)protocolEnd;
+- (NSString *) massageURI:(NSString *)uri;
+
+@end
+
 @implementation URIParsedResult
 
-@synthesize uRI;
+@synthesize uri;
 @synthesize title;
 @synthesize possiblyMaliciousURI;
 @synthesize displayResult;
 
-- (id) init:(NSString *)uri title:(NSString *)title {
-  if (self = [super init:ParsedResultType.URI]) {
-    uri = [self massageURI:uri];
-    title = title;
+- (id) initWithUri:(NSString *)aUri title:(NSString *)aTitle {
+  if (self = [super initWithType:kParsedResultTypeURI]) {
+    uri = [[self massageURI:uri] copy];
+    title = [aTitle copy];
   }
   return self;
 }
@@ -29,7 +37,7 @@
 }
 
 - (BOOL) containsUser {
-  int hostStart = [uri rangeOfString:':'];
+  int hostStart = [uri rangeOfString:@":"].location;
   hostStart++;
   int uriLength = [uri length];
 
@@ -37,43 +45,42 @@
     hostStart++;
   }
 
-  int hostEnd = [uri rangeOfString:'/' param1:hostStart];
+  int hostEnd = [uri rangeOfString:@"/" options:nil range:NSMakeRange(hostStart, uriLength - hostStart)].location;
   if (hostEnd < 0) {
     hostEnd = uriLength;
   }
-  int at = [uri rangeOfString:'@' param1:hostStart];
+  int at = [uri rangeOfString:@"@" options:nil range:NSMakeRange(hostStart, uriLength - hostStart)].location;
   return at >= hostStart && at < hostEnd;
 }
 
 - (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:30] autorelease];
-  [self maybeAppend:title param1:result];
-  [self maybeAppend:uri param1:result];
-  return [result description];
+  NSMutableString* result = [NSMutableString stringWithCapacity:30];
+  [self maybeAppend:title result:result];
+  [self maybeAppend:uri result:result];
+  return result;
 }
-
 
 /**
  * Transforms a string that represents a URI into something more proper, by adding or canonicalizing
  * the protocol.
  */
-+ (NSString *) massageURI:(NSString *)uri {
-  uri = [uri stringByTrimmingCharactersInSet];
-  int protocolEnd = [uri rangeOfString:':'];
+- (NSString *) massageURI:(NSString *)aUri {
+  NSString *_uri = [aUri stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  int protocolEnd = [_uri rangeOfString:@":"].location;
   if (protocolEnd < 0) {
-    uri = [@"http://" stringByAppendingString:uri];
+    // No protocol, assume http
+    _uri = [NSString stringWithFormat:@"http://%@", _uri];
+  } else if ([self isColonFollowedByPortNumber:_uri protocolEnd:protocolEnd]) {
+    // Found a colon, but it looks like it is after the host, so the protocol is still missing
+    _uri = [NSString stringWithFormat:@"http://%@", _uri];
+  } else {
+    _uri = [[[_uri substringToIndex:protocolEnd] lowercaseString] stringByAppendingString:[_uri substringFromIndex:protocolEnd]];
   }
-   else if ([self isColonFollowedByPortNumber:uri protocolEnd:protocolEnd]) {
-    uri = [@"http://" stringByAppendingString:uri];
-  }
-   else {
-    uri = [[uri substringFromIndex:0 param1:protocolEnd] toLowerCase] + [uri substringFromIndex:protocolEnd];
-  }
-  return uri;
+  return _uri;
 }
 
-+ (BOOL) isColonFollowedByPortNumber:(NSString *)uri protocolEnd:(int)protocolEnd {
-  int nextSlash = [uri rangeOfString:'/' param1:protocolEnd + 1];
+- (BOOL) isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {
+  int nextSlash = [aUri rangeOfString:@"/" options:nil range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
   if (nextSlash < 0) {
     nextSlash = [uri length];
   }

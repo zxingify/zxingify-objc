@@ -1,12 +1,8 @@
 #import "BookmarkDoCoMoResultParser.h"
+#import "URIParsedResult.h"
+#import "Result.h"
 
 @implementation BookmarkDoCoMoResultParser
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
 
 + (URIParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];

@@ -1,6 +1,4 @@
-#import "Result.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
+#import "ResultParser.h"
 
 /**
  * <p>Parses an "sms:" URI result, which specifies a number to SMS.
@@ -18,8 +16,10 @@
  * @author Sean Owen
  */
 
-@interface SMSMMSResultParser : ResultParser {
-}
+@class Result, SMSParsedResult;
+
+@interface SMSMMSResultParser : ResultParser
 
 + (SMSParsedResult *) parse:(Result *)result;
+
 @end

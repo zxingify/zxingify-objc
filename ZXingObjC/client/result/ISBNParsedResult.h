@@ -8,7 +8,7 @@
   NSString * isbn;
 }
 
-@property(nonatomic, retain, readonly) NSString * iSBN;
+@property(nonatomic, retain, readonly) NSString * isbn;
 @property(nonatomic, retain, readonly) NSString * displayResult;
 - (id) initWithIsbn:(NSString *)isbn;
 @end

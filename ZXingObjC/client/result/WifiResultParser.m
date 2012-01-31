@@ -1,4 +1,6 @@
+#import "Result.h"
 #import "WifiResultParser.h"
+#import "WifiParsedResult.h"
 
 @implementation WifiResultParser
 

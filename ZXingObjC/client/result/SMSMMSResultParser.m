@@ -1,4 +1,6 @@
+#import "Result.h"
 #import "SMSMMSResultParser.h"
+#import "SMSParsedResult.h"
 
 @implementation SMSMMSResultParser
 

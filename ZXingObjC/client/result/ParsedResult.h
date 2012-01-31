@@ -19,6 +19,6 @@
 @property(nonatomic, retain, readonly) NSString * displayResult;
 - (id) initWithType:(ParsedResultType)type;
 - (NSString *) description;
-+ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result;
-+ (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
+- (void) maybeAppend:(NSString *)value result:(NSMutableString *)result;
+- (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
 @end

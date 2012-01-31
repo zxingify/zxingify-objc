@@ -1,4 +1,6 @@
 #import "AddressBookAUResultParser.h"
+#import "AddressBookParsedResult.h"
+#import "Result.h"
 
 @implementation AddressBookAUResultParser
 

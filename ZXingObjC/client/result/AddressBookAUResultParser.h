@@ -1,5 +1,4 @@
-#import "Result.h"
-#import "NSMutableArray.h"
+#import "ResultParser.h"
 
 /**
  * Implements KDDI AU's address book format. See
@@ -10,8 +9,10 @@
  * @author Sean Owen
  */
 
-@interface AddressBookAUResultParser : ResultParser {
-}
+@class AddressBookParsedResult, Result;
+
+@interface AddressBookAUResultParser : ResultParser
 
 + (AddressBookParsedResult *) parse:(Result *)result;
+
 @end

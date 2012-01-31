@@ -22,7 +22,7 @@
   return [self displayResult];
 }
 
-+ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result {
+- (void) maybeAppend:(NSString *)value result:(NSMutableString *)result {
   if (value != nil && [value length] > 0) {
     if ([result length] > 0) {
       [result appendString:@"\n"];
@@ -31,7 +31,7 @@
   }
 }
 
-+ (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
+- (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
 
     for (int i = 0; i < [value count]; i++) {

@@ -2,12 +2,12 @@
 
 @implementation ISBNParsedResult
 
-@synthesize iSBN;
+@synthesize isbn;
 @synthesize displayResult;
 
-- (id) initWithIsbn:(NSString *)isbn {
-  if (self = [super init:ParsedResultType.ISBN]) {
-    isbn = isbn;
+- (id) initWithIsbn:(NSString *)anIsbn {
+  if (self = [super initWithType:kParsedResultTypeISBN]) {
+    isbn = [isbn copy];
   }
   return self;
 }

@@ -1,31 +1,23 @@
 #import "ExpandedPair.h"
+#import "DataCharacter.h"
+#import "FinderPattern.h"
 
 @implementation ExpandedPair
 
-- (id) init:(DataCharacter *)leftChar rightChar:(DataCharacter *)rightChar finderPattern:(FinderPattern *)finderPattern mayBeLast:(BOOL)mayBeLast {
+@synthesize finderPattern;
+@synthesize leftChar;
+@synthesize mayBeLast;
+@synthesize rightChar;
+
+- (id) initWithLeftChar:(DataCharacter *)aLeftChar rightChar:(DataCharacter *)aRightChar
+          finderPattern:(FinderPattern *)aFinderPattern mayBeLast:(BOOL)aMayBeLast {
   if (self = [super init]) {
-    leftChar = leftChar;
-    rightChar = rightChar;
-    finderPattern = finderPattern;
-    mayBeLast = mayBeLast;
+    leftChar = [aLeftChar retain];
+    rightChar = [aRightChar retain];
+    finderPattern = [aFinderPattern retain];
+    mayBeLast = aMayBeLast;
   }
   return self;
-}
-
-- (BOOL) mayBeLast {
-  return mayBeLast;
-}
-
-- (DataCharacter *) getLeftChar {
-  return leftChar;
-}
-
-- (DataCharacter *) getRightChar {
-  return rightChar;
-}
-
-- (FinderPattern *) getFinderPattern {
-  return finderPattern;
 }
 
 - (BOOL) mustBeLast {

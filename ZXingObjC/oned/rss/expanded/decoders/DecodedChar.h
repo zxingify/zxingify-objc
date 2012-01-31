@@ -1,3 +1,4 @@
+#import "DecodedObject.h"
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)

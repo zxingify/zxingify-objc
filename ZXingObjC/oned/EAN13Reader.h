@@ -1,6 +1,5 @@
 #import "BarcodeFormat.h"
-#import "NotFoundException.h"
-#import "BitArray.h"
+#import "UPCEANReader.h"
 
 /**
  * <p>Implements decoding of the EAN-13 format.</p>
@@ -10,11 +9,13 @@
  * @author alasdair@google.com (Alasdair Mackintosh)
  */
 
+@class BitArray;
+
 @interface EAN13Reader : UPCEANReader {
   NSArray * decodeMiddleCounters;
 }
 
 - (id) init;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(StringBuffer *)resultString;
-- (BarcodeFormat *) getBarcodeFormat;
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
+- (BarcodeFormat) getBarcodeFormat;
 @end

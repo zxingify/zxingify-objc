@@ -1,4 +1,4 @@
-#import "Result.h"
+#import "ResultParser.h"
 
 /**
  * Parses a WIFI configuration string.  Strings will be of the form:
@@ -10,8 +10,10 @@
  * @author Vikram Aggarwal
  */
 
-@interface WifiResultParser : ResultParser {
-}
+@class Result, WifiParsedResult;
+
+@interface WifiResultParser : ResultParser
 
 + (WifiParsedResult *) parse:(Result *)result;
+
 @end

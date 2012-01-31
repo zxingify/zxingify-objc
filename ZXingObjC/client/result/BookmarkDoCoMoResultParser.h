@@ -1,11 +1,13 @@
-#import "Result.h"
+#import "AbstractDoCoMoResultParser.h"
 
 /**
  * @author Sean Owen
  */
 
-@interface BookmarkDoCoMoResultParser : AbstractDoCoMoResultParser {
-}
+@class Result, URIParsedResult;
+
+@interface BookmarkDoCoMoResultParser : AbstractDoCoMoResultParser
 
 + (URIParsedResult *) parse:(Result *)result;
+
 @end

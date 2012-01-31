@@ -1,3 +1,5 @@
+#import "ParsedResult.h"
+
 /**
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
  * @author Agustín Delgado, Servinform, S.A.
@@ -38,8 +40,7 @@ extern NSString * const POUND;
 @property(nonatomic, retain, readonly) NSString * priceCurrency;
 @property(nonatomic, retain, readonly) NSMutableDictionary * uncommonAIs;
 @property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init;
+
 - (id) init:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs;
-- (BOOL) isEqualTo:(NSObject *)o;
-- (int) hash;
+
 @end
