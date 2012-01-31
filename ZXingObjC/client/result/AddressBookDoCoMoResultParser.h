@@ -1,3 +1,4 @@
+#import "AbstractDoCoMoResultParser.h"
 #import "Result.h"
 
 /**
@@ -16,8 +17,10 @@
  * @author Sean Owen
  */
 
-@interface AddressBookDoCoMoResultParser : AbstractDoCoMoResultParser {
-}
+@class AddressBookParsedResult, Result;
+
+@interface AddressBookDoCoMoResultParser : AbstractDoCoMoResultParser
 
 + (AddressBookParsedResult *) parse:(Result *)result;
+
 @end

@@ -9,14 +9,14 @@
 
 @interface PerspectiveTransform : NSObject {
   float a11;
-  , a12;
-  , a13;
-  , a21;
-  , a22;
-  , a23;
-  , a31;
-  , a32;
-  , a33;
+  float a12;
+  float a13;
+  float a21;
+  float a22;
+  float a23;
+  float a31;
+  float a32;
+  float a33;
 }
 
 + (PerspectiveTransform *) quadrilateralToQuadrilateral:(float)x0 y0:(float)y0 x1:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3 x0p:(float)x0p y0p:(float)y0p x1p:(float)x1p y1p:(float)y1p x2p:(float)x2p y2p:(float)y2p x3p:(float)x3p y3p:(float)y3p;

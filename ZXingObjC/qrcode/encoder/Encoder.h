@@ -8,17 +8,14 @@
 #import "ErrorCorrectionLevel.h"
 #import "Mode.h"
 #import "Version.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
+#import "QRCode.h"
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 
-@interface Encoder : NSObject {
-}
-
+@interface Encoder : NSObject
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel qrCode:(QRCode *)qrCode;
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints qrCode:(QRCode *)qrCode;
 + (int) getAlphanumericCode:(int)code;

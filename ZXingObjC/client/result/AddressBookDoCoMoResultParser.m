@@ -1,4 +1,6 @@
 #import "AddressBookDoCoMoResultParser.h"
+#import "AddressBookParsedResult.h"
+#import "Result.h"
 
 @implementation AddressBookDoCoMoResultParser
 

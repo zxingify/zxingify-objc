@@ -38,7 +38,8 @@
 @interface Detector ()
 
 - (NSArray*)bullEyeCornerPoints:(AztecPoint*)pCenter;
-- (void)correctParameterData:(NSArray*)parameterData compact:(BOOL)compact;
+- (int) color:(AztecPoint *)p1 p2:(AztecPoint *)p2;
+- (void)correctParameterData:(NSMutableArray*)parameterData compact:(BOOL)compact;
 - (float)distance:(AztecPoint*)a b:(AztecPoint*)b;
 - (void)extractParameters:(NSArray*)bullEyeCornerPoints;
 - (AztecPoint*)firstDifferent:(AztecPoint *)init color:(BOOL)color dx:(int)dx dy:(int)dy;
@@ -215,7 +216,7 @@
  * @param compact true if this is a compact Aztec code
  * @throws NotFoundException if the array contains too many errors
  */
-+ (void)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact {
+- (void)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact {
   int numCodewords;
   int numDataCodewords;
   if (compact) {
@@ -383,7 +384,7 @@
 /**
  * Samples an Aztec matrix from an image
  */
-- (BitMatrix *) sampleGrid:(BitMatrix *)image topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topRight:(ResultPoint *)topRight {
+- (BitMatrix *) sampleGrid:(BitMatrix *)anImage topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topRight:(ResultPoint *)topRight {
   int dimension;
   if (compact) {
     dimension = 4 * nbLayers + 11;
@@ -398,7 +399,7 @@
   }
   GridSampler * sampler = [GridSampler instance];
 
-  return [sampler sampleGrid:image
+  return [sampler sampleGrid:anImage
                   dimensionX:dimension
                   dimensionY:dimension
                        p1ToX:0.5f
@@ -437,7 +438,7 @@
 
   for (int i = 0; i < nbBitsForNbLayers; i++) {
     nbLayers <<= 1;
-    if (parameterData[i]) {
+    if ([[parameterData objectAtIndex:i] boolValue]) {
       nbLayers += 1;
     }
   }
@@ -445,7 +446,7 @@
 
   for (int i = nbBitsForNbLayers; i < nbBitsForNbLayers + nbBitsForNbDatablocks; i++) {
     nbDataBlocks <<= 1;
-    if (parameterData[i]) {
+    if ([[parameterData objectAtIndex:i] boolValue]) {
       nbDataBlocks += 1;
     }
   }
@@ -464,8 +465,8 @@
  * @param size number of bits
  * @return the array of bits
  */
-- (NSArray *) sampleLine:(CGPoint)p1 p2:(CGPoint)p2 size:(int)size {
-  NSArray * res = [NSArray array];
+- (NSArray *) sampleLine:(AztecPoint *)p1 p2:(AztecPoint *)p2 size:(int)size {
+  NSMutableArray * res = [NSMutableArray arrayWithCapacity:size];
   float d = [self distance:p1 b:p2];
   float moduleSize = d / (size - 1);
   float dx = moduleSize * (p2.x - p1.x) / d;
@@ -474,7 +475,7 @@
   float py = p1.y;
 
   for (int i = 0; i < size; i++) {
-    res[i] = [image get:[self round:px] param1:[self round:py]];
+    [res addObject:[NSNumber numberWithBool:[image get:[self round:px] y:[self round:py]]]];
     px += dx;
     py += dy;
   }
@@ -489,10 +490,10 @@
  */
 - (BOOL)isWhiteOrBlackRectangle:(AztecPoint *)p1 p2:(AztecPoint *)p2 p3:(AztecPoint *)p3 p4:(AztecPoint *)p4 {
   int corr = 3;
-  p1 = [[[Point alloc] init:p1.x - corr param1:p1.y + corr] autorelease];
-  p2 = [[[Point alloc] init:p2.x - corr param1:p2.y - corr] autorelease];
-  p3 = [[[Point alloc] init:p3.x + corr param1:p3.y - corr] autorelease];
-  p4 = [[[Point alloc] init:p4.x + corr param1:p4.y + corr] autorelease];
+  p1 = [[[AztecPoint alloc] initWithX:p1.x - corr y:p1.y + corr] autorelease];
+  p2 = [[[AztecPoint alloc] initWithX:p2.x - corr y:p2.y - corr] autorelease];
+  p3 = [[[AztecPoint alloc] initWithX:p3.x + corr y:p3.y - corr] autorelease];
+  p4 = [[[AztecPoint alloc] initWithX:p4.x + corr y:p4.y + corr] autorelease];
   int cInit = [self color:p4 p2:p1];
   if (cInit == 0) {
     return NO;
@@ -515,19 +516,19 @@
  * 
  * @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
  */
-- (int) color:(Point *)p1 p2:(Point *)p2 {
+- (int) color:(AztecPoint *)p1 p2:(AztecPoint *)p2 {
   float d = [self distance:p1 b:p2];
   float dx = (p2.x - p1.x) / d;
   float dy = (p2.y - p1.y) / d;
   int error = 0;
   float px = p1.x;
   float py = p1.y;
-  BOOL colorModel = [image get:p1.x param1:p1.y];
+  BOOL colorModel = [image get:p1.x y:p1.y];
 
   for (int i = 0; i < d; i++) {
     px += dx;
     py += dy;
-    if ([image get:[self round:px] param1:[self round:py]] != colorModel) {
+    if ([image get:[self round:px] y:[self round:py]] != colorModel) {
       error++;
     }
   }
@@ -552,7 +553,7 @@
   int x = init.x + dx;
   int y = init.y + dy;
 
-  while ([self isValid:x y:y] && [image get:x param1:y] == color) {
+  while ([self isValidX:x y:y] && [image get:x y:y] == color) {
     x += dx;
     y += dy;
   }
@@ -560,18 +561,18 @@
   x -= dx;
   y -= dy;
 
-  while ([self isValid:x y:y] && [image get:x param1:y] == color) {
+  while ([self isValidX:x y:y] && [image get:x y:y] == color) {
     x += dx;
   }
 
   x -= dx;
 
-  while ([self isValid:x y:y] && [image get:x param1:y] == color) {
+  while ([self isValidX:x y:y] && [image get:x y:y] == color) {
     y += dy;
   }
 
   y -= dy;
-  return [[[Point alloc] init:x param1:y] autorelease];
+  return [[[AztecPoint alloc] initWithX:x y:y] autorelease];
 }
 
 - (BOOL) isValidX:(int)x y:(int)y {
@@ -587,8 +588,8 @@
   return (int)(d + 0.5f);
 }
 
-- (float) distance:(Point *)a b:(Point *)b {
-  return (float)[Math sqrt:(a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)];
+- (float) distance:(AztecPoint *)a b:(AztecPoint *)b {
+  return (float)sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
 - (void) dealloc {

@@ -1,15 +1,15 @@
 #import "FormatException.h"
 
-FormatException * const instance = [[[FormatException alloc] init] autorelease];
+static FormatException* instance = nil;
 
 @implementation FormatException
 
-@synthesize formatInstance;
-
-- (id) init {
-  if (self = [super init]) {
++ (FormatException *)formatInstance {
+  if (instance == nil) {
+    instance = [[[FormatException alloc] init] autorelease];
   }
-  return self;
+  
+  return instance;
 }
 
 @end

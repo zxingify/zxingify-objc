@@ -1,3 +1,4 @@
+#import "ReaderException.h"
 
 /**
  * Thrown when a barcode was successfully detected, but some aspect of
@@ -7,8 +8,8 @@
  * @author Sean Owen
  */
 
-@interface FormatException : ReaderException {
-}
+@interface FormatException : ReaderException
 
-@property(nonatomic, retain, readonly) FormatException * formatInstance;
++ (FormatException *) formatInstance;
+
 @end
