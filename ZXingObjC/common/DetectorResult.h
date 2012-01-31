@@ -17,4 +17,5 @@
 @property(nonatomic, retain, readonly) BitMatrix * bits;
 @property(nonatomic, retain, readonly) NSArray * points;
 - (id) initWithBits:(BitMatrix *)bits points:(NSArray *)points;
+
 @end

@@ -1,20 +1,75 @@
+#import "AztecDetectorResult.h"
+#import "BitMatrix.h"
 #import "Decoder.h"
+#import "DecoderResult.h"
+#import "FormatException.h"
+#import "GenericGF.h"
+#import "ReedSolomonDecoder.h"
+#import "ReedSolomonException.h"
 
-int const UPPER = 0;
-int const LOWER = 1;
-int const MIXED = 2;
-int const DIGIT = 3;
-int const PUNCT = 4;
-int const BINARY = 5;
-NSArray * const NB_BITS_COMPACT = [NSArray arrayWithObjects:0, 104, 240, 408, 608, nil];
-NSArray * const NB_BITS = [NSArray arrayWithObjects:0, 128, 288, 480, 704, 960, 1248, 1568, 1920, 2304, 2720, 3168, 3648, 4160, 4704, 5280, 5888, 6528, 7200, 7904, 8640, 9408, 10208, 11040, 11904, 12800, 13728, 14688, 15680, 16704, 17760, 18848, 19968, nil];
-NSArray * const NB_DATABLOCK_COMPACT = [NSArray arrayWithObjects:0, 17, 40, 51, 76, nil];
-NSArray * const NB_DATABLOCK = [NSArray arrayWithObjects:0, 21, 48, 60, 88, 120, 156, 196, 240, 230, 272, 316, 364, 416, 470, 528, 588, 652, 720, 790, 864, 940, 1020, 920, 992, 1066, 1144, 1224, 1306, 1392, 1480, 1570, 1664, nil];
-NSArray * const UPPER_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", @"CTRL_LL", @"CTRL_ML", @"CTRL_DL", @"CTRL_BS", nil];
-NSArray * const LOWER_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"a", @"b", @"c", @"d", @"e", @"f", @"g", @"h", @"i", @"j", @"k", @"l", @"m", @"n", @"o", @"p", @"q", @"r", @"s", @"t", @"u", @"v", @"w", @"x", @"y", @"z", @"CTRL_US", @"CTRL_ML", @"CTRL_DL", @"CTRL_BS", nil];
-NSArray * const MIXED_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"\1", @"\2", @"\3", @"\4", @"\5", @"\6", @"\7", @"\b", @"\t", @"\n", @"\13", @"\f", @"\r", @"\33", @"\34", @"\35", @"\36", @"\37", @"@", @"\\", @"^", @"_", @"`", @"|", @"~", @"\177", @"CTRL_LL", @"CTRL_UL", @"CTRL_PL", @"CTRL_BS", nil];
-NSArray * const PUNCT_TABLE = [NSArray arrayWithObjects:@"", @"\r", @"\r\n", @". ", @", ", @": ", @"!", @"\"", @"#", @"$", @"%", @"&", @"'", @"(", @")", @"*", @"+", @",", @"-", @".", @"/", @":", @";", @"<", @"=", @">", @"?", @"[", @"]", @"{", @"}", @"CTRL_UL", nil];
-NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @",", @".", @"CTRL_UL", @"CTRL_US", nil];
+enum {
+  UPPER = 0,
+  LOWER,
+  MIXED,
+  DIGIT,
+  PUNCT,
+  BINARY
+};
+
+static int NB_BITS_COMPACT[] = {
+  0, 104, 240, 408, 608
+};
+
+static int NB_BITS[] = {
+  0, 128, 288, 480, 704, 960, 1248, 1568, 1920, 2304, 2720, 3168, 3648, 4160, 4704, 5280, 5888, 6528,
+  7200, 7904, 8640, 9408, 10208, 11040, 11904, 12800, 13728, 14688, 15680, 16704, 17760, 18848, 19968
+};
+
+static int NB_DATABLOCK_COMPACT[] = {
+  0, 17, 40, 51, 76
+};
+
+static int NB_DATABLOCK[] = {
+  0, 21, 48, 60, 88, 120, 156, 196, 240, 230, 272, 316, 364, 416, 470, 528, 588, 652, 720, 790, 864,
+  940, 1020, 920, 992, 1066, 1144, 1224, 1306, 1392, 1480, 1570, 1664
+};
+
+static NSString* UPPER_TABLE[] = {
+  @"CTRL_PS", @" ", @"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P",
+  @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", @"CTRL_LL", @"CTRL_ML", @"CTRL_DL", @"CTRL_BS"
+};
+
+static NSString* LOWER_TABLE[] = {
+  @"CTRL_PS", @" ", @"a", @"b", @"c", @"d", @"e", @"f", @"g", @"h", @"i", @"j", @"k", @"l", @"m", @"n", @"o", @"p",
+  @"q", @"r", @"s", @"t", @"u", @"v", @"w", @"x", @"y", @"z", @"CTRL_US", @"CTRL_ML", @"CTRL_DL", @"CTRL_BS"
+};
+
+static NSString* MIXED_TABLE[] = {
+  @"CTRL_PS", @" ", @"\1", @"\2", @"\3", @"\4", @"\5", @"\6", @"\7", @"\b", @"\t", @"\n",
+  @"\13", @"\f", @"\r", @"\33", @"\34", @"\35", @"\36", @"\37", @"@", @"\\", @"^", @"_",
+  @"`", @"|", @"~", @"\177", @"CTRL_LL", @"CTRL_UL", @"CTRL_PL", @"CTRL_BS"
+};
+
+static NSString* PUNCT_TABLE[] = {
+  @"", @"\r", @"\r\n", @". ", @", ", @": ", @"!", @"\"", @"#", @"$", @"%", @"&", @"'", @"(", @")",
+  @"*", @"+", @",", @"-", @".", @"/", @":", @";", @"<", @"=", @">", @"?", @"[", @"]", @"{", @"}", @"CTRL_UL"
+};
+
+static NSString* DIGIT_TABLE[] = {
+  @"CTRL_PS", @" ", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @",", @".", @"CTRL_UL", @"CTRL_US"
+};
+
+@interface Decoder ()
+
+- (NSString *) character:(int)table code:(int)code;
+- (NSArray *) correctBits:(NSArray *)rawbits;
+- (NSString *) encodedData:(NSArray *)correctedBits;
+- (NSArray *) extractBits:(BitMatrix *)matrix;
+- (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(int)length;
+- (BitMatrix *) removeDashedLines:(BitMatrix *)matrix;
+- (int) table:(unichar)t;
+
+@end
 
 @implementation Decoder
 
@@ -26,8 +81,8 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
   }
   NSArray * rawbits = [self extractBits:matrix];
   NSArray * correctedBits = [self correctBits:rawbits];
-  NSString * result = [self getEncodedData:correctedBits];
-  return [[[DecoderResult alloc] init:nil param1:result param2:nil param3:nil] autorelease];
+  NSString * result = [self encodedData:correctedBits];
+  return [[[DecoderResult alloc] init:nil text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
 
@@ -38,15 +93,15 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
  * @return the decoded string
  * @throws FormatException if the input is not valid
  */
-- (NSString *) getEncodedData:(NSArray *)correctedBits {
+- (NSString *) encodedData:(NSArray *)correctedBits {
   int endIndex = codewordSize * [ddata nbDatablocks] - invertedBitCount;
-  if (endIndex > correctedBits.length) {
+  if (endIndex > [correctedBits count]) {
     @throw [FormatException formatInstance];
   }
   int lastTable = UPPER;
   int table = UPPER;
   int startIndex = 0;
-  StringBuffer * result = [[[StringBuffer alloc] init:20] autorelease];
+  NSMutableString * result = [NSMutableString stringWithCapacity:20];
   BOOL end = NO;
   BOOL shift = NO;
   BOOL switchShift = NO;
@@ -68,30 +123,32 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
       }
       code = [self readCode:correctedBits startIndex:startIndex length:8];
       startIndex += 8;
-      [result append:(unichar)code];
+      unichar uCode = (unichar)code;
+      [result appendString:[NSString stringWithCharacters:&uCode length:1]];
       break;
-    default:
-      int size = 5;
-      if (table == DIGIT) {
-        size = 4;
-      }
-      if (endIndex - startIndex < size) {
-        end = YES;
+      default: {
+        int size = 5;
+        if (table == DIGIT) {
+          size = 4;
+        }
+        if (endIndex - startIndex < size) {
+          end = YES;
+          break;
+        }
+        code = [self readCode:correctedBits startIndex:startIndex length:size];
+        startIndex += size;
+        NSString * str = [self character:table code:code];
+        if ([str hasPrefix:@"CTRL_"]) {
+          table = [self table:[str characterAtIndex:5]];
+          if ([str characterAtIndex:6] == 'S') {
+            shift = YES;
+          }
+        }
+         else {
+          [result appendString:str];
+        }
         break;
       }
-      code = [self readCode:correctedBits startIndex:startIndex length:size];
-      startIndex += size;
-      NSString * str = [self getCharacter:table code:code];
-      if ([str hasPrefix:@"CTRL_"]) {
-        table = [self getTable:[str characterAtIndex:5]];
-        if ([str characterAtIndex:6] == 'S') {
-          shift = YES;
-        }
-      }
-       else {
-        [result append:str];
-      }
-      break;
     }
     if (switchShift) {
       table = lastTable;
@@ -100,14 +157,14 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
     }
   }
 
-  return [result description];
+  return result;
 }
 
 
 /**
  * gets the table corresponding to the char passed
  */
-+ (int) getTable:(unichar)t {
+- (int) table:(unichar)t {
   int table = UPPER;
 
   switch (t) {
@@ -141,7 +198,7 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
  * @param table the table used
  * @param code the code of the character
  */
-+ (NSString *) getCharacter:(int)table code:(int)code {
+- (NSString *) character:(int)table code:(int)code {
 
   switch (table) {
   case UPPER:
@@ -171,19 +228,16 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
   GenericGF * gf;
   if ([ddata nbLayers] <= 2) {
     codewordSize = 6;
-    gf = GenericGF.AZTEC_DATA_6;
-  }
-   else if ([ddata nbLayers] <= 8) {
+    gf = [GenericGF AztecData6];
+  } else if ([ddata nbLayers] <= 8) {
     codewordSize = 8;
-    gf = GenericGF.AZTEC_DATA_8;
-  }
-   else if ([ddata nbLayers] <= 22) {
+    gf = [GenericGF AztecData8];
+  } else if ([ddata nbLayers] <= 22) {
     codewordSize = 10;
-    gf = GenericGF.AZTEC_DATA_10;
-  }
-   else {
+    gf = [GenericGF AztecData10];
+  } else {
     codewordSize = 12;
-    gf = GenericGF.AZTEC_DATA_12;
+    gf = [GenericGF AztecData12];
   }
   int numDataCodewords = [ddata nbDatablocks];
   int numECCodewords;
@@ -196,31 +250,35 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
     offset = NB_BITS[[ddata nbLayers]] - numCodewords * codewordSize;
     numECCodewords = NB_DATABLOCK[[ddata nbLayers]] - numDataCodewords;
   }
-  NSArray * dataWords = [NSArray array];
+  NSMutableArray * dataWords = [NSMutableArray array];
 
   for (int i = 0; i < numCodewords; i++) {
+    [dataWords addObject:[NSNumber numberWithInt:0]];
     int flag = 1;
 
     for (int j = 1; j <= codewordSize; j++) {
-      if (rawbits[codewordSize * i + codewordSize - j + offset]) {
-        dataWords[i] += flag;
+      if ([rawbits objectAtIndex:codewordSize * i + codewordSize - j + offset]) {
+        [dataWords replaceObjectAtIndex:i withObject:
+         [NSNumber numberWithInt:[[dataWords objectAtIndex:i] intValue] + flag]];
       }
       flag <<= 1;
     }
-
   }
 
 
   @try {
-    ReedSolomonDecoder * rsDecoder = [[[ReedSolomonDecoder alloc] init:gf] autorelease];
-    [rsDecoder decode:dataWords param1:numECCodewords];
+    ReedSolomonDecoder * rsDecoder = [[[ReedSolomonDecoder alloc] initWithField:gf] autorelease];
+    [rsDecoder decode:dataWords twoS:numECCodewords];
   }
   @catch (ReedSolomonException * rse) {
     @throw [FormatException formatInstance];
   }
   offset = 0;
   invertedBitCount = 0;
-  NSArray * correctedBits = [NSArray array];
+  NSMutableArray * correctedBits = [NSMutableArray array];
+  for (int i = 0; i < numDataCodewords*codewordSize; i++) {
+    [correctedBits addObject:[NSNull null]];
+  }
 
   for (int i = 0; i < numDataCodewords; i++) {
     BOOL seriesColor = NO;
@@ -228,7 +286,7 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
     int flag = 1 << (codewordSize - 1);
 
     for (int j = 0; j < codewordSize; j++) {
-      BOOL color = (dataWords[i] & flag) == flag;
+      BOOL color = ([[dataWords objectAtIndex:i] intValue] & flag) == flag;
       if (seriesCount == codewordSize - 1) {
         if (color == seriesColor) {
           @throw [FormatException formatInstance];
@@ -246,9 +304,9 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
           seriesCount = 1;
           seriesColor = color;
         }
-        correctedBits[i * codewordSize + j - offset] = color;
+        [correctedBits replaceObjectAtIndex:i * codewordSize + j - offset withObject:[NSNumber numberWithBool:color]];
       }
-      flag >>>= 1;
+      flag >>= 1;
     }
 
   }
@@ -265,21 +323,27 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
  * @throws FormatException if the matrix is not a valid aztec code
  */
 - (NSArray *) extractBits:(BitMatrix *)matrix {
-  NSArray * rawbits;
+  NSMutableArray * rawbits;
+  int capacity;
   if ([ddata compact]) {
-    if ([ddata nbLayers] > NB_BITS_COMPACT.length) {
+    if ([ddata nbLayers] > (sizeof(NB_BITS_COMPACT) / sizeof(int))) {
       @throw [FormatException formatInstance];
     }
-    rawbits = [NSArray array];
+    capacity = NB_BITS_COMPACT[[ddata nbLayers]];
     numCodewords = NB_DATABLOCK_COMPACT[[ddata nbLayers]];
-  }
-   else {
-    if ([ddata nbLayers] > NB_BITS.length) {
+  } else {
+    if ([ddata nbLayers] > (sizeof(NB_BITS) / sizeof(int))) {
       @throw [FormatException formatInstance];
     }
-    rawbits = [NSArray array];
+    capacity = NB_BITS[[ddata nbLayers]];
     numCodewords = NB_DATABLOCK[[ddata nbLayers]];
   }
+  
+  rawbits = [NSMutableArray arrayWithCapacity:capacity];
+  for (int i = 0; i < capacity; i++) {
+    [rawbits addObject:[NSNull null]];
+  }
+
   int layer = [ddata nbLayers];
   int size = matrix.height;
   int rawbitsOffset = 0;
@@ -289,16 +353,24 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
     int flip = 0;
 
     for (int i = 0; i < 2 * size - 4; i++) {
-      rawbits[rawbitsOffset + i] = [matrix get:matrixOffset + flip param1:matrixOffset + i / 2];
-      rawbits[rawbitsOffset + 2 * size - 4 + i] = [matrix get:matrixOffset + i / 2 param1:matrixOffset + size - 1 - flip];
+      [rawbits replaceObjectAtIndex:rawbitsOffset + i
+                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + flip y:matrixOffset + i / 2]]];
+
+      [rawbits replaceObjectAtIndex:rawbitsOffset + 2 * size - 4 + i
+                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + i / 2 y:matrixOffset + size - 1 - flip]]];
+
       flip = (flip + 1) % 2;
     }
 
     flip = 0;
 
     for (int i = 2 * size + 1; i > 5; i--) {
-      rawbits[rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1] = [matrix get:matrixOffset + size - 1 - flip param1:matrixOffset + i / 2 - 1];
-      rawbits[rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1] = [matrix get:matrixOffset + i / 2 - 1 param1:matrixOffset + flip];
+      [rawbits replaceObjectAtIndex:rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1
+                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + size - 1 - flip y:matrixOffset + i / 2 - 1]]];
+
+      [rawbits replaceObjectAtIndex:rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1
+                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + i / 2 - 1 y:matrixOffset + flip]]];
+
       flip = (flip + 1) % 2;
     }
 
@@ -315,9 +387,9 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
 /**
  * Transforms an Aztec code matrix by removing the control dashed lines
  */
-+ (BitMatrix *) removeDashedLines:(BitMatrix *)matrix {
+- (BitMatrix *) removeDashedLines:(BitMatrix *)matrix {
   int nbDashed = 1 + 2 * ((matrix.width - 1) / 2 / 16);
-  BitMatrix * newMatrix = [[[BitMatrix alloc] init:matrix.width - nbDashed param1:matrix.height - nbDashed] autorelease];
+  BitMatrix * newMatrix = [[[BitMatrix alloc] initWithWidth:matrix.width - nbDashed height:matrix.height - nbDashed] autorelease];
   int nx = 0;
 
   for (int x = 0; x < matrix.width; x++) {
@@ -330,8 +402,8 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
       if ((matrix.width / 2 - y) % 16 == 0) {
         continue;
       }
-      if ([matrix get:x param1:y]) {
-        [newMatrix set:nx param1:ny];
+      if ([matrix get:x y:y]) {
+        [newMatrix set:nx y:ny];
       }
       ny++;
     }
@@ -346,12 +418,12 @@ NSArray * const DIGIT_TABLE = [NSArray arrayWithObjects:@"CTRL_PS", @" ", @"0", 
 /**
  * Reads a code of given length and at given index in an array of bits
  */
-+ (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(int)length {
+- (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(int)length {
   int res = 0;
 
   for (int i = startIndex; i < startIndex + length; i++) {
     res <<= 1;
-    if (rawbits[i]) {
+    if ([[rawbits objectAtIndex:i] boolValue]) {
       res++;
     }
   }
