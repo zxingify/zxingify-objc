@@ -10,11 +10,11 @@
  * @author aripollak@gmail.com (Ari Pollak)
  */
 
-@interface UPCEANWriter : NSObject <Writer> {
-}
+@interface UPCEANWriter : NSObject <Writer>
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height;
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height;
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
 + (int) appendPattern:(NSArray *)target pos:(int)pos pattern:(NSArray *)pattern startColor:(int)startColor;
 - (NSArray *) encode:(NSString *)contents;
+
 @end

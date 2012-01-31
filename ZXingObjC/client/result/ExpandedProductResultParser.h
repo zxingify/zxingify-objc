@@ -1,5 +1,6 @@
-#import "BarcodeFormat.h"
+#import "ExpandedProductParsedResult.h"
 #import "Result.h"
+#import "ResultParser.h"
 
 /**
  * Parses strings of digits that represent a RSS Extended code.
@@ -8,8 +9,8 @@
  * @author Agustín Delgado, Servinform, S.A.
  */
 
-@interface ExpandedProductResultParser : ResultParser {
-}
+@interface ExpandedProductResultParser : ResultParser
 
 + (ExpandedProductParsedResult *) parse:(Result *)result;
+
 @end

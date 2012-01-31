@@ -1,7 +1,14 @@
+#import "AztecDetectorResult.h"
 #import "AztecReader.h"
+#import "BinaryBitmap.h"
+#import "DecodeHintType.h"
+#import "Decoder.h"
+#import "DecoderResult.h"
+#import "Detector.h"
+#import "Result.h"
+#import "ResultPointCallback.h"
 
 @implementation AztecReader
-
 
 /**
  * Locates and decodes a Data Matrix code in an image.
@@ -16,30 +23,31 @@
 }
 
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
-  AztecDetectorResult * detectorResult = [[[[Detector alloc] init:[image blackMatrix]] autorelease] detect];
-  NSArray * points = [detectorResult points];
+  AztecDetectorResult * detectorResult = [[[[Detector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
+  NSArray *points = [detectorResult points];
   if (hints != nil && [detectorResult points] != nil) {
-    ResultPointCallback * rpcb = (ResultPointCallback *)[hints objectForKey:DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+    id <ResultPointCallback> rpcb = [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]];
     if (rpcb != nil) {
-
-      for (int i = 0; i < [detectorResult points].length; i++) {
-        [rpcb foundPossibleResultPoint:[detectorResult points][i]];
+      for (ResultPoint *p in [detectorResult points]) {
+        [rpcb foundPossibleResultPoint:p];
       }
-
     }
   }
-  DecoderResult * decoderResult = [[[[Decoder alloc] init] autorelease] decode:detectorResult];
-  Result * result = [[[Result alloc] init:[decoderResult text] param1:[decoderResult rawBytes] param2:points param3:BarcodeFormat.AZTEC] autorelease];
+
+  DecoderResult *decoderResult = [[[[Decoder alloc] init] autorelease] decode:detectorResult];
+  Result * result = [[[Result alloc] init:[decoderResult text] rawBytes:[decoderResult rawBytes]
+                             resultPoints:points format:kBarcodeAztec] autorelease];
   if ([decoderResult byteSegments] != nil) {
-    [result putMetadata:ResultMetadataType.BYTE_SEGMENTS param1:[decoderResult byteSegments]];
+    [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
   }
   if ([decoderResult eCLevel] != nil) {
-    [result putMetadata:ResultMetadataType.ERROR_CORRECTION_LEVEL param1:[[decoderResult eCLevel] description]];
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[decoderResult eCLevel]];
   }
   return result;
 }
 
-- (void) reset {
+- (void)reset {
+  // do nothing
 }
 
 @end

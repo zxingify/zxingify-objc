@@ -9,70 +9,70 @@
 @synthesize body;
 @synthesize displayResult;
 
-- (id) init:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body {
-  if (self = [super init:ParsedResultType.SMS]) {
+- (id)initWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)aSubject body:(NSString *)aBody {
+  if (self = [super initWithType:kParsedResultTypeSMS]) {
     numbers = [NSArray arrayWithObjects:number, nil];
     vias = [NSArray arrayWithObjects:via, nil];
-    subject = subject;
-    body = body;
+    subject = [aSubject copy];
+    body = [aBody copy];
   }
   return self;
 }
 
-- (id) init:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body {
-  if (self = [super init:ParsedResultType.SMS]) {
-    numbers = numbers;
-    vias = vias;
-    subject = subject;
-    body = body;
+- (id)initWithNumbers:(NSArray *)theNumbers vias:(NSArray *)theVias subject:(NSString *)aSubject body:(NSString *)aBody {
+  if (self = [super initWithType:kParsedResultTypeSMS]) {
+    numbers = [theNumbers retain];
+    vias = [theVias retain];
+    subject = [aSubject copy];
+    body = [aBody copy];
   }
   return self;
 }
 
-- (NSString *) sMSURI {
-  StringBuffer * result = [[[StringBuffer alloc] init] autorelease];
-  [result append:@"sms:"];
+- (NSString *)sMSURI {
+  NSMutableString* result = [NSMutableString stringWithString:@"sms:"];
+
   BOOL first = YES;
 
-  for (int i = 0; i < numbers.length; i++) {
+  for (int i = 0; i < [numbers count]; i++) {
     if (first) {
       first = NO;
     }
      else {
-      [result append:','];
+      [result appendString:@","];
     }
-    [result append:numbers[i]];
-    if (vias[i] != nil) {
-      [result append:@";via="];
-      [result append:vias[i]];
+    [result appendString:[numbers objectAtIndex:i]];
+    if ([vias objectAtIndex:i] != nil) {
+      [result appendString:@";via="];
+      [result appendString:[vias objectAtIndex:i]];
     }
   }
 
   BOOL hasBody = body != nil;
   BOOL hasSubject = subject != nil;
   if (hasBody || hasSubject) {
-    [result append:'?'];
+    [result appendString:@"?"];
     if (hasBody) {
-      [result append:@"body="];
-      [result append:body];
+      [result appendString:@"body="];
+      [result appendString:body];
     }
     if (hasSubject) {
       if (hasBody) {
-        [result append:'&'];
+        [result appendString:@"&"];
       }
-      [result append:@"subject="];
-      [result append:subject];
+      [result appendString:@"subject="];
+      [result appendString:subject];
     }
   }
-  return [result description];
+  return result;
 }
 
-- (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:100] autorelease];
-  [self maybeAppend:numbers param1:result];
-  [self maybeAppend:subject param1:result];
-  [self maybeAppend:body param1:result];
-  return [result description];
+- (NSString *)displayResult {
+  NSMutableString* result = [NSMutableString stringWithCapacity:100];
+  [ParsedResult maybeAppendArray:numbers result:result];
+  [ParsedResult maybeAppend:subject result:result];
+  [ParsedResult maybeAppend:body result:result];
+  return result;
 }
 
 - (void) dealloc {

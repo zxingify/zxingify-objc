@@ -1,5 +1,3 @@
-#import "GenericGF.h"
-
 /**
  * <p>Represents a polynomial whose coefficients are elements of a GF.
  * Instances of this class are immutable.</p>
@@ -9,6 +7,8 @@
  * 
  * @author Sean Owen
  */
+
+@class GenericGF;
 
 @interface GenericGFPoly : NSObject {
   GenericGF * field;
@@ -23,7 +23,7 @@
 - (int) evaluateAt:(int)a;
 - (GenericGFPoly *) addOrSubtract:(GenericGFPoly *)other;
 - (GenericGFPoly *) multiply:(GenericGFPoly *)other;
-- (GenericGFPoly *) multiply:(int)scalar;
+- (GenericGFPoly *) multiplyScalar:(int)scalar;
 - (GenericGFPoly *) multiplyByMonomial:(int)degree coefficient:(int)coefficient;
 - (NSArray *) divide:(GenericGFPoly *)other;
 - (NSString *) description;

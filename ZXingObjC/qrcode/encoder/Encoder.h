@@ -8,7 +8,6 @@
 #import "ErrorCorrectionLevel.h"
 #import "Mode.h"
 #import "Version.h"
-#import "UnsupportedEncodingException.h"
 #import "NSMutableDictionary.h"
 #import "NSMutableArray.h"
 

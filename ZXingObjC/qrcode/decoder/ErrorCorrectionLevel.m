@@ -1,39 +1,24 @@
 #import "ErrorCorrectionLevel.h"
 
-
-/**
- * L = ~7% correction
- */
-ErrorCorrectionLevel * const L = [[[ErrorCorrectionLevel alloc] init:0 param1:0x01 param2:@"L"] autorelease];
-
-/**
- * M = ~15% correction
- */
-ErrorCorrectionLevel * const M = [[[ErrorCorrectionLevel alloc] init:1 param1:0x00 param2:@"M"] autorelease];
-
-/**
- * Q = ~25% correction
- */
-ErrorCorrectionLevel * const Q = [[[ErrorCorrectionLevel alloc] init:2 param1:0x03 param2:@"Q"] autorelease];
-
-/**
- * H = ~30% correction
- */
-ErrorCorrectionLevel * const H = [[[ErrorCorrectionLevel alloc] init:3 param1:0x02 param2:@"H"] autorelease];
-NSArray * const FOR_BITS = [NSArray arrayWithObjects:M, L, H, Q, nil];
-
 @implementation ErrorCorrectionLevel
+
+static NSArray* FOR_BITS = nil;
 
 @synthesize bits;
 @synthesize name;
 
-- (id) init:(int)ordinal bits:(int)bits name:(NSString *)name {
+- (id)initWithOrdinal:(int)anOrdinal bits:(int)theBits name:(NSString *)aName {
   if (self = [super init]) {
-    ordinal = ordinal;
-    bits = bits;
-    name = name;
+    ordinal = anOrdinal;
+    bits = theBits;
+    name = [aName copy];
   }
   return self;
+}
+
+- (void)dealloc {
+  [name release];
+  [super dealloc];
 }
 
 - (int) ordinal {
@@ -50,15 +35,62 @@ NSArray * const FOR_BITS = [NSArray arrayWithObjects:M, L, H, Q, nil];
  * @return ErrorCorrectionLevel representing the encoded error correction level
  */
 + (ErrorCorrectionLevel *) forBits:(int)bits {
-  if (bits < 0 || bits >= FOR_BITS.length) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
+  if (!FOR_BITS) {
+    FOR_BITS = [NSArray arrayWithObjects:[ErrorCorrectionLevel errorCorrectionLevelM],
+                [ErrorCorrectionLevel errorCorrectionLevelL], [ErrorCorrectionLevel errorCorrectionLevelH],
+                [ErrorCorrectionLevel errorCorrectionLevelQ], nil];
   }
-  return FOR_BITS[bits];
+
+  if (bits < 0 || bits >= [FOR_BITS count]) {
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:@"Invalid bits"
+                                 userInfo:nil];
+  }
+  return [FOR_BITS objectAtIndex:bits];
 }
 
-- (void) dealloc {
-  [name release];
-  [super dealloc];
+/**
+ * L = ~7% correction
+ */
++ (ErrorCorrectionLevel *)errorCorrectionLevelL {
+  static ErrorCorrectionLevel* thisLevel = nil;
+  if (!thisLevel) {
+    thisLevel = [[ErrorCorrectionLevel alloc] initWithOrdinal:0 bits:0x01 name:@"L"];
+  }
+  return thisLevel;
+}
+
+/**
+ * M = ~15% correction
+ */
++ (ErrorCorrectionLevel *)errorCorrectionLevelM {
+  static ErrorCorrectionLevel* thisLevel = nil;
+  if (!thisLevel) {
+    thisLevel = [[ErrorCorrectionLevel alloc] initWithOrdinal:1 bits:0x00 name:@"M"];
+  }
+  return thisLevel;
+}
+
+/**
+ * Q = ~25% correction
+ */
++ (ErrorCorrectionLevel *)errorCorrectionLevelQ {
+  static ErrorCorrectionLevel* thisLevel = nil;
+  if (!thisLevel) {
+    thisLevel = [[ErrorCorrectionLevel alloc] initWithOrdinal:2 bits:0x03 name:@"Q"];
+  }
+  return thisLevel;
+}
+
+/**
+ * H = ~30% correction
+ */
++ (ErrorCorrectionLevel *)errorCorrectionLevelH {
+  static ErrorCorrectionLevel* thisLevel = nil;
+  if (!thisLevel) {
+    thisLevel = [[ErrorCorrectionLevel alloc] initWithOrdinal:3 bits:0x02 name:@"H"];
+  }
+  return thisLevel;
 }
 
 @end

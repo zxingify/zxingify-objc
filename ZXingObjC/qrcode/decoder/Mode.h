@@ -1,4 +1,3 @@
-
 /**
  * <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
  * data can be encoded to bits in the QR code standard.</p>
@@ -6,20 +5,7 @@
  * @author Sean Owen
  */
 
-extern Mode * const TERMINATOR;
-extern Mode * const NUMERIC;
-extern Mode * const ALPHANUMERIC;
-extern Mode * const STRUCTURED_APPEND;
-extern Mode * const BYTE;
-extern Mode * const ECI;
-extern Mode * const KANJI;
-extern Mode * const FNC1_FIRST_POSITION;
-extern Mode * const FNC1_SECOND_POSITION;
-
-/**
- * See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
- */
-extern Mode * const HANZI;
+@class Version;
 
 @interface Mode : NSObject {
   NSArray * characterCountBitsForVersions;
@@ -29,7 +15,24 @@ extern Mode * const HANZI;
 
 @property(nonatomic, readonly) int bits;
 @property(nonatomic, retain, readonly) NSString * name;
+
+- (id)initWithCharacterCountBitsForVersions:(NSArray *)characterCountBitsForVersions
+                                       bits:(int)bits
+                                       name:(NSString *)name;
 + (Mode *) forBits:(int)bits;
 - (int) getCharacterCountBits:(Version *)version;
-- (NSString *) description;
+
++ (Mode *)terminatorMode; // Not really a mode...
++ (Mode *)numericMode;
++ (Mode *)alphanumericMode;
++ (Mode *)structuredAppendMode; // Not supported
++ (Mode *)byteMode;
++ (Mode *)eciMode; // character counts don't apply
++ (Mode *)kanjiMode;
++ (Mode *)fnc1FirstPositionMode;
++ (Mode *)fnc1SecondPositionMode;
+
+/** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
++ (Mode *)hanziMode;
+
 @end

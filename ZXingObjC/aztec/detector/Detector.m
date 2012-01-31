@@ -1,26 +1,67 @@
 #import "Detector.h"
+#import "GenericGF.h"
+#import "GridSampler.h"
+#import "NotFoundException.h"
+#import "ReedSolomonDecoder.h"
+#import "ReedSolomonException.h"
+#import "ResultPoint.h"
+#import "WhiteRectangleDetector.h"
 
-@implementation Point
+@interface AztecPoint : NSObject
 
-- (ResultPoint *) toResultPoint {
-  return [[[ResultPoint alloc] init:x y:y] autorelease];
-}
+@property (nonatomic, assign) int x;
+@property (nonatomic, assign) int y;
 
-- (id) init:(int)x y:(int)y {
+- (id)initWithX:(int) x y:(int)y;
+- (ResultPoint *)toResultPoint;
+
+@end
+
+@implementation AztecPoint
+
+@synthesize x, y;
+
+- (id)initWithX:(int)anX y:(int)aY {
   if (self = [super init]) {
-    x = x;
-    y = y;
+    x = anX;
+    y = aY;
   }
   return self;
 }
+
+- (ResultPoint *)toResultPoint {
+  return [[ResultPoint alloc] initWithX:x y:y];
+}
+
+@end
+
+@interface Detector ()
+
+- (NSArray*)bullEyeCornerPoints:(AztecPoint*)pCenter;
+- (void)correctParameterData:(NSArray*)parameterData compact:(BOOL)compact;
+- (float)distance:(AztecPoint*)a b:(AztecPoint*)b;
+- (void)extractParameters:(NSArray*)bullEyeCornerPoints;
+- (AztecPoint*)firstDifferent:(AztecPoint *)init color:(BOOL)color dx:(int)dx dy:(int)dy;
+- (BOOL)isValidX:(int)x y:(int)y;
+- (BOOL)isWhiteOrBlackRectangle:(AztecPoint *)p1 p2:(AztecPoint *)p2 p3:(AztecPoint *)p3 p4:(AztecPoint *)p4;
+- (AztecPoint*)matrixCenter;
+- (NSArray*)matrixCornerPoints:(NSArray*)bullEyeCornerPoints;
+- (void)parameters:(NSMutableArray*)parameterData;
+- (int)round:(float)d;
+- (BitMatrix*)sampleGrid:(BitMatrix*)image
+                  topLeft:(ResultPoint*)topLeft
+               bottomLeft:(ResultPoint*)bottomLeft
+              bottomRight:(ResultPoint*)bottomRight
+                 topRight:(ResultPoint*)topRight;
+- (NSArray*)sampleLine:(AztecPoint*)p1 p2:(AztecPoint*)p2 size:(int)size;
 
 @end
 
 @implementation Detector
 
-- (id) initWithImage:(BitMatrix *)image {
+- (id)initWithImage:(BitMatrix*)anImage {
   if (self = [super init]) {
-    image = image;
+    image = [anImage retain];
   }
   return self;
 }
@@ -32,12 +73,16 @@
  * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
  * @throws NotFoundException if no Aztec Code can be found
  */
-- (AztecDetectorResult *) detect {
-  Point * pCenter = [self matrixCenter];
-  NSArray * bullEyeCornerPoints = [self getBullEyeCornerPoints:pCenter];
+- (AztecDetectorResult*)detect {
+  AztecPoint* pCenter = [self matrixCenter];
+  NSArray * bullEyeCornerPoints = [self bullEyeCornerPoints:pCenter];
   [self extractParameters:bullEyeCornerPoints];
-  NSArray * corners = [self getMatrixCornerPoints:bullEyeCornerPoints];
-  BitMatrix * bits = [self sampleGrid:image topLeft:corners[shift % 4] bottomLeft:corners[(shift + 3) % 4] bottomRight:corners[(shift + 2) % 4] topRight:corners[(shift + 1) % 4]];
+  NSArray * corners = [self matrixCornerPoints:bullEyeCornerPoints];
+  BitMatrix *bits = [self sampleGrid:image
+                             topLeft:[corners objectAtIndex:shift % 4]
+                          bottomLeft:[corners objectAtIndex:(shift + 3) % 4]
+                         bottomRight:[corners objectAtIndex:(shift + 2) % 4]
+                            topRight:[corners objectAtIndex:(shift + 1) % 4]];
   return [[[AztecDetectorResult alloc] init:bits param1:corners param2:compact param3:nbDataBlocks param4:nbLayers] autorelease];
 }
 
@@ -48,72 +93,73 @@
  * @param bullEyeCornerPoints the array of bull's eye corners
  * @throws NotFoundException in case of too many errors or invalid parameters
  */
-- (void) extractParameters:(NSArray *)bullEyeCornerPoints {
-  NSArray * resab = [self sampleLine:bullEyeCornerPoints[0] p2:bullEyeCornerPoints[1] size:2 * nbCenterLayers + 1];
-  NSArray * resbc = [self sampleLine:bullEyeCornerPoints[1] p2:bullEyeCornerPoints[2] size:2 * nbCenterLayers + 1];
-  NSArray * rescd = [self sampleLine:bullEyeCornerPoints[2] p2:bullEyeCornerPoints[3] size:2 * nbCenterLayers + 1];
-  NSArray * resda = [self sampleLine:bullEyeCornerPoints[3] p2:bullEyeCornerPoints[0] size:2 * nbCenterLayers + 1];
-  if (resab[0] && resab[2 * nbCenterLayers]) {
+- (void)extractParameters:(NSArray*)bullEyeCornerPoints {
+  AztecPoint *p0 = [bullEyeCornerPoints objectAtIndex:0];
+  AztecPoint *p1 = [bullEyeCornerPoints objectAtIndex:1];
+  AztecPoint *p2 = [bullEyeCornerPoints objectAtIndex:2];
+  AztecPoint *p3 = [bullEyeCornerPoints objectAtIndex:3];
+
+  NSArray *resab = [self sampleLine:p0 p2:p1 size:2 * nbCenterLayers + 1];
+  NSArray *resbc = [self sampleLine:p1 p2:p2 size:2 * nbCenterLayers + 1];
+  NSArray *rescd = [self sampleLine:p2 p2:p3 size:2 * nbCenterLayers + 1];
+  NSArray *resda = [self sampleLine:p3 p2:p0 size:2 * nbCenterLayers + 1];
+
+  if ([resab objectAtIndex:0] && [resab objectAtIndex:2 * nbCenterLayers]) {
     shift = 0;
-  }
-   else if (resbc[0] && resbc[2 * nbCenterLayers]) {
+  } else if ([resbc objectAtIndex:0] && [resbc objectAtIndex:2 * nbCenterLayers]) {
     shift = 1;
-  }
-   else if (rescd[0] && rescd[2 * nbCenterLayers]) {
+  } else if ([rescd objectAtIndex:0] && [rescd objectAtIndex:2 * nbCenterLayers]) {
     shift = 2;
-  }
-   else if (resda[0] && resda[2 * nbCenterLayers]) {
+  } else if ([resda objectAtIndex:0] && [resda objectAtIndex:2 * nbCenterLayers]) {
     shift = 3;
-  }
-   else {
+  } else {
     @throw [NotFoundException notFoundInstance];
   }
-  NSArray * parameterData;
-  NSArray * shiftedParameterData;
+
+  NSMutableArray *parameterData = [NSMutableArray array];
+  NSMutableArray *shiftedParameterData = [NSMutableArray array];
   if (compact) {
-    shiftedParameterData = [NSArray array];
+    for (int i = 0; i < 28; i++) {
+      [shiftedParameterData addObject:[NSNull null]];
+    }
 
     for (int i = 0; i < 7; i++) {
-      shiftedParameterData[i] = resab[2 + i];
-      shiftedParameterData[i + 7] = resbc[2 + i];
-      shiftedParameterData[i + 14] = rescd[2 + i];
-      shiftedParameterData[i + 21] = resda[2 + i];
+      [shiftedParameterData replaceObjectAtIndex:i withObject:[resab objectAtIndex:2+i]];
+      [shiftedParameterData replaceObjectAtIndex:i + 7 withObject:[resbc objectAtIndex:2+i]];
+      [shiftedParameterData replaceObjectAtIndex:i + 14 withObject:[rescd objectAtIndex:2+i]];
+      [shiftedParameterData replaceObjectAtIndex:i + 21 withObject:[resda objectAtIndex:2+i]];
     }
-
-    parameterData = [NSArray array];
 
     for (int i = 0; i < 28; i++) {
-      parameterData[i] = shiftedParameterData[(i + shift * 7) % 28];
+      [parameterData addObject:[shiftedParameterData objectAtIndex:(i + shift * 7) % 28]];
     }
-
-  }
-   else {
-    shiftedParameterData = [NSArray array];
+  } else {
+    for (int i = 0; i < 40; i++) {
+      [shiftedParameterData addObject:[NSNull null]];
+    }
 
     for (int i = 0; i < 11; i++) {
       if (i < 5) {
-        shiftedParameterData[i] = resab[2 + i];
-        shiftedParameterData[i + 10] = resbc[2 + i];
-        shiftedParameterData[i + 20] = rescd[2 + i];
-        shiftedParameterData[i + 30] = resda[2 + i];
+        [shiftedParameterData replaceObjectAtIndex:i withObject:[resab objectAtIndex:2 + i]];
+        [shiftedParameterData replaceObjectAtIndex:i + 10 withObject:[resbc objectAtIndex:2 + i]];
+        [shiftedParameterData replaceObjectAtIndex:i + 20 withObject:[rescd objectAtIndex:2 + i]];
+        [shiftedParameterData replaceObjectAtIndex:i + 30 withObject:[resda objectAtIndex:2 + i]];
       }
       if (i > 5) {
-        shiftedParameterData[i - 1] = resab[2 + i];
-        shiftedParameterData[i + 10 - 1] = resbc[2 + i];
-        shiftedParameterData[i + 20 - 1] = rescd[2 + i];
-        shiftedParameterData[i + 30 - 1] = resda[2 + i];
+        [shiftedParameterData replaceObjectAtIndex:i - 1 withObject:[resab objectAtIndex:2 + i]];
+        [shiftedParameterData replaceObjectAtIndex:i + 10 - 1 withObject:[resbc objectAtIndex:2 + i]];
+        [shiftedParameterData replaceObjectAtIndex:i + 20 - 1 withObject:[rescd objectAtIndex:2 + i]];
+        [shiftedParameterData replaceObjectAtIndex:i + 30 - 1 withObject:[resda objectAtIndex:2 + i]];
       }
     }
 
-    parameterData = [NSArray array];
-
     for (int i = 0; i < 40; i++) {
-      parameterData[i] = shiftedParameterData[(i + shift * 10) % 40];
+      [parameterData addObject:[shiftedParameterData objectAtIndex:(i + shift * 10) % 40]];
     }
 
   }
   [self correctParameterData:parameterData compact:compact];
-  [self getParameters:parameterData];
+  [self parameters:parameterData];
 }
 
 
@@ -125,28 +171,39 @@
  * @return the array of aztec code corners
  * @throws NotFoundException if the corner points do not fit in the image
  */
-- (NSArray *) getMatrixCornerPoints:(NSArray *)bullEyeCornerPoints {
+- (NSArray*)matrixCornerPoints:(NSArray*)bullEyeCornerPoints {
+  AztecPoint *p0 = [bullEyeCornerPoints objectAtIndex:0];
+  AztecPoint *p1 = [bullEyeCornerPoints objectAtIndex:1];
+  AztecPoint *p2 = [bullEyeCornerPoints objectAtIndex:2];
+  AztecPoint *p3 = [bullEyeCornerPoints objectAtIndex:3];
+  
   float ratio = (2 * nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4) / 8) / (2.0f * nbCenterLayers);
-  int dx = bullEyeCornerPoints[0].x - bullEyeCornerPoints[2].x;
+  int dx = p0.x - p2.x;
   dx += dx > 0 ? 1 : -1;
-  int dy = bullEyeCornerPoints[0].y - bullEyeCornerPoints[2].y;
+  int dy = p0.y - p2.y;
   dy += dy > 0 ? 1 : -1;
-  int targetcx = [self round:bullEyeCornerPoints[2].x - ratio * dx];
-  int targetcy = [self round:bullEyeCornerPoints[2].y - ratio * dy];
-  int targetax = [self round:bullEyeCornerPoints[0].x + ratio * dx];
-  int targetay = [self round:bullEyeCornerPoints[0].y + ratio * dy];
-  dx = bullEyeCornerPoints[1].x - bullEyeCornerPoints[3].x;
+  int targetcx = [self round:p2.x - ratio * dx];
+  int targetcy = [self round:p2.y - ratio * dy];
+  int targetax = [self round:p0.x + ratio * dx];
+  int targetay = [self round:p0.y + ratio * dy];
+  dx = p1.x - p3.x;
   dx += dx > 0 ? 1 : -1;
-  dy = bullEyeCornerPoints[1].y - bullEyeCornerPoints[3].y;
+  dy = p1.y - p3.y;
   dy += dy > 0 ? 1 : -1;
-  int targetdx = [self round:bullEyeCornerPoints[3].x - ratio * dx];
-  int targetdy = [self round:bullEyeCornerPoints[3].y - ratio * dy];
-  int targetbx = [self round:bullEyeCornerPoints[1].x + ratio * dx];
-  int targetby = [self round:bullEyeCornerPoints[1].y + ratio * dy];
-  if (![self isValid:targetax y:targetay] || ![self isValid:targetbx y:targetby] || ![self isValid:targetcx y:targetcy] || ![self isValid:targetdx y:targetdy]) {
+  int targetdx = [self round:p3.x - ratio * dx];
+  int targetdy = [self round:p3.y - ratio * dy];
+  int targetbx = [self round:p1.x + ratio * dx];
+  int targetby = [self round:p1.y + ratio * dy];
+  if (![self isValidX:targetax y:targetay] ||
+      ![self isValidX:targetbx y:targetby] ||
+      ![self isValidX:targetcx y:targetcy] ||
+      ![self isValidX:targetdx y:targetdy]) {
     @throw [NotFoundException notFoundInstance];
   }
-  return [NSArray arrayWithObjects:[[[ResultPoint alloc] init:targetax param1:targetay] autorelease], [[[ResultPoint alloc] init:targetbx param1:targetby] autorelease], [[[ResultPoint alloc] init:targetcx param1:targetcy] autorelease], [[[ResultPoint alloc] init:targetdx param1:targetdy] autorelease], nil];
+  return [NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:targetax y:targetay] autorelease],
+          [[[ResultPoint alloc] initWithX:targetbx y:targetby] autorelease],
+          [[[ResultPoint alloc] initWithX:targetcx y:targetcy] autorelease],
+          [[[ResultPoint alloc] initWithX:targetdx y:targetdy] autorelease], nil];
 }
 
 
@@ -158,7 +215,7 @@
  * @param compact true if this is a compact Aztec code
  * @throws NotFoundException if the array contains too many errors
  */
-+ (void) correctParameterData:(NSArray *)parameterData compact:(BOOL)compact {
++ (void)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact {
   int numCodewords;
   int numDataCodewords;
   if (compact) {
@@ -170,25 +227,28 @@
     numDataCodewords = 4;
   }
   int numECCodewords = numCodewords - numDataCodewords;
-  NSArray * parameterWords = [NSArray array];
+  NSMutableArray *parameterWords = [NSMutableArray array];
+  for (int i = 0; i < numCodewords; i++) {
+    [parameterWords addObject:[NSNumber numberWithInt:0]];
+  }
+  
   int codewordSize = 4;
 
   for (int i = 0; i < numCodewords; i++) {
     int flag = 1;
 
     for (int j = 1; j <= codewordSize; j++) {
-      if (parameterData[codewordSize * i + codewordSize - j]) {
-        parameterWords[i] += flag;
+      if ([[parameterData objectAtIndex:codewordSize * i + codewordSize - j] boolValue]) {
+        [parameterWords replaceObjectAtIndex:i withObject:
+         [NSNumber numberWithInt:[[parameterWords objectAtIndex:i] intValue] + flag]];
       }
       flag <<= 1;
     }
-
   }
 
-
   @try {
-    ReedSolomonDecoder * rsDecoder = [[[ReedSolomonDecoder alloc] init:GenericGF.AZTEC_PARAM] autorelease];
-    [rsDecoder decode:parameterWords param1:numECCodewords];
+    ReedSolomonDecoder *rsDecoder = [[[ReedSolomonDecoder alloc] initWithField:[GenericGF AztecDataParam]] autorelease];
+    [rsDecoder decode:parameterWords twoS:numECCodewords];
   }
   @catch (ReedSolomonException * rse) {
     @throw [NotFoundException notFoundInstance];
@@ -198,12 +258,12 @@
     int flag = 1;
 
     for (int j = 1; j <= codewordSize; j++) {
-      parameterData[i * codewordSize + codewordSize - j] = (parameterWords[i] & flag) == flag;
+      [parameterData replaceObjectAtIndex:i * codewordSize + codewordSize - j
+                               withObject:[NSNumber numberWithBool:
+                                           ([[parameterWords objectAtIndex:i] intValue] & flag) == flag]];
       flag <<= 1;
     }
-
   }
-
 }
 
 
@@ -215,18 +275,18 @@
  * @return The corners of the bull-eye
  * @throws NotFoundException If no valid bull-eye can be found
  */
-- (NSArray *) getBullEyeCornerPoints:(Point *)pCenter {
-  Point * pina = pCenter;
-  Point * pinb = pCenter;
-  Point * pinc = pCenter;
-  Point * pind = pCenter;
+- (NSArray*)bullEyeCornerPoints:(AztecPoint*)pCenter {
+  AztecPoint *pina = pCenter;
+  AztecPoint *pinb = pCenter;
+  AztecPoint *pinc = pCenter;
+  AztecPoint *pind = pCenter;
   BOOL color = YES;
 
   for (nbCenterLayers = 1; nbCenterLayers < 9; nbCenterLayers++) {
-    Point * pouta = [self getFirstDifferent:pina color:color dx:1 dy:-1];
-    Point * poutb = [self getFirstDifferent:pinb color:color dx:1 dy:1];
-    Point * poutc = [self getFirstDifferent:pinc color:color dx:-1 dy:1];
-    Point * poutd = [self getFirstDifferent:pind color:color dx:-1 dy:-1];
+    AztecPoint *pouta = [self firstDifferent:pina color:color dx:1 dy:-1];
+    AztecPoint *poutb = [self firstDifferent:pinb color:color dx:1 dy:1];
+    AztecPoint *poutc = [self firstDifferent:pinc color:color dx:-1 dy:1];
+    AztecPoint *poutd = [self firstDifferent:pind color:color dx:-1 dy:-1];
     if (nbCenterLayers > 2) {
       float q = [self distance:poutd b:pouta] * nbCenterLayers / ([self distance:pind b:pina] * (nbCenterLayers + 2));
       if (q < 0.75 || q > 1.25 || ![self isWhiteOrBlackRectangle:pouta p2:poutb p3:poutc p4:poutd]) {
@@ -257,13 +317,16 @@
   int targetdy = [self round:pind.y - ratio * dy];
   int targetbx = [self round:pinb.x + ratio * dx];
   int targetby = [self round:pinb.y + ratio * dy];
-  if (![self isValid:targetax y:targetay] || ![self isValid:targetbx y:targetby] || ![self isValid:targetcx y:targetcy] || ![self isValid:targetdx y:targetdy]) {
+  if (![self isValidX:targetax y:targetay] ||
+      ![self isValidX:targetbx y:targetby] ||
+      ![self isValidX:targetcx y:targetcy] ||
+      ![self isValidX:targetdx y:targetdy]) {
     @throw [NotFoundException notFoundInstance];
   }
-  Point * pa = [[[Point alloc] init:targetax param1:targetay] autorelease];
-  Point * pb = [[[Point alloc] init:targetbx param1:targetby] autorelease];
-  Point * pc = [[[Point alloc] init:targetcx param1:targetcy] autorelease];
-  Point * pd = [[[Point alloc] init:targetdx param1:targetdy] autorelease];
+  AztecPoint * pa = [[[AztecPoint alloc] initWithX:targetax y:targetay] autorelease];
+  AztecPoint * pb = [[[AztecPoint alloc] initWithX:targetbx y:targetby] autorelease];
+  AztecPoint * pc = [[[AztecPoint alloc] initWithX:targetcx y:targetcy] autorelease];
+  AztecPoint * pd = [[[AztecPoint alloc] initWithX:targetdx y:targetdy] autorelease];
   return [NSArray arrayWithObjects:pa, pb, pc, pd, nil];
 }
 
@@ -274,46 +337,46 @@
  * 
  * @return the center point
  */
-- (Point *) getMatrixCenter {
-  ResultPoint * pointA;
-  ResultPoint * pointB;
-  ResultPoint * pointC;
-  ResultPoint * pointD;
+- (AztecPoint *)matrixCenter {
+  ResultPoint *pointA;
+  ResultPoint *pointB;
+  ResultPoint *pointC;
+  ResultPoint *pointD;
 
   @try {
-    NSArray * cornerPoints = [[[[WhiteRectangleDetector alloc] init:image] autorelease] detect];
-    pointA = cornerPoints[0];
-    pointB = cornerPoints[1];
-    pointC = cornerPoints[2];
-    pointD = cornerPoints[3];
+    NSArray * cornerPoints = [[[[WhiteRectangleDetector alloc] initWithImage:image] autorelease] detect];
+    pointA = [cornerPoints objectAtIndex:0];
+    pointB = [cornerPoints objectAtIndex:1];
+    pointC = [cornerPoints objectAtIndex:2];
+    pointD = [cornerPoints objectAtIndex:3];
   }
   @catch (NotFoundException * e) {
     int cx = image.width / 2;
     int cy = image.height / 2;
-    pointA = [[self getFirstDifferent:[[[Point alloc] init:cx + 15 / 2 param1:cy - 15 / 2] autorelease] color:NO dx:1 dy:-1] toResultPoint];
-    pointB = [[self getFirstDifferent:[[[Point alloc] init:cx + 15 / 2 param1:cy + 15 / 2] autorelease] color:NO dx:1 dy:1] toResultPoint];
-    pointC = [[self getFirstDifferent:[[[Point alloc] init:cx - 15 / 2 param1:cy + 15 / 2] autorelease] color:NO dx:-1 dy:1] toResultPoint];
-    pointD = [[self getFirstDifferent:[[[Point alloc] init:cx - 15 / 2 param1:cy - 15 / 2] autorelease] color:NO dx:-1 dy:-1] toResultPoint];
+    pointA = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx + 15 / 2 y:cy - 15 / 2] autorelease] color:NO dx:1 dy:-1] toResultPoint];
+    pointB = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx + 15 / 2 y:cy + 15 / 2] autorelease] color:NO dx:1 dy:1] toResultPoint];
+    pointC = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx - 15 / 2 y:cy + 15 / 2] autorelease] color:NO dx:-1 dy:1] toResultPoint];
+    pointD = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx - 15 / 2 y:cy - 15 / 2] autorelease] color:NO dx:-1 dy:-1] toResultPoint];
   }
   int cx = [self round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
   int cy = [self round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
 
   @try {
-    NSArray * cornerPoints = [[[[WhiteRectangleDetector alloc] init:image param1:15 param2:cx param3:cy] autorelease] detect];
-    pointA = cornerPoints[0];
-    pointB = cornerPoints[1];
-    pointC = cornerPoints[2];
-    pointD = cornerPoints[3];
+    NSArray * cornerPoints = [[[[WhiteRectangleDetector alloc] initWithImage:image initSize:15 x:cx y:cy] autorelease] detect];
+    pointA = [cornerPoints objectAtIndex:0];
+    pointB = [cornerPoints objectAtIndex:1];
+    pointC = [cornerPoints objectAtIndex:2];
+    pointD = [cornerPoints objectAtIndex:3];
   }
   @catch (NotFoundException * e) {
-    pointA = [[self getFirstDifferent:[[[Point alloc] init:cx + 15 / 2 param1:cy - 15 / 2] autorelease] color:NO dx:1 dy:-1] toResultPoint];
-    pointB = [[self getFirstDifferent:[[[Point alloc] init:cx + 15 / 2 param1:cy + 15 / 2] autorelease] color:NO dx:1 dy:1] toResultPoint];
-    pointC = [[self getFirstDifferent:[[[Point alloc] init:cx - 15 / 2 param1:cy + 15 / 2] autorelease] color:NO dx:-1 dy:1] toResultPoint];
-    pointD = [[self getFirstDifferent:[[[Point alloc] init:cx - 15 / 2 param1:cy - 15 / 2] autorelease] color:NO dx:-1 dy:-1] toResultPoint];
+    pointA = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx + 15 / 2 y:cy - 15 / 2] autorelease] color:NO dx:1 dy:-1] toResultPoint];
+    pointB = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx + 15 / 2 y:cy + 15 / 2] autorelease] color:NO dx:1 dy:1] toResultPoint];
+    pointC = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx - 15 / 2 y:cy + 15 / 2] autorelease] color:NO dx:-1 dy:1] toResultPoint];
+    pointD = [[self firstDifferent:[[[AztecPoint alloc] initWithX:cx - 15 / 2 y:cy - 15 / 2] autorelease] color:NO dx:-1 dy:-1] toResultPoint];
   }
   cx = [self round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
   cy = [self round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
-  return [[[Point alloc] init:cx param1:cy] autorelease];
+  return [[[AztecPoint alloc] initWithX:cx y:cy] autorelease];
 }
 
 
@@ -334,14 +397,33 @@
     }
   }
   GridSampler * sampler = [GridSampler instance];
-  return [sampler sampleGrid:image param1:dimension param2:dimension param3:0.5f param4:0.5f param5:dimension - 0.5f param6:0.5f param7:dimension - 0.5f param8:dimension - 0.5f param9:0.5f param10:dimension - 0.5f param11:[topLeft x] param12:[topLeft y] param13:[topRight x] param14:[topRight y] param15:[bottomRight x] param16:[bottomRight y] param17:[bottomLeft x] param18:[bottomLeft y]];
+
+  return [sampler sampleGrid:image
+                  dimensionX:dimension
+                  dimensionY:dimension
+                       p1ToX:0.5f
+                       p1ToY:0.5f
+                       p2ToX:dimension - 0.5f
+                       p2ToY:0.5f
+                       p3ToX:dimension - 0.5f
+                       p3ToY:dimension - 0.5f
+                       p4ToX:0.5f
+                       p4ToY:dimension - 0.5f
+                     p1FromX:[topLeft x]
+                     p1FromY:[topLeft y]
+                     p2FromX:[topRight x]
+                     p2FromY:[topRight y]
+                     p3FromX:[bottomRight x]
+                     p3FromY:[bottomRight y]
+                     p4FromX:[bottomLeft x]
+                     p4FromY:[bottomLeft y]];
 }
 
 
 /**
  * Sets number of layers and number of datablocks from parameter bits
  */
-- (void) getParameters:(NSArray *)parameterData {
+- (void) parameters:(NSArray *)parameterData {
   int nbBitsForNbLayers;
   int nbBitsForNbDatablocks;
   if (compact) {
@@ -382,7 +464,7 @@
  * @param size number of bits
  * @return the array of bits
  */
-- (NSArray *) sampleLine:(Point *)p1 p2:(Point *)p2 size:(int)size {
+- (NSArray *) sampleLine:(CGPoint)p1 p2:(CGPoint)p2 size:(int)size {
   NSArray * res = [NSArray array];
   float d = [self distance:p1 b:p2];
   float moduleSize = d / (size - 1);
@@ -405,25 +487,25 @@
  * @return true if the border of the rectangle passed in parameter is compound of white points only
  * or black points only
  */
-- (BOOL) isWhiteOrBlackRectangle:(Point *)p1 p2:(Point *)p2 p3:(Point *)p3 p4:(Point *)p4 {
+- (BOOL)isWhiteOrBlackRectangle:(AztecPoint *)p1 p2:(AztecPoint *)p2 p3:(AztecPoint *)p3 p4:(AztecPoint *)p4 {
   int corr = 3;
   p1 = [[[Point alloc] init:p1.x - corr param1:p1.y + corr] autorelease];
   p2 = [[[Point alloc] init:p2.x - corr param1:p2.y - corr] autorelease];
   p3 = [[[Point alloc] init:p3.x + corr param1:p3.y - corr] autorelease];
   p4 = [[[Point alloc] init:p4.x + corr param1:p4.y + corr] autorelease];
-  int cInit = [self getColor:p4 p2:p1];
+  int cInit = [self color:p4 p2:p1];
   if (cInit == 0) {
     return NO;
   }
-  int c = [self getColor:p1 p2:p2];
+  int c = [self color:p1 p2:p2];
   if (c != cInit || c == 0) {
     return NO;
   }
-  c = [self getColor:p2 p2:p3];
+  c = [self color:p2 p2:p3];
   if (c != cInit || c == 0) {
     return NO;
   }
-  c = [self getColor:p3 p2:p4];
+  c = [self color:p3 p2:p4];
   return c == cInit && c != 0;
 }
 
@@ -433,7 +515,7 @@
  * 
  * @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
  */
-- (int) getColor:(Point *)p1 p2:(Point *)p2 {
+- (int) color:(Point *)p1 p2:(Point *)p2 {
   float d = [self distance:p1 b:p2];
   float dx = (p2.x - p1.x) / d;
   float dy = (p2.y - p1.y) / d;
@@ -466,7 +548,7 @@
 /**
  * Gets the coordinate of the first point with a different color in the given direction
  */
-- (Point *) getFirstDifferent:(Point *)init color:(BOOL)color dx:(int)dx dy:(int)dy {
+- (AztecPoint *) firstDifferent:(AztecPoint *)init color:(BOOL)color dx:(int)dx dy:(int)dy {
   int x = init.x + dx;
   int y = init.y + dy;
 
@@ -492,7 +574,7 @@
   return [[[Point alloc] init:x param1:y] autorelease];
 }
 
-- (BOOL) isValid:(int)x y:(int)y {
+- (BOOL) isValidX:(int)x y:(int)y {
   return x >= 0 && x < image.width && y > 0 && y < image.height;
 }
 
@@ -501,11 +583,11 @@
  * Ends up being a bit faster than Math.round(). This merely rounds its
  * argument to the nearest int, where x.5 rounds up.
  */
-+ (int) round:(float)d {
+- (int) round:(float)d {
   return (int)(d + 0.5f);
 }
 
-+ (float) distance:(Point *)a b:(Point *)b {
+- (float) distance:(Point *)a b:(Point *)b {
   return (float)[Math sqrt:(a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)];
 }
 

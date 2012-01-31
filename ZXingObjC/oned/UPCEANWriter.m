@@ -1,17 +1,27 @@
 #import "UPCEANWriter.h"
 
+@interface UPCEANWriter ()
+
++ (BitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height;
+
+@end
+
 @implementation UPCEANWriter
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height {
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
   if (contents == nil || [contents length] == 0) {
-    @throw [[[IllegalArgumentException alloc] init:@"Found empty contents"] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:@"Found empty contents"
+                                 userInfo:nil];
   }
   if (width < 0 || height < 0) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Requested dimensions are too small: " stringByAppendingString:width] + 'x' + height] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:[NSString stringWithFormat:@"Requested dimensions are too small: %dx%d", width, height]
+                                 userInfo:nil];
   }
   NSArray * code = [self encode:contents];
   return [self renderResult:code width:width height:height];
@@ -22,7 +32,7 @@
  * @return a byte array of horizontal pixels (0 = white, 1 = black)
  */
 + (BitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height {
-  int inputWidth = code.length;
+  int inputWidth = [code count];
   int fullWidth = inputWidth + (UPCEANReader.START_END_PATTERN.length << 1);
   int outputWidth = [Math max:width param1:fullWidth];
   int outputHeight = [Math max:1 param1:height];

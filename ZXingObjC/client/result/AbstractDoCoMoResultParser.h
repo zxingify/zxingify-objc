@@ -1,3 +1,4 @@
+#import "ResultParser.h"
 
 /**
  * <p>See
@@ -10,9 +11,9 @@
  * @author Sean Owen
  */
 
-@interface AbstractDoCoMoResultParser : ResultParser {
-}
+@interface AbstractDoCoMoResultParser : ResultParser
 
 + (NSArray *) matchDoCoMoPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 + (NSString *) matchSingleDoCoMoPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
+
 @end

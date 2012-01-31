@@ -5,7 +5,7 @@
 @synthesize x;
 @synthesize y;
 
-- (id) init:(float)x y:(float)y {
+- (id) initWithX:(float)x y:(float)y {
   if (self = [super init]) {
     x = x;
     y = y;

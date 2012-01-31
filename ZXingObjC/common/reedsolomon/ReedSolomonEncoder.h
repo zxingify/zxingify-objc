@@ -1,11 +1,11 @@
-#import "NSMutableArray.h"
-
 /**
  * <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
  * 
  * @author Sean Owen
  * @author William Rucklidge
  */
+
+@class GenericGF;
 
 @interface ReedSolomonEncoder : NSObject {
   GenericGF * field;

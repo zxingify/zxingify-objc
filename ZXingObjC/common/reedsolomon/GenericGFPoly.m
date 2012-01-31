@@ -1,3 +1,4 @@
+#import "GenericGF.h"
 #import "GenericGFPoly.h"
 
 @implementation GenericGFPoly
@@ -149,7 +150,7 @@
   return [[[GenericGFPoly alloc] init:field param1:product] autorelease];
 }
 
-- (GenericGFPoly *) multiply:(int)scalar {
+- (GenericGFPoly *) multiplyScalar:(int)scalar {
   if (scalar == 0) {
     return [field zero];
   }

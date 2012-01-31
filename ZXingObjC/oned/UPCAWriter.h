@@ -1,6 +1,5 @@
 #import "BarcodeFormat.h"
 #import "Writer.h"
-#import "WriterException.h"
 #import "BitMatrix.h"
 
 /**
@@ -9,11 +8,9 @@
  * @author qwandor@google.com (Andrew Walbran)
  */
 
-@interface UPCAWriter : NSObject <Writer> {
-  EAN13Writer * subWriter;
-}
+@interface UPCAWriter : NSObject <Writer>
 
-- (void) init;
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height;
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height;
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
+
 @end

@@ -1,3 +1,4 @@
+#import "GenericGF.h"
 #import "ReedSolomonEncoder.h"
 
 @implementation ReedSolomonEncoder

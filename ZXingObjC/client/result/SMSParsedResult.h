@@ -1,3 +1,4 @@
+#import "ParsedResult.h"
 
 /**
  * @author Sean Owen
@@ -16,6 +17,7 @@
 @property(nonatomic, retain, readonly) NSString * subject;
 @property(nonatomic, retain, readonly) NSString * body;
 @property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body;
-- (id) init:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body;
+- (id)initWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body;
+- (id)initWithNumbers:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body;
+
 @end

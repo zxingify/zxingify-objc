@@ -13,7 +13,7 @@
 
 @property(nonatomic, readonly) float x;
 @property(nonatomic, readonly) float y;
-- (id) init:(float)x y:(float)y;
+- (id) initWithX:(float)x y:(float)y;
 - (BOOL) isEqualTo:(NSObject *)other;
 - (int) hash;
 - (NSString *) description;

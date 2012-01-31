@@ -4,11 +4,13 @@ int const codeWidth = 3 + (7 * 6) + 5 + (7 * 6) + 3;
 
 @implementation EAN13Writer
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
-  if (format != BarcodeFormat.EAN_13) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Can only encode EAN_13, but got " stringByAppendingString:format]] autorelease];
+- (BitMatrix *)encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+  if (format != kBarcodeEan13) {
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:[NSString stringWithFormat:@"Can only encode EAN_13, but got %d", format]
+                                 userInfo:nil];
   }
-  return [super encode:contents param1:format param2:width param3:height param4:hints];
+  return [super encode:contents format:format width:width height:height hints:hints];
 }
 
 - (NSArray *) encode:(NSString *)contents {
