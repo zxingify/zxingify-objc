@@ -1,7 +1,23 @@
 #import "OneDReader.h"
+#import "BinaryBitmap.h"
+#import "ChecksumException.h"
+#import "DecodeHintType.h"
+#import "FormatException.h"
+#import "NotFoundException.h"
+#import "ReaderException.h"
+#import "Result.h"
+#import "ResultMetadataType.h"
+#import "ResultPoint.h"
+#import "BitArray.h"
 
 int const INTEGER_MATH_SHIFT = 8;
 int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+
+@interface OneDReader ()
+
+- (Result *) doDecode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+
+@end
 
 @implementation OneDReader
 
@@ -15,21 +31,24 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     return [self doDecode:image hints:hints];
   }
   @catch (NotFoundException * nfe) {
-    BOOL tryHarder = hints != nil && [hints containsKey:DecodeHintType.TRY_HARDER];
+    BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
     if (tryHarder && [image rotateSupported]) {
       BinaryBitmap * rotatedImage = [image rotateCounterClockwise];
       Result * result = [self doDecode:rotatedImage hints:hints];
       NSMutableDictionary * metadata = [result resultMetadata];
       int orientation = 270;
-      if (metadata != nil && [metadata containsKey:ResultMetadataType.ORIENTATION]) {
-        orientation = (orientation + [((NSNumber *)[metadata objectForKey:ResultMetadataType.ORIENTATION]) intValue]) % 360;
+      if (metadata != nil && [metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) {
+        orientation = (orientation + [((NSNumber *)[metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) intValue]) % 360;
       }
-      [result putMetadata:ResultMetadataType.ORIENTATION param1:[[[NSNumber alloc] init:orientation] autorelease]];
-      NSArray * points = [result resultPoints];
+      [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:orientation]];
+      NSMutableArray * points = [result resultPoints];
       int height = [rotatedImage height];
 
-      for (int i = 0; i < points.length; i++) {
-        points[i] = [[[ResultPoint alloc] init:height - [points[i] y] - 1 param1:[points[i] x]] autorelease];
+      for (int i = 0; i < [points count]; i++) {
+        [points replaceObjectAtIndex:i
+                          withObject:[[[ResultPoint alloc] initWithX:height - [(ResultPoint*)[points objectAtIndex:i] y]             
+                                                                   y:[(ResultPoint*)[points objectAtIndex:i] x]]
+                                      autorelease]];
       }
 
       return result;
@@ -61,10 +80,10 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 - (Result *) doDecode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
   int width = [image width];
   int height = [image height];
-  BitArray * row = [[[BitArray alloc] init:width] autorelease];
+  BitArray * row = [[[BitArray alloc] initWithSize:width] autorelease];
   int middle = height >> 1;
-  BOOL tryHarder = hints != nil && [hints containsKey:DecodeHintType.TRY_HARDER];
-  int rowStep = [Math max:1 param1:height >> (tryHarder ? 8 : 5)];
+  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+  int rowStep = (height >> (tryHarder ? 8 : 5)) > 1 ? height >> (tryHarder ? 8 : 5) : 1;
   int maxLines;
   if (tryHarder) {
     maxLines = height;
@@ -82,7 +101,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     }
 
     @try {
-      row = [image getBlackRow:rowNumber param1:row];
+      row = [image getBlackRow:rowNumber row:row];
     }
     @catch (NotFoundException * nfe) {
       continue;
@@ -91,14 +110,11 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     for (int attempt = 0; attempt < 2; attempt++) {
       if (attempt == 1) {
         [row reverse];
-        if (hints != nil && [hints containsKey:DecodeHintType.NEED_RESULT_POINT_CALLBACK]) {
-          NSMutableDictionary * newHints = [[[NSMutableDictionary alloc] init] autorelease];
-          NSEnumerator * hintEnum = [hints keys];
-
-          while ([hintEnum hasMoreElements]) {
-            NSObject * key = [hintEnum nextObject];
-            if (![key isEqualTo:DecodeHintType.NEED_RESULT_POINT_CALLBACK]) {
-              [newHints setObject:key param1:[hints objectForKey:key]];
+        if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]]) {
+          NSMutableDictionary * newHints = [NSMutableDictionary dictionary];
+          for (id key in [hints allKeys]) {
+            if ([key intValue] != kDecodeHintTypeNeedResultPointCallback) {
+              [newHints setObject:[hints objectForKey:key] forKey:key];
             }
           }
 
@@ -109,10 +125,16 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       @try {
         Result * result = [self decodeRow:rowNumber row:row hints:hints];
         if (attempt == 1) {
-          [result putMetadata:ResultMetadataType.ORIENTATION param1:[[[NSNumber alloc] init:180] autorelease]];
-          NSArray * points = [result resultPoints];
-          points[0] = [[[ResultPoint alloc] init:width - [points[0] x] - 1 param1:[points[0] y]] autorelease];
-          points[1] = [[[ResultPoint alloc] init:width - [points[1] x] - 1 param1:[points[1] y]] autorelease];
+          [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:180]];
+          NSMutableArray * points = [result resultPoints];
+          [points replaceObjectAtIndex:0
+                            withObject:[[[ResultPoint alloc] initWithX:width - [(ResultPoint*)[points objectAtIndex:0] x]
+                                                                     y:[(ResultPoint*)[points objectAtIndex:0] y]]
+                                        autorelease]];
+          [points replaceObjectAtIndex:1
+                            withObject:[[[ResultPoint alloc] initWithX:width - [(ResultPoint*)[points objectAtIndex:1] x]
+                                                                     y:[(ResultPoint*)[points objectAtIndex:1] y]]
+                                        autorelease]];
         }
         return result;
       }
@@ -139,11 +161,11 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * @throws NotFoundException if counters cannot be filled entirely from row before running out
  * of pixels
  */
-+ (void) recordPattern:(BitArray *)row start:(int)start counters:(NSArray *)counters {
-  int numCounters = counters.length;
++ (void) recordPattern:(BitArray *)row start:(int)start counters:(NSMutableArray *)counters {
+  int numCounters = [counters count];
 
   for (int i = 0; i < numCounters; i++) {
-    counters[i] = 0;
+    [counters replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:0]];
   }
 
   int end = [row size];
@@ -157,15 +179,15 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   while (i < end) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
-      counters[counterPosition]++;
+      [counters replaceObjectAtIndex:counterPosition withObject:
+       [NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
     }
      else {
       counterPosition++;
       if (counterPosition == numCounters) {
         break;
-      }
-       else {
-        counters[counterPosition] = 1;
+      } else {
+        [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
         isWhite = !isWhite;
       }
     }
@@ -177,8 +199,8 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   }
 }
 
-+ (void) recordPatternInReverse:(BitArray *)row start:(int)start counters:(NSArray *)counters {
-  int numTransitionsLeft = counters.length;
++ (void) recordPatternInReverse:(BitArray *)row start:(int)start counters:(NSMutableArray *)counters {
+  int numTransitionsLeft = [counters count];
   BOOL last = [row get:start];
 
   while (start > 0 && numTransitionsLeft >= 0) {
@@ -209,28 +231,28 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * even more variance
  */
 + (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance {
-  int numCounters = counters.length;
+  int numCounters = [counters count];
   int total = 0;
   int patternLength = 0;
 
   for (int i = 0; i < numCounters; i++) {
-    total += counters[i];
-    patternLength += pattern[i];
+    total += [[counters objectAtIndex:i] intValue];
+    patternLength += [[pattern objectAtIndex:i] intValue];
   }
 
   if (total < patternLength) {
-    return Integer.MAX_VALUE;
+    return NSIntegerMax;
   }
   int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
   maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
   int totalVariance = 0;
 
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters[x] << INTEGER_MATH_SHIFT;
-    int scaledPattern = pattern[x] * unitBarWidth;
+    int counter = [[counters objectAtIndex:x] intValue] << INTEGER_MATH_SHIFT;
+    int scaledPattern = [[pattern objectAtIndex:x] intValue] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
-      return Integer.MAX_VALUE;
+      return NSIntegerMax;
     }
     totalVariance += variance;
   }
@@ -250,6 +272,9 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * @throws NotFoundException if an error occurs or barcode cannot be found
  */
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 @end

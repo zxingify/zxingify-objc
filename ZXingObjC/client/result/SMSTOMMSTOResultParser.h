@@ -1,4 +1,4 @@
-#import "Result.h"
+#import "ResultParser.h"
 
 /**
  * <p>Parses an "smsto:" URI result, whose format is not standardized but appears to be like:
@@ -11,8 +11,10 @@
  * @author Sean Owen
  */
 
-@interface SMSTOMMSTOResultParser : ResultParser {
-}
+@class SMSParsedResult, Result;
+
+@interface SMSTOMMSTOResultParser : ResultParser
 
 + (SMSParsedResult *) parse:(Result *)result;
+
 @end

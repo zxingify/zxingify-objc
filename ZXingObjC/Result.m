@@ -24,7 +24,7 @@
     }
     self.text = aText;
     self.rawBytes = aRawBytes;
-    self.resultPoints = aResultPoints;
+    self.resultPoints = [[aResultPoints mutableCopy] autorelease];
     self.barcodeFormat = aFormat;
     self.resultMetadata = nil;
     timestamp = aTimestamp;
@@ -54,9 +54,9 @@
 
 - (void) addResultPoints:(NSArray *)newPoints {
   if (self.resultPoints == nil) {
-    self.resultPoints = newPoints;
+    self.resultPoints = [[newPoints mutableCopy] autorelease];
   } else if (newPoints != nil && [newPoints count] > 0) {
-    self.resultPoints = [self.resultPoints arrayByAddingObjectsFromArray:newPoints];
+    self.resultPoints = [[[self.resultPoints arrayByAddingObjectsFromArray:newPoints] mutableCopy] autorelease];
   }
 }
 
