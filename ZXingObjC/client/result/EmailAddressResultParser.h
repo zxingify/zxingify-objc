@@ -1,5 +1,3 @@
-#import "EmailAddressParsedResult.h"
-#import "Result.h"
 #import "ResultParser.h"
 
 /**
@@ -8,6 +6,8 @@
  * 
  * @author Sean Owen
  */
+
+@class EmailAddressParsedResult, Result;
 
 @interface EmailAddressResultParser : ResultParser
 

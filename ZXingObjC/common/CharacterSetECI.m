@@ -1,15 +1,22 @@
 #import "CharacterSetECI.h"
 
-NSMutableDictionary * VALUE_TO_ECI;
-NSMutableDictionary * NAME_TO_ECI;
+static NSMutableDictionary * VALUE_TO_ECI = nil;
+static NSMutableDictionary * NAME_TO_ECI = nil;
+
+@interface CharacterSetECI ()
+
++ (void) addCharacterSet:(int)value encodingName:(NSString *)encodingName;
++ (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodingNames;
+
+@end
 
 @implementation CharacterSetECI
 
 @synthesize encodingName;
 
 + (void) initialize {
-  VALUE_TO_ECI = [[[NSMutableDictionary alloc] init:29] autorelease];
-  NAME_TO_ECI = [[[NSMutableDictionary alloc] init:29] autorelease];
+  VALUE_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
+  NAME_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
   [self addCharacterSet:0 encodingName:@"Cp437"];
   [self addCharacterSet:1 encodingName:[NSArray arrayWithObjects:@"ISO8859_1", @"ISO-8859-1", nil]];
   [self addCharacterSet:2 encodingName:@"Cp437"];
@@ -31,29 +38,27 @@ NSMutableDictionary * NAME_TO_ECI;
   [self addCharacterSet:20 encodingName:[NSArray arrayWithObjects:@"SJIS", @"Shift_JIS", nil]];
 }
 
-- (id) init:(int)value encodingName:(NSString *)encodingName {
-  if (self = [super init:value]) {
-    encodingName = encodingName;
+- (id) init:(int)value encodingName:(NSString *)anEncodingName {
+  if (self = [super initWithValue:value]) {
+    encodingName = [anEncodingName copy];
   }
   return self;
 }
 
 + (void) addCharacterSet:(int)value encodingName:(NSString *)encodingName {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] init:value param1:encodingName] autorelease];
-  [VALUE_TO_ECI setObject:[[[NSNumber alloc] init:value] autorelease] param1:eci];
-  [NAME_TO_ECI setObject:encodingName param1:eci];
+  CharacterSetECI * eci = [[[CharacterSetECI alloc] init:value encodingName:encodingName] autorelease];
+  [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
+  [NAME_TO_ECI setObject:eci forKey:encodingName];
 }
 
 + (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodingNames {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] init:value param1:encodingNames[0]] autorelease];
-  [VALUE_TO_ECI setObject:[[[NSNumber alloc] init:value] autorelease] param1:eci];
+  CharacterSetECI * eci = [[[CharacterSetECI alloc] init:value encodingName:[encodingNames objectAtIndex:0]] autorelease];
+  [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
 
-  for (int i = 0; i < encodingNames.length; i++) {
-    [NAME_TO_ECI setObject:encodingNames[i] param1:eci];
+  for (id name in encodingNames) {
+    [NAME_TO_ECI setObject:eci forKey:name];
   }
-
 }
-
 
 /**
  * @param value character set ECI value
@@ -66,9 +71,11 @@ NSMutableDictionary * NAME_TO_ECI;
     [self initialize];
   }
   if (value < 0 || value >= 900) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Bad ECI value: " stringByAppendingString:value]] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:[NSString stringWithFormat:@"Bad ECI value: %d", value]
+                                 userInfo:nil];
   }
-  return (CharacterSetECI *)[VALUE_TO_ECI objectForKey:[[[NSNumber alloc] init:value] autorelease]];
+  return [VALUE_TO_ECI objectForKey:[NSNumber numberWithInt:value]];
 }
 
 
@@ -81,7 +88,7 @@ NSMutableDictionary * NAME_TO_ECI;
   if (NAME_TO_ECI == nil) {
     [self initialize];
   }
-  return (CharacterSetECI *)[NAME_TO_ECI objectForKey:name];
+  return [NAME_TO_ECI objectForKey:name];
 }
 
 - (void) dealloc {

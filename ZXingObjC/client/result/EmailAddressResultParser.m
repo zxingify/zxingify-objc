@@ -1,4 +1,7 @@
+#import "EmailAddressParsedResult.h"
 #import "EmailAddressResultParser.h"
+#import "EmailDoCoMoResultParser.h"
+#import "Result.h"
 
 @implementation EmailAddressResultParser
 
@@ -10,28 +13,27 @@
   NSString * emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
     emailAddress = [rawText substringFromIndex:7];
-    int queryStart = [emailAddress rangeOfString:'?'];
+    int queryStart = [emailAddress rangeOfString:@"?"].location;
     if (queryStart >= 0) {
-      emailAddress = [emailAddress substringFromIndex:0 param1:queryStart];
+      emailAddress = [emailAddress substringToIndex:queryStart];
     }
     NSMutableDictionary * nameValues = [self parseNameValuePairs:rawText];
     NSString * subject = nil;
     NSString * body = nil;
     if (nameValues != nil) {
       if ([emailAddress length] == 0) {
-        emailAddress = (NSString *)[nameValues objectForKey:@"to"];
+        emailAddress = [nameValues objectForKey:@"to"];
       }
-      subject = (NSString *)[nameValues objectForKey:@"subject"];
-      body = (NSString *)[nameValues objectForKey:@"body"];
+      subject = [nameValues objectForKey:@"subject"];
+      body = [nameValues objectForKey:@"body"];
     }
-    return [[[EmailAddressParsedResult alloc] init:emailAddress param1:subject param2:body param3:rawText] autorelease];
-  }
-   else {
+    return [[[EmailAddressParsedResult alloc] init:emailAddress subject:subject body:body mailtoURI:rawText] autorelease];
+  } else {
     if (![EmailDoCoMoResultParser isBasicallyValidEmailAddress:rawText]) {
       return nil;
     }
     emailAddress = rawText;
-    return [[[EmailAddressParsedResult alloc] init:emailAddress param1:nil param2:nil param3:[@"mailto:" stringByAppendingString:emailAddress]] autorelease];
+    return [[[EmailAddressParsedResult alloc] init:emailAddress subject:nil body:nil mailtoURI:[@"mailto:" stringByAppendingString:emailAddress]] autorelease];
   }
 }
 

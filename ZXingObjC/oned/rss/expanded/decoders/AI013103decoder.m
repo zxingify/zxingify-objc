@@ -1,15 +1,10 @@
 #import "AI013103decoder.h"
+#import "BitArray.h"
 
 @implementation AI013103decoder
 
-- (id) initWithInformation:(BitArray *)information {
-  if (self = [super init:information]) {
-  }
-  return self;
-}
-
-- (void) addWeightCode:(StringBuffer *)buf weight:(int)weight {
-  [buf append:@"(3103)"];
+- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
+  [buf appendString:@"(3103)"];
 }
 
 - (int) checkWeight:(int)weight {
