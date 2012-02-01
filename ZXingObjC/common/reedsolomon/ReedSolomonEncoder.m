@@ -3,14 +3,16 @@
 
 @implementation ReedSolomonEncoder
 
-- (id) initWithField:(GenericGF *)field {
+- (id) initWithField:(GenericGF *)aField {
   if (self = [super init]) {
-    if (![GenericGF.QR_CODE_FIELD_256 isEqualTo:field]) {
-      @throw [[[IllegalArgumentException alloc] init:@"Only QR Code is supported at this time"] autorelease];
+    if (![[GenericGF QrCodeField256] isEqual:aField]) {
+      @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                     reason:@"Only QR Code is supported at this time"
+                                   userInfo:nil];
     }
-    field = field;
-    cachedGenerators = [[[NSMutableArray alloc] init] autorelease];
-    [cachedGenerators addObject:[[[GenericGFPoly alloc] init:field param1:[NSArray arrayWithObjects:1, nil]] autorelease]];
+    field = [aField retain];
+    cachedGenerators = [[NSMutableArray alloc] initWithObjects:
+                        [[[GenericGFPoly alloc] init:aField coefficients:[NSArray arrayWithObject:[NSNumber numberWithInt:1]]] autorelease], nil];
   }
   return self;
 }
@@ -20,7 +22,7 @@
     GenericGFPoly * lastGenerator = (GenericGFPoly *)[cachedGenerators objectAtIndex:[cachedGenerators count] - 1];
 
     for (int d = [cachedGenerators count]; d <= degree; d++) {
-      GenericGFPoly * nextGenerator = [lastGenerator multiply:[[[GenericGFPoly alloc] init:field param1:[NSArray arrayWithObjects:1, [field exp:d - 1], nil]] autorelease]];
+      GenericGFPoly * nextGenerator = [lastGenerator multiply:[[[GenericGFPoly alloc] init:field coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], [field exp:d - 1], nil]] autorelease]];
       [cachedGenerators addObject:nextGenerator];
       lastGenerator = nextGenerator;
     }
@@ -29,28 +31,33 @@
   return (GenericGFPoly *)[cachedGenerators objectAtIndex:degree];
 }
 
-- (void) encode:(NSArray *)toEncode ecBytes:(int)ecBytes {
+- (void) encode:(NSMutableArray *)toEncode ecBytes:(int)ecBytes {
   if (ecBytes == 0) {
-    @throw [[[IllegalArgumentException alloc] init:@"No error correction bytes"] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:@"No error correction bytes"
+                                 userInfo:nil];
   }
-  int dataBytes = toEncode.length - ecBytes;
+  int dataBytes = [toEncode count] - ecBytes;
   if (dataBytes <= 0) {
-    @throw [[[IllegalArgumentException alloc] init:@"No data bytes provided"] autorelease];
+    @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                   reason:@"No data bytes provided"
+                                 userInfo:nil];
   }
   GenericGFPoly * generator = [self buildGenerator:ecBytes];
-  NSArray * infoCoefficients = [NSArray array];
-  [System arraycopy:toEncode param1:0 param2:infoCoefficients param3:0 param4:dataBytes];
-  GenericGFPoly * info = [[[GenericGFPoly alloc] init:field param1:infoCoefficients] autorelease];
-  info = [info multiplyByMonomial:ecBytes param1:1];
-  GenericGFPoly * remainder = [info divide:generator][1];
+  NSArray * infoCoefficients = [toEncode copy];
+  GenericGFPoly * info = [[[GenericGFPoly alloc] init:field coefficients:infoCoefficients] autorelease];
+  info = [info multiplyByMonomial:ecBytes coefficient:1];
+  GenericGFPoly * remainder = [[info divide:generator] objectAtIndex:1];
   NSArray * coefficients = [remainder coefficients];
-  int numZeroCoefficients = ecBytes - coefficients.length;
+  int numZeroCoefficients = ecBytes - [coefficients count];
 
   for (int i = 0; i < numZeroCoefficients; i++) {
-    toEncode[dataBytes + i] = 0;
+    [toEncode replaceObjectAtIndex:dataBytes + i withObject:[NSNumber numberWithInt:0]];
   }
 
-  [System arraycopy:coefficients param1:0 param2:toEncode param3:dataBytes + numZeroCoefficients param4:coefficients.length];
+  for (int i = 0; i < [coefficients count]; i++) {
+    [toEncode replaceObjectAtIndex:dataBytes + numZeroCoefficients + i withObject:[coefficients objectAtIndex:dataBytes + numZeroCoefficients + i]];
+  }
 }
 
 - (void) dealloc {

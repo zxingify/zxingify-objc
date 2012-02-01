@@ -13,5 +13,5 @@
 }
 
 - (id) initWithField:(GenericGF *)field;
-- (void) encode:(NSArray *)toEncode ecBytes:(int)ecBytes;
+- (void) encode:(NSMutableArray *)toEncode ecBytes:(int)ecBytes;
 @end

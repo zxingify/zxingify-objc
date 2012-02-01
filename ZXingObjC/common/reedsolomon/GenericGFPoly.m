@@ -42,7 +42,7 @@
   return self;
 }
 
-- (NSArray *) getCoefficients {
+- (NSArray *) coefficients {
   return coefficients;
 }
 

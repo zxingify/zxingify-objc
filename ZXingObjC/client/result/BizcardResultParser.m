@@ -1,4 +1,13 @@
+#import "AddressBookParsedResult.h"
 #import "BizcardResultParser.h"
+#import "Result.h"
+
+@interface BizcardResultParser ()
+
++ (NSString *) buildName:(NSString *)firstName lastName:(NSString *)lastName;
++ (NSArray *) buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3;
+
+@end
 
 @implementation BizcardResultParser
 
@@ -7,21 +16,30 @@
   if (rawText == nil || ![rawText hasPrefix:@"BIZCARD:"]) {
     return nil;
   }
-  NSString * firstName = [self matchSingleDoCoMoPrefixedField:@"N:" param1:rawText param2:YES];
-  NSString * lastName = [self matchSingleDoCoMoPrefixedField:@"X:" param1:rawText param2:YES];
+  NSString * firstName = [self matchSingleDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
+  NSString * lastName = [self matchSingleDoCoMoPrefixedField:@"X:" rawText:rawText trim:YES];
   NSString * fullName = [self buildName:firstName lastName:lastName];
-  NSString * title = [self matchSingleDoCoMoPrefixedField:@"T:" param1:rawText param2:YES];
-  NSString * org = [self matchSingleDoCoMoPrefixedField:@"C:" param1:rawText param2:YES];
-  NSArray * addresses = [self matchDoCoMoPrefixedField:@"A:" param1:rawText param2:YES];
-  NSString * phoneNumber1 = [self matchSingleDoCoMoPrefixedField:@"B:" param1:rawText param2:YES];
-  NSString * phoneNumber2 = [self matchSingleDoCoMoPrefixedField:@"M:" param1:rawText param2:YES];
-  NSString * phoneNumber3 = [self matchSingleDoCoMoPrefixedField:@"F:" param1:rawText param2:YES];
-  NSString * email = [self matchSingleDoCoMoPrefixedField:@"E:" param1:rawText param2:YES];
-  return [[[AddressBookParsedResult alloc] init:[self maybeWrap:fullName] param1:nil param2:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3] param3:[self maybeWrap:email] param4:nil param5:addresses param6:org param7:nil param8:title param9:nil] autorelease];
+  NSString * title = [self matchSingleDoCoMoPrefixedField:@"T:" rawText:rawText trim:YES];
+  NSString * org = [self matchSingleDoCoMoPrefixedField:@"C:" rawText:rawText trim:YES];
+  NSArray * addresses = [self matchDoCoMoPrefixedField:@"A:" rawText:rawText trim:YES];
+  NSString * phoneNumber1 = [self matchSingleDoCoMoPrefixedField:@"B:" rawText:rawText trim:YES];
+  NSString * phoneNumber2 = [self matchSingleDoCoMoPrefixedField:@"M:" rawText:rawText trim:YES];
+  NSString * phoneNumber3 = [self matchSingleDoCoMoPrefixedField:@"F:" rawText:rawText trim:YES];
+  NSString * email = [self matchSingleDoCoMoPrefixedField:@"E:" rawText:rawText trim:YES];
+  return [[[AddressBookParsedResult alloc] init:[self maybeWrap:fullName]
+                                  pronunciation:nil
+                                         phoneNumbers:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3]
+                                         emails:[self maybeWrap:email]
+                                         note:nil
+                                         addresses:addresses
+                                         org:org
+                                         birthday:nil
+                                         title:title
+                                         url:nil] autorelease];
 }
 
 + (NSArray *) buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {
-  NSMutableArray * numbers = [[[NSMutableArray alloc] init:3] autorelease];
+  NSMutableArray * numbers = [NSMutableArray arrayWithCapacity:3];
   if (number1 != nil) {
     [numbers addObject:number1];
   }
@@ -35,10 +53,10 @@
   if (size == 0) {
     return nil;
   }
-  NSArray * result = [NSArray array];
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:size];
 
   for (int i = 0; i < size; i++) {
-    result[i] = (NSString *)[numbers objectAtIndex:i];
+    [result addObject:[numbers objectAtIndex:i]];
   }
 
   return result;
@@ -49,7 +67,7 @@
     return lastName;
   }
    else {
-    return lastName == nil ? firstName : [[firstName stringByAppendingString:' '] stringByAppendingString:lastName];
+    return lastName == nil ? firstName : [[firstName stringByAppendingString:@" "] stringByAppendingString:lastName];
   }
 }
 

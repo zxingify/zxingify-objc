@@ -16,7 +16,7 @@
 }
 
 - (id) init:(GenericGF *)field coefficients:(NSArray *)coefficients;
-- (NSArray *) getCoefficients;
+- (NSArray *) coefficients;
 - (int) getDegree;
 - (BOOL) isZero;
 - (int) getCoefficient:(int)degree;

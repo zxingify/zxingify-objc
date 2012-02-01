@@ -1,5 +1,4 @@
 #import "AbstractDoCoMoResultParser.h"
-#import "Result.h"
 
 /**
  * Implements the "BIZCARD" address book entry format, though this has been
@@ -8,6 +7,8 @@
  * 
  * @author Sean Owen
  */
+
+@class AddressBookParsedResult, Result;
 
 @interface BizcardResultParser : AbstractDoCoMoResultParser
 
