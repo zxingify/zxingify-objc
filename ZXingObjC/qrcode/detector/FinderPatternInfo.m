@@ -1,3 +1,4 @@
+#import "FinderPattern.h"
 #import "FinderPatternInfo.h"
 
 @implementation FinderPatternInfo

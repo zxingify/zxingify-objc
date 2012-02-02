@@ -32,7 +32,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     [row clear];
   }
   [self initArrays:width];
-  NSArray * localLuminances = [source getRow:y param1:luminances];
+  NSArray * localLuminances = [source getRow:y row:luminances];
   NSArray * localBuckets = buckets;
 
   for (int x = 0; x < width; x++) {

@@ -6,6 +6,8 @@
  * @author Sean Owen
  */
 
+@class FinderPattern;
+
 @interface FinderPatternInfo : NSObject {
   FinderPattern * bottomLeft;
   FinderPattern * topLeft;

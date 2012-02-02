@@ -1,4 +1,5 @@
 #import "MultiFormatWriter.h"
+#import "Writer.h"
 
 @implementation MultiFormatWriter
 

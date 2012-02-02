@@ -1,7 +1,17 @@
+#import "BitMatrix.h"
 #import "BitMatrixParser.h"
+#import "FormatException.h"
+#import "Version.h"
+
+@interface BitMatrixParser ()
+
+- (Version *) readVersion:(BitMatrix *)bitMatrix;
+
+@end
 
 @implementation BitMatrixParser
 
+@synthesize version;
 
 /**
  * @param bitMatrix {@link BitMatrix} to parse
@@ -15,7 +25,8 @@
     }
     version = [self readVersion:bitMatrix];
     mappingBitMatrix = [self extractDataRegion:bitMatrix];
-    readMappingMatrix = [[[BitMatrix alloc] init:[mappingBitMatrix width] param1:[mappingBitMatrix height]] autorelease];
+    readMappingMatrix = [[[BitMatrix alloc] initWithWidth:[mappingBitMatrix width]
+                                                   height:[mappingBitMatrix height]] autorelease];
   }
   return self;
 }
@@ -36,10 +47,10 @@
  * @throws FormatException if the dimensions of the mapping matrix are not valid
  * Data Matrix dimensions.
  */
-+ (Version *) readVersion:(BitMatrix *)bitMatrix {
+- (Version *) readVersion:(BitMatrix *)bitMatrix {
   int numRows = [bitMatrix height];
   int numColumns = [bitMatrix width];
-  return [Version getVersionForDimensions:numRows param1:numColumns];
+  return [Version getVersionForDimensions:numRows numColumns:numColumns];
 }
 
 

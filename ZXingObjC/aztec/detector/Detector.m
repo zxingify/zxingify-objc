@@ -1,3 +1,4 @@
+#import "AztecDetectorResult.h"
 #import "Detector.h"
 #import "GenericGF.h"
 #import "GridSampler.h"
@@ -84,7 +85,11 @@
                           bottomLeft:[corners objectAtIndex:(shift + 3) % 4]
                          bottomRight:[corners objectAtIndex:(shift + 2) % 4]
                             topRight:[corners objectAtIndex:(shift + 1) % 4]];
-  return [[[AztecDetectorResult alloc] init:bits param1:corners param2:compact param3:nbDataBlocks param4:nbLayers] autorelease];
+  return [[[AztecDetectorResult alloc] initWithBits:bits
+                                             points:corners
+                                            compact:compact
+                                       nbDatablocks:nbDataBlocks
+                                           nbLayers:nbLayers] autorelease];
 }
 
 
@@ -216,10 +221,10 @@
  * @param compact true if this is a compact Aztec code
  * @throws NotFoundException if the array contains too many errors
  */
-- (void)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact {
+- (void)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)isCompact {
   int numCodewords;
   int numDataCodewords;
-  if (compact) {
+  if (isCompact) {
     numCodewords = 7;
     numDataCodewords = 2;
   }

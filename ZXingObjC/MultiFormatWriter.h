@@ -6,7 +6,6 @@
 #import "ITFWriter.h"
 #import "UPCAWriter.h"
 #import "QRCodeWriter.h"
-#import "NSMutableDictionary.h"
 
 /**
  * This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat
@@ -15,9 +14,9 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
-@interface MultiFormatWriter : NSObject <Writer> {
-}
+@interface MultiFormatWriter : NSObject <Writer>
 
 - (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height;
 - (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
+
 @end
