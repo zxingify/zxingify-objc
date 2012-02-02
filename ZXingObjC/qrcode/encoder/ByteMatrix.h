@@ -1,4 +1,3 @@
-
 /**
  * A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a
  * unsigned container, it's up to you to do byteValue & 0xff at each location.
@@ -15,8 +14,8 @@
   int height;
 }
 
-@property(nonatomic, assign) int height;
-@property(nonatomic, assign) int width;
+@property(nonatomic, readonly) int height;
+@property(nonatomic, readonly) int width;
 @property(nonatomic, readonly) char** array;
 - (id) initWithWidth:(int)width height:(int)height;
 - (char) get:(int)x y:(int)y;
