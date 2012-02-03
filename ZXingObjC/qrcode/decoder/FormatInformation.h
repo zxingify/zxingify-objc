@@ -1,4 +1,3 @@
-
 /**
  * <p>Encapsulates a QR Code's format information, including the data mask used and
  * error correction level.</p>
@@ -7,6 +6,8 @@
  * @see DataMask
  * @see ErrorCorrectionLevel
  */
+
+@class ErrorCorrectionLevel;
 
 @interface FormatInformation : NSObject {
   ErrorCorrectionLevel * errorCorrectionLevel;
@@ -19,4 +20,5 @@
 - (char) getDataMask;
 - (int) hash;
 - (BOOL) isEqualTo:(NSObject *)o;
+
 @end
