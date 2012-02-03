@@ -1,12 +1,22 @@
+#import "BitMatrix.h"
 #import "MonochromeRectangleDetector.h"
+#import "NotFoundException.h"
+#import "ResultPoint.h"
 
 int const MAX_MODULES = 32;
 
+@interface MonochromeRectangleDetector ()
+
+- (NSArray *) blackWhiteRange:(int)fixedDimension maxWhiteRun:(int)maxWhiteRun minDim:(int)minDim maxDim:(int)maxDim horizontal:(BOOL)horizontal;
+- (ResultPoint *) findCornerFromCenter:(int)centerX deltaX:(int)deltaX left:(int)left right:(int)right centerY:(int)centerY deltaY:(int)deltaY top:(int)top bottom:(int)bottom maxWhiteRun:(int)maxWhiteRun;
+
+@end
+
 @implementation MonochromeRectangleDetector
 
-- (id) initWithImage:(BitMatrix *)image {
+- (id) initWithImage:(BitMatrix *)anImage {
   if (self = [super init]) {
-    image = image;
+    image = [anImage retain];
   }
   return self;
 }
@@ -27,8 +37,8 @@ int const MAX_MODULES = 32;
   int width = [image width];
   int halfHeight = height >> 1;
   int halfWidth = width >> 1;
-  int deltaY = [Math max:1 param1:height / (MAX_MODULES << 3)];
-  int deltaX = [Math max:1 param1:width / (MAX_MODULES << 3)];
+  int deltaY = height / (MAX_MODULES << 3) > 1 ? height / (MAX_MODULES << 3) : 1;
+  int deltaX = width / (MAX_MODULES << 3) > 1 ? width / (MAX_MODULES << 3) : 1;
   int top = 0;
   int bottom = height;
   int left = 0;
@@ -81,26 +91,26 @@ int const MAX_MODULES = 32;
       }
       if (deltaX == 0) {
         int lastY = y - deltaY;
-        if (lastRange[0] < centerX) {
-          if (lastRange[1] > centerX) {
-            return [[[ResultPoint alloc] init:deltaY > 0 ? lastRange[0] : lastRange[1] param1:lastY] autorelease];
+        if ([[lastRange objectAtIndex:0] intValue] < centerX) {
+          if ([[lastRange objectAtIndex:0] intValue] > centerX) {
+            return [[[ResultPoint alloc] initWithX:deltaY > 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue] y:lastY] autorelease];
           }
-          return [[[ResultPoint alloc] init:lastRange[0] param1:lastY] autorelease];
+          return [[[ResultPoint alloc] initWithX:[[lastRange objectAtIndex:0] intValue] y:lastY] autorelease];
         }
          else {
-          return [[[ResultPoint alloc] init:lastRange[1] param1:lastY] autorelease];
+          return [[[ResultPoint alloc] initWithX:[[lastRange objectAtIndex:1] intValue] y:lastY] autorelease];
         }
       }
        else {
         int lastX = x - deltaX;
-        if (lastRange[0] < centerY) {
-          if (lastRange[1] > centerY) {
-            return [[[ResultPoint alloc] init:lastX param1:deltaX < 0 ? lastRange[0] : lastRange[1]] autorelease];
+        if ([[lastRange objectAtIndex:0] intValue] < centerY) {
+          if ([[lastRange objectAtIndex:1] intValue] > centerY) {
+            return [[[ResultPoint alloc] initWithX:lastX y:deltaX < 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue]] autorelease];
           }
-          return [[[ResultPoint alloc] init:lastX param1:lastRange[0]] autorelease];
+          return [[[ResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:0] intValue]] autorelease];
         }
          else {
-          return [[[ResultPoint alloc] init:lastX param1:lastRange[1]] autorelease];
+          return [[[ResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:1] intValue]] autorelease];
         }
       }
     }
@@ -130,7 +140,7 @@ int const MAX_MODULES = 32;
   int start = center;
 
   while (start >= minDim) {
-    if (horizontal ? [image get:start param1:fixedDimension] : [image get:fixedDimension param1:start]) {
+    if (horizontal ? [image get:start y:fixedDimension] : [image get:fixedDimension y:start]) {
       start--;
     }
      else {
@@ -139,7 +149,7 @@ int const MAX_MODULES = 32;
       do {
         start--;
       }
-       while (start >= minDim && !(horizontal ? [image get:start param1:fixedDimension] : [image get:fixedDimension param1:start]));
+       while (start >= minDim && !(horizontal ? [image get:start y:fixedDimension] : [image get:fixedDimension y:start]));
       int whiteRunSize = whiteRunStart - start;
       if (start < minDim || whiteRunSize > maxWhiteRun) {
         start = whiteRunStart;
@@ -152,7 +162,7 @@ int const MAX_MODULES = 32;
   int end = center;
 
   while (end < maxDim) {
-    if (horizontal ? [image get:end param1:fixedDimension] : [image get:fixedDimension param1:end]) {
+    if (horizontal ? [image get:end y:fixedDimension] : [image get:fixedDimension y:end]) {
       end++;
     }
      else {
@@ -161,7 +171,7 @@ int const MAX_MODULES = 32;
       do {
         end++;
       }
-       while (end < maxDim && !(horizontal ? [image get:end param1:fixedDimension] : [image get:fixedDimension param1:end]));
+       while (end < maxDim && !(horizontal ? [image get:end y:fixedDimension] : [image get:fixedDimension y:end]));
       int whiteRunSize = end - whiteRunStart;
       if (end >= maxDim || whiteRunSize > maxWhiteRun) {
         end = whiteRunStart;
@@ -171,7 +181,7 @@ int const MAX_MODULES = 32;
   }
 
   end--;
-  return end > start ? [NSArray arrayWithObjects:start, end, nil] : nil;
+  return end > start ? [NSArray arrayWithObjects:[NSNumber numberWithInt:start], [NSNumber numberWithInt:end], nil] : nil;
 }
 
 - (void) dealloc {
