@@ -1,5 +1,3 @@
-#import "FormatException.h"
-
 /**
  * <p>Encapsulates a set of error-correction blocks in one symbol version. Most versions will
  * use blocks of differing sizes within one version, so, this encapsulates the parameters for
@@ -12,8 +10,9 @@
   NSArray * ecBlocks;
 }
 
-- (int) getECCodewords;
-- (NSArray *) getECBlocks;
+@property (nonatomic, readonly) int ecCodewords;
+@property (nonatomic, readonly) NSArray * ecBlocks;
+
 @end
 
 /**
@@ -27,8 +26,9 @@
   int dataCodewords;
 }
 
-- (int) getCount;
-- (int) getDataCodewords;
+@property (nonatomic, readonly) int count;
+@property (nonatomic, readonly) int dataCodewords;
+
 @end
 
 /**
@@ -54,7 +54,8 @@
 @property(nonatomic, readonly) int dataRegionSizeRows;
 @property(nonatomic, readonly) int dataRegionSizeColumns;
 @property(nonatomic, readonly) int totalCodewords;
-- (ECBlocks *) getECBlocks;
+@property(nonatomic, readonly) ECBlocks * ecBlocks;
+
 + (Version *) getVersionForDimensions:(int)numRows numColumns:(int)numColumns;
-- (NSString *) description;
+
 @end

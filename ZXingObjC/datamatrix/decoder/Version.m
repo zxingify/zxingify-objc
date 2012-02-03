@@ -1,29 +1,24 @@
+#import "FormatException.h"
 #import "Version.h"
 
 @implementation ECBlocks
 
-- (id) init:(int)ecCodewords ecBlocks:(ECB *)ecBlocks {
+@synthesize ecCodewords, ecBlocks;
+
+- (id) initWithCodewords:(int)theEcCodewords ecBlocks:(ECB *)theEcBlocks {
   if (self = [super init]) {
-    ecCodewords = ecCodewords;
-    ecBlocks = [NSArray arrayWithObjects:ecBlocks, nil];
+    ecCodewords = theEcCodewords;
+    ecBlocks = [NSArray arrayWithObjects:theEcBlocks, nil];
   }
   return self;
 }
 
-- (id) init:(int)ecCodewords ecBlocks1:(ECB *)ecBlocks1 ecBlocks2:(ECB *)ecBlocks2 {
+- (id) initWithCodewords:(int)theEcCodewords ecBlocks1:(ECB *)ecBlocks1 ecBlocks2:(ECB *)ecBlocks2 {
   if (self = [super init]) {
-    ecCodewords = ecCodewords;
+    ecCodewords = theEcCodewords;
     ecBlocks = [NSArray arrayWithObjects:ecBlocks1, ecBlocks2, nil];
   }
   return self;
-}
-
-- (int) getECCodewords {
-  return ecCodewords;
-}
-
-- (NSArray *) getECBlocks {
-  return ecBlocks;
 }
 
 - (void) dealloc {
@@ -33,30 +28,30 @@
 
 @end
 
+
 @implementation ECB
 
-- (id) init:(int)count dataCodewords:(int)dataCodewords {
+@synthesize count, dataCodewords;
+
+- (id) initWithCount:(int)aCount dataCodewords:(int)theDataCodewords {
   if (self = [super init]) {
-    count = count;
-    dataCodewords = dataCodewords;
+    count = aCount;
+    dataCodewords = theDataCodewords;
   }
   return self;
 }
 
-- (int) getCount {
-  return count;
-}
+@end
 
-- (int) getDataCodewords {
-  return dataCodewords;
-}
+@interface Version
+
++ (NSArray *) buildVersions;
 
 @end
 
-NSArray * const VERSIONS = [self buildVersions];
-
 @implementation Version
 
+@synthesize ecBlocks;
 @synthesize versionNumber;
 @synthesize symbolSizeRows;
 @synthesize symbolSizeColumns;
@@ -64,30 +59,25 @@ NSArray * const VERSIONS = [self buildVersions];
 @synthesize dataRegionSizeColumns;
 @synthesize totalCodewords;
 
-- (id) init:(int)versionNumber symbolSizeRows:(int)symbolSizeRows symbolSizeColumns:(int)symbolSizeColumns dataRegionSizeRows:(int)dataRegionSizeRows dataRegionSizeColumns:(int)dataRegionSizeColumns ecBlocks:(ECBlocks *)ecBlocks {
+- (id) initWithVersionNumber:(int)aVersionNumber symbolSizeRows:(int)theSymbolSizeRows symbolSizeColumns:(int)theSymbolSizeColumns dataRegionSizeRows:(int)theDataRegionSizeRows dataRegionSizeColumns:(int)theDataRegionSizeColumns ecBlocks:(ECBlocks *)anEcBlocks {
   if (self = [super init]) {
-    versionNumber = versionNumber;
-    symbolSizeRows = symbolSizeRows;
-    symbolSizeColumns = symbolSizeColumns;
-    dataRegionSizeRows = dataRegionSizeRows;
-    dataRegionSizeColumns = dataRegionSizeColumns;
-    ecBlocks = ecBlocks;
+    versionNumber = aVersionNumber;
+    symbolSizeRows = theSymbolSizeRows;
+    symbolSizeColumns = theSymbolSizeColumns;
+    dataRegionSizeRows = theDataRegionSizeRows;
+    dataRegionSizeColumns = theDataRegionSizeColumns;
+    ecBlocks = [anEcBlocks retain];
     int total = 0;
-    int ecCodewords = [ecBlocks eCCodewords];
-    NSArray * ecbArray = [ecBlocks eCBlocks];
+    int ecCodewords = ecBlocks.ecCodewords;
+    NSArray * ecbArray = ecBlocks.ecBlocks;
 
-    for (int i = 0; i < ecbArray.length; i++) {
-      ECB * ecBlock = ecbArray[i];
+    for (ECB *ecBlock in ecbArray) {
       total += [ecBlock count] * ([ecBlock dataCodewords] + ecCodewords);
     }
 
     totalCodewords = total;
   }
   return self;
-}
-
-- (ECBlocks *) getECBlocks {
-  return ecBlocks;
 }
 
 
@@ -100,13 +90,17 @@ NSArray * const VERSIONS = [self buildVersions];
  * @throws FormatException if dimensions do correspond to a valid Data Matrix size
  */
 + (Version *) getVersionForDimensions:(int)numRows numColumns:(int)numColumns {
+  static NSArray* VERSIONS = nil;
+
+  if (!VERSIONS) {
+    VERSIONS = [self buildVersions];
+  }
+
   if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
     @throw [FormatException formatInstance];
   }
-  int numVersions = VERSIONS.length;
 
-  for (int i = 0; i < numVersions; ++i) {
-    Version * version = VERSIONS[i];
+  for (Version *version in VERSIONS) {
     if (version.symbolSizeRows == numRows && version.symbolSizeColumns == numColumns) {
       return version;
     }
@@ -116,7 +110,7 @@ NSArray * const VERSIONS = [self buildVersions];
 }
 
 - (NSString *) description {
-  return [String valueOf:versionNumber];
+  return [NSString stringWithFormat:@"%d", versionNumber];
 }
 
 
@@ -124,7 +118,310 @@ NSArray * const VERSIONS = [self buildVersions];
  * See ISO 16022:2006 5.5.1 Table 7
  */
 + (NSArray *) buildVersions {
-  return [NSArray arrayWithObjects:[[[Version alloc] init:1 param1:10 param2:10 param3:8 param4:8 param5:[[[ECBlocks alloc] init:5 param1:[[[ECB alloc] init:1 param1:3] autorelease]] autorelease]] autorelease], [[[Version alloc] init:2 param1:12 param2:12 param3:10 param4:10 param5:[[[ECBlocks alloc] init:7 param1:[[[ECB alloc] init:1 param1:5] autorelease]] autorelease]] autorelease], [[[Version alloc] init:3 param1:14 param2:14 param3:12 param4:12 param5:[[[ECBlocks alloc] init:10 param1:[[[ECB alloc] init:1 param1:8] autorelease]] autorelease]] autorelease], [[[Version alloc] init:4 param1:16 param2:16 param3:14 param4:14 param5:[[[ECBlocks alloc] init:12 param1:[[[ECB alloc] init:1 param1:12] autorelease]] autorelease]] autorelease], [[[Version alloc] init:5 param1:18 param2:18 param3:16 param4:16 param5:[[[ECBlocks alloc] init:14 param1:[[[ECB alloc] init:1 param1:18] autorelease]] autorelease]] autorelease], [[[Version alloc] init:6 param1:20 param2:20 param3:18 param4:18 param5:[[[ECBlocks alloc] init:18 param1:[[[ECB alloc] init:1 param1:22] autorelease]] autorelease]] autorelease], [[[Version alloc] init:7 param1:22 param2:22 param3:20 param4:20 param5:[[[ECBlocks alloc] init:20 param1:[[[ECB alloc] init:1 param1:30] autorelease]] autorelease]] autorelease], [[[Version alloc] init:8 param1:24 param2:24 param3:22 param4:22 param5:[[[ECBlocks alloc] init:24 param1:[[[ECB alloc] init:1 param1:36] autorelease]] autorelease]] autorelease], [[[Version alloc] init:9 param1:26 param2:26 param3:24 param4:24 param5:[[[ECBlocks alloc] init:28 param1:[[[ECB alloc] init:1 param1:44] autorelease]] autorelease]] autorelease], [[[Version alloc] init:10 param1:32 param2:32 param3:14 param4:14 param5:[[[ECBlocks alloc] init:36 param1:[[[ECB alloc] init:1 param1:62] autorelease]] autorelease]] autorelease], [[[Version alloc] init:11 param1:36 param2:36 param3:16 param4:16 param5:[[[ECBlocks alloc] init:42 param1:[[[ECB alloc] init:1 param1:86] autorelease]] autorelease]] autorelease], [[[Version alloc] init:12 param1:40 param2:40 param3:18 param4:18 param5:[[[ECBlocks alloc] init:48 param1:[[[ECB alloc] init:1 param1:114] autorelease]] autorelease]] autorelease], [[[Version alloc] init:13 param1:44 param2:44 param3:20 param4:20 param5:[[[ECBlocks alloc] init:56 param1:[[[ECB alloc] init:1 param1:144] autorelease]] autorelease]] autorelease], [[[Version alloc] init:14 param1:48 param2:48 param3:22 param4:22 param5:[[[ECBlocks alloc] init:68 param1:[[[ECB alloc] init:1 param1:174] autorelease]] autorelease]] autorelease], [[[Version alloc] init:15 param1:52 param2:52 param3:24 param4:24 param5:[[[ECBlocks alloc] init:42 param1:[[[ECB alloc] init:2 param1:102] autorelease]] autorelease]] autorelease], [[[Version alloc] init:16 param1:64 param2:64 param3:14 param4:14 param5:[[[ECBlocks alloc] init:56 param1:[[[ECB alloc] init:2 param1:140] autorelease]] autorelease]] autorelease], [[[Version alloc] init:17 param1:72 param2:72 param3:16 param4:16 param5:[[[ECBlocks alloc] init:36 param1:[[[ECB alloc] init:4 param1:92] autorelease]] autorelease]] autorelease], [[[Version alloc] init:18 param1:80 param2:80 param3:18 param4:18 param5:[[[ECBlocks alloc] init:48 param1:[[[ECB alloc] init:4 param1:114] autorelease]] autorelease]] autorelease], [[[Version alloc] init:19 param1:88 param2:88 param3:20 param4:20 param5:[[[ECBlocks alloc] init:56 param1:[[[ECB alloc] init:4 param1:144] autorelease]] autorelease]] autorelease], [[[Version alloc] init:20 param1:96 param2:96 param3:22 param4:22 param5:[[[ECBlocks alloc] init:68 param1:[[[ECB alloc] init:4 param1:174] autorelease]] autorelease]] autorelease], [[[Version alloc] init:21 param1:104 param2:104 param3:24 param4:24 param5:[[[ECBlocks alloc] init:56 param1:[[[ECB alloc] init:6 param1:136] autorelease]] autorelease]] autorelease], [[[Version alloc] init:22 param1:120 param2:120 param3:18 param4:18 param5:[[[ECBlocks alloc] init:68 param1:[[[ECB alloc] init:6 param1:175] autorelease]] autorelease]] autorelease], [[[Version alloc] init:23 param1:132 param2:132 param3:20 param4:20 param5:[[[ECBlocks alloc] init:62 param1:[[[ECB alloc] init:8 param1:163] autorelease]] autorelease]] autorelease], [[[Version alloc] init:24 param1:144 param2:144 param3:22 param4:22 param5:[[[ECBlocks alloc] init:62 param1:[[[ECB alloc] init:8 param1:156] autorelease] param2:[[[ECB alloc] init:2 param1:155] autorelease]] autorelease]] autorelease], [[[Version alloc] init:25 param1:8 param2:18 param3:6 param4:16 param5:[[[ECBlocks alloc] init:7 param1:[[[ECB alloc] init:1 param1:5] autorelease]] autorelease]] autorelease], [[[Version alloc] init:26 param1:8 param2:32 param3:6 param4:14 param5:[[[ECBlocks alloc] init:11 param1:[[[ECB alloc] init:1 param1:10] autorelease]] autorelease]] autorelease], [[[Version alloc] init:27 param1:12 param2:26 param3:10 param4:24 param5:[[[ECBlocks alloc] init:14 param1:[[[ECB alloc] init:1 param1:16] autorelease]] autorelease]] autorelease], [[[Version alloc] init:28 param1:12 param2:36 param3:10 param4:16 param5:[[[ECBlocks alloc] init:18 param1:[[[ECB alloc] init:1 param1:22] autorelease]] autorelease]] autorelease], [[[Version alloc] init:29 param1:16 param2:36 param3:14 param4:16 param5:[[[ECBlocks alloc] init:24 param1:[[[ECB alloc] init:1 param1:32] autorelease]] autorelease]] autorelease], [[[Version alloc] init:30 param1:16 param2:48 param3:14 param4:22 param5:[[[ECBlocks alloc] init:28 param1:[[[ECB alloc] init:1 param1:49] autorelease]] autorelease]] autorelease], nil];
+  return [NSArray arrayWithObjects:
+          [[[Version alloc] initWithVersionNumber:1
+                                   symbolSizeRows:10
+                                symbolSizeColumns:10
+                               dataRegionSizeRows:8
+                            dataRegionSizeColumns:8
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:5
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:3] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:2
+                                   symbolSizeRows:12
+                                symbolSizeColumns:12
+                               dataRegionSizeRows:10
+                            dataRegionSizeColumns:10
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:7
+                                          ecBlocks:[[[ECB alloc] initWithCount:1
+                                                                 dataCodewords:5] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:3
+                                   symbolSizeRows:14
+                                symbolSizeColumns:14
+                               dataRegionSizeRows:12
+                            dataRegionSizeColumns:12
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:10
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:8] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:4
+                                   symbolSizeRows:16
+                                symbolSizeColumns:16
+                               dataRegionSizeRows:14
+                            dataRegionSizeColumns:14
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:12
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:12] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:5
+                                   symbolSizeRows:18
+                                symbolSizeColumns:18
+                               dataRegionSizeRows:16
+                            dataRegionSizeColumns:16
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:14
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:18] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:6
+                                   symbolSizeRows:20
+                                symbolSizeColumns:20
+                               dataRegionSizeRows:18
+                            dataRegionSizeColumns:18
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:18
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:22] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:7
+                                   symbolSizeRows:22
+                                symbolSizeColumns:22
+                               dataRegionSizeRows:20
+                            dataRegionSizeColumns:20
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:20
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:30] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:8
+                                   symbolSizeRows:24
+                                symbolSizeColumns:24
+                               dataRegionSizeRows:22
+                            dataRegionSizeColumns:22
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:24
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:36] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:9
+                                   symbolSizeRows:26
+                                symbolSizeColumns:26
+                               dataRegionSizeRows:24
+                            dataRegionSizeColumns:24
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:28
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:44] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:10
+                                   symbolSizeRows:32
+                                symbolSizeColumns:32
+                               dataRegionSizeRows:14
+                            dataRegionSizeColumns:14
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:36
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:62] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:11
+                                   symbolSizeRows:36
+                                symbolSizeColumns:36
+                               dataRegionSizeRows:16
+                            dataRegionSizeColumns:16
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:42
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:86] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:12
+                                   symbolSizeRows:40
+                                symbolSizeColumns:40
+                               dataRegionSizeRows:18
+                            dataRegionSizeColumns:18
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:48
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:114] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:13
+                                   symbolSizeRows:44
+                                symbolSizeColumns:44
+                               dataRegionSizeRows:20
+                            dataRegionSizeColumns:20
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:144] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:14
+                                   symbolSizeRows:48
+                                symbolSizeColumns:48
+                               dataRegionSizeRows:22
+                            dataRegionSizeColumns:22
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:68
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:174] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:15
+                                   symbolSizeRows:52
+                                symbolSizeColumns:52
+                               dataRegionSizeRows:24
+                            dataRegionSizeColumns:24
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:42
+                                        ecBlocks:[[[ECB alloc] initWithCount:2
+                                                               dataCodewords:102] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:16
+                                   symbolSizeRows:64
+                                symbolSizeColumns:64
+                               dataRegionSizeRows:14
+                            dataRegionSizeColumns:14
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[ECB alloc] initWithCount:2
+                                                               dataCodewords:140] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:17
+                                   symbolSizeRows:72
+                                symbolSizeColumns:72
+                               dataRegionSizeRows:16
+                            dataRegionSizeColumns:16
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:36
+                                        ecBlocks:[[[ECB alloc] initWithCount:4
+                                                               dataCodewords:92] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:18
+                                   symbolSizeRows:80
+                                symbolSizeColumns:80
+                               dataRegionSizeRows:18
+                            dataRegionSizeColumns:18
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:48
+                                        ecBlocks:[[[ECB alloc] initWithCount:4
+                                                               dataCodewords:114] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:19
+                                   symbolSizeRows:88
+                                symbolSizeColumns:88
+                               dataRegionSizeRows:20
+                            dataRegionSizeColumns:20
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[ECB alloc] initWithCount:4
+                                                               dataCodewords:144] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:20
+                                   symbolSizeRows:96
+                                symbolSizeColumns:96
+                               dataRegionSizeRows:22
+                            dataRegionSizeColumns:22
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:68
+                                        ecBlocks:[[[ECB alloc] initWithCount:4
+                                                               dataCodewords:174] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:21
+                                   symbolSizeRows:104
+                                symbolSizeColumns:104
+                               dataRegionSizeRows:24
+                            dataRegionSizeColumns:24
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[ECB alloc] initWithCount:6
+                                                               dataCodewords:136] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:22
+                                   symbolSizeRows:120
+                                symbolSizeColumns:120
+                               dataRegionSizeRows:18
+                            dataRegionSizeColumns:18
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:68
+                                        ecBlocks:[[[ECB alloc] initWithCount:6
+                                                               dataCodewords:175] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:23
+                                   symbolSizeRows:132
+                                symbolSizeColumns:132
+                               dataRegionSizeRows:20
+                            dataRegionSizeColumns:20
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:62
+                                        ecBlocks:[[[ECB alloc] initWithCount:8
+                                                               dataCodewords:163] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:24
+                                   symbolSizeRows:144
+                                symbolSizeColumns:144
+                               dataRegionSizeRows:22
+                            dataRegionSizeColumns:22
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:62
+                                       ecBlocks1:[[[ECB alloc] initWithCount:8
+                                                               dataCodewords:156] autorelease]
+                                       ecBlocks2:[[[ECB alloc] initWithCount:2
+                                                               dataCodewords:155] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:25
+                                   symbolSizeRows:8
+                                symbolSizeColumns:18
+                               dataRegionSizeRows:6
+                            dataRegionSizeColumns:16
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:7
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:5] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:26
+                                   symbolSizeRows:8
+                                symbolSizeColumns:32
+                               dataRegionSizeRows:6
+                            dataRegionSizeColumns:14
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:11
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:10] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:27
+                                   symbolSizeRows:12
+                                symbolSizeColumns:26
+                               dataRegionSizeRows:10
+                            dataRegionSizeColumns:24
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:14
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:16] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:28
+                                   symbolSizeRows:12
+                                symbolSizeColumns:36
+                               dataRegionSizeRows:10
+                            dataRegionSizeColumns:16
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:18
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:22] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:29
+                                   symbolSizeRows:16
+                                symbolSizeColumns:36
+                               dataRegionSizeRows:14
+                            dataRegionSizeColumns:16
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:24
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:32] autorelease]] autorelease]] autorelease],
+
+          [[[Version alloc] initWithVersionNumber:30
+                                   symbolSizeRows:16
+                                symbolSizeColumns:48
+                               dataRegionSizeRows:14
+                            dataRegionSizeColumns:22
+                                         ecBlocks:
+            [[[ECBlocks alloc] initWithCodewords:28
+                                        ecBlocks:[[[ECB alloc] initWithCount:1
+                                                               dataCodewords:49] autorelease]] autorelease]] autorelease],
+          
+           nil];
 }
 
 - (void) dealloc {
