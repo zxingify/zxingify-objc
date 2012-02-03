@@ -1,3 +1,6 @@
+#import "ByteMatrix.h"
+#import "ErrorCorrectionLevel.h"
+#import "Mode.h"
 #import "QRCode.h"
 
 int const NUM_MASK_PATTERNS = 8;
@@ -33,47 +36,35 @@ int const NUM_MASK_PATTERNS = 8;
 }
 
 - (int) at:(int)x y:(int)y {
-  int value = [matrix get:x param1:y];
+  int value = [matrix get:x y:y];
   if (!(value == 0 || value == 1)) {
-    @throw [[[NSException alloc] init:@"Bad value"] autorelease];
+    [NSException raise:NSInternalInconsistencyException format:@"Bad value"];
   }
   return value;
 }
 
 - (BOOL) valid {
-  return mode != nil && ecLevel != nil && version != -1 && matrixWidth != -1 && maskPattern != -1 && numTotalBytes != -1 && numDataBytes != -1 && numECBytes != -1 && numRSBlocks != -1 && [self isValidMaskPattern:maskPattern] && numTotalBytes == numDataBytes + numECBytes && matrix != nil && matrixWidth == [matrix width] && [matrix width] == [matrix height];
+  return mode != nil && ecLevel != nil && version != -1 && matrixWidth != -1 && maskPattern != -1 && numTotalBytes != -1 && numDataBytes != -1 && numECBytes != -1 && numRSBlocks != -1 && [QRCode isValidMaskPattern:maskPattern] && numTotalBytes == numDataBytes + numECBytes && matrix != nil && matrixWidth == [matrix width] && [matrix width] == [matrix height];
 }
 
 - (NSString *) description {
-  StringBuffer * result = [[[StringBuffer alloc] init:200] autorelease];
-  [result append:@"<<\n"];
-  [result append:@" mode: "];
-  [result append:mode];
-  [result append:@"\n ecLevel: "];
-  [result append:ecLevel];
-  [result append:@"\n version: "];
-  [result append:version];
-  [result append:@"\n matrixWidth: "];
-  [result append:matrixWidth];
-  [result append:@"\n maskPattern: "];
-  [result append:maskPattern];
-  [result append:@"\n numTotalBytes: "];
-  [result append:numTotalBytes];
-  [result append:@"\n numDataBytes: "];
-  [result append:numDataBytes];
-  [result append:@"\n numECBytes: "];
-  [result append:numECBytes];
-  [result append:@"\n numRSBlocks: "];
-  [result append:numRSBlocks];
+  NSMutableString *result = [NSMutableString stringWithCapacity:200];
+  [result appendFormat:@"<<\n mode: %@", mode];
+  [result appendFormat:@"\n ecLevel: %@", ecLevel];
+  [result appendFormat:@"\n version: %d", version];
+  [result appendFormat:@"\n matrixWidth: %d", matrixWidth];
+  [result appendFormat:@"\n maskPattern: %d", maskPattern];
+  [result appendFormat:@"\n numTotalBytes: %d", numTotalBytes];
+  [result appendFormat:@"\n numDataBytes: %d", numDataBytes];
+  [result appendFormat:@"\n numECBytes: %d", numECBytes];
+  [result appendFormat:@"\n numRSBlocks: %d", numRSBlocks];
   if (matrix == nil) {
-    [result append:@"\n matrix: null\n"];
+    [result appendString:@"\n matrix: null\n"];
+  } else {
+    [result appendFormat:@"\n matrix:\n%@", [matrix description]];
   }
-   else {
-    [result append:@"\n matrix:\n"];
-    [result append:[matrix description]];
-  }
-  [result append:@">>\n"];
-  return [result description];
+  [result appendString:@">>\n"];
+  return result;
 }
 
 + (BOOL) isValidMaskPattern:(int)maskPattern {

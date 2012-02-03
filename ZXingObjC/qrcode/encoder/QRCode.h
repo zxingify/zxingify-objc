@@ -1,12 +1,11 @@
-#import "ErrorCorrectionLevel.h"
-#import "Mode.h"
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 
 extern int const NUM_MASK_PATTERNS;
+
+@class ByteMatrix, ErrorCorrectionLevel, Mode;
 
 @interface QRCode : NSObject {
   Mode * mode;
@@ -32,18 +31,8 @@ extern int const NUM_MASK_PATTERNS;
 @property(nonatomic) int numRSBlocks;
 @property(nonatomic, retain) ByteMatrix * matrix;
 @property(nonatomic, readonly) BOOL valid;
-- (id) init;
+
 - (int) at:(int)x y:(int)y;
-- (NSString *) description;
-- (void) setMode:(Mode *)value;
-- (void) setECLevel:(ErrorCorrectionLevel *)value;
-- (void) setVersion:(int)value;
-- (void) setMatrixWidth:(int)value;
-- (void) setMaskPattern:(int)value;
-- (void) setNumTotalBytes:(int)value;
-- (void) setNumDataBytes:(int)value;
-- (void) setNumECBytes:(int)value;
-- (void) setNumRSBlocks:(int)value;
-- (void) setMatrix:(ByteMatrix *)value;
 + (BOOL) isValidMaskPattern:(int)maskPattern;
+
 @end
