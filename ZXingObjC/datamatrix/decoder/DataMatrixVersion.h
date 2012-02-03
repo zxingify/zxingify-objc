@@ -38,7 +38,7 @@
  * @author bbrown@google.com (Brian Brown)
  */
 
-@interface Version : NSObject {
+@interface DataMatrixVersion : NSObject {
   int versionNumber;
   int symbolSizeRows;
   int symbolSizeColumns;
@@ -56,6 +56,6 @@
 @property(nonatomic, readonly) int totalCodewords;
 @property(nonatomic, readonly) ECBlocks * ecBlocks;
 
-+ (Version *) getVersionForDimensions:(int)numRows numColumns:(int)numColumns;
++ (DataMatrixVersion *) getVersionForDimensions:(int)numRows numColumns:(int)numColumns;
 
 @end

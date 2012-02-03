@@ -79,7 +79,6 @@
 		029BCF3815129BD0009E6549 /* DataBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1A15129BD0009E6549 /* DataBlock.m */; };
 		029BCF3915129BD0009E6549 /* DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */; };
 		029BCF3A15129BD0009E6549 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1E15129BD0009E6549 /* Decoder.m */; };
-		029BCF3B15129BD0009E6549 /* Version.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2015129BD0009E6549 /* Version.m */; };
 		029BCF3C15129BD0009E6549 /* Detector.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2315129BD0009E6549 /* Detector.m */; };
 		029BCF3D15129BD0009E6549 /* FormatException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2715129BD0009E6549 /* FormatException.m */; };
 		029BCF3E15129BD0009E6549 /* LuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2915129BD0009E6549 /* LuminanceSource.m */; };
@@ -173,6 +172,8 @@
 		029BCF9615129BD0009E6549 /* Result.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEE915129BD0009E6549 /* Result.m */; };
 		029BCF9715129BD0009E6549 /* ResultPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEEC15129BD0009E6549 /* ResultPoint.m */; };
 		029BCF9815129BD0009E6549 /* WriterException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEF015129BD0009E6549 /* WriterException.m */; };
+		029BCFA315129C87009E6549 /* DataMatrixVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFA115129C87009E6549 /* DataMatrixVersion.h */; };
+		029BCFA415129C87009E6549 /* DataMatrixVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFA215129C87009E6549 /* DataMatrixVersion.m */; };
 		02D26EE6151288DB007F8DC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE5151288DB007F8DC6 /* Foundation.framework */; };
 		02D26EF4151288DB007F8DC6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		02D26EF7151288DB007F8DC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE5151288DB007F8DC6 /* Foundation.framework */; };
@@ -339,8 +340,6 @@
 		029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DecodedBitStreamParser.m; sourceTree = "<group>"; };
 		029BCE1D15129BD0009E6549 /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
 		029BCE1E15129BD0009E6549 /* Decoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
-		029BCE1F15129BD0009E6549 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
-		029BCE2015129BD0009E6549 /* Version.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Version.m; sourceTree = "<group>"; };
 		029BCE2215129BD0009E6549 /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
 		029BCE2315129BD0009E6549 /* Detector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Detector.m; sourceTree = "<group>"; };
 		029BCE2415129BD0009E6549 /* DecodeHintType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodeHintType.h; sourceTree = "<group>"; };
@@ -534,6 +533,8 @@
 		029BCEEE15129BD0009E6549 /* Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Writer.h; sourceTree = "<group>"; };
 		029BCEEF15129BD0009E6549 /* WriterException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WriterException.h; sourceTree = "<group>"; };
 		029BCEF015129BD0009E6549 /* WriterException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WriterException.m; sourceTree = "<group>"; };
+		029BCFA115129C87009E6549 /* DataMatrixVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixVersion.h; sourceTree = "<group>"; };
+		029BCFA215129C87009E6549 /* DataMatrixVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMatrixVersion.m; sourceTree = "<group>"; };
 		02D26EE2151288DB007F8DC6 /* libZXingObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZXingObjC.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D26EE5151288DB007F8DC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02D26EE9151288DB007F8DC6 /* ZXingObjC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZXingObjC-Prefix.pch"; sourceTree = "<group>"; };
@@ -784,12 +785,12 @@
 				029BCE1815129BD0009E6549 /* BitMatrixParser.m */,
 				029BCE1915129BD0009E6549 /* DataBlock.h */,
 				029BCE1A15129BD0009E6549 /* DataBlock.m */,
+				029BCFA115129C87009E6549 /* DataMatrixVersion.h */,
+				029BCFA215129C87009E6549 /* DataMatrixVersion.m */,
 				029BCE1B15129BD0009E6549 /* DecodedBitStreamParser.h */,
 				029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */,
 				029BCE1D15129BD0009E6549 /* Decoder.h */,
 				029BCE1E15129BD0009E6549 /* Decoder.m */,
-				029BCE1F15129BD0009E6549 /* Version.h */,
-				029BCE2015129BD0009E6549 /* Version.m */,
 			);
 			path = decoder;
 			sourceTree = "<group>";
@@ -1188,6 +1189,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				029BCFA315129C87009E6549 /* DataMatrixVersion.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1289,6 +1291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				029BCFA415129C87009E6549 /* DataMatrixVersion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1369,7 +1372,6 @@
 				029BCF3815129BD0009E6549 /* DataBlock.m in Sources */,
 				029BCF3915129BD0009E6549 /* DecodedBitStreamParser.m in Sources */,
 				029BCF3A15129BD0009E6549 /* Decoder.m in Sources */,
-				029BCF3B15129BD0009E6549 /* Version.m in Sources */,
 				029BCF3C15129BD0009E6549 /* Detector.m in Sources */,
 				029BCF3D15129BD0009E6549 /* FormatException.m in Sources */,
 				029BCF3E15129BD0009E6549 /* LuminanceSource.m in Sources */,
