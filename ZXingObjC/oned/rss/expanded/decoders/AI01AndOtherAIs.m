@@ -4,12 +4,6 @@ int const HEADER_SIZE = 1 + 1 + 2;
 
 @implementation AI01AndOtherAIs
 
-- (id) initWithInformation:(BitArray *)information {
-  if (self = [super init:information]) {
-  }
-  return self;
-}
-
 - (NSString *) parseInformation {
   StringBuffer * buff = [[[StringBuffer alloc] init] autorelease];
   [buff append:@"(01)"];

@@ -1,4 +1,5 @@
 #import "AI013x0x1xDecoder.h"
+#import "BitArray.h"
 
 int const headerSize = 7 + 1;
 int const weightSize = 20;
@@ -7,7 +8,7 @@ int const dateSize = 16;
 @implementation AI013x0x1xDecoder
 
 - (id) init:(BitArray *)information firstAIdigits:(NSString *)firstAIdigits dateCode:(NSString *)dateCode {
-  if (self = [super init:information]) {
+  if (self = [super initWithInformation:information]) {
     dateCode = dateCode;
     firstAIdigits = firstAIdigits;
   }
