@@ -1,19 +1,22 @@
+#import "BitMatrix.h"
 #import "BitMatrixParser.h"
+#import "FormatException.h"
+#import "FormatInformation.h"
+#import "QrCodeVersion.h"
 
 @implementation BitMatrixParser
-
 
 /**
  * @param bitMatrix {@link BitMatrix} to parse
  * @throws FormatException if dimension is not >= 21 and 1 mod 4
  */
-- (id) initWithBitMatrix:(BitMatrix *)bitMatrix {
+- (id) initWithBitMatrix:(BitMatrix *)aBitMatrix {
   if (self = [super init]) {
-    int dimension = [bitMatrix height];
+    int dimension = [aBitMatrix height];
     if (dimension < 21 || (dimension & 0x03) != 1) {
       @throw [FormatException formatInstance];
     }
-    bitMatrix = bitMatrix;
+    bitMatrix = aBitMatrix;
   }
   return self;
 }

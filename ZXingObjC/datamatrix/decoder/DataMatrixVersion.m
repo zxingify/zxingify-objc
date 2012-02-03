@@ -110,7 +110,7 @@
 }
 
 - (NSString *) description {
-  return [NSString stringWithFormat:@"%d", versionNumber];
+  return [[NSNumber numberWithInt:versionNumber] stringValue];
 }
 
 
@@ -118,7 +118,7 @@
  * See ISO 16022:2006 5.5.1 Table 7
  */
 + (NSArray *) buildVersions {
-  return [NSArray arrayWithObjects:
+  return [[NSArray alloc] initWithObjects:
           [[[DataMatrixVersion alloc] initWithVersionNumber:1
                                              symbolSizeRows:10
                                           symbolSizeColumns:10

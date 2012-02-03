@@ -1,18 +1,18 @@
-#import "FormatException.h"
-#import "BitMatrix.h"
-
 /**
  * @author Sean Owen
  */
 
+@class BitMatrix, FormatInformation, QrCodeVersion;
+
 @interface BitMatrixParser : NSObject {
   BitMatrix * bitMatrix;
-  Version * parsedVersion;
+  QrCodeVersion * parsedVersion;
   FormatInformation * parsedFormatInfo;
 }
 
 - (id) initWithBitMatrix:(BitMatrix *)bitMatrix;
 - (FormatInformation *) readFormatInformation;
-- (Version *) readVersion;
+- (QrCodeVersion *) readVersion;
 - (NSArray *) readCodewords;
+
 @end
