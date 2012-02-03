@@ -1,4 +1,5 @@
 #import "GlobalHistogramBinarizer.h"
+#import "BitMatrix.h"
 
 int const LUMINANCE_BITS = 5;
 int const LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;

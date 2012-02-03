@@ -2,33 +2,53 @@
 #import "AddressBookParsedResult.h"
 #import "Result.h"
 
+@interface AddressBookAUResultParser ()
+
++ (NSArray *) matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim;
+
+@end
+
 @implementation AddressBookAUResultParser
 
 + (AddressBookParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];
-  if (rawText == nil || [rawText rangeOfString:@"MEMORY"] < 0 || [rawText rangeOfString:@"\r\n"] < 0) {
+
+  if (rawText == nil || [rawText rangeOfString:@"MEMORY"].location == NSNotFound || [rawText rangeOfString:@"\r\n"].location == NSNotFound) {
     return nil;
   }
-  NSString * name = [self matchSinglePrefixedField:@"NAME1:" param1:rawText param2:'\r' param3:YES];
-  NSString * pronunciation = [self matchSinglePrefixedField:@"NAME2:" param1:rawText param2:'\r' param3:YES];
+
+  NSString * name = [self matchSinglePrefixedField:@"NAME1:" rawText:rawText endChar:'\r' trim:YES];
+  NSString * pronunciation = [self matchSinglePrefixedField:@"NAME2:" rawText:rawText endChar:'\r' trim:YES];
   NSArray * phoneNumbers = [self matchMultipleValuePrefix:@"TEL" max:3 rawText:rawText trim:YES];
   NSArray * emails = [self matchMultipleValuePrefix:@"MAIL" max:3 rawText:rawText trim:YES];
-  NSString * note = [self matchSinglePrefixedField:@"MEMORY:" param1:rawText param2:'\r' param3:NO];
-  NSString * address = [self matchSinglePrefixedField:@"ADD:" param1:rawText param2:'\r' param3:YES];
+  NSString * note = [self matchSinglePrefixedField:@"MEMORY:" rawText:rawText endChar:'\r' trim:NO];
+  NSString * address = [self matchSinglePrefixedField:@"ADD:" rawText:rawText endChar:'\r' trim:YES];
   NSArray * addresses = address == nil ? nil : [NSArray arrayWithObjects:address, nil];
-  return [[[AddressBookParsedResult alloc] init:[self maybeWrap:name] param1:pronunciation param2:phoneNumbers param3:emails param4:note param5:addresses param6:nil param7:nil param8:nil param9:nil] autorelease];
+  return [[[AddressBookParsedResult alloc] init:[self maybeWrap:name]
+                                  pronunciation:pronunciation
+                                   phoneNumbers:phoneNumbers
+                                         emails:emails
+                                           note:note
+                                      addresses:addresses
+                                            org:nil
+                                       birthday:nil
+                                          title:nil
+                                            url:nil] autorelease];
 }
 
 + (NSArray *) matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {
   NSMutableArray * values = nil;
 
   for (int i = 1; i <= max; i++) {
-    NSString * value = [self matchSinglePrefixedField:[prefix stringByAppendingString:i] + ':' param1:rawText param2:'\r' param3:trim];
+    NSString * value = [self matchSinglePrefixedField:[NSString stringWithFormat:@"%@%d:", prefix, i]
+                                              rawText:rawText
+                                              endChar:'\r'
+                                                 trim:trim];
     if (value == nil) {
       break;
     }
     if (values == nil) {
-      values = [[[NSMutableArray alloc] init:max] autorelease];
+      values = [[[NSMutableArray alloc] initWithCapacity:max] autorelease];
     }
     [values addObject:value];
   }

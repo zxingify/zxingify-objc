@@ -1,6 +1,4 @@
 #import "Binarizer.h"
-#import "LuminanceSource.h"
-#import "NotFoundException.h"
 
 /**
  * This Binarizer implementation uses the old ZXing global histogram approach. It is suitable
@@ -14,13 +12,14 @@
  * @author Sean Owen
  */
 
+@class BitMatrix;
+
 @interface GlobalHistogramBinarizer : Binarizer {
   NSArray * luminances;
   NSArray * buckets;
 }
 
-@property(nonatomic, retain, readonly) BitMatrix * blackMatrix;
-- (id) initWithSource:(LuminanceSource *)source;
 - (BitArray *) getBlackRow:(int)y row:(BitArray *)row;
 - (Binarizer *) createBinarizer:(LuminanceSource *)source;
+
 @end
