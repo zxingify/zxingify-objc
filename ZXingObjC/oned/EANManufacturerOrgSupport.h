@@ -13,6 +13,6 @@
   NSMutableArray * countryIdentifiers;
 }
 
-- (void) init;
 - (NSString *) lookupCountryIdentifier:(NSString *)productCode;
+
 @end

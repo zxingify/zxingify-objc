@@ -1,150 +1,161 @@
 #import "EANManufacturerOrgSupport.h"
 
+@interface EANManufacturerOrgSupport ()
+
+- (void) add:(NSArray *)range identifier:(NSString *)identifier;
+- (void)initIfNeeded;
+
+@end
+
 @implementation EANManufacturerOrgSupport
 
-- (void) init {
+- (id)init {
   if (self = [super init]) {
-    ranges = [[[NSMutableArray alloc] init] autorelease];
-    countryIdentifiers = [[[NSMutableArray alloc] init] autorelease];
+    ranges = [NSMutableArray array];
+    countryIdentifiers = [NSMutableArray array];
   }
   return self;
 }
 
 - (NSString *) lookupCountryIdentifier:(NSString *)productCode {
   [self initIfNeeded];
-  int prefix = [Integer parseInt:[productCode substringFromIndex:0 param1:3]];
+  
+  int prefix = [[productCode substringToIndex:3] intValue];
   int max = [ranges count];
 
   for (int i = 0; i < max; i++) {
     NSArray * range = (NSArray *)[ranges objectAtIndex:i];
-    int start = range[0];
+    int start = [[range objectAtIndex:0] intValue];
     if (prefix < start) {
       return nil;
     }
-    int end = range.length == 1 ? start : range[1];
+    int end = [range count] == 1 ? start : [[range objectAtIndex:1] intValue];
     if (prefix <= end) {
-      return (NSString *)[countryIdentifiers objectAtIndex:i];
+      return [countryIdentifiers objectAtIndex:i];
     }
   }
 
   return nil;
 }
 
-- (void) add:(NSArray *)range id:(NSString *)id {
+- (void) add:(NSArray *)range identifier:(NSString *)identifier {
   [ranges addObject:range];
-  [countryIdentifiers addObject:id];
+  [countryIdentifiers addObject:identifier];
 }
 
 - (void) initIfNeeded {
-  if (![ranges empty]) {
-    return;
+  @synchronized(ranges) {
+    if ([ranges count] > 0) {
+      return;
+    }
+
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], [NSNumber numberWithInt:19], nil] identifier:@"US/CA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:30], [NSNumber numberWithInt:39], nil] identifier:@"US"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:60], [NSNumber numberWithInt:139], nil] identifier:@"US/CA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:300], [NSNumber numberWithInt:379], nil] identifier:@"FR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:380], nil] identifier:@"BG"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:383], nil] identifier:@"SI"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:385], nil] identifier:@"HR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:387], nil] identifier:@"BA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:400], [NSNumber numberWithInt:440], nil] identifier:@"DE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:450], [NSNumber numberWithInt:459], nil] identifier:@"JP"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:460], [NSNumber numberWithInt:469], nil] identifier:@"RU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:471], nil] identifier:@"TW"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:474], nil] identifier:@"EE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:475], nil] identifier:@"LV"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:476], nil] identifier:@"AZ"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:477], nil] identifier:@"LT"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:478], nil] identifier:@"UZ"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:479], nil] identifier:@"LK"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:480], nil] identifier:@"PH"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:481], nil] identifier:@"BY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:482], nil] identifier:@"UA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:484], nil] identifier:@"MD"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:485], nil] identifier:@"AM"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:486], nil] identifier:@"GE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:487], nil] identifier:@"KZ"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:489], nil] identifier:@"HK"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:490], [NSNumber numberWithInt:499], nil] identifier:@"JP"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:500], [NSNumber numberWithInt:509], nil] identifier:@"GB"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:520], nil] identifier:@"GR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:528], nil] identifier:@"LB"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:529], nil] identifier:@"CY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:531], nil] identifier:@"MK"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:535], nil] identifier:@"MT"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:539], nil] identifier:@"IE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:540], [NSNumber numberWithInt:549], nil] identifier:@"BE/LU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:560], nil] identifier:@"PT"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:569], nil] identifier:@"IS"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:570], [NSNumber numberWithInt:579], nil] identifier:@"DK"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:590], nil] identifier:@"PL"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:594], nil] identifier:@"RO"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:599], nil] identifier:@"HU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:600], [NSNumber numberWithInt:601], nil] identifier:@"ZA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:603], nil] identifier:@"GH"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:608], nil] identifier:@"BH"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:609], nil] identifier:@"MU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:611], nil] identifier:@"MA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:613], nil] identifier:@"DZ"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:616], nil] identifier:@"KE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:618], nil] identifier:@"CI"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:619], nil] identifier:@"TN"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:621], nil] identifier:@"SY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:622], nil] identifier:@"EG"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:624], nil] identifier:@"LY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:625], nil] identifier:@"JO"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:626], nil] identifier:@"IR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:627], nil] identifier:@"KW"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:628], nil] identifier:@"SA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:629], nil] identifier:@"AE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:640], [NSNumber numberWithInt:649], nil] identifier:@"FI"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:690], [NSNumber numberWithInt:695], nil] identifier:@"CN"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:700], [NSNumber numberWithInt:709], nil] identifier:@"NO"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:729], nil] identifier:@"IL"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:730], [NSNumber numberWithInt:739], nil] identifier:@"SE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:740], nil] identifier:@"GT"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:741], nil] identifier:@"SV"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:742], nil] identifier:@"HN"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:743], nil] identifier:@"NI"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:744], nil] identifier:@"CR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:745], nil] identifier:@"PA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:746], nil] identifier:@"DO"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:750], nil] identifier:@"MX"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:754], [NSNumber numberWithInt:755], nil] identifier:@"CA"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:759], nil] identifier:@"VE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:760], [NSNumber numberWithInt:769], nil] identifier:@"CH"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:770], nil] identifier:@"CO"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:773], nil] identifier:@"UY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:775], nil] identifier:@"PE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:777], nil] identifier:@"BO"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:779], nil] identifier:@"AR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:780], nil] identifier:@"CL"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:784], nil] identifier:@"PY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:785], nil] identifier:@"PE"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:786], nil] identifier:@"EC"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:789], [NSNumber numberWithInt:790], nil] identifier:@"BR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:800], [NSNumber numberWithInt:839], nil] identifier:@"IT"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:840], [NSNumber numberWithInt:849], nil] identifier:@"ES"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:850], nil] identifier:@"CU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:858], nil] identifier:@"SK"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:859], nil] identifier:@"CZ"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:860], nil] identifier:@"YU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:865], nil] identifier:@"MN"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:867], nil] identifier:@"KP"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:868], [NSNumber numberWithInt:869], nil] identifier:@"TR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:870], [NSNumber numberWithInt:879], nil] identifier:@"NL"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:880], nil] identifier:@"KR"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:885], nil] identifier:@"TH"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:888], nil] identifier:@"SG"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:890], nil] identifier:@"IN"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:893], nil] identifier:@"VN"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:896], nil] identifier:@"PK"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:899], nil] identifier:@"ID"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:900], [NSNumber numberWithInt:919], nil] identifier:@"AT"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:930], [NSNumber numberWithInt:939], nil] identifier:@"AU"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:940], [NSNumber numberWithInt:949], nil] identifier:@"AZ"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:955], nil] identifier:@"MY"];
+    [self add:[NSArray arrayWithObjects:[NSNumber numberWithInt:958], nil] identifier:@"MO"];
   }
-  [self add:[NSArray arrayWithObjects:0, 19, nil] id:@"US/CA"];
-  [self add:[NSArray arrayWithObjects:30, 39, nil] id:@"US"];
-  [self add:[NSArray arrayWithObjects:60, 139, nil] id:@"US/CA"];
-  [self add:[NSArray arrayWithObjects:300, 379, nil] id:@"FR"];
-  [self add:[NSArray arrayWithObjects:380, nil] id:@"BG"];
-  [self add:[NSArray arrayWithObjects:383, nil] id:@"SI"];
-  [self add:[NSArray arrayWithObjects:385, nil] id:@"HR"];
-  [self add:[NSArray arrayWithObjects:387, nil] id:@"BA"];
-  [self add:[NSArray arrayWithObjects:400, 440, nil] id:@"DE"];
-  [self add:[NSArray arrayWithObjects:450, 459, nil] id:@"JP"];
-  [self add:[NSArray arrayWithObjects:460, 469, nil] id:@"RU"];
-  [self add:[NSArray arrayWithObjects:471, nil] id:@"TW"];
-  [self add:[NSArray arrayWithObjects:474, nil] id:@"EE"];
-  [self add:[NSArray arrayWithObjects:475, nil] id:@"LV"];
-  [self add:[NSArray arrayWithObjects:476, nil] id:@"AZ"];
-  [self add:[NSArray arrayWithObjects:477, nil] id:@"LT"];
-  [self add:[NSArray arrayWithObjects:478, nil] id:@"UZ"];
-  [self add:[NSArray arrayWithObjects:479, nil] id:@"LK"];
-  [self add:[NSArray arrayWithObjects:480, nil] id:@"PH"];
-  [self add:[NSArray arrayWithObjects:481, nil] id:@"BY"];
-  [self add:[NSArray arrayWithObjects:482, nil] id:@"UA"];
-  [self add:[NSArray arrayWithObjects:484, nil] id:@"MD"];
-  [self add:[NSArray arrayWithObjects:485, nil] id:@"AM"];
-  [self add:[NSArray arrayWithObjects:486, nil] id:@"GE"];
-  [self add:[NSArray arrayWithObjects:487, nil] id:@"KZ"];
-  [self add:[NSArray arrayWithObjects:489, nil] id:@"HK"];
-  [self add:[NSArray arrayWithObjects:490, 499, nil] id:@"JP"];
-  [self add:[NSArray arrayWithObjects:500, 509, nil] id:@"GB"];
-  [self add:[NSArray arrayWithObjects:520, nil] id:@"GR"];
-  [self add:[NSArray arrayWithObjects:528, nil] id:@"LB"];
-  [self add:[NSArray arrayWithObjects:529, nil] id:@"CY"];
-  [self add:[NSArray arrayWithObjects:531, nil] id:@"MK"];
-  [self add:[NSArray arrayWithObjects:535, nil] id:@"MT"];
-  [self add:[NSArray arrayWithObjects:539, nil] id:@"IE"];
-  [self add:[NSArray arrayWithObjects:540, 549, nil] id:@"BE/LU"];
-  [self add:[NSArray arrayWithObjects:560, nil] id:@"PT"];
-  [self add:[NSArray arrayWithObjects:569, nil] id:@"IS"];
-  [self add:[NSArray arrayWithObjects:570, 579, nil] id:@"DK"];
-  [self add:[NSArray arrayWithObjects:590, nil] id:@"PL"];
-  [self add:[NSArray arrayWithObjects:594, nil] id:@"RO"];
-  [self add:[NSArray arrayWithObjects:599, nil] id:@"HU"];
-  [self add:[NSArray arrayWithObjects:600, 601, nil] id:@"ZA"];
-  [self add:[NSArray arrayWithObjects:603, nil] id:@"GH"];
-  [self add:[NSArray arrayWithObjects:608, nil] id:@"BH"];
-  [self add:[NSArray arrayWithObjects:609, nil] id:@"MU"];
-  [self add:[NSArray arrayWithObjects:611, nil] id:@"MA"];
-  [self add:[NSArray arrayWithObjects:613, nil] id:@"DZ"];
-  [self add:[NSArray arrayWithObjects:616, nil] id:@"KE"];
-  [self add:[NSArray arrayWithObjects:618, nil] id:@"CI"];
-  [self add:[NSArray arrayWithObjects:619, nil] id:@"TN"];
-  [self add:[NSArray arrayWithObjects:621, nil] id:@"SY"];
-  [self add:[NSArray arrayWithObjects:622, nil] id:@"EG"];
-  [self add:[NSArray arrayWithObjects:624, nil] id:@"LY"];
-  [self add:[NSArray arrayWithObjects:625, nil] id:@"JO"];
-  [self add:[NSArray arrayWithObjects:626, nil] id:@"IR"];
-  [self add:[NSArray arrayWithObjects:627, nil] id:@"KW"];
-  [self add:[NSArray arrayWithObjects:628, nil] id:@"SA"];
-  [self add:[NSArray arrayWithObjects:629, nil] id:@"AE"];
-  [self add:[NSArray arrayWithObjects:640, 649, nil] id:@"FI"];
-  [self add:[NSArray arrayWithObjects:690, 695, nil] id:@"CN"];
-  [self add:[NSArray arrayWithObjects:700, 709, nil] id:@"NO"];
-  [self add:[NSArray arrayWithObjects:729, nil] id:@"IL"];
-  [self add:[NSArray arrayWithObjects:730, 739, nil] id:@"SE"];
-  [self add:[NSArray arrayWithObjects:740, nil] id:@"GT"];
-  [self add:[NSArray arrayWithObjects:741, nil] id:@"SV"];
-  [self add:[NSArray arrayWithObjects:742, nil] id:@"HN"];
-  [self add:[NSArray arrayWithObjects:743, nil] id:@"NI"];
-  [self add:[NSArray arrayWithObjects:744, nil] id:@"CR"];
-  [self add:[NSArray arrayWithObjects:745, nil] id:@"PA"];
-  [self add:[NSArray arrayWithObjects:746, nil] id:@"DO"];
-  [self add:[NSArray arrayWithObjects:750, nil] id:@"MX"];
-  [self add:[NSArray arrayWithObjects:754, 755, nil] id:@"CA"];
-  [self add:[NSArray arrayWithObjects:759, nil] id:@"VE"];
-  [self add:[NSArray arrayWithObjects:760, 769, nil] id:@"CH"];
-  [self add:[NSArray arrayWithObjects:770, nil] id:@"CO"];
-  [self add:[NSArray arrayWithObjects:773, nil] id:@"UY"];
-  [self add:[NSArray arrayWithObjects:775, nil] id:@"PE"];
-  [self add:[NSArray arrayWithObjects:777, nil] id:@"BO"];
-  [self add:[NSArray arrayWithObjects:779, nil] id:@"AR"];
-  [self add:[NSArray arrayWithObjects:780, nil] id:@"CL"];
-  [self add:[NSArray arrayWithObjects:784, nil] id:@"PY"];
-  [self add:[NSArray arrayWithObjects:785, nil] id:@"PE"];
-  [self add:[NSArray arrayWithObjects:786, nil] id:@"EC"];
-  [self add:[NSArray arrayWithObjects:789, 790, nil] id:@"BR"];
-  [self add:[NSArray arrayWithObjects:800, 839, nil] id:@"IT"];
-  [self add:[NSArray arrayWithObjects:840, 849, nil] id:@"ES"];
-  [self add:[NSArray arrayWithObjects:850, nil] id:@"CU"];
-  [self add:[NSArray arrayWithObjects:858, nil] id:@"SK"];
-  [self add:[NSArray arrayWithObjects:859, nil] id:@"CZ"];
-  [self add:[NSArray arrayWithObjects:860, nil] id:@"YU"];
-  [self add:[NSArray arrayWithObjects:865, nil] id:@"MN"];
-  [self add:[NSArray arrayWithObjects:867, nil] id:@"KP"];
-  [self add:[NSArray arrayWithObjects:868, 869, nil] id:@"TR"];
-  [self add:[NSArray arrayWithObjects:870, 879, nil] id:@"NL"];
-  [self add:[NSArray arrayWithObjects:880, nil] id:@"KR"];
-  [self add:[NSArray arrayWithObjects:885, nil] id:@"TH"];
-  [self add:[NSArray arrayWithObjects:888, nil] id:@"SG"];
-  [self add:[NSArray arrayWithObjects:890, nil] id:@"IN"];
-  [self add:[NSArray arrayWithObjects:893, nil] id:@"VN"];
-  [self add:[NSArray arrayWithObjects:896, nil] id:@"PK"];
-  [self add:[NSArray arrayWithObjects:899, nil] id:@"ID"];
-  [self add:[NSArray arrayWithObjects:900, 919, nil] id:@"AT"];
-  [self add:[NSArray arrayWithObjects:930, 939, nil] id:@"AU"];
-  [self add:[NSArray arrayWithObjects:940, 949, nil] id:@"AZ"];
-  [self add:[NSArray arrayWithObjects:955, nil] id:@"MY"];
-  [self add:[NSArray arrayWithObjects:958, nil] id:@"MO"];
 }
 
 - (void) dealloc {
