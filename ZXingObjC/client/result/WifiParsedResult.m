@@ -1,3 +1,4 @@
+#import "ParsedResultType.h"
 #import "WifiParsedResult.h"
 
 @implementation WifiParsedResult
@@ -7,21 +8,21 @@
 @synthesize password;
 @synthesize displayResult;
 
-- (id) init:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password {
-  if (self = [super init:ParsedResultType.WIFI]) {
-    ssid = ssid;
-    networkEncryption = networkEncryption;
-    password = password;
+- (id) initWithNetworkEncryption:(NSString *)aNetworkEncryption ssid:(NSString *)anSsid password:(NSString *)aPassword {
+  if (self = [super initWithType:kParsedResultTypeWifi]) {
+    ssid = [anSsid copy];
+    networkEncryption = [aNetworkEncryption copy];
+    password = [aPassword copy];
   }
   return self;
 }
 
 - (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:80] autorelease];
-  [self maybeAppend:ssid param1:result];
-  [self maybeAppend:networkEncryption param1:result];
-  [self maybeAppend:password param1:result];
-  return [result description];
+  NSMutableString *result = [NSMutableString stringWithCapacity:80];
+  [self maybeAppend:ssid result:result];
+  [self maybeAppend:networkEncryption result:result];
+  [self maybeAppend:password result:result];
+  return result;
 }
 
 - (void) dealloc {

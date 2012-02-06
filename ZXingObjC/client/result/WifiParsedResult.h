@@ -1,3 +1,4 @@
+#import "ParsedResult.h"
 
 /**
  * @author Vikram Aggarwal
@@ -13,5 +14,5 @@
 @property(nonatomic, retain, readonly) NSString * networkEncryption;
 @property(nonatomic, retain, readonly) NSString * password;
 @property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password;
+- (id) initWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password;
 @end
