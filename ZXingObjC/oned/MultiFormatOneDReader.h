@@ -7,8 +7,6 @@
 #import "BitArray.h"
 #import "RSS14Reader.h"
 #import "RSSExpandedReader.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * @author dswitkin@google.com (Daniel Switkin)

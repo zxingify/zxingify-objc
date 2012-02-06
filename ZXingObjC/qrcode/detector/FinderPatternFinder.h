@@ -5,8 +5,6 @@
 #import "BitMatrix.h"
 #import "Collections.h"
 #import "Comparator.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>Orders by furthest from average</p>

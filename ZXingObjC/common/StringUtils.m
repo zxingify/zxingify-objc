@@ -1,21 +1,7 @@
+#import "DecodeHintType.h"
 #import "StringUtils.h"
 
-NSString * const PLATFORM_DEFAULT_ENCODING = [System getProperty:@"file.encoding"];
-NSString * const SHIFT_JIS = @"SJIS";
-NSString * const GB2312 = @"GB2312";
-NSString * const EUC_JP = @"EUC_JP";
-NSString * const UTF8 = @"UTF8";
-NSString * const ISO88591 = @"ISO8859_1";
-BOOL const ASSUME_SHIFT_JIS = [SHIFT_JIS equalsIgnoreCase:PLATFORM_DEFAULT_ENCODING] || [EUC_JP equalsIgnoreCase:PLATFORM_DEFAULT_ENCODING];
-
 @implementation StringUtils
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
 
 /**
  * @param bytes bytes encoding a string, whose encoding should be guessed
@@ -24,17 +10,20 @@ BOOL const ASSUME_SHIFT_JIS = [SHIFT_JIS equalsIgnoreCase:PLATFORM_DEFAULT_ENCOD
  * {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
  * default encoding if none of these can possibly be correct
  */
-+ (NSString *) guessEncoding:(NSArray *)bytes hints:(NSMutableDictionary *)hints {
++ (NSStringEncoding) guessEncoding:(char *)bytes length:(int)length hints:(NSMutableDictionary *)hints {
+  BOOL assumeShiftJIS = CFStringGetSystemEncoding() == NSShiftJISStringEncoding || CFStringGetSystemEncoding() == NSJapaneseEUCStringEncoding;
+  
   if (hints != nil) {
-    NSString * characterSet = (NSString *)[hints objectForKey:DecodeHintType.CHARACTER_SET];
+    NSString * characterSet = (NSString *)[hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeCharacterSet]];
     if (characterSet != nil) {
-      return characterSet;
+      return [characterSet intValue];
     }
   }
-  if (bytes.length > 3 && bytes[0] == (char)0xEF && bytes[1] == (char)0xBB && bytes[2] == (char)0xBF) {
-    return UTF8;
+  if (length > 3 && bytes[0] == (char) 0xEF &&
+      bytes[1] == (char) 0xBB &&
+      bytes[2] == (char) 0xBF) {
+    return NSUTF8StringEncoding;
   }
-  int length = bytes.length;
   BOOL canBeISO88591 = YES;
   BOOL canBeShiftJIS = YES;
   BOOL canBeUTF8 = YES;
@@ -90,21 +79,18 @@ BOOL const ASSUME_SHIFT_JIS = [SHIFT_JIS equalsIgnoreCase:PLATFORM_DEFAULT_ENCOD
       }
        else {
         lastWasPossibleDoubleByteStart = YES;
-        if (i >= bytes.length - 1) {
+        if (i >= length - 1) {
           canBeShiftJIS = NO;
-        }
-         else {
+        } else {
           int nextValue = bytes[i + 1] & 0xFF;
           if (nextValue < 0x40 || nextValue > 0xFC) {
             canBeShiftJIS = NO;
-          }
-           else {
+          } else {
             maybeDoubleByteCount++;
           }
         }
       }
-    }
-     else {
+    } else {
       lastWasPossibleDoubleByteStart = NO;
     }
   }
@@ -112,19 +98,19 @@ BOOL const ASSUME_SHIFT_JIS = [SHIFT_JIS equalsIgnoreCase:PLATFORM_DEFAULT_ENCOD
   if (utf8BytesLeft > 0) {
     canBeUTF8 = NO;
   }
-  if (canBeShiftJIS && ASSUME_SHIFT_JIS) {
-    return SHIFT_JIS;
+  if (canBeShiftJIS && assumeShiftJIS) {
+    return NSShiftJISStringEncoding;
   }
   if (canBeUTF8 && sawUTF8Start) {
-    return UTF8;
+    return NSUTF8StringEncoding;
   }
   if (canBeShiftJIS && (maybeDoubleByteCount >= 3 || 20 * maybeSingleByteKatakanaCount > length)) {
-    return SHIFT_JIS;
+    return NSShiftJISStringEncoding;
   }
   if (!sawLatin1Supplement && canBeISO88591) {
-    return ISO88591;
+    return NSISOLatin1StringEncoding;
   }
-  return PLATFORM_DEFAULT_ENCODING;
+  return CFStringGetSystemEncoding();
 }
 
 @end

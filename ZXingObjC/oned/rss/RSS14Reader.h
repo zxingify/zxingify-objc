@@ -6,8 +6,6 @@
 #import "ResultPointCallback.h"
 #import "BitArray.h"
 #import "NSEnumerator.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.

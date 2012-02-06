@@ -5,8 +5,6 @@
 #import "ReaderException.h"
 #import "Result.h"
 #import "BitArray.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>A reader that can read all available UPC/EAN formats. If a caller wants to try to

@@ -2,7 +2,6 @@
 #import "BitSource.h"
 #import "DecoderResult.h"
 #import "UnsupportedEncodingException.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes

@@ -1,4 +1,3 @@
-#import "NSMutableDictionary.h"
 #import "BarcodeFormat.h"
 #import "ChecksumException.h"
 #import "FormatException.h"

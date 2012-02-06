@@ -9,7 +9,6 @@
 #import "ResultPoint.h"
 #import "ResultPointCallback.h"
 #import "BitArray.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>Encapsulates functionality and implementation that is common to UPC and EAN families

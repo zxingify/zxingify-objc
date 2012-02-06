@@ -43,7 +43,7 @@
 
 @end
 
-@interface DataMatrixVersion
+@interface DataMatrixVersion ()
 
 + (NSArray *) buildVersions;
 

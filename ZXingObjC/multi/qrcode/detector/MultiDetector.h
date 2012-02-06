@@ -4,8 +4,6 @@
 #import "DetectorResult.h"
 #import "Detector.h"
 #import "FinderPatternInfo.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code

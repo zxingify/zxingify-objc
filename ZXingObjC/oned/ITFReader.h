@@ -5,7 +5,6 @@
 #import "Result.h"
 #import "ResultPoint.h"
 #import "BitArray.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>

@@ -7,20 +7,20 @@
 @synthesize title;
 @synthesize displayResult;
 
-- (id) init:(NSString *)number telURI:(NSString *)telURI title:(NSString *)title {
-  if (self = [super init:ParsedResultType.TEL]) {
-    number = number;
-    telURI = telURI;
-    title = title;
+- (id) initWithNumber:(NSString *)aNumber telURI:(NSString *)aTelURI title:(NSString *)aTitle {
+  if (self = [super initWithType:kParsedResultTypeTel]) {
+    number = [aNumber copy];
+    telURI = [aTelURI copy];
+    title = [aTitle copy];
   }
   return self;
 }
 
 - (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:20] autorelease];
-  [self maybeAppend:number param1:result];
-  [self maybeAppend:title param1:result];
-  return [result description];
+  NSMutableString *result = [NSMutableString stringWithCapacity:20];
+  [self maybeAppend:number result:result];
+  [self maybeAppend:title result:result];
+  return result;
 }
 
 - (void) dealloc {

@@ -7,8 +7,6 @@
 #import "GridSampler.h"
 #import "WhiteRectangleDetector.h"
 #import "NSEnumerator.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * Simply encapsulates two points and a number of transitions between them.

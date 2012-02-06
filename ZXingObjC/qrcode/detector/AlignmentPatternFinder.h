@@ -2,7 +2,6 @@
 #import "ResultPoint.h"
 #import "ResultPointCallback.h"
 #import "BitMatrix.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder

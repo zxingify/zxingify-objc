@@ -1,5 +1,5 @@
 #import "Mode.h"
-#import "Version.h"
+#import "QrCodeVersion.h"
 
 @implementation Mode
 
@@ -56,7 +56,7 @@
  * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
  * count of characters that will follow encoded in this Mode
  */
-- (int) getCharacterCountBits:(Version *)version {
+- (int) getCharacterCountBits:(QrCodeVersion *)version {
   if (characterCountBitsForVersions == nil) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Character count doesn't apply to this mode"

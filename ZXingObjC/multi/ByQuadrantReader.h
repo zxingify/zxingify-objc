@@ -4,7 +4,6 @@
 #import "NotFoundException.h"
 #import "Reader.h"
 #import "Result.h"
-#import "NSMutableDictionary.h"
 
 /**
  * This class attempts to decode a barcode from an image, not by scanning the whole image,

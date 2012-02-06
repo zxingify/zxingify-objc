@@ -5,7 +5,6 @@
 #import "NotFoundException.h"
 #import "Result.h"
 #import "BitArray.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>Implements decoding of the UPC-A format.</p>

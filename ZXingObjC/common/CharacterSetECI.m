@@ -12,7 +12,7 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
 
 @implementation CharacterSetECI
 
-@synthesize encodingName;
+@synthesize encoding;
 
 + (void) initialize {
   VALUE_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
@@ -38,24 +38,24 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
   [self addCharacterSet:20 encodingName:[NSArray arrayWithObjects:@"SJIS", @"Shift_JIS", nil]];
 }
 
-- (id) init:(int)value encodingName:(NSString *)anEncodingName {
+- (id) initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
   if (self = [super initWithValue:value]) {
-    encodingName = [anEncodingName copy];
+    encoding = anEncoding;
   }
   return self;
 }
 
-+ (void) addCharacterSet:(int)value encodingName:(NSString *)encodingName {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] init:value encodingName:encodingName] autorelease];
++ (void) addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
+  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
-  [NAME_TO_ECI setObject:eci forKey:encodingName];
+  [NAME_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:encoding]];
 }
 
-+ (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodingNames {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] init:value encodingName:[encodingNames objectAtIndex:0]] autorelease];
++ (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodings {
+  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:[[encodings objectAtIndex:0] intValue]] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
 
-  for (id name in encodingNames) {
+  for (id name in encodings) {
     [NAME_TO_ECI setObject:eci forKey:name];
   }
 }
@@ -89,11 +89,6 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
     [self initialize];
   }
   return [NAME_TO_ECI objectForKey:name];
-}
-
-- (void) dealloc {
-  [encodingName release];
-  [super dealloc];
 }
 
 @end

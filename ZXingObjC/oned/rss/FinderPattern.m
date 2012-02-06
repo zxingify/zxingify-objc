@@ -11,8 +11,8 @@
     self.value = aValue;
     self.startEnd = aStartEnd;
     self.resultPoints = [NSArray arrayWithObjects:
-                         [[[ResultPoint alloc] init:(float)aStart y:(float)aRowNumber] autorelease],
-                         [[[ResultPoint alloc] init:(float)anEnd y:(float)aRowNumber] autorelease],
+                         [[[ResultPoint alloc] initWithX:(float)aStart y:(float)aRowNumber] autorelease],
+                         [[[ResultPoint alloc] initWithX:(float)anEnd y:(float)aRowNumber] autorelease],
                          nil];
   }
   return self;

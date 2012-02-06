@@ -4,8 +4,6 @@
 #import "ReaderException.h"
 #import "Result.h"
 #import "ResultPoint.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.

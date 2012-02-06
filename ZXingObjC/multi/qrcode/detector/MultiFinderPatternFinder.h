@@ -8,8 +8,6 @@
 #import "FinderPattern.h"
 #import "FinderPatternFinder.h"
 #import "FinderPatternInfo.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * A comparator that orders FinderPatterns by their estimated module size.

@@ -1,4 +1,3 @@
-#import "NSMutableDictionary.h"
 #import "BarcodeFormat.h"
 #import "NotFoundException.h"
 #import "Result.h"

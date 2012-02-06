@@ -1,7 +1,3 @@
-#import "BitMatrix.h"
-#import "NotFoundException.h"
-#import "PerspectiveTransform.h"
-
 /**
  * Implementations of this class can, given locations of finder patterns for a QR code in an
  * image, sample the right points in the image to reconstruct the QR code, accounting for
@@ -15,6 +11,8 @@
  * 
  * @author Sean Owen
  */
+
+@class BitMatrix, PerspectiveTransform;
 
 @interface GridSampler : NSObject
 

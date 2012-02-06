@@ -3,8 +3,6 @@
 #import "MultiFormatOneDReader.h"
 #import "PDF417Reader.h"
 #import "QRCodeReader.h"
-#import "NSMutableDictionary.h"
-#import "NSMutableArray.h"
 
 /**
  * MultiFormatReader is a convenience class and the main entry point into the library for most uses.

@@ -5,7 +5,6 @@
 #import "GenericGF.h"
 #import "ReedSolomonDecoder.h"
 #import "ReedSolomonException.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting

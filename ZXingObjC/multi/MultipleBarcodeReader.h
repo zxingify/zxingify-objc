@@ -1,7 +1,6 @@
 #import "BinaryBitmap.h"
 #import "NotFoundException.h"
 #import "Result.h"
-#import "NSMutableDictionary.h"
 
 /**
  * Implementation of this interface attempt to read several barcodes from one image.

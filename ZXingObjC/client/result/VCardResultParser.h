@@ -1,7 +1,5 @@
 #import "Result.h"
-#import "ByteArrayOutputStream.h"
 #import "UnsupportedEncodingException.h"
-#import "NSMutableArray.h"
 
 /**
  * Parses contact information formatted according to the VCard (2.1) format. This is not a complete

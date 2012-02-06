@@ -4,7 +4,6 @@
 #import "BitMatrix.h"
 #import "DetectorResult.h"
 #import "GridSampler.h"
-#import "NSMutableDictionary.h"
 
 /**
  * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
