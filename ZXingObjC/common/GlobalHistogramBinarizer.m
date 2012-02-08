@@ -1,5 +1,8 @@
 #import "GlobalHistogramBinarizer.h"
+#import "BitArray.h"
 #import "BitMatrix.h"
+#import "LuminanceSource.h"
+#import "NotFoundException.h"
 
 int const LUMINANCE_BITS = 5;
 int const LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
@@ -8,6 +11,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 @interface GlobalHistogramBinarizer ()
 
 - (void) initArrays:(int)luminanceSize;
+- (int) estimateBlackPoint:(NSArray *)buckets;
 
 @end
 
@@ -34,19 +38,19 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   }
   [self initArrays:width];
   NSArray * localLuminances = [source getRow:y row:luminances];
-  NSArray * localBuckets = buckets;
+  NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:buckets];
 
   for (int x = 0; x < width; x++) {
-    int pixel = localLuminances[x] & 0xff;
-    localBuckets[pixel >> LUMINANCE_SHIFT]++;
+    int pixel = [[localLuminances objectAtIndex:x] intValue] & 0xff;
+    [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
   }
 
   int blackPoint = [self estimateBlackPoint:localBuckets];
-  int left = localLuminances[0] & 0xff;
-  int center = localLuminances[1] & 0xff;
+  int left = [[localLuminances objectAtIndex:0] intValue] & 0xff;
+  int center = [[localLuminances objectAtIndex:1] intValue] & 0xff;
 
   for (int x = 1; x < width - 1; x++) {
-    int right = localLuminances[x + 1] & 0xff;
+    int right = [[localLuminances objectAtIndex:x + 1] intValue] & 0xff;
     int luminance = ((center << 2) - left - right) >> 1;
     if (luminance < blackPoint) {
       [row set:x];
@@ -62,18 +66,18 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   LuminanceSource * source = [self luminanceSource];
   int width = [source width];
   int height = [source height];
-  BitMatrix * matrix = [[[BitMatrix alloc] init:width param1:height] autorelease];
+  BitMatrix * matrix = [[[BitMatrix alloc] initWithWidth:width height:height] autorelease];
   [self initArrays:width];
-  NSArray * localBuckets = buckets;
+  NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:buckets];
 
   for (int y = 1; y < 5; y++) {
     int row = height * y / 5;
-    NSArray * localLuminances = [source getRow:row param1:luminances];
+    NSArray * localLuminances = [source getRow:row row:luminances];
     int right = (width << 2) / 5;
 
     for (int x = width / 5; x < right; x++) {
-      int pixel = localLuminances[x] & 0xff;
-      localBuckets[pixel >> LUMINANCE_SHIFT]++;
+      int pixel = [[localLuminances objectAtIndex:x] intValue] & 0xff;
+      [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
     }
 
   }
@@ -85,9 +89,9 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     int offset = y * width;
 
     for (int x = 0; x < width; x++) {
-      int pixel = localLuminances[offset + x] & 0xff;
+      int pixel = [[localLuminances objectAtIndex:offset + x] intValue] & 0xff;
       if (pixel < blackPoint) {
-        [matrix set:x param1:y];
+        [matrix set:x y:y];
       }
     }
 
@@ -97,38 +101,37 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 }
 
 - (Binarizer *) createBinarizer:(LuminanceSource *)source {
-  return [[[GlobalHistogramBinarizer alloc] init:source] autorelease];
+  return [[[GlobalHistogramBinarizer alloc] initWithSource:source] autorelease];
 }
 
 - (void) initArrays:(int)luminanceSize {
-  if (luminances == nil || luminances.length < luminanceSize) {
+  if (luminances == nil || [luminances count] < luminanceSize) {
     luminances = [NSArray array];
   }
   if (buckets == nil) {
-    buckets = [NSArray array];
+    buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
   }
    else {
-
     for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-      buckets[x] = 0;
+      [buckets addObject:[NSNumber numberWithInt:0]];
     }
 
   }
 }
 
-+ (int) estimateBlackPoint:(NSArray *)buckets {
-  int numBuckets = buckets.length;
+- (int) estimateBlackPoint:(NSArray *)otherBuckets {
+  int numBuckets = [otherBuckets count];
   int maxBucketCount = 0;
   int firstPeak = 0;
   int firstPeakSize = 0;
 
   for (int x = 0; x < numBuckets; x++) {
-    if (buckets[x] > firstPeakSize) {
+    if ([[otherBuckets objectAtIndex:x] intValue] > firstPeakSize) {
       firstPeak = x;
-      firstPeakSize = buckets[x];
+      firstPeakSize = [[otherBuckets objectAtIndex:x] intValue];
     }
-    if (buckets[x] > maxBucketCount) {
-      maxBucketCount = buckets[x];
+    if ([[otherBuckets objectAtIndex:x] intValue] > maxBucketCount) {
+      maxBucketCount = [[otherBuckets objectAtIndex:x] intValue];
     }
   }
 
@@ -137,7 +140,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   for (int x = 0; x < numBuckets; x++) {
     int distanceToBiggest = x - firstPeak;
-    int score = buckets[x] * distanceToBiggest * distanceToBiggest;
+    int score = [[otherBuckets objectAtIndex:x] intValue] * distanceToBiggest * distanceToBiggest;
     if (score > secondPeakScore) {
       secondPeak = x;
       secondPeakScore = score;
@@ -157,7 +160,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   for (int x = secondPeak - 1; x > firstPeak; x--) {
     int fromFirst = x - firstPeak;
-    int score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - buckets[x]);
+    int score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - [[otherBuckets objectAtIndex:x] intValue]);
     if (score > bestValleyScore) {
       bestValley = x;
       bestValleyScore = score;

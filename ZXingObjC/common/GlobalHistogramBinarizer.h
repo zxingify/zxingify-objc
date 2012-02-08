@@ -12,11 +12,11 @@
  * @author Sean Owen
  */
 
-@class BitMatrix;
+@class BitArray, BitMatrix, LuminanceSource;
 
 @interface GlobalHistogramBinarizer : Binarizer {
   NSArray * luminances;
-  NSArray * buckets;
+  NSMutableArray * buckets;
 }
 
 - (BitArray *) getBlackRow:(int)y row:(BitArray *)row;
