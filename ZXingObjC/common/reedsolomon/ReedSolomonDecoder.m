@@ -1,10 +1,20 @@
 #import "ReedSolomonDecoder.h"
+#import "GenericGF.h"
+#import "ReedSolomonException.h"
+
+@interface ReedSolomonDecoder ()
+
+- (NSArray *) runEuclideanAlgorithm:(GenericGFPoly *)a b:(GenericGFPoly *)b R:(int)R;
+- (NSArray *) findErrorLocations:(GenericGFPoly *)errorLocator;
+- (NSArray *) findErrorMagnitudes:(GenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations dataMatrix:(BOOL)dataMatrix;
+
+@end
 
 @implementation ReedSolomonDecoder
 
-- (id) initWithField:(GenericGF *)field {
+- (id) initWithField:(GenericGF *)aField {
   if (self = [super init]) {
-    field = field;
+    field = [aField retain];
   }
   return self;
 }
@@ -19,15 +29,19 @@
  * @param twoS number of error-correction codewords available
  * @throws ReedSolomonException if decoding fails for any reason
  */
-- (void) decode:(NSArray *)received twoS:(int)twoS {
-  GenericGFPoly * poly = [[[GenericGFPoly alloc] init:field param1:received] autorelease];
-  NSArray * syndromeCoefficients = [NSArray array];
-  BOOL dataMatrix = [field isEqualTo:GenericGF.DATA_MATRIX_FIELD_256];
+- (void) decode:(NSMutableArray *)received twoS:(int)twoS {
+  GenericGFPoly * poly = [[[GenericGFPoly alloc] init:field coefficients:received] autorelease];
+  NSMutableArray * syndromeCoefficients = [NSMutableArray arrayWithCapacity:twoS];
+  for (int i = 0; i < twoS; i++) {
+    [syndromeCoefficients addObject:[NSNull null]];
+  }
+  
+  BOOL dataMatrix = [field isEqual:[GenericGF DataMatrixField256]];
   BOOL noError = YES;
 
   for (int i = 0; i < twoS; i++) {
     int eval = [poly evaluateAt:[field exp:dataMatrix ? i + 1 : i]];
-    syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
+    [syndromeCoefficients replaceObjectAtIndex:[syndromeCoefficients count] - 1 - i withObject:[NSNumber numberWithInt:eval]];
     if (eval != 0) {
       noError = NO;
     }
@@ -36,19 +50,19 @@
   if (noError) {
     return;
   }
-  GenericGFPoly * syndrome = [[[GenericGFPoly alloc] init:field param1:syndromeCoefficients] autorelease];
-  NSArray * sigmaOmega = [self runEuclideanAlgorithm:[field buildMonomial:twoS param1:1] b:syndrome R:twoS];
-  GenericGFPoly * sigma = sigmaOmega[0];
-  GenericGFPoly * omega = sigmaOmega[1];
+  GenericGFPoly * syndrome = [[[GenericGFPoly alloc] init:field coefficients:syndromeCoefficients] autorelease];
+  NSArray * sigmaOmega = [self runEuclideanAlgorithm:[field buildMonomial:twoS coefficient:1] b:syndrome R:twoS];
+  GenericGFPoly * sigma = [sigmaOmega objectAtIndex:0];
+  GenericGFPoly * omega = [sigmaOmega objectAtIndex:1];
   NSArray * errorLocations = [self findErrorLocations:sigma];
   NSArray * errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations dataMatrix:dataMatrix];
 
-  for (int i = 0; i < errorLocations.length; i++) {
-    int position = received.length - 1 - [field log:errorLocations[i]];
+  for (int i = 0; i < [errorLocations count]; i++) {
+    int position = [received count] - 1 - [field log:[[errorLocations objectAtIndex:i] intValue]];
     if (position < 0) {
-      @throw [[[ReedSolomonException alloc] init:@"Bad error location"] autorelease];
+      @throw [[[ReedSolomonException alloc] initWithMessage:@"Bad error location"] autorelease];
     }
-    received[position] = [GenericGF addOrSubtract:received[position] param1:errorMagnitudes[i]];
+    [received replaceObjectAtIndex:position withObject:[NSNumber numberWithInt:[GenericGF addOrSubtract:[[received objectAtIndex:position] intValue] b:[[errorMagnitudes objectAtIndex:i] intValue]]]];
   }
 
 }
@@ -74,74 +88,80 @@
     sLast = s;
     tLast = t;
     if ([rLast zero]) {
-      @throw [[[ReedSolomonException alloc] init:@"r_{i-1} was zero"] autorelease];
+      @throw [[[ReedSolomonException alloc] initWithName:@"ReedSolomonException"
+                                                  reason:@"r_{i-1} was zero"
+                                                userInfo:nil] autorelease];
     }
     r = rLastLast;
     GenericGFPoly * q = [field zero];
-    int denominatorLeadingTerm = [rLast getCoefficient:[rLast degree]];
+    int denominatorLeadingTerm = [rLast coefficient:[rLast degree]];
     int dltInverse = [field inverse:denominatorLeadingTerm];
 
     while ([r degree] >= [rLast degree] && ![r zero]) {
       int degreeDiff = [r degree] - [rLast degree];
-      int scale = [field multiply:[r getCoefficient:[r degree]] param1:dltInverse];
-      q = [q addOrSubtract:[field buildMonomial:degreeDiff param1:scale]];
-      r = [r addOrSubtract:[rLast multiplyByMonomial:degreeDiff param1:scale]];
+      int scale = [field multiply:[r coefficient:[r degree]] b:dltInverse];
+      q = [q addOrSubtract:[field buildMonomial:degreeDiff coefficient:scale]];
+      r = [r addOrSubtract:[rLast multiplyByMonomial:degreeDiff coefficient:scale]];
     }
 
     s = [[q multiply:sLast] addOrSubtract:sLastLast];
     t = [[q multiply:tLast] addOrSubtract:tLastLast];
   }
 
-  int sigmaTildeAtZero = [t getCoefficient:0];
+  int sigmaTildeAtZero = [t coefficient:0];
   if (sigmaTildeAtZero == 0) {
-    @throw [[[ReedSolomonException alloc] init:@"sigmaTilde(0) was zero"] autorelease];
+    @throw [[[ReedSolomonException alloc] initWithName:@"ReedSolomonException"
+                                                reason:@"sigmaTilde(0) was zero"
+                                              userInfo:nil] autorelease];
   }
   int inverse = [field inverse:sigmaTildeAtZero];
-  GenericGFPoly * sigma = [t multiply:inverse];
-  GenericGFPoly * omega = [r multiply:inverse];
+  GenericGFPoly * sigma = [t multiplyScalar:inverse];
+  GenericGFPoly * omega = [r multiplyScalar:inverse];
   return [NSArray arrayWithObjects:sigma, omega, nil];
 }
 
 - (NSArray *) findErrorLocations:(GenericGFPoly *)errorLocator {
   int numErrors = [errorLocator degree];
   if (numErrors == 1) {
-    return [NSArray arrayWithObjects:[errorLocator getCoefficient:1], nil];
+    return [NSArray arrayWithObject:[NSNumber numberWithInt:[errorLocator coefficient:1]]];
   }
-  NSArray * result = [NSArray array];
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:numErrors];
   int e = 0;
 
   for (int i = 1; i < [field size] && e < numErrors; i++) {
     if ([errorLocator evaluateAt:i] == 0) {
-      result[e] = [field inverse:i];
+      [result addObject:[NSNumber numberWithInt:[field inverse:i]]];
       e++;
     }
   }
 
   if (e != numErrors) {
-    @throw [[[ReedSolomonException alloc] init:@"Error locator degree does not match number of roots"] autorelease];
+    @throw [[[ReedSolomonException alloc] initWithName:@"ReedSolomonException"
+                                                reason:@"Error locator degree does not match number of roots"
+                                              userInfo:nil] autorelease];
   }
   return result;
 }
 
 - (NSArray *) findErrorMagnitudes:(GenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations dataMatrix:(BOOL)dataMatrix {
-  int s = errorLocations.length;
-  NSArray * result = [NSArray array];
+  int s = [errorLocations count];
+  NSMutableArray * result = [NSMutableArray array];
 
   for (int i = 0; i < s; i++) {
-    int xiInverse = [field inverse:errorLocations[i]];
+    int xiInverse = [field inverse:[[errorLocations objectAtIndex:i] intValue]];
     int denominator = 1;
 
     for (int j = 0; j < s; j++) {
       if (i != j) {
-        int term = [field multiply:errorLocations[j] param1:xiInverse];
+        int term = [field multiply:[[errorLocations objectAtIndex:j] intValue] b:xiInverse];
         int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
-        denominator = [field multiply:denominator param1:termPlus1];
+        denominator = [field multiply:denominator b:termPlus1];
       }
     }
 
-    result[i] = [field multiply:[errorEvaluator evaluateAt:xiInverse] param1:[field inverse:denominator]];
+    [result addObject:[NSNumber numberWithInt:[field multiply:[errorEvaluator evaluateAt:xiInverse] b:[field inverse:denominator]]]];
     if (dataMatrix) {
-      result[i] = [field multiply:result[i] param1:xiInverse];
+      [result replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:[field multiply:[[result objectAtIndex:i] intValue] b:xiInverse]]];
     }
   }
 

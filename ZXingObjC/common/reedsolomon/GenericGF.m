@@ -90,12 +90,12 @@ int const INITIALIZATION_THRESHOLD = 0;
   }
 }
 
-- (GenericGFPoly *) getZero {
+- (GenericGFPoly *) zero {
   [self checkInit];
   return zero;
 }
 
-- (GenericGFPoly *) getOne {
+- (GenericGFPoly *) one {
   [self checkInit];
   return one;
 }

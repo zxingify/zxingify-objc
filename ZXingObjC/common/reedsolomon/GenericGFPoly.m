@@ -50,7 +50,7 @@
 /**
  * @return degree of this polynomial
  */
-- (int) getDegree {
+- (int) degree {
   return coefficients.length - 1;
 }
 
@@ -58,7 +58,7 @@
 /**
  * @return true iff this polynomial is the monomial "0"
  */
-- (BOOL) isZero {
+- (BOOL) zero {
   return coefficients[0] == 0;
 }
 
@@ -66,7 +66,7 @@
 /**
  * @return coefficient of x^degree term in this polynomial
  */
-- (int) getCoefficient:(int)degree {
+- (int) coefficient:(int)degree {
   return coefficients[coefficients.length - 1 - degree];
 }
 

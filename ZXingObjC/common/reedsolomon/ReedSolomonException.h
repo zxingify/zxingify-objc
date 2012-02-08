@@ -6,8 +6,6 @@
  * @author Sean Owen
  */
 
-@interface ReedSolomonException : NSException {
-}
+@interface ReedSolomonException : NSException
 
-- (id) initWithMessage:(NSString *)message;
 @end

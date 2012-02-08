@@ -1,4 +1,3 @@
-
 /**
  * <p>Implements Reed-Solomon decoding, as the name implies.</p>
  * 
@@ -22,10 +21,12 @@
  * @author sanfordsquires
  */
 
+@class GenericGF;
+
 @interface ReedSolomonDecoder : NSObject {
   GenericGF * field;
 }
 
 - (id) initWithField:(GenericGF *)field;
-- (void) decode:(NSArray *)received twoS:(int)twoS;
+- (void) decode:(NSMutableArray *)received twoS:(int)twoS;
 @end

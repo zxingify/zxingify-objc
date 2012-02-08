@@ -22,7 +22,9 @@
   BOOL initialized;
 }
 
+@property(nonatomic, readonly) GenericGFPoly * one;
 @property(nonatomic, readonly) int size;
+@property(nonatomic, readonly) GenericGFPoly * zero;
 
 + (GenericGF *)AztecData12;
 + (GenericGF *)AztecData10;
@@ -33,8 +35,6 @@
 + (GenericGF *)AztecData8;
 
 - (id) initWithPrimitive:(int)primitive size:(int)size;
-- (GenericGFPoly *) getZero;
-- (GenericGFPoly *) getOne;
 - (GenericGFPoly *) buildMonomial:(int)degree coefficient:(int)coefficient;
 + (int) addOrSubtract:(int)a b:(int)b;
 - (int) exp:(int)a;

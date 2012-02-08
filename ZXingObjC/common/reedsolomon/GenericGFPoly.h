@@ -17,9 +17,9 @@
 
 - (id) init:(GenericGF *)field coefficients:(NSArray *)coefficients;
 - (NSArray *) coefficients;
-- (int) getDegree;
-- (BOOL) isZero;
-- (int) getCoefficient:(int)degree;
+- (int) degree;
+- (BOOL) zero;
+- (int) coefficient:(int)degree;
 - (int) evaluateAt:(int)a;
 - (GenericGFPoly *) addOrSubtract:(GenericGFPoly *)other;
 - (GenericGFPoly *) multiply:(GenericGFPoly *)other;

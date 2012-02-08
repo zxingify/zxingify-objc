@@ -1,18 +1,49 @@
 #import "Detector.h"
+#import "BinaryBitmap.h"
+#import "NotFoundException.h"
+#import "ResultPoint.h"
+#import "BitMatrix.h"
+#import "DetectorResult.h"
+#import "GridSampler.h"
 
 int const MAX_AVG_VARIANCE = (int)((1 << 8) * 0.42f);
 int const MAX_INDIVIDUAL_VARIANCE = (int)((1 << 8) * 0.8f);
 int const SKEW_THRESHOLD = 2;
-NSArray * const START_PATTERN = [NSArray arrayWithObjects:8, 1, 1, 1, 1, 1, 1, 3, nil];
-NSArray * const START_PATTERN_REVERSE = [NSArray arrayWithObjects:3, 1, 1, 1, 1, 1, 1, 8, nil];
-NSArray * const STOP_PATTERN = [NSArray arrayWithObjects:7, 1, 1, 3, 1, 1, 1, 2, 1, nil];
-NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 3, 1, 1, 7, nil];
+
+// B S B S B S B S Bar/Space pattern
+// 11111111 0 1 0 1 0 1 000
+int const START_PATTERN[8] = {8, 1, 1, 1, 1, 1, 1, 3};
+
+// 11111111 0 1 0 1 0 1 000
+int const START_PATTERN_REVERSE[8] = {3, 1, 1, 1, 1, 1, 1, 8};
+
+// 1111111 0 1 000 1 0 1 00 1
+int const STOP_PATTERN[9] = {7, 1, 1, 3, 1, 1, 1, 2, 1};
+
+// B S B S B S B S B Bar/Space pattern
+// 1111111 0 1 000 1 0 1 00 1
+int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
+
+@interface Detector ()
+
+- (NSArray *) findVertices:(BitMatrix *)matrix;
+- (NSArray *) findVertices180:(BitMatrix *)matrix;
+- (void) correctCodeWordVertices:(NSArray *)vertices upsideDown:(BOOL)upsideDown;
+- (float) computeModuleWidth:(NSArray *)vertices;
+- (int) computeDimension:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
+- (int) round:(float)d;
+- (NSArray *) findGuardPattern:(BitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern;
+- (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance;
+- (BitMatrix *) sampleGrid:(BitMatrix *)matrix topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft topRight:(ResultPoint *)topRight bottomRight:(ResultPoint *)bottomRight dimension:(int)dimension;
+
+@end
+
 
 @implementation Detector
 
-- (id) initWithImage:(BinaryBitmap *)image {
+- (id) initWithImage:(BinaryBitmap *)anImage {
   if (self = [super init]) {
-    image = image;
+    image = [anImage retain];
   }
   return self;
 }
@@ -55,12 +86,12 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
   if (moduleWidth < 1.0f) {
     @throw [NotFoundException notFoundInstance];
   }
-  int dimension = [self computeDimension:vertices[4] topRight:vertices[6] bottomLeft:vertices[5] bottomRight:vertices[7] moduleWidth:moduleWidth];
+  int dimension = [self computeDimension:[vertices objectAtIndex:4] topRight:[vertices objectAtIndex:6] bottomLeft:[vertices objectAtIndex:5] bottomRight:[vertices objectAtIndex:7] moduleWidth:moduleWidth];
   if (dimension < 1) {
     @throw [NotFoundException notFoundInstance];
   }
-  BitMatrix * bits = [self sampleGrid:matrix topLeft:vertices[4] bottomLeft:vertices[5] topRight:vertices[6] bottomRight:vertices[7] dimension:dimension];
-  return [[[DetectorResult alloc] init:bits param1:[NSArray arrayWithObjects:vertices[4], vertices[5], vertices[6], vertices[7], nil]] autorelease];
+  BitMatrix * bits = [self sampleGrid:matrix topLeft:[vertices objectAtIndex:4] bottomLeft:[vertices objectAtIndex:5] topRight:[vertices objectAtIndex:6] bottomRight:[vertices objectAtIndex:7] dimension:dimension];
+  return [[[DetectorResult alloc] initWithBits:bits points:[NSArray arrayWithObjects:[vertices objectAtIndex:4], [vertices objectAtIndex:5], [vertices objectAtIndex:6], [vertices objectAtIndex:7], nil]] autorelease];
 }
 
 
@@ -80,7 +111,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * vertices[6] x, y top right codeword area
  * vertices[7] x, y bottom right codeword area
  */
-+ (NSArray *) findVertices:(BitMatrix *)matrix {
+- (NSArray *) findVertices:(BitMatrix *)matrix {
   int height = [matrix height];
   int width = [matrix width];
   NSArray * result = [NSArray array];
@@ -161,7 +192,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * vertices[6] x, y top right codeword area
  * vertices[7] x, y bottom right codeword area
  */
-+ (NSArray *) findVertices180:(BitMatrix *)matrix {
+- (NSArray *) findVertices180:(BitMatrix *)matrix {
   int height = [matrix height];
   int width = [matrix width];
   int halfWidth = width >> 1;
@@ -232,7 +263,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * 
  * @param vertices The eight vertices located by findVertices().
  */
-+ (void) correctCodeWordVertices:(NSArray *)vertices upsideDown:(BOOL)upsideDown {
+- (void) correctCodeWordVertices:(NSArray *)vertices upsideDown:(BOOL)upsideDown {
   float skew = [vertices[4] y] - [vertices[6] y];
   if (upsideDown) {
     skew = -skew;
@@ -287,7 +318,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * vertices[7] x, y bottom right codeword area
  * @return the module size.
  */
-+ (float) computeModuleWidth:(NSArray *)vertices {
+- (float) computeModuleWidth:(NSArray *)vertices {
   float pixels1 = [ResultPoint distance:vertices[0] param1:vertices[4]];
   float pixels2 = [ResultPoint distance:vertices[1] param1:vertices[5]];
   float moduleWidth1 = (pixels1 + pixels2) / (17 * 2.0f);
@@ -309,13 +340,13 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * @param moduleWidth estimated module size
  * @return the number of modules in a row.
  */
-+ (int) computeDimension:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight moduleWidth:(float)moduleWidth {
+- (int) computeDimension:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight moduleWidth:(float)moduleWidth {
   int topRowDimension = [self round:[ResultPoint distance:topLeft param1:topRight] / moduleWidth];
   int bottomRowDimension = [self round:[ResultPoint distance:bottomLeft param1:bottomRight] / moduleWidth];
   return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
 }
 
-+ (BitMatrix *) sampleGrid:(BitMatrix *)matrix topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft topRight:(ResultPoint *)topRight bottomRight:(ResultPoint *)bottomRight dimension:(int)dimension {
+- (BitMatrix *) sampleGrid:(BitMatrix *)matrix topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft topRight:(ResultPoint *)topRight bottomRight:(ResultPoint *)bottomRight dimension:(int)dimension {
   GridSampler * sampler = [GridSampler instance];
   return [sampler sampleGrid:matrix param1:dimension param2:dimension param3:0.0f param4:0.0f param5:dimension param6:0.0f param7:dimension param8:dimension param9:0.0f param10:dimension param11:[topLeft x] param12:[topLeft y] param13:[topRight x] param14:[topRight y] param15:[bottomRight x] param16:[bottomRight y] param17:[bottomLeft x] param18:[bottomLeft y]];
 }
@@ -325,7 +356,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * Ends up being a bit faster than Math.round(). This merely rounds its
  * argument to the nearest int, where x.5 rounds up.
  */
-+ (int) round:(float)d {
+- (int) round:(float)d {
   return (int)(d + 0.5f);
 }
 
@@ -339,7 +370,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * being searched for as a pattern
  * @return start/end horizontal offset of guard pattern, as an array of two ints.
  */
-+ (NSArray *) findGuardPattern:(BitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(NSArray *)pattern {
+- (NSArray *) findGuardPattern:(BitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern {
   int patternLength = pattern.length;
   NSArray * counters = [NSArray array];
   BOOL isWhite = whiteFirst;
@@ -393,7 +424,7 @@ NSArray * const STOP_PATTERN_REVERSE = [NSArray arrayWithObjects:1, 2, 1, 1, 1, 
  * variance between counters and patterns equals the pattern length,
  * higher values mean even more variance
  */
-+ (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance {
+- (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = counters.length;
   int total = 0;
   int patternLength = 0;
