@@ -1,12 +1,8 @@
 #import "URIResultParser.h"
+#import "Result.h"
+#import "URIParsedResult.h"
 
 @implementation URIResultParser
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
 
 + (URIParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];
@@ -14,12 +10,12 @@
     rawText = [rawText substringFromIndex:4];
   }
   if (rawText != nil) {
-    rawText = [rawText stringByTrimmingCharactersInSet];
+    rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
   }
   if (![self isBasicallyValidURI:rawText]) {
     return nil;
   }
-  return [[[URIParsedResult alloc] init:rawText param1:nil] autorelease];
+  return [[[URIParsedResult alloc] initWithUri:rawText title:nil] autorelease];
 }
 
 
@@ -29,14 +25,14 @@
  * need to know when a string is obviously not a URI.
  */
 + (BOOL) isBasicallyValidURI:(NSString *)uri {
-  if (uri == nil || [uri rangeOfString:' '] >= 0 || [uri rangeOfString:'\n'] >= 0) {
+  if (uri == nil || [uri rangeOfString:@" "].location != NSNotFound || [uri rangeOfString:@"\n"].location != NSNotFound) {
     return NO;
   }
-  int period = [uri rangeOfString:'.'];
+  int period = [uri rangeOfString:@"."].location;
   if (period >= [uri length] - 2) {
     return NO;
   }
-  int colon = [uri rangeOfString:':'];
+  int colon = [uri rangeOfString:@":"].location;
   if (period < 0 && colon < 0) {
     return NO;
   }
