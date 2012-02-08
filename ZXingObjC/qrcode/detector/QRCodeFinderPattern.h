@@ -8,7 +8,7 @@
  * @author Sean Owen
  */
 
-@interface FinderPattern : ResultPoint {
+@interface QRCodeFinderPattern : ResultPoint {
   float estimatedModuleSize;
   int count;
 }

@@ -1,6 +1,6 @@
-#import "FinderPattern.h"
+#import "RSSFinderPattern.h"
 
-@implementation FinderPattern
+@implementation RSSFinderPattern
 
 @synthesize value;
 @synthesize startEnd;

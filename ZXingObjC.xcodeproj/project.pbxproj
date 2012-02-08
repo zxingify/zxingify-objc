@@ -130,7 +130,6 @@
 		029BCF6C15129BD0009E6549 /* GeneralAppIdDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE8D15129BD0009E6549 /* GeneralAppIdDecoder.m */; };
 		029BCF6D15129BD0009E6549 /* ExpandedPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE8F15129BD0009E6549 /* ExpandedPair.m */; };
 		029BCF6E15129BD0009E6549 /* RSSExpandedReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE9115129BD0009E6549 /* RSSExpandedReader.m */; };
-		029BCF6F15129BD0009E6549 /* FinderPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE9315129BD0009E6549 /* FinderPattern.m */; };
 		029BCF7015129BD0009E6549 /* Pair.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE9515129BD0009E6549 /* Pair.m */; };
 		029BCF7115129BD0009E6549 /* RSS14Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE9715129BD0009E6549 /* RSS14Reader.m */; };
 		029BCF7215129BD0009E6549 /* RSSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE9915129BD0009E6549 /* RSSUtils.m */; };
@@ -153,11 +152,9 @@
 		029BCF8315129BD0009E6549 /* ErrorCorrectionLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC015129BD0009E6549 /* ErrorCorrectionLevel.m */; };
 		029BCF8415129BD0009E6549 /* FormatInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC215129BD0009E6549 /* FormatInformation.m */; };
 		029BCF8515129BD0009E6549 /* Mode.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC415129BD0009E6549 /* Mode.m */; };
-		029BCF8615129BD0009E6549 /* Version.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC615129BD0009E6549 /* Version.m */; };
 		029BCF8715129BD0009E6549 /* AlignmentPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC915129BD0009E6549 /* AlignmentPattern.m */; };
 		029BCF8815129BD0009E6549 /* AlignmentPatternFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCECB15129BD0009E6549 /* AlignmentPatternFinder.m */; };
 		029BCF8915129BD0009E6549 /* Detector.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCECD15129BD0009E6549 /* Detector.m */; };
-		029BCF8A15129BD0009E6549 /* FinderPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCECF15129BD0009E6549 /* FinderPattern.m */; };
 		029BCF8B15129BD0009E6549 /* FinderPatternFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED115129BD0009E6549 /* FinderPatternFinder.m */; };
 		029BCF8C15129BD0009E6549 /* FinderPatternInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED315129BD0009E6549 /* FinderPatternInfo.m */; };
 		029BCF8D15129BD0009E6549 /* BlockPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED615129BD0009E6549 /* BlockPair.m */; };
@@ -174,6 +171,12 @@
 		029BCF9815129BD0009E6549 /* WriterException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEF015129BD0009E6549 /* WriterException.m */; };
 		029BCFA315129C87009E6549 /* DataMatrixVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFA115129C87009E6549 /* DataMatrixVersion.h */; };
 		029BCFA415129C87009E6549 /* DataMatrixVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFA215129C87009E6549 /* DataMatrixVersion.m */; };
+		029BCFAB15129DBE009E6549 /* RSSFinderPattern.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFA915129DBE009E6549 /* RSSFinderPattern.h */; };
+		029BCFAC15129DBE009E6549 /* RSSFinderPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFAA15129DBE009E6549 /* RSSFinderPattern.m */; };
+		029BCFAF15129DD1009E6549 /* QRCodeVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFAD15129DD1009E6549 /* QRCodeVersion.h */; };
+		029BCFB015129DD1009E6549 /* QRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFAE15129DD1009E6549 /* QRCodeVersion.m */; };
+		029BCFB315129DE1009E6549 /* QRCodeFinderPattern.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFB115129DE1009E6549 /* QRCodeFinderPattern.h */; };
+		029BCFB415129DE1009E6549 /* QRCodeFinderPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFB215129DE1009E6549 /* QRCodeFinderPattern.m */; };
 		02D26EE6151288DB007F8DC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE5151288DB007F8DC6 /* Foundation.framework */; };
 		02D26EF4151288DB007F8DC6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		02D26EF7151288DB007F8DC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE5151288DB007F8DC6 /* Foundation.framework */; };
@@ -445,8 +448,6 @@
 		029BCE8F15129BD0009E6549 /* ExpandedPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandedPair.m; sourceTree = "<group>"; };
 		029BCE9015129BD0009E6549 /* RSSExpandedReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSExpandedReader.h; sourceTree = "<group>"; };
 		029BCE9115129BD0009E6549 /* RSSExpandedReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSExpandedReader.m; sourceTree = "<group>"; };
-		029BCE9215129BD0009E6549 /* FinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPattern.h; sourceTree = "<group>"; };
-		029BCE9315129BD0009E6549 /* FinderPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinderPattern.m; sourceTree = "<group>"; };
 		029BCE9415129BD0009E6549 /* Pair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pair.h; sourceTree = "<group>"; };
 		029BCE9515129BD0009E6549 /* Pair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pair.m; sourceTree = "<group>"; };
 		029BCE9615129BD0009E6549 /* RSS14Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSS14Reader.h; sourceTree = "<group>"; };
@@ -491,16 +492,12 @@
 		029BCEC215129BD0009E6549 /* FormatInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormatInformation.m; sourceTree = "<group>"; };
 		029BCEC315129BD0009E6549 /* Mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mode.h; sourceTree = "<group>"; };
 		029BCEC415129BD0009E6549 /* Mode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mode.m; sourceTree = "<group>"; };
-		029BCEC515129BD0009E6549 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
-		029BCEC615129BD0009E6549 /* Version.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Version.m; sourceTree = "<group>"; };
 		029BCEC815129BD0009E6549 /* AlignmentPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlignmentPattern.h; sourceTree = "<group>"; };
 		029BCEC915129BD0009E6549 /* AlignmentPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlignmentPattern.m; sourceTree = "<group>"; };
 		029BCECA15129BD0009E6549 /* AlignmentPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlignmentPatternFinder.h; sourceTree = "<group>"; };
 		029BCECB15129BD0009E6549 /* AlignmentPatternFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlignmentPatternFinder.m; sourceTree = "<group>"; };
 		029BCECC15129BD0009E6549 /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
 		029BCECD15129BD0009E6549 /* Detector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Detector.m; sourceTree = "<group>"; };
-		029BCECE15129BD0009E6549 /* FinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPattern.h; sourceTree = "<group>"; };
-		029BCECF15129BD0009E6549 /* FinderPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinderPattern.m; sourceTree = "<group>"; };
 		029BCED015129BD0009E6549 /* FinderPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPatternFinder.h; sourceTree = "<group>"; };
 		029BCED115129BD0009E6549 /* FinderPatternFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinderPatternFinder.m; sourceTree = "<group>"; };
 		029BCED215129BD0009E6549 /* FinderPatternInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPatternInfo.h; sourceTree = "<group>"; };
@@ -535,6 +532,12 @@
 		029BCEF015129BD0009E6549 /* WriterException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WriterException.m; sourceTree = "<group>"; };
 		029BCFA115129C87009E6549 /* DataMatrixVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixVersion.h; sourceTree = "<group>"; };
 		029BCFA215129C87009E6549 /* DataMatrixVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMatrixVersion.m; sourceTree = "<group>"; };
+		029BCFA915129DBE009E6549 /* RSSFinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSFinderPattern.h; sourceTree = "<group>"; };
+		029BCFAA15129DBE009E6549 /* RSSFinderPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSFinderPattern.m; sourceTree = "<group>"; };
+		029BCFAD15129DD1009E6549 /* QRCodeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeVersion.h; sourceTree = "<group>"; };
+		029BCFAE15129DD1009E6549 /* QRCodeVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeVersion.m; sourceTree = "<group>"; };
+		029BCFB115129DE1009E6549 /* QRCodeFinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeFinderPattern.h; sourceTree = "<group>"; };
+		029BCFB215129DE1009E6549 /* QRCodeFinderPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeFinderPattern.m; sourceTree = "<group>"; };
 		02D26EE2151288DB007F8DC6 /* libZXingObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZXingObjC.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D26EE5151288DB007F8DC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02D26EE9151288DB007F8DC6 /* ZXingObjC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZXingObjC-Prefix.pch"; sourceTree = "<group>"; };
@@ -898,12 +901,12 @@
 				029BCE6215129BD0009E6549 /* DataCharacter.h */,
 				029BCE6315129BD0009E6549 /* DataCharacter.m */,
 				029BCE6415129BD0009E6549 /* expanded */,
-				029BCE9215129BD0009E6549 /* FinderPattern.h */,
-				029BCE9315129BD0009E6549 /* FinderPattern.m */,
 				029BCE9415129BD0009E6549 /* Pair.h */,
 				029BCE9515129BD0009E6549 /* Pair.m */,
 				029BCE9615129BD0009E6549 /* RSS14Reader.h */,
 				029BCE9715129BD0009E6549 /* RSS14Reader.m */,
+				029BCFA915129DBE009E6549 /* RSSFinderPattern.h */,
+				029BCFAA15129DBE009E6549 /* RSSFinderPattern.m */,
 				029BCE9815129BD0009E6549 /* RSSUtils.h */,
 				029BCE9915129BD0009E6549 /* RSSUtils.m */,
 			);
@@ -1035,8 +1038,8 @@
 				029BCEC215129BD0009E6549 /* FormatInformation.m */,
 				029BCEC315129BD0009E6549 /* Mode.h */,
 				029BCEC415129BD0009E6549 /* Mode.m */,
-				029BCEC515129BD0009E6549 /* Version.h */,
-				029BCEC615129BD0009E6549 /* Version.m */,
+				029BCFAD15129DD1009E6549 /* QRCodeVersion.h */,
+				029BCFAE15129DD1009E6549 /* QRCodeVersion.m */,
 			);
 			path = decoder;
 			sourceTree = "<group>";
@@ -1050,12 +1053,12 @@
 				029BCECB15129BD0009E6549 /* AlignmentPatternFinder.m */,
 				029BCECC15129BD0009E6549 /* Detector.h */,
 				029BCECD15129BD0009E6549 /* Detector.m */,
-				029BCECE15129BD0009E6549 /* FinderPattern.h */,
-				029BCECF15129BD0009E6549 /* FinderPattern.m */,
 				029BCED015129BD0009E6549 /* FinderPatternFinder.h */,
 				029BCED115129BD0009E6549 /* FinderPatternFinder.m */,
 				029BCED215129BD0009E6549 /* FinderPatternInfo.h */,
 				029BCED315129BD0009E6549 /* FinderPatternInfo.m */,
+				029BCFB115129DE1009E6549 /* QRCodeFinderPattern.h */,
+				029BCFB215129DE1009E6549 /* QRCodeFinderPattern.m */,
 			);
 			path = detector;
 			sourceTree = "<group>";
@@ -1190,6 +1193,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				029BCFA315129C87009E6549 /* DataMatrixVersion.h in Headers */,
+				029BCFAB15129DBE009E6549 /* RSSFinderPattern.h in Headers */,
+				029BCFAF15129DD1009E6549 /* QRCodeVersion.h in Headers */,
+				029BCFB315129DE1009E6549 /* QRCodeFinderPattern.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,6 +1298,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				029BCFA415129C87009E6549 /* DataMatrixVersion.m in Sources */,
+				029BCFAC15129DBE009E6549 /* RSSFinderPattern.m in Sources */,
+				029BCFB015129DD1009E6549 /* QRCodeVersion.m in Sources */,
+				029BCFB415129DE1009E6549 /* QRCodeFinderPattern.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1423,7 +1432,6 @@
 				029BCF6C15129BD0009E6549 /* GeneralAppIdDecoder.m in Sources */,
 				029BCF6D15129BD0009E6549 /* ExpandedPair.m in Sources */,
 				029BCF6E15129BD0009E6549 /* RSSExpandedReader.m in Sources */,
-				029BCF6F15129BD0009E6549 /* FinderPattern.m in Sources */,
 				029BCF7015129BD0009E6549 /* Pair.m in Sources */,
 				029BCF7115129BD0009E6549 /* RSS14Reader.m in Sources */,
 				029BCF7215129BD0009E6549 /* RSSUtils.m in Sources */,
@@ -1446,11 +1454,9 @@
 				029BCF8315129BD0009E6549 /* ErrorCorrectionLevel.m in Sources */,
 				029BCF8415129BD0009E6549 /* FormatInformation.m in Sources */,
 				029BCF8515129BD0009E6549 /* Mode.m in Sources */,
-				029BCF8615129BD0009E6549 /* Version.m in Sources */,
 				029BCF8715129BD0009E6549 /* AlignmentPattern.m in Sources */,
 				029BCF8815129BD0009E6549 /* AlignmentPatternFinder.m in Sources */,
 				029BCF8915129BD0009E6549 /* Detector.m in Sources */,
-				029BCF8A15129BD0009E6549 /* FinderPattern.m in Sources */,
 				029BCF8B15129BD0009E6549 /* FinderPatternFinder.m in Sources */,
 				029BCF8C15129BD0009E6549 /* FinderPatternInfo.m in Sources */,
 				029BCF8D15129BD0009E6549 /* BlockPair.m in Sources */,

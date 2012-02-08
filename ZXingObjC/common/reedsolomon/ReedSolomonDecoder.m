@@ -60,11 +60,12 @@
   for (int i = 0; i < [errorLocations count]; i++) {
     int position = [received count] - 1 - [field log:[[errorLocations objectAtIndex:i] intValue]];
     if (position < 0) {
-      @throw [[[ReedSolomonException alloc] initWithMessage:@"Bad error location"] autorelease];
+      @throw [[[ReedSolomonException alloc] initWithName:@"ReedSolomonException"
+                                                  reason:@"Bad error location"
+                                                userInfo:nil] autorelease];
     }
     [received replaceObjectAtIndex:position withObject:[NSNumber numberWithInt:[GenericGF addOrSubtract:[[received objectAtIndex:position] intValue] b:[[errorMagnitudes objectAtIndex:i] intValue]]]];
   }
-
 }
 
 - (NSArray *) runEuclideanAlgorithm:(GenericGFPoly *)a b:(GenericGFPoly *)b R:(int)R {

@@ -1,11 +1,16 @@
+#import "DataCharacter.h"
+
+@class RSSFinderPattern;
 
 @interface Pair : DataCharacter {
-  FinderPattern * finderPattern;
+  RSSFinderPattern * finderPattern;
   int count;
 }
 
-- (id) init:(int)value checksumPortion:(int)checksumPortion finderPattern:(FinderPattern *)finderPattern;
-- (FinderPattern *) getFinderPattern;
-- (int) getCount;
+@property (nonatomic, readonly) int count;
+@property (nonatomic, readonly) RSSFinderPattern * finderPattern;
+
+- (id) initWithValue:(int)value checksumPortion:(int)checksumPortion finderPattern:(RSSFinderPattern *)finderPattern;
 - (void) incrementCount;
+
 @end

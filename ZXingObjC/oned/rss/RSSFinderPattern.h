@@ -1,6 +1,6 @@
 #import "ResultPoint.h"
 
-@interface FinderPattern : NSObject {
+@interface RSSFinderPattern : NSObject {
   int value;
   NSArray * startEnd;
   NSArray * resultPoints;

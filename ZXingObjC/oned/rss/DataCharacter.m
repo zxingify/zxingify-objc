@@ -5,10 +5,10 @@
 @synthesize value;
 @synthesize checksumPortion;
 
-- (id) init:(int)value checksumPortion:(int)checksumPortion {
+- (id) initWithValue:(int)aValue checksumPortion:(int)aChecksumPortion {
   if (self = [super init]) {
-    value = value;
-    checksumPortion = checksumPortion;
+    value = aValue;
+    checksumPortion = aChecksumPortion;
   }
   return self;
 }

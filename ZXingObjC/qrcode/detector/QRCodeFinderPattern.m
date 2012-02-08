@@ -1,11 +1,11 @@
-#import "FinderPattern.h"
+#import "QRCodeFinderPattern.h"
 
-@implementation FinderPattern
+@implementation QRCodeFinderPattern
 
 @synthesize estimatedModuleSize;
 
 - (id) init:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize {
-  if (self = [super init:posX param1:posY]) {
+  if (self = [super initWithX:posX y:posY]) {
     estimatedModuleSize = estimatedModuleSize;
     count = 1;
   }

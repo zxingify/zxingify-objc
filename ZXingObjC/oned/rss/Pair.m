@@ -1,20 +1,15 @@
+#import "RSSFinderPattern.h"
 #import "Pair.h"
 
 @implementation Pair
 
-- (id) init:(int)value checksumPortion:(int)checksumPortion finderPattern:(FinderPattern *)finderPattern {
-  if (self = [super init:value param1:checksumPortion]) {
-    finderPattern = finderPattern;
+@synthesize count, finderPattern;
+
+- (id) initWithValue:(int)aValue checksumPortion:(int)aChecksumPortion finderPattern:(RSSFinderPattern *)aFinderPattern {
+  if (self = [super init:aValue checksumPortion:aChecksumPortion]) {
+    finderPattern = [aFinderPattern retain];
   }
   return self;
-}
-
-- (FinderPattern *) getFinderPattern {
-  return finderPattern;
-}
-
-- (int) getCount {
-  return count;
 }
 
 - (void) incrementCount {
