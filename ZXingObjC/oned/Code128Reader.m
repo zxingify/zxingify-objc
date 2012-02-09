@@ -178,12 +178,7 @@ int const CODE_STOP = 106;
         }
 
         if (bestMatch >= 0) {
-          int start = patternStart - (i - patternStart) / 2;
-          if (start < 0) {
-            start = 0;
-          }
-
-          if ([row isRange:start end:patternStart value:NO]) {
+          if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
             return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], [NSNumber numberWithInt:bestMatch], nil];
           }
         }

@@ -80,7 +80,7 @@
   BitArray * row = [[[BitArray alloc] initWithSize:width] autorelease];
   int middle = height >> 1;
   BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
-  int rowStep = (height >> (tryHarder ? 8 : 5)) > 1 ? height >> (tryHarder ? 8 : 5) : 1;
+  int rowStep = MAX(1, height >> (tryHarder ? 8 : 5));
   int maxLines;
   if (tryHarder) {
     maxLines = height;
