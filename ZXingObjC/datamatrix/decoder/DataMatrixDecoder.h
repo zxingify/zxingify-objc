@@ -13,11 +13,12 @@
  * @author bbrown@google.com (Brian Brown)
  */
 
-@interface Decoder : NSObject {
+@interface DataMatrixDecoder : NSObject {
   ReedSolomonDecoder * rsDecoder;
 }
 
 - (id) init;
 - (DecoderResult *) decode:(NSArray *)image;
-- (DecoderResult *) decode:(BitMatrix *)bits;
+- (DecoderResult *) decodeMatrix:(BitMatrix *)bits;
+
 @end

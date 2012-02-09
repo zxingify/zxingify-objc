@@ -1,12 +1,22 @@
+#import "BinaryBitmap.h"
+#import "BitMatrix.h"
+#import "DataMatrixDecoder.h"
 #import "DataMatrixReader.h"
+#import "DataMatrixDetector.h"
+#import "DecodeHintType.h"
+#import "DetectorResult.h"
 
-NSArray * const NO_POINTS = [NSArray array];
+@interface DataMatrixReader ()
+
+- (BitMatrix *) extractPureBits:(BitMatrix *)image;
+
+@end
 
 @implementation DataMatrixReader
 
-- (void) init {
+- (id) init {
   if (self = [super init]) {
-    decoder = [[[Decoder alloc] init] autorelease];
+    decoder = [[[DataMatrixDecoder alloc] init] autorelease];
   }
   return self;
 }
@@ -27,13 +37,12 @@ NSArray * const NO_POINTS = [NSArray array];
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
   DecoderResult * decoderResult;
   NSArray * points;
-  if (hints != nil && [hints containsKey:DecodeHintType.PURE_BARCODE]) {
+  if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePureBarcode]]) {
     BitMatrix * bits = [self extractPureBits:[image blackMatrix]];
-    decoderResult = [decoder decode:bits];
-    points = NO_POINTS;
-  }
-   else {
-    DetectorResult * detectorResult = [[[[Detector alloc] init:[image blackMatrix]] autorelease] detect];
+    decoderResult = [decoder decodeMatrix:bits];
+    points = [NSArray array];
+  } else {
+    DetectorResult * detectorResult = [[[[Detector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
     decoderResult = [decoder decode:[detectorResult bits]];
     points = [detectorResult points];
   }
@@ -60,7 +69,7 @@ NSArray * const NO_POINTS = [NSArray array];
  * @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
  * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
  */
-+ (BitMatrix *) extractPureBits:(BitMatrix *)image {
+- (BitMatrix *) extractPureBits:(BitMatrix *)image {
   NSArray * leftTopBlack = [image topLeftOnBit];
   NSArray * rightBottomBlack = [image bottomRightOnBit];
   if (leftTopBlack == nil || rightBottomBlack == nil) {

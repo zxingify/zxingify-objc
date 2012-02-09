@@ -1,5 +1,5 @@
+#import "AztecDetector.h"
 #import "AztecDetectorResult.h"
-#import "Detector.h"
 #import "GenericGF.h"
 #import "GridSampler.h"
 #import "NotFoundException.h"
@@ -36,7 +36,7 @@
 
 @end
 
-@interface Detector ()
+@interface AztecDetector ()
 
 - (NSArray*)bullEyeCornerPoints:(AztecPoint*)pCenter;
 - (int) color:(AztecPoint *)p1 p2:(AztecPoint *)p2;
@@ -59,7 +59,7 @@
 
 @end
 
-@implementation Detector
+@implementation AztecDetector
 
 - (id)initWithImage:(BitMatrix*)anImage {
   if (self = [super init]) {

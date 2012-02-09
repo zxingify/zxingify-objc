@@ -1,10 +1,10 @@
-#import "Detector.h"
 #import "BinaryBitmap.h"
 #import "NotFoundException.h"
 #import "ResultPoint.h"
 #import "BitMatrix.h"
 #import "DetectorResult.h"
 #import "GridSampler.h"
+#import "PDF417Detector.h"
 
 int const MAX_AVG_VARIANCE = (int)((1 << 8) * 0.42f);
 int const MAX_INDIVIDUAL_VARIANCE = (int)((1 << 8) * 0.8f);
@@ -24,7 +24,7 @@ int const STOP_PATTERN[9] = {7, 1, 1, 3, 1, 1, 1, 2, 1};
 // 1111111 0 1 000 1 0 1 00 1
 int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
-@interface Detector ()
+@interface PDF417Detector ()
 
 - (NSArray *) findVertices:(BitMatrix *)matrix;
 - (NSArray *) findVertices180:(BitMatrix *)matrix;
@@ -39,7 +39,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 @end
 
 
-@implementation Detector
+@implementation PDF417Detector
 
 - (id) initWithImage:(BinaryBitmap *)anImage {
   if (self = [super init]) {

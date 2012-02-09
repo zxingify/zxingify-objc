@@ -7,7 +7,7 @@
 
 @class AztecDetectorResult, BitMatrix;
 
-@interface Detector : NSObject {
+@interface AztecDetector : NSObject {
   BitMatrix * image;
   BOOL compact;
   int nbLayers;

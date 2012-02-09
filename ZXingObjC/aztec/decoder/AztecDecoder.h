@@ -7,7 +7,7 @@
 
 @class AztecDetectorResult, DecoderResult;
 
-@interface Decoder : NSObject {
+@interface AztecDecoder : NSObject {
   int numCodewords;
   int codewordSize;
   AztecDetectorResult * ddata;

@@ -1,16 +1,9 @@
-#import "Decoder.h"
+#import "PDF417Decoder.h"
 
 int const MAX_ERRORS = 3;
 int const MAX_EC_CODEWORDS = 512;
 
-@implementation Decoder
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
+@implementation PDF417Decoder
 
 /**
  * <p>Convenience method that can decode a PDF417 Code represented as a 2D array of booleans.

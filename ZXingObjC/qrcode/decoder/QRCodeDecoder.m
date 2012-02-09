@@ -1,25 +1,29 @@
-#import "Decoder.h"
+#import "QRCodeDecoder.h"
 
-@implementation Decoder
+@implementation QRCodeDecoder
 
 - (id) init {
   if (self = [super init]) {
-    rsDecoder = [[[ReedSolomonDecoder alloc] init:GenericGF.DATA_MATRIX_FIELD_256] autorelease];
+    rsDecoder = [[[ReedSolomonDecoder alloc] init:GenericGF.QR_CODE_FIELD_256] autorelease];
   }
   return self;
 }
 
+- (DecoderResult *) decode:(NSArray *)image {
+  return [self decode:image hints:nil];
+}
+
 
 /**
- * <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
+ * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.</p>
  * 
- * @param image booleans representing white/black Data Matrix Code modules
- * @return text and bytes encoded within the Data Matrix Code
- * @throws FormatException if the Data Matrix Code cannot be decoded
+ * @param image booleans representing white/black QR Code modules
+ * @return text and bytes encoded within the QR Code
+ * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (DecoderResult *) decode:(NSArray *)image {
+- (DecoderResult *) decode:(NSArray *)image hints:(NSMutableDictionary *)hints {
   int dimension = image.length;
   BitMatrix * bits = [[[BitMatrix alloc] init:dimension] autorelease];
 
@@ -33,46 +37,50 @@
 
   }
 
-  return [self decode:bits];
+  return [self decode:bits hints:hints];
+}
+
+- (DecoderResult *) decode:(BitMatrix *)bits {
+  return [self decode:bits hints:nil];
 }
 
 
 /**
- * <p>Decodes a Data Matrix Code represented as a {@link BitMatrix}. A 1 or "true" is taken
- * to mean a black module.</p>
+ * <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
  * 
- * @param bits booleans representing white/black Data Matrix Code modules
- * @return text and bytes encoded within the Data Matrix Code
- * @throws FormatException if the Data Matrix Code cannot be decoded
+ * @param bits booleans representing white/black QR Code modules
+ * @return text and bytes encoded within the QR Code
+ * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (DecoderResult *) decode:(BitMatrix *)bits {
+- (DecoderResult *) decode:(BitMatrix *)bits hints:(NSMutableDictionary *)hints {
   BitMatrixParser * parser = [[[BitMatrixParser alloc] init:bits] autorelease];
-  Version * version = [parser version];
+  Version * version = [parser readVersion];
+  ErrorCorrectionLevel * ecLevel = [[parser readFormatInformation] errorCorrectionLevel];
   NSArray * codewords = [parser readCodewords];
-  NSArray * dataBlocks = [DataBlock getDataBlocks:codewords param1:version];
-  int dataBlocksCount = dataBlocks.length;
+  NSArray * dataBlocks = [DataBlock getDataBlocks:codewords param1:version param2:ecLevel];
   int totalBytes = 0;
 
-  for (int i = 0; i < dataBlocksCount; i++) {
+  for (int i = 0; i < dataBlocks.length; i++) {
     totalBytes += [dataBlocks[i] numDataCodewords];
   }
 
   NSArray * resultBytes = [NSArray array];
+  int resultOffset = 0;
 
-  for (int j = 0; j < dataBlocksCount; j++) {
+  for (int j = 0; j < dataBlocks.length; j++) {
     DataBlock * dataBlock = dataBlocks[j];
     NSArray * codewordBytes = [dataBlock codewords];
     int numDataCodewords = [dataBlock numDataCodewords];
     [self correctErrors:codewordBytes numDataCodewords:numDataCodewords];
 
     for (int i = 0; i < numDataCodewords; i++) {
-      resultBytes[i * dataBlocksCount + j] = codewordBytes[i];
+      resultBytes[resultOffset++] = codewordBytes[i];
     }
 
   }
 
-  return [DecodedBitStreamParser decode:resultBytes];
+  return [DecodedBitStreamParser decode:resultBytes param1:version param2:ecLevel param3:hints];
 }
 
 

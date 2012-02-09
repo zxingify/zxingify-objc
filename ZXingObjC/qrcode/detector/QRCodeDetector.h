@@ -16,7 +16,7 @@
  * @author Sean Owen
  */
 
-@interface Detector : NSObject {
+@interface QrCodeDetector : NSObject {
   BitMatrix * image;
   ResultPointCallback * resultPointCallback;
 }

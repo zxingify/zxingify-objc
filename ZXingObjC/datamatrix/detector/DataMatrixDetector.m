@@ -1,4 +1,4 @@
-#import "Detector.h"
+#import "DataMatrixDetector.h"
 
 @implementation ResultPointsAndTransitions
 
@@ -37,7 +37,7 @@
 
 NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] autorelease], [[[NSNumber alloc] init:1] autorelease], [[[NSNumber alloc] init:2] autorelease], [[[NSNumber alloc] init:3] autorelease], [[[NSNumber alloc] init:4] autorelease], nil];
 
-@implementation Detector
+@implementation DataMatrixDetector
 
 - (id) initWithImage:(BitMatrix *)image {
   if (self = [super init]) {

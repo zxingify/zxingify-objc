@@ -8,7 +8,7 @@
 
 @class BinaryBitmap, DetectorResult;
 
-@interface Detector : NSObject {
+@interface PDF417Detector : NSObject {
   BinaryBitmap * image;
 }
 

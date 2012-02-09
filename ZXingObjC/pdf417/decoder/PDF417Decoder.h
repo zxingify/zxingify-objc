@@ -11,10 +11,9 @@
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 
-@interface Decoder : NSObject {
-}
+@interface PDF417Decoder : NSObject
 
-- (id) init;
 - (DecoderResult *) decode:(NSArray *)image;
 - (DecoderResult *) decode:(BitMatrix *)bits;
+
 @end

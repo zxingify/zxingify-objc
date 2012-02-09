@@ -1,6 +1,6 @@
+#import "AztecDecoder.h"
 #import "AztecDetectorResult.h"
 #import "BitMatrix.h"
-#import "Decoder.h"
 #import "DecoderResult.h"
 #import "FormatException.h"
 #import "GenericGF.h"
@@ -59,7 +59,7 @@ static NSString* DIGIT_TABLE[] = {
   @"CTRL_PS", @" ", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @",", @".", @"CTRL_UL", @"CTRL_US"
 };
 
-@interface Decoder ()
+@interface AztecDecoder ()
 
 - (NSString *) character:(int)table code:(int)code;
 - (NSArray *) correctBits:(NSArray *)rawbits;
@@ -71,7 +71,7 @@ static NSString* DIGIT_TABLE[] = {
 
 @end
 
-@implementation Decoder
+@implementation AztecDecoder
 
 - (DecoderResult *) decode:(AztecDetectorResult *)detectorResult {
   ddata = detectorResult;

@@ -1,6 +1,6 @@
-#import "Detector.h"
+#import "QrCodeDetector.h"
 
-@implementation Detector
+@implementation QrCodeDetector
 
 - (id) initWithImage:(BitMatrix *)image {
   if (self = [super init]) {

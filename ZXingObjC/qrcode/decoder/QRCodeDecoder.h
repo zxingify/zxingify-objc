@@ -13,11 +13,10 @@
  * @author Sean Owen
  */
 
-@interface Decoder : NSObject {
+@interface QRCodeDecoder : NSObject {
   ReedSolomonDecoder * rsDecoder;
 }
 
-- (id) init;
 - (DecoderResult *) decode:(NSArray *)image;
 - (DecoderResult *) decode:(NSArray *)image hints:(NSMutableDictionary *)hints;
 - (DecoderResult *) decode:(BitMatrix *)bits;

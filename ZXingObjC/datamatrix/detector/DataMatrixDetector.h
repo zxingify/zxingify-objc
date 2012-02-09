@@ -41,7 +41,7 @@
  * @author Sean Owen
  */
 
-@interface Detector : NSObject {
+@interface DataMatrixDetector : NSObject {
   BitMatrix * image;
   WhiteRectangleDetector * rectangleDetector;
 }
