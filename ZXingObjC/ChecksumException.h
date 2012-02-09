@@ -9,4 +9,6 @@
 
 @interface ChecksumException : ReaderException
 
++ (ChecksumException *)checksumInstance;
+
 @end

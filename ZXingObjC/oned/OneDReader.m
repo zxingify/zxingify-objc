@@ -10,9 +10,6 @@
 #import "ResultPoint.h"
 #import "BitArray.h"
 
-int const INTEGER_MATH_SHIFT = 8;
-int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
-
 @interface OneDReader ()
 
 - (Result *) doDecode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
@@ -230,7 +227,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * the total variance between counters and patterns equals the pattern length, higher values mean
  * even more variance
  */
-+ (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (int) patternMatchVariance:(NSArray *)counters pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = [counters count];
   int total = 0;
   int patternLength = 0;

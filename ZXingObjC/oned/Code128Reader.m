@@ -1,6 +1,122 @@
+#import "BitArray.h"
+#import "ChecksumException.h"
 #import "Code128Reader.h"
+#import "FormatException.h"
+#import "NotFoundException.h"
+#import "Result.h"
+#import "ResultPoint.h"
 
-NSArray * const CODE_PATTERNS = [NSArray arrayWithObjects:[NSArray arrayWithObjects:2, 1, 2, 2, 2, 2, nil], [NSArray arrayWithObjects:2, 2, 2, 1, 2, 2, nil], [NSArray arrayWithObjects:2, 2, 2, 2, 2, 1, nil], [NSArray arrayWithObjects:1, 2, 1, 2, 2, 3, nil], [NSArray arrayWithObjects:1, 2, 1, 3, 2, 2, nil], [NSArray arrayWithObjects:1, 3, 1, 2, 2, 2, nil], [NSArray arrayWithObjects:1, 2, 2, 2, 1, 3, nil], [NSArray arrayWithObjects:1, 2, 2, 3, 1, 2, nil], [NSArray arrayWithObjects:1, 3, 2, 2, 1, 2, nil], [NSArray arrayWithObjects:2, 2, 1, 2, 1, 3, nil], [NSArray arrayWithObjects:2, 2, 1, 3, 1, 2, nil], [NSArray arrayWithObjects:2, 3, 1, 2, 1, 2, nil], [NSArray arrayWithObjects:1, 1, 2, 2, 3, 2, nil], [NSArray arrayWithObjects:1, 2, 2, 1, 3, 2, nil], [NSArray arrayWithObjects:1, 2, 2, 2, 3, 1, nil], [NSArray arrayWithObjects:1, 1, 3, 2, 2, 2, nil], [NSArray arrayWithObjects:1, 2, 3, 1, 2, 2, nil], [NSArray arrayWithObjects:1, 2, 3, 2, 2, 1, nil], [NSArray arrayWithObjects:2, 2, 3, 2, 1, 1, nil], [NSArray arrayWithObjects:2, 2, 1, 1, 3, 2, nil], [NSArray arrayWithObjects:2, 2, 1, 2, 3, 1, nil], [NSArray arrayWithObjects:2, 1, 3, 2, 1, 2, nil], [NSArray arrayWithObjects:2, 2, 3, 1, 1, 2, nil], [NSArray arrayWithObjects:3, 1, 2, 1, 3, 1, nil], [NSArray arrayWithObjects:3, 1, 1, 2, 2, 2, nil], [NSArray arrayWithObjects:3, 2, 1, 1, 2, 2, nil], [NSArray arrayWithObjects:3, 2, 1, 2, 2, 1, nil], [NSArray arrayWithObjects:3, 1, 2, 2, 1, 2, nil], [NSArray arrayWithObjects:3, 2, 2, 1, 1, 2, nil], [NSArray arrayWithObjects:3, 2, 2, 2, 1, 1, nil], [NSArray arrayWithObjects:2, 1, 2, 1, 2, 3, nil], [NSArray arrayWithObjects:2, 1, 2, 3, 2, 1, nil], [NSArray arrayWithObjects:2, 3, 2, 1, 2, 1, nil], [NSArray arrayWithObjects:1, 1, 1, 3, 2, 3, nil], [NSArray arrayWithObjects:1, 3, 1, 1, 2, 3, nil], [NSArray arrayWithObjects:1, 3, 1, 3, 2, 1, nil], [NSArray arrayWithObjects:1, 1, 2, 3, 1, 3, nil], [NSArray arrayWithObjects:1, 3, 2, 1, 1, 3, nil], [NSArray arrayWithObjects:1, 3, 2, 3, 1, 1, nil], [NSArray arrayWithObjects:2, 1, 1, 3, 1, 3, nil], [NSArray arrayWithObjects:2, 3, 1, 1, 1, 3, nil], [NSArray arrayWithObjects:2, 3, 1, 3, 1, 1, nil], [NSArray arrayWithObjects:1, 1, 2, 1, 3, 3, nil], [NSArray arrayWithObjects:1, 1, 2, 3, 3, 1, nil], [NSArray arrayWithObjects:1, 3, 2, 1, 3, 1, nil], [NSArray arrayWithObjects:1, 1, 3, 1, 2, 3, nil], [NSArray arrayWithObjects:1, 1, 3, 3, 2, 1, nil], [NSArray arrayWithObjects:1, 3, 3, 1, 2, 1, nil], [NSArray arrayWithObjects:3, 1, 3, 1, 2, 1, nil], [NSArray arrayWithObjects:2, 1, 1, 3, 3, 1, nil], [NSArray arrayWithObjects:2, 3, 1, 1, 3, 1, nil], [NSArray arrayWithObjects:2, 1, 3, 1, 1, 3, nil], [NSArray arrayWithObjects:2, 1, 3, 3, 1, 1, nil], [NSArray arrayWithObjects:2, 1, 3, 1, 3, 1, nil], [NSArray arrayWithObjects:3, 1, 1, 1, 2, 3, nil], [NSArray arrayWithObjects:3, 1, 1, 3, 2, 1, nil], [NSArray arrayWithObjects:3, 3, 1, 1, 2, 1, nil], [NSArray arrayWithObjects:3, 1, 2, 1, 1, 3, nil], [NSArray arrayWithObjects:3, 1, 2, 3, 1, 1, nil], [NSArray arrayWithObjects:3, 3, 2, 1, 1, 1, nil], [NSArray arrayWithObjects:3, 1, 4, 1, 1, 1, nil], [NSArray arrayWithObjects:2, 2, 1, 4, 1, 1, nil], [NSArray arrayWithObjects:4, 3, 1, 1, 1, 1, nil], [NSArray arrayWithObjects:1, 1, 1, 2, 2, 4, nil], [NSArray arrayWithObjects:1, 1, 1, 4, 2, 2, nil], [NSArray arrayWithObjects:1, 2, 1, 1, 2, 4, nil], [NSArray arrayWithObjects:1, 2, 1, 4, 2, 1, nil], [NSArray arrayWithObjects:1, 4, 1, 1, 2, 2, nil], [NSArray arrayWithObjects:1, 4, 1, 2, 2, 1, nil], [NSArray arrayWithObjects:1, 1, 2, 2, 1, 4, nil], [NSArray arrayWithObjects:1, 1, 2, 4, 1, 2, nil], [NSArray arrayWithObjects:1, 2, 2, 1, 1, 4, nil], [NSArray arrayWithObjects:1, 2, 2, 4, 1, 1, nil], [NSArray arrayWithObjects:1, 4, 2, 1, 1, 2, nil], [NSArray arrayWithObjects:1, 4, 2, 2, 1, 1, nil], [NSArray arrayWithObjects:2, 4, 1, 2, 1, 1, nil], [NSArray arrayWithObjects:2, 2, 1, 1, 1, 4, nil], [NSArray arrayWithObjects:4, 1, 3, 1, 1, 1, nil], [NSArray arrayWithObjects:2, 4, 1, 1, 1, 2, nil], [NSArray arrayWithObjects:1, 3, 4, 1, 1, 1, nil], [NSArray arrayWithObjects:1, 1, 1, 2, 4, 2, nil], [NSArray arrayWithObjects:1, 2, 1, 1, 4, 2, nil], [NSArray arrayWithObjects:1, 2, 1, 2, 4, 1, nil], [NSArray arrayWithObjects:1, 1, 4, 2, 1, 2, nil], [NSArray arrayWithObjects:1, 2, 4, 1, 1, 2, nil], [NSArray arrayWithObjects:1, 2, 4, 2, 1, 1, nil], [NSArray arrayWithObjects:4, 1, 1, 2, 1, 2, nil], [NSArray arrayWithObjects:4, 2, 1, 1, 1, 2, nil], [NSArray arrayWithObjects:4, 2, 1, 2, 1, 1, nil], [NSArray arrayWithObjects:2, 1, 2, 1, 4, 1, nil], [NSArray arrayWithObjects:2, 1, 4, 1, 2, 1, nil], [NSArray arrayWithObjects:4, 1, 2, 1, 2, 1, nil], [NSArray arrayWithObjects:1, 1, 1, 1, 4, 3, nil], [NSArray arrayWithObjects:1, 1, 1, 3, 4, 1, nil], [NSArray arrayWithObjects:1, 3, 1, 1, 4, 1, nil], [NSArray arrayWithObjects:1, 1, 4, 1, 1, 3, nil], [NSArray arrayWithObjects:1, 1, 4, 3, 1, 1, nil], [NSArray arrayWithObjects:4, 1, 1, 1, 1, 3, nil], [NSArray arrayWithObjects:4, 1, 1, 3, 1, 1, nil], [NSArray arrayWithObjects:1, 1, 3, 1, 4, 1, nil], [NSArray arrayWithObjects:1, 1, 4, 1, 3, 1, nil], [NSArray arrayWithObjects:3, 1, 1, 1, 4, 1, nil], [NSArray arrayWithObjects:4, 1, 1, 1, 3, 1, nil], [NSArray arrayWithObjects:2, 1, 1, 4, 1, 2, nil], [NSArray arrayWithObjects:2, 1, 1, 2, 1, 4, nil], [NSArray arrayWithObjects:2, 1, 1, 2, 3, 2, nil], [NSArray arrayWithObjects:2, 3, 3, 1, 1, 1, 2, nil], nil];
+const int CODE_PATTERNS[107][7] = {
+  {2, 1, 2, 2, 2, 2}, // 0
+  {2, 2, 2, 1, 2, 2},
+  {2, 2, 2, 2, 2, 1},
+  {1, 2, 1, 2, 2, 3},
+  {1, 2, 1, 3, 2, 2},
+  {1, 3, 1, 2, 2, 2}, // 5
+  {1, 2, 2, 2, 1, 3},
+  {1, 2, 2, 3, 1, 2},
+  {1, 3, 2, 2, 1, 2},
+  {2, 2, 1, 2, 1, 3},
+  {2, 2, 1, 3, 1, 2}, // 10
+  {2, 3, 1, 2, 1, 2},
+  {1, 1, 2, 2, 3, 2},
+  {1, 2, 2, 1, 3, 2},
+  {1, 2, 2, 2, 3, 1},
+  {1, 1, 3, 2, 2, 2}, // 15
+  {1, 2, 3, 1, 2, 2},
+  {1, 2, 3, 2, 2, 1},
+  {2, 2, 3, 2, 1, 1},
+  {2, 2, 1, 1, 3, 2},
+  {2, 2, 1, 2, 3, 1}, // 20
+  {2, 1, 3, 2, 1, 2},
+  {2, 2, 3, 1, 1, 2},
+  {3, 1, 2, 1, 3, 1},
+  {3, 1, 1, 2, 2, 2},
+  {3, 2, 1, 1, 2, 2}, // 25
+  {3, 2, 1, 2, 2, 1},
+  {3, 1, 2, 2, 1, 2},
+  {3, 2, 2, 1, 1, 2},
+  {3, 2, 2, 2, 1, 1},
+  {2, 1, 2, 1, 2, 3}, // 30
+  {2, 1, 2, 3, 2, 1},
+  {2, 3, 2, 1, 2, 1},
+  {1, 1, 1, 3, 2, 3},
+  {1, 3, 1, 1, 2, 3},
+  {1, 3, 1, 3, 2, 1}, // 35
+  {1, 1, 2, 3, 1, 3},
+  {1, 3, 2, 1, 1, 3},
+  {1, 3, 2, 3, 1, 1},
+  {2, 1, 1, 3, 1, 3},
+  {2, 3, 1, 1, 1, 3}, // 40
+  {2, 3, 1, 3, 1, 1},
+  {1, 1, 2, 1, 3, 3},
+  {1, 1, 2, 3, 3, 1},
+  {1, 3, 2, 1, 3, 1},
+  {1, 1, 3, 1, 2, 3}, // 45
+  {1, 1, 3, 3, 2, 1},
+  {1, 3, 3, 1, 2, 1},
+  {3, 1, 3, 1, 2, 1},
+  {2, 1, 1, 3, 3, 1},
+  {2, 3, 1, 1, 3, 1}, // 50
+  {2, 1, 3, 1, 1, 3},
+  {2, 1, 3, 3, 1, 1},
+  {2, 1, 3, 1, 3, 1},
+  {3, 1, 1, 1, 2, 3},
+  {3, 1, 1, 3, 2, 1}, // 55
+  {3, 3, 1, 1, 2, 1},
+  {3, 1, 2, 1, 1, 3},
+  {3, 1, 2, 3, 1, 1},
+  {3, 3, 2, 1, 1, 1},
+  {3, 1, 4, 1, 1, 1}, // 60
+  {2, 2, 1, 4, 1, 1},
+  {4, 3, 1, 1, 1, 1},
+  {1, 1, 1, 2, 2, 4},
+  {1, 1, 1, 4, 2, 2},
+  {1, 2, 1, 1, 2, 4}, // 65
+  {1, 2, 1, 4, 2, 1},
+  {1, 4, 1, 1, 2, 2},
+  {1, 4, 1, 2, 2, 1},
+  {1, 1, 2, 2, 1, 4},
+  {1, 1, 2, 4, 1, 2}, // 70
+  {1, 2, 2, 1, 1, 4},
+  {1, 2, 2, 4, 1, 1},
+  {1, 4, 2, 1, 1, 2},
+  {1, 4, 2, 2, 1, 1},
+  {2, 4, 1, 2, 1, 1}, // 75
+  {2, 2, 1, 1, 1, 4},
+  {4, 1, 3, 1, 1, 1},
+  {2, 4, 1, 1, 1, 2},
+  {1, 3, 4, 1, 1, 1},
+  {1, 1, 1, 2, 4, 2}, // 80
+  {1, 2, 1, 1, 4, 2},
+  {1, 2, 1, 2, 4, 1},
+  {1, 1, 4, 2, 1, 2},
+  {1, 2, 4, 1, 1, 2},
+  {1, 2, 4, 2, 1, 1}, // 85
+  {4, 1, 1, 2, 1, 2},
+  {4, 2, 1, 1, 1, 2},
+  {4, 2, 1, 2, 1, 1},
+  {2, 1, 2, 1, 4, 1},
+  {2, 1, 4, 1, 2, 1}, // 90
+  {4, 1, 2, 1, 2, 1},
+  {1, 1, 1, 1, 4, 3},
+  {1, 1, 1, 3, 4, 1},
+  {1, 3, 1, 1, 4, 1},
+  {1, 1, 4, 1, 1, 3}, // 95
+  {1, 1, 4, 3, 1, 1},
+  {4, 1, 1, 1, 1, 3},
+  {4, 1, 1, 3, 1, 1},
+  {1, 1, 3, 1, 4, 1},
+  {1, 1, 4, 1, 3, 1}, // 100
+  {3, 1, 1, 1, 4, 1},
+  {4, 1, 1, 1, 3, 1},
+  {2, 1, 1, 4, 1, 2},
+  {2, 1, 1, 2, 1, 4},
+  {2, 1, 1, 2, 3, 2}, // 105
+  {2, 3, 3, 1, 1, 1, 2}
+};
+
+
 int const MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
 int const MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 int const CODE_SHIFT = 98;
@@ -17,9 +133,16 @@ int const CODE_START_B = 104;
 int const CODE_START_C = 105;
 int const CODE_STOP = 106;
 
+@interface Code128Reader ()
+
+- (int) decodeCode:(BitArray *)row counters:(NSMutableArray *)counters rowOffset:(int)rowOffset;
+- (NSArray *) findStartPattern:(BitArray *)row;
+
+@end
+
 @implementation Code128Reader
 
-+ (NSArray *) findStartPattern:(BitArray *)row {
+- (NSArray *) findStartPattern:(BitArray *)row {
   int width = [row size];
   int rowOffset = 0;
 
@@ -31,23 +154,23 @@ int const CODE_STOP = 106;
   }
 
   int counterPosition = 0;
-  NSArray * counters = [NSArray array];
+  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:6];
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = counters.length;
+  int patternLength = [counters count];
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
-      counters[counterPosition]++;
-    }
-     else {
+      [counters replaceObjectAtIndex:counterPosition
+                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+    } else {
       if (counterPosition == patternLength - 1) {
         int bestVariance = MAX_AVG_VARIANCE;
         int bestMatch = -1;
 
         for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-          int variance = [self patternMatchVariance:counters param1:CODE_PATTERNS[startCode] param2:MAX_INDIVIDUAL_VARIANCE];
+          int variance = [OneDReader patternMatchVariance:counters pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -55,24 +178,28 @@ int const CODE_STOP = 106;
         }
 
         if (bestMatch >= 0) {
-          if ([row isRange:[Math max:0 param1:patternStart - (i - patternStart) / 2] param1:patternStart param2:NO]) {
-            return [NSArray arrayWithObjects:patternStart, i, bestMatch, nil];
+          int start = patternStart - (i - patternStart) / 2;
+          if (start < 0) {
+            start = 0;
+          }
+
+          if ([row isRange:start end:patternStart value:NO]) {
+            return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], [NSNumber numberWithInt:bestMatch], nil];
           }
         }
-        patternStart += counters[0] + counters[1];
+        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
 
         for (int y = 2; y < patternLength; y++) {
-          counters[y - 2] = counters[y];
+          [counters replaceObjectAtIndex:y-2 withObject:[counters objectAtIndex:y]];
         }
 
-        counters[patternLength - 2] = 0;
-        counters[patternLength - 1] = 0;
+        [counters replaceObjectAtIndex:patternLength - 2 withObject:[NSNumber numberWithInt:0]];
+        [counters replaceObjectAtIndex:patternLength - 1 withObject:[NSNumber numberWithInt:0]];
         counterPosition--;
-      }
-       else {
+      } else {
         counterPosition++;
       }
-      counters[counterPosition] = 1;
+      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
       isWhite = !isWhite;
     }
   }
@@ -80,14 +207,14 @@ int const CODE_STOP = 106;
   @throw [NotFoundException notFoundInstance];
 }
 
-+ (int) decodeCode:(BitArray *)row counters:(NSArray *)counters rowOffset:(int)rowOffset {
-  [self recordPattern:row param1:rowOffset param2:counters];
+- (int) decodeCode:(BitArray *)row counters:(NSMutableArray *)counters rowOffset:(int)rowOffset {
+  [OneDReader recordPattern:row start:rowOffset counters:counters];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
 
-  for (int d = 0; d < CODE_PATTERNS.length; d++) {
-    NSArray * pattern = CODE_PATTERNS[d];
-    int variance = [self patternMatchVariance:counters param1:pattern param2:MAX_INDIVIDUAL_VARIANCE];
+  for (int d = 0; d < sizeof(CODE_PATTERNS) / sizeof(int*); d++) {
+    int * pattern = (int*)CODE_PATTERNS[d];
+    int variance = [OneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = d;
@@ -96,15 +223,14 @@ int const CODE_STOP = 106;
 
   if (bestMatch >= 0) {
     return bestMatch;
-  }
-   else {
+  } else {
     @throw [NotFoundException notFoundInstance];
   }
 }
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
   NSArray * startPatternInfo = [self findStartPattern:row];
-  int startCode = startPatternInfo[2];
+  int startCode = [[startPatternInfo objectAtIndex:2] intValue];
   int codeSet;
 
   switch (startCode) {
@@ -122,10 +248,10 @@ int const CODE_STOP = 106;
   }
   BOOL done = NO;
   BOOL isNextShifted = NO;
-  StringBuffer * result = [[[StringBuffer alloc] init:20] autorelease];
-  int lastStart = startPatternInfo[0];
-  int nextStart = startPatternInfo[1];
-  NSArray * counters = [NSArray array];
+  NSMutableString *result = [NSMutableString stringWithCapacity:20];
+  int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
+  int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
+  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:6];
   int lastCode = 0;
   int code = 0;
   int checksumTotal = startCode;
@@ -146,10 +272,9 @@ int const CODE_STOP = 106;
     }
     lastStart = nextStart;
 
-    for (int i = 0; i < counters.length; i++) {
-      nextStart += counters[i];
+    for (NSNumber *i in counters) {
+      nextStart += [i intValue];
     }
-
 
     switch (code) {
     case CODE_START_A:
@@ -161,12 +286,10 @@ int const CODE_STOP = 106;
     switch (codeSet) {
     case CODE_CODE_A:
       if (code < 64) {
-        [result append:(unichar)(' ' + code)];
-      }
-       else if (code < 96) {
-        [result append:(unichar)(code - 64)];
-      }
-       else {
+        [result appendFormat:@" %c", (unichar)code];
+      } else if (code < 96) {
+        [result appendFormat:@"%c", (unichar)(code - 64)];
+      } else {
         if (code != CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
@@ -195,9 +318,8 @@ int const CODE_STOP = 106;
       break;
     case CODE_CODE_B:
       if (code < 96) {
-        [result append:(unichar)(' ' + code)];
-      }
-       else {
+        [result appendFormat:@" %c", (unichar)code];
+      } else {
         if (code != CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
@@ -227,9 +349,9 @@ int const CODE_STOP = 106;
     case CODE_CODE_C:
       if (code < 100) {
         if (code < 10) {
-          [result append:'0'];
+          [result appendString:@"0"];
         }
-        [result append:code];
+        [result appendFormat:@"%c", (unichar)code];
       }
        else {
         if (code != CODE_STOP) {
@@ -263,7 +385,11 @@ int const CODE_STOP = 106;
     nextStart++;
   }
 
-  if (![row isRange:nextStart param1:[Math min:width param1:nextStart + (nextStart - lastStart) / 2] param2:NO]) {
+  int end = nextStart + (nextStart - lastStart) / 2;
+  if (end > width) {
+    end = width;
+  }
+  if (![row isRange:nextStart end:end value:NO]) {
     @throw [NotFoundException notFoundInstance];
   }
   checksumTotal -= multiplier * lastCode;
@@ -273,19 +399,22 @@ int const CODE_STOP = 106;
   int resultLength = [result length];
   if (resultLength > 0 && lastCharacterWasPrintable) {
     if (codeSet == CODE_CODE_C) {
-      [result delete:resultLength - 2 param1:resultLength];
-    }
-     else {
-      [result delete:resultLength - 1 param1:resultLength];
+      [result deleteCharactersInRange:NSMakeRange(resultLength - 2, 2)];
+    } else {
+      [result deleteCharactersInRange:NSMakeRange(resultLength - 1, 1)];
     }
   }
   NSString * resultString = [result description];
   if ([resultString length] == 0) {
     @throw [FormatException formatInstance];
   }
-  float left = (float)(startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
+  float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
-  return [[[Result alloc] init:resultString param1:nil param2:[NSArray arrayWithObjects:[[[ResultPoint alloc] init:left param1:(float)rowNumber] autorelease], [[[ResultPoint alloc] init:right param1:(float)rowNumber] autorelease], nil] param3:BarcodeFormat.CODE_128] autorelease];
+  return [[[Result alloc] init:resultString
+                      rawBytes:nil
+                  resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                        format:kBarcodeCode128] autorelease];
 }
 
 @end

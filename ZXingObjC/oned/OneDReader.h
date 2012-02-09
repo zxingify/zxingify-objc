@@ -8,6 +8,9 @@
  * @author Sean Owen
  */
 
+int const INTEGER_MATH_SHIFT = 8;
+int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+
 @class BitArray, BinaryBitmap, Result;
 
 @interface OneDReader : NSObject <Reader>
@@ -17,7 +20,7 @@
 - (void) reset;
 + (void) recordPattern:(BitArray *)row start:(int)start counters:(NSMutableArray *)counters;
 + (void) recordPatternInReverse:(BitArray *)row start:(int)start counters:(NSMutableArray *)counters;
-+ (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance;
++ (int) patternMatchVariance:(NSArray *)counters pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
 
 @end
