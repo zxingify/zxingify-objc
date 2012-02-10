@@ -15,4 +15,5 @@
 - (id) initWithImage:(BinaryBitmap *)image;
 - (DetectorResult *) detect;
 - (DetectorResult *) detect:(NSMutableDictionary *)hints;
+
 @end

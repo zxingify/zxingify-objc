@@ -28,12 +28,12 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
 - (NSArray *) findVertices:(BitMatrix *)matrix;
 - (NSArray *) findVertices180:(BitMatrix *)matrix;
-- (void) correctCodeWordVertices:(NSArray *)vertices upsideDown:(BOOL)upsideDown;
+- (void) correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown;
 - (float) computeModuleWidth:(NSArray *)vertices;
 - (int) computeDimension:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
 - (int) round:(float)d;
 - (NSArray *) findGuardPattern:(BitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern;
-- (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance;
+- (int) patternMatchVariance:(NSArray *)counters pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (BitMatrix *) sampleGrid:(BitMatrix *)matrix topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft topRight:(ResultPoint *)topRight bottomRight:(ResultPoint *)bottomRight dimension:(int)dimension;
 
 @end
@@ -114,60 +114,69 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 - (NSArray *) findVertices:(BitMatrix *)matrix {
   int height = [matrix height];
   int width = [matrix width];
-  NSArray * result = [NSArray array];
+
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:8];
+  for (int i = 0; i < 8; i++) {
+    [result addObject:[NSNull null]];
+  }
   BOOL found = NO;
 
+  // Top Left
   for (int i = 0; i < height; i++) {
-    NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:START_PATTERN];
+    NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)START_PATTERN];
     if (loc != nil) {
-      result[0] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
-      result[4] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
+      [result replaceObjectAtIndex:0
+                        withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
+      [result replaceObjectAtIndex:4
+                        withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
       found = YES;
       break;
     }
   }
-
-  if (found) {
+  // Bottom left
+  if (found) { // Found the Top Left vertex
     found = NO;
-
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:START_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)START_PATTERN];
       if (loc != nil) {
-        result[1] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
-        result[5] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
+        [result replaceObjectAtIndex:1
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
+        [result replaceObjectAtIndex:5
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
         found = YES;
         break;
       }
     }
-
   }
-  if (found) {
+  // Top right
+  if (found) { // Found the Bottom Left vertex
     found = NO;
-
     for (int i = 0; i < height; i++) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:STOP_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN];
       if (loc != nil) {
-        result[2] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
-        result[6] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
+        [result replaceObjectAtIndex:2
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
+        [result replaceObjectAtIndex:6
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
         found = YES;
         break;
       }
     }
-
   }
-  if (found) {
+  // Bottom right
+  if (found) { // Found the Top right vertex
     found = NO;
-
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:STOP_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN];
       if (loc != nil) {
-        result[3] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
-        result[7] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
+        [result replaceObjectAtIndex:3
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
+        [result replaceObjectAtIndex:7
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
         found = YES;
         break;
       }
     }
-
   }
   return found ? result : nil;
 }
@@ -196,60 +205,69 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   int height = [matrix height];
   int width = [matrix width];
   int halfWidth = width >> 1;
-  NSArray * result = [NSArray array];
+
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:8];
+  for (int i = 0; i < 8; i++) {
+    [result addObject:[NSNull null]];
+  }
   BOOL found = NO;
 
+  // Top Left
   for (int i = height - 1; i > 0; i--) {
-    NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:START_PATTERN_REVERSE];
+    NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE];
     if (loc != nil) {
-      result[0] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
-      result[4] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
+      [result replaceObjectAtIndex:0
+                        withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
+      [result replaceObjectAtIndex:4
+                        withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
       found = YES;
       break;
     }
   }
-
-  if (found) {
+  // Bottom Left
+  if (found) { // Found the Top Left vertex
     found = NO;
-
     for (int i = 0; i < height; i++) {
-      NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:START_PATTERN_REVERSE];
+      NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE];
       if (loc != nil) {
-        result[1] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
-        result[5] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
+        [result replaceObjectAtIndex:1
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
+        [result replaceObjectAtIndex:5
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
         found = YES;
         break;
       }
     }
-
   }
-  if (found) {
+  // Top Right
+  if (found) { // Found the Bottom Left vertex
     found = NO;
-
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:STOP_PATTERN_REVERSE];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE];
       if (loc != nil) {
-        result[2] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
-        result[6] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
+        [result replaceObjectAtIndex:2
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
+        [result replaceObjectAtIndex:6
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
         found = YES;
         break;
       }
     }
-
   }
-  if (found) {
+  // Bottom Right
+  if (found) { // Found the Top Right vertex
     found = NO;
-
     for (int i = 0; i < height; i++) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:STOP_PATTERN_REVERSE];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE];
       if (loc != nil) {
-        result[3] = [[[ResultPoint alloc] init:loc[0] param1:i] autorelease];
-        result[7] = [[[ResultPoint alloc] init:loc[1] param1:i] autorelease];
+        [result replaceObjectAtIndex:3
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
+        [result replaceObjectAtIndex:7
+                          withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
         found = YES;
         break;
       }
     }
-
   }
   return found ? result : nil;
 }
@@ -263,42 +281,53 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * 
  * @param vertices The eight vertices located by findVertices().
  */
-- (void) correctCodeWordVertices:(NSArray *)vertices upsideDown:(BOOL)upsideDown {
-  float skew = [vertices[4] y] - [vertices[6] y];
+- (void) correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown {
+  float skew = [(ResultPoint*)[vertices objectAtIndex:4] y] - [(ResultPoint*)[vertices objectAtIndex:6] y];
   if (upsideDown) {
     skew = -skew;
   }
   if (skew > SKEW_THRESHOLD) {
-    float length = [vertices[4] x] - [vertices[0] x];
-    float deltax = [vertices[6] x] - [vertices[0] x];
-    float deltay = [vertices[6] y] - [vertices[0] y];
+    // Fix v4
+    float length = [(ResultPoint*)[vertices objectAtIndex:4] x] - [(ResultPoint*)[vertices objectAtIndex:0] x];
+    float deltax = [(ResultPoint*)[vertices objectAtIndex:6] x] - [(ResultPoint*)[vertices objectAtIndex:0] x];
+    float deltay = [(ResultPoint*)[vertices objectAtIndex:6] y] - [(ResultPoint*)[vertices objectAtIndex:0] y];
     float correction = length * deltay / deltax;
-    vertices[4] = [[[ResultPoint alloc] init:[vertices[4] x] param1:[vertices[4] y] + correction] autorelease];
-  }
-   else if (-skew > SKEW_THRESHOLD) {
-    float length = [vertices[2] x] - [vertices[6] x];
-    float deltax = [vertices[2] x] - [vertices[4] x];
-    float deltay = [vertices[2] y] - [vertices[4] y];
+    [vertices replaceObjectAtIndex:4
+                        withObject:[[[ResultPoint alloc] initWithX:[(ResultPoint*)[vertices objectAtIndex:4] x]
+                                                                 y:[(ResultPoint*)[vertices objectAtIndex:4] y] + correction] autorelease]];
+  } else if (-skew > SKEW_THRESHOLD) {
+    // Fix v6
+    float length = [(ResultPoint*)[vertices objectAtIndex:2] x] - [(ResultPoint*)[vertices objectAtIndex:6] x];
+    float deltax = [(ResultPoint*)[vertices objectAtIndex:2] x] - [(ResultPoint*)[vertices objectAtIndex:4] x];
+    float deltay = [(ResultPoint*)[vertices objectAtIndex:2] y] - [(ResultPoint*)[vertices objectAtIndex:4] y];
     float correction = length * deltay / deltax;
-    vertices[6] = [[[ResultPoint alloc] init:[vertices[6] x] param1:[vertices[6] y] - correction] autorelease];
+    [vertices replaceObjectAtIndex:6
+                        withObject:[[[ResultPoint alloc] initWithX:[(ResultPoint*)[vertices objectAtIndex:6] x]
+                                                                 y:[(ResultPoint*)[vertices objectAtIndex:6] y] + correction] autorelease]];
   }
-  skew = [vertices[7] y] - [vertices[5] y];
+  
+  skew = [(ResultPoint*)[vertices objectAtIndex:7] y] - [(ResultPoint*)[vertices objectAtIndex:5] y];
   if (upsideDown) {
     skew = -skew;
   }
   if (skew > SKEW_THRESHOLD) {
-    float length = [vertices[5] x] - [vertices[1] x];
-    float deltax = [vertices[7] x] - [vertices[1] x];
-    float deltay = [vertices[7] y] - [vertices[1] y];
+    // Fix v5
+    float length = [(ResultPoint*)[vertices objectAtIndex:5] x] - [(ResultPoint*)[vertices objectAtIndex:1] x];
+    float deltax = [(ResultPoint*)[vertices objectAtIndex:7] x] - [(ResultPoint*)[vertices objectAtIndex:1] x];
+    float deltay = [(ResultPoint*)[vertices objectAtIndex:7] y] - [(ResultPoint*)[vertices objectAtIndex:1] y];
     float correction = length * deltay / deltax;
-    vertices[5] = [[[ResultPoint alloc] init:[vertices[5] x] param1:[vertices[5] y] + correction] autorelease];
-  }
-   else if (-skew > SKEW_THRESHOLD) {
-    float length = [vertices[3] x] - [vertices[7] x];
-    float deltax = [vertices[3] x] - [vertices[5] x];
-    float deltay = [vertices[3] y] - [vertices[5] y];
+    [vertices replaceObjectAtIndex:5
+                        withObject:[[[ResultPoint alloc] initWithX:[(ResultPoint*)[vertices objectAtIndex:5] x]
+                                                                 y:[(ResultPoint*)[vertices objectAtIndex:5] y] + correction] autorelease]];
+  } else if (-skew > SKEW_THRESHOLD) {
+    // Fix v7
+    float length = [(ResultPoint*)[vertices objectAtIndex:3] x] - [(ResultPoint*)[vertices objectAtIndex:7] x];
+    float deltax = [(ResultPoint*)[vertices objectAtIndex:3] x] - [(ResultPoint*)[vertices objectAtIndex:5] x];
+    float deltay = [(ResultPoint*)[vertices objectAtIndex:3] y] - [(ResultPoint*)[vertices objectAtIndex:5] y];
     float correction = length * deltay / deltax;
-    vertices[7] = [[[ResultPoint alloc] init:[vertices[7] x] param1:[vertices[7] y] - correction] autorelease];
+    [vertices replaceObjectAtIndex:7
+                        withObject:[[[ResultPoint alloc] initWithX:[(ResultPoint*)[vertices objectAtIndex:7] x]
+                                                                 y:[(ResultPoint*)[vertices objectAtIndex:7] y] + correction] autorelease]];
   }
 }
 
@@ -319,11 +348,11 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * @return the module size.
  */
 - (float) computeModuleWidth:(NSArray *)vertices {
-  float pixels1 = [ResultPoint distance:vertices[0] param1:vertices[4]];
-  float pixels2 = [ResultPoint distance:vertices[1] param1:vertices[5]];
+  float pixels1 = [ResultPoint distance:[vertices objectAtIndex:0] pattern2:[vertices objectAtIndex:4]];
+  float pixels2 = [ResultPoint distance:[vertices objectAtIndex:1] pattern2:[vertices objectAtIndex:5]];
   float moduleWidth1 = (pixels1 + pixels2) / (17 * 2.0f);
-  float pixels3 = [ResultPoint distance:vertices[6] param1:vertices[2]];
-  float pixels4 = [ResultPoint distance:vertices[7] param1:vertices[3]];
+  float pixels3 = [ResultPoint distance:[vertices objectAtIndex:6] pattern2:[vertices objectAtIndex:2]];
+  float pixels4 = [ResultPoint distance:[vertices objectAtIndex:7] pattern2:[vertices objectAtIndex:3]];
   float moduleWidth2 = (pixels3 + pixels4) / (18 * 2.0f);
   return (moduleWidth1 + moduleWidth2) / 2.0f;
 }
@@ -341,14 +370,32 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * @return the number of modules in a row.
  */
 - (int) computeDimension:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight moduleWidth:(float)moduleWidth {
-  int topRowDimension = [self round:[ResultPoint distance:topLeft param1:topRight] / moduleWidth];
-  int bottomRowDimension = [self round:[ResultPoint distance:bottomLeft param1:bottomRight] / moduleWidth];
+  int topRowDimension = [self round:[ResultPoint distance:topLeft pattern2:topRight] / moduleWidth];
+  int bottomRowDimension = [self round:[ResultPoint distance:bottomLeft pattern2:bottomRight] / moduleWidth];
   return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
 }
 
 - (BitMatrix *) sampleGrid:(BitMatrix *)matrix topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft topRight:(ResultPoint *)topRight bottomRight:(ResultPoint *)bottomRight dimension:(int)dimension {
   GridSampler * sampler = [GridSampler instance];
-  return [sampler sampleGrid:matrix param1:dimension param2:dimension param3:0.0f param4:0.0f param5:dimension param6:0.0f param7:dimension param8:dimension param9:0.0f param10:dimension param11:[topLeft x] param12:[topLeft y] param13:[topRight x] param14:[topRight y] param15:[bottomRight x] param16:[bottomRight y] param17:[bottomLeft x] param18:[bottomLeft y]];
+  return [sampler sampleGrid:matrix
+                  dimensionX:dimension
+                  dimensionY:dimension
+                       p1ToX:0.0f
+                       p1ToY:0.0f
+                       p2ToX:dimension
+                       p2ToY:0.0f
+                       p3ToX:dimension
+                       p3ToY:dimension
+                       p4ToX:0.0f
+                       p4ToY:dimension
+                     p1FromX:[topLeft x]
+                     p1FromY:[topLeft y]
+                     p2FromX:[topRight x]
+                     p2FromY:[topRight y]
+                     p3FromX:[bottomRight x]
+                     p3FromY:[bottomRight y]
+                     p4FromX:[bottomLeft x]
+                     p4FromY:[bottomLeft y]];
 }
 
 
@@ -371,40 +418,39 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * @return start/end horizontal offset of guard pattern, as an array of two ints.
  */
 - (NSArray *) findGuardPattern:(BitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern {
-  int patternLength = pattern.length;
-  NSArray * counters = [NSArray array];
+  int patternLength = sizeof(pattern) / sizeof(int*);
+  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:patternLength];
+  for (int i = 0; i < patternLength; i++) {
+    [counters addObject:[NSNumber numberWithInt:0]];
+  }
   BOOL isWhite = whiteFirst;
+
   int counterPosition = 0;
   int patternStart = column;
-
   for (int x = column; x < column + width; x++) {
-    BOOL pixel = [matrix get:x param1:row];
+    BOOL pixel = [matrix get:x y:row];
     if (pixel ^ isWhite) {
-      counters[counterPosition]++;
-    }
-     else {
+      [counters replaceObjectAtIndex:counterPosition
+                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+    } else {
       if (counterPosition == patternLength - 1) {
         if ([self patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
-          return [NSArray arrayWithObjects:patternStart, x, nil];
+          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
         }
-        patternStart += counters[0] + counters[1];
-
+        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
         for (int y = 2; y < patternLength; y++) {
-          counters[y - 2] = counters[y];
+          [counters replaceObjectAtIndex:y - 2 withObject:[counters objectAtIndex:y]];
         }
-
-        counters[patternLength - 2] = 0;
-        counters[patternLength - 1] = 0;
+        [counters replaceObjectAtIndex:patternLength - 2 withObject:[NSNumber numberWithInt:0]];
+        [counters replaceObjectAtIndex:patternLength - 1 withObject:[NSNumber numberWithInt:0]];
         counterPosition--;
-      }
-       else {
+      } else {
         counterPosition++;
       }
-      counters[counterPosition] = 1;
+      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
       isWhite = !isWhite;
     }
   }
-
   return nil;
 }
 
@@ -424,29 +470,28 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * variance between counters and patterns equals the pattern length,
  * higher values mean even more variance
  */
-- (int) patternMatchVariance:(NSArray *)counters pattern:(NSArray *)pattern maxIndividualVariance:(int)maxIndividualVariance {
-  int numCounters = counters.length;
+- (int) patternMatchVariance:(NSArray *)counters pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
+  int numCounters = [counters count];
   int total = 0;
   int patternLength = 0;
-
   for (int i = 0; i < numCounters; i++) {
-    total += counters[i];
+    total += [[counters objectAtIndex:i] intValue];
     patternLength += pattern[i];
   }
 
   if (total < patternLength) {
-    return Integer.MAX_VALUE;
+    return NSIntegerMax;
   }
   int unitBarWidth = (total << 8) / patternLength;
   maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
-  int totalVariance = 0;
 
+  int totalVariance = 0;
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters[x] << 8;
+    int counter = [[counters objectAtIndex:x] intValue] << 8;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
-      return Integer.MAX_VALUE;
+      return NSIntegerMax;
     }
     totalVariance += variance;
   }
