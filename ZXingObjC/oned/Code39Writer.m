@@ -1,57 +1,64 @@
+#import "BitMatrix.h"
+#import "Code39Reader.h"
 #import "Code39Writer.h"
+
+@interface Code39Writer ()
+
+- (void) toIntArray:(int)a toReturn:(NSArray *)toReturn;
+
+@end
 
 @implementation Code39Writer
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
-  if (format != BarcodeFormat.CODE_39) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Can only encode CODE_39, but got " stringByAppendingString:format]] autorelease];
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+  if (format != kBarcodeFormatCode39) {
+    [NSException raise:NSInvalidArgumentException 
+                format:@"Can only encode CODE_39."];
   }
-  return [super encode:contents param1:format param2:width param3:height param4:hints];
+  return [super encode:contents format:format width:width height:height hints:hints];
 }
 
 - (NSArray *) encode:(NSString *)contents {
   int length = [contents length];
   if (length > 80) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Requested contents should be less than 80 digits long, but got " stringByAppendingString:length]] autorelease];
+    [NSException raise:NSInvalidArgumentException 
+                format:[NSString stringWithFormat:@"Requested contents should be less than 80 digits long, but got %d", length]];
   }
-  NSArray * widths = [NSArray array];
+  NSMutableArray * widths = [NSMutableArray arrayWithCapacity:9];
   int codeWidth = 24 + 1 + length;
 
   for (int i = 0; i < length; i++) {
-    int indexInString = [Code39Reader.ALPHABET_STRING indexOf:[contents characterAtIndex:i]];
-    [self toIntArray:Code39Reader.CHARACTER_ENCODINGS[indexInString] toReturn:widths];
+    int indexInString = [ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    [self toIntArray:CHARACTER_ENCODINGS[indexInString] toReturn:widths];
 
-    for (int j = 0; j < widths.length; j++) {
-      codeWidth += widths[j];
+    for (int j = 0; j < [widths count]; j++) {
+      codeWidth += [[widths objectAtIndex:j] intValue];
     }
-
   }
 
-  NSArray * result = [NSArray array];
-  [self toIntArray:Code39Reader.CHARACTER_ENCODINGS[39] toReturn:widths];
-  int pos = [self appendPattern:result param1:0 param2:widths param3:1];
-  NSArray * narrowWhite = [NSArray arrayWithObjects:1, nil];
-  pos += [self appendPattern:result param1:pos param2:narrowWhite param3:0];
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:codeWidth];
+  [self toIntArray:CHARACTER_ENCODINGS[39] toReturn:widths];
+  int pos = [Code39Writer appendPattern:result pos:0 pattern:widths startColor:1];
+  NSArray * narrowWhite = [NSArray arrayWithObject:[NSNumber numberWithInt:1]];
+  pos += [Code39Writer appendPattern:result pos:pos pattern:narrowWhite startColor:0];
 
   for (int i = length - 1; i >= 0; i--) {
-    int indexInString = [Code39Reader.ALPHABET_STRING indexOf:[contents characterAtIndex:i]];
-    [self toIntArray:Code39Reader.CHARACTER_ENCODINGS[indexInString] toReturn:widths];
-    pos += [self appendPattern:result param1:pos param2:widths param3:1];
-    pos += [self appendPattern:result param1:pos param2:narrowWhite param3:0];
+    int indexInString = [ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    [self toIntArray:CHARACTER_ENCODINGS[indexInString] toReturn:widths];
+    pos += [Code39Writer appendPattern:result pos:pos pattern:widths startColor:1];
+    pos += [Code39Writer appendPattern:result pos:pos pattern:narrowWhite startColor:0];
   }
 
-  [self toIntArray:Code39Reader.CHARACTER_ENCODINGS[39] toReturn:widths];
-  pos += [self appendPattern:result param1:pos param2:widths param3:1];
+  [self toIntArray:CHARACTER_ENCODINGS[39] toReturn:widths];
+  pos += [Code39Writer appendPattern:result pos:pos pattern:widths startColor:1];
   return result;
 }
 
-+ (void) toIntArray:(int)a toReturn:(NSArray *)toReturn {
-
+- (void) toIntArray:(int)a toReturn:(NSMutableArray *)toReturn {
   for (int i = 0; i < 9; i++) {
     int temp = a & (1 << i);
-    toReturn[i] = temp == 0 ? 1 : 2;
+    [toReturn addObject:[NSNumber numberWithInt:temp == 0 ? 1 : 2]];
   }
-
 }
 
 @end
