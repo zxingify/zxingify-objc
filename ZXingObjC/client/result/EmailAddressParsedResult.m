@@ -30,7 +30,7 @@
 }
 
 - (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:30] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:30] autorelease];
   [self maybeAppend:emailAddress param1:result];
   [self maybeAppend:subject param1:result];
   [self maybeAppend:body param1:result];

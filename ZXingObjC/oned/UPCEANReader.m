@@ -48,7 +48,7 @@ NSArray * const L_AND_G_PATTERNS;
 
 - (id) init {
   if (self = [super init]) {
-    decodeRowStringBuffer = [[[StringBuffer alloc] init:20] autorelease];
+    decodeRowNSMutableString = [[[NSMutableString alloc] init:20] autorelease];
     extensionReader = [[[UPCEANExtensionSupport alloc] init] autorelease];
     eanManSupport = [[[EANManufacturerOrgSupport alloc] init] autorelease];
   }
@@ -88,7 +88,7 @@ NSArray * const L_AND_G_PATTERNS;
   if (resultPointCallback != nil) {
     [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] init:(startGuardRange[0] + startGuardRange[1]) / 2.0f param1:rowNumber] autorelease]];
   }
-  StringBuffer * result = decodeRowStringBuffer;
+  NSMutableString * result = decodeRowNSMutableString;
   [result setLength:0];
   int endStart = [self decodeMiddle:row startRange:startGuardRange resultString:result];
   if (resultPointCallback != nil) {
@@ -288,15 +288,15 @@ NSArray * const L_AND_G_PATTERNS;
  * 
  * @param row row of black/white values to search
  * @param startRange start/end offset of start guard pattern
- * @param resultString {@link StringBuffer} to append decoded chars to
+ * @param resultString {@link NSMutableString} to append decoded chars to
  * @return horizontal offset of first pixel after the "middle" that was decoded
  * @throws NotFoundException if decoding could not complete successfully
  */
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(StringBuffer *)resultString {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
 }
 
 - (void) dealloc {
-  [decodeRowStringBuffer release];
+  [decodeRowNSMutableString release];
   [extensionReader release];
   [eanManSupport release];
   [super dealloc];

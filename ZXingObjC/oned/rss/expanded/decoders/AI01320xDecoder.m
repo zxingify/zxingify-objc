@@ -8,7 +8,7 @@
   return self;
 }
 
-- (void) addWeightCode:(StringBuffer *)buf weight:(int)weight {
+- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
   if (weight < 10000) {
     [buf append:@"(3202)"];
   }

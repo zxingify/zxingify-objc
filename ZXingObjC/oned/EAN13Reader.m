@@ -15,7 +15,7 @@ NSArray * const FIRST_DIGIT_ENCODINGS = [NSArray arrayWithObjects:0x00, 0x0B, 0x
   return self;
 }
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(StringBuffer *)resultString {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
   NSArray * counters = decodeMiddleCounters;
   counters[0] = 0;
   counters[1] = 0;
@@ -70,7 +70,7 @@ NSArray * const FIRST_DIGIT_ENCODINGS = [NSArray arrayWithObjects:0x00, 0x0B, 0x
  * encode digits
  * @throws NotFoundException if first digit cannot be determined
  */
-+ (void) determineFirstDigit:(StringBuffer *)resultString lgPatternFound:(int)lgPatternFound {
++ (void) determineFirstDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
 
   for (int d = 0; d < 10; d++) {
     if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {

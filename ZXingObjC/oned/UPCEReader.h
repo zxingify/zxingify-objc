@@ -19,7 +19,7 @@
 }
 
 - (id) init;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(StringBuffer *)result;
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
 - (NSArray *) decodeEnd:(BitArray *)row endStart:(int)endStart;
 - (BOOL) checkChecksum:(NSString *)s;
 - (BarcodeFormat *) getBarcodeFormat;

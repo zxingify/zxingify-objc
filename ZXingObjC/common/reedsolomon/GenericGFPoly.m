@@ -209,7 +209,7 @@
 }
 
 - (NSString *) description {
-  StringBuffer * result = [[[StringBuffer alloc] init:8 * [self degree]] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:8 * [self degree]] autorelease];
 
   for (int degree = [self degree]; degree >= 0; degree--) {
     int coefficient = [self getCoefficient:degree];

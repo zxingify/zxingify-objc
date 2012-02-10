@@ -93,7 +93,7 @@
 }
 
 + (NSString *) findAIvalue:(int)i rawText:(NSString *)rawText {
-  StringBuffer * buf = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
   unichar c = [rawText characterAtIndex:i];
   if (c != '(') {
     return @"ERROR";
@@ -127,7 +127,7 @@
 }
 
 + (NSString *) findValue:(int)i rawText:(NSString *)rawText {
-  StringBuffer * buf = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
   NSString * rawTextAux = [rawText substringFromIndex:i];
 
   for (int index = 0; index < [rawTextAux length]; index++) {

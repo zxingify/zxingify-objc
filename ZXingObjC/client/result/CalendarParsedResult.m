@@ -43,7 +43,7 @@
 }
 
 - (NSString *) displayResult {
-  StringBuffer * result = [[[StringBuffer alloc] init:100] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:100] autorelease];
   [self maybeAppend:summary param1:result];
   [self maybeAppend:start param1:result];
   [self maybeAppend:end param1:result];

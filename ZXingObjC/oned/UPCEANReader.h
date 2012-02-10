@@ -20,7 +20,7 @@
  */
 
 @interface UPCEANReader : OneDReader {
-  StringBuffer * decodeRowStringBuffer;
+  NSMutableString * decodeRowNSMutableString;
   UPCEANExtensionSupport * extensionReader;
   EANManufacturerOrgSupport * eanManSupport;
 }
@@ -35,5 +35,5 @@
 + (NSArray *) findGuardPattern:(BitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(NSArray *)pattern;
 + (int) decodeDigit:(BitArray *)row counters:(NSArray *)counters rowOffset:(int)rowOffset patterns:(NSArray *)patterns;
 - (BarcodeFormat *) getBarcodeFormat;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(StringBuffer *)resultString;
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
 @end

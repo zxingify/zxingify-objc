@@ -5,13 +5,13 @@
 - (id) initWithInformation:(BitArray *)information {
   if (self = [super init]) {
     current = [[[CurrentParsingState alloc] init] autorelease];
-    buffer = [[[StringBuffer alloc] init] autorelease];
+    buffer = [[[NSMutableString alloc] init] autorelease];
     information = information;
   }
   return self;
 }
 
-- (NSString *) decodeAllCodes:(StringBuffer *)buff initialPosition:(int)initialPosition {
+- (NSString *) decodeAllCodes:(NSMutableString *)buff initialPosition:(int)initialPosition {
   int currentPosition = initialPosition;
   NSString * remaining = nil;
 

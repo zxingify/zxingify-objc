@@ -151,7 +151,6 @@
 		029BCF8C15129BD0009E6549 /* FinderPatternInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED315129BD0009E6549 /* FinderPatternInfo.m */; };
 		029BCF8D15129BD0009E6549 /* BlockPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED615129BD0009E6549 /* BlockPair.m */; };
 		029BCF8E15129BD0009E6549 /* ByteMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED815129BD0009E6549 /* ByteMatrix.m */; };
-		029BCF8F15129BD0009E6549 /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEDA15129BD0009E6549 /* Encoder.m */; };
 		029BCF9015129BD0009E6549 /* MaskUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEDC15129BD0009E6549 /* MaskUtil.m */; };
 		029BCF9115129BD0009E6549 /* MatrixUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEDE15129BD0009E6549 /* MatrixUtil.m */; };
 		029BCF9215129BD0009E6549 /* QRCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEE015129BD0009E6549 /* QRCode.m */; };
@@ -484,8 +483,6 @@
 		029BD1101512A0FA009E6549 /* BlockPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED615129BD0009E6549 /* BlockPair.m */; };
 		029BD1111512A0FA009E6549 /* ByteMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCED715129BD0009E6549 /* ByteMatrix.h */; };
 		029BD1121512A0FA009E6549 /* ByteMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCED815129BD0009E6549 /* ByteMatrix.m */; };
-		029BD1131512A0FA009E6549 /* Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCED915129BD0009E6549 /* Encoder.h */; };
-		029BD1141512A0FA009E6549 /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEDA15129BD0009E6549 /* Encoder.m */; };
 		029BD1151512A0FA009E6549 /* MaskUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEDB15129BD0009E6549 /* MaskUtil.h */; };
 		029BD1161512A0FA009E6549 /* MaskUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEDC15129BD0009E6549 /* MaskUtil.m */; };
 		029BD1171512A0FA009E6549 /* MatrixUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEDD15129BD0009E6549 /* MatrixUtil.h */; };
@@ -514,6 +511,9 @@
 		02D26EFA151288DB007F8DC6 /* libZXingObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE2151288DB007F8DC6 /* libZXingObjC.a */; };
 		02D26F00151288DB007F8DC6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02D26EFE151288DB007F8DC6 /* InfoPlist.strings */; };
 		02D26F03151288DC007F8DC6 /* ZXingObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 02D26F02151288DC007F8DC6 /* ZXingObjCTests.m */; };
+		250830011512AFD4006D79E6 /* QRCodeEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25082FFF1512AFD4006D79E6 /* QRCodeEncoder.h */; };
+		250830021512AFD4006D79E6 /* QRCodeEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* QRCodeEncoder.m */; };
+		250830031512AFD4006D79E6 /* QRCodeEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* QRCodeEncoder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -821,8 +821,6 @@
 		029BCED615129BD0009E6549 /* BlockPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockPair.m; sourceTree = "<group>"; };
 		029BCED715129BD0009E6549 /* ByteMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteMatrix.h; sourceTree = "<group>"; };
 		029BCED815129BD0009E6549 /* ByteMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ByteMatrix.m; sourceTree = "<group>"; };
-		029BCED915129BD0009E6549 /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
-		029BCEDA15129BD0009E6549 /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		029BCEDB15129BD0009E6549 /* MaskUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaskUtil.h; sourceTree = "<group>"; };
 		029BCEDC15129BD0009E6549 /* MaskUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaskUtil.m; sourceTree = "<group>"; };
 		029BCEDD15129BD0009E6549 /* MatrixUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixUtil.h; sourceTree = "<group>"; };
@@ -876,6 +874,8 @@
 		02D26EFF151288DB007F8DC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02D26F01151288DC007F8DC6 /* ZXingObjCTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXingObjCTests.h; sourceTree = "<group>"; };
 		02D26F02151288DC007F8DC6 /* ZXingObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZXingObjCTests.m; sourceTree = "<group>"; };
+		25082FFF1512AFD4006D79E6 /* QRCodeEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeEncoder.h; sourceTree = "<group>"; };
+		250830001512AFD4006D79E6 /* QRCodeEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeEncoder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1397,14 +1397,14 @@
 				029BCED615129BD0009E6549 /* BlockPair.m */,
 				029BCED715129BD0009E6549 /* ByteMatrix.h */,
 				029BCED815129BD0009E6549 /* ByteMatrix.m */,
-				029BCED915129BD0009E6549 /* Encoder.h */,
-				029BCEDA15129BD0009E6549 /* Encoder.m */,
 				029BCEDB15129BD0009E6549 /* MaskUtil.h */,
 				029BCEDC15129BD0009E6549 /* MaskUtil.m */,
 				029BCEDD15129BD0009E6549 /* MatrixUtil.h */,
 				029BCEDE15129BD0009E6549 /* MatrixUtil.m */,
 				029BCEDF15129BD0009E6549 /* QRCode.h */,
 				029BCEE015129BD0009E6549 /* QRCode.m */,
+				25082FFF1512AFD4006D79E6 /* QRCodeEncoder.h */,
+				250830001512AFD4006D79E6 /* QRCodeEncoder.m */,
 			);
 			path = encoder;
 			sourceTree = "<group>";
@@ -1679,7 +1679,6 @@
 				029BD10D1512A0F3009E6549 /* FinderPatternInfo.h in Headers */,
 				029BD10F1512A0FA009E6549 /* BlockPair.h in Headers */,
 				029BD1111512A0FA009E6549 /* ByteMatrix.h in Headers */,
-				029BD1131512A0FA009E6549 /* Encoder.h in Headers */,
 				029BD1151512A0FA009E6549 /* MaskUtil.h in Headers */,
 				029BD1171512A0FA009E6549 /* MatrixUtil.h in Headers */,
 				029BD1191512A0FA009E6549 /* QRCode.h in Headers */,
@@ -1693,6 +1692,7 @@
 				029BD1271512A0FA009E6549 /* ResultPointCallback.h in Headers */,
 				029BD1281512A0FA009E6549 /* Writer.h in Headers */,
 				029BD1291512A0FA009E6549 /* WriterException.h in Headers */,
+				250830011512AFD4006D79E6 /* QRCodeEncoder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1949,7 +1949,6 @@
 				029BD10E1512A0F3009E6549 /* FinderPatternInfo.m in Sources */,
 				029BD1101512A0FA009E6549 /* BlockPair.m in Sources */,
 				029BD1121512A0FA009E6549 /* ByteMatrix.m in Sources */,
-				029BD1141512A0FA009E6549 /* Encoder.m in Sources */,
 				029BD1161512A0FA009E6549 /* MaskUtil.m in Sources */,
 				029BD1181512A0FA009E6549 /* MatrixUtil.m in Sources */,
 				029BD11A1512A0FA009E6549 /* QRCode.m in Sources */,
@@ -1959,6 +1958,7 @@
 				029BD1231512A0FA009E6549 /* Result.m in Sources */,
 				029BD1261512A0FA009E6549 /* ResultPoint.m in Sources */,
 				029BD12A1512A0FA009E6549 /* WriterException.m in Sources */,
+				250830021512AFD4006D79E6 /* QRCodeEncoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2111,7 +2111,6 @@
 				029BCF8C15129BD0009E6549 /* FinderPatternInfo.m in Sources */,
 				029BCF8D15129BD0009E6549 /* BlockPair.m in Sources */,
 				029BCF8E15129BD0009E6549 /* ByteMatrix.m in Sources */,
-				029BCF8F15129BD0009E6549 /* Encoder.m in Sources */,
 				029BCF9015129BD0009E6549 /* MaskUtil.m in Sources */,
 				029BCF9115129BD0009E6549 /* MatrixUtil.m in Sources */,
 				029BCF9215129BD0009E6549 /* QRCode.m in Sources */,
@@ -2129,6 +2128,7 @@
 				029BCFDB15129F65009E6549 /* PDF417Detector.m in Sources */,
 				029BD0F31512A0DB009E6549 /* QRCodeDecoder.m in Sources */,
 				029BD1061512A0EF009E6549 /* QRCodeDetector.m in Sources */,
+				250830031512AFD4006D79E6 /* QRCodeEncoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

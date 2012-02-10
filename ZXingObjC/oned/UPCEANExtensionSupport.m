@@ -8,14 +8,14 @@ NSArray * const CHECK_DIGIT_ENCODINGS = [NSArray arrayWithObjects:0x18, 0x14, 0x
 - (void) init {
   if (self = [super init]) {
     decodeMiddleCounters = [NSArray array];
-    decodeRowStringBuffer = [[[StringBuffer alloc] init] autorelease];
+    decodeRowNSMutableString = [[[NSMutableString alloc] init] autorelease];
   }
   return self;
 }
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row rowOffset:(int)rowOffset {
   NSArray * extensionStartRange = [UPCEANReader findGuardPattern:row param1:rowOffset param2:NO param3:EXTENSION_START_PATTERN];
-  StringBuffer * result = decodeRowStringBuffer;
+  NSMutableString * result = decodeRowNSMutableString;
   [result setLength:0];
   int end = [self decodeMiddle:row startRange:extensionStartRange resultString:result];
   NSString * resultString = [result description];
@@ -27,7 +27,7 @@ NSArray * const CHECK_DIGIT_ENCODINGS = [NSArray arrayWithObjects:0x18, 0x14, 0x
   return extensionResult;
 }
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(StringBuffer *)resultString {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
   NSArray * counters = decodeMiddleCounters;
   counters[0] = 0;
   counters[1] = 0;
@@ -170,7 +170,7 @@ NSArray * const CHECK_DIGIT_ENCODINGS = [NSArray arrayWithObjects:0x18, 0x14, 0x
 
 - (void) dealloc {
   [decodeMiddleCounters release];
-  [decodeRowStringBuffer release];
+  [decodeRowNSMutableString release];
   [super dealloc];
 }
 

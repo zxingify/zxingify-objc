@@ -141,7 +141,7 @@
 
 + (NSString *) stripContinuationCRLF:(NSString *)value {
   int length = [value length];
-  StringBuffer * result = [[[StringBuffer alloc] init:length] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:length] autorelease];
   BOOL lastWasLF = NO;
 
   for (int i = 0; i < length; i++) {
@@ -168,7 +168,7 @@
 
 + (NSString *) decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
   int length = [value length];
-  StringBuffer * result = [[[StringBuffer alloc] init:length] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:length] autorelease];
   ByteArrayOutputStream * fragmentBuffer = [[[ByteArrayOutputStream alloc] init] autorelease];
 
   for (int i = 0; i < length; i++) {
@@ -219,7 +219,7 @@
   @throw [[[IllegalArgumentException alloc] init] autorelease];
 }
 
-+ (void) maybeAppendFragment:(ByteArrayOutputStream *)fragmentBuffer charset:(NSString *)charset result:(StringBuffer *)result {
++ (void) maybeAppendFragment:(ByteArrayOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
   if ([fragmentBuffer size] > 0) {
     NSArray * fragmentBytes = [fragmentBuffer toByteArray];
     NSString * fragment;
@@ -260,7 +260,7 @@
     return nil;
   }
   int length = [address length];
-  StringBuffer * newAddress = [[[StringBuffer alloc] init:length] autorelease];
+  NSMutableString * newAddress = [[[NSMutableString alloc] init:length] autorelease];
 
   for (int j = 0; j < length; j++) {
     unichar c = [address characterAtIndex:j];
@@ -299,7 +299,7 @@
       }
 
       components[componentIndex] = [name substringFromIndex:start];
-      StringBuffer * newName = [[[StringBuffer alloc] init:100] autorelease];
+      NSMutableString * newName = [[[NSMutableString alloc] init:100] autorelease];
       [self maybeAppendComponent:components i:3 newName:newName];
       [self maybeAppendComponent:components i:1 newName:newName];
       [self maybeAppendComponent:components i:2 newName:newName];
@@ -311,7 +311,7 @@
   }
 }
 
-+ (void) maybeAppendComponent:(NSArray *)components i:(int)i newName:(StringBuffer *)newName {
++ (void) maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
   if (components[i] != nil) {
     [newName append:' '];
     [newName append:components[i]];

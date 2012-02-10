@@ -5,7 +5,7 @@ int const HEADER_SIZE = 1 + 1 + 2;
 @implementation AI01AndOtherAIs
 
 - (NSString *) parseInformation {
-  StringBuffer * buff = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buff = [[[NSMutableString alloc] init] autorelease];
   [buff append:@"(01)"];
   int initialGtinPosition = [buff length];
   int firstGtinDigit = [generalDecoder extractNumericValueFromBitArray:HEADER_SIZE param1:4];

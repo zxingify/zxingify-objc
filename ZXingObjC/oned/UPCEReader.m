@@ -23,7 +23,7 @@ NSArray * const NUMSYS_AND_CHECK_DIGIT_PATTERNS = [NSArray arrayWithObjects:[NSA
   return self;
 }
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(StringBuffer *)result {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
   NSArray * counters = decodeMiddleCounters;
   counters[0] = 0;
   counters[1] = 0;
@@ -58,7 +58,7 @@ NSArray * const NUMSYS_AND_CHECK_DIGIT_PATTERNS = [NSArray arrayWithObjects:[NSA
   return [super checkChecksum:[self convertUPCEtoUPCA:s]];
 }
 
-+ (void) determineNumSysAndCheckDigit:(StringBuffer *)resultString lgPatternFound:(int)lgPatternFound {
++ (void) determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
 
   for (int numSys = 0; numSys <= 1; numSys++) {
 
@@ -89,7 +89,7 @@ NSArray * const NUMSYS_AND_CHECK_DIGIT_PATTERNS = [NSArray arrayWithObjects:[NSA
 + (NSString *) convertUPCEtoUPCA:(NSString *)upce {
   NSArray * upceChars = [NSArray array];
   [upce getCharacters:1 param1:7 param2:upceChars param3:0];
-  StringBuffer * result = [[[StringBuffer alloc] init:12] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:12] autorelease];
   [result append:[upce characterAtIndex:0]];
   unichar lastChar = upceChars[5];
 

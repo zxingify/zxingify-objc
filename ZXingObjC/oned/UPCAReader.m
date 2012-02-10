@@ -29,7 +29,7 @@
   return BarcodeFormat.UPC_A;
 }
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(StringBuffer *)resultString {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
   return [ean13Reader decodeMiddle:row param1:startRange param2:resultString];
 }
 

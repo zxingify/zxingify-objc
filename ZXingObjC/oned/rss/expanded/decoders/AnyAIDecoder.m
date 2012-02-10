@@ -11,7 +11,7 @@ int const HEADER_SIZE = 2 + 1 + 2;
 }
 
 - (NSString *) parseInformation {
-  StringBuffer * buf = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
   return [generalDecoder decodeAllCodes:buf param1:HEADER_SIZE];
 }
 

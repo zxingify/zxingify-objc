@@ -26,7 +26,7 @@
 }
 
 - (NSString *) description {
-  StringBuffer * result = [[[StringBuffer alloc] init:25] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:25] autorelease];
   [result append:'('];
   [result append:x];
   [result append:','];

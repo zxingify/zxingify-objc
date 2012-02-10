@@ -1,10 +1,10 @@
+#import "AztecDecoder.h"
+#import "AztecDetector.h"
 #import "AztecDetectorResult.h"
 #import "AztecReader.h"
 #import "BinaryBitmap.h"
 #import "DecodeHintType.h"
-#import "Decoder.h"
 #import "DecoderResult.h"
-#import "Detector.h"
 #import "Result.h"
 #import "ResultPointCallback.h"
 

@@ -24,7 +24,7 @@ NSArray * const STARTEND_ENCODING = [NSArray arrayWithObjects:'E', '*', 'A', 'B'
     nextStart++;
   }
 
-  StringBuffer * result = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init] autorelease];
   NSArray * counters;
   int lastStart;
 

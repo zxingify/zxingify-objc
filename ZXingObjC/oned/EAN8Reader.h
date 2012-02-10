@@ -13,6 +13,6 @@
 }
 
 - (id) init;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(StringBuffer *)result;
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
 - (BarcodeFormat *) getBarcodeFormat;
 @end

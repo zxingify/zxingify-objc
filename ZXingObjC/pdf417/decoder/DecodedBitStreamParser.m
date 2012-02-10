@@ -35,7 +35,7 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
 }
 
 + (DecoderResult *) decode:(NSArray *)codewords {
-  StringBuffer * result = [[[StringBuffer alloc] init:100] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:100] autorelease];
   int codeIndex = 1;
   int code = codewords[codeIndex++];
 
@@ -84,7 +84,7 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-+ (int) textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(StringBuffer *)result {
++ (int) textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   NSArray * textCompactionData = [NSArray array];
   NSArray * byteCompactionData = [NSArray array];
   int index = 0;
@@ -147,7 +147,7 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
  * @param length             The size of the text compaction and byte compaction data.
  * @param result             The decoded data is appended to the result.
  */
-+ (void) decodeTextCompaction:(NSArray *)textCompactionData byteCompactionData:(NSArray *)byteCompactionData length:(int)length result:(StringBuffer *)result {
++ (void) decodeTextCompaction:(NSArray *)textCompactionData byteCompactionData:(NSArray *)byteCompactionData length:(int)length result:(NSMutableString *)result {
   int subMode = ALPHA;
   int priorToShiftMode = ALPHA;
   int i = 0;
@@ -288,7 +288,7 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-+ (int) byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(StringBuffer *)result {
++ (int) byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   if (mode == BYTE_COMPACTION_MODE_LATCH) {
     int count = 0;
     long value = 0;
@@ -369,7 +369,7 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-+ (int) numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(StringBuffer *)result {
++ (int) numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   int count = 0;
   BOOL end = NO;
   NSArray * numericCodewords = [NSArray array];
@@ -400,10 +400,10 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
 }
 
 + (NSString *) decodeBase900toBase10:(NSArray *)codewords count:(int)count {
-  StringBuffer * accum = nil;
+  NSMutableString * accum = nil;
 
   for (int i = 0; i < count; i++) {
-    StringBuffer * value = [self multiply:EXP900[count - i - 1] value2:codewords[i]];
+    NSMutableString * value = [self multiply:EXP900[count - i - 1] value2:codewords[i]];
     if (accum == nil) {
       accum = value;
     }
@@ -435,8 +435,8 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
  * @param value2 A number <= 999.
  * @return the result of value1 * value2.
  */
-+ (StringBuffer *) multiply:(NSString *)value1 value2:(int)value2 {
-  StringBuffer * result = [[[StringBuffer alloc] init:[value1 length]] autorelease];
++ (NSMutableString *) multiply:(NSString *)value1 value2:(int)value2 {
+  NSMutableString * result = [[[NSMutableString alloc] init:[value1 length]] autorelease];
 
   for (int i = 0; i < [value1 length]; i++) {
     [result append:'0'];
@@ -471,10 +471,10 @@ NSArray * const EXP900 = [NSArray arrayWithObjects:@"000000000000000000000000000
  * @param value2
  * @return the result of value1 + value2
  */
-+ (StringBuffer *) add:(NSString *)value1 value2:(NSString *)value2 {
-  StringBuffer * temp1 = [[[StringBuffer alloc] init:5] autorelease];
-  StringBuffer * temp2 = [[[StringBuffer alloc] init:5] autorelease];
-  StringBuffer * result = [[[StringBuffer alloc] init:[value1 length]] autorelease];
++ (NSMutableString *) add:(NSString *)value1 value2:(NSString *)value2 {
+  NSMutableString * temp1 = [[[NSMutableString alloc] init:5] autorelease];
+  NSMutableString * temp2 = [[[NSMutableString alloc] init:5] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:[value1 length]] autorelease];
 
   for (int i = 0; i < [value1 length]; i++) {
     [result append:'0'];

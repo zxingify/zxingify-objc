@@ -15,7 +15,7 @@ int const weightSize = 15;
   if (information.size != headerSize + gtinSize + weightSize) {
     @throw [NotFoundException notFoundInstance];
   }
-  StringBuffer * buf = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
   [self encodeCompressedGtin:buf param1:headerSize];
   [self encodeCompressedWeight:buf param1:headerSize + gtinSize param2:weightSize];
   return [buf description];

@@ -1,7 +1,6 @@
 #import "FormatException.h"
 #import "BitSource.h"
 #import "DecoderResult.h"
-#import "UnsupportedEncodingException.h"
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes

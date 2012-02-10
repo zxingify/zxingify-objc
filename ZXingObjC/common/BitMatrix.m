@@ -215,7 +215,7 @@
 }
 
 - (NSString *) description {
-  StringBuffer * result = [[[StringBuffer alloc] init:height * (width + 1)] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:height * (width + 1)] autorelease];
 
   for (int y = 0; y < height; y++) {
 

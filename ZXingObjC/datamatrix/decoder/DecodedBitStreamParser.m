@@ -32,8 +32,8 @@ int const BASE256_ENCODE = 6;
 
 + (DecoderResult *) decode:(NSArray *)bytes {
   BitSource * bits = [[[BitSource alloc] init:bytes] autorelease];
-  StringBuffer * result = [[[StringBuffer alloc] init:100] autorelease];
-  StringBuffer * resultTrailer = [[[StringBuffer alloc] init:0] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:100] autorelease];
+  NSMutableString * resultTrailer = [[[NSMutableString alloc] init:0] autorelease];
   NSMutableArray * byteSegments = [[[NSMutableArray alloc] init:1] autorelease];
   int mode = ASCII_ENCODE;
 
@@ -76,7 +76,7 @@ int const BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
  */
-+ (int) decodeAsciiSegment:(BitSource *)bits result:(StringBuffer *)result resultTrailer:(StringBuffer *)resultTrailer {
++ (int) decodeAsciiSegment:(BitSource *)bits result:(NSMutableString *)result resultTrailer:(NSMutableString *)resultTrailer {
   BOOL upperShift = NO;
 
   do {
@@ -146,7 +146,7 @@ int const BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
  */
-+ (void) decodeC40Segment:(BitSource *)bits result:(StringBuffer *)result {
++ (void) decodeC40Segment:(BitSource *)bits result:(NSMutableString *)result {
   BOOL upperShift = NO;
   NSArray * cValues = [NSArray array];
 
@@ -238,7 +238,7 @@ int const BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
  */
-+ (void) decodeTextSegment:(BitSource *)bits result:(StringBuffer *)result {
++ (void) decodeTextSegment:(BitSource *)bits result:(NSMutableString *)result {
   BOOL upperShift = NO;
   NSArray * cValues = [NSArray array];
   int shift = 0;
@@ -336,7 +336,7 @@ int const BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.7
  */
-+ (void) decodeAnsiX12Segment:(BitSource *)bits result:(StringBuffer *)result {
++ (void) decodeAnsiX12Segment:(BitSource *)bits result:(NSMutableString *)result {
   NSArray * cValues = [NSArray array];
 
   do {
@@ -392,7 +392,7 @@ int const BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
  */
-+ (void) decodeEdifactSegment:(BitSource *)bits result:(StringBuffer *)result {
++ (void) decodeEdifactSegment:(BitSource *)bits result:(NSMutableString *)result {
   BOOL unlatch = NO;
 
   do {
@@ -421,7 +421,7 @@ int const BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.9 and Annex B, B.2
  */
-+ (void) decodeBase256Segment:(BitSource *)bits result:(StringBuffer *)result byteSegments:(NSMutableArray *)byteSegments {
++ (void) decodeBase256Segment:(BitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments {
   int codewordPosition = 2;
   int d1 = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
   int count;

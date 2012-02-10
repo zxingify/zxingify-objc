@@ -1,0 +1,344 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B185E14D1B5FE000503E2 /* UIKit.framework */; };
+		022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186014D1B5FE000503E2 /* Foundation.framework */; };
+		022B186314D1B5FE000503E2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186214D1B5FE000503E2 /* CoreGraphics.framework */; };
+		022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 022B186714D1B5FE000503E2 /* InfoPlist.strings */; };
+		026851F8151383A200394C7B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 026851F7151383A200394C7B /* ViewController.xib */; };
+		029BCCF715128A90009E6549 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B186A14D1B5FE000503E2 /* main.m */; };
+		029BCCF815128A92009E6549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B187114D1B5FE000503E2 /* ViewController.m */; };
+		029BCCF915128A94009E6549 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B186E14D1B5FE000503E2 /* AppDelegate.m */; };
+		029BCD1C15128C10009E6549 /* libZXingObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D272871512897D007F8DC6 /* libZXingObjC.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		029BCD3715128E5C009E6549 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02D272811512897D007F8DC6 /* ZXingObjC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02D26EE1151288DB007F8DC6;
+			remoteInfo = ZXingObjC;
+		};
+		02D272861512897D007F8DC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02D272811512897D007F8DC6 /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02D26EE2151288DB007F8DC6;
+			remoteInfo = ZXingObjC;
+		};
+		02D272881512897D007F8DC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02D272811512897D007F8DC6 /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02D26EF2151288DB007F8DC6;
+			remoteInfo = ZXingObjCTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		022B185A14D1B5FE000503E2 /* QrCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QrCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		022B185E14D1B5FE000503E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		022B186014D1B5FE000503E2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		022B186214D1B5FE000503E2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		022B186614D1B5FE000503E2 /* QrCodeTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QrCodeTest-Info.plist"; sourceTree = SOURCE_ROOT; };
+		022B186814D1B5FE000503E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		022B186A14D1B5FE000503E2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
+		022B186C14D1B5FE000503E2 /* QrCodeTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QrCodeTest-Prefix.pch"; sourceTree = "<group>"; };
+		022B186D14D1B5FE000503E2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		022B186E14D1B5FE000503E2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		022B187014D1B5FE000503E2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = SOURCE_ROOT; };
+		022B187114D1B5FE000503E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
+		026851F7151383A200394C7B /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = SOURCE_ROOT; };
+		02D272811512897D007F8DC6 /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../ZXingObjC.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		022B185714D1B5FE000503E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				029BCD1C15128C10009E6549 /* libZXingObjC.a in Frameworks */,
+				022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */,
+				022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */,
+				022B186314D1B5FE000503E2 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		022B184F14D1B5FE000503E2 = {
+			isa = PBXGroup;
+			children = (
+				022B186414D1B5FE000503E2 /* QrCodeTest */,
+				022B185D14D1B5FE000503E2 /* Frameworks */,
+				022B185B14D1B5FE000503E2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		022B185B14D1B5FE000503E2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				022B185A14D1B5FE000503E2 /* QrCodeTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		022B185D14D1B5FE000503E2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02D272811512897D007F8DC6 /* ZXingObjC.xcodeproj */,
+				022B185E14D1B5FE000503E2 /* UIKit.framework */,
+				022B186014D1B5FE000503E2 /* Foundation.framework */,
+				022B186214D1B5FE000503E2 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		022B186414D1B5FE000503E2 /* QrCodeTest */ = {
+			isa = PBXGroup;
+			children = (
+				022B186D14D1B5FE000503E2 /* AppDelegate.h */,
+				022B186E14D1B5FE000503E2 /* AppDelegate.m */,
+				022B187014D1B5FE000503E2 /* ViewController.h */,
+				022B187114D1B5FE000503E2 /* ViewController.m */,
+				026851F7151383A200394C7B /* ViewController.xib */,
+				022B186514D1B5FE000503E2 /* Supporting Files */,
+			);
+			path = QrCodeTest;
+			sourceTree = "<group>";
+		};
+		022B186514D1B5FE000503E2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				022B186614D1B5FE000503E2 /* QrCodeTest-Info.plist */,
+				022B186714D1B5FE000503E2 /* InfoPlist.strings */,
+				022B186A14D1B5FE000503E2 /* main.m */,
+				022B186C14D1B5FE000503E2 /* QrCodeTest-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02D272821512897D007F8DC6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				02D272871512897D007F8DC6 /* libZXingObjC.a */,
+				02D272891512897D007F8DC6 /* ZXingObjCTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		022B185914D1B5FE000503E2 /* QrCodeTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 022B187814D1B5FE000503E2 /* Build configuration list for PBXNativeTarget "QrCodeTest" */;
+			buildPhases = (
+				022B185614D1B5FE000503E2 /* Sources */,
+				022B185714D1B5FE000503E2 /* Frameworks */,
+				022B185814D1B5FE000503E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				029BCD3815128E5C009E6549 /* PBXTargetDependency */,
+			);
+			name = QrCodeTest;
+			productName = QrCodeTest;
+			productReference = 022B185A14D1B5FE000503E2 /* QrCodeTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		022B185114D1B5FE000503E2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Draconis Software";
+			};
+			buildConfigurationList = 022B185414D1B5FE000503E2 /* Build configuration list for PBXProject "QrCodeTest" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 022B184F14D1B5FE000503E2;
+			productRefGroup = 022B185B14D1B5FE000503E2 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 02D272821512897D007F8DC6 /* Products */;
+					ProjectRef = 02D272811512897D007F8DC6 /* ZXingObjC.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				022B185914D1B5FE000503E2 /* QrCodeTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		02D272871512897D007F8DC6 /* libZXingObjC.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libZXingObjC.a;
+			remoteRef = 02D272861512897D007F8DC6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		02D272891512897D007F8DC6 /* ZXingObjCTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ZXingObjCTests.octest;
+			remoteRef = 02D272881512897D007F8DC6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		022B185814D1B5FE000503E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */,
+				026851F8151383A200394C7B /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		022B185614D1B5FE000503E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				029BCCF715128A90009E6549 /* main.m in Sources */,
+				029BCCF815128A92009E6549 /* ViewController.m in Sources */,
+				029BCCF915128A94009E6549 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		029BCD3815128E5C009E6549 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ZXingObjC;
+			targetProxy = 029BCD3715128E5C009E6549 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		022B186714D1B5FE000503E2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				022B186814D1B5FE000503E2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		022B187614D1B5FE000503E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		022B187714D1B5FE000503E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		022B187914D1B5FE000503E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QrCodeTest-Prefix.pch";
+				HEADER_SEARCH_PATHS = "../../ZXingObjC/**";
+				INFOPLIST_FILE = "QrCodeTest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		022B187A14D1B5FE000503E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QrCodeTest-Prefix.pch";
+				HEADER_SEARCH_PATHS = "../../ZXingObjC/**";
+				INFOPLIST_FILE = "QrCodeTest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		022B185414D1B5FE000503E2 /* Build configuration list for PBXProject "QrCodeTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				022B187614D1B5FE000503E2 /* Debug */,
+				022B187714D1B5FE000503E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		022B187814D1B5FE000503E2 /* Build configuration list for PBXNativeTarget "QrCodeTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				022B187914D1B5FE000503E2 /* Debug */,
+				022B187A14D1B5FE000503E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 022B185114D1B5FE000503E2 /* Project object */;
+}

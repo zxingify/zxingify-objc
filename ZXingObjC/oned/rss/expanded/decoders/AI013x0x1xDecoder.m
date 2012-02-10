@@ -19,14 +19,14 @@ int const dateSize = 16;
   if (information.size != headerSize + gtinSize + weightSize + dateSize) {
     @throw [NotFoundException notFoundInstance];
   }
-  StringBuffer * buf = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
   [self encodeCompressedGtin:buf param1:headerSize];
   [self encodeCompressedWeight:buf param1:headerSize + gtinSize param2:weightSize];
   [self encodeCompressedDate:buf currentPos:headerSize + gtinSize + weightSize];
   return [buf description];
 }
 
-- (void) encodeCompressedDate:(StringBuffer *)buf currentPos:(int)currentPos {
+- (void) encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos {
   int numericDate = [generalDecoder extractNumericValueFromBitArray:currentPos param1:dateSize];
   if (numericDate == 38400) {
     return;
@@ -53,7 +53,7 @@ int const dateSize = 16;
   [buf append:day];
 }
 
-- (void) addWeightCode:(StringBuffer *)buf weight:(int)weight {
+- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
   int lastAI = weight / 100000;
   [buf append:'('];
   [buf append:firstAIdigits];

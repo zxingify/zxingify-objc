@@ -32,7 +32,7 @@ NSArray * const PATTERNS = [NSArray arrayWithObjects:[NSArray arrayWithObjects:N
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
   NSArray * startRange = [self decodeStart:row];
   NSArray * endRange = [self decodeEnd:row];
-  StringBuffer * result = [[[StringBuffer alloc] init:20] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:20] autorelease];
   [self decodeMiddle:row payloadStart:startRange[1] payloadEnd:endRange[0] resultString:result];
   NSString * resultString = [result description];
   NSArray * allowedLengths = nil;
@@ -62,10 +62,10 @@ NSArray * const PATTERNS = [NSArray arrayWithObjects:[NSArray arrayWithObjects:N
 /**
  * @param row          row of black/white values to search
  * @param payloadStart offset of start pattern
- * @param resultString {@link StringBuffer} to append decoded chars to
+ * @param resultString {@link NSMutableString} to append decoded chars to
  * @throws NotFoundException if decoding could not complete successfully
  */
-+ (void) decodeMiddle:(BitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(StringBuffer *)resultString {
++ (void) decodeMiddle:(BitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
   NSArray * counterDigitPair = [NSArray array];
   NSArray * counterBlack = [NSArray array];
   NSArray * counterWhite = [NSArray array];

@@ -8,7 +8,7 @@
   return self;
 }
 
-- (void) encodeCompressedWeight:(StringBuffer *)buf currentPos:(int)currentPos weightSize:(int)weightSize {
+- (void) encodeCompressedWeight:(NSMutableString *)buf currentPos:(int)currentPos weightSize:(int)weightSize {
   int originalWeightNumeric = [generalDecoder extractNumericValueFromBitArray:currentPos param1:weightSize];
   [self addWeightCode:buf weight:originalWeightNumeric];
   int weightNumeric = [self checkWeight:originalWeightNumeric];
@@ -24,7 +24,7 @@
   [buf append:weightNumeric];
 }
 
-- (void) addWeightCode:(StringBuffer *)buf weight:(int)weight {
+- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
 }
 
 - (int) checkWeight:(int)weight {

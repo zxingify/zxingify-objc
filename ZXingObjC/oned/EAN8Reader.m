@@ -9,7 +9,7 @@
   return self;
 }
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(StringBuffer *)result {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
   NSArray * counters = decodeMiddleCounters;
   counters[0] = 0;
   counters[1] = 0;

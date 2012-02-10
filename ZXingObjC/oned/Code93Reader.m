@@ -21,7 +21,7 @@ int const ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
     nextStart++;
   }
 
-  StringBuffer * result = [[[StringBuffer alloc] init:20] autorelease];
+  NSMutableString * result = [[[NSMutableString alloc] init:20] autorelease];
   NSArray * counters = [NSArray array];
   unichar decodedChar;
   int lastStart;
@@ -155,9 +155,9 @@ int const ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
   @throw [NotFoundException notFoundInstance];
 }
 
-+ (NSString *) decodeExtended:(StringBuffer *)encoded {
++ (NSString *) decodeExtended:(NSMutableString *)encoded {
   int length = [encoded length];
-  StringBuffer * decoded = [[[StringBuffer alloc] init:length] autorelease];
+  NSMutableString * decoded = [[[NSMutableString alloc] init:length] autorelease];
 
   for (int i = 0; i < length; i++) {
     unichar c = [encoded charAt:i];
@@ -216,13 +216,13 @@ int const ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
   return [decoded description];
 }
 
-+ (void) checkChecksums:(StringBuffer *)result {
++ (void) checkChecksums:(NSMutableString *)result {
   int length = [result length];
   [self checkOneChecksum:result checkPosition:length - 2 weightMax:20];
   [self checkOneChecksum:result checkPosition:length - 1 weightMax:15];
 }
 
-+ (void) checkOneChecksum:(StringBuffer *)result checkPosition:(int)checkPosition weightMax:(int)weightMax {
++ (void) checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax {
   int weight = 1;
   int total = 0;
 

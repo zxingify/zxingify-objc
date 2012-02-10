@@ -64,14 +64,14 @@
   return [[[TextParsedResult alloc] init:[theResult text] param1:nil] autorelease];
 }
 
-+ (void) maybeAppend:(NSString *)value result:(StringBuffer *)result {
++ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result {
   if (value != nil) {
     [result append:'\n'];
     [result append:value];
   }
 }
 
-+ (void) maybeAppend:(NSArray *)value result:(StringBuffer *)result {
++ (void) maybeAppend:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
 
     for (int i = 0; i < value.length; i++) {
@@ -91,7 +91,7 @@
     int backslash = [escaped rangeOfString:(int)'\\'];
     if (backslash >= 0) {
       int max = [escaped length];
-      StringBuffer * unescaped = [[[StringBuffer alloc] init:max - 1] autorelease];
+      NSMutableString * unescaped = [[[NSMutableString alloc] init:max - 1] autorelease];
       [unescaped append:[escaped toCharArray] param1:0 param2:backslash];
       BOOL nextIsEscaped = NO;
 
@@ -122,7 +122,7 @@
     return escaped;
   }
   int max = escapedArray.length;
-  StringBuffer * unescaped = [[[StringBuffer alloc] init:max - 2] autorelease];
+  NSMutableString * unescaped = [[[NSMutableString alloc] init:max - 2] autorelease];
   [unescaped append:escapedArray param1:0 param2:first];
 
   for (int i = first; i < max; i++) {

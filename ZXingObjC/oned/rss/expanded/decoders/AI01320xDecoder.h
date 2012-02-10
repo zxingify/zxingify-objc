@@ -9,6 +9,6 @@
 }
 
 - (id) initWithInformation:(BitArray *)information;
-- (void) addWeightCode:(StringBuffer *)buf weight:(int)weight;
+- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight;
 - (int) checkWeight:(int)weight;
 @end

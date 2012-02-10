@@ -16,7 +16,7 @@ int const firstThreeDigitsSize = 10;
   if (information.size < headerSize + gtinSize) {
     @throw [NotFoundException notFoundInstance];
   }
-  StringBuffer * buf = [[[StringBuffer alloc] init] autorelease];
+  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
   [self encodeCompressedGtin:buf param1:headerSize];
   int lastAIdigit = [generalDecoder extractNumericValueFromBitArray:headerSize + gtinSize param1:lastDigitSize];
   [buf append:@"(393"];

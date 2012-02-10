@@ -5,7 +5,7 @@
 #import "BitMatrix.h"
 #import "ByteMatrix.h"
 #import "ErrorCorrectionLevel.h"
-#import "Encoder.h"
+#import "QRCodeEncoder.h"
 #import "QRCode.h"
 
 /**

@@ -7,7 +7,7 @@
 #import "ReedSolomonEncoder.h"
 #import "ErrorCorrectionLevel.h"
 #import "Mode.h"
-#import "Version.h"
+#import "QRCodeVersion.h"
 #import "QRCode.h"
 
 /**
@@ -15,7 +15,8 @@
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 
-@interface Encoder : NSObject
+@interface QRCodeEncoder : NSObject
+
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel qrCode:(QRCode *)qrCode;
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints qrCode:(QRCode *)qrCode;
 + (int) getAlphanumericCode:(int)code;
@@ -32,4 +33,5 @@
 + (void) appendAlphanumericBytes:(NSString *)content bits:(BitArray *)bits;
 + (void) append8BitBytes:(NSString *)content bits:(BitArray *)bits encoding:(NSString *)encoding;
 + (void) appendKanjiBytes:(NSString *)content bits:(BitArray *)bits;
+
 @end
