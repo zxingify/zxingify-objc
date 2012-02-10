@@ -55,8 +55,8 @@
 
 - (NSString *) displayResult {
   NSMutableString* result = [NSMutableString stringWithCapacity:30];
-  [self maybeAppend:title result:result];
-  [self maybeAppend:uri result:result];
+  [ParsedResult maybeAppend:title result:result];
+  [ParsedResult maybeAppend:uri result:result];
   return result;
 }
 

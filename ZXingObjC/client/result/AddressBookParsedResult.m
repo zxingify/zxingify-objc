@@ -33,16 +33,16 @@
 
 - (NSString *) displayResult {
   NSMutableString * result = [NSMutableString string];
-  [self maybeAppendArray:names result:result];
-  [self maybeAppend:pronunciation result:result];
-  [self maybeAppend:title result:result];
-  [self maybeAppend:org result:result];
-  [self maybeAppendArray:addresses result:result];
-  [self maybeAppendArray:phoneNumbers result:result];
-  [self maybeAppendArray:emails result:result];
-  [self maybeAppend:uRL result:result];
-  [self maybeAppend:birthday result:result];
-  [self maybeAppend:note result:result];
+  [ParsedResult maybeAppendArray:names result:result];
+  [ParsedResult maybeAppend:pronunciation result:result];
+  [ParsedResult maybeAppend:title result:result];
+  [ParsedResult maybeAppend:org result:result];
+  [ParsedResult maybeAppendArray:addresses result:result];
+  [ParsedResult maybeAppendArray:phoneNumbers result:result];
+  [ParsedResult maybeAppendArray:emails result:result];
+  [ParsedResult maybeAppend:uRL result:result];
+  [ParsedResult maybeAppend:birthday result:result];
+  [ParsedResult maybeAppend:note result:result];
   return result;
 }
 

@@ -18,8 +18,8 @@
 
 - (NSString *) displayResult {
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  [self maybeAppend:number result:result];
-  [self maybeAppend:title result:result];
+  [ParsedResult maybeAppend:number result:result];
+  [ParsedResult maybeAppend:title result:result];
   return result;
 }
 

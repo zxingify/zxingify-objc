@@ -1,5 +1,11 @@
 #import "CalendarParsedResult.h"
 
+@interface CalendarParsedResult ()
+
+- (void) validateDate:(NSString *)date;
+
+@end
+
 @implementation CalendarParsedResult
 
 @synthesize summary;
@@ -12,45 +18,39 @@
 @synthesize longitude;
 @synthesize displayResult;
 
-- (id) init:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location attendee:(NSString *)attendee description:(NSString *)description {
-  if (self = [self init:summary start:start end:end location:location attendee:attendee description:description latitude:Double.NaN longitude:Double.NaN]) {
-  }
-  return self;
-}
-
-- (id) init:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude {
-  if (self = [super init:ParsedResultType.CALENDAR]) {
-    if (start == nil) {
-      @throw [[[IllegalArgumentException alloc] init] autorelease];
+- (id) initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
+  if (self = [super initWithType:kParsedResultTypeCalendar]) {
+    if (aStart == nil) {
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"Start is required"];
     }
-    [self validateDate:start];
-    if (end == nil) {
-      end = start;
+    [self validateDate:aStart];
+    if (anEnd == nil) {
+      anEnd = aStart;
+    } else {
+      [self validateDate:anEnd];
     }
-     else {
-      [self validateDate:end];
-    }
-    summary = summary;
-    start = start;
-    end = end;
-    location = location;
-    attendee = attendee;
-    description = description;
-    latitude = latitude;
-    longitude = longitude;
+    summary = [aSummary copy];
+    start = [aStart copy];
+    end = [anEnd copy];
+    location = [aLocation copy];
+    attendee = [anAttendee copy];
+    description = [aDescription copy];
+    latitude = aLatitude;
+    longitude = aLongitude;
   }
   return self;
 }
 
 - (NSString *) displayResult {
-  NSMutableString * result = [[[NSMutableString alloc] init:100] autorelease];
-  [self maybeAppend:summary param1:result];
-  [self maybeAppend:start param1:result];
-  [self maybeAppend:end param1:result];
-  [self maybeAppend:location param1:result];
-  [self maybeAppend:attendee param1:result];
-  [self maybeAppend:description param1:result];
-  return [result description];
+  NSMutableString * result = [NSMutableString stringWithCapacity:100];
+  [ParsedResult maybeAppend:summary result:result];
+  [ParsedResult maybeAppend:start result:result];
+  [ParsedResult maybeAppend:end result:result];
+  [ParsedResult maybeAppend:location result:result];
+  [ParsedResult maybeAppend:attendee result:result];
+  [ParsedResult maybeAppend:description result:result];
+  return result;
 }
 
 
@@ -60,32 +60,37 @@
  * 
  * @param date The string to validate
  */
-+ (void) validateDate:(NSString *)date {
+- (void) validateDate:(NSString *)date {
   if (date != nil) {
     int length = [date length];
     if (length != 8 && length != 15 && length != 16) {
-      @throw [[[IllegalArgumentException alloc] init] autorelease];
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"Invalid length"];
     }
 
     for (int i = 0; i < 8; i++) {
-      if (![Character isDigit:[date characterAtIndex:i]]) {
-        @throw [[[IllegalArgumentException alloc] init] autorelease];
+      if (!isdigit([date characterAtIndex:i])) {
+        [NSException raise:NSInvalidArgumentException 
+                    format:@"Invalid date"];
       }
     }
 
     if (length > 8) {
       if ([date characterAtIndex:8] != 'T') {
-        @throw [[[IllegalArgumentException alloc] init] autorelease];
+        [NSException raise:NSInvalidArgumentException 
+                    format:@"Invalid date"];
       }
 
       for (int i = 9; i < 15; i++) {
-        if (![Character isDigit:[date characterAtIndex:i]]) {
-          @throw [[[IllegalArgumentException alloc] init] autorelease];
+        if (!isdigit([date characterAtIndex:i])) {
+          [NSException raise:NSInvalidArgumentException 
+                      format:@"Invalid date"];
         }
       }
 
       if (length == 16 && [date characterAtIndex:15] != 'Z') {
-        @throw [[[IllegalArgumentException alloc] init] autorelease];
+        [NSException raise:NSInvalidArgumentException 
+                    format:@"Invalid date"];
       }
     }
   }

@@ -19,9 +19,9 @@
 
 - (NSString *) displayResult {
   NSMutableString *result = [NSMutableString stringWithCapacity:80];
-  [self maybeAppend:ssid result:result];
-  [self maybeAppend:networkEncryption result:result];
-  [self maybeAppend:password result:result];
+  [ParsedResult maybeAppend:ssid result:result];
+  [ParsedResult maybeAppend:networkEncryption result:result];
+  [ParsedResult maybeAppend:password result:result];
   return result;
 }
 

@@ -31,10 +31,10 @@
 
 - (NSString *) displayResult {
   NSMutableString * result = [[[NSMutableString alloc] init:30] autorelease];
-  [self maybeAppend:emailAddress param1:result];
-  [self maybeAppend:subject param1:result];
-  [self maybeAppend:body param1:result];
-  return [result description];
+  [ParsedResult maybeAppend:emailAddress param1:result];
+  [ParsedResult maybeAppend:subject param1:result];
+  [ParsedResult maybeAppend:body param1:result];
+  return result;
 }
 
 - (void) dealloc {
