@@ -1,5 +1,3 @@
-#import "ExpandedProductParsedResult.h"
-#import "Result.h"
 #import "ResultParser.h"
 
 /**
@@ -8,6 +6,8 @@
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
  * @author Agustín Delgado, Servinform, S.A.
  */
+
+@class ExpandedProductParsedResult, Result;
 
 @interface ExpandedProductResultParser : ResultParser
 
