@@ -1,3 +1,4 @@
+#import "AbstractNDEFResultParser.h"
 #import "NDEFRecord.h"
 
 int const SUPPORTED_HEADER_MASK = 0x3F;
@@ -7,41 +8,34 @@ NSString * const URI_WELL_KNOWN_TYPE = @"U";
 NSString * const SMART_POSTER_WELL_KNOWN_TYPE = @"Sp";
 NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
 
-@interface NDEFRecord () {
-  int header;
-  NSString * type;
-  NSArray * payload;
-  int totalRecordLength;
-}
-
-@property (nonatomic, copy) NSString *type;
-@property (nonatomic, retain) NSArray *payload;
-
-@end
-
 @implementation NDEFRecord
 
-- (id) init:(int)aHeader type:(NSString *)aType payload:(NSArray *)aPayload totalRecordLength:(int)aTotalRecordLength {
+@synthesize type, payload, totalRecordLength;
+
+- (id) initWithHeader:(int)aHeader type:(NSString *)aType payload:(NSArray *)aPayload totalRecordLength:(int)aTotalRecordLength {
   if (self = [super init]) {
     header = aHeader;
-    self.type = aType;
-    self.payload = aPayload;
+    type = [aType copy];
+    payload = [aPayload retain];
     totalRecordLength = aTotalRecordLength;
   }
   return self;
 }
 
 + (NDEFRecord *) readRecord:(NSArray *)bytes offset:(int)offset {
-  int header = bytes[offset] & 0xFF;
+  int header = [[bytes objectAtIndex:offset] charValue] & 0xFF;
   if (((header ^ SUPPORTED_HEADER) & SUPPORTED_HEADER_MASK) != 0) {
     return nil;
   }
-  int typeLength = bytes[offset + 1] & 0xFF;
-  int payloadLength = bytes[offset + 2] & 0xFF;
-  NSString * type = [AbstractNDEFResultParser bytesToString:bytes param1:offset + 3 param2:typeLength param3:@"US-ASCII"];
-  NSArray * payload = [NSArray array];
-  [System arraycopy:bytes param1:offset + 3 + typeLength param2:payload param3:0 param4:payloadLength];
-  return [[[NDEFRecord alloc] init:header param1:type param2:payload param3:3 + typeLength + payloadLength] autorelease];
+  int typeLength = [[bytes objectAtIndex:offset + 1] charValue] & 0xFF;
+  int payloadLength = [[bytes objectAtIndex:offset + 2] charValue] & 0xFF;
+  NSString * type = [AbstractNDEFResultParser bytesToString:bytes offset:offset + 3 length:typeLength encoding:@"US-ASCII"];
+  NSMutableArray * payload = [NSMutableArray arrayWithCapacity:payloadLength];
+  for (int i = offset + 3 + typeLength; i < offset + 3 + typeLength + payloadLength; i++) {
+    [payload addObject:[bytes objectAtIndex:i]];
+  }
+
+  return [[[NDEFRecord alloc] initWithHeader:header type:type payload:payload totalRecordLength:3 + typeLength + payloadLength] autorelease];
 }
 
 - (BOOL) isMessageBegin {

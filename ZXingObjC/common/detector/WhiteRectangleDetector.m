@@ -228,7 +228,7 @@ int const CORR = 1;
     int x = [self round:aX + i * xStep];
     int y = [self round:aY + i * yStep];
     if ([self.image get:x y:y]) {
-      return [[[ResultPoint alloc] init:x y:y] autorelease];
+      return [[[ResultPoint alloc] initWithX:x y:y] autorelease];
     }
   }
 
@@ -265,10 +265,15 @@ int const CORR = 1;
   float ti = [t x];
   float tj = [t y];
   if (yi < width / 2) {
-    return [NSArray arrayWithObjects:[[[ResultPoint alloc] init:ti - CORR param1:tj + CORR] autorelease], [[[ResultPoint alloc] init:zi + CORR param1:zj + CORR] autorelease], [[[ResultPoint alloc] init:xi - CORR param1:xj - CORR] autorelease], [[[ResultPoint alloc] init:yi + CORR param1:yj - CORR] autorelease], nil];
-  }
-   else {
-    return [NSArray arrayWithObjects:[[[ResultPoint alloc] init:ti + CORR param1:tj + CORR] autorelease], [[[ResultPoint alloc] init:zi + CORR param1:zj - CORR] autorelease], [[[ResultPoint alloc] init:xi - CORR param1:xj + CORR] autorelease], [[[ResultPoint alloc] init:yi - CORR param1:yj - CORR] autorelease], nil];
+    return [NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:ti - CORR y:tj + CORR] autorelease],
+            [[[ResultPoint alloc] initWithX:zi + CORR y:zj + CORR] autorelease],
+            [[[ResultPoint alloc] initWithX:xi - CORR y:xj - CORR] autorelease],
+            [[[ResultPoint alloc] initWithX:yi + CORR y:yj - CORR] autorelease], nil];
+  } else {
+    return [NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:ti + CORR y:tj + CORR] autorelease],
+            [[[ResultPoint alloc] initWithX:zi + CORR y:zj - CORR] autorelease],
+            [[[ResultPoint alloc] initWithX:xi - CORR y:xj + CORR] autorelease],
+            [[[ResultPoint alloc] initWithX:yi - CORR y:yj - CORR] autorelease], nil];
   }
 }
 
