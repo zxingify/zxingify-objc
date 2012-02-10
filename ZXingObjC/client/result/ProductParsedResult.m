@@ -6,16 +6,15 @@
 @synthesize normalizedProductID;
 @synthesize displayResult;
 
-- (id) initWithProductID:(NSString *)productID {
-  if (self = [self init:productID normalizedProductID:productID]) {
-  }
+- (id) initWithProductID:(NSString *)aProductID {
+  self = [self initWithProductID:aProductID normalizedProductID:aProductID];
   return self;
 }
 
-- (id) init:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID {
-  if (self = [super init:ParsedResultType.PRODUCT]) {
-    productID = productID;
-    normalizedProductID = normalizedProductID;
+- (id) initWithProductID:(NSString *)aProductID normalizedProductID:(NSString *)aNormalizedProductID {
+  if (self = [super initWithType:kParsedResultTypeProduct]) {
+    productID = [aProductID copy];
+    normalizedProductID = [aNormalizedProductID copy];
   }
   return self;
 }
