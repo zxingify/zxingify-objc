@@ -8,12 +8,14 @@
 
 @class DataMatrixVersion;
 
-@interface DataBlock : NSObject {
+@interface DataMatrixDataBlock : NSObject {
   int numDataCodewords;
-  NSArray * codewords;
+  NSMutableArray * codewords;
 }
 
+@property (nonatomic, readonly) int numDataCodewords;
+@property (nonatomic, readonly) NSMutableArray * codewords;
+
 + (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(DataMatrixVersion *)version;
-- (int) getNumDataCodewords;
-- (NSArray *) getCodewords;
+
 @end

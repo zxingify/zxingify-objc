@@ -1,6 +1,6 @@
-#import "DataBlock.h"
+#import "QRCodeDataBlock.h"
 
-@implementation DataBlock
+@implementation QRCodeDataBlock
 
 - (id) init:(int)numDataCodewords codewords:(NSArray *)codewords {
   if (self = [super init]) {
