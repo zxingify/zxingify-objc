@@ -1,38 +1,38 @@
 #import "ResultPoint.h"
 
+@interface ResultPoint ()
+
++ (float) crossProductZ:(ResultPoint *)pointA pointB:(ResultPoint *)pointB pointC:(ResultPoint *)pointC;
+
+@end
+
 @implementation ResultPoint
 
 @synthesize x;
 @synthesize y;
 
-- (id) initWithX:(float)x y:(float)y {
+- (id) initWithX:(float)anX y:(float)aY {
   if (self = [super init]) {
-    x = x;
-    y = y;
+    x = anX;
+    y = aY;
   }
   return self;
 }
 
-- (BOOL) isEqualTo:(NSObject *)other {
-  if ([other conformsToProtocol:@protocol(ResultPoint)]) {
+- (BOOL) isEqual:(id)other {
+  if ([other isKindOfClass:[ResultPoint class]]) {
     ResultPoint * otherPoint = (ResultPoint *)other;
     return x == otherPoint.x && y == otherPoint.y;
   }
   return NO;
 }
 
-- (int) hash {
-  return 31 * [Float floatToIntBits:x] + [Float floatToIntBits:y];
+- (NSUInteger) hash {
+  return 31 * *((int*)(&x)) + *((int*)(&y));
 }
 
 - (NSString *) description {
-  NSMutableString * result = [[[NSMutableString alloc] init:25] autorelease];
-  [result append:'('];
-  [result append:x];
-  [result append:','];
-  [result append:y];
-  [result append:')'];
-  return [result description];
+  return [NSString stringWithFormat:@"(%f,%f)", x, y];
 }
 
 
@@ -40,36 +40,35 @@
  * <p>Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
  * BC < AC and the angle between BC and BA is less than 180 degrees.
  */
-+ (void) orderBestPatterns:(NSArray *)patterns {
-  float zeroOneDistance = [self distance:patterns[0] pattern2:patterns[1]];
-  float oneTwoDistance = [self distance:patterns[1] pattern2:patterns[2]];
-  float zeroTwoDistance = [self distance:patterns[0] pattern2:patterns[2]];
++ (void) orderBestPatterns:(NSMutableArray *)patterns {
+  float zeroOneDistance = [self distance:[patterns objectAtIndex:0] pattern2:[patterns objectAtIndex:1]];
+  float oneTwoDistance = [self distance:[patterns objectAtIndex:1] pattern2:[patterns objectAtIndex:2]];
+  float zeroTwoDistance = [self distance:[patterns objectAtIndex:0] pattern2:[patterns objectAtIndex:2]];
   ResultPoint * pointA;
   ResultPoint * pointB;
   ResultPoint * pointC;
   if (oneTwoDistance >= zeroOneDistance && oneTwoDistance >= zeroTwoDistance) {
-    pointB = patterns[0];
-    pointA = patterns[1];
-    pointC = patterns[2];
+    pointB = [patterns objectAtIndex:0];
+    pointA = [patterns objectAtIndex:1];
+    pointC = [patterns objectAtIndex:2];
+  } else if (zeroTwoDistance >= oneTwoDistance && zeroTwoDistance >= zeroOneDistance) {
+    pointB = [patterns objectAtIndex:1];
+    pointA = [patterns objectAtIndex:0];
+    pointC = [patterns objectAtIndex:2];
+  } else {
+    pointB = [patterns objectAtIndex:2];
+    pointA = [patterns objectAtIndex:0];
+    pointC = [patterns objectAtIndex:1];
   }
-   else if (zeroTwoDistance >= oneTwoDistance && zeroTwoDistance >= zeroOneDistance) {
-    pointB = patterns[1];
-    pointA = patterns[0];
-    pointC = patterns[2];
-  }
-   else {
-    pointB = patterns[2];
-    pointA = patterns[0];
-    pointC = patterns[1];
-  }
+
   if ([self crossProductZ:pointA pointB:pointB pointC:pointC] < 0.0f) {
     ResultPoint * temp = pointA;
     pointA = pointC;
     pointC = temp;
   }
-  patterns[0] = pointA;
-  patterns[1] = pointB;
-  patterns[2] = pointC;
+  [patterns replaceObjectAtIndex:0 withObject:pointA];
+  [patterns replaceObjectAtIndex:1 withObject:pointB];
+  [patterns replaceObjectAtIndex:2 withObject:pointC];
 }
 
 
@@ -79,7 +78,7 @@
 + (float) distance:(ResultPoint *)pattern1 pattern2:(ResultPoint *)pattern2 {
   float xDiff = [pattern1 x] - [pattern2 x];
   float yDiff = [pattern1 y] - [pattern2 y];
-  return (float)[Math sqrt:(double)(xDiff * xDiff + yDiff * yDiff)];
+  return sqrtf(xDiff * xDiff + yDiff * yDiff);
 }
 
 

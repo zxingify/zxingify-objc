@@ -23,7 +23,7 @@
 }
 
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
-  AztecDetectorResult * detectorResult = [[[[Detector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
+  AztecDetectorResult * detectorResult = [[[[AztecDetector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
   NSArray *points = [detectorResult points];
   if (hints != nil && [detectorResult points] != nil) {
     id <ResultPointCallback> rpcb = [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]];
@@ -34,9 +34,9 @@
     }
   }
 
-  DecoderResult *decoderResult = [[[[Decoder alloc] init] autorelease] decode:detectorResult];
+  DecoderResult *decoderResult = [[[[AztecDecoder alloc] init] autorelease] decode:detectorResult];
   Result * result = [[[Result alloc] init:[decoderResult text] rawBytes:[decoderResult rawBytes]
-                             resultPoints:points format:kBarcodeAztec] autorelease];
+                             resultPoints:points format:kBarcodeFormatAztec] autorelease];
   if ([decoderResult byteSegments] != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
   }

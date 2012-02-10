@@ -45,11 +45,11 @@
     hostStart++;
   }
 
-  int hostEnd = [uri rangeOfString:@"/" options:nil range:NSMakeRange(hostStart, uriLength - hostStart)].location;
+  int hostEnd = [uri rangeOfString:@"/" options:0 range:NSMakeRange(hostStart, uriLength - hostStart)].location;
   if (hostEnd < 0) {
     hostEnd = uriLength;
   }
-  int at = [uri rangeOfString:@"@" options:nil range:NSMakeRange(hostStart, uriLength - hostStart)].location;
+  int at = [uri rangeOfString:@"@" options:0 range:NSMakeRange(hostStart, uriLength - hostStart)].location;
   return at >= hostStart && at < hostEnd;
 }
 
@@ -80,7 +80,7 @@
 }
 
 - (BOOL) isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {
-  int nextSlash = [aUri rangeOfString:@"/" options:nil range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
+  int nextSlash = [aUri rangeOfString:@"/" options:0 range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
   if (nextSlash < 0) {
     nextSlash = [uri length];
   }

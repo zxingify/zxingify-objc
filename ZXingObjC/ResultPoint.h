@@ -13,10 +13,9 @@
 
 @property(nonatomic, readonly) float x;
 @property(nonatomic, readonly) float y;
+
 - (id) initWithX:(float)x y:(float)y;
-- (BOOL) isEqualTo:(NSObject *)other;
-- (int) hash;
-- (NSString *) description;
-+ (void) orderBestPatterns:(NSArray *)patterns;
++ (void) orderBestPatterns:(NSMutableArray *)patterns;
 + (float) distance:(ResultPoint *)pattern1 pattern2:(ResultPoint *)pattern2;
+
 @end

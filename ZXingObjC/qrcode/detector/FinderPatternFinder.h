@@ -3,7 +3,6 @@
 #import "ResultPoint.h"
 #import "ResultPointCallback.h"
 #import "BitMatrix.h"
-#import "Collections.h"
 #import "Comparator.h"
 
 /**

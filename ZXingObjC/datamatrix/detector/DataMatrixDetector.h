@@ -1,12 +1,10 @@
 #import "NotFoundException.h"
 #import "ResultPoint.h"
 #import "BitMatrix.h"
-#import "Collections.h"
 #import "Comparator.h"
 #import "DetectorResult.h"
 #import "GridSampler.h"
 #import "WhiteRectangleDetector.h"
-#import "NSEnumerator.h"
 
 /**
  * Simply encapsulates two points and a number of transitions between them.
