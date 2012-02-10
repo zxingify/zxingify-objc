@@ -1,5 +1,4 @@
-#import "ParsedResult.h"
-#import "Result.h"
+#import "ResultParser.h"
 
 /**
  * Parses a "geo:" URI result, which specifies a location on the surface of
@@ -10,8 +9,10 @@
  * @author Sean Owen
  */
 
-@interface GeoResultParser : ResultParser {
-}
+@class GeoParsedResult;
+
+@interface GeoResultParser : ResultParser
 
 + (GeoParsedResult *) parse:(Result *)result;
+
 @end

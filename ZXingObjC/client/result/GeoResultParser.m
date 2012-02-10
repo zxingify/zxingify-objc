@@ -1,12 +1,7 @@
+#import "GeoParsedResult.h"
 #import "GeoResultParser.h"
 
 @implementation GeoResultParser
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
 
 + (GeoParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];

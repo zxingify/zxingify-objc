@@ -1,4 +1,4 @@
-#import "Result.h"
+#import "AbstractDoCoMoResultParser.h"
 
 /**
  * Implements the "MATMSG" email message entry format.
@@ -8,9 +8,11 @@
  * @author Sean Owen
  */
 
-@interface EmailDoCoMoResultParser : AbstractDoCoMoResultParser {
-}
+@class EmailAddressParsedResult, Result;
+
+@interface EmailDoCoMoResultParser : AbstractDoCoMoResultParser
 
 + (EmailAddressParsedResult *) parse:(Result *)result;
 + (BOOL) isBasicallyValidEmailAddress:(NSString *)email;
+
 @end

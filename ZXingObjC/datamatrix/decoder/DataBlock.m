@@ -1,4 +1,5 @@
 #import "DataBlock.h"
+#import "DataMatrixVersion.h"
 
 @implementation DataBlock
 
@@ -21,7 +22,7 @@
  * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
  * Data Matrix Code
  */
-+ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(Version *)version {
++ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(DataMatrixVersion *)version {
   ECBlocks * ecBlocks = [version eCBlocks];
   int totalBlocks = 0;
   NSArray * ecBlockArray = [ecBlocks eCBlocks];

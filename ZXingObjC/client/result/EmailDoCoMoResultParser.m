@@ -1,6 +1,14 @@
+#import "EmailAddressParsedResult.h"
 #import "EmailDoCoMoResultParser.h"
+#import "Result.h"
 
-NSArray * const ATEXT_SYMBOLS = [NSArray arrayWithObjects:'@', '.', '!', '#', '$', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~', nil];
+const unichar ATEXT_SYMBOLS[21] = {'@','.','!','#','$','%','&','\'','*','+','-','/','=','?','^','_','`','{','|','}','~'};
+
+@interface EmailDoCoMoResultParser ()
+
++ (BOOL) isAtextSymbol:(unichar)c;
+
+@end
 
 @implementation EmailDoCoMoResultParser
 
@@ -9,17 +17,17 @@ NSArray * const ATEXT_SYMBOLS = [NSArray arrayWithObjects:'@', '.', '!', '#', '$
   if (rawText == nil || ![rawText hasPrefix:@"MATMSG:"]) {
     return nil;
   }
-  NSArray * rawTo = [self matchDoCoMoPrefixedField:@"TO:" param1:rawText param2:YES];
+  NSArray * rawTo = [self matchDoCoMoPrefixedField:@"TO:" rawText:rawText trim:YES];
   if (rawTo == nil) {
     return nil;
   }
-  NSString * to = rawTo[0];
+  NSString * to = [rawTo objectAtIndex:0];
   if (![self isBasicallyValidEmailAddress:to]) {
     return nil;
   }
-  NSString * subject = [self matchSingleDoCoMoPrefixedField:@"SUB:" param1:rawText param2:NO];
-  NSString * body = [self matchSingleDoCoMoPrefixedField:@"BODY:" param1:rawText param2:NO];
-  return [[[EmailAddressParsedResult alloc] init:to param1:subject param2:body param3:[@"mailto:" stringByAppendingString:to]] autorelease];
+  NSString * subject = [self matchSingleDoCoMoPrefixedField:@"SUB:" rawText:rawText trim:NO];
+  NSString * body = [self matchSingleDoCoMoPrefixedField:@"BODY:" rawText:rawText trim:NO];
+  return [[[EmailAddressParsedResult alloc] init:to subject:subject body:body mailtoURI:[@"mailto:" stringByAppendingString:to]] autorelease];
 }
 
 
@@ -53,7 +61,7 @@ NSArray * const ATEXT_SYMBOLS = [NSArray arrayWithObjects:'@', '.', '!', '#', '$
 
 + (BOOL) isAtextSymbol:(unichar)c {
 
-  for (int i = 0; i < ATEXT_SYMBOLS.length; i++) {
+  for (int i = 0; i < sizeof(ATEXT_SYMBOLS) / sizeof(unichar); i++) {
     if (c == ATEXT_SYMBOLS[i]) {
       return YES;
     }

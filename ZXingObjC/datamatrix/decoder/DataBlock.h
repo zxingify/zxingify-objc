@@ -1,5 +1,3 @@
-#import "Version.h"
-
 /**
  * <p>Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into
  * multiple blocks, each of which is a unit of data and error-correction codewords. Each
@@ -8,12 +6,14 @@
  * @author bbrown@google.com (Brian Brown)
  */
 
+@class DataMatrixVersion;
+
 @interface DataBlock : NSObject {
   int numDataCodewords;
   NSArray * codewords;
 }
 
-+ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(Version *)version;
++ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(DataMatrixVersion *)version;
 - (int) getNumDataCodewords;
 - (NSArray *) getCodewords;
 @end
