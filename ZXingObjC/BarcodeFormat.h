@@ -7,80 +7,80 @@ typedef enum {
   /**
    * Aztec 2D barcode format.
    */
-  kBarcodeAztec,
+  kBarcodeFormatAztec,
 
   /**
    * CODABAR 1D format.
    */
-  kBarcodeCodabar,
+  kBarcodeFormatCodabar,
 
   /**
    * Code 39 1D format.
    */
-  kBarcodeCode39,
+  kBarcodeFormatCode39,
 
   /**
    * Code 93 1D format.
    */
-  kBarcodeCode93,
+  kBarcodeFormatCode93,
 
   /**
    * Code 128 1D format.
    */
-  kBarcodeCode128,
+  kBarcodeFormatCode128,
 
   /**
    * Data Matrix 2D barcode format.
    */
-  kBarcodeDataMatrix,
+  kBarcodeFormatDataMatrix,
 
   /**
    * EAN-8 1D format.
    */
-  kBarcodeEan8,
+  kBarcodeFormatEan8,
 
   /**
    * EAN-13 1D format.
    */
-  kBarcodeEan13,
+  kBarcodeFormatEan13,
 
   /**
    * ITF (Interleaved Two of Five) 1D format.
    */
-  kBarcodeEanITF,
+  kBarcodeFormatITF,
 
   /**
    * PDF417 format.
    */
-  kBarcodePDF417,
+  kBarcodeFormatPDF417,
 
   /**
    * QR Code 2D barcode format.
    */
-  kBarcodeQRCode,
+  kBarcodeFormatQRCode,
 
   /**
    * RSS 14
    */
-  kBarcodeRSS14,
+  kBarcodeFormatRSS14,
 
   /**
    * RSS EXPANDED
    */
-  kBarcodeRSSExpanded,
+  kBarcodeFormatRSSExpanded,
 
   /**
    * UPC-A 1D format.
    */
-  kBarcodeUPCA,
+  kBarcodeFormatUPCA,
 
   /**
    * UPC-E 1D format.
    */
-  kBarcodeUPCE,
+  kBarcodeFormatUPCE,
 
   /**
    * UPC/EAN extension format. Not a stand-alone format.
    */
-  kBarcodeUPCEANExtension
+  kBarcodeFormatUPCEANExtension
 } BarcodeFormat;

@@ -1,39 +1,40 @@
+#import "BitMatrix.h"
+#import "Code39Writer.h"
+#import "Code128Writer.h"
+#import "EAN8Writer.h"
+#import "EAN13Writer.h"
+#import "ITFWriter.h"
 #import "MultiFormatWriter.h"
-#import "Writer.h"
+#import "UPCAWriter.h"
+#import "QRCodeWriter.h"
 
 @implementation MultiFormatWriter
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height {
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
-  Writer * writer;
-  if (format == BarcodeFormat.EAN_8) {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+  id<Writer> writer;
+  if (format == kBarcodeFormatEan8) {
     writer = [[[EAN8Writer alloc] init] autorelease];
-  }
-   else if (format == BarcodeFormat.EAN_13) {
+  } else if (format == kBarcodeFormatEan13) {
     writer = [[[EAN13Writer alloc] init] autorelease];
-  }
-   else if (format == BarcodeFormat.UPC_A) {
+  } else if (format == kBarcodeFormatUPCA) {
     writer = [[[UPCAWriter alloc] init] autorelease];
-  }
-   else if (format == BarcodeFormat.QR_CODE) {
+  } else if (format == kBarcodeFormatQRCode) {
     writer = [[[QRCodeWriter alloc] init] autorelease];
-  }
-   else if (format == BarcodeFormat.CODE_39) {
+  } else if (format == kBarcodeFormatCode39) {
     writer = [[[Code39Writer alloc] init] autorelease];
-  }
-   else if (format == BarcodeFormat.CODE_128) {
+  } else if (format == kBarcodeFormatCode128) {
     writer = [[[Code128Writer alloc] init] autorelease];
-  }
-   else if (format == BarcodeFormat.ITF) {
+  } else if (format == kBarcodeFormatITF) {
     writer = [[[ITFWriter alloc] init] autorelease];
+  } else {
+    [NSException raise:NSInvalidArgumentException 
+                format:@"No encoder available for format"];
   }
-   else {
-    @throw [[[IllegalArgumentException alloc] init:[@"No encoder available for format " stringByAppendingString:format]] autorelease];
-  }
-  return [writer encode:contents param1:format param2:width param3:height param4:hints];
+  return [writer encode:contents format:format width:width height:height hints:hints];
 }
 
 @end

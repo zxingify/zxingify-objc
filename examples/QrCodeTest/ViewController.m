@@ -24,7 +24,9 @@
   // Try to create a basic QR code
   NSString* data = @"http://code.google.com/p/zxing/";
   MultiFormatWriter* writer = [[MultiFormatWriter alloc] init];
-  BitMatrix* result = [writer encode:data format:kBarcodeQRCode width:300 height:300];
+  BitMatrix* result = [writer encode:data format:kBarcodeFormatQRCode width:300 height:300];
+  
+  NSLog(@"Result is %@", result);
 }
 
 @end

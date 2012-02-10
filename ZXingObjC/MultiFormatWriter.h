@@ -1,11 +1,5 @@
-#import "BitMatrix.h"
-#import "Code128Writer.h"
-#import "Code39Writer.h"
-#import "EAN13Writer.h"
-#import "EAN8Writer.h"
-#import "ITFWriter.h"
-#import "UPCAWriter.h"
-#import "QRCodeWriter.h"
+#import "BarcodeFormat.h"
+#import "Writer.h"
 
 /**
  * This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat
@@ -14,9 +8,11 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
+@class BitMatrix;
+
 @interface MultiFormatWriter : NSObject <Writer>
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height;
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height;
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
 
 @end
