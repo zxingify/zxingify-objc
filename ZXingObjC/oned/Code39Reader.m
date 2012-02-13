@@ -146,7 +146,7 @@ int const ASTERISK_ENCODING = 0x094;
                       rawBytes:nil
                   resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
                                 [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                        format:kBarcodeCode39] autorelease];
+                        format:kBarcodeFormatCode39] autorelease];
 }
 
 - (NSArray *) findAsteriskPattern:(BitArray *)row {

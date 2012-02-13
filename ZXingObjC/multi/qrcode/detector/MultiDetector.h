@@ -2,7 +2,7 @@
 #import "ReaderException.h"
 #import "BitMatrix.h"
 #import "DetectorResult.h"
-#import "Detector.h"
+#import "QRCodeDetector.h"
 #import "FinderPatternInfo.h"
 
 /**
@@ -13,7 +13,7 @@
  * @author Hannes Erven
  */
 
-@interface MultiDetector : Detector {
+@interface MultiDetector : QRCodeDetector {
 }
 
 - (id) initWithImage:(BitMatrix *)image;

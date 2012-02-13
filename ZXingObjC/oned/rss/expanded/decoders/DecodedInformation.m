@@ -2,38 +2,28 @@
 
 @implementation DecodedInformation
 
-- (id) init:(int)newPosition newString:(NSString *)newString {
-  if (self = [super init:newPosition]) {
-    newString = newString;
+@synthesize remaining, remainingValue, theNewString;
+
+- (id) init:(int)aNewPosition newString:(NSString *)aNewString {
+  if (self = [super initWithNewPosition:aNewPosition]) {
+    theNewString = [aNewString copy];
     remaining = NO;
     remainingValue = 0;
   }
   return self;
 }
 
-- (id) init:(int)newPosition newString:(NSString *)newString remainingValue:(int)remainingValue {
-  if (self = [super init:newPosition]) {
+- (id) init:(int)aNewPosition newString:(NSString *)aNewString remainingValue:(int)aRemainingValue {
+  if (self = [super initWithNewPosition:newPosition]) {
     remaining = YES;
-    remainingValue = remainingValue;
-    newString = newString;
+    remainingValue = aRemainingValue;
+    theNewString = [aNewString copy];
   }
   return self;
 }
 
-- (NSString *) getNewString {
-  return newString;
-}
-
-- (BOOL) isRemaining {
-  return remaining;
-}
-
-- (int) getRemainingValue {
-  return remainingValue;
-}
-
 - (void) dealloc {
-  [newString release];
+  [theNewString release];
   [super dealloc];
 }
 

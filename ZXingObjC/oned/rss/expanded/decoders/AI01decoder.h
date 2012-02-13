@@ -5,6 +5,8 @@
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 
+extern const int gtinSize;
+
 @class BitArray;
 
 @interface AI01decoder : AbstractExpandedDecoder
