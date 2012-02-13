@@ -1,11 +1,15 @@
+#import "ErrorCorrectionLevel.h"
 #import "QRCodeDataBlock.h"
+#import "QRCodeVersion.h"
 
 @implementation QRCodeDataBlock
 
-- (id) init:(int)numDataCodewords codewords:(NSArray *)codewords {
+@synthesize codewords, numDataCodewords;
+
+- (id) init:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
   if (self = [super init]) {
-    numDataCodewords = numDataCodewords;
-    codewords = codewords;
+    numDataCodewords = theNumDataCodewords;
+    codewords = [theCodewords retain];
   }
   return self;
 }
@@ -22,37 +26,38 @@
  * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
  * QR Code
  */
-+ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(Version *)version ecLevel:(ErrorCorrectionLevel *)ecLevel {
-  if (rawCodewords.length != [version totalCodewords]) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
++ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel {
+  if ([rawCodewords count] != [version totalCodewords]) {
+    [NSException raise:NSInvalidArgumentException format:@"Invalid codewords count"];
   }
+
   ECBlocks * ecBlocks = [version getECBlocksForLevel:ecLevel];
-  int totalBlocks = 0;
-  NSArray * ecBlockArray = [ecBlocks eCBlocks];
 
-  for (int i = 0; i < ecBlockArray.length; i++) {
-    totalBlocks += [ecBlockArray[i] count];
+  int totalBlocks = 0;
+  NSArray * ecBlockArray = [ecBlocks ecBlocks];
+  for (int i = 0; i < [ecBlockArray count]; i++) {
+    totalBlocks += [[ecBlockArray objectAtIndex:i] count];
   }
 
-  NSArray * result = [NSArray array];
-  int numResultBlocks = 0;
-
-  for (int j = 0; j < ecBlockArray.length; j++) {
-    ECB * ecBlock = ecBlockArray[j];
-
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
+  for (ECB *ecBlock in ecBlockArray) {
     for (int i = 0; i < [ecBlock count]; i++) {
       int numDataCodewords = [ecBlock dataCodewords];
       int numBlockCodewords = [ecBlocks eCCodewordsPerBlock] + numDataCodewords;
-      result[numResultBlocks++] = [[[DataBlock alloc] init:numDataCodewords param1:[NSArray array]] autorelease];
-    }
+      NSMutableArray *newCodewords = [NSMutableArray arrayWithCapacity:numBlockCodewords];
+      for (int j = 0; j < numBlockCodewords; j++) {
+        [newCodewords addObject:[NSNull null]];
+      }
 
+      [result addObject:[[[QRCodeDataBlock alloc] init:numDataCodewords codewords:newCodewords] autorelease]];
+    }
   }
 
-  int shorterBlocksTotalCodewords = result[0].codewords.length;
-  int longerBlocksStartAt = result.length - 1;
+  int shorterBlocksTotalCodewords = [[[result objectAtIndex:0] codewords] count];
+  int longerBlocksStartAt = [result count] - 1;
 
   while (longerBlocksStartAt >= 0) {
-    int numCodewords = result[longerBlocksStartAt].codewords.length;
+    int numCodewords = [[[result objectAtIndex:longerBlocksStartAt] codewords] count];
     if (numCodewords == shorterBlocksTotalCodewords) {
       break;
     }
@@ -62,40 +67,27 @@
   longerBlocksStartAt++;
   int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - [ecBlocks eCCodewordsPerBlock];
   int rawCodewordsOffset = 0;
+  int numResultBlocks = [result count];
 
   for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
-
     for (int j = 0; j < numResultBlocks; j++) {
-      result[j].codewords[i] = rawCodewords[rawCodewordsOffset++];
+      [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:i withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
     }
-
   }
-
 
   for (int j = longerBlocksStartAt; j < numResultBlocks; j++) {
-    result[j].codewords[shorterBlocksNumDataCodewords] = rawCodewords[rawCodewordsOffset++];
+    [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:shorterBlocksNumDataCodewords withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
   }
 
-  int max = result[0].codewords.length;
-
+  int max = [[[result objectAtIndex:0] codewords] count];
   for (int i = shorterBlocksNumDataCodewords; i < max; i++) {
-
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = j < longerBlocksStartAt ? i : i + 1;
-      result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
+      [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:iOffset withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
     }
-
   }
 
   return result;
-}
-
-- (int) getNumDataCodewords {
-  return numDataCodewords;
-}
-
-- (NSArray *) getCodewords {
-  return codewords;
 }
 
 - (void) dealloc {
