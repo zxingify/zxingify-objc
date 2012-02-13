@@ -1,5 +1,3 @@
-#import "Result.h"
-
 /**
  * <p>Parses an "smtp:" URI result, whose format is not standardized but appears to be like:
  * <code>smtp(:subject(:body))</code>.</p>
@@ -9,8 +7,10 @@
  * @author Sean Owen
  */
 
-@interface SMTPResultParser : NSObject {
-}
+@class EmailAddressParsedResult, Result;
+
+@interface SMTPResultParser : NSObject
 
 + (EmailAddressParsedResult *) parse:(Result *)result;
+
 @end

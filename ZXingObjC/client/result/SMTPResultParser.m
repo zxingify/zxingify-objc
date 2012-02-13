@@ -1,13 +1,8 @@
 #import "EmailAddressParsedResult.h"
+#import "Result.h"
 #import "SMTPResultParser.h"
 
 @implementation SMTPResultParser
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
 
 + (EmailAddressParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];
@@ -20,18 +15,18 @@
   NSString * emailAddress = [rawText substringFromIndex:5];
   NSString * subject = nil;
   NSString * body = nil;
-  int colon = [emailAddress rangeOfString:':'];
+  int colon = [emailAddress rangeOfString:@":"].location;
   if (colon >= 0) {
     subject = [emailAddress substringFromIndex:colon + 1];
-    emailAddress = [emailAddress substringFromIndex:0 param1:colon];
-    colon = [subject rangeOfString:':'];
+    emailAddress = [emailAddress substringToIndex:colon];
+    colon = [subject rangeOfString:@":"].location;
     if (colon >= 0) {
       body = [subject substringFromIndex:colon + 1];
-      subject = [subject substringFromIndex:0 param1:colon];
+      subject = [subject substringToIndex:colon];
     }
   }
   NSString * mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
-  return [[[EmailAddressParsedResult alloc] init:emailAddress param1:subject param2:body param3:mailtoURI] autorelease];
+  return [[[EmailAddressParsedResult alloc] init:emailAddress subject:subject body:body mailtoURI:mailtoURI] autorelease];
 }
 
 @end
