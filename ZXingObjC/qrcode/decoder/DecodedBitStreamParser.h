@@ -7,10 +7,10 @@
  * @author Sean Owen
  */
 
-@class DecoderResult, ErrorCorrectionLevel, QrCodeVersion;
+@class DecoderResult, ErrorCorrectionLevel, QRCodeVersion;
 
 @interface DecodedBitStreamParser : NSObject
 
-+ (DecoderResult *) decode:(NSArray *)bytes version:(QrCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
++ (DecoderResult *) decode:(NSArray *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
 
 @end

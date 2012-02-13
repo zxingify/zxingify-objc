@@ -1,15 +1,33 @@
+#import "BitMatrix.h"
+#import "BitMatrixParser.h"
+#import "ChecksumException.h"
+#import "DecodedBitStreamParser.h"
+#import "DecoderResult.h"
+#import "ErrorCorrectionLevel.h"
+#import "FormatInformation.h"
+#import "GenericGF.h"
+#import "QRCodeDataBlock.h"
 #import "QRCodeDecoder.h"
+#import "QRCodeVersion.h"
+#import "ReedSolomonDecoder.h"
+#import "ReedSolomonException.h"
+
+@interface QRCodeDecoder ()
+
+- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords;
+
+@end
 
 @implementation QRCodeDecoder
 
 - (id) init {
   if (self = [super init]) {
-    rsDecoder = [[[ReedSolomonDecoder alloc] init:GenericGF.QR_CODE_FIELD_256] autorelease];
+    rsDecoder = [[[ReedSolomonDecoder alloc] initWithField:[GenericGF QrCodeField256]] autorelease];
   }
   return self;
 }
 
-- (DecoderResult *) decode:(NSArray *)image {
+- (DecoderResult *) decode:(BOOL **)image {
   return [self decode:image hints:nil];
 }
 
@@ -23,25 +41,23 @@
  * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (DecoderResult *) decode:(NSArray *)image hints:(NSMutableDictionary *)hints {
-  int dimension = image.length;
-  BitMatrix * bits = [[[BitMatrix alloc] init:dimension] autorelease];
-
+- (DecoderResult *) decodeImage:(BOOL **)image hints:(NSMutableDictionary *)hints {
+  int dimension = sizeof(image) / sizeof(BOOL *);
+  BitMatrix * bits = [[[BitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
-
     for (int j = 0; j < dimension; j++) {
       if (image[i][j]) {
-        [bits set:j param1:i];
+        [bits set:j y:i];
       }
     }
 
   }
 
-  return [self decode:bits hints:hints];
+  return [self decodeMatrix:bits hints:hints];
 }
 
-- (DecoderResult *) decode:(BitMatrix *)bits {
-  return [self decode:bits hints:nil];
+- (DecoderResult *) decodeMatrix:(BitMatrix *)bits {
+  return [self decodeMatrix:bits hints:nil];
 }
 
 
@@ -53,34 +69,31 @@
  * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (DecoderResult *) decode:(BitMatrix *)bits hints:(NSMutableDictionary *)hints {
-  BitMatrixParser * parser = [[[BitMatrixParser alloc] init:bits] autorelease];
-  Version * version = [parser readVersion];
+- (DecoderResult *) decodeMatrix:(BitMatrix *)bits hints:(NSMutableDictionary *)hints {
+  BitMatrixParser * parser = [[[BitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
+  QRCodeVersion * version = [parser readVersion];
   ErrorCorrectionLevel * ecLevel = [[parser readFormatInformation] errorCorrectionLevel];
   NSArray * codewords = [parser readCodewords];
-  NSArray * dataBlocks = [DataBlock getDataBlocks:codewords param1:version param2:ecLevel];
+  NSArray * dataBlocks = [QRCodeDataBlock getDataBlocks:codewords version:version ecLevel:ecLevel];
   int totalBytes = 0;
 
-  for (int i = 0; i < dataBlocks.length; i++) {
-    totalBytes += [dataBlocks[i] numDataCodewords];
+  for (QRCodeDataBlock *dataBlock in dataBlocks) {
+    totalBytes += dataBlock.numDataCodewords;
   }
 
-  NSArray * resultBytes = [NSArray array];
-  int resultOffset = 0;
+  NSMutableArray * resultBytes = [NSMutableArray arrayWithCapacity:totalBytes];
 
-  for (int j = 0; j < dataBlocks.length; j++) {
-    DataBlock * dataBlock = dataBlocks[j];
-    NSArray * codewordBytes = [dataBlock codewords];
+  for (QRCodeDataBlock *dataBlock in dataBlocks) {
+    NSMutableArray * codewordBytes = [dataBlock codewords];
     int numDataCodewords = [dataBlock numDataCodewords];
     [self correctErrors:codewordBytes numDataCodewords:numDataCodewords];
 
     for (int i = 0; i < numDataCodewords; i++) {
-      resultBytes[resultOffset++] = codewordBytes[i];
+      [resultBytes addObject:[codewordBytes objectAtIndex:i]];
     }
-
   }
 
-  return [DecodedBitStreamParser decode:resultBytes param1:version param2:ecLevel param3:hints];
+  return [DecodedBitStreamParser decode:resultBytes version:version ecLevel:ecLevel hints:hints];
 }
 
 
@@ -92,27 +105,26 @@
  * @param numDataCodewords number of codewords that are data bytes
  * @throws ChecksumException if error correction fails
  */
-- (void) correctErrors:(NSArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
-  int numCodewords = codewordBytes.length;
-  NSArray * codewordsInts = [NSArray array];
+- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
+  int numCodewords = [codewordBytes count];
+  NSMutableArray * codewordsInts = [NSMutableArray arrayWithCapacity:numCodewords];
 
   for (int i = 0; i < numCodewords; i++) {
-    codewordsInts[i] = codewordBytes[i] & 0xFF;
+    [codewordsInts addObject:[NSNumber numberWithInt:[[codewordBytes objectAtIndex:i] charValue] & 0xFF]];
   }
 
-  int numECCodewords = codewordBytes.length - numDataCodewords;
+  int numECCodewords = [codewordBytes count] - numDataCodewords;
 
   @try {
-    [rsDecoder decode:codewordsInts param1:numECCodewords];
+    [rsDecoder decode:codewordsInts twoS:numECCodewords];
   }
   @catch (ReedSolomonException * rse) {
     @throw [ChecksumException checksumInstance];
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
-    codewordBytes[i] = (char)codewordsInts[i];
+    [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:[[codewordsInts objectAtIndex:i] charValue]]];
   }
-
 }
 
 - (void) dealloc {

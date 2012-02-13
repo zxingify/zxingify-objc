@@ -1,11 +1,11 @@
 #import "BitMatrix.h"
 #import "BitMatrixParser.h"
 #import "FormatException.h"
-#import "Version.h"
+#import "QRCodeVersion.h"
 
 @interface BitMatrixParser ()
 
-- (Version *) readVersion:(BitMatrix *)bitMatrix;
+- (QRCodeVersion *) readVersion:(BitMatrix *)bitMatrix;
 
 @end
 
@@ -31,11 +31,6 @@
   return self;
 }
 
-- (Version *) getVersion {
-  return version;
-}
-
-
 /**
  * <p>Creates the version object based on the dimension of the original bit matrix from 
  * the datamatrix code.</p>
@@ -47,10 +42,10 @@
  * @throws FormatException if the dimensions of the mapping matrix are not valid
  * Data Matrix dimensions.
  */
-- (Version *) readVersion:(BitMatrix *)bitMatrix {
+- (QRCodeVersion *) readVersion:(BitMatrix *)bitMatrix {
   int numRows = [bitMatrix height];
   int numColumns = [bitMatrix width];
-  return [Version getVersionForDimensions:numRows numColumns:numColumns];
+  return [QRCodeVersion getVersionForDimensions:numRows numColumns:numColumns];
 }
 
 

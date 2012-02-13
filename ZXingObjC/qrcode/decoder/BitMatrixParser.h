@@ -2,17 +2,17 @@
  * @author Sean Owen
  */
 
-@class BitMatrix, FormatInformation, QrCodeVersion;
+@class BitMatrix, FormatInformation, QRCodeVersion;
 
 @interface BitMatrixParser : NSObject {
   BitMatrix * bitMatrix;
-  QrCodeVersion * parsedVersion;
+  QRCodeVersion * parsedVersion;
   FormatInformation * parsedFormatInfo;
 }
 
 - (id) initWithBitMatrix:(BitMatrix *)bitMatrix;
 - (FormatInformation *) readFormatInformation;
-- (QrCodeVersion *) readVersion;
+- (QRCodeVersion *) readVersion;
 - (NSArray *) readCodewords;
 
 @end

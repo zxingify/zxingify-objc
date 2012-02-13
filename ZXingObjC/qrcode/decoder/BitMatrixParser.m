@@ -2,7 +2,7 @@
 #import "BitMatrixParser.h"
 #import "FormatException.h"
 #import "FormatInformation.h"
-#import "QrCodeVersion.h"
+#import "QRCodeVersion.h"
 
 @implementation BitMatrixParser
 
@@ -75,7 +75,7 @@
  * @throws FormatException if both version information locations cannot be parsed as
  * the valid encoding of version information
  */
-- (Version *) readVersion {
+- (QRCodeVersion *) readVersion {
   if (parsedVersion != nil) {
     return parsedVersion;
   }

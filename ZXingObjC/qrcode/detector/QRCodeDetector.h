@@ -7,7 +7,7 @@
 #import "DetectorResult.h"
 #import "GridSampler.h"
 #import "PerspectiveTransform.h"
-#import "QrCodeVersion.h"
+#import "QRCodeVersion.h"
 
 /**
  * <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code

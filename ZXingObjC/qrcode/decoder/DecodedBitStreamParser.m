@@ -5,7 +5,7 @@
 #import "ErrorCorrectionLevel.h"
 #import "FormatException.h"
 #import "Mode.h"
-#import "QrCodeVersion.h"
+#import "QRCodeVersion.h"
 #import "StringUtils.h"
 
 
@@ -40,7 +40,7 @@ int const GB2312_SUBSET = 1;
   return self;
 }
 
-+ (DecoderResult *) decode:(NSArray *)bytes version:(QrCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
++ (DecoderResult *) decode:(NSArray *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
   BitSource * bits = [[[BitSource alloc] initWithBytes:bytes] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:50];
   CharacterSetECI * currentCharacterSetECI = nil;

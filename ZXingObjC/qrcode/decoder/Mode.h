@@ -5,7 +5,7 @@
  * @author Sean Owen
  */
 
-@class QrCodeVersion;
+@class QRCodeVersion;
 
 @interface Mode : NSObject {
   NSArray * characterCountBitsForVersions;
@@ -20,7 +20,7 @@
                                        bits:(int)bits
                                        name:(NSString *)name;
 + (Mode *) forBits:(int)bits;
-- (int) getCharacterCountBits:(QrCodeVersion *)version;
+- (int) getCharacterCountBits:(QRCodeVersion *)version;
 
 + (Mode *)terminatorMode; // Not really a mode...
 + (Mode *)numericMode;

@@ -54,6 +54,8 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 
 @implementation FormatInformation
 
+@synthesize errorCorrectionLevel;
+
 - (id) initWithFormatInfo:(int)formatInfo {
   if (self = [super init]) {
     errorCorrectionLevel = [ErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03];
@@ -110,10 +112,6 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
     return [[[FormatInformation alloc] initWithFormatInfo:bestFormatInfo] autorelease];
   }
   return nil;
-}
-
-- (ErrorCorrectionLevel *) getErrorCorrectionLevel {
-  return errorCorrectionLevel;
 }
 
 - (char) getDataMask {
