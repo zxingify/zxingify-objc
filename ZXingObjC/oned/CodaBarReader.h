@@ -1,8 +1,4 @@
-#import "BarcodeFormat.h"
-#import "NotFoundException.h"
-#import "Result.h"
-#import "ResultPoint.h"
-#import "BitArray.h"
+#import "OneDReader.h"
 
 /**
  * <p>Decodes Codabar barcodes.</p>
@@ -10,8 +6,10 @@
  * @author Bas Vijfwinkel
  */
 
-@interface CodaBarReader : OneDReader {
-}
+@class BitArray, Result;
+
+@interface CodaBarReader : OneDReader
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
+
 @end
