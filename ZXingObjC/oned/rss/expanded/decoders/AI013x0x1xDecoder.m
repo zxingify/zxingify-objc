@@ -1,16 +1,24 @@
 #import "AI013x0x1xDecoder.h"
 #import "BitArray.h"
+#import "GeneralAppIdDecoder.h"
+#import "NotFoundException.h"
 
 int const headerSize = 7 + 1;
 int const weightSize = 20;
 int const dateSize = 16;
 
+@interface AI013x0x1xDecoder ()
+
+- (void) encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos;
+
+@end
+
 @implementation AI013x0x1xDecoder
 
-- (id) init:(BitArray *)information firstAIdigits:(NSString *)firstAIdigits dateCode:(NSString *)dateCode {
-  if (self = [super initWithInformation:information]) {
-    dateCode = dateCode;
-    firstAIdigits = firstAIdigits;
+- (id) initWithInformation:(BitArray *)anInformation firstAIdigits:(NSString *)aFirstAIdigits dateCode:(NSString *)aDateCode {
+  if (self = [super initWithInformation:anInformation]) {
+    dateCode = [aDateCode copy];
+    firstAIdigits = [aFirstAIdigits copy];
   }
   return self;
 }
@@ -19,46 +27,41 @@ int const dateSize = 16;
   if (information.size != headerSize + gtinSize + weightSize + dateSize) {
     @throw [NotFoundException notFoundInstance];
   }
-  NSMutableString * buf = [[[NSMutableString alloc] init] autorelease];
-  [self encodeCompressedGtin:buf param1:headerSize];
-  [self encodeCompressedWeight:buf param1:headerSize + gtinSize param2:weightSize];
+  NSMutableString * buf = [NSMutableString string];
+  [self encodeCompressedGtin:buf currentPos:headerSize];
+  [self encodeCompressedWeight:buf currentPos:headerSize + gtinSize weightSize:weightSize];
   [self encodeCompressedDate:buf currentPos:headerSize + gtinSize + weightSize];
   return [buf description];
 }
 
 - (void) encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos {
-  int numericDate = [generalDecoder extractNumericValueFromBitArray:currentPos param1:dateSize];
+  int numericDate = [generalDecoder extractNumericValueFromBitArray:currentPos bits:dateSize];
   if (numericDate == 38400) {
     return;
   }
-  [buf append:'('];
-  [buf append:dateCode];
-  [buf append:')'];
+  [buf appendFormat:@"(%@)", dateCode];
   int day = numericDate % 32;
   numericDate /= 32;
   int month = numericDate % 12 + 1;
   numericDate /= 12;
   int year = numericDate;
   if (year / 10 == 0) {
-    [buf append:'0'];
+    [buf appendString:@"0"];
   }
-  [buf append:year];
+  [buf appendFormat:@"%d", year];
   if (month / 10 == 0) {
-    [buf append:'0'];
+    [buf appendString:@"0"];
   }
-  [buf append:month];
+  [buf appendFormat:@"%d", month];
   if (day / 10 == 0) {
-    [buf append:'0'];
+    [buf appendString:@"0"];
   }
-  [buf append:day];
+  [buf appendFormat:@"%d", day];
 }
 
 - (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
   int lastAI = weight / 100000;
-  [buf append:'('];
-  [buf append:firstAIdigits];
-  [buf append:lastAI];
-  [buf append:')'];
+  [buf appendFormat:@"(%@%d)", firstAIdigits, lastAI];
 }
 
 - (int) checkWeight:(int)weight {

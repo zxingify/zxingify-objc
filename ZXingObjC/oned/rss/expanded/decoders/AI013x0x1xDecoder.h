@@ -16,4 +16,5 @@
 - (NSString *) parseInformation;
 - (void) addWeightCode:(NSMutableString *)buf weight:(int)weight;
 - (int) checkWeight:(int)weight;
+
 @end
