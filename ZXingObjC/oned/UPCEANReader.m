@@ -1,4 +1,12 @@
+#import "ChecksumException.h"
+#import "DecodeHintType.h"
+#import "EANManufacturerOrgSupport.h"
+#import "FormatException.h"
+#import "ReaderException.h"
+#import "Result.h"
+#import "ResultPointCallback.h"
 #import "UPCEANReader.h"
+#import "UPCEANExtensionSupport.h"
 
 int const MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
 int const MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
@@ -6,51 +14,62 @@ int const MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.
 /**
  * Start/end guard pattern.
  */
-NSArray * const START_END_PATTERN = [NSArray arrayWithObjects:1, 1, 1, nil];
+int const START_END_PATTERN[3] = {1, 1, 1};
 
 /**
  * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
  */
-NSArray * const MIDDLE_PATTERN = [NSArray arrayWithObjects:1, 1, 1, 1, 1, nil];
+int const MIDDLE_PATTERN[5] = {1, 1, 1, 1, 1};
 
 /**
  * "Odd", or "L" patterns used to encode UPC/EAN digits.
  */
-NSArray * const L_PATTERNS = [NSArray arrayWithObjects:[NSArray arrayWithObjects:3, 2, 1, 1, nil], [NSArray arrayWithObjects:2, 2, 2, 1, nil], [NSArray arrayWithObjects:2, 1, 2, 2, nil], [NSArray arrayWithObjects:1, 4, 1, 1, nil], [NSArray arrayWithObjects:1, 1, 3, 2, nil], [NSArray arrayWithObjects:1, 2, 3, 1, nil], [NSArray arrayWithObjects:1, 1, 1, 4, nil], [NSArray arrayWithObjects:1, 3, 1, 2, nil], [NSArray arrayWithObjects:1, 2, 1, 3, nil], [NSArray arrayWithObjects:3, 1, 1, 2, nil], nil];
+int const L_PATTERNS[10][4] = {
+  {3, 2, 1, 1}, // 0
+  {2, 2, 2, 1}, // 1
+  {2, 1, 2, 2}, // 2
+  {1, 4, 1, 1}, // 3
+  {1, 1, 3, 2}, // 4
+  {1, 2, 3, 1}, // 5
+  {1, 1, 1, 4}, // 6
+  {1, 3, 1, 2}, // 7
+  {1, 2, 1, 3}, // 8
+  {3, 1, 1, 2}  // 9
+};
 
 /**
  * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
  */
-NSArray * const L_AND_G_PATTERNS;
+static int L_AND_G_PATTERNS[20][4];
+
+@interface UPCEANReader ()
+
+- (BOOL) checkStandardUPCEANChecksum:(NSString *)s;
+
+@end
 
 @implementation UPCEANReader
 
 + (void) initialize {
-  L_AND_G_PATTERNS = [NSArray array];
-
   for (int i = 0; i < 10; i++) {
-    L_AND_G_PATTERNS[i] = L_PATTERNS[i];
+    for (int j = 0; j < sizeof(L_PATTERNS[i]) / sizeof(int); j++) {
+      L_AND_G_PATTERNS[i][j] = L_PATTERNS[i][j];
+    }
   }
-
 
   for (int i = 10; i < 20; i++) {
-    NSArray * widths = L_PATTERNS[i - 10];
-    NSArray * reversedWidths = [NSArray array];
-
-    for (int j = 0; j < widths.length; j++) {
-      reversedWidths[j] = widths[widths.length - j - 1];
+    int *widths = (int*)L_PATTERNS[i - 10];
+    for (int j = 0; j < sizeof(widths) / sizeof(int); j++) {
+      L_AND_G_PATTERNS[i][j] = widths[sizeof(widths) / sizeof(int) - j - 1];
     }
-
-    L_AND_G_PATTERNS[i] = reversedWidths;
   }
-
 }
 
 - (id) init {
   if (self = [super init]) {
-    decodeRowNSMutableString = [[[NSMutableString alloc] init:20] autorelease];
-    extensionReader = [[[UPCEANExtensionSupport alloc] init] autorelease];
-    eanManSupport = [[[EANManufacturerOrgSupport alloc] init] autorelease];
+    decodeRowNSMutableString = [[NSMutableString alloc] initWithCapacity:20];
+    extensionReader = [[UPCEANExtensionSupport alloc] init];
+    eanManSupport = [[EANManufacturerOrgSupport alloc] init];
   }
   return self;
 }
@@ -61,12 +80,12 @@ NSArray * const L_AND_G_PATTERNS;
   int nextStart = 0;
 
   while (!foundStart) {
-    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:START_END_PATTERN];
-    int start = startRange[0];
-    nextStart = startRange[1];
+    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:(int*)START_END_PATTERN];
+    int start = [[startRange objectAtIndex:0] intValue];
+    nextStart = [[startRange objectAtIndex:1] intValue];
     int quietStart = start - (nextStart - start);
     if (quietStart >= 0) {
-      foundStart = [row isRange:quietStart param1:start param2:NO];
+      foundStart = [row isRange:quietStart end:start value:NO];
     }
   }
 
@@ -74,7 +93,7 @@ NSArray * const L_AND_G_PATTERNS;
 }
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
-  return [self decodeRow:rowNumber row:row startGuardRange:[self findStartGuardPattern:row] hints:hints];
+  return [self decodeRow:rowNumber row:row startGuardRange:[UPCEANReader findStartGuardPattern:row] hints:hints];
 }
 
 
@@ -84,45 +103,47 @@ NSArray * const L_AND_G_PATTERNS;
  * found. This allows this to be computed once and reused across many implementations.</p>
  */
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints {
-  ResultPointCallback * resultPointCallback = hints == nil ? nil : (ResultPointCallback *)[hints objectForKey:DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+  id<ResultPointCallback> resultPointCallback = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]];
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] init:(startGuardRange[0] + startGuardRange[1]) / 2.0f param1:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] initWithX:([[startGuardRange objectAtIndex:0] intValue] + [[startGuardRange objectAtIndex:1] intValue]) / 2.0f y:rowNumber] autorelease]];
   }
-  NSMutableString * result = decodeRowNSMutableString;
-  [result setLength:0];
+  NSMutableString * result = [NSMutableString string];
   int endStart = [self decodeMiddle:row startRange:startGuardRange resultString:result];
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] init:endStart param1:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] initWithX:endStart y:rowNumber] autorelease]];
   }
   NSArray * endRange = [self decodeEnd:row endStart:endStart];
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] init:(endRange[0] + endRange[1]) / 2.0f param1:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] initWithX:([[endRange objectAtIndex:0] intValue] + [[endRange objectAtIndex:1] intValue]) / 2.0f y:rowNumber] autorelease]];
   }
-  int end = endRange[1];
-  int quietEnd = end + (end - endRange[0]);
-  if (quietEnd >= [row size] || ![row isRange:end param1:quietEnd param2:NO]) {
+  int end = [[endRange objectAtIndex:1] intValue];
+  int quietEnd = end + (end - [[endRange objectAtIndex:0] intValue]);
+  if (quietEnd >= [row size] || ![row isRange:end end:quietEnd value:NO]) {
     @throw [NotFoundException notFoundInstance];
   }
   NSString * resultString = [result description];
   if (![self checkChecksum:resultString]) {
     @throw [ChecksumException checksumInstance];
   }
-  float left = (float)(startGuardRange[1] + startGuardRange[0]) / 2.0f;
-  float right = (float)(endRange[1] + endRange[0]) / 2.0f;
-  BarcodeFormat * format = [self barcodeFormat];
-  Result * decodeResult = [[[Result alloc] init:resultString param1:nil param2:[NSArray arrayWithObjects:[[[ResultPoint alloc] init:left param1:(float)rowNumber] autorelease], [[[ResultPoint alloc] init:right param1:(float)rowNumber] autorelease], nil] param3:format] autorelease];
+  float left = (float)([[startGuardRange objectAtIndex:1] intValue] + [[startGuardRange objectAtIndex:0] intValue]) / 2.0f;
+  float right = (float)([[endRange objectAtIndex:1] intValue] + [[endRange objectAtIndex:0] intValue]) / 2.0f;
+  BarcodeFormat format = [self barcodeFormat];
+  Result * decodeResult = [[[Result alloc] initWithText:resultString
+                                               rawBytes:nil
+                                           resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                                 format:format] autorelease];
 
   @try {
-    Result * extensionResult = [extensionReader decodeRow:rowNumber param1:row param2:endRange[1]];
+    Result * extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:[[endRange objectAtIndex:1] intValue]];
     [decodeResult putAllMetadata:[extensionResult resultMetadata]];
     [decodeResult addResultPoints:[extensionResult resultPoints]];
   }
   @catch (ReaderException * re) {
   }
-  if ([BarcodeFormat.EAN_13 isEqualTo:format] || [BarcodeFormat.UPC_A isEqualTo:format]) {
+  if (format == kBarcodeFormatEan13 || format == kBarcodeFormatUPCA) {
     NSString * countryID = [eanManSupport lookupCountryIdentifier:resultString];
     if (countryID != nil) {
-      [decodeResult putMetadata:ResultMetadataType.POSSIBLE_COUNTRY param1:countryID];
+      [decodeResult putMetadata:kResultMetadataTypePossibleCountry value:countryID];
     }
   }
   return decodeResult;
@@ -145,7 +166,7 @@ NSArray * const L_AND_G_PATTERNS;
  * @return true iff string of digits passes the UPC/EAN checksum algorithm
  * @throws FormatException if the string does not contain only digits
  */
-+ (BOOL) checkStandardUPCEANChecksum:(NSString *)s {
+- (BOOL) checkStandardUPCEANChecksum:(NSString *)s {
   int length = [s length];
   if (length == 0) {
     return NO;
@@ -174,7 +195,7 @@ NSArray * const L_AND_G_PATTERNS;
 }
 
 - (NSArray *) decodeEnd:(BitArray *)row endStart:(int)endStart {
-  return [self findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:START_END_PATTERN];
+  return [UPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:(int*)START_END_PATTERN];
 }
 
 
@@ -188,9 +209,9 @@ NSArray * const L_AND_G_PATTERNS;
  * @return start/end horizontal offset of guard pattern, as an array of two ints
  * @throws NotFoundException if pattern is not found
  */
-+ (NSArray *) findGuardPattern:(BitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(NSArray *)pattern {
-  int patternLength = pattern.length;
-  NSArray * counters = [NSArray array];
++ (NSArray *) findGuardPattern:(BitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int[])pattern {
+  int patternLength = sizeof((int*)pattern) / sizeof(int);
+  int counters[patternLength];
   int width = [row size];
   BOOL isWhite = NO;
 
@@ -212,8 +233,8 @@ NSArray * const L_AND_G_PATTERNS;
     }
      else {
       if (counterPosition == patternLength - 1) {
-        if ([self patternMatchVariance:counters param1:pattern param2:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
-          return [NSArray arrayWithObjects:patternStart, x, nil];
+        if ([self patternMatchVariance:(int*)counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
         }
         patternStart += counters[0] + counters[1];
 
@@ -249,15 +270,15 @@ NSArray * const L_AND_G_PATTERNS;
  * @return horizontal offset of first pixel beyond the decoded digit
  * @throws NotFoundException if digit cannot be decoded
  */
-+ (int) decodeDigit:(BitArray *)row counters:(NSArray *)counters rowOffset:(int)rowOffset patterns:(NSArray *)patterns {
-  [self recordPattern:row param1:rowOffset param2:counters];
++ (int) decodeDigit:(BitArray *)row counters:(int[])counters rowOffset:(int)rowOffset patterns:(int*[])patterns {
+  [self recordPattern:row start:rowOffset counters:counters];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
-  int max = patterns.length;
+  int max = sizeof((int**)patterns) / sizeof(int*);
 
   for (int i = 0; i < max; i++) {
-    NSArray * pattern = patterns[i];
-    int variance = [self patternMatchVariance:counters param1:pattern param2:MAX_INDIVIDUAL_VARIANCE];
+    int *pattern = (int*)patterns[i];
+    int variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = i;
@@ -278,7 +299,10 @@ NSArray * const L_AND_G_PATTERNS;
  * 
  * @return The 1D format.
  */
-- (BarcodeFormat *) getBarcodeFormat {
+- (BarcodeFormat) barcodeFormat {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 

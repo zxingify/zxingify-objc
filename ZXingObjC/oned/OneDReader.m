@@ -84,8 +84,7 @@
   int maxLines;
   if (tryHarder) {
     maxLines = height;
-  }
-   else {
+  } else {
     maxLines = 15;
   }
 
@@ -158,11 +157,11 @@
  * @throws NotFoundException if counters cannot be filled entirely from row before running out
  * of pixels
  */
-+ (void) recordPattern:(BitArray *)row start:(int)start counters:(NSMutableArray *)counters {
-  int numCounters = [counters count];
++ (void) recordPattern:(BitArray *)row start:(int)start counters:(int[])counters {
+  int numCounters = sizeof((int*)counters) / sizeof(int);
 
   for (int i = 0; i < numCounters; i++) {
-    [counters replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:0]];
+    counters[i] = 0;
   }
 
   int end = [row size];
@@ -176,15 +175,13 @@
   while (i < end) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition withObject:
-       [NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
-    }
-     else {
+      counters[counterPosition]++;
+    } else {
       counterPosition++;
       if (counterPosition == numCounters) {
         break;
       } else {
-        [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+        counters[counterPosition] = 1;
         isWhite = !isWhite;
       }
     }
@@ -196,8 +193,8 @@
   }
 }
 
-+ (void) recordPatternInReverse:(BitArray *)row start:(int)start counters:(NSMutableArray *)counters {
-  int numTransitionsLeft = [counters count];
++ (void) recordPatternInReverse:(BitArray *)row start:(int)start counters:(int[])counters {
+  int numTransitionsLeft = sizeof((int*)counters) / sizeof(int);
   BOOL last = [row get:start];
 
   while (start > 0 && numTransitionsLeft >= 0) {
@@ -227,14 +224,14 @@
  * the total variance between counters and patterns equals the pattern length, higher values mean
  * even more variance
  */
-+ (int) patternMatchVariance:(NSArray *)counters pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
-  int numCounters = [counters count];
++ (int) patternMatchVariance:(int[])counters pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
+  int numCounters = sizeof((int*)counters) / sizeof(int);
   int total = 0;
   int patternLength = 0;
 
   for (int i = 0; i < numCounters; i++) {
-    total += [[counters objectAtIndex:i] intValue];
-    patternLength += [[pattern objectAtIndex:i] intValue];
+    total += counters[i];
+    patternLength += pattern[i];
   }
 
   if (total < patternLength) {
@@ -245,8 +242,8 @@
   int totalVariance = 0;
 
   for (int x = 0; x < numCounters; x++) {
-    int counter = [[counters objectAtIndex:x] intValue] << INTEGER_MATH_SHIFT;
-    int scaledPattern = [[pattern objectAtIndex:x] intValue] * unitBarWidth;
+    int counter = counters[x] << INTEGER_MATH_SHIFT;
+    int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
       return NSIntegerMax;

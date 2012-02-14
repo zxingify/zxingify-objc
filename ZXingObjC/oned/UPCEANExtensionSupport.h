@@ -10,7 +10,7 @@
   NSMutableString * decodeRowNSMutableString;
 }
 
-- (void) init;
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row rowOffset:(int)rowOffset;
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
+
 @end

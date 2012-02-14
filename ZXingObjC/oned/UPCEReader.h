@@ -1,8 +1,4 @@
 #import "BarcodeFormat.h"
-#import "ChecksumException.h"
-#import "FormatException.h"
-#import "NotFoundException.h"
-#import "BitArray.h"
 #import "UPCEANReader.h"
 
 /**
@@ -14,14 +10,17 @@
  * @author Sean Owen
  */
 
+@class BitArray;
+
 @interface UPCEReader : UPCEANReader {
-  NSArray * decodeMiddleCounters;
+  int decodeMiddleCounters[4];
 }
 
-- (id) init;
+@property (nonatomic, readonly) BarcodeFormat barcodeFormat;
+
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
 - (NSArray *) decodeEnd:(BitArray *)row endStart:(int)endStart;
 - (BOOL) checkChecksum:(NSString *)s;
-- (BarcodeFormat *) getBarcodeFormat;
 + (NSString *) convertUPCEtoUPCA:(NSString *)upce;
+
 @end
