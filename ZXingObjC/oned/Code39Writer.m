@@ -22,7 +22,7 @@
   int length = [contents length];
   if (length > 80) {
     [NSException raise:NSInvalidArgumentException 
-                format:[NSString stringWithFormat:@"Requested contents should be less than 80 digits long, but got %d", length]];
+                format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
   NSMutableArray * widths = [NSMutableArray arrayWithCapacity:9];
   int codeWidth = 24 + 1 + length;

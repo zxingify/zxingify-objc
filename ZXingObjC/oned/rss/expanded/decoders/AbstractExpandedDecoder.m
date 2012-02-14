@@ -68,7 +68,7 @@
     return [[[AI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"17"] autorelease];
   }
   [NSException raise:NSInternalInconsistencyException
-              format:[NSString stringWithFormat@"unknown decoder: %@", information]];
+              format:@"unknown decoder: %@", information];
 }
 
 - (void) dealloc {

@@ -4,7 +4,7 @@
 #import "ResultPointCallback.h"
 #import "BitMatrix.h"
 #import "Comparator.h"
-#import "FinderPattern.h"
+#import "QRCodeFinderPattern.h"
 #import "FinderPatternFinder.h"
 #import "FinderPatternInfo.h"
 
