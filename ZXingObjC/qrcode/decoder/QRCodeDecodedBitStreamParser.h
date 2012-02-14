@@ -9,8 +9,8 @@
 
 @class DecoderResult, ErrorCorrectionLevel, QRCodeVersion;
 
-@interface DecodedBitStreamParser : NSObject
+@interface QRCodeDecodedBitStreamParser : NSObject
 
-+ (DecoderResult *) decode:(NSArray *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
++ (DecoderResult *) decode:(char *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
 
 @end

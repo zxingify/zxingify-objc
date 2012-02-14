@@ -12,27 +12,31 @@ NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
 
 @synthesize type, payload, totalRecordLength;
 
-- (id) initWithHeader:(int)aHeader type:(NSString *)aType payload:(NSArray *)aPayload totalRecordLength:(int)aTotalRecordLength {
+- (id) initWithHeader:(int)aHeader type:(NSString *)aType payload:(char *)aPayload totalRecordLength:(int)aTotalRecordLength {
   if (self = [super init]) {
     header = aHeader;
     type = [aType copy];
-    payload = [aPayload retain];
+    payload = aPayload;
     totalRecordLength = aTotalRecordLength;
   }
   return self;
 }
 
-+ (NDEFRecord *) readRecord:(NSArray *)bytes offset:(int)offset {
-  int header = [[bytes objectAtIndex:offset] charValue] & 0xFF;
++ (NDEFRecord *) readRecord:(char *)bytes offset:(int)offset {
+  int header = bytes[offset] & 0xFF;
   if (((header ^ SUPPORTED_HEADER) & SUPPORTED_HEADER_MASK) != 0) {
     return nil;
   }
-  int typeLength = [[bytes objectAtIndex:offset + 1] charValue] & 0xFF;
-  int payloadLength = [[bytes objectAtIndex:offset + 2] charValue] & 0xFF;
-  NSString * type = [AbstractNDEFResultParser bytesToString:bytes offset:offset + 3 length:typeLength encoding:@"US-ASCII"];
-  NSMutableArray * payload = [NSMutableArray arrayWithCapacity:payloadLength];
+  int typeLength = bytes[offset + 1] & 0xFF;
+  
+  int payloadLength = bytes[offset + 2] & 0xFF;
+
+  NSString * type = [AbstractNDEFResultParser bytesToString:bytes offset:offset + 3 length:typeLength encoding:NSASCIIStringEncoding];
+
+  char payload[payloadLength];
+  int payloadCount = 0;
   for (int i = offset + 3 + typeLength; i < offset + 3 + typeLength + payloadLength; i++) {
-    [payload addObject:[bytes objectAtIndex:i]];
+    payload[payloadCount++] = bytes[i];
   }
 
   return [[[NDEFRecord alloc] initWithHeader:header type:type payload:payload totalRecordLength:3 + typeLength + payloadLength] autorelease];
@@ -46,21 +50,8 @@ NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
   return (header & 0x40) != 0;
 }
 
-- (NSString *) getType {
-  return type;
-}
-
-- (NSArray *) getPayload {
-  return payload;
-}
-
-- (int) getTotalRecordLength {
-  return totalRecordLength;
-}
-
 - (void) dealloc {
   [type release];
-  [payload release];
   [super dealloc];
 }
 

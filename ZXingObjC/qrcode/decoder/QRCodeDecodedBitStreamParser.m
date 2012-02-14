@@ -1,10 +1,10 @@
 #import "BitSource.h"
 #import "CharacterSetECI.h"
-#import "DecodedBitStreamParser.h"
 #import "DecoderResult.h"
 #import "ErrorCorrectionLevel.h"
 #import "FormatException.h"
 #import "Mode.h"
+#import "QRCodeDecodedBitStreamParser.h"
 #import "QRCodeVersion.h"
 #import "StringUtils.h"
 
@@ -21,7 +21,7 @@ char const ALPHANUMERIC_CHARS[45] = {
 
 int const GB2312_SUBSET = 1;
 
-@interface DecodedBitStreamParser ()
+@interface QRCodeDecodedBitStreamParser ()
 
 + (void) decodeHanziSegment:(BitSource *)bits result:(NSMutableString *)result count:(int)count;
 + (void) decodeKanjiSegment:(BitSource *)bits result:(NSMutableString *)result count:(int)count;
@@ -32,7 +32,7 @@ int const GB2312_SUBSET = 1;
 
 @end
 
-@implementation DecodedBitStreamParser
+@implementation QRCodeDecodedBitStreamParser
 
 - (id) init {
   if (self = [super init]) {
@@ -40,7 +40,7 @@ int const GB2312_SUBSET = 1;
   return self;
 }
 
-+ (DecoderResult *) decode:(NSArray *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
++ (DecoderResult *) decode:(char *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
   BitSource * bits = [[[BitSource alloc] initWithBytes:bytes] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:50];
   CharacterSetECI * currentCharacterSetECI = nil;
@@ -233,8 +233,8 @@ int const GB2312_SUBSET = 1;
     if (twoDigitsBits >= 100) {
       @throw [FormatException formatInstance];
     }
-    [result append:[self toAlphaNumericChar:twoDigitsBits / 10]];
-    [result append:[self toAlphaNumericChar:twoDigitsBits % 10]];
+    [result appendFormat:@"%c", [self toAlphaNumericChar:twoDigitsBits / 10]];
+    [result appendFormat:@"%c", [self toAlphaNumericChar:twoDigitsBits % 10]];
   }
    else if (count == 1) {
     int digitBits = [bits readBits:4];

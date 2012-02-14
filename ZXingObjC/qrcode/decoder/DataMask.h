@@ -1,94 +1,3 @@
-#import "BitMatrix.h"
-#import "DataMask.h"
-
-@interface DataMask : NSObject {
-}
-
-- (void) unmaskBitMatrix:(BitMatrix *)bits dimension:(int)dimension;
-- (BOOL) isMasked:(int)i j:(int)j;
-+ (DataMask *) forReference:(int)reference;
-@end
-
-/**
- * 000: mask bits for which (x + y) mod 2 == 0
- */
-
-@interface DataMask000 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 001: mask bits for which x mod 2 == 0
- */
-
-@interface DataMask001 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 010: mask bits for which y mod 3 == 0
- */
-
-@interface DataMask010 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 011: mask bits for which (x + y) mod 3 == 0
- */
-
-@interface DataMask011 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 100: mask bits for which (x/2 + y/3) mod 2 == 0
- */
-
-@interface DataMask100 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 101: mask bits for which xy mod 2 + xy mod 3 == 0
- */
-
-@interface DataMask101 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
- */
-
-@interface DataMask110 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
-/**
- * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
- */
-
-@interface DataMask111 : DataMask {
-}
-
-- (BOOL) isMasked:(int)i j:(int)j;
-@end
-
 /**
  * <p>Encapsulates data masks for the data bits in a QR code, per ISO 18004:2006 6.8. Implementations
  * of this class can un-mask a raw BitMatrix. For simplicity, they will unmask the entire BitMatrix,
@@ -101,3 +10,12 @@
  * @author Sean Owen
  */
 
+@class BitMatrix;
+
+@interface DataMask : NSObject
+
+- (void) unmaskBitMatrix:(BitMatrix *)bits dimension:(int)dimension;
+- (BOOL) isMasked:(int)i j:(int)j;
++ (DataMask *) forReference:(int)reference;
+
+@end

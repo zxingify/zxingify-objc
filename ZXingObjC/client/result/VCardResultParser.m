@@ -2,12 +2,6 @@
 
 @implementation VCardResultParser
 
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
 + (AddressBookParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];
   if (rawText == nil || ![rawText hasPrefix:@"BEGIN:VCARD"]) {

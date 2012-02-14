@@ -142,11 +142,11 @@ int const ASTERISK_ENCODING = 0x094;
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
   
-  return [[[Result alloc] init:resultString
-                      rawBytes:nil
-                  resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                        format:kBarcodeFormatCode39] autorelease];
+  return [[[Result alloc] initWithText:resultString
+                              rawBytes:nil
+                          resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                        [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                format:kBarcodeFormatCode39] autorelease];
 }
 
 - (NSArray *) findAsteriskPattern:(BitArray *)row {

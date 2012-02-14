@@ -7,21 +7,21 @@
 @synthesize byteSegments;
 @synthesize eCLevel;
 
-- (id) init:(NSArray *)rawBytes text:(NSString *)text byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel {
+- (id) init:(char *)theRawBytes text:(NSString *)theText byteSegments:(NSMutableArray *)theByteSegments ecLevel:(NSString *)anEcLevel {
   if (self = [super init]) {
-    if (rawBytes == nil && text == nil) {
-      @throw [[[IllegalArgumentException alloc] init] autorelease];
+    if (theRawBytes == nil && theText == nil) {
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"Bytes and text must be non-null."];
     }
-    rawBytes = rawBytes;
-    text = text;
-    byteSegments = byteSegments;
-    ecLevel = ecLevel;
+    rawBytes = theRawBytes;
+    text = [theText copy];
+    byteSegments = [theByteSegments retain];
+    ecLevel = [anEcLevel copy];
   }
   return self;
 }
 
 - (void) dealloc {
-  [rawBytes release];
   [text release];
   [byteSegments release];
   [ecLevel release];

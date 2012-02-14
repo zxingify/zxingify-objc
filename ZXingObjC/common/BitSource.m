@@ -7,9 +7,9 @@
  * @param bytes bytes from which this will read bits. Bits will be read from the first byte first.
  * Bits are read within a byte from most-significant to least-significant bit.
  */
-- (id) initWithBytes:(NSArray *)bytes {
+- (id) initWithBytes:(char *)_bytes {
   if (self = [super init]) {
-    bytes = bytes;
+    bytes = _bytes;
   }
   return self;
 }
@@ -23,7 +23,8 @@
  */
 - (int) readBits:(int)numBits {
   if (numBits < 1 || numBits > 32) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
+    [NSException raise:NSInvalidArgumentException 
+                format:@"Number of bits must be between 1 and 32."];
   }
   int result = 0;
   if (bitOffset > 0) {
@@ -62,12 +63,7 @@
  * @return number of bits that can be read successfully
  */
 - (int) available {
-  return 8 * (bytes.length - byteOffset) - bitOffset;
-}
-
-- (void) dealloc {
-  [bytes release];
-  [super dealloc];
+  return 8 * (sizeof(bytes) / sizeof(char) - byteOffset) - bitOffset;
 }
 
 @end

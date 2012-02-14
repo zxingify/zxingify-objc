@@ -7,15 +7,17 @@
  */
 
 @interface DecoderResult : NSObject {
-  NSArray * rawBytes;
+  char * rawBytes;
   NSString * text;
   NSMutableArray * byteSegments;
   NSString * ecLevel;
 }
 
-@property(nonatomic, retain, readonly) NSArray * rawBytes;
-@property(nonatomic, retain, readonly) NSString * text;
-@property(nonatomic, retain, readonly) NSMutableArray * byteSegments;
-@property(nonatomic, retain, readonly) NSString * eCLevel;
-- (id) init:(NSArray *)rawBytes text:(NSString *)text byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel;
+@property(nonatomic, readonly) char * rawBytes;
+@property(nonatomic, readonly) NSString * text;
+@property(nonatomic, readonly) NSMutableArray * byteSegments;
+@property(nonatomic, readonly) NSString * eCLevel;
+
+- (id) init:(char *)rawBytes text:(NSString *)text byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel;
+
 @end

@@ -1,6 +1,7 @@
 #import "BookmarkDoCoMoResultParser.h"
-#import "URIParsedResult.h"
 #import "Result.h"
+#import "URIParsedResult.h"
+#import "URIResultParser.h"
 
 @implementation BookmarkDoCoMoResultParser
 
@@ -9,16 +10,16 @@
   if (rawText == nil || ![rawText hasPrefix:@"MEBKM:"]) {
     return nil;
   }
-  NSString * title = [self matchSingleDoCoMoPrefixedField:@"TITLE:" param1:rawText param2:YES];
-  NSArray * rawUri = [self matchDoCoMoPrefixedField:@"URL:" param1:rawText param2:YES];
+  NSString * title = [self matchSingleDoCoMoPrefixedField:@"TITLE:" rawText:rawText trim:YES];
+  NSArray * rawUri = [self matchDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
   if (rawUri == nil) {
     return nil;
   }
-  NSString * uri = rawUri[0];
+  NSString * uri = [rawUri objectAtIndex:0];
   if (![URIResultParser isBasicallyValidURI:uri]) {
     return nil;
   }
-  return [[[URIParsedResult alloc] init:uri param1:title] autorelease];
+  return [[[URIParsedResult alloc] initWithUri:uri title:title] autorelease];
 }
 
 @end

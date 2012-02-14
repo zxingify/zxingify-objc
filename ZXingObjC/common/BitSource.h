@@ -10,12 +10,13 @@
  */
 
 @interface BitSource : NSObject {
-  NSArray * bytes;
+  char * bytes;
   int byteOffset;
   int bitOffset;
 }
 
-- (id) initWithBytes:(NSArray *)bytes;
+- (id) initWithBytes:(char *)bytes;
 - (int) readBits:(int)numBits;
 - (int) available;
+
 @end

@@ -11,8 +11,8 @@
  * @author Sean Owen
  */
 
-@interface AbstractNDEFResultParser : ResultParser {
-}
+@interface AbstractNDEFResultParser : ResultParser
 
-+ (NSString *) bytesToString:(NSArray *)bytes offset:(int)offset length:(int)length encoding:(NSString *)encoding;
++ (NSString *) bytesToString:(char *)bytes offset:(int)offset length:(int)length encoding:(NSStringEncoding)encoding;
+
 @end

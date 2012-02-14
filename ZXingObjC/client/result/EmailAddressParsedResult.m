@@ -30,10 +30,10 @@
 }
 
 - (NSString *) displayResult {
-  NSMutableString * result = [[[NSMutableString alloc] init:30] autorelease];
-  [ParsedResult maybeAppend:emailAddress param1:result];
-  [ParsedResult maybeAppend:subject param1:result];
-  [ParsedResult maybeAppend:body param1:result];
+  NSMutableString * result = [NSMutableString stringWithCapacity:30];
+  [ParsedResult maybeAppend:emailAddress result:result];
+  [ParsedResult maybeAppend:subject result:result];
+  [ParsedResult maybeAppend:body result:result];
   return result;
 }
 
