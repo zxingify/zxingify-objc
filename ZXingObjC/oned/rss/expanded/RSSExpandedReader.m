@@ -1,30 +1,93 @@
+#import "AbstractExpandedDecoder.h"
+#import "BitArrayBuilder.h"
+#import "DataCharacter.h"
+#import "ExpandedPair.h"
 #import "RSSExpandedReader.h"
+#import "RSSFinderPattern.h"
+#import "RSSUtils.h"
 
-NSArray * const SYMBOL_WIDEST = [NSArray arrayWithObjects:7, 5, 4, 3, 1, nil];
-NSArray * const EVEN_TOTAL_SUBSET = [NSArray arrayWithObjects:4, 20, 52, 104, 204, nil];
-NSArray * const GSUM = [NSArray arrayWithObjects:0, 348, 1388, 2948, 3988, nil];
-NSArray * const FINDER_PATTERNS = [NSArray arrayWithObjects:[NSArray arrayWithObjects:1, 8, 4, 1, nil], [NSArray arrayWithObjects:3, 6, 4, 1, nil], [NSArray arrayWithObjects:3, 4, 6, 1, nil], [NSArray arrayWithObjects:3, 2, 8, 1, nil], [NSArray arrayWithObjects:2, 6, 5, 1, nil], [NSArray arrayWithObjects:2, 2, 9, 1, nil], nil];
-NSArray * const WEIGHTS = [NSArray arrayWithObjects:[NSArray arrayWithObjects:1, 3, 9, 27, 81, 32, 96, 77, nil], [NSArray arrayWithObjects:20, 60, 180, 118, 143, 7, 21, 63, nil], [NSArray arrayWithObjects:189, 145, 13, 39, 117, 140, 209, 205, nil], [NSArray arrayWithObjects:193, 157, 49, 147, 19, 57, 171, 91, nil], [NSArray arrayWithObjects:62, 186, 136, 197, 169, 85, 44, 132, nil], [NSArray arrayWithObjects:185, 133, 188, 142, 4, 12, 36, 108, nil], [NSArray arrayWithObjects:113, 128, 173, 97, 80, 29, 87, 50, nil], [NSArray arrayWithObjects:150, 28, 84, 41, 123, 158, 52, 156, nil], [NSArray arrayWithObjects:46, 138, 203, 187, 139, 206, 196, 166, nil], [NSArray arrayWithObjects:76, 17, 51, 153, 37, 111, 122, 155, nil], [NSArray arrayWithObjects:43, 129, 176, 106, 107, 110, 119, 146, nil], [NSArray arrayWithObjects:16, 48, 144, 10, 30, 90, 59, 177, nil], [NSArray arrayWithObjects:109, 116, 137, 200, 178, 112, 125, 164, nil], [NSArray arrayWithObjects:70, 210, 208, 202, 184, 130, 179, 115, nil], [NSArray arrayWithObjects:134, 191, 151, 31, 93, 68, 204, 190, nil], [NSArray arrayWithObjects:148, 22, 66, 198, 172, 94, 71, 2, nil], [NSArray arrayWithObjects:6, 18, 54, 162, 64, 192, 154, 40, nil], [NSArray arrayWithObjects:120, 149, 25, 75, 14, 42, 126, 167, nil], [NSArray arrayWithObjects:79, 26, 78, 23, 69, 207, 199, 175, nil], [NSArray arrayWithObjects:103, 98, 83, 38, 114, 131, 182, 124, nil], [NSArray arrayWithObjects:161, 61, 183, 127, 170, 88, 53, 159, nil], [NSArray arrayWithObjects:55, 165, 73, 8, 24, 72, 5, 15, nil], [NSArray arrayWithObjects:45, 135, 194, 160, 58, 174, 100, 89, nil], nil];
-int const FINDER_PAT_A = 0;
-int const FINDER_PAT_B = 1;
-int const FINDER_PAT_C = 2;
-int const FINDER_PAT_D = 3;
-int const FINDER_PAT_E = 4;
-int const FINDER_PAT_F = 5;
-NSArray * const FINDER_PATTERN_SEQUENCES = [NSArray arrayWithObjects:[NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_A, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F, nil], [NSArray arrayWithObjects:FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F, nil], nil];
-int const LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;
-int const MAX_PAIRS = 11;
+const int SYMBOL_WIDEST[5] = {7, 5, 4, 3, 1};
+const int EVEN_TOTAL_SUBSET[5] = {4, 20, 52, 104, 204};
+const int GSUM[5] = {0, 348, 1388, 2948, 3988};
+
+const int FINDER_PATTERNS[6][4] = {
+  {1,8,4,1}, // A
+  {3,6,4,1}, // B
+  {3,4,6,1}, // C
+  {3,2,8,1}, // D
+  {2,6,5,1}, // E
+  {2,2,9,1}  // F
+};
+
+const int WEIGHTS[23][8] = {
+  {  1,   3,   9,  27,  81,  32,  96,  77},
+  { 20,  60, 180, 118, 143,   7,  21,  63},
+  {189, 145,  13,  39, 117, 140, 209, 205},
+  {193, 157,  49, 147,  19,  57, 171,  91},
+  { 62, 186, 136, 197, 169,  85,  44, 132},
+  {185, 133, 188, 142,   4,  12,  36, 108},
+  {113, 128, 173,  97,  80,  29,  87,  50},
+  {150,  28,  84,  41, 123, 158,  52, 156},
+  { 46, 138, 203, 187, 139, 206, 196, 166},
+  { 76,  17,  51, 153,  37, 111, 122, 155},
+  { 43, 129, 176, 106, 107, 110, 119, 146},
+  { 16,  48, 144,  10,  30,  90,  59, 177},
+  {109, 116, 137, 200, 178, 112, 125, 164},
+  { 70, 210, 208, 202, 184, 130, 179, 115},
+  {134, 191, 151,  31,  93,  68, 204, 190},
+  {148,  22,  66, 198, 172,   94, 71,   2},
+  {  6,  18,  54, 162,  64,  192,154,  40},
+  {120, 149,  25,  75,  14,   42,126, 167},
+  { 79,  26,  78,  23,  69,  207,199, 175},
+  {103,  98,  83,  38, 114, 131, 182, 124},
+  {161,  61, 183, 127, 170,  88,  53, 159},
+  { 55, 165,  73,   8,  24,  72,   5,  15},
+  { 45, 135, 194, 160,  58, 174, 100,  89}
+};
+
+const int FINDER_PAT_A = 0;
+const int FINDER_PAT_B = 1;
+const int FINDER_PAT_C = 2;
+const int FINDER_PAT_D = 3;
+const int FINDER_PAT_E = 4;
+const int FINDER_PAT_F = 5;
+
+const int FINDER_PATTERN_SEQUENCES[10][11] = {
+  { FINDER_PAT_A, FINDER_PAT_A },
+  { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
+  { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
+  { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C },
+  { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F },
+  { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D },
+  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E },
+  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+};
+
+const int LONGEST_SEQUENCE_SIZE = sizeof(FINDER_PATTERN_SEQUENCES[(sizeof(FINDER_PATTERN_SEQUENCES) / sizeof(int*)) - 1]) / sizeof(int);
+const int MAX_PAIRS = 11;
+
+@interface RSSExpandedReader () {
+  NSMutableArray *pairs;
+  int startEnd[2];
+  int currentSequence[LONGEST_SEQUENCE_SIZE];
+}
+
+- (void) adjustOddEvenCounts:(int)numModules;
+- (Result *) constructResult:(NSMutableArray *)pairs;
+- (BOOL) checkChecksum;
+- (BOOL) checkPairSequence:(NSMutableArray *)previousPairs pattern:(RSSFinderPattern *)pattern;
+- (DataCharacter *) decodeDataCharacter:(BitArray *)row pattern:(RSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
+- (void) findNextPair:(BitArray *)row previousPairs:(NSMutableArray *)previousPairs forcedOffset:(int)forcedOffset;
+- (int) getNextSecondBar:(BitArray *)row initialPos:(int)initialPos;
+- (BOOL) isNotA1left:(RSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
+- (RSSFinderPattern *) parseFoundFinderPattern:(BitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern;
+- (void) reverseCounters:(NSMutableArray *)counters;
+
+@end
 
 @implementation RSSExpandedReader
-
-- (void) init {
-  if (self = [super init]) {
-    pairs = [[[NSMutableArray alloc] init:MAX_PAIRS] autorelease];
-    startEnd = [NSArray array];
-    currentSequence = [NSArray array];
-  }
-  return self;
-}
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
   [self reset];
@@ -33,14 +96,13 @@ int const MAX_PAIRS = 11;
 }
 
 - (void) reset {
-  [pairs setSize:0];
+  [pairs removeAllObjects];
 }
 
 - (NSMutableArray *) decodeRow2pairs:(int)rowNumber row:(BitArray *)row {
-
   while (YES) {
     ExpandedPair * nextPair = [self retrieveNextPair:row previousPairs:pairs rowNumber:rowNumber];
-    [pairs addElement:nextPair];
+    [pairs addObject:nextPair];
     if ([nextPair mayBeLast]) {
       if ([self checkChecksum]) {
         return pairs;
@@ -53,24 +115,26 @@ int const MAX_PAIRS = 11;
 
 }
 
-+ (Result *) constructResult:(NSMutableArray *)pairs {
-  BitArray * binary = [BitArrayBuilder buildBitArray:pairs];
+- (Result *) constructResult:(NSMutableArray *)_pairs {
+  BitArray * binary = [BitArrayBuilder buildBitArray:_pairs];
   AbstractExpandedDecoder * decoder = [AbstractExpandedDecoder createDecoder:binary];
   NSString * resultingString = [decoder parseInformation];
-  NSArray * firstPoints = [[((ExpandedPair *)[pairs objectAtIndex:0]) finderPattern] resultPoints];
-  NSArray * lastPoints = [[((ExpandedPair *)[pairs lastObject]) finderPattern] resultPoints];
-  return [[[Result alloc] init:resultingString param1:nil param2:[NSArray arrayWithObjects:firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1], nil] param3:BarcodeFormat.RSS_EXPANDED] autorelease];
+  NSArray * firstPoints = [[((ExpandedPair *)[_pairs objectAtIndex:0]) finderPattern] resultPoints];
+  NSArray * lastPoints = [[((ExpandedPair *)[_pairs lastObject]) finderPattern] resultPoints];
+  return [[[Result alloc] initWithText:resultingString
+                              rawBytes:nil
+                          resultPoints:[NSArray arrayWithObjects:[firstPoints objectAtIndex:0], [firstPoints objectAtIndex:1], [lastPoints objectAtIndex:0], [lastPoints objectAtIndex:1], nil]
+                                format:kBarcodeFormatRSSExpanded] autorelease];
 }
 
 - (BOOL) checkChecksum {
-  ExpandedPair * firstPair = (ExpandedPair *)[pairs elementAt:0];
+  ExpandedPair * firstPair = (ExpandedPair *)[pairs objectAtIndex:0];
   DataCharacter * checkCharacter = [firstPair leftChar];
   DataCharacter * firstCharacter = [firstPair rightChar];
   int checksum = [firstCharacter checksumPortion];
   int S = 2;
 
-  for (int i = 1; i < [pairs size]; ++i) {
-    ExpandedPair * currentPair = (ExpandedPair *)[pairs elementAt:i];
+  for (ExpandedPair *currentPair in pairs) {
     checksum += [[currentPair leftChar] checksumPortion];
     S++;
     if ([currentPair rightChar] != nil) {
@@ -84,7 +148,7 @@ int const MAX_PAIRS = 11;
   return checkCharacterValue == [checkCharacter value];
 }
 
-+ (int) getNextSecondBar:(BitArray *)row initialPos:(int)initialPos {
+- (int) getNextSecondBar:(BitArray *)row initialPos:(int)initialPos {
   int currentPos = initialPos;
   BOOL current = [row get:currentPos];
 
@@ -103,7 +167,7 @@ int const MAX_PAIRS = 11;
 
 - (ExpandedPair *) retrieveNextPair:(BitArray *)row previousPairs:(NSMutableArray *)previousPairs rowNumber:(int)rowNumber {
   BOOL isOddPattern = [previousPairs count] % 2 == 0;
-  FinderPattern * pattern;
+  RSSFinderPattern * pattern;
   BOOL keepFinding = YES;
   int forcedOffset = -1;
 
@@ -116,8 +180,7 @@ int const MAX_PAIRS = 11;
      else {
       keepFinding = NO;
     }
-  }
-   while (keepFinding);
+  } while (keepFinding);
   BOOL mayBeLast = [self checkPairSequence:previousPairs pattern:pattern];
   DataCharacter * leftChar = [self decodeDataCharacter:row pattern:pattern isOddPattern:isOddPattern leftChar:YES];
   DataCharacter * rightChar;
@@ -133,24 +196,24 @@ int const MAX_PAIRS = 11;
       @throw nfe;
     }
   }
-  return [[[ExpandedPair alloc] init:leftChar param1:rightChar param2:pattern param3:mayBeLast] autorelease];
+  return [[[ExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:pattern mayBeLast:mayBeLast] autorelease];
 }
 
-- (BOOL) checkPairSequence:(NSMutableArray *)previousPairs pattern:(FinderPattern *)pattern {
+- (BOOL) checkPairSequence:(NSMutableArray *)previousPairs pattern:(RSSFinderPattern *)pattern {
   int currentSequenceLength = [previousPairs count] + 1;
-  if (currentSequenceLength > currentSequence.length) {
+  if (currentSequenceLength > sizeof(currentSequence) / sizeof(int)) {
     @throw [NotFoundException notFoundInstance];
   }
 
   for (int pos = 0; pos < [previousPairs count]; ++pos) {
-    currentSequence[pos] = [[((ExpandedPair *)[previousPairs objectAtIndex:pos]) finderPattern] value];
+    currentSequence[pos] = [[[previousPairs objectAtIndex:pos] finderPattern] value];
   }
 
   currentSequence[currentSequenceLength - 1] = [pattern value];
 
-  for (int i = 0; i < FINDER_PATTERN_SEQUENCES.length; ++i) {
-    NSArray * validSequence = FINDER_PATTERN_SEQUENCES[i];
-    if (validSequence.length >= currentSequenceLength) {
+  for (int i = 0; i < sizeof(FINDER_PATTERN_SEQUENCES) / sizeof(int*); ++i) {
+    int * validSequence = (int*)FINDER_PATTERN_SEQUENCES[i];
+    if (sizeof(validSequence) / sizeof(int) >= currentSequenceLength) {
       BOOL valid = YES;
 
       for (int pos = 0; pos < currentSequenceLength; ++pos) {
@@ -161,7 +224,7 @@ int const MAX_PAIRS = 11;
       }
 
       if (valid) {
-        return currentSequenceLength == validSequence.length;
+        return currentSequenceLength == sizeof(validSequence) / sizeof(int);
       }
     }
   }
@@ -170,22 +233,17 @@ int const MAX_PAIRS = 11;
 }
 
 - (void) findNextPair:(BitArray *)row previousPairs:(NSMutableArray *)previousPairs forcedOffset:(int)forcedOffset {
-  NSArray * counters = decodeFinderCounters;
-  counters[0] = 0;
-  counters[1] = 0;
-  counters[2] = 0;
-  counters[3] = 0;
+  NSMutableArray * counters = [NSMutableArray arrayWithObjects:[NSNumber numberWithInt:0], [NSNumber numberWithInt:0],
+                               [NSNumber numberWithInt:0], [NSNumber numberWithInt:0], nil];
   int width = [row size];
   int rowOffset;
   if (forcedOffset >= 0) {
     rowOffset = forcedOffset;
-  }
-   else if ([previousPairs empty]) {
+  } else if ([previousPairs count] == 0) {
     rowOffset = 0;
-  }
-   else {
+  } else {
     ExpandedPair * lastPair = (ExpandedPair *)[previousPairs lastObject];
-    rowOffset = [[lastPair finderPattern] startEnd][1];
+    rowOffset = [[[[lastPair finderPattern] startEnd] objectAtIndex:1] intValue];
   }
   BOOL searchingEvenPair = [previousPairs count] % 2 != 0;
   BOOL isWhite = NO;
@@ -204,14 +262,14 @@ int const MAX_PAIRS = 11;
   for (int x = rowOffset; x < width; x++) {
     BOOL pixel = [row get:x];
     if (pixel ^ isWhite) {
-      counters[counterPosition]++;
-    }
-     else {
+      [counters replaceObjectAtIndex:counterPosition
+                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+    } else {
       if (counterPosition == 3) {
         if (searchingEvenPair) {
           [self reverseCounters:counters];
         }
-        if ([self isFinderPattern:counters]) {
+        if ([AbstractRSSReader isFinderPattern:counters]) {
           startEnd[0] = patternStart;
           startEnd[1] = x;
           return;
@@ -219,17 +277,16 @@ int const MAX_PAIRS = 11;
         if (searchingEvenPair) {
           [self reverseCounters:counters];
         }
-        patternStart += counters[0] + counters[1];
-        counters[0] = counters[2];
-        counters[1] = counters[3];
-        counters[2] = 0;
-        counters[3] = 0;
+        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
+        [counters replaceObjectAtIndex:0 withObject:[counters objectAtIndex:2]];
+        [counters replaceObjectAtIndex:1 withObject:[counters objectAtIndex:3]];
+        [counters replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:0]];
+        [counters replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:0]];
         counterPosition--;
-      }
-       else {
+      } else {
         counterPosition++;
       }
-      counters[counterPosition] = 1;
+      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
       isWhite = !isWhite;
     }
   }
@@ -237,18 +294,17 @@ int const MAX_PAIRS = 11;
   @throw [NotFoundException notFoundInstance];
 }
 
-+ (void) reverseCounters:(NSArray *)counters {
-  int length = counters.length;
+- (void) reverseCounters:(NSMutableArray *)counters {
+  int length = [counters count];
 
   for (int i = 0; i < length / 2; ++i) {
-    int tmp = counters[i];
-    counters[i] = counters[length - i - 1];
-    counters[length - i - 1] = tmp;
+    id tmp = [counters objectAtIndex:i];
+    [counters replaceObjectAtIndex:i withObject:[counters objectAtIndex:length - i - 1]];
+    [counters replaceObjectAtIndex:length - i - 1 withObject:tmp];
   }
-
 }
 
-- (FinderPattern *) parseFoundFinderPattern:(BitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern {
+- (RSSFinderPattern *) parseFoundFinderPattern:(BitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern {
   int firstCounter;
   int start;
   int end;
@@ -263,8 +319,7 @@ int const MAX_PAIRS = 11;
     firstCounter = startEnd[0] - firstElementStart;
     start = firstElementStart;
     end = startEnd[1];
-  }
-   else {
+  } else {
     start = startEnd[0];
     int firstElementStart = startEnd[1] + 1;
 
@@ -275,26 +330,25 @@ int const MAX_PAIRS = 11;
     end = firstElementStart;
     firstCounter = end - startEnd[1];
   }
-  NSArray * counters = decodeFinderCounters;
-
-  for (int i = counters.length - 1; i > 0; i--) {
-    counters[i] = counters[i - 1];
+  int counters[[decodeFinderCounters count]];
+  for (int i = [decodeFinderCounters count] - 1; i > 0; i--) {
+    counters[i] = [[decodeFinderCounters objectAtIndex:i - 1] intValue];
   }
 
   counters[0] = firstCounter;
   int value;
 
   @try {
-    value = [self parseFinderValue:counters param1:FINDER_PATTERNS];
+    value = [AbstractRSSReader parseFinderValue:counters finderPatterns:(int **)FINDER_PATTERNS];
   }
   @catch (NotFoundException * nfe) {
     return nil;
   }
-  return [[[FinderPattern alloc] init:value param1:[NSArray arrayWithObjects:start, end, nil] param2:start param3:end param4:rowNumber] autorelease];
+  return [[[RSSFinderPattern alloc] initWithValue:value startEnd:[NSArray arrayWithObjects:[NSNumber numberWithInt:start], [NSNumber numberWithInt:end], nil] start:start end:end rowNumber:rowNumber] autorelease];
 }
 
-- (DataCharacter *) decodeDataCharacter:(BitArray *)row pattern:(FinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
-  NSArray * counters = dataCharacterCounters;
+- (DataCharacter *) decodeDataCharacter:(BitArray *)row pattern:(RSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
+  int counters[8];
   counters[0] = 0;
   counters[1] = 0;
   counters[2] = 0;
@@ -304,12 +358,11 @@ int const MAX_PAIRS = 11;
   counters[6] = 0;
   counters[7] = 0;
   if (leftChar) {
-    [self recordPatternInReverse:row param1:[pattern startEnd][0] param2:counters];
-  }
-   else {
-    [self recordPattern:row param1:[pattern startEnd][1] + 1 param2:counters];
+    [OneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters];
+  } else {
+    [OneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] + 1 counters:counters];
 
-    for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
+    for (int i = 0, j = (sizeof(counters) / sizeof(int)) - 1; i < j; i++, j--) {
       int temp = counters[i];
       counters[i] = counters[j];
       counters[j] = temp;
@@ -317,29 +370,27 @@ int const MAX_PAIRS = 11;
 
   }
   int numModules = 17;
-  float elementWidth = (float)[self count:counters] / (float)numModules;
-  NSArray * oddCounts = oddCounts;
-  NSArray * evenCounts = evenCounts;
-  NSArray * oddRoundingErrors = oddRoundingErrors;
-  NSArray * evenRoundingErrors = evenRoundingErrors;
+  float elementWidth = (float)[AbstractRSSReader count:counters] / (float)numModules;
+  NSMutableArray * _oddCounts = [[oddCounts mutableCopy] autorelease];
+  NSMutableArray * _evenCounts = [[evenCounts mutableCopy] autorelease];
+  NSMutableArray * _oddRoundingErrors = [[oddRoundingErrors mutableCopy] autorelease];
+  NSMutableArray * _evenRoundingErrors = [[evenRoundingErrors mutableCopy] autorelease];
 
-  for (int i = 0; i < counters.length; i++) {
+  for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
     float value = 1.0f * counters[i] / elementWidth;
     int count = (int)(value + 0.5f);
     if (count < 1) {
       count = 1;
-    }
-     else if (count > 8) {
+    } else if (count > 8) {
       count = 8;
     }
     int offset = i >> 1;
     if ((i & 0x01) == 0) {
-      oddCounts[offset] = count;
-      oddRoundingErrors[offset] = value - count;
-    }
-     else {
-      evenCounts[offset] = count;
-      evenRoundingErrors[offset] = value - count;
+      [_oddCounts replaceObjectAtIndex:offset withObject:[NSNumber numberWithInt:count]];
+      [_oddRoundingErrors replaceObjectAtIndex:offset withObject:[NSNumber numberWithInt:value - count]];
+    } else {
+      [_evenCounts replaceObjectAtIndex:offset withObject:[NSNumber numberWithInt:count]];
+      [_evenRoundingErrors replaceObjectAtIndex:offset withObject:[NSNumber numberWithInt:value - count]];
     }
   }
 
@@ -348,23 +399,23 @@ int const MAX_PAIRS = 11;
   int oddSum = 0;
   int oddChecksumPortion = 0;
 
-  for (int i = oddCounts.length - 1; i >= 0; i--) {
+  for (int i = [_oddCounts count] - 1; i >= 0; i--) {
     if ([self isNotA1left:pattern isOddPattern:isOddPattern leftChar:leftChar]) {
       int weight = WEIGHTS[weightRowNumber][2 * i];
-      oddChecksumPortion += oddCounts[i] * weight;
+      oddChecksumPortion += [[_oddCounts objectAtIndex:i] intValue] * weight;
     }
-    oddSum += oddCounts[i];
+    oddSum += [[_oddCounts objectAtIndex:i] intValue];
   }
 
   int evenChecksumPortion = 0;
   int evenSum = 0;
 
-  for (int i = evenCounts.length - 1; i >= 0; i--) {
+  for (int i = [_evenCounts count] - 1; i >= 0; i--) {
     if ([self isNotA1left:pattern isOddPattern:isOddPattern leftChar:leftChar]) {
       int weight = WEIGHTS[weightRowNumber][2 * i + 1];
-      evenChecksumPortion += evenCounts[i] * weight;
+      evenChecksumPortion += [[_evenCounts objectAtIndex:i] intValue] * weight;
     }
-    evenSum += evenCounts[i];
+    evenSum += [[_evenCounts objectAtIndex:i] intValue];
   }
 
   int checksumPortion = oddChecksumPortion + evenChecksumPortion;
@@ -374,21 +425,21 @@ int const MAX_PAIRS = 11;
   int group = (13 - oddSum) / 2;
   int oddWidest = SYMBOL_WIDEST[group];
   int evenWidest = 9 - oddWidest;
-  int vOdd = [RSSUtils getRSSvalue:oddCounts param1:oddWidest param2:YES];
-  int vEven = [RSSUtils getRSSvalue:evenCounts param1:evenWidest param2:NO];
+  int vOdd = [RSSUtils getRSSvalue:_oddCounts maxWidth:oddWidest noNarrow:YES];
+  int vEven = [RSSUtils getRSSvalue:_evenCounts maxWidth:evenWidest noNarrow:NO];
   int tEven = EVEN_TOTAL_SUBSET[group];
   int gSum = GSUM[group];
   int value = vOdd * tEven + vEven + gSum;
-  return [[[DataCharacter alloc] init:value param1:checksumPortion] autorelease];
+  return [[[DataCharacter alloc] initWithValue:value checksumPortion:checksumPortion] autorelease];
 }
 
-+ (BOOL) isNotA1left:(FinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
+- (BOOL) isNotA1left:(RSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
   return !([pattern value] == 0 && isOddPattern && leftChar);
 }
 
 - (void) adjustOddEvenCounts:(int)numModules {
-  int oddSum = [self count:oddCounts];
-  int evenSum = [self count:evenCounts];
+  int oddSum = [AbstractRSSReader countArray:oddCounts];
+  int evenSum = [AbstractRSSReader countArray:evenCounts];
   int mismatch = oddSum + evenSum - numModules;
   BOOL oddParityBad = (oddSum & 0x01) == 1;
   BOOL evenParityBad = (evenSum & 0x01) == 0;
@@ -396,47 +447,42 @@ int const MAX_PAIRS = 11;
   BOOL decrementOdd = NO;
   if (oddSum > 13) {
     decrementOdd = YES;
-  }
-   else if (oddSum < 4) {
+  } else if (oddSum < 4) {
     incrementOdd = YES;
   }
   BOOL incrementEven = NO;
   BOOL decrementEven = NO;
   if (evenSum > 13) {
     decrementEven = YES;
-  }
-   else if (evenSum < 4) {
+  } else if (evenSum < 4) {
     incrementEven = YES;
   }
+  
   if (mismatch == 1) {
     if (oddParityBad) {
       if (evenParityBad) {
         @throw [NotFoundException notFoundInstance];
       }
       decrementOdd = YES;
-    }
-     else {
+    } else {
       if (!evenParityBad) {
         @throw [NotFoundException notFoundInstance];
       }
       decrementEven = YES;
     }
-  }
-   else if (mismatch == -1) {
+  } else if (mismatch == -1) {
     if (oddParityBad) {
       if (evenParityBad) {
         @throw [NotFoundException notFoundInstance];
       }
       incrementOdd = YES;
-    }
-     else {
+    } else {
       if (!evenParityBad) {
         @throw [NotFoundException notFoundInstance];
       }
       incrementEven = YES;
     }
-  }
-   else if (mismatch == 0) {
+  } else if (mismatch == 0) {
     if (oddParityBad) {
       if (!evenParityBad) {
         @throw [NotFoundException notFoundInstance];
@@ -444,45 +490,41 @@ int const MAX_PAIRS = 11;
       if (oddSum < evenSum) {
         incrementOdd = YES;
         decrementEven = YES;
-      }
-       else {
+      } else {
         decrementOdd = YES;
         incrementEven = YES;
       }
-    }
-     else {
+    } else {
       if (evenParityBad) {
         @throw [NotFoundException notFoundInstance];
       }
     }
-  }
-   else {
+  } else {
     @throw [NotFoundException notFoundInstance];
   }
+
   if (incrementOdd) {
     if (decrementOdd) {
       @throw [NotFoundException notFoundInstance];
     }
-    [self increment:oddCounts param1:oddRoundingErrors];
+    [AbstractRSSReader increment:oddCounts errors:oddRoundingErrors];
   }
   if (decrementOdd) {
-    [self decrement:oddCounts param1:oddRoundingErrors];
+    [AbstractRSSReader decrement:oddCounts errors:oddRoundingErrors];
   }
   if (incrementEven) {
     if (decrementEven) {
       @throw [NotFoundException notFoundInstance];
     }
-    [self increment:evenCounts param1:oddRoundingErrors];
+    [AbstractRSSReader increment:evenCounts errors:oddRoundingErrors];
   }
   if (decrementEven) {
-    [self decrement:evenCounts param1:evenRoundingErrors];
+    [AbstractRSSReader decrement:evenCounts errors:evenRoundingErrors];
   }
 }
 
 - (void) dealloc {
   [pairs release];
-  [startEnd release];
-  [currentSequence release];
   [super dealloc];
 }
 

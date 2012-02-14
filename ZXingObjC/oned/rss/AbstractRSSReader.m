@@ -13,16 +13,15 @@ float const MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
     dataCharacterCounters = [NSArray array];
     oddRoundingErrors = [NSArray array];
     evenRoundingErrors = [NSArray array];
-    oddCounts = [NSArray array];
-    evenCounts = [NSArray array];
+    oddCounts = [NSMutableArray array];
+    evenCounts = [NSMutableArray array];
   }
   return self;
 }
 
-+ (int) parseFinderValue:(NSArray *)counters finderPatterns:(NSArray *)finderPatterns {
-
-  for (int value = 0; value < finderPatterns.length; value++) {
-    if ([self patternMatchVariance:counters param1:finderPatterns[value] param2:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
++ (int) parseFinderValue:(int[])counters finderPatterns:(int*[])finderPatterns {
+  for (int value = 0; value < sizeof((int*)finderPatterns) / sizeof(int); value++) {
+    if ([self patternMatchVariance:counters pattern:finderPatterns[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
       return value;
     }
   }
@@ -30,54 +29,64 @@ float const MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
   @throw [NotFoundException notFoundInstance];
 }
 
-+ (int) count:(NSArray *)array {
++ (int) count:(int[])array {
   int count = 0;
 
-  for (int i = 0; i < array.length; i++) {
+  for (int i = 0; i < sizeof((int*)array) / sizeof(int); i++) {
     count += array[i];
   }
 
   return count;
 }
 
-+ (void) increment:(NSArray *)array errors:(NSArray *)errors {
-  int index = 0;
-  float biggestError = errors[0];
-
-  for (int i = 1; i < array.length; i++) {
-    if (errors[i] > biggestError) {
-      biggestError = errors[i];
-      index = i;
-    }
++ (int) countArray:(NSArray*)array {
+  int count = 0;
+  
+  for (NSNumber *i in array) {
+    count += [i intValue];
   }
-
-  array[index]++;
+  
+  return count;
 }
 
-+ (void) decrement:(NSArray *)array errors:(NSArray *)errors {
++ (void) increment:(NSMutableArray *)array errors:(NSArray *)errors {
   int index = 0;
-  float biggestError = errors[0];
+  float biggestError = [[errors objectAtIndex:0] intValue];
 
-  for (int i = 1; i < array.length; i++) {
-    if (errors[i] < biggestError) {
-      biggestError = errors[i];
+  for (int i = 1; i < [array count]; i++) {
+    if ([[errors objectAtIndex:i] intValue] > biggestError) {
+      biggestError = [[errors objectAtIndex:i] intValue];
       index = i;
     }
   }
 
-  array[index]--;
+  [array replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:[[array objectAtIndex:index] intValue] + 1]];
+}
+
++ (void) decrement:(NSMutableArray *)array errors:(NSArray *)errors {
+  int index = 0;
+  float biggestError = [[errors objectAtIndex:0] intValue];
+
+  for (int i = 1; i < [array count]; i++) {
+    if ([[errors objectAtIndex:i] intValue] < biggestError) {
+      biggestError = [[errors objectAtIndex:i] intValue];
+      index = i;
+    }
+  }
+
+  [array replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:[[array objectAtIndex:index] intValue] - 1]];
 }
 
 + (BOOL) isFinderPattern:(NSArray *)counters {
-  int firstTwoSum = counters[0] + counters[1];
-  int sum = firstTwoSum + counters[2] + counters[3];
+  int firstTwoSum = [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
+  int sum = firstTwoSum + [[counters objectAtIndex:2] intValue] + [[counters objectAtIndex:3] intValue];
   float ratio = (float)firstTwoSum / (float)sum;
   if (ratio >= MIN_FINDER_PATTERN_RATIO && ratio <= MAX_FINDER_PATTERN_RATIO) {
-    int minCounter = Integer.MAX_VALUE;
-    int maxCounter = Integer.MIN_VALUE;
+    int minCounter = NSIntegerMax;
+    int maxCounter = NSIntegerMin;
 
-    for (int i = 0; i < counters.length; i++) {
-      int counter = counters[i];
+    for (NSNumber *i in counters) {
+      int counter = [i intValue];
       if (counter > maxCounter) {
         maxCounter = counter;
       }

@@ -1,6 +1,6 @@
 #import "ExpandedPair.h"
 #import "DataCharacter.h"
-#import "FinderPattern.h"
+#import "RSSFinderPattern.h"
 
 @implementation ExpandedPair
 
@@ -10,7 +10,7 @@
 @synthesize rightChar;
 
 - (id) initWithLeftChar:(DataCharacter *)aLeftChar rightChar:(DataCharacter *)aRightChar
-          finderPattern:(FinderPattern *)aFinderPattern mayBeLast:(BOOL)aMayBeLast {
+          finderPattern:(RSSFinderPattern *)aFinderPattern mayBeLast:(BOOL)aMayBeLast {
   if (self = [super init]) {
     leftChar = [aLeftChar retain];
     rightChar = [aRightChar retain];

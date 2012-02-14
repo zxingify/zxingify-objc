@@ -54,7 +54,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 
 @implementation FormatInformation
 
-@synthesize errorCorrectionLevel;
+@synthesize dataMask, errorCorrectionLevel;
 
 - (id) initWithFormatInfo:(int)formatInfo {
   if (self = [super init]) {
@@ -112,10 +112,6 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
     return [[[FormatInformation alloc] initWithFormatInfo:bestFormatInfo] autorelease];
   }
   return nil;
-}
-
-- (char) getDataMask {
-  return dataMask;
 }
 
 - (int) hash {

@@ -1,8 +1,15 @@
 #import "BitMatrix.h"
+#import "DataMask.h"
 #import "FormatException.h"
 #import "FormatInformation.h"
 #import "QRCodeBitMatrixParser.h"
 #import "QRCodeVersion.h"
+
+@interface QRCodeBitMatrixParser ()
+
+- (int) copyBit:(int)i j:(int)j versionBits:(int)versionBits;
+
+@end
 
 @implementation QRCodeBitMatrixParser
 
@@ -60,7 +67,7 @@
     formatInfoBits2 = [self copyBit:i j:8 versionBits:formatInfoBits2];
   }
 
-  parsedFormatInfo = [FormatInformation decodeFormatInformation:formatInfoBits1 param1:formatInfoBits2];
+  parsedFormatInfo = [FormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2];
   if (parsedFormatInfo != nil) {
     return parsedFormatInfo;
   }
@@ -82,7 +89,7 @@
   int dimension = [bitMatrix height];
   int provisionalVersion = (dimension - 17) >> 2;
   if (provisionalVersion <= 6) {
-    return [Version getVersionForNumber:provisionalVersion];
+    return [QRCodeVersion getVersionForNumber:provisionalVersion];
   }
   int versionBits = 0;
   int ijMin = dimension - 11;
@@ -95,7 +102,7 @@
 
   }
 
-  parsedVersion = [Version decodeVersionInformation:versionBits];
+  parsedVersion = [QRCodeVersion decodeVersionInformation:versionBits];
   if (parsedVersion != nil && [parsedVersion dimensionForVersion] == dimension) {
     return parsedVersion;
   }
@@ -109,7 +116,7 @@
 
   }
 
-  parsedVersion = [Version decodeVersionInformation:versionBits];
+  parsedVersion = [QRCodeVersion decodeVersionInformation:versionBits];
   if (parsedVersion != nil && [parsedVersion dimensionForVersion] == dimension) {
     return parsedVersion;
   }
@@ -117,7 +124,7 @@
 }
 
 - (int) copyBit:(int)i j:(int)j versionBits:(int)versionBits {
-  return [bitMatrix get:i param1:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
+  return [bitMatrix get:i y:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
 }
 
 
@@ -131,13 +138,13 @@
  */
 - (NSArray *) readCodewords {
   FormatInformation * formatInfo = [self readFormatInformation];
-  Version * version = [self readVersion];
+  QRCodeVersion * version = [self readVersion];
   DataMask * dataMask = [DataMask forReference:(int)[formatInfo dataMask]];
   int dimension = [bitMatrix height];
-  [dataMask unmaskBitMatrix:bitMatrix param1:dimension];
+  [dataMask unmaskBitMatrix:bitMatrix dimension:dimension];
   BitMatrix * functionPattern = [version buildFunctionPattern];
   BOOL readingUp = YES;
-  NSArray * result = [NSArray array];
+  NSMutableArray * result = [NSMutableArray array];
   int resultOffset = 0;
   int currentByte = 0;
   int bitsRead = 0;
@@ -151,14 +158,15 @@
       int i = readingUp ? dimension - 1 - count : count;
 
       for (int col = 0; col < 2; col++) {
-        if (![functionPattern get:j - col param1:i]) {
+        if (![functionPattern get:j - col y:i]) {
           bitsRead++;
           currentByte <<= 1;
-          if ([bitMatrix get:j - col param1:i]) {
+          if ([bitMatrix get:j - col y:i]) {
             currentByte |= 1;
           }
           if (bitsRead == 8) {
-            result[resultOffset++] = (char)currentByte;
+            [result addObject:[NSNumber numberWithChar:(char)currentByte]];
+            resultOffset++;
             bitsRead = 0;
             currentByte = 0;
           }

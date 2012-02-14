@@ -5,7 +5,7 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
 
 @interface CharacterSetECI ()
 
-+ (void) addCharacterSet:(int)value encodingName:(NSString *)encodingName;
++ (void) addCharacterSet:(int)value encodingName:(NSString*)encodingName;
 + (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodingNames;
 
 @end
@@ -38,21 +38,21 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
   [self addCharacterSet:20 encodingName:[NSArray arrayWithObjects:@"SJIS", @"Shift_JIS", nil]];
 }
 
-- (id) initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
+- (id) initWithValue:(int)value encoding:(NSString *)anEncoding {
   if (self = [super initWithValue:value]) {
-    encoding = anEncoding;
+    encoding = [anEncoding copy];
   }
   return self;
 }
 
-+ (void) addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
++ (void) addCharacterSet:(int)value encodingName:(NSString *)encoding {
   CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
-  [NAME_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:encoding]];
+  [NAME_TO_ECI setObject:eci forKey:encoding];
 }
 
 + (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodings {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:[[encodings objectAtIndex:0] intValue]] autorelease];
+  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:[encodings objectAtIndex:0]] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
 
   for (id name in encodings) {
@@ -89,6 +89,11 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
     [self initialize];
   }
   return [NAME_TO_ECI objectForKey:name];
+}
+
+- (void)dealloc {
+  [encoding release];
+  [super dealloc];
 }
 
 @end

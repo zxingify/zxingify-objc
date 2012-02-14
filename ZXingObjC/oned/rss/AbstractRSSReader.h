@@ -6,14 +6,15 @@
   NSArray * dataCharacterCounters;
   NSArray * oddRoundingErrors;
   NSArray * evenRoundingErrors;
-  NSArray * oddCounts;
-  NSArray * evenCounts;
+  NSMutableArray * oddCounts;
+  NSMutableArray * evenCounts;
 }
 
-- (id) init;
-+ (int) parseFinderValue:(NSArray *)counters finderPatterns:(NSArray *)finderPatterns;
-+ (int) count:(NSArray *)array;
-+ (void) increment:(NSArray *)array errors:(NSArray *)errors;
-+ (void) decrement:(NSArray *)array errors:(NSArray *)errors;
++ (int) parseFinderValue:(int[])counters finderPatterns:(int*[])finderPatterns;
++ (int) count:(int[])array;
++ (int) countArray:(NSArray*)array;
++ (void) increment:(NSMutableArray *)array errors:(NSArray *)errors;
++ (void) decrement:(NSMutableArray *)array errors:(NSArray *)errors;
 + (BOOL) isFinderPattern:(NSArray *)counters;
+
 @end

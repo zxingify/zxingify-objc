@@ -40,7 +40,7 @@ int const L_PATTERNS[10][4] = {
 /**
  * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
  */
-static int L_AND_G_PATTERNS[20][4];
+int L_AND_G_PATTERNS[20][4];
 
 @interface UPCEANReader ()
 
