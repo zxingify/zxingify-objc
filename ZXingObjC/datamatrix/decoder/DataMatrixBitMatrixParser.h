@@ -4,7 +4,7 @@
 
 @class BitMatrix, QRCodeVersion;
 
-@interface BitMatrixParser : NSObject {
+@interface DataMatrixBitMatrixParser : NSObject {
   BitMatrix * mappingBitMatrix;
   BitMatrix * readMappingMatrix;
   QRCodeVersion * version;

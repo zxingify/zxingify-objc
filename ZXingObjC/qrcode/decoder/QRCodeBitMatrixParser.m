@@ -1,10 +1,10 @@
 #import "BitMatrix.h"
-#import "BitMatrixParser.h"
 #import "FormatException.h"
 #import "FormatInformation.h"
+#import "QRCodeBitMatrixParser.h"
 #import "QRCodeVersion.h"
 
-@implementation BitMatrixParser
+@implementation QRCodeBitMatrixParser
 
 /**
  * @param bitMatrix {@link BitMatrix} to parse

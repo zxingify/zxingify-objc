@@ -7,7 +7,7 @@
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 
-@interface DecodedBitStreamParser : NSObject {
+@interface PDF417DecodedBitStreamParser : NSObject {
 }
 
 + (DecoderResult *) decode:(NSArray *)codewords;

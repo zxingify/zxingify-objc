@@ -1,5 +1,5 @@
 #import "BitMatrix.h"
-#import "BitMatrixParser.h"
+#import "DataMatrixBitMatrixParser.h"
 #import "FormatException.h"
 #import "QRCodeVersion.h"
 
@@ -9,7 +9,7 @@
 
 @end
 
-@implementation BitMatrixParser
+@implementation DataMatrixBitMatrixParser
 
 @synthesize version;
 

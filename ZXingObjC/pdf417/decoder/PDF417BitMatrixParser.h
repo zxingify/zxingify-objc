@@ -10,7 +10,7 @@
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 
-@interface BitMatrixParser : NSObject {
+@interface PDF417BitMatrixParser : NSObject {
   BitMatrix * bitMatrix;
   int rows;
   int leftColumnECData;

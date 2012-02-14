@@ -1,4 +1,4 @@
-#import "DecodedBitStreamParser.h"
+#import "DataMatrixDecodedBitStreamParser.h"
 
 
 /**
@@ -22,13 +22,7 @@ int const ANSIX12_ENCODE = 4;
 int const EDIFACT_ENCODE = 5;
 int const BASE256_ENCODE = 6;
 
-@implementation DecodedBitStreamParser
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
+@implementation DataMatrixDecodedBitStreamParser
 
 + (DecoderResult *) decode:(NSArray *)bytes {
   BitSource * bits = [[[BitSource alloc] init:bytes] autorelease];

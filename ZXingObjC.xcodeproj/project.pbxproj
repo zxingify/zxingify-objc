@@ -73,8 +73,6 @@
 		029BCF3415129BD0009E6549 /* ReedSolomonException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1015129BD0009E6549 /* ReedSolomonException.m */; };
 		029BCF3515129BD0009E6549 /* StringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1215129BD0009E6549 /* StringUtils.m */; };
 		029BCF3615129BD0009E6549 /* DataMatrixReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1515129BD0009E6549 /* DataMatrixReader.m */; };
-		029BCF3715129BD0009E6549 /* BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1815129BD0009E6549 /* BitMatrixParser.m */; };
-		029BCF3915129BD0009E6549 /* DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */; };
 		029BCF3D15129BD0009E6549 /* FormatException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2715129BD0009E6549 /* FormatException.m */; };
 		029BCF3E15129BD0009E6549 /* LuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2915129BD0009E6549 /* LuminanceSource.m */; };
 		029BCF3F15129BD0009E6549 /* ByQuadrantReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE2C15129BD0009E6549 /* ByQuadrantReader.m */; };
@@ -134,10 +132,7 @@
 		029BCF7615129BD0009E6549 /* UPCEANReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA115129BD0009E6549 /* UPCEANReader.m */; };
 		029BCF7715129BD0009E6549 /* UPCEANWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA315129BD0009E6549 /* UPCEANWriter.m */; };
 		029BCF7815129BD0009E6549 /* UPCEReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA515129BD0009E6549 /* UPCEReader.m */; };
-		029BCF7915129BD0009E6549 /* BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA915129BD0009E6549 /* BitMatrixParser.m */; };
-		029BCF7A15129BD0009E6549 /* DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEAB15129BD0009E6549 /* DecodedBitStreamParser.m */; };
 		029BCF7D15129BD0009E6549 /* PDF417Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEB215129BD0009E6549 /* PDF417Reader.m */; };
-		029BCF7E15129BD0009E6549 /* BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEB615129BD0009E6549 /* BitMatrixParser.m */; };
 		029BCF8015129BD0009E6549 /* DataMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEBA15129BD0009E6549 /* DataMask.m */; };
 		029BCF8315129BD0009E6549 /* ErrorCorrectionLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC015129BD0009E6549 /* ErrorCorrectionLevel.m */; };
 		029BCF8415129BD0009E6549 /* FormatInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEC215129BD0009E6549 /* FormatInformation.m */; };
@@ -312,11 +307,7 @@
 		029BD0641512A046009E6549 /* StringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1215129BD0009E6549 /* StringUtils.m */; };
 		029BD0651512A052009E6549 /* DataMatrixReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCE1415129BD0009E6549 /* DataMatrixReader.h */; };
 		029BD0661512A052009E6549 /* DataMatrixReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1515129BD0009E6549 /* DataMatrixReader.m */; };
-		029BD0671512A052009E6549 /* BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCE1715129BD0009E6549 /* BitMatrixParser.h */; };
-		029BD0681512A052009E6549 /* BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1815129BD0009E6549 /* BitMatrixParser.m */; };
 		029BD06B1512A052009E6549 /* DataMatrixDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFC815129F28009E6549 /* DataMatrixDecoder.h */; };
-		029BD06C1512A052009E6549 /* DecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCE1B15129BD0009E6549 /* DecodedBitStreamParser.h */; };
-		029BD06D1512A052009E6549 /* DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */; };
 		029BD06E1512A052009E6549 /* DataMatrixDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFCD15129F3B009E6549 /* DataMatrixDetector.h */; };
 		029BD06F1512A059009E6549 /* DecodeHintType.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCE2415129BD0009E6549 /* DecodeHintType.h */; };
 		029BD0701512A059009E6549 /* EncodeHintType.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCE2515129BD0009E6549 /* EncodeHintType.h */; };
@@ -439,18 +430,12 @@
 		029BD0E51512A0A8009E6549 /* UPCEANWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA315129BD0009E6549 /* UPCEANWriter.m */; };
 		029BD0E61512A0A8009E6549 /* UPCEReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEA415129BD0009E6549 /* UPCEReader.h */; };
 		029BD0E71512A0A8009E6549 /* UPCEReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA515129BD0009E6549 /* UPCEReader.m */; };
-		029BD0E81512A0BD009E6549 /* BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEA815129BD0009E6549 /* BitMatrixParser.h */; };
-		029BD0E91512A0BD009E6549 /* BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEA915129BD0009E6549 /* BitMatrixParser.m */; };
-		029BD0EA1512A0BD009E6549 /* DecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEAA15129BD0009E6549 /* DecodedBitStreamParser.h */; };
-		029BD0EB1512A0BD009E6549 /* DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEAB15129BD0009E6549 /* DecodedBitStreamParser.m */; };
 		029BD0EC1512A0BD009E6549 /* PDF417Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCFD215129F53009E6549 /* PDF417Decoder.h */; };
 		029BD0ED1512A0C2009E6549 /* PDF417Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEB115129BD0009E6549 /* PDF417Reader.h */; };
 		029BD0EE1512A0C2009E6549 /* PDF417Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEB215129BD0009E6549 /* PDF417Reader.m */; };
 		029BD0F11512A0DB009E6549 /* QRCodeDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BD0EF1512A0DA009E6549 /* QRCodeDecoder.h */; };
 		029BD0F21512A0DB009E6549 /* QRCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BD0F01512A0DB009E6549 /* QRCodeDecoder.m */; };
 		029BD0F31512A0DB009E6549 /* QRCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BD0F01512A0DB009E6549 /* QRCodeDecoder.m */; };
-		029BD0F41512A0E1009E6549 /* BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEB515129BD0009E6549 /* BitMatrixParser.h */; };
-		029BD0F51512A0E1009E6549 /* BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEB615129BD0009E6549 /* BitMatrixParser.m */; };
 		029BD0F81512A0E1009E6549 /* DataMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEB915129BD0009E6549 /* DataMask.h */; };
 		029BD0F91512A0E1009E6549 /* DataMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEBA15129BD0009E6549 /* DataMask.m */; };
 		029BD0FC1512A0E1009E6549 /* ErrorCorrectionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEBF15129BD0009E6549 /* ErrorCorrectionLevel.h */; };
@@ -514,6 +499,21 @@
 		250830191512B135006D79E6 /* QRCodeDecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830171512B135006D79E6 /* QRCodeDecodedBitStreamParser.h */; };
 		2508301A1512B135006D79E6 /* QRCodeDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830181512B135006D79E6 /* QRCodeDecodedBitStreamParser.m */; };
 		2508301B1512B135006D79E6 /* QRCodeDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830181512B135006D79E6 /* QRCodeDecodedBitStreamParser.m */; };
+		250830231512B1B6006D79E6 /* DataMatrixBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 2508301F1512B1B6006D79E6 /* DataMatrixBitMatrixParser.h */; };
+		250830241512B1B6006D79E6 /* DataMatrixBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830201512B1B6006D79E6 /* DataMatrixBitMatrixParser.m */; };
+		250830251512B1B6006D79E6 /* DataMatrixBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830201512B1B6006D79E6 /* DataMatrixBitMatrixParser.m */; };
+		250830261512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830211512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.h */; };
+		250830271512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830221512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m */; };
+		250830281512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830221512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m */; };
+		2508302E1512B1D7006D79E6 /* PDF417BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 2508302A1512B1D7006D79E6 /* PDF417BitMatrixParser.h */; };
+		2508302F1512B1D7006D79E6 /* PDF417BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2508302B1512B1D7006D79E6 /* PDF417BitMatrixParser.m */; };
+		250830301512B1D7006D79E6 /* PDF417BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2508302B1512B1D7006D79E6 /* PDF417BitMatrixParser.m */; };
+		250830311512B1D7006D79E6 /* PDF417DecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 2508302C1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.h */; };
+		250830321512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2508302D1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m */; };
+		250830331512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2508302D1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m */; };
+		250830361512B1E6006D79E6 /* QRCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830341512B1E6006D79E6 /* QRCodeBitMatrixParser.h */; };
+		250830371512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */; };
+		250830381512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -662,10 +662,6 @@
 		029BCE1215129BD0009E6549 /* StringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringUtils.m; sourceTree = "<group>"; };
 		029BCE1415129BD0009E6549 /* DataMatrixReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixReader.h; sourceTree = "<group>"; };
 		029BCE1515129BD0009E6549 /* DataMatrixReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMatrixReader.m; sourceTree = "<group>"; };
-		029BCE1715129BD0009E6549 /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
-		029BCE1815129BD0009E6549 /* BitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitMatrixParser.m; sourceTree = "<group>"; };
-		029BCE1B15129BD0009E6549 /* DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodedBitStreamParser.h; sourceTree = "<group>"; };
-		029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DecodedBitStreamParser.m; sourceTree = "<group>"; };
 		029BCE2415129BD0009E6549 /* DecodeHintType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodeHintType.h; sourceTree = "<group>"; };
 		029BCE2515129BD0009E6549 /* EncodeHintType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncodeHintType.h; sourceTree = "<group>"; };
 		029BCE2615129BD0009E6549 /* FormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatException.h; sourceTree = "<group>"; };
@@ -787,14 +783,8 @@
 		029BCEA315129BD0009E6549 /* UPCEANWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCEANWriter.m; sourceTree = "<group>"; };
 		029BCEA415129BD0009E6549 /* UPCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEReader.h; sourceTree = "<group>"; };
 		029BCEA515129BD0009E6549 /* UPCEReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCEReader.m; sourceTree = "<group>"; };
-		029BCEA815129BD0009E6549 /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
-		029BCEA915129BD0009E6549 /* BitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitMatrixParser.m; sourceTree = "<group>"; };
-		029BCEAA15129BD0009E6549 /* DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodedBitStreamParser.h; sourceTree = "<group>"; };
-		029BCEAB15129BD0009E6549 /* DecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DecodedBitStreamParser.m; sourceTree = "<group>"; };
 		029BCEB115129BD0009E6549 /* PDF417Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDF417Reader.h; sourceTree = "<group>"; };
 		029BCEB215129BD0009E6549 /* PDF417Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDF417Reader.m; sourceTree = "<group>"; };
-		029BCEB515129BD0009E6549 /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
-		029BCEB615129BD0009E6549 /* BitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitMatrixParser.m; sourceTree = "<group>"; };
 		029BCEB915129BD0009E6549 /* DataMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMask.h; sourceTree = "<group>"; };
 		029BCEBA15129BD0009E6549 /* DataMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMask.m; sourceTree = "<group>"; };
 		029BCEBF15129BD0009E6549 /* ErrorCorrectionLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCorrectionLevel.h; sourceTree = "<group>"; };
@@ -876,6 +866,16 @@
 		250830131512B0D0006D79E6 /* QRCodeDataBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeDataBlock.m; sourceTree = "<group>"; };
 		250830171512B135006D79E6 /* QRCodeDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeDecodedBitStreamParser.h; sourceTree = "<group>"; };
 		250830181512B135006D79E6 /* QRCodeDecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeDecodedBitStreamParser.m; sourceTree = "<group>"; };
+		2508301F1512B1B6006D79E6 /* DataMatrixBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixBitMatrixParser.h; sourceTree = "<group>"; };
+		250830201512B1B6006D79E6 /* DataMatrixBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMatrixBitMatrixParser.m; sourceTree = "<group>"; };
+		250830211512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixDecodedBitStreamParser.h; sourceTree = "<group>"; };
+		250830221512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMatrixDecodedBitStreamParser.m; sourceTree = "<group>"; };
+		2508302A1512B1D7006D79E6 /* PDF417BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDF417BitMatrixParser.h; sourceTree = "<group>"; };
+		2508302B1512B1D7006D79E6 /* PDF417BitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDF417BitMatrixParser.m; sourceTree = "<group>"; };
+		2508302C1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDF417DecodedBitStreamParser.h; sourceTree = "<group>"; };
+		2508302D1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDF417DecodedBitStreamParser.m; sourceTree = "<group>"; };
+		250830341512B1E6006D79E6 /* QRCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBitMatrixParser.h; sourceTree = "<group>"; };
+		250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBitMatrixParser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1113,16 +1113,16 @@
 		029BCE1615129BD0009E6549 /* decoder */ = {
 			isa = PBXGroup;
 			children = (
-				029BCE1715129BD0009E6549 /* BitMatrixParser.h */,
-				029BCE1815129BD0009E6549 /* BitMatrixParser.m */,
+				2508301F1512B1B6006D79E6 /* DataMatrixBitMatrixParser.h */,
+				250830201512B1B6006D79E6 /* DataMatrixBitMatrixParser.m */,
 				2508300D1512B0B1006D79E6 /* DataMatrixDataBlock.h */,
 				2508300E1512B0B1006D79E6 /* DataMatrixDataBlock.m */,
+				250830211512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.h */,
+				250830221512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m */,
 				029BCFC815129F28009E6549 /* DataMatrixDecoder.h */,
 				029BCFC915129F28009E6549 /* DataMatrixDecoder.m */,
 				029BCFA115129C87009E6549 /* DataMatrixVersion.h */,
 				029BCFA215129C87009E6549 /* DataMatrixVersion.m */,
-				029BCE1B15129BD0009E6549 /* DecodedBitStreamParser.h */,
-				029BCE1C15129BD0009E6549 /* DecodedBitStreamParser.m */,
 			);
 			path = decoder;
 			sourceTree = "<group>";
@@ -1315,10 +1315,10 @@
 		029BCEA715129BD0009E6549 /* decoder */ = {
 			isa = PBXGroup;
 			children = (
-				029BCEA815129BD0009E6549 /* BitMatrixParser.h */,
-				029BCEA915129BD0009E6549 /* BitMatrixParser.m */,
-				029BCEAA15129BD0009E6549 /* DecodedBitStreamParser.h */,
-				029BCEAB15129BD0009E6549 /* DecodedBitStreamParser.m */,
+				2508302A1512B1D7006D79E6 /* PDF417BitMatrixParser.h */,
+				2508302B1512B1D7006D79E6 /* PDF417BitMatrixParser.m */,
+				2508302C1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.h */,
+				2508302D1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m */,
 				029BCFD215129F53009E6549 /* PDF417Decoder.h */,
 				029BCFD315129F53009E6549 /* PDF417Decoder.m */,
 			);
@@ -1351,8 +1351,6 @@
 		029BCEB415129BD0009E6549 /* decoder */ = {
 			isa = PBXGroup;
 			children = (
-				029BCEB515129BD0009E6549 /* BitMatrixParser.h */,
-				029BCEB615129BD0009E6549 /* BitMatrixParser.m */,
 				029BCEB915129BD0009E6549 /* DataMask.h */,
 				029BCEBA15129BD0009E6549 /* DataMask.m */,
 				029BCEBF15129BD0009E6549 /* ErrorCorrectionLevel.h */,
@@ -1361,6 +1359,8 @@
 				029BCEC215129BD0009E6549 /* FormatInformation.m */,
 				029BCEC315129BD0009E6549 /* Mode.h */,
 				029BCEC415129BD0009E6549 /* Mode.m */,
+				250830341512B1E6006D79E6 /* QRCodeBitMatrixParser.h */,
+				250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */,
 				250830121512B0D0006D79E6 /* QRCodeDataBlock.h */,
 				250830131512B0D0006D79E6 /* QRCodeDataBlock.m */,
 				250830171512B135006D79E6 /* QRCodeDecodedBitStreamParser.h */,
@@ -1593,9 +1593,7 @@
 				029BD0611512A046009E6549 /* ReedSolomonException.h in Headers */,
 				029BD0631512A046009E6549 /* StringUtils.h in Headers */,
 				029BD0651512A052009E6549 /* DataMatrixReader.h in Headers */,
-				029BD0671512A052009E6549 /* BitMatrixParser.h in Headers */,
 				029BD06B1512A052009E6549 /* DataMatrixDecoder.h in Headers */,
-				029BD06C1512A052009E6549 /* DecodedBitStreamParser.h in Headers */,
 				029BD06E1512A052009E6549 /* DataMatrixDetector.h in Headers */,
 				029BD06F1512A059009E6549 /* DecodeHintType.h in Headers */,
 				029BD0701512A059009E6549 /* EncodeHintType.h in Headers */,
@@ -1659,12 +1657,9 @@
 				029BD0E21512A0A8009E6549 /* UPCEANReader.h in Headers */,
 				029BD0E41512A0A8009E6549 /* UPCEANWriter.h in Headers */,
 				029BD0E61512A0A8009E6549 /* UPCEReader.h in Headers */,
-				029BD0E81512A0BD009E6549 /* BitMatrixParser.h in Headers */,
-				029BD0EA1512A0BD009E6549 /* DecodedBitStreamParser.h in Headers */,
 				029BD0EC1512A0BD009E6549 /* PDF417Decoder.h in Headers */,
 				029BD0ED1512A0C2009E6549 /* PDF417Reader.h in Headers */,
 				029BD0F11512A0DB009E6549 /* QRCodeDecoder.h in Headers */,
-				029BD0F41512A0E1009E6549 /* BitMatrixParser.h in Headers */,
 				029BD0F81512A0E1009E6549 /* DataMask.h in Headers */,
 				029BD0FC1512A0E1009E6549 /* ErrorCorrectionLevel.h in Headers */,
 				029BD0FE1512A0E1009E6549 /* FormatInformation.h in Headers */,
@@ -1693,6 +1688,11 @@
 				2508300F1512B0B1006D79E6 /* DataMatrixDataBlock.h in Headers */,
 				250830141512B0D0006D79E6 /* QRCodeDataBlock.h in Headers */,
 				250830191512B135006D79E6 /* QRCodeDecodedBitStreamParser.h in Headers */,
+				250830231512B1B6006D79E6 /* DataMatrixBitMatrixParser.h in Headers */,
+				250830261512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.h in Headers */,
+				2508302E1512B1D7006D79E6 /* PDF417BitMatrixParser.h in Headers */,
+				250830311512B1D7006D79E6 /* PDF417DecodedBitStreamParser.h in Headers */,
+				250830361512B1E6006D79E6 /* QRCodeBitMatrixParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1869,8 +1869,6 @@
 				029BD0621512A046009E6549 /* ReedSolomonException.m in Sources */,
 				029BD0641512A046009E6549 /* StringUtils.m in Sources */,
 				029BD0661512A052009E6549 /* DataMatrixReader.m in Sources */,
-				029BD0681512A052009E6549 /* BitMatrixParser.m in Sources */,
-				029BD06D1512A052009E6549 /* DecodedBitStreamParser.m in Sources */,
 				029BD0721512A059009E6549 /* FormatException.m in Sources */,
 				029BD0741512A059009E6549 /* LuminanceSource.m in Sources */,
 				029BD0761512A064009E6549 /* ByQuadrantReader.m in Sources */,
@@ -1930,11 +1928,8 @@
 				029BD0E31512A0A8009E6549 /* UPCEANReader.m in Sources */,
 				029BD0E51512A0A8009E6549 /* UPCEANWriter.m in Sources */,
 				029BD0E71512A0A8009E6549 /* UPCEReader.m in Sources */,
-				029BD0E91512A0BD009E6549 /* BitMatrixParser.m in Sources */,
-				029BD0EB1512A0BD009E6549 /* DecodedBitStreamParser.m in Sources */,
 				029BD0EE1512A0C2009E6549 /* PDF417Reader.m in Sources */,
 				029BD0F21512A0DB009E6549 /* QRCodeDecoder.m in Sources */,
-				029BD0F51512A0E1009E6549 /* BitMatrixParser.m in Sources */,
 				029BD0F91512A0E1009E6549 /* DataMask.m in Sources */,
 				029BD0FD1512A0E1009E6549 /* ErrorCorrectionLevel.m in Sources */,
 				029BD0FF1512A0E1009E6549 /* FormatInformation.m in Sources */,
@@ -1959,6 +1954,11 @@
 				250830101512B0B1006D79E6 /* DataMatrixDataBlock.m in Sources */,
 				250830151512B0D0006D79E6 /* QRCodeDataBlock.m in Sources */,
 				2508301A1512B135006D79E6 /* QRCodeDecodedBitStreamParser.m in Sources */,
+				250830241512B1B6006D79E6 /* DataMatrixBitMatrixParser.m in Sources */,
+				250830271512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m in Sources */,
+				2508302F1512B1D7006D79E6 /* PDF417BitMatrixParser.m in Sources */,
+				250830321512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m in Sources */,
+				250830371512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2033,8 +2033,6 @@
 				029BCF3415129BD0009E6549 /* ReedSolomonException.m in Sources */,
 				029BCF3515129BD0009E6549 /* StringUtils.m in Sources */,
 				029BCF3615129BD0009E6549 /* DataMatrixReader.m in Sources */,
-				029BCF3715129BD0009E6549 /* BitMatrixParser.m in Sources */,
-				029BCF3915129BD0009E6549 /* DecodedBitStreamParser.m in Sources */,
 				029BCF3D15129BD0009E6549 /* FormatException.m in Sources */,
 				029BCF3E15129BD0009E6549 /* LuminanceSource.m in Sources */,
 				029BCF3F15129BD0009E6549 /* ByQuadrantReader.m in Sources */,
@@ -2094,10 +2092,7 @@
 				029BCF7615129BD0009E6549 /* UPCEANReader.m in Sources */,
 				029BCF7715129BD0009E6549 /* UPCEANWriter.m in Sources */,
 				029BCF7815129BD0009E6549 /* UPCEReader.m in Sources */,
-				029BCF7915129BD0009E6549 /* BitMatrixParser.m in Sources */,
-				029BCF7A15129BD0009E6549 /* DecodedBitStreamParser.m in Sources */,
 				029BCF7D15129BD0009E6549 /* PDF417Reader.m in Sources */,
-				029BCF7E15129BD0009E6549 /* BitMatrixParser.m in Sources */,
 				029BCF8015129BD0009E6549 /* DataMask.m in Sources */,
 				029BCF8315129BD0009E6549 /* ErrorCorrectionLevel.m in Sources */,
 				029BCF8415129BD0009E6549 /* FormatInformation.m in Sources */,
@@ -2129,6 +2124,11 @@
 				250830111512B0B1006D79E6 /* DataMatrixDataBlock.m in Sources */,
 				250830161512B0D0006D79E6 /* QRCodeDataBlock.m in Sources */,
 				2508301B1512B135006D79E6 /* QRCodeDecodedBitStreamParser.m in Sources */,
+				250830251512B1B6006D79E6 /* DataMatrixBitMatrixParser.m in Sources */,
+				250830281512B1B6006D79E6 /* DataMatrixDecodedBitStreamParser.m in Sources */,
+				250830301512B1D7006D79E6 /* PDF417BitMatrixParser.m in Sources */,
+				250830331512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m in Sources */,
+				250830381512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

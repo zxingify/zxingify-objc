@@ -12,8 +12,8 @@
  * @author Sean Owen
  */
 
-@interface DecodedBitStreamParser : NSObject {
-}
+@interface DataMatrixDecodedBitStreamParser : NSObject
 
 + (DecoderResult *) decode:(NSArray *)bytes;
+
 @end
