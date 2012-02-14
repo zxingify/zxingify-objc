@@ -1,4 +1,16 @@
+#import "AlignmentPattern.h"
 #import "AlignmentPatternFinder.h"
+#import "BitMatrix.h"
+#import "NotFoundException.h"
+#import "ResultPointCallback.h"
+
+@interface AlignmentPatternFinder ()
+
+- (float) centerFromEnd:(int *)stateCount end:(int)end;
+- (BOOL) foundPatternCross:(int *)stateCount;
+- (AlignmentPattern *) handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j;
+
+@end
 
 @implementation AlignmentPatternFinder
 
@@ -13,17 +25,20 @@
  * @param height height of region to search
  * @param moduleSize estimated module size so far
  */
-- (id) init:(BitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(ResultPointCallback *)resultPointCallback {
+- (id) initWithImage:(BitMatrix *)anImage startX:(int)aStartX startY:(int)aStartY width:(int)aWidth height:(int)aHeight moduleSize:(float)aModuleSize resultPointCallback:(ResultPointCallback *)aResultPointCallback {
   if (self = [super init]) {
-    image = image;
-    possibleCenters = [[[NSMutableArray alloc] init:5] autorelease];
-    startX = startX;
-    startY = startY;
-    width = width;
-    height = height;
-    moduleSize = moduleSize;
-    crossCheckStateCount = [NSArray array];
-    resultPointCallback = resultPointCallback;
+    image = [anImage retain];
+    possibleCenters = [[NSMutableArray alloc] initWithCapacity:5];
+    for (int i = 0; i < 5; i++) {
+      [possibleCenters addObject:[NSNull null]];
+    }
+    startX = aStartX;
+    startY = aStartY;
+    width = aWidth;
+    height = aHeight;
+    moduleSize = aModuleSize;
+    crossCheckStateCount = (int*)malloc(3 * sizeof(int));
+    resultPointCallback = aResultPointCallback;
   }
   return self;
 }
@@ -37,11 +52,9 @@
  * @throws NotFoundException if not found
  */
 - (AlignmentPattern *) find {
-  int startX = startX;
-  int height = height;
   int maxJ = startX + width;
   int middleI = startY + (height >> 1);
-  NSArray * stateCount = [NSArray array];
+  int stateCount[3];
 
   for (int iGen = 0; iGen < height; iGen++) {
     int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) >> 1 : -((iGen + 1) >> 1));
@@ -50,14 +63,14 @@
     stateCount[2] = 0;
     int j = startX;
 
-    while (j < maxJ && ![image get:j param1:i]) {
+    while (j < maxJ && ![image get:j y:i]) {
       j++;
     }
 
     int currentState = 0;
 
     while (j < maxJ) {
-      if ([image get:j param1:i]) {
+      if ([image get:j y:i]) {
         if (currentState == 1) {
           stateCount[currentState]++;
         }
@@ -96,8 +109,8 @@
     }
   }
 
-  if (![possibleCenters empty]) {
-    return (AlignmentPattern *)[possibleCenters objectAtIndex:0];
+  if ([possibleCenters count] > 0) {
+    return [possibleCenters objectAtIndex:0];
   }
   @throw [NotFoundException notFoundInstance];
 }
@@ -107,7 +120,7 @@
  * Given a count of black/white/black pixels just seen and an end position,
  * figures the location of the center of this black/white/black run.
  */
-+ (float) centerFromEnd:(NSArray *)stateCount end:(int)end {
+- (float) centerFromEnd:(int *)stateCount end:(int)end {
   return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
 }
 
@@ -117,12 +130,11 @@
  * @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
  * used by alignment patterns to be considered a match
  */
-- (BOOL) foundPatternCross:(NSArray *)stateCount {
-  float moduleSize = moduleSize;
+- (BOOL) foundPatternCross:(int *)stateCount {
   float maxVariance = moduleSize / 2.0f;
 
   for (int i = 0; i < 3; i++) {
-    if ([Math abs:moduleSize - stateCount[i]] >= maxVariance) {
+    if (abs(moduleSize - stateCount[i]) >= maxVariance) {
       return NO;
     }
   }
@@ -143,55 +155,54 @@
  * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
  */
 - (float) crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
-  BitMatrix * image = image;
   int maxI = [image height];
-  NSArray * stateCount = crossCheckStateCount;
+  int stateCount[3];
   stateCount[0] = 0;
   stateCount[1] = 0;
   stateCount[2] = 0;
   int i = startI;
 
-  while (i >= 0 && [image get:centerJ param1:i] && stateCount[1] <= maxCount) {
+  while (i >= 0 && [image get:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i--;
   }
 
   if (i < 0 || stateCount[1] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
 
-  while (i >= 0 && ![image get:centerJ param1:i] && stateCount[0] <= maxCount) {
+  while (i >= 0 && ![image get:centerJ y:i] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
 
   if (stateCount[0] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
   i = startI + 1;
 
-  while (i < maxI && [image get:centerJ param1:i] && stateCount[1] <= maxCount) {
+  while (i < maxI && [image get:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i++;
   }
 
   if (i == maxI || stateCount[1] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
 
-  while (i < maxI && ![image get:centerJ param1:i] && stateCount[2] <= maxCount) {
+  while (i < maxI && ![image get:centerJ y:i] && stateCount[2] <= maxCount) {
     stateCount[2]++;
     i++;
   }
 
   if (stateCount[2] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-  if (5 * [Math abs:stateCountTotal - originalStateCountTotal] >= 2 * originalStateCountTotal) {
-    return Float.NaN;
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
+    return NAN;
   }
-  return [self foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:i] : Float.NaN;
+  return [self foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:i] : NAN;
 }
 
 
@@ -206,22 +217,22 @@
  * @param j end of possible alignment pattern in row
  * @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
  */
-- (AlignmentPattern *) handlePossibleCenter:(NSArray *)stateCount i:(int)i j:(int)j {
+- (AlignmentPattern *) handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
   float centerJ = [self centerFromEnd:stateCount end:j];
   float centerI = [self crossCheckVertical:i centerJ:(int)centerJ maxCount:2 * stateCount[1] originalStateCountTotal:stateCountTotal];
-  if (![Float isNaN:centerI]) {
+  if (!isnan(centerI)) {
     float estimatedModuleSize = (float)(stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
     int max = [possibleCenters count];
 
     for (int index = 0; index < max; index++) {
       AlignmentPattern * center = (AlignmentPattern *)[possibleCenters objectAtIndex:index];
-      if ([center aboutEquals:estimatedModuleSize param1:centerI param2:centerJ]) {
-        return [[[AlignmentPattern alloc] init:centerJ param1:centerI param2:estimatedModuleSize] autorelease];
+      if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
+        return [[[AlignmentPattern alloc] init:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
       }
     }
 
-    ResultPoint * point = [[[AlignmentPattern alloc] init:centerJ param1:centerI param2:estimatedModuleSize] autorelease];
+    ResultPoint * point = [[[AlignmentPattern alloc] init:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
     [possibleCenters addObject:point];
     if (resultPointCallback != nil) {
       [resultPointCallback foundPossibleResultPoint:point];
@@ -233,7 +244,7 @@
 - (void) dealloc {
   [image release];
   [possibleCenters release];
-  [crossCheckStateCount release];
+  free(crossCheckStateCount);
   [resultPointCallback release];
   [super dealloc];
 }

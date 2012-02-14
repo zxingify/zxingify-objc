@@ -1,8 +1,3 @@
-#import "NotFoundException.h"
-#import "ResultPoint.h"
-#import "ResultPointCallback.h"
-#import "BitMatrix.h"
-
 /**
  * <p>This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
  * patterns but are smaller and appear at regular intervals throughout the image.</p>
@@ -18,6 +13,8 @@
  * @author Sean Owen
  */
 
+@class AlignmentPattern, BitMatrix, ResultPointCallback;
+
 @interface AlignmentPatternFinder : NSObject {
   BitMatrix * image;
   NSMutableArray * possibleCenters;
@@ -26,10 +23,11 @@
   int width;
   int height;
   float moduleSize;
-  NSArray * crossCheckStateCount;
+  int * crossCheckStateCount;
   ResultPointCallback * resultPointCallback;
 }
 
-- (id) init:(BitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(ResultPointCallback *)resultPointCallback;
+- (id) initWithImage:(BitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(ResultPointCallback *)resultPointCallback;
 - (AlignmentPattern *) find;
+
 @end
