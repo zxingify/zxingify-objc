@@ -8,47 +8,41 @@
   if (rawText == nil || (![rawText hasPrefix:@"geo:"] && ![rawText hasPrefix:@"GEO:"])) {
     return nil;
   }
-  int queryStart = [rawText rangeOfString:'?' param1:4];
+  int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
   NSString * query;
   NSString * geoURIWithoutQuery;
   if (queryStart < 0) {
     query = nil;
     geoURIWithoutQuery = [rawText substringFromIndex:4];
-  }
-   else {
+  } else {
     query = [rawText substringFromIndex:queryStart + 1];
-    geoURIWithoutQuery = [rawText substringFromIndex:4 param1:queryStart];
+    geoURIWithoutQuery = [rawText substringWithRange:NSMakeRange(4, queryStart + 4)];
   }
-  int latitudeEnd = [geoURIWithoutQuery rangeOfString:','];
+  int latitudeEnd = [geoURIWithoutQuery rangeOfString:@","].location;
   if (latitudeEnd < 0) {
     return nil;
   }
-  int longitudeEnd = [geoURIWithoutQuery rangeOfString:',' param1:latitudeEnd + 1];
+  int longitudeEnd = [geoURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(latitudeEnd + 1, [geoURIWithoutQuery length] - latitudeEnd + 1)].location;
   double latitude;
   double longitude;
   double altitude;
 
-  @try {
-    latitude = [Double parseDouble:[geoURIWithoutQuery substringFromIndex:0 param1:latitudeEnd]];
-    if (latitude > 90.0 || latitude < -90.0) {
-      return nil;
-    }
-    if (longitudeEnd < 0) {
-      longitude = [Double parseDouble:[geoURIWithoutQuery substringFromIndex:latitudeEnd + 1]];
-      altitude = 0.0;
-    }
-     else {
-      longitude = [Double parseDouble:[geoURIWithoutQuery substringFromIndex:latitudeEnd + 1 param1:longitudeEnd]];
-      altitude = [Double parseDouble:[geoURIWithoutQuery substringFromIndex:longitudeEnd + 1]];
-    }
-    if (longitude > 180.0 || longitude < -180.0 || altitude < 0) {
-      return nil;
-    }
-  }
-  @catch (NumberFormatException * nfe) {
+  latitude = [[geoURIWithoutQuery substringToIndex:latitudeEnd] doubleValue];
+  if (latitude > 90.0 || latitude < -90.0) {
     return nil;
   }
-  return [[[GeoParsedResult alloc] init:latitude param1:longitude param2:altitude param3:query] autorelease];
+  if (longitudeEnd < 0) {
+    longitude = [[geoURIWithoutQuery substringFromIndex:latitudeEnd + 1] doubleValue];
+    altitude = 0.0;
+  } else {
+    longitude = [[geoURIWithoutQuery substringWithRange:NSMakeRange(latitudeEnd + 1, [geoURIWithoutQuery length] - longitudeEnd)] doubleValue];
+    altitude = [[geoURIWithoutQuery substringFromIndex:longitudeEnd + 1] doubleValue];
+  }
+  if (longitude > 180.0 || longitude < -180.0 || altitude < 0) {
+    return nil;
+  }
+
+  return [[[GeoParsedResult alloc] initWithLatitude:latitude longitude:longitude altitude:altitude query:query] autorelease];
 }
 
 @end
