@@ -1,16 +1,13 @@
+#import "BarcodeFormat.h"
+#import "ProductParsedResult.h"
 #import "ProductResultParser.h"
+#import "UPCEReader.h"
 
 @implementation ProductResultParser
 
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
 + (ProductParsedResult *) parse:(Result *)result {
-  BarcodeFormat * format = [result barcodeFormat];
-  if (!([BarcodeFormat.UPC_A isEqualTo:format] || [BarcodeFormat.UPC_E isEqualTo:format] || [BarcodeFormat.EAN_8 isEqualTo:format] || [BarcodeFormat.EAN_13 isEqualTo:format])) {
+  BarcodeFormat format = [result barcodeFormat];
+  if (!(format == kBarcodeFormatUPCA || format == kBarcodeFormatUPCE || format == kBarcodeFormatEan8 || format == kBarcodeFormatEan13)) {
     return nil;
   }
   NSString * rawText = [result text];
@@ -27,13 +24,12 @@
   }
 
   NSString * normalizedProductID;
-  if ([BarcodeFormat.UPC_E isEqualTo:format]) {
+  if (format == kBarcodeFormatUPCE) {
     normalizedProductID = [UPCEReader convertUPCEtoUPCA:rawText];
-  }
-   else {
+  } else {
     normalizedProductID = rawText;
   }
-  return [[[ProductParsedResult alloc] init:rawText param1:normalizedProductID] autorelease];
+  return [[[ProductParsedResult alloc] initWithProductID:rawText normalizedProductID:normalizedProductID] autorelease];
 }
 
 @end
