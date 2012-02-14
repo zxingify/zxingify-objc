@@ -1,12 +1,7 @@
+#import "TelParsedResult.h"
 #import "TelResultParser.h"
 
 @implementation TelResultParser
-
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
 
 + (TelParsedResult *) parse:(Result *)result {
   NSString * rawText = [result text];
@@ -14,9 +9,9 @@
     return nil;
   }
   NSString * telURI = [rawText hasPrefix:@"TEL:"] ? [@"tel:" stringByAppendingString:[rawText substringFromIndex:4]] : rawText;
-  int queryStart = [rawText rangeOfString:'?' param1:4];
-  NSString * number = queryStart < 0 ? [rawText substringFromIndex:4] : [rawText substringFromIndex:4 param1:queryStart];
-  return [[[TelParsedResult alloc] init:number param1:telURI param2:nil] autorelease];
+  int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
+  NSString * number = queryStart < 0 ? [rawText substringFromIndex:4] : [rawText substringWithRange:NSMakeRange(4, [rawText length] - queryStart)];
+  return [[[TelParsedResult alloc] initWithNumber:number telURI:telURI title:nil] autorelease];
 }
 
 @end
