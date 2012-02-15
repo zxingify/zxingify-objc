@@ -1,12 +1,13 @@
 #import "BarcodeFormat.h"
-#import "WriterException.h"
-#import "BitMatrix.h"
+#import "UPCEANWriter.h"
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
  * 
  * @author erik.barbara@gmail.com (Erik Barbara)
  */
+
+@class BitMatrix;
 
 @interface ITFWriter : UPCEANWriter
 

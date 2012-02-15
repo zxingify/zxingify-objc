@@ -10,7 +10,7 @@
 
 @implementation BitArray
 
-@synthesize size;
+@synthesize bits, size;
 
 - (id) init {
   if (self = [super init]) {
@@ -218,10 +218,6 @@
     array[offset + i] = (char)theByte;
   }
 
-}
-
-- (int*) bitArray {
-  return bits;
 }
 
 /**

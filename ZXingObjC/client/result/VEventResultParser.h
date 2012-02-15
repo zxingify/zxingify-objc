@@ -1,4 +1,4 @@
-#import "Result.h"
+#import "ResultParser.h"
 
 /**
  * Partially implements the iCalendar format's "VEVENT" format for specifying a
@@ -7,8 +7,10 @@
  * @author Sean Owen
  */
 
-@interface VEventResultParser : ResultParser {
-}
+@class CalendarParsedResult, Result;
+
+@interface VEventResultParser : ResultParser
 
 + (CalendarParsedResult *) parse:(Result *)result;
+
 @end

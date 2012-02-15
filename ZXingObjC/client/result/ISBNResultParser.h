@@ -1,6 +1,3 @@
-#import "BarcodeFormat.h"
-#import "ISBNParsedResult.h"
-#import "Result.h"
 #import "ResultParser.h"
 
 /**
@@ -8,6 +5,8 @@
  * 
  * @author jbreiden@google.com (Jeff Breidenbach)
  */
+
+@class ISBNParsedResult, Result;
 
 @interface ISBNResultParser : ResultParser
 

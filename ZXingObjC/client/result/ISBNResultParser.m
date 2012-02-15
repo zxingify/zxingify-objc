@@ -1,16 +1,11 @@
+#import "ISBNParsedResult.h"
 #import "ISBNResultParser.h"
 
 @implementation ISBNResultParser
 
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
 + (ISBNParsedResult *) parse:(Result *)result {
   BarcodeFormat format = [result barcodeFormat];
-  if (format != kBarcodeEan13) {
+  if (format != kBarcodeFormatEan13) {
     return nil;
   }
   NSString * rawText = [result text];

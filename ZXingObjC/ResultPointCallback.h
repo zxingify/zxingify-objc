@@ -6,6 +6,10 @@
  * @see DecodeHintType#NEED_RESULT_POINT_CALLBACK
  */
 
+@class ResultPoint;
+
 @protocol ResultPointCallback <NSObject>
+
 - (void) foundPossibleResultPoint:(ResultPoint *)point;
+
 @end

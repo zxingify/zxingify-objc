@@ -1,9 +1,4 @@
-#import "BinaryBitmap.h"
-#import "ChecksumException.h"
-#import "FormatException.h"
-#import "NotFoundException.h"
 #import "Reader.h"
-#import "Result.h"
 
 /**
  * This class attempts to decode a barcode from an image, not by scanning the whole image,
@@ -15,12 +10,15 @@
  * @see GenericMultipleBarcodeReader
  */
 
+@class BinaryBitmap, Result;
+
 @interface ByQuadrantReader : NSObject <Reader> {
-  Reader * delegate;
+  id<Reader> delegate;
 }
 
-- (id) initWithDelegate:(Reader *)delegate;
+- (id) initWithDelegate:(id<Reader>)delegate;
 - (Result *) decode:(BinaryBitmap *)image;
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
 - (void) reset;
+
 @end

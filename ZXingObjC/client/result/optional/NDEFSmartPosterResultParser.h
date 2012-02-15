@@ -1,4 +1,4 @@
-#import "Result.h"
+#import "AbstractNDEFResultParser.h"
 
 /**
  * <p>Recognizes an NDEF message that encodes information according to the
@@ -12,8 +12,10 @@
  * @author Sean Owen
  */
 
-@interface NDEFSmartPosterResultParser : AbstractNDEFResultParser {
-}
+@class NDEFSmartPosterParsedResult, Result;
+
+@interface NDEFSmartPosterResultParser : AbstractNDEFResultParser
 
 + (NDEFSmartPosterParsedResult *) parse:(Result *)result;
+
 @end

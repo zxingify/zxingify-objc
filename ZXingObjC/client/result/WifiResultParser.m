@@ -16,10 +16,10 @@
     return nil;
   }
   BOOL trim = NO;
-  NSString * ssid = [self matchSinglePrefixedField:@"S:" param1:rawText param2:';' param3:trim];
-  NSString * pass = [self matchSinglePrefixedField:@"P:" param1:rawText param2:';' param3:trim];
-  NSString * type = [self matchSinglePrefixedField:@"T:" param1:rawText param2:';' param3:trim];
-  return [[[WifiParsedResult alloc] init:type param1:ssid param2:pass] autorelease];
+  NSString * ssid = [self matchSinglePrefixedField:@"S:" rawText:rawText endChar:';' trim:trim];
+  NSString * pass = [self matchSinglePrefixedField:@"P:" rawText:rawText endChar:';' trim:trim];
+  NSString * type = [self matchSinglePrefixedField:@"T:" rawText:rawText endChar:';' trim:trim];
+  return [[[WifiParsedResult alloc] initWithNetworkEncryption:type ssid:ssid password:pass] autorelease];
 }
 
 @end

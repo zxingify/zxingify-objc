@@ -1,5 +1,4 @@
-#import "Result.h"
-#import "URIParsedResult.h"
+#import "AbstractNDEFResultParser.h"
 
 /**
  * Recognizes an NDEF message that encodes a URI according to the
@@ -8,9 +7,11 @@
  * @author Sean Owen
  */
 
-@interface NDEFURIResultParser : AbstractNDEFResultParser {
-}
+@class Result, URIParsedResult;
+
+@interface NDEFURIResultParser : AbstractNDEFResultParser
 
 + (URIParsedResult *) parse:(Result *)result;
 + (NSString *) decodeURIPayload:(NSArray *)payload;
+
 @end

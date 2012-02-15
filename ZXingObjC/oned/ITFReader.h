@@ -1,10 +1,4 @@
-#import "BarcodeFormat.h"
-#import "DecodeHintType.h"
-#import "FormatException.h"
-#import "NotFoundException.h"
-#import "Result.h"
-#import "ResultPoint.h"
-#import "BitArray.h"
+#import "OneDReader.h"
 
 /**
  * <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>
@@ -23,12 +17,14 @@
  * @author kevin.osullivan@sita.aero, SITA Lab.
  */
 
+@class BitArray, Result;
+
 @interface ITFReader : OneDReader {
   int narrowLineWidth;
 }
 
-- (void) init;
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
 - (NSArray *) decodeStart:(BitArray *)row;
 - (NSArray *) decodeEnd:(BitArray *)row;
+
 @end

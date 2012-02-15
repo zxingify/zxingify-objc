@@ -1,3 +1,4 @@
+#import "ParsedResult.h"
 
 /**
  * A simple result type encapsulating a string that has no further
@@ -14,5 +15,7 @@
 @property(nonatomic, retain, readonly) NSString * text;
 @property(nonatomic, retain, readonly) NSString * language;
 @property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init:(NSString *)text language:(NSString *)language;
+
+- (id) initWithText:(NSString *)text language:(NSString *)language;
+
 @end

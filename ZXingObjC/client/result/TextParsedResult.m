@@ -1,3 +1,4 @@
+#import "ParsedResultType.h"
 #import "TextParsedResult.h"
 
 @implementation TextParsedResult
@@ -6,10 +7,10 @@
 @synthesize language;
 @synthesize displayResult;
 
-- (id) init:(NSString *)text language:(NSString *)language {
-  if (self = [super init:ParsedResultType.TEXT]) {
-    text = text;
-    language = language;
+- (id) initWithText:(NSString *)aText language:(NSString *)aLanguage {
+  if (self = [super initWithType:kParsedResultTypeText]) {
+    text = [aText copy];
+    language = [aLanguage copy];
   }
   return self;
 }
