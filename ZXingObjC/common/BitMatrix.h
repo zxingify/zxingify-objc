@@ -1,5 +1,3 @@
-#import "BitArray.h"
-
 /**
  * <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
  * module, x is the column position, and y is the row position. The ordering is always x, y.
@@ -16,11 +14,13 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
+@class BitArray;
+
 @interface BitMatrix : NSObject {
   int width;
   int height;
   int rowSize;
-  NSArray * bits;
+  int *bits;
 }
 
 @property(nonatomic, retain, readonly) NSArray * topLeftOnBit;
@@ -37,7 +37,5 @@
 - (void) clear;
 - (void) setRegion:(int)left top:(int)top width:(int)width height:(int)height;
 - (BitArray *) getRow:(int)y row:(BitArray *)row;
-- (BOOL) isEqualTo:(NSObject *)o;
-- (int) hash;
-- (NSString *) description;
+
 @end
