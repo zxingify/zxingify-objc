@@ -9,7 +9,9 @@
   unichar value;
 }
 
-- (id) init:(int)newPosition value:(unichar)value;
-- (unichar) getValue;
+@property (nonatomic, readonly) unichar value;
+
+- (id) initWithNewPosition:(int)newPosition value:(unichar)value;
 - (BOOL) isFNC1;
+
 @end
