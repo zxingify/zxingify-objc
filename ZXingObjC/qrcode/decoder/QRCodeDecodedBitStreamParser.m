@@ -168,7 +168,7 @@ int const GB2312_SUBSET = 1;
     [readBytesArray addObject:[NSNumber numberWithChar:readBytes[i]]];
   }
 
-  NSStringEncoding encoding;
+  NSString encoding;
   if (currentCharacterSetECI == nil) {
     encoding = [StringUtils guessEncoding:readBytes length:count hints:hints];
   } else {
