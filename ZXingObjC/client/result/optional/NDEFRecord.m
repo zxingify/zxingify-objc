@@ -42,11 +42,11 @@ NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
   return [[[NDEFRecord alloc] initWithHeader:header type:type payload:payload totalRecordLength:3 + typeLength + payloadLength] autorelease];
 }
 
-- (BOOL) isMessageBegin {
+- (BOOL) messageBegin {
   return (header & 0x80) != 0;
 }
 
-- (BOOL) isMessageEnd {
+- (BOOL) messageEnd {
   return (header & 0x40) != 0;
 }
 

@@ -23,7 +23,7 @@ extern NSString * const ACTION_WELL_KNOWN_TYPE;
 @property (nonatomic, readonly) int totalRecordLength;
 
 + (NDEFRecord *) readRecord:(char *)bytes offset:(int)offset;
-- (BOOL) isMessageBegin;
-- (BOOL) isMessageEnd;
+- (BOOL) messageBegin;
+- (BOOL) messageEnd;
 
 @end

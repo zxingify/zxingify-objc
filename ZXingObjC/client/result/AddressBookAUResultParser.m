@@ -56,7 +56,7 @@
   if (values == nil) {
     return nil;
   }
-  return [self toStringArray:values];
+  return values;
 }
 
 @end
