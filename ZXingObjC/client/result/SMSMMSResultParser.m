@@ -48,8 +48,8 @@
   }
   [self addNumberVia:numbers vias:vias numberPart:[smsURIWithoutQuery substringFromIndex:lastComma + 1]];
 
-  return [[[SMSParsedResult alloc] initWithNumbers:[self toStringArray:numbers]
-                                              vias:[self toStringArray:vias]
+  return [[[SMSParsedResult alloc] initWithNumbers:numbers
+                                              vias:vias
                                            subject:subject
                                               body:body] autorelease];
 }

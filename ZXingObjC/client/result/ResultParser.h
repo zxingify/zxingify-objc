@@ -1,6 +1,3 @@
-#import "ParsedResult.h"
-#import "Result.h"
-
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
@@ -12,6 +9,8 @@
  * 
  * @author Sean Owen
  */
+
+@class ParsedResult, Result;
 
 @interface ResultParser : NSObject
 
@@ -25,6 +24,5 @@
 + (NSMutableDictionary *) parseNameValuePairs:(NSString *)uri;
 + (NSArray *) matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSString *) matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
-+ (NSArray *) toStringArray:(NSMutableArray *)strings;
 
 @end
