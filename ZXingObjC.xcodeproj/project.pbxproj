@@ -487,9 +487,9 @@
 		02D26EFA151288DB007F8DC6 /* libZXingObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE2151288DB007F8DC6 /* libZXingObjC.a */; };
 		02D26F00151288DB007F8DC6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02D26EFE151288DB007F8DC6 /* InfoPlist.strings */; };
 		02D26F03151288DC007F8DC6 /* ZXingObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 02D26F02151288DC007F8DC6 /* ZXingObjCTests.m */; };
-		250830011512AFD4006D79E6 /* QRCodeEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25082FFF1512AFD4006D79E6 /* QRCodeEncoder.h */; };
-		250830021512AFD4006D79E6 /* QRCodeEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* QRCodeEncoder.m */; };
-		250830031512AFD4006D79E6 /* QRCodeEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* QRCodeEncoder.m */; };
+		250830011512AFD4006D79E6 /* Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25082FFF1512AFD4006D79E6 /* Encoder.h */; };
+		250830021512AFD4006D79E6 /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* Encoder.m */; };
+		250830031512AFD4006D79E6 /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* Encoder.m */; };
 		2508300F1512B0B1006D79E6 /* DataMatrixDataBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 2508300D1512B0B1006D79E6 /* DataMatrixDataBlock.h */; };
 		250830101512B0B1006D79E6 /* DataMatrixDataBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 2508300E1512B0B1006D79E6 /* DataMatrixDataBlock.m */; };
 		250830111512B0B1006D79E6 /* DataMatrixDataBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 2508300E1512B0B1006D79E6 /* DataMatrixDataBlock.m */; };
@@ -858,8 +858,8 @@
 		02D26EFF151288DB007F8DC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02D26F01151288DC007F8DC6 /* ZXingObjCTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXingObjCTests.h; sourceTree = "<group>"; };
 		02D26F02151288DC007F8DC6 /* ZXingObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZXingObjCTests.m; sourceTree = "<group>"; };
-		25082FFF1512AFD4006D79E6 /* QRCodeEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeEncoder.h; sourceTree = "<group>"; };
-		250830001512AFD4006D79E6 /* QRCodeEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeEncoder.m; sourceTree = "<group>"; };
+		25082FFF1512AFD4006D79E6 /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
+		250830001512AFD4006D79E6 /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		2508300D1512B0B1006D79E6 /* DataMatrixDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixDataBlock.h; sourceTree = "<group>"; };
 		2508300E1512B0B1006D79E6 /* DataMatrixDataBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMatrixDataBlock.m; sourceTree = "<group>"; };
 		250830121512B0D0006D79E6 /* QRCodeDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeDataBlock.h; sourceTree = "<group>"; };
@@ -1397,14 +1397,14 @@
 				029BCED615129BD0009E6549 /* BlockPair.m */,
 				029BCED715129BD0009E6549 /* ByteMatrix.h */,
 				029BCED815129BD0009E6549 /* ByteMatrix.m */,
+				25082FFF1512AFD4006D79E6 /* Encoder.h */,
+				250830001512AFD4006D79E6 /* Encoder.m */,
 				029BCEDB15129BD0009E6549 /* MaskUtil.h */,
 				029BCEDC15129BD0009E6549 /* MaskUtil.m */,
 				029BCEDD15129BD0009E6549 /* MatrixUtil.h */,
 				029BCEDE15129BD0009E6549 /* MatrixUtil.m */,
 				029BCEDF15129BD0009E6549 /* QRCode.h */,
 				029BCEE015129BD0009E6549 /* QRCode.m */,
-				25082FFF1512AFD4006D79E6 /* QRCodeEncoder.h */,
-				250830001512AFD4006D79E6 /* QRCodeEncoder.m */,
 			);
 			path = encoder;
 			sourceTree = "<group>";
@@ -1684,7 +1684,7 @@
 				029BD1271512A0FA009E6549 /* ResultPointCallback.h in Headers */,
 				029BD1281512A0FA009E6549 /* Writer.h in Headers */,
 				029BD1291512A0FA009E6549 /* WriterException.h in Headers */,
-				250830011512AFD4006D79E6 /* QRCodeEncoder.h in Headers */,
+				250830011512AFD4006D79E6 /* Encoder.h in Headers */,
 				2508300F1512B0B1006D79E6 /* DataMatrixDataBlock.h in Headers */,
 				250830141512B0D0006D79E6 /* QRCodeDataBlock.h in Headers */,
 				250830191512B135006D79E6 /* QRCodeDecodedBitStreamParser.h in Headers */,
@@ -1950,7 +1950,7 @@
 				029BD1231512A0FA009E6549 /* Result.m in Sources */,
 				029BD1261512A0FA009E6549 /* ResultPoint.m in Sources */,
 				029BD12A1512A0FA009E6549 /* WriterException.m in Sources */,
-				250830021512AFD4006D79E6 /* QRCodeEncoder.m in Sources */,
+				250830021512AFD4006D79E6 /* Encoder.m in Sources */,
 				250830101512B0B1006D79E6 /* DataMatrixDataBlock.m in Sources */,
 				250830151512B0D0006D79E6 /* QRCodeDataBlock.m in Sources */,
 				2508301A1512B135006D79E6 /* QRCodeDecodedBitStreamParser.m in Sources */,
@@ -2120,7 +2120,7 @@
 				029BCFDB15129F65009E6549 /* PDF417Detector.m in Sources */,
 				029BD0F31512A0DB009E6549 /* QRCodeDecoder.m in Sources */,
 				029BD1061512A0EF009E6549 /* QRCodeDetector.m in Sources */,
-				250830031512AFD4006D79E6 /* QRCodeEncoder.m in Sources */,
+				250830031512AFD4006D79E6 /* Encoder.m in Sources */,
 				250830111512B0B1006D79E6 /* DataMatrixDataBlock.m in Sources */,
 				250830161512B0D0006D79E6 /* QRCodeDataBlock.m in Sources */,
 				2508301B1512B135006D79E6 /* QRCodeDecodedBitStreamParser.m in Sources */,

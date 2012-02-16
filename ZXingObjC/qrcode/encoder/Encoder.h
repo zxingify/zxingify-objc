@@ -1,21 +1,11 @@
-#import "EncodeHintType.h"
-#import "WriterException.h"
-#import "BitArray.h"
-#import "CharacterSetECI.h"
-#import "ECI.h"
-#import "GenericGF.h"
-#import "ReedSolomonEncoder.h"
-#import "ErrorCorrectionLevel.h"
-#import "Mode.h"
-#import "QRCodeVersion.h"
-#import "QRCode.h"
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 
-@interface QRCodeEncoder : NSObject
+@class BitArray, ErrorCorrectionLevel, Mode, QRCode;
+
+@interface Encoder : NSObject
 
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel qrCode:(QRCode *)qrCode;
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints qrCode:(QRCode *)qrCode;

@@ -1,40 +1,45 @@
+#import "NDEFRecord.h"
+#import "NDEFSmartPosterParsedResult.h"
 #import "NDEFSmartPosterResultParser.h"
+#import "NDEFTextResultParser.h"
+#import "NDEFURIResultParser.h"
+#import "Result.h"
 
 @implementation NDEFSmartPosterResultParser
 
 + (NDEFSmartPosterParsedResult *) parse:(Result *)result {
-  NSArray * bytes = [result rawBytes];
+  char * bytes = [result rawBytes];
   if (bytes == nil) {
     return nil;
   }
-  NDEFRecord * headerRecord = [NDEFRecord readRecord:bytes param1:0];
+  NDEFRecord * headerRecord = [NDEFRecord readRecord:bytes offset:0];
   if (headerRecord == nil || ![headerRecord messageBegin] || ![headerRecord messageEnd]) {
     return nil;
   }
-  if (![[headerRecord type] isEqualTo:NDEFRecord.SMART_POSTER_WELL_KNOWN_TYPE]) {
+  if (![[headerRecord type] isEqualToString:SMART_POSTER_WELL_KNOWN_TYPE]) {
     return nil;
   }
+
   int offset = 0;
   int recordNumber = 0;
   NDEFRecord * ndefRecord = nil;
-  NSArray * payload = [headerRecord payload];
-  int action = NDEFSmartPosterParsedResult.ACTION_UNSPECIFIED;
+  char * payload = [headerRecord payload];
+  int action = ACTION_UNSPECIFIED;
   NSString * title = nil;
   NSString * uri = nil;
 
-  while (offset < payload.length && (ndefRecord = [NDEFRecord readRecord:payload param1:offset]) != nil) {
+  while (offset < sizeof(payload) / sizeof(char) && (ndefRecord = [NDEFRecord readRecord:payload offset:offset]) != nil) {
     if (recordNumber == 0 && ![ndefRecord messageBegin]) {
       return nil;
     }
+
     NSString * type = [ndefRecord type];
-    if ([NDEFRecord.TEXT_WELL_KNOWN_TYPE isEqualTo:type]) {
+    if ([TEXT_WELL_KNOWN_TYPE isEqualToString:type]) {
       NSArray * languageText = [NDEFTextResultParser decodeTextPayload:[ndefRecord payload]];
-      title = languageText[1];
-    }
-     else if ([NDEFRecord.URI_WELL_KNOWN_TYPE isEqualTo:type]) {
+      title = [languageText objectAtIndex:1];
+    } else if ([URI_WELL_KNOWN_TYPE isEqualToString:type]) {
       uri = [NDEFURIResultParser decodeURIPayload:[ndefRecord payload]];
-    }
-     else if ([NDEFRecord.ACTION_WELL_KNOWN_TYPE isEqualTo:type]) {
+    } else if ([ACTION_WELL_KNOWN_TYPE isEqualToString:type]) {
       action = [ndefRecord payload][0];
     }
     recordNumber++;
@@ -44,7 +49,8 @@
   if (recordNumber == 0 || (ndefRecord != nil && ![ndefRecord messageEnd])) {
     return nil;
   }
-  return [[[NDEFSmartPosterParsedResult alloc] init:action param1:uri param2:title] autorelease];
+
+  return [[[NDEFSmartPosterParsedResult alloc] initWithAction:action uri:uri title:title] autorelease];
 }
 
 @end
