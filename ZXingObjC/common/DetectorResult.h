@@ -1,6 +1,3 @@
-#import "BitMatrix.h"
-#import "ResultPoint.h"
-
 /**
  * <p>Encapsulates the result of detecting a barcode in an image. This includes the raw
  * matrix of black/white pixels corresponding to the barcode, and possibly points of interest
@@ -9,6 +6,8 @@
  * @author Sean Owen
  */
 
+@class BitMatrix;
+
 @interface DetectorResult : NSObject {
   BitMatrix * bits;
   NSArray * points;
@@ -16,6 +15,7 @@
 
 @property(nonatomic, retain, readonly) BitMatrix * bits;
 @property(nonatomic, retain, readonly) NSArray * points;
+
 - (id) initWithBits:(BitMatrix *)bits points:(NSArray *)points;
 
 @end

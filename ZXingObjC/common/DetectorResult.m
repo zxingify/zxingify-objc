@@ -1,3 +1,4 @@
+#import "BitMatrix.h"
 #import "DetectorResult.h"
 
 @implementation DetectorResult
@@ -5,10 +6,10 @@
 @synthesize bits;
 @synthesize points;
 
-- (id) initWithBits:(BitMatrix *)bits points:(NSArray *)points {
+- (id) initWithBits:(BitMatrix *)theBits points:(NSArray *)thePoints {
   if (self = [super init]) {
-    bits = bits;
-    points = points;
+    bits = [theBits retain];
+    points = [thePoints retain];
   }
   return self;
 }
