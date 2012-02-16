@@ -1,25 +1,21 @@
+#import "Result.h"
+#import "URIParsedResult.h"
 #import "URLTOResultParser.h"
 
 @implementation URLTOResultParser
 
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
 + (URIParsedResult *) parse:(Result *)result {
-  NSString * rawText = [result text];
+  NSString * rawText = result.text;
   if (rawText == nil || (![rawText hasPrefix:@"urlto:"] && ![rawText hasPrefix:@"URLTO:"])) {
     return nil;
   }
-  int titleEnd = [rawText rangeOfString:':' param1:6];
+  int titleEnd = [rawText rangeOfString:@":" options:NSLiteralSearch range:NSMakeRange(6, [rawText length] - 6)].location;
   if (titleEnd < 0) {
     return nil;
   }
-  NSString * title = titleEnd <= 6 ? nil : [rawText substringFromIndex:6 param1:titleEnd];
+  NSString * title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, [rawText length] - titleEnd)];
   NSString * uri = [rawText substringFromIndex:titleEnd + 1];
-  return [[[URIParsedResult alloc] init:uri param1:title] autorelease];
+  return [[[URIParsedResult alloc] initWithUri:uri title:title] autorelease];
 }
 
 @end
