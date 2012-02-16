@@ -26,8 +26,8 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
 @interface PDF417Detector ()
 
-- (NSArray *) findVertices:(BitMatrix *)matrix;
-- (NSArray *) findVertices180:(BitMatrix *)matrix;
+- (NSMutableArray *) findVertices:(BitMatrix *)matrix;
+- (NSMutableArray *) findVertices180:(BitMatrix *)matrix;
 - (void) correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown;
 - (float) computeModuleWidth:(NSArray *)vertices;
 - (int) computeDimension:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
@@ -69,7 +69,8 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  */
 - (DetectorResult *) detect:(NSMutableDictionary *)hints {
   BitMatrix * matrix = [image blackMatrix];
-  NSArray * vertices = [self findVertices:matrix];
+
+  NSMutableArray * vertices = [self findVertices:matrix];
   if (vertices == nil) {
     vertices = [self findVertices180:matrix];
     if (vertices != nil) {
@@ -111,7 +112,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * vertices[6] x, y top right codeword area
  * vertices[7] x, y bottom right codeword area
  */
-- (NSArray *) findVertices:(BitMatrix *)matrix {
+- (NSMutableArray *) findVertices:(BitMatrix *)matrix {
   int height = [matrix height];
   int width = [matrix width];
 
@@ -201,7 +202,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * vertices[6] x, y top right codeword area
  * vertices[7] x, y bottom right codeword area
  */
-- (NSArray *) findVertices180:(BitMatrix *)matrix {
+- (NSMutableArray *) findVertices180:(BitMatrix *)matrix {
   int height = [matrix height];
   int width = [matrix width];
   int halfWidth = width >> 1;

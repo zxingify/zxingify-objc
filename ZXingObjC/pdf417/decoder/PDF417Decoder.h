@@ -1,9 +1,3 @@
-#import "ChecksumException.h"
-#import "FormatException.h"
-#import "NotFoundException.h"
-#import "BitMatrix.h"
-#import "DecoderResult.h"
-
 /**
  * <p>The main class which implements PDF417 Code decoding -- as
  * opposed to locating and extracting the PDF417 Code from an image.</p>
@@ -11,9 +5,11 @@
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 
+@class BitMatrix, DecoderResult;
+
 @interface PDF417Decoder : NSObject
 
-- (DecoderResult *) decode:(NSArray *)image;
 - (DecoderResult *) decode:(BitMatrix *)bits;
+- (DecoderResult *) decodeArray:(NSArray *)image;
 
 @end

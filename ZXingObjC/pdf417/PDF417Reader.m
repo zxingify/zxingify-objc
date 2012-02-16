@@ -1,12 +1,27 @@
+#import "BarcodeFormat.h"
+#import "DecodeHintType.h"
+#import "DecoderResult.h"
+#import "DetectorResult.h"
+#import "NotFoundException.h"
+#import "PDF417Decoder.h"
+#import "PDF417Detector.h"
 #import "PDF417Reader.h"
+#import "Result.h"
 
-NSArray * const NO_POINTS = [NSArray array];
+@interface PDF417Reader ()
+
+- (BitMatrix *) extractPureBits:(BitMatrix *)image;
+- (int) findPatternStart:(int)x y:(int)y image:(BitMatrix *)image;
+- (int) findPatternEnd:(int)x y:(int)y image:(BitMatrix *)image;
+- (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image;
+
+@end
 
 @implementation PDF417Reader
 
-- (void) init {
+- (id) init {
   if (self = [super init]) {
-    decoder = [[[Decoder alloc] init] autorelease];
+    decoder = [[PDF417Decoder alloc] init];
   }
   return self;
 }
@@ -26,20 +41,23 @@ NSArray * const NO_POINTS = [NSArray array];
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
   DecoderResult * decoderResult;
   NSArray * points;
-  if (hints != nil && [hints containsKey:DecodeHintType.PURE_BARCODE]) {
+  if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePureBarcode]]) {
     BitMatrix * bits = [self extractPureBits:[image blackMatrix]];
     decoderResult = [decoder decode:bits];
-    points = NO_POINTS;
-  }
-   else {
-    DetectorResult * detectorResult = [[[[Detector alloc] init:image] autorelease] detect];
+    points = [NSArray array];
+  } else {
+    DetectorResult * detectorResult = [[[[PDF417Detector alloc] initWithImage:image] autorelease] detect];
     decoderResult = [decoder decode:[detectorResult bits]];
     points = [detectorResult points];
   }
-  return [[[Result alloc] init:[decoderResult text] param1:[decoderResult rawBytes] param2:points param3:BarcodeFormat.PDF_417] autorelease];
+  return [[[Result alloc] initWithText:[decoderResult text]
+                              rawBytes:[decoderResult rawBytes]
+                                resultPoints:points
+                                format:kBarcodeFormatPDF417] autorelease];
 }
 
 - (void) reset {
+  // do nothing
 }
 
 
@@ -52,95 +70,94 @@ NSArray * const NO_POINTS = [NSArray array];
  * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
  * @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
  */
-+ (BitMatrix *) extractPureBits:(BitMatrix *)image {
+- (BitMatrix *) extractPureBits:(BitMatrix *)image {
   NSArray * leftTopBlack = [image topLeftOnBit];
   NSArray * rightBottomBlack = [image bottomRightOnBit];
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     @throw [NotFoundException notFoundInstance];
   }
+
   int moduleSize = [self moduleSize:leftTopBlack image:image];
-  int top = leftTopBlack[1];
-  int bottom = rightBottomBlack[1];
-  int left = [self findPatternStart:leftTopBlack[0] y:top image:image];
-  int right = [self findPatternEnd:leftTopBlack[0] y:top image:image];
+
+  int top = [[leftTopBlack objectAtIndex:1] intValue];
+  int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
+  int left = [self findPatternStart:[[leftTopBlack objectAtIndex:0] intValue] y:top image:image];
+  int right = [self findPatternEnd:[[leftTopBlack objectAtIndex:0] intValue] y:top image:image];
+
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
   if (matrixWidth == 0 || matrixHeight == 0) {
     @throw [NotFoundException notFoundInstance];
   }
+
   int nudge = moduleSize >> 1;
   top += nudge;
   left += nudge;
-  BitMatrix * bits = [[[BitMatrix alloc] init:matrixWidth param1:matrixHeight] autorelease];
 
+  BitMatrix * bits = [[[BitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + y * moduleSize;
-
     for (int x = 0; x < matrixWidth; x++) {
-      if ([image get:left + x * moduleSize param1:iOffset]) {
-        [bits set:x param1:y];
+      if ([image get:left + x * moduleSize y:iOffset]) {
+        [bits set:x y:y];
       }
     }
-
   }
 
   return bits;
 }
 
-+ (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image {
-  int x = leftTopBlack[0];
-  int y = leftTopBlack[1];
+- (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image {
+  int x = [[leftTopBlack objectAtIndex:0] intValue];
+  int y = [[leftTopBlack objectAtIndex:1] intValue];
   int width = [image width];
-
-  while (x < width && [image get:x param1:y]) {
+  while (x < width && [image get:x y:y]) {
     x++;
   }
-
   if (x == width) {
     @throw [NotFoundException notFoundInstance];
   }
-  int moduleSize = (x - leftTopBlack[0]) >>> 3;
+
+  int moduleSize = (x - [[leftTopBlack objectAtIndex:0] intValue]) >> 3;
   if (moduleSize == 0) {
     @throw [NotFoundException notFoundInstance];
   }
+
   return moduleSize;
 }
 
-+ (int) findPatternStart:(int)x y:(int)y image:(BitMatrix *)image {
+- (int) findPatternStart:(int)x y:(int)y image:(BitMatrix *)image {
   int width = [image width];
   int start = x;
+
   int transitions = 0;
   BOOL black = YES;
-
   while (start < width - 1 && transitions < 8) {
     start++;
-    BOOL newBlack = [image get:start param1:y];
+    BOOL newBlack = [image get:start y:y];
     if (black != newBlack) {
       transitions++;
     }
     black = newBlack;
   }
-
   if (start == width - 1) {
     @throw [NotFoundException notFoundInstance];
   }
   return start;
 }
 
-+ (int) findPatternEnd:(int)x y:(int)y image:(BitMatrix *)image {
+- (int) findPatternEnd:(int)x y:(int)y image:(BitMatrix *)image {
   int width = [image width];
   int end = width - 1;
 
-  while (end > x && ![image get:end param1:y]) {
+  while (end > x && ![image get:end y:y]) {
     end--;
   }
-
   int transitions = 0;
   BOOL black = YES;
-
   while (end > x && transitions < 9) {
     end--;
-    BOOL newBlack = [image get:end param1:y];
+    BOOL newBlack = [image get:end y:y];
     if (black != newBlack) {
       transitions++;
     }

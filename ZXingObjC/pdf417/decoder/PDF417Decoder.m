@@ -1,3 +1,4 @@
+#import "BitMatrix.h"
 #import "PDF417Decoder.h"
 
 int const MAX_ERRORS = 3;
