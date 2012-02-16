@@ -15,8 +15,9 @@
   NSArray * coefficients;
 }
 
-- (id) init:(GenericGF *)field coefficients:(NSArray *)coefficients;
-- (NSArray *) coefficients;
+@property (nonatomic, readonly) NSArray* coefficients;
+
+- (id) initWithField:(GenericGF *)field coefficients:(NSArray *)coefficients;
 - (int) degree;
 - (BOOL) zero;
 - (int) coefficient:(int)degree;
@@ -26,5 +27,5 @@
 - (GenericGFPoly *) multiplyScalar:(int)scalar;
 - (GenericGFPoly *) multiplyByMonomial:(int)degree coefficient:(int)coefficient;
 - (NSArray *) divide:(GenericGFPoly *)other;
-- (NSString *) description;
+
 @end
