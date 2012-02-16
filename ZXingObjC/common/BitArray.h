@@ -27,7 +27,6 @@
 - (void) appendBitArray:(BitArray *)other;
 - (void) xor:(BitArray *)other;
 - (void) toBytes:(int)bitOffset array:(char *)array offset:(int)offset numBytes:(int)numBytes;
-- (int*) bitArray;
 - (void) reverse;
 
 @end

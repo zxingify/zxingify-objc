@@ -4,6 +4,7 @@
 
 @property (nonatomic, assign) int size;
 
+- (void) ensureCapacity:(int)aSize;
 - (int *)makeArray:(int)size;
 
 @end

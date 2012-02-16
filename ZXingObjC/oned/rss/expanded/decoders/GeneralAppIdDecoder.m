@@ -66,7 +66,7 @@
   return [self extractNumericValueFromBitArray:information pos:pos bits:bits];
 }
 
-+ (int) extractNumericValueFromBitArray:(BitArray *)information pos:(int)pos bits:(int)bits {
+- (int) extractNumericValueFromBitArray:(BitArray *)information pos:(int)pos bits:(int)bits {
   if (bits > 32) {
     @throw [[[IllegalArgumentException alloc] init:@"extractNumberValueFromBitArray can't handle more than 32 bits"] autorelease];
   }

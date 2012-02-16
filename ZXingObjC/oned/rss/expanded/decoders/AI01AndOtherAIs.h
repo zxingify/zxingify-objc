@@ -7,6 +7,4 @@
 
 @interface AI01AndOtherAIs : AI01decoder
 
-- (NSString *) parseInformation;
-
 @end
