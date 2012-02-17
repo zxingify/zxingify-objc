@@ -1,6 +1,6 @@
 #import "Binarizer.h"
 #import "LuminanceSource.h"
-#import "NotFoundException.h"
+#import "GlobalHistogramBinarizer.h"
 
 /**
  * This class implements a local thresholding algorithm, which while slower than the

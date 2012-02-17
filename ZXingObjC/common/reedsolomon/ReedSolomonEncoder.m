@@ -12,7 +12,8 @@
     }
     field = [aField retain];
     cachedGenerators = [[NSMutableArray alloc] initWithObjects:
-                        [[[GenericGFPoly alloc] init:aField coefficients:[NSArray arrayWithObject:[NSNumber numberWithInt:1]]] autorelease], nil];
+                        [[[GenericGFPoly alloc] initWithField:aField
+                                                 coefficients:[NSArray arrayWithObject:[NSNumber numberWithInt:1]]] autorelease], nil];
   }
   return self;
 }
@@ -22,7 +23,7 @@
     GenericGFPoly * lastGenerator = (GenericGFPoly *)[cachedGenerators objectAtIndex:[cachedGenerators count] - 1];
 
     for (int d = [cachedGenerators count]; d <= degree; d++) {
-      GenericGFPoly * nextGenerator = [lastGenerator multiply:[[[GenericGFPoly alloc] init:field coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], [field exp:d - 1], nil]] autorelease]];
+      GenericGFPoly * nextGenerator = [lastGenerator multiply:[[[GenericGFPoly alloc] initWithField:field coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], [field exp:d - 1], nil]] autorelease]];
       [cachedGenerators addObject:nextGenerator];
       lastGenerator = nextGenerator;
     }
@@ -45,7 +46,7 @@
   }
   GenericGFPoly * generator = [self buildGenerator:ecBytes];
   NSArray * infoCoefficients = [toEncode copy];
-  GenericGFPoly * info = [[[GenericGFPoly alloc] init:field coefficients:infoCoefficients] autorelease];
+  GenericGFPoly * info = [[[GenericGFPoly alloc] initWithField:field coefficients:infoCoefficients] autorelease];
   info = [info multiplyByMonomial:ecBytes coefficient:1];
   GenericGFPoly * remainder = [[info divide:generator] objectAtIndex:1];
   NSArray * coefficients = [remainder coefficients];

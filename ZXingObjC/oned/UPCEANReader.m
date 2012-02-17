@@ -317,6 +317,9 @@ int L_AND_G_PATTERNS[20][4];
  * @throws NotFoundException if decoding could not complete successfully
  */
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 - (void) dealloc {

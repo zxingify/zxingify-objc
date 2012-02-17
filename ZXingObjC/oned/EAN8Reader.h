@@ -1,6 +1,5 @@
 #import "BarcodeFormat.h"
-#import "NotFoundException.h"
-#import "BitArray.h"
+#import "UPCEANReader.h"
 
 /**
  * <p>Implements decoding of the EAN-8 format.</p>

@@ -30,7 +30,7 @@
  * @throws ReedSolomonException if decoding fails for any reason
  */
 - (void) decode:(NSMutableArray *)received twoS:(int)twoS {
-  GenericGFPoly * poly = [[[GenericGFPoly alloc] init:field coefficients:received] autorelease];
+  GenericGFPoly * poly = [[[GenericGFPoly alloc] initWithField:field coefficients:received] autorelease];
   NSMutableArray * syndromeCoefficients = [NSMutableArray arrayWithCapacity:twoS];
   for (int i = 0; i < twoS; i++) {
     [syndromeCoefficients addObject:[NSNull null]];
@@ -50,7 +50,7 @@
   if (noError) {
     return;
   }
-  GenericGFPoly * syndrome = [[[GenericGFPoly alloc] init:field coefficients:syndromeCoefficients] autorelease];
+  GenericGFPoly * syndrome = [[[GenericGFPoly alloc] initWithField:field coefficients:syndromeCoefficients] autorelease];
   NSArray * sigmaOmega = [self runEuclideanAlgorithm:[field buildMonomial:twoS coefficient:1] b:syndrome R:twoS];
   GenericGFPoly * sigma = [sigmaOmega objectAtIndex:0];
   GenericGFPoly * omega = [sigmaOmega objectAtIndex:1];

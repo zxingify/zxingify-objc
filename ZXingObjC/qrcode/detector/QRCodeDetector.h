@@ -16,14 +16,14 @@
  * @author Sean Owen
  */
 
-@interface QrCodeDetector : NSObject {
+@interface QRCodeDetector : NSObject {
   BitMatrix * image;
-  ResultPointCallback * resultPointCallback;
+  id <ResultPointCallback> resultPointCallback;
 }
 
 - (id) initWithImage:(BitMatrix *)image;
 - (BitMatrix *) getImage;
-- (ResultPointCallback *) getResultPointCallback;
+- (id <ResultPointCallback>) getResultPointCallback;
 - (DetectorResult *) detect;
 - (DetectorResult *) detect:(NSMutableDictionary *)hints;
 - (DetectorResult *) processFinderPatternInfo:(FinderPatternInfo *)info;

@@ -42,7 +42,7 @@
     decoderResult = [decoder decodeMatrix:bits];
     points = [NSArray array];
   } else {
-    DetectorResult * detectorResult = [[[[Detector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
+    DetectorResult * detectorResult = [[[[DataMatrixDetector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
     decoderResult = [decoder decode:[detectorResult bits]];
     points = [detectorResult points];
   }
