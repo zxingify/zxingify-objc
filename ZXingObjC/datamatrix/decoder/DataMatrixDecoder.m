@@ -1,10 +1,26 @@
+#import "BitMatrix.h"
+#import "ChecksumException.h"
+#import "DataMatrixBitMatrixParser.h"
+#import "DataMatrixDataBlock.h"
+#import "DataMatrixDecodedBitStreamParser.h"
 #import "DataMatrixDecoder.h"
+#import "DataMatrixVersion.h"
+#import "DecoderResult.h"
+#import "GenericGF.h"
+#import "ReedSolomonDecoder.h"
+#import "ReedSolomonException.h"
+
+@interface DataMatrixDecoder ()
+
+- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords;
+
+@end
 
 @implementation DataMatrixDecoder
 
 - (id) init {
   if (self = [super init]) {
-    rsDecoder = [[[ReedSolomonDecoder alloc] init:GenericGF.DATA_MATRIX_FIELD_256] autorelease];
+    rsDecoder = [[[ReedSolomonDecoder alloc] initWithField:[GenericGF DataMatrixField256]] autorelease];
   }
   return self;
 }
@@ -19,21 +35,18 @@
  * @throws FormatException if the Data Matrix Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (DecoderResult *) decode:(NSArray *)image {
-  int dimension = image.length;
-  BitMatrix * bits = [[[BitMatrix alloc] init:dimension] autorelease];
-
+- (DecoderResult *) decode:(BOOL*[])image {
+  int dimension = sizeof((BOOL*)image) / sizeof(BOOL*);
+  BitMatrix * bits = [[[BitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
-
     for (int j = 0; j < dimension; j++) {
       if (image[i][j]) {
-        [bits set:j param1:i];
+        [bits set:j y:i];
       }
     }
-
   }
 
-  return [self decode:bits];
+  return [self decodeMatrix:bits];
 }
 
 
@@ -47,32 +60,31 @@
  * @throws ChecksumException if error correction fails
  */
 - (DecoderResult *) decodeMatrix:(BitMatrix *)bits {
-  BitMatrixParser * parser = [[[BitMatrixParser alloc] init:bits] autorelease];
-  Version * version = [parser version];
+  DataMatrixBitMatrixParser * parser = [[[DataMatrixBitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
+  DataMatrixVersion * version = [parser version];
+
   NSArray * codewords = [parser readCodewords];
-  NSArray * dataBlocks = [DataBlock getDataBlocks:codewords param1:version];
-  int dataBlocksCount = dataBlocks.length;
+  NSArray * dataBlocks = [DataMatrixDataBlock getDataBlocks:codewords version:version];
+
+  int dataBlocksCount = [dataBlocks count];
+
   int totalBytes = 0;
-
   for (int i = 0; i < dataBlocksCount; i++) {
-    totalBytes += [dataBlocks[i] numDataCodewords];
+    totalBytes += [[dataBlocks objectAtIndex:i] numDataCodewords];
   }
-
-  NSArray * resultBytes = [NSArray array];
+  char resultBytes[totalBytes];
 
   for (int j = 0; j < dataBlocksCount; j++) {
-    DataBlock * dataBlock = dataBlocks[j];
-    NSArray * codewordBytes = [dataBlock codewords];
+    DataMatrixDataBlock * dataBlock = [dataBlocks objectAtIndex:j];
+    NSMutableArray * codewordBytes = [dataBlock codewords];
     int numDataCodewords = [dataBlock numDataCodewords];
     [self correctErrors:codewordBytes numDataCodewords:numDataCodewords];
-
     for (int i = 0; i < numDataCodewords; i++) {
-      resultBytes[i * dataBlocksCount + j] = codewordBytes[i];
+      resultBytes[i * dataBlocksCount + j] = [[codewordBytes objectAtIndex:i] charValue];
     }
-
   }
 
-  return [DecodedBitStreamParser decode:resultBytes];
+  return [DataMatrixDecodedBitStreamParser decode:resultBytes];
 }
 
 
@@ -84,27 +96,24 @@
  * @param numDataCodewords number of codewords that are data bytes
  * @throws ChecksumException if error correction fails
  */
-- (void) correctErrors:(NSArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
-  int numCodewords = codewordBytes.length;
-  NSArray * codewordsInts = [NSArray array];
+- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
+  int numCodewords = [codewordBytes count];
 
+  NSMutableArray * codewordsInts = [NSMutableArray arrayWithCapacity:numCodewords];
   for (int i = 0; i < numCodewords; i++) {
-    codewordsInts[i] = codewordBytes[i] & 0xFF;
+    [codewordsInts addObject:[NSNumber numberWithInt:[[codewordBytes objectAtIndex:i] charValue] & 0xFF]];
   }
 
-  int numECCodewords = codewordBytes.length - numDataCodewords;
-
+  int numECCodewords = [codewordBytes count] - numDataCodewords;
   @try {
-    [rsDecoder decode:codewordsInts param1:numECCodewords];
-  }
-  @catch (ReedSolomonException * rse) {
+    [rsDecoder decode:codewordsInts twoS:numECCodewords];
+  } @catch (ReedSolomonException * rse) {
     @throw [ChecksumException checksumInstance];
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
-    codewordBytes[i] = (char)codewordsInts[i];
+    [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:[[codewordsInts objectAtIndex:i] charValue]]];
   }
-
 }
 
 - (void) dealloc {

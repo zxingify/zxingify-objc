@@ -1,11 +1,11 @@
 #import "BitMatrix.h"
 #import "DataMatrixBitMatrixParser.h"
+#import "DataMatrixVersion.h"
 #import "FormatException.h"
-#import "QRCodeVersion.h"
 
-@interface BitMatrixParser ()
+@interface DataMatrixBitMatrixParser ()
 
-- (QRCodeVersion *) readVersion:(BitMatrix *)bitMatrix;
+- (DataMatrixVersion *) readVersion:(BitMatrix *)bitMatrix;
 
 @end
 
@@ -42,10 +42,10 @@
  * @throws FormatException if the dimensions of the mapping matrix are not valid
  * Data Matrix dimensions.
  */
-- (QRCodeVersion *) readVersion:(BitMatrix *)bitMatrix {
+- (DataMatrixVersion *) readVersion:(BitMatrix *)bitMatrix {
   int numRows = [bitMatrix height];
   int numColumns = [bitMatrix width];
-  return [QRCodeVersion getVersionForDimensions:numRows numColumns:numColumns];
+  return [DataMatrixVersion getVersionForDimensions:numRows numColumns:numColumns];
 }
 
 

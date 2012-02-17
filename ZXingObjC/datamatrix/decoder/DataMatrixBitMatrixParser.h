@@ -2,15 +2,15 @@
  * @author bbrown@google.com (Brian Brown)
  */
 
-@class BitMatrix, QRCodeVersion;
+@class BitMatrix, DataMatrixVersion;
 
 @interface DataMatrixBitMatrixParser : NSObject {
   BitMatrix * mappingBitMatrix;
   BitMatrix * readMappingMatrix;
-  QRCodeVersion * version;
+  DataMatrixVersion * version;
 }
 
-@property (nonatomic, readonly) QRCodeVersion* version;
+@property (nonatomic, readonly) DataMatrixVersion* version;
 
 - (id) initWithBitMatrix:(BitMatrix *)bitMatrix;
 - (NSArray *) readCodewords;
