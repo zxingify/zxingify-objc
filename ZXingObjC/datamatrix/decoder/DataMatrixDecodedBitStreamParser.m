@@ -1,42 +1,71 @@
+#import "BitSource.h"
 #import "DataMatrixDecodedBitStreamParser.h"
-
+#import "DecoderResult.h"
+#import "FormatException.h"
 
 /**
  * See ISO 16022:2006, Annex C Table C.1
  * The C40 Basic Character Set (*'s used for placeholders for the shift values)
  */
-NSArray * const C40_BASIC_SET_CHARS = [NSArray arrayWithObjects:'*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', nil];
-NSArray * const C40_SHIFT2_SET_CHARS = [NSArray arrayWithObjects:'!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', nil];
+const char C40_BASIC_SET_CHARS[40] = {
+  '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+  'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+};
+
+const char C40_SHIFT2_SET_CHARS[40] = {
+  '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',  '+', ',', '-', '.',
+  '/', ':', ';', '<', '=', '>', '?',  '@', '[', '\\', ']', '^', '_'
+};
 
 /**
  * See ISO 16022:2006, Annex C Table C.2
  * The Text Basic Character Set (*'s used for placeholders for the shift values)
  */
-NSArray * const TEXT_BASIC_SET_CHARS = [NSArray arrayWithObjects:'*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', nil];
-NSArray * const TEXT_SHIFT3_SET_CHARS = [NSArray arrayWithObjects:'\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (unichar)127, nil];
-int const PAD_ENCODE = 0;
-int const ASCII_ENCODE = 1;
-int const C40_ENCODE = 2;
-int const TEXT_ENCODE = 3;
-int const ANSIX12_ENCODE = 4;
-int const EDIFACT_ENCODE = 5;
-int const BASE256_ENCODE = 6;
+const char TEXT_BASIC_SET_CHARS[40] = {
+  '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+  'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+};
+
+const char TEXT_SHIFT3_SET_CHARS[32] = {
+  '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+  'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
+};
+
+const int PAD_ENCODE = 0;
+const int ASCII_ENCODE = 1;
+const int C40_ENCODE = 2;
+const int TEXT_ENCODE = 3;
+const int ANSIX12_ENCODE = 4;
+const int EDIFACT_ENCODE = 5;
+const int BASE256_ENCODE = 6;
+
+@interface DataMatrixDecodedBitStreamParser ()
+
++ (void) decodeAnsiX12Segment:(BitSource *)bits result:(NSMutableString *)result;
++ (int) decodeAsciiSegment:(BitSource *)bits result:(NSMutableString *)result resultTrailer:(NSMutableString *)resultTrailer;
++ (void) decodeBase256Segment:(BitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments;
++ (void) decodeC40Segment:(BitSource *)bits result:(NSMutableString *)result;
++ (void) decodeEdifactSegment:(BitSource *)bits result:(NSMutableString *)result;
++ (void) decodeTextSegment:(BitSource *)bits result:(NSMutableString *)result;
++ (void) parseTwoBytes:(int)firstByte secondByte:(int)secondByte result:(int[])result;
++ (char) unrandomize255State:(int)randomizedBase256Codeword base256CodewordPosition:(int)base256CodewordPosition;
+
+@end
 
 @implementation DataMatrixDecodedBitStreamParser
 
-+ (DecoderResult *) decode:(NSArray *)bytes {
-  BitSource * bits = [[[BitSource alloc] init:bytes] autorelease];
-  NSMutableString * result = [[[NSMutableString alloc] init:100] autorelease];
-  NSMutableString * resultTrailer = [[[NSMutableString alloc] init:0] autorelease];
-  NSMutableArray * byteSegments = [[[NSMutableArray alloc] init:1] autorelease];
++ (DecoderResult *) decode:(char *)bytes {
+  BitSource * bits = [[[BitSource alloc] initWithBytes:bytes] autorelease];
+  NSMutableString * result = [NSMutableString stringWithCapacity:100];
+  NSMutableString * resultTrailer = [NSMutableString string];
+  NSMutableArray * byteSegments = [NSMutableArray arrayWithCapacity:1];
   int mode = ASCII_ENCODE;
-
   do {
     if (mode == ASCII_ENCODE) {
       mode = [self decodeAsciiSegment:bits result:result resultTrailer:resultTrailer];
-    }
-     else {
-
+    } else {
       switch (mode) {
       case C40_ENCODE:
         [self decodeC40Segment:bits result:result];
@@ -61,9 +90,12 @@ int const BASE256_ENCODE = 6;
   }
    while (mode != PAD_ENCODE && [bits available] > 0);
   if ([resultTrailer length] > 0) {
-    [result append:[resultTrailer description]];
+    [result appendString:resultTrailer];
   }
-  return [[[DecoderResult alloc] init:bytes param1:[result description] param2:[byteSegments empty] ? nil : byteSegments param3:nil] autorelease];
+  return [[[DecoderResult alloc] init:bytes
+                                 text:result
+                         byteSegments:[byteSegments count] == 0 ? nil : byteSegments
+                               ecLevel:nil] autorelease];
 }
 
 
@@ -77,62 +109,51 @@ int const BASE256_ENCODE = 6;
     int oneByte = [bits readBits:8];
     if (oneByte == 0) {
       @throw [FormatException formatInstance];
-    }
-     else if (oneByte <= 128) {
+    } else if (oneByte <= 128) {
       oneByte = upperShift ? oneByte + 128 : oneByte;
       upperShift = NO;
-      [result append:(unichar)(oneByte - 1)];
+      [result appendFormat:@"%c", (unichar)(oneByte - 1)];
       return ASCII_ENCODE;
-    }
-     else if (oneByte == 129) {
+    } else if (oneByte == 129) {
       return PAD_ENCODE;
-    }
-     else if (oneByte <= 229) {
+    } else if (oneByte <= 229) {
       int value = oneByte - 130;
       if (value < 10) {
-        [result append:'0'];
+        [result appendString:@"0"];
       }
-      [result append:value];
-    }
-     else if (oneByte == 230) {
+      [result appendFormat:@"%d", value];
+    } else if (oneByte == 230) {
       return C40_ENCODE;
-    }
-     else if (oneByte == 231) {
+    } else if (oneByte == 231) {
       return BASE256_ENCODE;
-    }
-     else if (oneByte == 232 || oneByte == 233 || oneByte == 234) {
-    }
-     else if (oneByte == 235) {
+    } else if (oneByte == 232 || oneByte == 233 || oneByte == 234) {
+      // FNC1, Structured Append, Reader Programming
+      // Ignore these symbols for now
+    } else if (oneByte == 235) {
       upperShift = YES;
-    }
-     else if (oneByte == 236) {
-      [result append:@"[)>05"];
-      [resultTrailer insert:0 param1:@""];
-    }
-     else if (oneByte == 237) {
-      [result append:@"[)>06"];
-      [resultTrailer insert:0 param1:@""];
-    }
-     else if (oneByte == 238) {
+    } else if (oneByte == 236) {
+      [result appendFormat:@"[)>%C%C", 0x001E05, 0x001D];
+      [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", 0x001E, 0x0004] atIndex:0];
+    } else if (oneByte == 237) {
+      [result appendFormat:@"[)>%C%C", 0x001E06, 0x001D];
+      [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", 0x001E, 0x0004] atIndex:0];
+    } else if (oneByte == 238) {
       return ANSIX12_ENCODE;
-    }
-     else if (oneByte == 239) {
+    } else if (oneByte == 239) {
       return TEXT_ENCODE;
-    }
-     else if (oneByte == 240) {
+    } else if (oneByte == 240) {
       return EDIFACT_ENCODE;
-    }
-     else if (oneByte == 241) {
-    }
-     else if (oneByte >= 242) {
+    } else if (oneByte == 241) {
+      // TODO(bbrown): I think we need to support ECI
+      // Ignore this symbol for now
+    } else if (oneByte >= 242) {
       if (oneByte == 254 && [bits available] == 0) {
-      }
-       else {
+        // Ignore
+      } else {
         @throw [FormatException formatInstance];
       }
     }
-  }
-   while ([bits available] > 0);
+  } while ([bits available] > 0);
   return ASCII_ENCODE;
 }
 
@@ -142,8 +163,8 @@ int const BASE256_ENCODE = 6;
  */
 + (void) decodeC40Segment:(BitSource *)bits result:(NSMutableString *)result {
   BOOL upperShift = NO;
-  NSArray * cValues = [NSArray array];
 
+  int cValues[3];
   do {
     if ([bits available] == 8) {
       return;
@@ -152,70 +173,61 @@ int const BASE256_ENCODE = 6;
     if (firstByte == 254) {
       return;
     }
-    [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
-    int shift = 0;
 
+    [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
+
+    int shift = 0;
     for (int i = 0; i < 3; i++) {
       int cValue = cValues[i];
-
       switch (shift) {
       case 0:
         if (cValue < 3) {
           shift = cValue + 1;
-        }
-         else if (cValue < C40_BASIC_SET_CHARS.length) {
+        } else if (cValue < sizeof(C40_BASIC_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_BASIC_SET_CHARS[cValue];
           if (upperShift) {
-            [result append:(unichar)(c40char + 128)];
+            [result appendFormat:@"%c", (unichar)(c40char + 128)];
             upperShift = NO;
+          } else {
+            [result appendFormat:@"%c", c40char];
           }
-           else {
-            [result append:c40char];
-          }
-        }
-         else {
+        } else {
           @throw [FormatException formatInstance];
         }
         break;
       case 1:
         if (upperShift) {
-          [result append:(unichar)(cValue + 128)];
+          [result appendFormat:@"%c", (unichar)(cValue + 128)];
           upperShift = NO;
-        }
-         else {
-          [result append:cValue];
+        } else {
+          [result appendFormat:@"%c", cValue];
         }
         shift = 0;
         break;
       case 2:
-        if (cValue < C40_SHIFT2_SET_CHARS.length) {
+        if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
-            [result append:(unichar)(c40char + 128)];
+            [result appendFormat:@"%c", (unichar)(c40char + 128)];
             upperShift = NO;
+          } else {
+            [result appendFormat:@"%c", c40char];
           }
-           else {
-            [result append:c40char];
-          }
-        }
-         else if (cValue == 27) {
+        } else if (cValue == 27) {
           @throw [FormatException formatInstance];
-        }
-         else if (cValue == 30) {
+        } else if (cValue == 30) {
           upperShift = YES;
-        }
-         else {
+        } else {
           @throw [FormatException formatInstance];
         }
         shift = 0;
         break;
       case 3:
         if (upperShift) {
-          [result append:(unichar)(cValue + 224)];
+          [result appendFormat:@"%c", (unichar)(cValue + 224)];
           upperShift = NO;
-        }
-         else {
-          [result append:(unichar)(cValue + 96)];
+        } else {
+          [result appendFormat:@"%c", (unichar)(cValue + 96)];
         }
         shift = 0;
         break;
@@ -223,9 +235,7 @@ int const BASE256_ENCODE = 6;
         @throw [FormatException formatInstance];
       }
     }
-
-  }
-   while ([bits available] > 0);
+  } while ([bits available] > 0);
 }
 
 
@@ -234,9 +244,9 @@ int const BASE256_ENCODE = 6;
  */
 + (void) decodeTextSegment:(BitSource *)bits result:(NSMutableString *)result {
   BOOL upperShift = NO;
-  NSArray * cValues = [NSArray array];
-  int shift = 0;
 
+  int cValues[3];
+  int shift = 0;
   do {
     if ([bits available] == 8) {
       return;
@@ -245,75 +255,65 @@ int const BASE256_ENCODE = 6;
     if (firstByte == 254) {
       return;
     }
+
     [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
 
     for (int i = 0; i < 3; i++) {
       int cValue = cValues[i];
-
       switch (shift) {
       case 0:
         if (cValue < 3) {
           shift = cValue + 1;
-        }
-         else if (cValue < TEXT_BASIC_SET_CHARS.length) {
+        } else if (cValue < sizeof(TEXT_BASIC_SET_CHARS) / sizeof(char)) {
           unichar textChar = TEXT_BASIC_SET_CHARS[cValue];
           if (upperShift) {
-            [result append:(unichar)(textChar + 128)];
+            [result appendFormat:@"%c", (unichar)(textChar + 128)];
             upperShift = NO;
+          } else {
+            [result appendFormat:@"%c", textChar];
           }
-           else {
-            [result append:textChar];
-          }
-        }
-         else {
+        } else {
           @throw [FormatException formatInstance];
         }
         break;
       case 1:
         if (upperShift) {
-          [result append:(unichar)(cValue + 128)];
+          [result appendFormat:@"%c", (unichar)(cValue + 128)];
           upperShift = NO;
-        }
-         else {
-          [result append:cValue];
+        } else {
+          [result appendFormat:@"%c", cValue];
         }
         shift = 0;
         break;
       case 2:
-        if (cValue < C40_SHIFT2_SET_CHARS.length) {
+        if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
-            [result append:(unichar)(c40char + 128)];
+            [result appendFormat:@"%c", (unichar)(c40char + 128)];
             upperShift = NO;
+          } else {
+            [result appendFormat:@"%c", c40char];
           }
-           else {
-            [result append:c40char];
-          }
-        }
-         else if (cValue == 27) {
+        } else if (cValue == 27) {
           @throw [FormatException formatInstance];
-        }
-         else if (cValue == 30) {
+        } else if (cValue == 30) {
           upperShift = YES;
-        }
-         else {
+        } else {
           @throw [FormatException formatInstance];
         }
         shift = 0;
         break;
       case 3:
-        if (cValue < TEXT_SHIFT3_SET_CHARS.length) {
+        if (cValue < sizeof(TEXT_SHIFT3_SET_CHARS) / sizeof(char)) {
           unichar textChar = TEXT_SHIFT3_SET_CHARS[cValue];
           if (upperShift) {
-            [result append:(unichar)(textChar + 128)];
+            [result appendFormat:@"%c", (unichar)(textChar + 128)];
             upperShift = NO;
-          }
-           else {
-            [result append:textChar];
+          } else {
+            [result appendFormat:@"%c", textChar];
           }
           shift = 0;
-        }
-         else {
+        } else {
           @throw [FormatException formatInstance];
         }
         break;
@@ -321,9 +321,7 @@ int const BASE256_ENCODE = 6;
         @throw [FormatException formatInstance];
       }
     }
-
-  }
-   while ([bits available] > 0);
+  } while ([bits available] > 0);
 }
 
 
@@ -331,8 +329,7 @@ int const BASE256_ENCODE = 6;
  * See ISO 16022:2006, 5.2.7
  */
 + (void) decodeAnsiX12Segment:(BitSource *)bits result:(NSMutableString *)result {
-  NSArray * cValues = [NSArray array];
-
+  int cValues[3];
   do {
     if ([bits available] == 8) {
       return;
@@ -346,33 +343,25 @@ int const BASE256_ENCODE = 6;
     for (int i = 0; i < 3; i++) {
       int cValue = cValues[i];
       if (cValue == 0) {
-        [result append:'\r'];
-      }
-       else if (cValue == 1) {
-        [result append:'*'];
-      }
-       else if (cValue == 2) {
-        [result append:'>'];
-      }
-       else if (cValue == 3) {
-        [result append:' '];
-      }
-       else if (cValue < 14) {
-        [result append:(unichar)(cValue + 44)];
-      }
-       else if (cValue < 40) {
-        [result append:(unichar)(cValue + 51)];
-      }
-       else {
+        [result appendString:@"\r"];
+      } else if (cValue == 1) {
+        [result appendString:@"*"];
+      } else if (cValue == 2) {
+        [result appendString:@">"];
+      } else if (cValue == 3) {
+        [result appendString:@" "];
+      } else if (cValue < 14) {
+        [result appendFormat:@"%c", (unichar)(cValue + 44)];
+      } else if (cValue < 40) {
+        [result appendFormat:@"%c", (unichar)(cValue + 51)];
+      } else {
         @throw [FormatException formatInstance];
       }
     }
-
-  }
-   while ([bits available] > 0);
+  } while ([bits available] > 0);
 }
 
-+ (void) parseTwoBytes:(int)firstByte secondByte:(int)secondByte result:(NSArray *)result {
++ (void) parseTwoBytes:(int)firstByte secondByte:(int)secondByte result:(int[])result {
   int fullBitValue = (firstByte << 8) + secondByte - 1;
   int temp = fullBitValue / 1600;
   result[0] = temp;
@@ -403,12 +392,10 @@ int const BASE256_ENCODE = 6;
         if ((edifactValue & 32) == 0) {
           edifactValue |= 64;
         }
-        [result append:edifactValue];
+        [result appendFormat:@"%d", edifactValue];
       }
     }
-
-  }
-   while (!unlatch && [bits available] > 0);
+  } while (!unlatch && [bits available] > 0);
 }
 
 
@@ -421,33 +408,29 @@ int const BASE256_ENCODE = 6;
   int count;
   if (d1 == 0) {
     count = [bits available] / 8;
-  }
-   else if (d1 < 250) {
+  } else if (d1 < 250) {
     count = d1;
-  }
-   else {
+  } else {
     count = 250 * (d1 - 249) + [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
   }
+
   if (count < 0) {
     @throw [FormatException formatInstance];
   }
-  NSArray * bytes = [NSArray array];
 
+  NSMutableArray * bytes = [NSMutableArray arrayWithCapacity:count];
+  NSMutableData * data = [NSMutableData dataWithLength:count];
   for (int i = 0; i < count; i++) {
     if ([bits available] < 8) {
       @throw [FormatException formatInstance];
     }
-    bytes[i] = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
+    char byte = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
+    [bytes addObject:[NSNumber numberWithChar:byte]];
+    [data appendBytes:&byte length:sizeof(char)];
   }
-
   [byteSegments addObject:bytes];
 
-  @try {
-    [result append:[[[NSString alloc] init:bytes param1:@"ISO8859_1"] autorelease]];
-  }
-  @catch (UnsupportedEncodingException * uee) {
-    @throw [[[NSException alloc] init:[@"Platform does not support required encoding: " stringByAppendingString:uee]] autorelease];
-  }
+  [result appendString:[[[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding] autorelease]];
 }
 
 

@@ -1,7 +1,3 @@
-#import "FormatException.h"
-#import "BitSource.h"
-#import "DecoderResult.h"
-
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
  * in one Data Matrix Code. This class decodes the bits back into text.</p>
@@ -12,8 +8,10 @@
  * @author Sean Owen
  */
 
+@class DecoderResult;
+
 @interface DataMatrixDecodedBitStreamParser : NSObject
 
-+ (DecoderResult *) decode:(NSArray *)bytes;
++ (DecoderResult *) decode:(char *)bytes;
 
 @end
