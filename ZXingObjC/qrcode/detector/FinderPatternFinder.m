@@ -58,7 +58,7 @@ int const INTEGER_MATH_SHIFT = 8;
   return self;
 }
 
-- (id) init:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback {
+- (id) initWithImage:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback {
   if (self = [super init]) {
     image = image;
     possibleCenters = [[[NSMutableArray alloc] init] autorelease];

@@ -45,7 +45,7 @@
 }
 
 - (id) initWithImage:(BitMatrix *)image;
-- (id) init:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback;
+- (id) initWithImage:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback;
 - (BitMatrix *) getImage;
 - (NSMutableArray *) getPossibleCenters;
 - (FinderPatternInfo *) find:(NSMutableDictionary *)hints;

@@ -25,7 +25,7 @@
  * @param height height of region to search
  * @param moduleSize estimated module size so far
  */
-- (id) initWithImage:(BitMatrix *)anImage startX:(int)aStartX startY:(int)aStartY width:(int)aWidth height:(int)aHeight moduleSize:(float)aModuleSize resultPointCallback:(ResultPointCallback *)aResultPointCallback {
+- (id) initWithImage:(BitMatrix *)anImage startX:(int)aStartX startY:(int)aStartY width:(int)aWidth height:(int)aHeight moduleSize:(float)aModuleSize resultPointCallback:(id <ResultPointCallback>)aResultPointCallback {
   if (self = [super init]) {
     image = [anImage retain];
     possibleCenters = [[NSMutableArray alloc] initWithCapacity:5];

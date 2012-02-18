@@ -13,7 +13,8 @@
  * @author Sean Owen
  */
 
-@class AlignmentPattern, BitMatrix, ResultPointCallback;
+@class AlignmentPattern, BitMatrix;
+@protocol ResultPointCallback;
 
 @interface AlignmentPatternFinder : NSObject {
   BitMatrix * image;
@@ -24,10 +25,10 @@
   int height;
   float moduleSize;
   int * crossCheckStateCount;
-  ResultPointCallback * resultPointCallback;
+  id <ResultPointCallback> resultPointCallback;
 }
 
-- (id) initWithImage:(BitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(ResultPointCallback *)resultPointCallback;
+- (id) initWithImage:(BitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(id <ResultPointCallback>)resultPointCallback;
 - (AlignmentPattern *) find;
 
 @end

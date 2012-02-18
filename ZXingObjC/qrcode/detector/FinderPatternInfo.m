@@ -1,5 +1,5 @@
-#import "FinderPattern.h"
 #import "FinderPatternInfo.h"
+#import "QRCodeFinderPattern.h"
 
 @implementation FinderPatternInfo
 
@@ -9,9 +9,9 @@
 
 - (id) initWithPatternCenters:(NSArray *)patternCenters {
   if (self = [super init]) {
-    bottomLeft = patternCenters[0];
-    topLeft = patternCenters[1];
-    topRight = patternCenters[2];
+    bottomLeft = [patternCenters objectAtIndex:0];
+    topLeft = [patternCenters objectAtIndex:1];
+    topRight = [patternCenters objectAtIndex:2];
   }
   return self;
 }
