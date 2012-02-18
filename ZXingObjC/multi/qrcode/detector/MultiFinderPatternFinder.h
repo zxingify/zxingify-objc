@@ -1,22 +1,4 @@
-#import "DecodeHintType.h"
-#import "NotFoundException.h"
-#import "ResultPoint.h"
-#import "ResultPointCallback.h"
-#import "BitMatrix.h"
-#import "Comparator.h"
-#import "QRCodeFinderPattern.h"
 #import "FinderPatternFinder.h"
-#import "FinderPatternInfo.h"
-
-/**
- * A comparator that orders FinderPatterns by their estimated module size.
- */
-
-@interface ModuleSizeComparator : NSObject <Comparator> {
-}
-
-- (int) compare:(NSObject *)center1 center2:(NSObject *)center2;
-@end
 
 /**
  * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
@@ -33,10 +15,8 @@
  * @author Hannes Erven
  */
 
-@interface MultiFinderPatternFinder : FinderPatternFinder {
-}
+@interface MultiFinderPatternFinder : FinderPatternFinder
 
-- (id) initWithImage:(BitMatrix *)image;
-- (id) init:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback;
 - (NSArray *) findMulti:(NSMutableDictionary *)hints;
+
 @end
