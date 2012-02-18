@@ -58,12 +58,14 @@
  * @throws FormatException if the exact number of bytes expected is not read
  */
 - (NSArray *) readCodewords {
-  NSArray * result = [NSArray array];
-  int resultOffset = 0;
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:[version totalCodewords]];
+
   int row = 4;
   int column = 0;
+
   int numRows = [mappingBitMatrix height];
   int numColumns = [mappingBitMatrix width];
+
   BOOL corner1Read = NO;
   BOOL corner2Read = NO;
   BOOL corner3Read = NO;
@@ -71,56 +73,49 @@
 
   do {
     if ((row == numRows) && (column == 0) && !corner1Read) {
-      result[resultOffset++] = (char)[self readCorner1:numRows numColumns:numColumns];
+      [result addObject:[NSNumber numberWithInt:[self readCorner1:numRows numColumns:numColumns]]];
       row -= 2;
       column += 2;
       corner1Read = YES;
-    }
-     else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
-      result[resultOffset++] = (char)[self readCorner2:numRows numColumns:numColumns];
+    } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
+      [result addObject:[NSNumber numberWithInt:[self readCorner2:numRows numColumns:numColumns]]];
       row -= 2;
       column += 2;
       corner2Read = YES;
-    }
-     else if ((row == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
-      result[resultOffset++] = (char)[self readCorner3:numRows numColumns:numColumns];
+    } else if ((row == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
+      [result addObject:[NSNumber numberWithInt:[self readCorner3:numRows numColumns:numColumns]]];
       row -= 2;
       column += 2;
       corner3Read = YES;
-    }
-     else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
-      result[resultOffset++] = (char)[self readCorner4:numRows numColumns:numColumns];
+    } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
+      [result addObject:[NSNumber numberWithInt:[self readCorner4:numRows numColumns:numColumns]]];
       row -= 2;
       column += 2;
       corner4Read = YES;
-    }
-     else {
-
+    } else {
       do {
-        if ((row < numRows) && (column >= 0) && ![readMappingMatrix get:column param1:row]) {
-          result[resultOffset++] = (char)[self readUtah:row column:column numRows:numRows numColumns:numColumns];
+        if ((row < numRows) && (column >= 0) && ![readMappingMatrix get:column y:row]) {
+          [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
         }
         row -= 2;
         column += 2;
-      }
-       while ((row >= 0) && (column < numColumns));
+      } while ((row >= 0) && (column < numColumns));
       row += 1;
       column += 3;
 
       do {
-        if ((row >= 0) && (column < numColumns) && ![readMappingMatrix get:column param1:row]) {
-          result[resultOffset++] = (char)[self readUtah:row column:column numRows:numRows numColumns:numColumns];
+        if ((row >= 0) && (column < numColumns) && ![readMappingMatrix get:column y:row]) {
+          [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
         }
         row += 2;
         column -= 2;
-      }
-       while ((row < numRows) && (column >= 0));
+      } while ((row < numRows) && (column >= 0));
       row += 3;
       column += 1;
     }
-  }
-   while ((row < numRows) || (column < numColumns));
-  if (resultOffset != [version totalCodewords]) {
+  } while ((row < numRows) || (column < numColumns));
+
+  if ([result count] != [version totalCodewords]) {
     @throw [FormatException formatInstance];
   }
   return result;
@@ -145,8 +140,8 @@
     column += numColumns;
     row += 4 - ((numColumns + 4) & 0x07);
   }
-  [readMappingMatrix set:column param1:row];
-  return [mappingBitMatrix get:column param1:row];
+  [readMappingMatrix set:column y:row];
+  return [mappingBitMatrix get:column y:row];
 }
 
 
@@ -392,39 +387,37 @@
 - (BitMatrix *) extractDataRegion:(BitMatrix *)bitMatrix {
   int symbolSizeRows = [version symbolSizeRows];
   int symbolSizeColumns = [version symbolSizeColumns];
+
   if ([bitMatrix height] != symbolSizeRows) {
-    @throw [[[IllegalArgumentException alloc] init:@"Dimension of bitMarix must match the version size"] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Dimension of bitMarix must match the version size"];
   }
+
   int dataRegionSizeRows = [version dataRegionSizeRows];
   int dataRegionSizeColumns = [version dataRegionSizeColumns];
+
   int numDataRegionsRow = symbolSizeRows / dataRegionSizeRows;
   int numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns;
+
   int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
   int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
-  BitMatrix * bitMatrixWithoutAlignment = [[[BitMatrix alloc] init:sizeDataRegionColumn param1:sizeDataRegionRow] autorelease];
 
+  BitMatrix * bitMatrixWithoutAlignment = [[[BitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow] autorelease];
   for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
     int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
-
     for (int dataRegionColumn = 0; dataRegionColumn < numDataRegionsColumn; ++dataRegionColumn) {
       int dataRegionColumnOffset = dataRegionColumn * dataRegionSizeColumns;
-
       for (int i = 0; i < dataRegionSizeRows; ++i) {
         int readRowOffset = dataRegionRow * (dataRegionSizeRows + 2) + 1 + i;
         int writeRowOffset = dataRegionRowOffset + i;
-
         for (int j = 0; j < dataRegionSizeColumns; ++j) {
           int readColumnOffset = dataRegionColumn * (dataRegionSizeColumns + 2) + 1 + j;
-          if ([bitMatrix get:readColumnOffset param1:readRowOffset]) {
+          if ([bitMatrix get:readColumnOffset y:readRowOffset]) {
             int writeColumnOffset = dataRegionColumnOffset + j;
-            [bitMatrixWithoutAlignment set:writeColumnOffset param1:writeRowOffset];
+            [bitMatrixWithoutAlignment set:writeColumnOffset y:writeRowOffset];
           }
         }
-
       }
-
     }
-
   }
 
   return bitMatrixWithoutAlignment;
