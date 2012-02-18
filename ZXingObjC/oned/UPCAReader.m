@@ -1,8 +1,17 @@
+#import "EAN13Reader.h"
+#import "FormatException.h"
+#import "Result.h"
 #import "UPCAReader.h"
+
+@interface UPCAReader ()
+
+- (Result *) maybeReturnResult:(Result *)result;
+
+@end
 
 @implementation UPCAReader
 
-- (void) init {
+- (id) init {
   if (self = [super init]) {
     ean13Reader = [[[EAN13Reader alloc] init] autorelease];
   }
@@ -10,11 +19,11 @@
 }
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints {
-  return [self maybeReturnResult:[ean13Reader decodeRow:rowNumber param1:row param2:startGuardRange param3:hints]];
+  return [self maybeReturnResult:[ean13Reader decodeRow:rowNumber row:row startGuardRange:startGuardRange hints:hints]];
 }
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
-  return [self maybeReturnResult:[ean13Reader decodeRow:rowNumber param1:row param2:hints]];
+  return [self maybeReturnResult:[ean13Reader decodeRow:rowNumber row:row hints:hints]];
 }
 
 - (Result *) decode:(BinaryBitmap *)image {
@@ -22,23 +31,25 @@
 }
 
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
-  return [self maybeReturnResult:[ean13Reader decode:image param1:hints]];
+  return [self maybeReturnResult:[ean13Reader decode:image hints:hints]];
 }
 
-- (BarcodeFormat) getBarcodeFormat {
-  return BarcodeFormat.UPC_A;
+- (BarcodeFormat) barcodeFormat {
+  return kBarcodeFormatUPCA;
 }
 
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
-  return [ean13Reader decodeMiddle:row param1:startRange param2:resultString];
+  return [ean13Reader decodeMiddle:row startRange:startRange resultString:resultString];
 }
 
-+ (Result *) maybeReturnResult:(Result *)result {
+- (Result *) maybeReturnResult:(Result *)result {
   NSString * text = [result text];
   if ([text characterAtIndex:0] == '0') {
-    return [[[Result alloc] init:[text substringFromIndex:1] param1:nil param2:[result resultPoints] param3:BarcodeFormat.UPC_A] autorelease];
-  }
-   else {
+    return [[[Result alloc] initWithText:[text substringFromIndex:1]
+                                rawBytes:nil
+                            resultPoints:[result resultPoints]
+                                  format:kBarcodeFormatUPCA] autorelease];
+  } else {
     @throw [FormatException formatInstance];
   }
 }

@@ -20,11 +20,10 @@ extern int L_AND_G_PATTERNS[20][4];
   EANManufacturerOrgSupport * eanManSupport;
 }
 
-+ (NSArray *) findStartGuardPattern:(BitArray *)row;
-- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
-- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints;
 - (BOOL) checkChecksum:(NSString *)s;
+- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints;
 - (NSArray *) decodeEnd:(BitArray *)row endStart:(int)endStart;
++ (NSArray *) findStartGuardPattern:(BitArray *)row;
 + (NSArray *) findGuardPattern:(BitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int[])pattern;
 + (int) decodeDigit:(BitArray *)row counters:(int[])counters rowOffset:(int)rowOffset patterns:(int*[])patterns;
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
