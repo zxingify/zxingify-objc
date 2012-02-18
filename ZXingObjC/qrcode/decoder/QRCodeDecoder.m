@@ -41,7 +41,7 @@
  * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (DecoderResult *) decodeImage:(BOOL **)image hints:(NSMutableDictionary *)hints {
+- (DecoderResult *) decode:(BOOL **)image hints:(NSMutableDictionary *)hints {
   int dimension = sizeof(image) / sizeof(BOOL *);
   BitMatrix * bits = [[[BitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
@@ -50,7 +50,6 @@
         [bits set:j y:i];
       }
     }
-
   }
 
   return [self decodeMatrix:bits hints:hints];
@@ -70,30 +69,31 @@
  * @throws ChecksumException if error correction fails
  */
 - (DecoderResult *) decodeMatrix:(BitMatrix *)bits hints:(NSMutableDictionary *)hints {
-  BitMatrixParser * parser = [[[BitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
+  QRCodeBitMatrixParser * parser = [[[QRCodeBitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
   QRCodeVersion * version = [parser readVersion];
   ErrorCorrectionLevel * ecLevel = [[parser readFormatInformation] errorCorrectionLevel];
+
   NSArray * codewords = [parser readCodewords];
   NSArray * dataBlocks = [QRCodeDataBlock getDataBlocks:codewords version:version ecLevel:ecLevel];
-  int totalBytes = 0;
 
+  int totalBytes = 0;
   for (QRCodeDataBlock *dataBlock in dataBlocks) {
     totalBytes += dataBlock.numDataCodewords;
   }
 
-  NSMutableArray * resultBytes = [NSMutableArray arrayWithCapacity:totalBytes];
+  char resultBytes[totalBytes];
+  int resultOffset = 0;
 
   for (QRCodeDataBlock *dataBlock in dataBlocks) {
     NSMutableArray * codewordBytes = [dataBlock codewords];
     int numDataCodewords = [dataBlock numDataCodewords];
     [self correctErrors:codewordBytes numDataCodewords:numDataCodewords];
-
     for (int i = 0; i < numDataCodewords; i++) {
-      [resultBytes addObject:[codewordBytes objectAtIndex:i]];
+      resultBytes[resultOffset++] = [[codewordBytes objectAtIndex:i] charValue];
     }
   }
 
-  return [DecodedBitStreamParser decode:resultBytes version:version ecLevel:ecLevel hints:hints];
+  return [QRCodeDecodedBitStreamParser decode:resultBytes version:version ecLevel:ecLevel hints:hints];
 }
 
 
