@@ -5,6 +5,8 @@
 #import "DataMatrixDetector.h"
 #import "DecodeHintType.h"
 #import "DecoderResult.h"
+#import "DetectorResult.h"
+#import "NotFoundException.h"
 #import "Result.h"
 
 @interface DataMatrixReader ()

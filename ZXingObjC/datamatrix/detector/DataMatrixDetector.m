@@ -1,4 +1,28 @@
 #import "DataMatrixDetector.h"
+#import "DetectorResult.h"
+#import "GridSampler.h"
+#import "NotFoundException.h"
+#import "ResultPoint.h"
+#import "WhiteRectangleDetector.h"
+
+/**
+ * Simply encapsulates two points and a number of transitions between them.
+ */
+
+@interface ResultPointsAndTransitions : NSObject {
+  ResultPoint * from;
+  ResultPoint * to;
+  int transitions;
+}
+
+@property(nonatomic, retain, readonly) ResultPoint * from;
+@property(nonatomic, retain, readonly) ResultPoint * to;
+@property(nonatomic, readonly) int transitions;
+
+- (id) init:(ResultPoint *)from to:(ResultPoint *)to transitions:(int)transitions;
+- (NSComparisonResult)compare:(ResultPointsAndTransitions *)otherObject;
+
+@end
 
 @implementation ResultPointsAndTransitions
 
@@ -6,17 +30,21 @@
 @synthesize to;
 @synthesize transitions;
 
-- (id) init:(ResultPoint *)from to:(ResultPoint *)to transitions:(int)transitions {
+- (id) init:(ResultPoint *)aFrom to:(ResultPoint *)aTo transitions:(int)aTransitions {
   if (self = [super init]) {
-    from = from;
-    to = to;
-    transitions = transitions;
+    from = [aFrom retain];
+    to = [aTo retain];
+    transitions = aTransitions;
   }
   return self;
 }
 
 - (NSString *) description {
-  return [from stringByAppendingString:@"/"] + to + '/' + transitions;
+  return [NSString stringWithFormat:@"%@/%@/%d", from, to, transitions];
+}
+
+- (NSComparisonResult)compare:(ResultPointsAndTransitions *)otherObject {
+  return [[NSNumber numberWithInt:transitions] compare:[NSNumber numberWithInt:otherObject.transitions]];
 }
 
 - (void) dealloc {
@@ -27,22 +55,26 @@
 
 @end
 
-@implementation ResultPointsAndTransitionsComparator
 
-- (int) compare:(NSObject *)o1 o2:(NSObject *)o2 {
-  return [((ResultPointsAndTransitions *)o1) transitions] - [((ResultPointsAndTransitions *)o2) transitions];
-}
+@interface DataMatrixDetector ()
+
+- (ResultPoint *) correctTopRight:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topLeft:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight dimension:(int)dimension;
+- (ResultPoint *) correctTopRightRectangular:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topLeft:(ResultPoint *)topLeft topRight:(ResultPoint *)topRight dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight;
+- (int) distance:(ResultPoint *)a b:(ResultPoint *)b;
+- (void) increment:(NSMutableDictionary *)table key:(ResultPoint *)key;
+- (BOOL) isValid:(ResultPoint *)p;
+- (int) round:(float)d;
+- (BitMatrix *) sampleGrid:(BitMatrix *)image topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topRight:(ResultPoint *)topRight dimensionX:(int)dimensionX dimensionY:(int)dimensionY;
+- (ResultPointsAndTransitions *) transitionsBetween:(ResultPoint *)from to:(ResultPoint *)to;
 
 @end
 
-NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] autorelease], [[[NSNumber alloc] init:1] autorelease], [[[NSNumber alloc] init:2] autorelease], [[[NSNumber alloc] init:3] autorelease], [[[NSNumber alloc] init:4] autorelease], nil];
-
 @implementation DataMatrixDetector
 
-- (id) initWithImage:(BitMatrix *)image {
+- (id) initWithImage:(BitMatrix *)anImage {
   if (self = [super init]) {
-    image = image;
-    rectangleDetector = [[[WhiteRectangleDetector alloc] init:image] autorelease];
+    image = [anImage retain];
+    rectangleDetector = [[[WhiteRectangleDetector alloc] initWithImage:anImage] autorelease];
   }
   return self;
 }
@@ -56,39 +88,38 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
  */
 - (DetectorResult *) detect {
   NSArray * cornerPoints = [rectangleDetector detect];
-  ResultPoint * pointA = cornerPoints[0];
-  ResultPoint * pointB = cornerPoints[1];
-  ResultPoint * pointC = cornerPoints[2];
-  ResultPoint * pointD = cornerPoints[3];
-  NSMutableArray * transitions = [[[NSMutableArray alloc] init:4] autorelease];
+  ResultPoint * pointA = [cornerPoints objectAtIndex:0];
+  ResultPoint * pointB = [cornerPoints objectAtIndex:1];
+  ResultPoint * pointC = [cornerPoints objectAtIndex:2];
+  ResultPoint * pointD = [cornerPoints objectAtIndex:3];
+
+  NSMutableArray * transitions = [NSMutableArray arrayWithCapacity:4];
   [transitions addObject:[self transitionsBetween:pointA to:pointB]];
   [transitions addObject:[self transitionsBetween:pointA to:pointC]];
   [transitions addObject:[self transitionsBetween:pointB to:pointD]];
   [transitions addObject:[self transitionsBetween:pointC to:pointD]];
-  [Collections insertionSort:transitions param1:[[[ResultPointsAndTransitionsComparator alloc] init] autorelease]];
+  [transitions sortUsingSelector:@selector(compare:)];
+
   ResultPointsAndTransitions * lSideOne = (ResultPointsAndTransitions *)[transitions objectAtIndex:0];
   ResultPointsAndTransitions * lSideTwo = (ResultPointsAndTransitions *)[transitions objectAtIndex:1];
-  NSMutableDictionary * pointCount = [[[NSMutableDictionary alloc] init] autorelease];
+
+  NSMutableDictionary * pointCount = [NSMutableDictionary dictionary];
   [self increment:pointCount key:[lSideOne from]];
   [self increment:pointCount key:[lSideOne to]];
   [self increment:pointCount key:[lSideTwo from]];
   [self increment:pointCount key:[lSideTwo to]];
+
   ResultPoint * maybeTopLeft = nil;
   ResultPoint * bottomLeft = nil;
   ResultPoint * maybeBottomRight = nil;
-  NSEnumerator * points = [pointCount keys];
-
-  while ([points hasMoreElements]) {
-    ResultPoint * point = (ResultPoint *)[points nextObject];
-    NSNumber * value = (NSNumber *)[pointCount objectForKey:point];
+  for (ResultPoint * point in [pointCount allKeys]) {
+    NSNumber * value = [pointCount objectForKey:point];
     if ([value intValue] == 2) {
       bottomLeft = point;
-    }
-     else {
+    } else {
       if (maybeTopLeft == nil) {
         maybeTopLeft = point;
-      }
-       else {
+      } else {
         maybeBottomRight = point;
       }
     }
@@ -97,65 +128,76 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
   if (maybeTopLeft == nil || bottomLeft == nil || maybeBottomRight == nil) {
     @throw [NotFoundException notFoundInstance];
   }
-  NSArray * corners = [NSArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
+
+  NSMutableArray * corners = [NSMutableArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
   [ResultPoint orderBestPatterns:corners];
-  ResultPoint * bottomRight = corners[0];
-  bottomLeft = corners[1];
-  ResultPoint * topLeft = corners[2];
+
+  ResultPoint * bottomRight = [corners objectAtIndex:0];
+  bottomLeft = [corners objectAtIndex:1];
+  ResultPoint * topLeft = [corners objectAtIndex:2];
+
   ResultPoint * topRight;
-  if (![pointCount containsKey:pointA]) {
+  if (![pointCount objectForKey:pointA]) {
     topRight = pointA;
-  }
-   else if (![pointCount containsKey:pointB]) {
+  } else if (![pointCount objectForKey:pointB]) {
     topRight = pointB;
-  }
-   else if (![pointCount containsKey:pointC]) {
+  } else if (![pointCount objectForKey:pointC]) {
     topRight = pointC;
-  }
-   else {
+  } else {
     topRight = pointD;
   }
+
   int dimensionTop = [[self transitionsBetween:topLeft to:topRight] transitions];
   int dimensionRight = [[self transitionsBetween:bottomRight to:topRight] transitions];
+
   if ((dimensionTop & 0x01) == 1) {
     dimensionTop++;
   }
   dimensionTop += 2;
+
   if ((dimensionRight & 0x01) == 1) {
     dimensionRight++;
   }
   dimensionRight += 2;
+
   BitMatrix * bits;
   ResultPoint * correctedTopRight;
+
   if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
     correctedTopRight = [self correctTopRightRectangular:bottomLeft bottomRight:bottomRight topLeft:topLeft topRight:topRight dimensionTop:dimensionTop dimensionRight:dimensionRight];
     if (correctedTopRight == nil) {
       correctedTopRight = topRight;
     }
+
     dimensionTop = [[self transitionsBetween:topLeft to:correctedTopRight] transitions];
     dimensionRight = [[self transitionsBetween:bottomRight to:correctedTopRight] transitions];
+
     if ((dimensionTop & 0x01) == 1) {
       dimensionTop++;
     }
+
     if ((dimensionRight & 0x01) == 1) {
       dimensionRight++;
     }
+
     bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionTop dimensionY:dimensionRight];
-  }
-   else {
-    int dimension = [Math min:dimensionRight param1:dimensionTop];
+  } else {
+    int dimension = MIN(dimensionRight, dimensionTop);
     correctedTopRight = [self correctTopRight:bottomLeft bottomRight:bottomRight topLeft:topLeft topRight:topRight dimension:dimension];
     if (correctedTopRight == nil) {
       correctedTopRight = topRight;
     }
-    int dimensionCorrected = [Math max:[[self transitionsBetween:topLeft to:correctedTopRight] transitions] param1:[[self transitionsBetween:bottomRight to:correctedTopRight] transitions]];
+
+    int dimensionCorrected = MAX([[self transitionsBetween:topLeft to:correctedTopRight] transitions], [[self transitionsBetween:bottomRight to:correctedTopRight] transitions]);
     dimensionCorrected++;
     if ((dimensionCorrected & 0x01) == 1) {
       dimensionCorrected++;
     }
+
     bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionCorrected dimensionY:dimensionCorrected];
   }
-  return [[[DetectorResult alloc] init:bits param1:[NSArray arrayWithObjects:topLeft, bottomLeft, bottomRight, correctedTopRight, nil]] autorelease];
+  return [[[DetectorResult alloc] initWithBits:bits
+                                        points:[NSArray arrayWithObjects:topLeft, bottomLeft, bottomRight, correctedTopRight, nil]] autorelease];
 }
 
 
@@ -168,26 +210,32 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
   int norm = [self distance:topLeft b:topRight];
   float cos = ([topRight x] - [topLeft x]) / norm;
   float sin = ([topRight y] - [topLeft y]) / norm;
-  ResultPoint * c1 = [[[ResultPoint alloc] init:[topRight x] + corr * cos param1:[topRight y] + corr * sin] autorelease];
+
+  ResultPoint * c1 = [[[ResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+
   corr = [self distance:bottomLeft b:topLeft] / (float)dimensionRight;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
-  ResultPoint * c2 = [[[ResultPoint alloc] init:[topRight x] + corr * cos param1:[topRight y] + corr * sin] autorelease];
+
+  ResultPoint * c2 = [[[ResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+
   if (![self isValid:c1]) {
     if ([self isValid:c2]) {
       return c2;
     }
     return nil;
-  }
-   else if (![self isValid:c2]) {
+  } else if (![self isValid:c2]) {
     return c1;
   }
-  int l1 = [Math abs:dimensionTop - [[self transitionsBetween:topLeft to:c1] transitions]] + [Math abs:dimensionRight - [[self transitionsBetween:bottomRight to:c1] transitions]];
-  int l2 = [Math abs:dimensionTop - [[self transitionsBetween:topLeft to:c2] transitions]] + [Math abs:dimensionRight - [[self transitionsBetween:bottomRight to:c2] transitions]];
+
+  int l1 = abs(dimensionTop - [[self transitionsBetween:topLeft to:c1] transitions]) + abs(dimensionRight - [[self transitionsBetween:bottomRight to:c1] transitions]);
+  int l2 = abs(dimensionTop - [[self transitionsBetween:topLeft to:c2] transitions]) + abs(dimensionRight - [[self transitionsBetween:bottomRight to:c2] transitions]);
+
   if (l1 <= l2) {
     return c1;
   }
+
   return c2;
 }
 
@@ -201,23 +249,28 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
   int norm = [self distance:topLeft b:topRight];
   float cos = ([topRight x] - [topLeft x]) / norm;
   float sin = ([topRight y] - [topLeft y]) / norm;
-  ResultPoint * c1 = [[[ResultPoint alloc] init:[topRight x] + corr * cos param1:[topRight y] + corr * sin] autorelease];
+
+  ResultPoint * c1 = [[[ResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+
   corr = [self distance:bottomLeft b:bottomRight] / (float)dimension;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
-  ResultPoint * c2 = [[[ResultPoint alloc] init:[topRight x] + corr * cos param1:[topRight y] + corr * sin] autorelease];
+
+  ResultPoint * c2 = [[[ResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+
   if (![self isValid:c1]) {
     if ([self isValid:c2]) {
       return c2;
     }
     return nil;
-  }
-   else if (![self isValid:c2]) {
+  } else if (![self isValid:c2]) {
     return c1;
   }
-  int l1 = [Math abs:[[self transitionsBetween:topLeft to:c1] transitions] - [[self transitionsBetween:bottomRight to:c1] transitions]];
-  int l2 = [Math abs:[[self transitionsBetween:topLeft to:c2] transitions] - [[self transitionsBetween:bottomRight to:c2] transitions]];
+
+  int l1 = abs([[self transitionsBetween:topLeft to:c1] transitions] - [[self transitionsBetween:bottomRight to:c1] transitions]);
+  int l2 = abs([[self transitionsBetween:topLeft to:c2] transitions] - [[self transitionsBetween:bottomRight to:c2] transitions]);
+
   return l1 <= l2 ? c1 : c2;
 }
 
@@ -230,26 +283,35 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
  * Ends up being a bit faster than Math.round(). This merely rounds its
  * argument to the nearest int, where x.5 rounds up.
  */
-+ (int) round:(float)d {
+- (int) round:(float)d {
   return (int)(d + 0.5f);
 }
 
-+ (int) distance:(ResultPoint *)a b:(ResultPoint *)b {
-  return [self round:(float)[Math sqrt:([a x] - [b x]) * ([a x] - [b x]) + ([a y] - [b y]) * ([a y] - [b y])]];
+- (int) distance:(ResultPoint *)a b:(ResultPoint *)b {
+  return [self round:(float)sqrt(([a x] - [b x]) * ([a x] - [b x]) + ([a y] - [b y]) * ([a y] - [b y]))];
 }
 
 
 /**
  * Increments the Integer associated with a key by one.
  */
-+ (void) increment:(NSMutableDictionary *)table key:(ResultPoint *)key {
-  NSNumber * value = (NSNumber *)[table objectForKey:key];
-  [table setObject:key param1:value == nil ? INTEGERS[1] : INTEGERS[[value intValue] + 1]];
+- (void) increment:(NSMutableDictionary *)table key:(ResultPoint *)key {
+  NSNumber * value = [table objectForKey:key];
+  [table setObject:value == nil ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:[value intValue] + 1] forKey:key];
 }
 
-+ (BitMatrix *) sampleGrid:(BitMatrix *)image topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topRight:(ResultPoint *)topRight dimensionX:(int)dimensionX dimensionY:(int)dimensionY {
+- (BitMatrix *) sampleGrid:(BitMatrix *)anImage topLeft:(ResultPoint *)topLeft bottomLeft:(ResultPoint *)bottomLeft bottomRight:(ResultPoint *)bottomRight topRight:(ResultPoint *)topRight dimensionX:(int)dimensionX dimensionY:(int)dimensionY {
   GridSampler * sampler = [GridSampler instance];
-  return [sampler sampleGrid:image param1:dimensionX param2:dimensionY param3:0.5f param4:0.5f param5:dimensionX - 0.5f param6:0.5f param7:dimensionX - 0.5f param8:dimensionY - 0.5f param9:0.5f param10:dimensionY - 0.5f param11:[topLeft x] param12:[topLeft y] param13:[topRight x] param14:[topRight y] param15:[bottomRight x] param16:[bottomRight y] param17:[bottomLeft x] param18:[bottomLeft y]];
+  return [sampler sampleGrid:anImage
+                  dimensionX:dimensionX dimensionY:dimensionY
+                       p1ToX:0.5f p1ToY:0.5f
+                       p2ToX:dimensionX - 0.5f p2ToY:0.5f
+                       p3ToX:dimensionX - 0.5f p3ToY:dimensionY - 0.5f
+                       p4ToX:0.5f p4ToY:dimensionY - 0.5f
+                     p1FromX:[topLeft x] p1FromY:[topLeft y]
+                     p2FromX:[topRight x] p2FromY:[topRight y]
+                     p3FromX:[bottomRight x] p3FromY:[bottomRight y]
+                     p4FromX:[bottomLeft x] p4FromY:[bottomLeft y]];
 }
 
 
@@ -261,7 +323,7 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
   int fromY = (int)[from y];
   int toX = (int)[to x];
   int toY = (int)[to y];
-  BOOL steep = [Math abs:toY - fromY] > [Math abs:toX - fromX];
+  BOOL steep = abs(toY - fromY) > abs(toX - fromX);
   if (steep) {
     int temp = fromX;
     fromX = fromY;
@@ -270,16 +332,16 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
     toX = toY;
     toY = temp;
   }
-  int dx = [Math abs:toX - fromX];
-  int dy = [Math abs:toY - fromY];
+
+  int dx = abs(toX - fromX);
+  int dy = abs(toY - fromY);
   int error = -dx >> 1;
   int ystep = fromY < toY ? 1 : -1;
   int xstep = fromX < toX ? 1 : -1;
   int transitions = 0;
-  BOOL inBlack = [image get:steep ? fromY : fromX param1:steep ? fromX : fromY];
-
+  BOOL inBlack = [image get:steep ? fromY : fromX y:steep ? fromX : fromY];
   for (int x = fromX, y = fromY; x != toX; x += xstep) {
-    BOOL isBlack = [image get:steep ? y : x param1:steep ? x : y];
+    BOOL isBlack = [image get:steep ? y : x y:steep ? x : y];
     if (isBlack != inBlack) {
       transitions++;
       inBlack = isBlack;
@@ -293,8 +355,7 @@ NSArray * const INTEGERS = [NSArray arrayWithObjects:[[[NSNumber alloc] init:0] 
       error -= dx;
     }
   }
-
-  return [[[ResultPointsAndTransitions alloc] init:from param1:to param2:transitions] autorelease];
+  return [[[ResultPointsAndTransitions alloc] init:from to:to transitions:transitions] autorelease];
 }
 
 - (void) dealloc {
