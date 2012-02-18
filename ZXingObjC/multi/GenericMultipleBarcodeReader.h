@@ -1,9 +1,4 @@
-#import "BinaryBitmap.h"
-#import "NotFoundException.h"
-#import "Reader.h"
-#import "ReaderException.h"
-#import "Result.h"
-#import "ResultPoint.h"
+#import "MultipleBarcodeReader.h"
 
 /**
  * <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
@@ -20,11 +15,14 @@
  * @author Sean Owen
  */
 
+@protocol Reader;
+
 @interface GenericMultipleBarcodeReader : NSObject <MultipleBarcodeReader> {
-  Reader * delegate;
+  id <Reader> delegate;
 }
 
-- (id) initWithDelegate:(Reader *)delegate;
+- (id) initWithDelegate:(id <Reader>)delegate;
 - (NSArray *) decodeMultiple:(BinaryBitmap *)image;
 - (NSArray *) decodeMultiple:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+
 @end

@@ -5,6 +5,7 @@
 #import "BinaryBitmap.h"
 #import "DecodeHintType.h"
 #import "DecoderResult.h"
+#import "Reader.h"
 #import "Result.h"
 #import "ResultPointCallback.h"
 

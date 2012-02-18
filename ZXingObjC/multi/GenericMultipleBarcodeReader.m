@@ -1,12 +1,22 @@
 #import "GenericMultipleBarcodeReader.h"
+#import "Reader.h"
+#import "ReaderException.h"
+#import "ResultPoint.h"
 
 int const MIN_DIMENSION_TO_RECUR = 100;
 
+@interface GenericMultipleBarcodeReader ()
+
+- (void) doDecodeMultiple:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset;
+- (Result *) translateResultPoints:(Result *)result xOffset:(int)xOffset yOffset:(int)yOffset;
+
+@end
+
 @implementation GenericMultipleBarcodeReader
 
-- (id) initWithDelegate:(Reader *)delegate {
+- (id) initWithDelegate:(id <Reader>)aDelegate {
   if (self = [super init]) {
-    delegate = delegate;
+    delegate = aDelegate;
   }
   return self;
 }
@@ -16,46 +26,35 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 }
 
 - (NSArray *) decodeMultiple:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
-  NSMutableArray * results = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray * results = [NSMutableArray array];
   [self doDecodeMultiple:image hints:hints results:results xOffset:0 yOffset:0];
-  if ([results empty]) {
+  if ([results count] == 0) {
     @throw [NotFoundException notFoundInstance];
   }
-  int numResults = [results count];
-  NSArray * resultArray = [NSArray array];
-
-  for (int i = 0; i < numResults; i++) {
-    resultArray[i] = (Result *)[results objectAtIndex:i];
-  }
-
-  return resultArray;
+  return results;
 }
 
 - (void) doDecodeMultiple:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset {
   Result * result;
-
   @try {
-    result = [delegate decode:image param1:hints];
+    result = [delegate decode:image hints:hints];
   }
   @catch (ReaderException * re) {
     return;
   }
   BOOL alreadyFound = NO;
-
-  for (int i = 0; i < [results count]; i++) {
-    Result * existingResult = (Result *)[results objectAtIndex:i];
-    if ([[existingResult text] isEqualTo:[result text]]) {
+  for (Result * existingResult in results) {
+    if ([[existingResult text] isEqualToString:[result text]]) {
       alreadyFound = YES;
       break;
     }
   }
-
   if (alreadyFound) {
     return;
   }
   [results addObject:[self translateResultPoints:result xOffset:xOffset yOffset:yOffset]];
-  NSArray * resultPoints = [result resultPoints];
-  if (resultPoints == nil || resultPoints.length == 0) {
+  NSMutableArray * resultPoints = [result resultPoints];
+  if (resultPoints == nil || [resultPoints count] == 0) {
     return;
   }
   int width = [image width];
@@ -64,9 +63,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   float minY = height;
   float maxX = 0.0f;
   float maxY = 0.0f;
-
-  for (int i = 0; i < resultPoints.length; i++) {
-    ResultPoint * point = resultPoints[i];
+  for (ResultPoint * point in resultPoints) {
     float x = [point x];
     float y = [point y];
     if (x < minX) {
@@ -84,34 +81,27 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   }
 
   if (minX > MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:0 param1:0 param2:(int)minX param3:height] hints:hints results:results xOffset:xOffset yOffset:yOffset];
+    [self doDecodeMultiple:[image crop:0 top:0 width:(int)minX height:height] hints:hints results:results xOffset:xOffset yOffset:yOffset];
   }
   if (minY > MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:0 param1:0 param2:width param3:(int)minY] hints:hints results:results xOffset:xOffset yOffset:yOffset];
+    [self doDecodeMultiple:[image crop:0 top:0 width:width height:(int)minY] hints:hints results:results xOffset:xOffset yOffset:yOffset];
   }
   if (maxX < width - MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:(int)maxX param1:0 param2:width - (int)maxX param3:height] hints:hints results:results xOffset:xOffset + (int)maxX yOffset:yOffset];
+    [self doDecodeMultiple:[image crop:(int)maxX top:0 width:width - (int)maxX height:height] hints:hints results:results xOffset:xOffset + (int)maxX yOffset:yOffset];
   }
   if (maxY < height - MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:0 param1:(int)maxY param2:width param3:height - (int)maxY] hints:hints results:results xOffset:xOffset yOffset:yOffset + (int)maxY];
+    [self doDecodeMultiple:[image crop:0 top:(int)maxY width:width height:height - (int)maxY] hints:hints results:results xOffset:xOffset yOffset:yOffset + (int)maxY];
   }
 }
 
-+ (Result *) translateResultPoints:(Result *)result xOffset:(int)xOffset yOffset:(int)yOffset {
+- (Result *) translateResultPoints:(Result *)result xOffset:(int)xOffset yOffset:(int)yOffset {
   NSArray * oldResultPoints = [result resultPoints];
-  NSArray * newResultPoints = [NSArray array];
-
-  for (int i = 0; i < oldResultPoints.length; i++) {
-    ResultPoint * oldPoint = oldResultPoints[i];
-    newResultPoints[i] = [[[ResultPoint alloc] init:[oldPoint x] + xOffset param1:[oldPoint y] + yOffset] autorelease];
+  NSMutableArray * newResultPoints = [NSMutableArray arrayWithCapacity:[oldResultPoints count]];
+  for (ResultPoint * oldPoint in oldResultPoints) {
+    [newResultPoints addObject:[[[ResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset] autorelease]];
   }
 
-  return [[[Result alloc] init:[result text] param1:[result rawBytes] param2:newResultPoints param3:[result barcodeFormat]] autorelease];
-}
-
-- (void) dealloc {
-  [delegate release];
-  [super dealloc];
+  return [[[Result alloc] initWithText:[result text] rawBytes:[result rawBytes] resultPoints:newResultPoints format:[result barcodeFormat]] autorelease];
 }
 
 @end
