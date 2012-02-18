@@ -1,6 +1,9 @@
+#import "DecoderResult.h"
+#import "DetectorResult.h"
+#import "MultiDetector.h"
+#import "QRCodeDecoder.h"
 #import "QRCodeMultiReader.h"
-
-NSArray * const EMPTY_RESULT_ARRAY = [NSArray array];
+#import "Result.h"
 
 @implementation QRCodeMultiReader
 
@@ -9,20 +12,18 @@ NSArray * const EMPTY_RESULT_ARRAY = [NSArray array];
 }
 
 - (NSArray *) decodeMultiple:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
-  NSMutableArray * results = [[[NSMutableArray alloc] init] autorelease];
-  NSArray * detectorResult = [[[[MultiDetector alloc] init:[image blackMatrix]] autorelease] detectMulti:hints];
-
-  for (int i = 0; i < detectorResult.length; i++) {
-
+  NSMutableArray * results = [NSMutableArray array];
+  NSArray * detectorResult = [[[[MultiDetector alloc] initWithImage:[image blackMatrix]] autorelease] detectMulti:hints];
+  for (int i = 0; i < [detectorResult count]; i++) {
     @try {
-      DecoderResult * decoderResult = [[self decoder] decode:[detectorResult[i] bits]];
-      NSArray * points = [detectorResult[i] points];
-      Result * result = [[[Result alloc] init:[decoderResult text] param1:[decoderResult rawBytes] param2:points param3:BarcodeFormat.QR_CODE] autorelease];
+      DecoderResult * decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits]];
+      NSArray * points = [[detectorResult objectAtIndex:i] points];
+      Result * result = [[[Result alloc] initWithText:[decoderResult text] rawBytes:[decoderResult rawBytes] resultPoints:points format:kBarcodeFormatQRCode] autorelease];
       if ([decoderResult byteSegments] != nil) {
-        [result putMetadata:ResultMetadataType.BYTE_SEGMENTS param1:[decoderResult byteSegments]];
+        [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
       }
       if ([decoderResult eCLevel] != nil) {
-        [result putMetadata:ResultMetadataType.ERROR_CORRECTION_LEVEL param1:[[decoderResult eCLevel] description]];
+        [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[[decoderResult eCLevel] description]];
       }
       [results addObject:result];
     }
@@ -30,18 +31,7 @@ NSArray * const EMPTY_RESULT_ARRAY = [NSArray array];
     }
   }
 
-  if ([results empty]) {
-    return EMPTY_RESULT_ARRAY;
-  }
-   else {
-    NSArray * resultArray = [NSArray array];
-
-    for (int i = 0; i < [results count]; i++) {
-      resultArray[i] = (Result *)[results objectAtIndex:i];
-    }
-
-    return resultArray;
-  }
+  return results;
 }
 
 @end
