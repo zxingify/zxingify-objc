@@ -8,7 +8,7 @@ int const CODE_STOP = 106;
 
 @implementation Code128Writer
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
   if (format != BarcodeFormat.CODE_128) {
     @throw [[[IllegalArgumentException alloc] init:[@"Can only encode CODE_128, but got " stringByAppendingString:format]] autorelease];
   }

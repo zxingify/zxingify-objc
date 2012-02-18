@@ -1,45 +1,27 @@
 #import "MultiDetector.h"
-
-NSArray * const EMPTY_DETECTOR_RESULTS = [NSArray array];
+#import "MultiFinderPatternFinder.h"
+#import "NotFoundException.h"
 
 @implementation MultiDetector
 
-- (id) initWithImage:(BitMatrix *)image {
-  if (self = [super init:image]) {
-  }
-  return self;
-}
-
 - (NSArray *) detectMulti:(NSMutableDictionary *)hints {
-  BitMatrix * image = [self image];
-  MultiFinderPatternFinder * finder = [[[MultiFinderPatternFinder alloc] init:image] autorelease];
+  MultiFinderPatternFinder * finder = [[[MultiFinderPatternFinder alloc] initWithImage:image] autorelease];
   NSArray * info = [finder findMulti:hints];
-  if (info == nil || info.length == 0) {
+
+  if (info == nil || [info count] == 0) {
     @throw [NotFoundException notFoundInstance];
   }
-  NSMutableArray * result = [[[NSMutableArray alloc] init] autorelease];
 
-  for (int i = 0; i < info.length; i++) {
-
+  NSMutableArray * result = [NSMutableArray array];
+  for (int i = 0; i < [info count]; i++) {
     @try {
-      [result addObject:[self processFinderPatternInfo:info[i]]];
+      [result addObject:[self processFinderPatternInfo:[info objectAtIndex:i]]];
     }
     @catch (ReaderException * e) {
     }
   }
 
-  if ([result empty]) {
-    return EMPTY_DETECTOR_RESULTS;
-  }
-   else {
-    NSArray * resultArray = [NSArray array];
-
-    for (int i = 0; i < [result count]; i++) {
-      resultArray[i] = (DetectorResult *)[result objectAtIndex:i];
-    }
-
-    return resultArray;
-  }
+  return result;
 }
 
 @end

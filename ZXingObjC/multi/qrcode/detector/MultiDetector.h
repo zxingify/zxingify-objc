@@ -8,11 +8,8 @@
  * @author Hannes Erven
  */
 
-@class BitMatrix;
-
 @interface MultiDetector : QRCodeDetector
 
-- (id) initWithImage:(BitMatrix *)image;
 - (NSArray *) detectMulti:(NSMutableDictionary *)hints;
 
 @end

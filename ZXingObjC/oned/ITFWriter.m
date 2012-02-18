@@ -2,7 +2,7 @@
 
 @implementation ITFWriter
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
   if (format != BarcodeFormat.ITF) {
     @throw [[[IllegalArgumentException alloc] init:[@"Can only encode ITF, but got " stringByAppendingString:format]] autorelease];
   }

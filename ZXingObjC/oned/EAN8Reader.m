@@ -44,7 +44,7 @@
   return rowOffset;
 }
 
-- (BarcodeFormat *) getBarcodeFormat {
+- (BarcodeFormat) getBarcodeFormat {
   return BarcodeFormat.EAN_8;
 }
 

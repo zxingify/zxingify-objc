@@ -22,6 +22,6 @@
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
 - (Result *) decode:(BinaryBitmap *)image;
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
-- (BarcodeFormat *) getBarcodeFormat;
+- (BarcodeFormat) getBarcodeFormat;
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
 @end

@@ -55,7 +55,7 @@ NSArray * const FIRST_DIGIT_ENCODINGS = [NSArray arrayWithObjects:0x00, 0x0B, 0x
   return rowOffset;
 }
 
-- (BarcodeFormat *) getBarcodeFormat {
+- (BarcodeFormat) getBarcodeFormat {
   return BarcodeFormat.EAN_13;
 }
 

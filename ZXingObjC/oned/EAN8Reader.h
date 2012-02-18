@@ -13,5 +13,5 @@
 
 - (id) init;
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
-- (BarcodeFormat *) getBarcodeFormat;
+- (BarcodeFormat) getBarcodeFormat;
 @end

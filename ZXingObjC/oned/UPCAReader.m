@@ -25,7 +25,7 @@
   return [self maybeReturnResult:[ean13Reader decode:image param1:hints]];
 }
 
-- (BarcodeFormat *) getBarcodeFormat {
+- (BarcodeFormat) getBarcodeFormat {
   return BarcodeFormat.UPC_A;
 }
 

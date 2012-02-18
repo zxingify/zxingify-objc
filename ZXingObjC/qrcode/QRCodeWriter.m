@@ -4,11 +4,11 @@ int const QUIET_ZONE_SIZE = 4;
 
 @implementation QRCodeWriter
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height {
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
   if (contents == nil || [contents length] == 0) {
     @throw [[[IllegalArgumentException alloc] init:@"Found empty contents"] autorelease];
   }

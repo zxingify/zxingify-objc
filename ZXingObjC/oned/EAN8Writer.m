@@ -4,7 +4,7 @@ int const codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
 @implementation EAN8Writer
 
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat *)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
   if (format != BarcodeFormat.EAN_8) {
     @throw [[[IllegalArgumentException alloc] init:[@"Can only encode EAN_8, but got " stringByAppendingString:format]] autorelease];
   }
