@@ -135,7 +135,7 @@ int const CODE_STOP = 106;
 
 @interface Code128Reader ()
 
-- (int) decodeCode:(BitArray *)row counters:(NSMutableArray *)counters rowOffset:(int)rowOffset;
+- (int) decodeCode:(BitArray *)row counters:(int[])counters rowOffset:(int)rowOffset;
 - (NSArray *) findStartPattern:(BitArray *)row;
 
 @end
@@ -145,7 +145,6 @@ int const CODE_STOP = 106;
 - (NSArray *) findStartPattern:(BitArray *)row {
   int width = [row size];
   int rowOffset = 0;
-
   while (rowOffset < width) {
     if ([row get:rowOffset]) {
       break;
@@ -154,21 +153,19 @@ int const CODE_STOP = 106;
   }
 
   int counterPosition = 0;
-  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:6];
+  int counters[6];
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = [counters count];
+  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition
-                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+      counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         int bestVariance = MAX_AVG_VARIANCE;
         int bestMatch = -1;
-
         for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
           int variance = [OneDReader patternMatchVariance:counters pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
@@ -176,25 +173,22 @@ int const CODE_STOP = 106;
             bestMatch = startCode;
           }
         }
-
         if (bestMatch >= 0) {
           if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
             return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], [NSNumber numberWithInt:bestMatch], nil];
           }
         }
-        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
-
+        patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {
-          [counters replaceObjectAtIndex:y-2 withObject:[counters objectAtIndex:y]];
+          counters[y - 2] = counters[y];
         }
-
-        [counters replaceObjectAtIndex:patternLength - 2 withObject:[NSNumber numberWithInt:0]];
-        [counters replaceObjectAtIndex:patternLength - 1 withObject:[NSNumber numberWithInt:0]];
+        counters[patternLength - 2] = 0;
+        counters[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+      counters[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -202,7 +196,7 @@ int const CODE_STOP = 106;
   @throw [NotFoundException notFoundInstance];
 }
 
-- (int) decodeCode:(BitArray *)row counters:(NSMutableArray *)counters rowOffset:(int)rowOffset {
+- (int) decodeCode:(BitArray *)row counters:(int[])counters rowOffset:(int)rowOffset {
   [OneDReader recordPattern:row start:rowOffset counters:counters];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
@@ -241,12 +235,15 @@ int const CODE_STOP = 106;
   default:
     @throw [FormatException formatInstance];
   }
+
   BOOL done = NO;
   BOOL isNextShifted = NO;
+
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
   int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
-  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:6];
+  int counters[6];
+
   int lastCode = 0;
   int code = 0;
   int checksumTotal = startCode;
@@ -256,19 +253,23 @@ int const CODE_STOP = 106;
   while (!done) {
     BOOL unshift = isNextShifted;
     isNextShifted = NO;
+
     lastCode = code;
+
     code = [self decodeCode:row counters:counters rowOffset:nextStart];
+
     if (code != CODE_STOP) {
       lastCharacterWasPrintable = YES;
     }
+
     if (code != CODE_STOP) {
       multiplier++;
       checksumTotal += multiplier * code;
     }
-    lastStart = nextStart;
 
-    for (NSNumber *i in counters) {
-      nextStart += [i intValue];
+    lastStart = nextStart;
+    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+      nextStart += counters[i];
     }
 
     switch (code) {
@@ -405,11 +406,11 @@ int const CODE_STOP = 106;
   }
   float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
-  return [[[Result alloc] init:resultString
-                      rawBytes:nil
-                  resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                        format:kBarcodeCode128] autorelease];
+  return [[[Result alloc] initWithText:resultString
+                              rawBytes:nil
+                          resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                        [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                format:kBarcodeFormatCode128] autorelease];
 }
 
 @end

@@ -35,7 +35,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 - (BOOL) arrayContains:(char *)array key:(unichar)key;
 - (NSMutableArray *) findAsteriskPattern:(BitArray *)row;
-- (unichar) toNarrowWidePattern:(NSArray *)counters;
+- (unichar) toNarrowWidePattern:(int[])counters;
 
 @end
 
@@ -52,23 +52,24 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   }
 
   NSMutableString * result = [NSMutableString string];
-  NSMutableArray * counters;
+  int counters[7];
   int lastStart;
 
   do {
-    counters = [NSMutableArray arrayWithObjects:[NSNumber numberWithInt:0], [NSNumber numberWithInt:0],
-                [NSNumber numberWithInt:0], [NSNumber numberWithInt:0], [NSNumber numberWithInt:0],
-                [NSNumber numberWithInt:0], [NSNumber numberWithInt:0], nil];
+    for (int i = 0; i < 7; i++) {
+      counters[i] = 0;
+    }
+
     [OneDReader recordPattern:row start:nextStart counters:counters];
+
     unichar decodedChar = [self toNarrowWidePattern:counters];
     if (decodedChar == '!') {
       @throw [NotFoundException notFoundInstance];
     }
     [result appendFormat:@"%c", decodedChar];
     lastStart = nextStart;
-
-    for (NSNumber *i in counters) {
-      nextStart += [i intValue];
+    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+      nextStart += counters[i];
     }
 
     while (nextStart < end && ![row get:nextStart]) {
@@ -77,8 +78,8 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   } while (nextStart < end);
 
   int lastPatternSize = 0;
-  for (NSNumber *i in counters) {
-    lastPatternSize += [i intValue];
+  for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    lastPatternSize += counters[i];
   }
 
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
@@ -111,12 +112,12 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
-  return [[[Result alloc] init:result
-                      rawBytes:nil
-                  resultPoints:[NSArray arrayWithObjects:
-                                [[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                        format:kBarcodeFormatCodabar] autorelease];
+  return [[[Result alloc] initWithText:result
+                              rawBytes:nil
+                          resultPoints:[NSArray arrayWithObjects:
+                                        [[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                        [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                format:kBarcodeFormatCodabar] autorelease];
 }
 
 - (NSMutableArray *) findAsteriskPattern:(BitArray *)row {
@@ -131,19 +132,15 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   }
 
   int counterPosition = 0;
-  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:7];
-  for (int i = 0; i < 7; i++) {
-    [counters addObject:[NSNumber numberWithInt:0]];
-  }  
+  int counters[7];
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = [counters count];
+  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition
-                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+      counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         @try {
@@ -157,17 +154,17 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
         @catch (NSException * re) {
         }
         
-        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
+        patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {
-          [counters replaceObjectAtIndex:y - 2 withObject:[counters objectAtIndex:y]];
+          counters[y - 2] = counters[y];
         }
-        [counters replaceObjectAtIndex:patternLength - 2 withObject:[NSNumber numberWithInt:0]];
-        [counters replaceObjectAtIndex:patternLength - 1 withObject:[NSNumber numberWithInt:0]];
+        counters[patternLength - 2] = 0;
+        counters[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+      counters[counterPosition] = 1;
       isWhite ^= YES;
     }
   }
@@ -187,17 +184,17 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   return NO;
 }
 
-- (unichar) toNarrowWidePattern:(NSArray *)counters {
-  int numCounters = [counters count];
+- (unichar) toNarrowWidePattern:(int[])counters {
+  int numCounters = sizeof((int*)counters) / sizeof(int);
   int maxNarrowCounter = 0;
   
   int minCounter = NSIntegerMax;
   for (int i = 0; i < numCounters; i++) {
-    if ([[counters objectAtIndex:i] intValue] < minCounter) {
-      minCounter = [[counters objectAtIndex:i] intValue];
+    if (counters[i] < minCounter) {
+      minCounter = counters[i];
     }
-    if ([[counters objectAtIndex:i] intValue] > maxNarrowCounter) {
-      maxNarrowCounter = [[counters objectAtIndex:i] intValue];
+    if (counters[i] > maxNarrowCounter) {
+      maxNarrowCounter = counters[i];
     }
   }
 
@@ -206,7 +203,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     int pattern = 0;
 
     for (int i = 0; i < numCounters; i++) {
-      if ([[counters objectAtIndex:i] intValue] > maxNarrowCounter) {
+      if (counters[i] > maxNarrowCounter) {
         pattern |= 1 << (numCounters - 1 - i);
         wideCounters++;
       }
