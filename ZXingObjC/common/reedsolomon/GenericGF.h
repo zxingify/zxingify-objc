@@ -1,5 +1,3 @@
-#import "GenericGFPoly.h"
-
 /**
  * <p>This class contains utility methods for performing mathematical operations over
  * the Galois Fields. Operations use a given primitive polynomial in calculations.</p>
@@ -11,6 +9,8 @@
  * @author Sean Owen
  * @author David Olivier
  */
+
+@class GenericGFPoly;
 
 @interface GenericGF : NSObject {
   NSMutableArray * expTable;

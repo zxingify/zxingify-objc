@@ -1,4 +1,5 @@
 #import "GenericGF.h"
+#import "GenericGFPoly.h"
 
 int const INITIALIZATION_THRESHOLD = 0;
 
@@ -51,8 +52,8 @@ int const INITIALIZATION_THRESHOLD = 0;
     [logTable insertObject:[NSNumber numberWithInt:i] atIndex:[[expTable objectAtIndex:i] intValue]];
   }
 
-  zero = [[[GenericGFPoly alloc] init:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]] autorelease];
-  one = [[[GenericGFPoly alloc] init:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]] autorelease];
+  zero = [[[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]] autorelease];
+  one = [[[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]] autorelease];
   initialized = YES;
 }
 
@@ -92,11 +93,13 @@ int const INITIALIZATION_THRESHOLD = 0;
 
 - (GenericGFPoly *) zero {
   [self checkInit];
+
   return zero;
 }
 
 - (GenericGFPoly *) one {
   [self checkInit];
+
   return one;
 }
 
@@ -106,15 +109,15 @@ int const INITIALIZATION_THRESHOLD = 0;
  */
 - (GenericGFPoly *) buildMonomial:(int)degree coefficient:(int)coefficient {
   [self checkInit];
+
   if (degree < 0) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
   if (coefficient == 0) {
     return zero;
   }
-  NSArray * coefficients = [NSArray array];
-  coefficients[0] = coefficient;
-  return [[[GenericGFPoly alloc] init:self param1:coefficients] autorelease];
+  NSArray * coefficients = [NSArray arrayWithObject:[NSNumber numberWithInt:coefficient]];
+  return [[[GenericGFPoly alloc] initWithField:self coefficients:coefficients] autorelease];
 }
 
 
@@ -133,7 +136,7 @@ int const INITIALIZATION_THRESHOLD = 0;
  */
 - (int) exp:(int)a {
   [self checkInit];
-  return expTable[a];
+  return [[expTable objectAtIndex:a] intValue];
 }
 
 
@@ -143,9 +146,9 @@ int const INITIALIZATION_THRESHOLD = 0;
 - (int) log:(int)a {
   [self checkInit];
   if (a == 0) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return logTable[a];
+  return [[logTable objectAtIndex:a] intValue];
 }
 
 
@@ -154,10 +157,11 @@ int const INITIALIZATION_THRESHOLD = 0;
  */
 - (int) inverse:(int)a {
   [self checkInit];
+
   if (a == 0) {
-    @throw [[[ArithmeticException alloc] init] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return expTable[size - logTable[a] - 1];
+  return [[expTable objectAtIndex:size - [[logTable objectAtIndex:a] intValue] - 1] intValue];
 }
 
 
@@ -168,14 +172,17 @@ int const INITIALIZATION_THRESHOLD = 0;
  */
 - (int) multiply:(int)a b:(int)b {
   [self checkInit];
+
   if (a == 0 || b == 0) {
     return 0;
   }
+
   if (a < 0 || b < 0 || a >= size || b >= size) {
     a++;
   }
-  int logSum = logTable[a] + logTable[b];
-  return expTable[(logSum % size) + logSum / size];
+
+  int logSum = [[logTable objectAtIndex:a] intValue] + [[logTable objectAtIndex:b] intValue];
+  return [[expTable objectAtIndex:(logSum % size) + logSum / size] intValue];
 }
 
 - (void) dealloc {

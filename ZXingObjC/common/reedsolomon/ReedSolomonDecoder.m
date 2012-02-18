@@ -1,5 +1,6 @@
-#import "ReedSolomonDecoder.h"
 #import "GenericGF.h"
+#import "GenericGFPoly.h"
+#import "ReedSolomonDecoder.h"
 #import "ReedSolomonException.h"
 
 @interface ReedSolomonDecoder ()
