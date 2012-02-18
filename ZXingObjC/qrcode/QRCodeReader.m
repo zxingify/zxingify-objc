@@ -1,20 +1,31 @@
+#import "BarcodeFormat.h"
+#import "BitMatrix.h"
+#import "DecodeHintType.h"
+#import "DecoderResult.h"
+#import "DetectorResult.h"
+#import "NotFoundException.h"
+#import "QRCodeDecoder.h"
+#import "QRCodeDetector.h"
 #import "QRCodeReader.h"
+#import "Result.h"
 
-NSArray * const NO_POINTS = [NSArray array];
+@interface QRCodeReader ()
+
+- (BitMatrix *) extractPureBits:(BitMatrix *)image;
+- (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image;
+
+@end
 
 @implementation QRCodeReader
 
-- (void) init {
+@synthesize decoder;
+
+- (id) init {
   if (self = [super init]) {
-    decoder = [[[Decoder alloc] init] autorelease];
+    decoder = [[[QRCodeDecoder alloc] init] autorelease];
   }
   return self;
 }
-
-- (Decoder *) getDecoder {
-  return decoder;
-}
-
 
 /**
  * Locates and decodes a QR code in an image.
@@ -31,27 +42,28 @@ NSArray * const NO_POINTS = [NSArray array];
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
   DecoderResult * decoderResult;
   NSArray * points;
-  if (hints != nil && [hints containsKey:DecodeHintType.PURE_BARCODE]) {
+  if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePureBarcode]]) {
     BitMatrix * bits = [self extractPureBits:[image blackMatrix]];
-    decoderResult = [decoder decode:bits param1:hints];
-    points = NO_POINTS;
-  }
-   else {
-    DetectorResult * detectorResult = [[[[Detector alloc] init:[image blackMatrix]] autorelease] detect:hints];
-    decoderResult = [decoder decode:[detectorResult bits] param1:hints];
+    decoderResult = [decoder decodeMatrix:bits hints:hints];
+    points = [NSArray array];
+  } else {
+    DetectorResult * detectorResult = [[[[QRCodeDetector alloc] initWithImage:[image blackMatrix]] autorelease] detect:hints];
+    decoderResult = [decoder decodeMatrix:[detectorResult bits] hints:hints];
     points = [detectorResult points];
   }
-  Result * result = [[[Result alloc] init:[decoderResult text] param1:[decoderResult rawBytes] param2:points param3:BarcodeFormat.QR_CODE] autorelease];
+
+  Result * result = [[[Result alloc] initWithText:[decoderResult text] rawBytes:[decoderResult rawBytes] resultPoints:points format:kBarcodeFormatQRCode] autorelease];
   if ([decoderResult byteSegments] != nil) {
-    [result putMetadata:ResultMetadataType.BYTE_SEGMENTS param1:[decoderResult byteSegments]];
+    [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
   }
   if ([decoderResult eCLevel] != nil) {
-    [result putMetadata:ResultMetadataType.ERROR_CORRECTION_LEVEL param1:[[decoderResult eCLevel] description]];
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[[decoderResult eCLevel] description]];
   }
   return result;
 }
 
 - (void) reset {
+  // do nothing
 }
 
 
@@ -64,17 +76,20 @@ NSArray * const NO_POINTS = [NSArray array];
  * @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
  * @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
  */
-+ (BitMatrix *) extractPureBits:(BitMatrix *)image {
+- (BitMatrix *) extractPureBits:(BitMatrix *)image {
   NSArray * leftTopBlack = [image topLeftOnBit];
   NSArray * rightBottomBlack = [image bottomRightOnBit];
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     @throw [NotFoundException notFoundInstance];
   }
+
   int moduleSize = [self moduleSize:leftTopBlack image:image];
-  int top = leftTopBlack[1];
-  int bottom = rightBottomBlack[1];
-  int left = leftTopBlack[0];
-  int right = rightBottomBlack[0];
+
+  int top = [[leftTopBlack objectAtIndex:1] intValue];
+  int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
+  int left = [[leftTopBlack objectAtIndex:0] intValue];
+  int right = [[rightBottomBlack objectAtIndex:0] intValue];
+
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
   if (matrixWidth == 0 || matrixHeight == 0) {
@@ -83,40 +98,37 @@ NSArray * const NO_POINTS = [NSArray array];
   if (matrixHeight != matrixWidth) {
     @throw [NotFoundException notFoundInstance];
   }
+
   int nudge = moduleSize >> 1;
   top += nudge;
   left += nudge;
-  BitMatrix * bits = [[[BitMatrix alloc] init:matrixWidth param1:matrixHeight] autorelease];
 
+  BitMatrix * bits = [[[BitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + y * moduleSize;
-
     for (int x = 0; x < matrixWidth; x++) {
-      if ([image get:left + x * moduleSize param1:iOffset]) {
-        [bits set:x param1:y];
+      if ([image get:left + x * moduleSize y:iOffset]) {
+        [bits set:x y:y];
       }
     }
-
   }
-
   return bits;
 }
 
-+ (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image {
+- (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image {
   int height = [image height];
   int width = [image width];
-  int x = leftTopBlack[0];
-  int y = leftTopBlack[1];
-
-  while (x < width && y < height && [image get:x param1:y]) {
+  int x = [[leftTopBlack objectAtIndex:0] intValue];
+  int y = [[leftTopBlack objectAtIndex:1] intValue];
+  while (x < width && y < height && [image get:x y:y]) {
     x++;
     y++;
   }
-
   if (x == width || y == height) {
     @throw [NotFoundException notFoundInstance];
   }
-  int moduleSize = x - leftTopBlack[0];
+
+  int moduleSize = x - [[leftTopBlack objectAtIndex:0] intValue];
   if (moduleSize == 0) {
     @throw [NotFoundException notFoundInstance];
   }

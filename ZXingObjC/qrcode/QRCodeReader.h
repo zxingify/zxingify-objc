@@ -6,15 +6,12 @@
  * @author Sean Owen
  */
 
-@class BinaryBitmap, Decoder, Result;
+@class BinaryBitmap, QRCodeDecoder, Result;
 
 @interface QRCodeReader : NSObject <Reader> {
-  Decoder * decoder;
+  QRCodeDecoder * decoder;
 }
 
-- (Decoder *) getDecoder;
-- (Result *) decode:(BinaryBitmap *)image;
-- (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
-- (void) reset;
+@property (nonatomic, readonly) QRCodeDecoder * decoder;
 
 @end
