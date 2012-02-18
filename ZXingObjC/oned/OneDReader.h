@@ -15,9 +15,6 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
 @interface OneDReader : NSObject <Reader>
 
-- (Result *) decode:(BinaryBitmap *)image;
-- (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
-- (void) reset;
 + (void) recordPattern:(BitArray *)row start:(int)start counters:(int[])counters;
 + (void) recordPatternInReverse:(BitArray *)row start:(int)start counters:(int[])counters;
 + (int) patternMatchVariance:(int[])counters pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance;

@@ -15,6 +15,6 @@
 + (int) countArray:(NSArray*)array;
 + (void) increment:(NSMutableArray *)array errors:(NSArray *)errors;
 + (void) decrement:(NSMutableArray *)array errors:(NSArray *)errors;
-+ (BOOL) isFinderPattern:(NSArray *)counters;
++ (BOOL) isFinderPattern:(int[])counters;
 
 @end

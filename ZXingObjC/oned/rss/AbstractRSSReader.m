@@ -77,16 +77,15 @@ float const MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
   [array replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:[[array objectAtIndex:index] intValue] - 1]];
 }
 
-+ (BOOL) isFinderPattern:(NSArray *)counters {
-  int firstTwoSum = [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
-  int sum = firstTwoSum + [[counters objectAtIndex:2] intValue] + [[counters objectAtIndex:3] intValue];
++ (BOOL) isFinderPattern:(int[])counters {
+  int firstTwoSum = counters[0] + counters[1];
+  int sum = firstTwoSum + counters[2] + counters[3];
   float ratio = (float)firstTwoSum / (float)sum;
   if (ratio >= MIN_FINDER_PATTERN_RATIO && ratio <= MAX_FINDER_PATTERN_RATIO) {
     int minCounter = NSIntegerMax;
     int maxCounter = NSIntegerMin;
-
-    for (NSNumber *i in counters) {
-      int counter = [i intValue];
+    for (int i = 0; i < sizeof((int*)counters) / sizeof(int); i++) {
+      int counter = counters[i];
       if (counter > maxCounter) {
         maxCounter = counter;
       }

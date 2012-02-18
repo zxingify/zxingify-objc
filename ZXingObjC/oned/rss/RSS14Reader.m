@@ -1,3 +1,4 @@
+#import "BarcodeFormat.h"
 #import "DecodeHintType.h"
 #import "Pair.h"
 #import "ResultPointCallback.h"
@@ -12,13 +13,23 @@ const int INSIDE_GSUM[4] = {0,336,1036,1516};
 const int OUTSIDE_ODD_WIDEST[5] = {8,6,4,3,1};
 const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
-static NSMutableArray* FINDER_PATTERNS = nil;
+const int FINDER_PATTERNS[9][4] = {
+  {3,8,2,1},
+  {3,5,5,1},
+  {3,3,7,1},
+  {3,1,9,1},
+  {2,7,4,1},
+  {2,5,6,1},
+  {2,3,8,1},
+  {1,5,7,1},
+  {1,3,9,1},
+};
+
 
 @interface RSS14Reader ()
 
 - (void) addOrTally:(NSMutableArray *)possiblePairs pair:(Pair *)pair;
 - (void) adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules;
-- (void) buildFinderPatterns;
 - (BOOL) checkChecksum:(Pair *)leftPair rightPair:(Pair *)rightPair;
 - (Result *) constructResult:(Pair *)leftPair rightPair:(Pair *)rightPair;
 - (DataCharacter *) decodeDataCharacter:(BitArray *)row pattern:(RSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar;
@@ -80,66 +91,6 @@ static NSMutableArray* FINDER_PATTERNS = nil;
   }
 }
 
-- (void)buildFinderPatterns {
-  if (!FINDER_PATTERNS) {
-    FINDER_PATTERNS = [[NSMutableArray alloc] initWithCapacity:9];
-
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:8],
-                                [NSNumber numberWithInt:2],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:5],
-                                [NSNumber numberWithInt:5],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:7],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:1],
-                                [NSNumber numberWithInt:9],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:2],
-                                [NSNumber numberWithInt:7],
-                                [NSNumber numberWithInt:4],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:2],
-                                [NSNumber numberWithInt:5],
-                                [NSNumber numberWithInt:6],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:2],
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:8],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:1],
-                                [NSNumber numberWithInt:5],
-                                [NSNumber numberWithInt:7],
-                                [NSNumber numberWithInt:1], nil]];
-    
-    [FINDER_PATTERNS addObject:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:1],
-                                [NSNumber numberWithInt:3],
-                                [NSNumber numberWithInt:9],
-                                [NSNumber numberWithInt:1], nil]];
-  }
-}
-
 - (void) reset {
   [possibleLeftPairs removeAllObjects];
   [possibleRightPairs removeAllObjects];
@@ -169,10 +120,10 @@ static NSMutableArray* FINDER_PATTERNS = nil;
   [buffer appendFormat:@"%d", checkDigit];
   NSArray * leftPoints = [[leftPair finderPattern] resultPoints];
   NSArray * rightPoints = [[rightPair finderPattern] resultPoints];
-  return [[[Result alloc] init:buffer
-                      rawBytes:nil
-                  resultPoints:[NSArray arrayWithObjects:[leftPoints objectAtIndex:0], [leftPoints objectAtIndex:1], [rightPoints objectAtIndex:0], [rightPoints objectAtIndex:1], nil]
-                        format:kBarcodeRSS14] autorelease];
+  return [[[Result alloc] initWithText:buffer
+                              rawBytes:nil
+                          resultPoints:[NSArray arrayWithObjects:[leftPoints objectAtIndex:0], [leftPoints objectAtIndex:1], [rightPoints objectAtIndex:0], [rightPoints objectAtIndex:1], nil]
+                                format:kBarcodeFormatRSS14] autorelease];
 }
 
 - (BOOL) checkChecksum:(Pair *)leftPair rightPair:(Pair *)rightPair {
@@ -217,47 +168,42 @@ static NSMutableArray* FINDER_PATTERNS = nil;
 }
 
 - (DataCharacter *) decodeDataCharacter:(BitArray *)row pattern:(RSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar {
-  NSMutableArray * counters = [NSMutableArray arrayWithArray:dataCharacterCounters];
-  
-  while ([counters count] < 8) {
-    [counters addObject:[NSNull null]];
-  }
-  
-  [counters replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:4 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:5 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:6 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:0]];
+  int counters[[dataCharacterCounters count]];
+  counters[0] = 0;
+  counters[1] = 0;
+  counters[2] = 0;
+  counters[3] = 0;
+  counters[4] = 0;
+  counters[5] = 0;
+  counters[6] = 0;
+  counters[7] = 0;
 
   if (outsideChar) {
     [OneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters];
   } else {
     [OneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters];
 
-    for (int i = 0, j = [counters count] - 1; i < j; i++, j--) {
-      id temp = [counters objectAtIndex:i];
-      [counters replaceObjectAtIndex:i withObject:[counters objectAtIndex:j]];
-      [counters replaceObjectAtIndex:j withObject:temp];
+    for (int i = 0, j = (sizeof(counters) / sizeof(int)) - 1; i < j; i++, j--) {
+      int temp = counters[i];
+      counters[i] = counters[j];
+      counters[j] = temp;
     }
-
   }
+
   int numModules = outsideChar ? 16 : 15;
   float elementWidth = (float)[AbstractRSSReader count:counters] / (float)numModules;
+
   NSMutableArray * _oddCounts = [NSMutableArray arrayWithArray:oddCounts];
   NSMutableArray * _evenCounts = [NSMutableArray arrayWithArray:evenCounts];
   NSMutableArray * _oddRoundingErrors = [NSMutableArray arrayWithArray:oddRoundingErrors];
   NSMutableArray * _evenRoundingErrors = [NSMutableArray arrayWithArray:evenRoundingErrors];
 
-  for (int i = 0; i < [counters count]; i++) {
-    float value = [[counters objectAtIndex:i] floatValue] / elementWidth;
+  for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    float value = (float) counters[i] / elementWidth;
     int count = (int)(value + 0.5f);
     if (count < 1) {
       count = 1;
-    }
-     else if (count > 8) {
+    } else if (count > 8) {
       count = 8;
     }
     int offset = i >> 1;
@@ -271,25 +217,23 @@ static NSMutableArray* FINDER_PATTERNS = nil;
   }
 
   [self adjustOddEvenCounts:outsideChar numModules:numModules];
+
   int oddSum = 0;
   int oddChecksumPortion = 0;
-
   for (int i = [_oddCounts count] - 1; i >= 0; i--) {
     oddChecksumPortion *= 9;
     oddChecksumPortion += [[_oddCounts objectAtIndex:i] intValue];
     oddSum += [[_oddCounts objectAtIndex:i] intValue];
   }
-
   int evenChecksumPortion = 0;
   int evenSum = 0;
-
   for (int i = [_evenCounts count] - 1; i >= 0; i--) {
     evenChecksumPortion *= 9;
     evenChecksumPortion += [[_evenCounts objectAtIndex:i] intValue];
     evenSum += [[_evenCounts objectAtIndex:i] intValue];
   }
-
   int checksumPortion = oddChecksumPortion + 3 * evenChecksumPortion;
+
   if (outsideChar) {
     if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4) {
       @throw [NotFoundException notFoundInstance];
@@ -301,7 +245,7 @@ static NSMutableArray* FINDER_PATTERNS = nil;
     int vEven = [RSSUtils getRSSvalue:_evenCounts maxWidth:evenWidest noNarrow:YES];
     int tEven = OUTSIDE_EVEN_TOTAL_SUBSET[group];
     int gSum = OUTSIDE_GSUM[group];
-    return [[[DataCharacter alloc] init:vOdd * tEven + vEven + gSum checksumPortion:checksumPortion] autorelease];
+    return [[[DataCharacter alloc] initWithValue:vOdd * tEven + vEven + gSum checksumPortion:checksumPortion] autorelease];
   } else {
     if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
       @throw [NotFoundException notFoundInstance];
@@ -313,25 +257,19 @@ static NSMutableArray* FINDER_PATTERNS = nil;
     int vEven = [RSSUtils getRSSvalue:_evenCounts maxWidth:evenWidest noNarrow:NO];
     int tOdd = INSIDE_ODD_TOTAL_SUBSET[group];
     int gSum = INSIDE_GSUM[group];
-    return [[[DataCharacter alloc] init:vEven * tOdd + vOdd + gSum checksumPortion:checksumPortion] autorelease];
+    return [[[DataCharacter alloc] initWithValue:vEven * tOdd + vOdd + gSum checksumPortion:checksumPortion] autorelease];
   }
 }
 
 - (NSArray *) findFinderPattern:(BitArray *)row rowOffset:(int)rowOffset rightFinderPattern:(BOOL)rightFinderPattern {
-  NSMutableArray * counters = [NSMutableArray arrayWithArray:decodeFinderCounters];
-  
-  while ([counters count] < 4) {
-    [counters addObject:[NSNull null]];
-  }
-  
-  [counters replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:0]];
-  [counters replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:0]];
+  int counters[[decodeFinderCounters count]];
+  counters[0] = 0;
+  counters[1] = 0;
+  counters[2] = 0;
+  counters[3] = 0;
 
   int width = [row size];
   BOOL isWhite = NO;
-
   while (rowOffset < width) {
     isWhite = ![row get:rowOffset];
     if (rightFinderPattern == isWhite) {
@@ -342,27 +280,25 @@ static NSMutableArray* FINDER_PATTERNS = nil;
 
   int counterPosition = 0;
   int patternStart = rowOffset;
-
   for (int x = rowOffset; x < width; x++) {
     BOOL pixel = [row get:x];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition
-                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+      counters[counterPosition]++;
     } else {
       if (counterPosition == 3) {
         if ([AbstractRSSReader isFinderPattern:counters]) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
         }
-        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
-        [counters replaceObjectAtIndex:0 withObject:[counters objectAtIndex:2]];
-        [counters replaceObjectAtIndex:1 withObject:[counters objectAtIndex:3]];
-        [counters replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:0]];
-        [counters replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:0]];
+        patternStart += counters[0] + counters[1];
+        counters[0] = counters[2];
+        counters[1] = counters[3];
+        counters[2] = 0;
+        counters[3] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+      counters[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -380,18 +316,13 @@ static NSMutableArray* FINDER_PATTERNS = nil;
 
   firstElementStart++;
   int firstCounter = [[startEnd objectAtIndex:0] intValue] - firstElementStart;
-  NSMutableArray * counters = [NSMutableArray arrayWithArray:decodeFinderCounters];
 
-  for (int i = [counters count] - 1; i > 0; i--) {
-    [counters replaceObjectAtIndex:i withObject:[counters objectAtIndex:i - 1]];
+  int counters[[decodeFinderCounters count]];
+  for (int i = (sizeof(counters) / sizeof(int)) - 1; i > 0; i--) {
+    counters[i] = counters[i-1];
   }
-
-  [counters replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:firstCounter]];
-  
-  if (!FINDER_PATTERNS) {
-    [self buildFinderPatterns];
-  }
-  int value = [AbstractRSSReader parseFinderValue:counters finderPatterns:FINDER_PATTERNS];
+  counters[0] = firstCounter;
+  int value = [AbstractRSSReader parseFinderValue:counters finderPatterns:(int**)FINDER_PATTERNS];
   int start = firstElementStart;
   int end = [[startEnd objectAtIndex:1] intValue];
   if (right) {
@@ -400,12 +331,14 @@ static NSMutableArray* FINDER_PATTERNS = nil;
   }
   return [[[RSSFinderPattern alloc] initWithValue:value
                                          startEnd:[NSArray arrayWithObjects:[NSNumber numberWithInt:firstElementStart], [startEnd objectAtIndex:1], nil] 
-                                           start:start end:end rowNumber:rowNumber] autorelease];
+                                            start:start
+                                              end:end
+                                        rowNumber:rowNumber] autorelease];
 }
 
 - (void) adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules {
-  int oddSum = [AbstractRSSReader count:oddCounts];
-  int evenSum = [AbstractRSSReader count:evenCounts];
+  int oddSum = [AbstractRSSReader countArray:oddCounts];
+  int evenSum = [AbstractRSSReader countArray:evenCounts];
   int mismatch = oddSum + evenSum - numModules;
   BOOL oddParityBad = (oddSum & 0x01) == (outsideChar ? 1 : 0);
   BOOL evenParityBad = (evenSum & 0x01) == 1;

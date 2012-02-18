@@ -15,7 +15,9 @@
  */
 
 @protocol Reader <NSObject>
+
 - (Result *) decode:(BinaryBitmap *)image;
 - (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
 - (void) reset;
+
 @end
