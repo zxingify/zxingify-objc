@@ -1,8 +1,11 @@
+#import "BarcodeFormat.h"
+#import "BitMatrix.h"
+#import "UPCEANReader.h"
 #import "UPCEANWriter.h"
 
 @interface UPCEANWriter ()
 
-+ (BitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height;
+- (BitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height;
 
 @end
 
@@ -31,21 +34,21 @@
 /**
  * @return a byte array of horizontal pixels (0 = white, 1 = black)
  */
-+ (BitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height {
+- (BitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height {
   int inputWidth = [code count];
-  int fullWidth = inputWidth + (UPCEANReader.START_END_PATTERN.length << 1);
-  int outputWidth = [Math max:width param1:fullWidth];
-  int outputHeight = [Math max:1 param1:height];
+  int fullWidth = inputWidth + ((sizeof((int*)START_END_PATTERN) / sizeof(int)) << 1);
+  int outputWidth = MAX(width, fullWidth);
+  int outputHeight = MAX(1, height);
+
   int multiple = outputWidth / fullWidth;
   int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
-  BitMatrix * output = [[[BitMatrix alloc] init:outputWidth param1:outputHeight] autorelease];
 
+  BitMatrix * output = [[[BitMatrix alloc] initWithWidth:outputWidth height:outputHeight] autorelease];
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
-    if (code[inputX] == 1) {
-      [output setRegion:outputX param1:0 param2:multiple param3:outputHeight];
+    if ([[code objectAtIndex:inputX] intValue] == 1) {
+      [output setRegion:outputX top:0 width:multiple height:outputHeight];
     }
   }
-
   return output;
 }
 
@@ -57,24 +60,21 @@
  * starting color - 0 for white, 1 for black
  * @return the number of elements added to target.
  */
-+ (int) appendPattern:(NSArray *)target pos:(int)pos pattern:(NSArray *)pattern startColor:(int)startColor {
++ (int) appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(NSArray *)pattern startColor:(int)startColor {
   if (startColor != 0 && startColor != 1) {
-    @throw [[[IllegalArgumentException alloc] init:[@"startColor must be either 0 or 1, but got: " stringByAppendingString:startColor]] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"startColor must be either 0 or 1, but got: %d", startColor];
   }
+
   char color = (char)startColor;
   int numAdded = 0;
-
-  for (int i = 0; i < pattern.length; i++) {
-
-    for (int j = 0; j < pattern[i]; j++) {
-      target[pos] = color;
+  for (int i = 0; i < [pattern count]; i++) {
+    for (int j = 0; j < [[pattern objectAtIndex:i] intValue]; j++) {
+      [target replaceObjectAtIndex:pos withObject:[NSNumber numberWithChar:color]];
       pos += 1;
       numAdded += 1;
     }
-
     color ^= 1;
   }
-
   return numAdded;
 }
 
@@ -83,6 +83,9 @@
  * @return a byte array of horizontal pixels (0 = white, 1 = black)
  */
 - (NSArray *) encode:(NSString *)contents {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 @end

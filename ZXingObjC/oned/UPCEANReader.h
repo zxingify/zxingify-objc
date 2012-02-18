@@ -10,6 +10,7 @@
  * @author alasdair@google.com (Alasdair Mackintosh)
  */
 
+extern const int START_END_PATTERN[];
 extern const int MIDDLE_PATTERN[];
 extern const int* L_PATTERNS[];
 extern const int L_AND_G_PATTERNS[];

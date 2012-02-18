@@ -2,7 +2,7 @@
 
 @implementation AlignmentPattern
 
-- (id) init:(float)posX posY:(float)posY estimatedModuleSize:(float)anEstimatedModuleSize {
+- (id) initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)anEstimatedModuleSize {
   if (self = [super initWithX:posX y:posY]) {
     estimatedModuleSize = anEstimatedModuleSize;
   }

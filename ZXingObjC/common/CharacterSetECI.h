@@ -8,10 +8,10 @@
  */
 
 @interface CharacterSetECI : ECI {
-  NSString* encoding;
+  NSStringEncoding encoding;
 }
 
-@property(nonatomic, readonly) NSString* encoding;
+@property(nonatomic, readonly) NSStringEncoding encoding;
 
 + (CharacterSetECI *) getCharacterSetECIByValue:(int)value;
 + (CharacterSetECI *) getCharacterSetECIByName:(NSString *)name;

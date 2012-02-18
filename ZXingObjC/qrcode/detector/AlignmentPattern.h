@@ -11,7 +11,7 @@
   float estimatedModuleSize;
 }
 
-- (id) init:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
+- (id) initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
 - (BOOL) aboutEquals:(float)moduleSize i:(float)i j:(float)j;
 
 @end

@@ -1,10 +1,11 @@
-
 @interface BlockPair : NSObject {
-  NSArray * dataBytes;
-  NSArray * errorCorrectionBytes;
+  char * dataBytes;
+  char * errorCorrectionBytes;
 }
 
-@property(nonatomic, retain, readonly) NSArray * dataBytes;
-@property(nonatomic, retain, readonly) NSArray * errorCorrectionBytes;
-- (id) init:(NSArray *)data errorCorrection:(NSArray *)errorCorrection;
+@property(nonatomic, readonly) char * dataBytes;
+@property(nonatomic, readonly) char * errorCorrectionBytes;
+
+- (id) initWithData:(char *)data errorCorrection:(char *)errorCorrection;
+
 @end
