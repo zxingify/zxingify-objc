@@ -1,32 +1,3 @@
-#import "DecodeHintType.h"
-#import "NotFoundException.h"
-#import "ResultPoint.h"
-#import "ResultPointCallback.h"
-#import "BitMatrix.h"
-#import "Comparator.h"
-
-/**
- * <p>Orders by furthest from average</p>
- */
-
-@interface FurthestFromAverageComparator : NSObject <Comparator> {
-  float average;
-}
-
-- (int) compare:(NSObject *)center1 center2:(NSObject *)center2;
-@end
-
-/**
- * <p>Orders by {@link FinderPattern#getCount()}, descending.</p>
- */
-
-@interface CenterComparator : NSObject <Comparator> {
-  float average;
-}
-
-- (int) compare:(NSObject *)center1 center2:(NSObject *)center2;
-@end
-
 /**
  * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
  * markers at three corners of a QR Code.</p>
@@ -36,19 +7,24 @@
  * @author Sean Owen
  */
 
+@class BitMatrix, FinderPatternInfo;
+@protocol ResultPointCallback;
+
 @interface FinderPatternFinder : NSObject {
   BitMatrix * image;
   NSMutableArray * possibleCenters;
   BOOL hasSkipped;
-  NSArray * crossCheckStateCount;
-  ResultPointCallback * resultPointCallback;
+  int crossCheckStateCount[5];
+  id <ResultPointCallback> resultPointCallback;
 }
 
+@property (nonatomic, readonly) BitMatrix * image;
+@property (nonatomic, readonly) NSMutableArray * possibleCenters;
+
 - (id) initWithImage:(BitMatrix *)image;
-- (id) initWithImage:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback;
-- (BitMatrix *) getImage;
-- (NSMutableArray *) getPossibleCenters;
+- (id) initWithImage:(BitMatrix *)image resultPointCallback:(id <ResultPointCallback>)resultPointCallback;
 - (FinderPatternInfo *) find:(NSMutableDictionary *)hints;
-+ (BOOL) foundPatternCross:(NSArray *)stateCount;
-- (BOOL) handlePossibleCenter:(NSArray *)stateCount i:(int)i j:(int)j;
++ (BOOL) foundPatternCross:(int[])stateCount;
+- (BOOL) handlePossibleCenter:(int[])stateCount i:(int)i j:(int)j;
+
 @end

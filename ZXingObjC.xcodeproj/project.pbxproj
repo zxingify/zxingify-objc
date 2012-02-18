@@ -272,7 +272,6 @@
 		029BD0411512A046009E6549 /* BitSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDEB15129BD0009E6549 /* BitSource.m */; };
 		029BD0421512A046009E6549 /* CharacterSetECI.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDEC15129BD0009E6549 /* CharacterSetECI.h */; };
 		029BD0431512A046009E6549 /* CharacterSetECI.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDED15129BD0009E6549 /* CharacterSetECI.m */; };
-		029BD0441512A046009E6549 /* Comparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDF015129BD0009E6549 /* Comparator.h */; };
 		029BD0451512A046009E6549 /* DecoderResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDF115129BD0009E6549 /* DecoderResult.h */; };
 		029BD0461512A046009E6549 /* DecoderResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDF215129BD0009E6549 /* DecoderResult.m */; };
 		029BD0471512A046009E6549 /* DefaultGridSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDF315129BD0009E6549 /* DefaultGridSampler.h */; };
@@ -627,7 +626,6 @@
 		029BCDEB15129BD0009E6549 /* BitSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitSource.m; sourceTree = "<group>"; };
 		029BCDEC15129BD0009E6549 /* CharacterSetECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSetECI.h; sourceTree = "<group>"; };
 		029BCDED15129BD0009E6549 /* CharacterSetECI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharacterSetECI.m; sourceTree = "<group>"; };
-		029BCDF015129BD0009E6549 /* Comparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comparator.h; sourceTree = "<group>"; };
 		029BCDF115129BD0009E6549 /* DecoderResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecoderResult.h; sourceTree = "<group>"; };
 		029BCDF215129BD0009E6549 /* DecoderResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DecoderResult.m; sourceTree = "<group>"; };
 		029BCDF315129BD0009E6549 /* DefaultGridSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultGridSampler.h; sourceTree = "<group>"; };
@@ -1046,7 +1044,6 @@
 				029BCDEB15129BD0009E6549 /* BitSource.m */,
 				029BCDEC15129BD0009E6549 /* CharacterSetECI.h */,
 				029BCDED15129BD0009E6549 /* CharacterSetECI.m */,
-				029BCDF015129BD0009E6549 /* Comparator.h */,
 				029BCDF115129BD0009E6549 /* DecoderResult.h */,
 				029BCDF215129BD0009E6549 /* DecoderResult.m */,
 				029BCDF315129BD0009E6549 /* DefaultGridSampler.h */,
@@ -1575,7 +1572,6 @@
 				029BD03E1512A046009E6549 /* BitMatrix.h in Headers */,
 				029BD0401512A046009E6549 /* BitSource.h in Headers */,
 				029BD0421512A046009E6549 /* CharacterSetECI.h in Headers */,
-				029BD0441512A046009E6549 /* Comparator.h in Headers */,
 				029BD0451512A046009E6549 /* DecoderResult.h in Headers */,
 				029BD0471512A046009E6549 /* DefaultGridSampler.h in Headers */,
 				029BD0491512A046009E6549 /* MonochromeRectangleDetector.h in Headers */,

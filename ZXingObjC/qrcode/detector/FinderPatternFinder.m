@@ -1,92 +1,64 @@
+#import "BitMatrix.h"
+#import "DecodeHintType.h"
 #import "FinderPatternFinder.h"
-
-@implementation FurthestFromAverageComparator
-
-- (id) initWithF:(float)f {
-  if (self = [super init]) {
-    average = f;
-  }
-  return self;
-}
-
-- (int) compare:(NSObject *)center1 center2:(NSObject *)center2 {
-  float dA = [Math abs:[((FinderPattern *)center2) estimatedModuleSize] - average];
-  float dB = [Math abs:[((FinderPattern *)center1) estimatedModuleSize] - average];
-  return dA < dB ? -1 : dA == dB ? 0 : 1;
-}
-
-@end
-
-@implementation CenterComparator
-
-- (id) initWithF:(float)f {
-  if (self = [super init]) {
-    average = f;
-  }
-  return self;
-}
-
-- (int) compare:(NSObject *)center1 center2:(NSObject *)center2 {
-  if ([((FinderPattern *)center2) count] == [((FinderPattern *)center1) count]) {
-    float dA = [Math abs:[((FinderPattern *)center2) estimatedModuleSize] - average];
-    float dB = [Math abs:[((FinderPattern *)center1) estimatedModuleSize] - average];
-    return dA < dB ? 1 : dA == dB ? 0 : -1;
-  }
-   else {
-    return [((FinderPattern *)center2) count] - [((FinderPattern *)center1) count];
-  }
-}
-
-@end
+#import "FinderPatternInfo.h"
+#import "NotFoundException.h"
+#import "QRCodeFinderPattern.h"
+#import "ResultPoint.h"
+#import "ResultPointCallback.h"
 
 int const CENTER_QUORUM = 2;
 int const MIN_SKIP = 3;
 int const MAX_MODULES = 57;
 int const INTEGER_MATH_SHIFT = 8;
 
+@interface FinderPatternFinder ()
+
+NSInteger centerCompare(id center1, id center2, void *context);
+NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
+
+- (float) centerFromEnd:(int[])stateCount end:(int)end;
+- (int*) crossCheckStateCount;
+- (int) findRowSkip;
+- (BOOL) haveMultiplyConfirmedCenters;
+- (NSMutableArray *) selectBestPatterns;
+
+@end
+
 @implementation FinderPatternFinder
 
+@synthesize image, possibleCenters;
 
 /**
  * <p>Creates a finder that will search the image for three finder patterns.</p>
  * 
  * @param image image to search
  */
-- (id) initWithImage:(BitMatrix *)image {
-  if (self = [self init:image resultPointCallback:nil]) {
-  }
+- (id) initWithImage:(BitMatrix *)anImage {
+  self = [self initWithImage:anImage resultPointCallback:nil];
   return self;
 }
 
-- (id) initWithImage:(BitMatrix *)image resultPointCallback:(ResultPointCallback *)resultPointCallback {
+- (id) initWithImage:(BitMatrix *)anImage resultPointCallback:(id <ResultPointCallback>)aResultPointCallback {
   if (self = [super init]) {
-    image = image;
-    possibleCenters = [[[NSMutableArray alloc] init] autorelease];
-    crossCheckStateCount = [NSArray array];
-    resultPointCallback = resultPointCallback;
+    image = [anImage retain];
+    possibleCenters = [[NSMutableArray alloc] init];
+    resultPointCallback = aResultPointCallback;
   }
   return self;
-}
-
-- (BitMatrix *) getImage {
-  return image;
-}
-
-- (NSMutableArray *) getPossibleCenters {
-  return possibleCenters;
 }
 
 - (FinderPatternInfo *) find:(NSMutableDictionary *)hints {
-  BOOL tryHarder = hints != nil && [hints containsKey:DecodeHintType.TRY_HARDER];
+  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
   int maxI = [image height];
   int maxJ = [image width];
   int iSkip = (3 * maxI) / (4 * MAX_MODULES);
   if (iSkip < MIN_SKIP || tryHarder) {
     iSkip = MIN_SKIP;
   }
-  BOOL done = NO;
-  NSArray * stateCount = [NSArray array];
 
+  BOOL done = NO;
+  int stateCount[5];
   for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
     stateCount[0] = 0;
     stateCount[1] = 0;
@@ -96,31 +68,28 @@ int const INTEGER_MATH_SHIFT = 8;
     int currentState = 0;
 
     for (int j = 0; j < maxJ; j++) {
-      if ([image get:j param1:i]) {
+      if ([image get:j y:i]) {
         if ((currentState & 1) == 1) {
           currentState++;
         }
         stateCount[currentState]++;
-      }
-       else {
+      } else {
         if ((currentState & 1) == 0) {
           if (currentState == 4) {
-            if ([self foundPatternCross:stateCount]) {
+            if ([FinderPatternFinder foundPatternCross:stateCount]) {
               BOOL confirmed = [self handlePossibleCenter:stateCount i:i j:j];
               if (confirmed) {
                 iSkip = 2;
                 if (hasSkipped) {
                   done = [self haveMultiplyConfirmedCenters];
-                }
-                 else {
+                } else {
                   int rowSkip = [self findRowSkip];
                   if (rowSkip > stateCount[2]) {
                     i += rowSkip - stateCount[2] - iSkip;
                     j = maxJ - 1;
                   }
                 }
-              }
-               else {
+              } else {
                 stateCount[0] = stateCount[2];
                 stateCount[1] = stateCount[3];
                 stateCount[2] = stateCount[4];
@@ -135,8 +104,7 @@ int const INTEGER_MATH_SHIFT = 8;
               stateCount[2] = 0;
               stateCount[3] = 0;
               stateCount[4] = 0;
-            }
-             else {
+            } else {
               stateCount[0] = stateCount[2];
               stateCount[1] = stateCount[3];
               stateCount[2] = stateCount[4];
@@ -144,18 +112,16 @@ int const INTEGER_MATH_SHIFT = 8;
               stateCount[4] = 0;
               currentState = 3;
             }
-          }
-           else {
+          } else {
             stateCount[++currentState]++;
           }
-        }
-         else {
+        } else {
           stateCount[currentState]++;
         }
       }
     }
 
-    if ([self foundPatternCross:stateCount]) {
+    if ([FinderPatternFinder foundPatternCross:stateCount]) {
       BOOL confirmed = [self handlePossibleCenter:stateCount i:i j:maxJ];
       if (confirmed) {
         iSkip = stateCount[0];
@@ -166,9 +132,9 @@ int const INTEGER_MATH_SHIFT = 8;
     }
   }
 
-  NSArray * patternInfo = [self selectBestPatterns];
+  NSMutableArray * patternInfo = [self selectBestPatterns];
   [ResultPoint orderBestPatterns:patternInfo];
-  return [[[FinderPatternInfo alloc] init:patternInfo] autorelease];
+  return [[[FinderPatternInfo alloc] initWithPatternCenters:patternInfo] autorelease];
 }
 
 
@@ -176,7 +142,7 @@ int const INTEGER_MATH_SHIFT = 8;
  * Given a count of black/white/black/white/black pixels just seen and an end position,
  * figures the location of the center of this run.
  */
-+ (float) centerFromEnd:(NSArray *)stateCount end:(int)end {
+- (float) centerFromEnd:(int[])stateCount end:(int)end {
   return (float)(end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
 }
 
@@ -186,7 +152,7 @@ int const INTEGER_MATH_SHIFT = 8;
  * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
  * used by finder patterns to be considered a match
  */
-+ (BOOL) foundPatternCross:(NSArray *)stateCount {
++ (BOOL) foundPatternCross:(int[])stateCount {
   int totalModuleSize = 0;
 
   for (int i = 0; i < 5; i++) {
@@ -202,10 +168,14 @@ int const INTEGER_MATH_SHIFT = 8;
   }
   int moduleSize = (totalModuleSize << INTEGER_MATH_SHIFT) / 7;
   int maxVariance = moduleSize / 2;
-  return [Math abs:moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)] < maxVariance && [Math abs:moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)] < maxVariance && [Math abs:3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)] < 3 * maxVariance && [Math abs:moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)] < maxVariance && [Math abs:moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)] < maxVariance;
+  return abs(moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)) < maxVariance &&
+    abs(moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)) < maxVariance &&
+    abs(3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
+    abs(moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)) < maxVariance &&
+    abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
 }
 
-- (NSArray *) getCrossCheckStateCount {
+- (int*) crossCheckStateCount {
   crossCheckStateCount[0] = 0;
   crossCheckStateCount[1] = 0;
   crossCheckStateCount[2] = 0;
@@ -227,70 +197,60 @@ int const INTEGER_MATH_SHIFT = 8;
  * @return vertical center of finder pattern, or {@link Float#NaN} if not found
  */
 - (float) crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
-  BitMatrix * image = image;
   int maxI = [image height];
-  NSArray * stateCount = [self crossCheckStateCount];
-  int i = startI;
+  int* stateCount = [self crossCheckStateCount];
 
-  while (i >= 0 && [image get:centerJ param1:i]) {
+  int i = startI;
+  while (i >= 0 && [image get:centerJ y:i]) {
     stateCount[2]++;
     i--;
   }
-
   if (i < 0) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (i >= 0 && ![image get:centerJ param1:i] && stateCount[1] <= maxCount) {
+  while (i >= 0 && ![image get:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i--;
   }
-
   if (i < 0 || stateCount[1] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (i >= 0 && [image get:centerJ param1:i] && stateCount[0] <= maxCount) {
+  while (i >= 0 && [image get:centerJ y:i] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
-
   if (stateCount[0] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
-  i = startI + 1;
 
-  while (i < maxI && [image get:centerJ param1:i]) {
+  i = startI + 1;
+  while (i < maxI && [image get:centerJ y:i]) {
     stateCount[2]++;
     i++;
   }
-
   if (i == maxI) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (i < maxI && ![image get:centerJ param1:i] && stateCount[3] < maxCount) {
+  while (i < maxI && ![image get:centerJ y:i] && stateCount[3] < maxCount) {
     stateCount[3]++;
     i++;
   }
-
   if (i == maxI || stateCount[3] >= maxCount) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (i < maxI && [image get:centerJ param1:i] && stateCount[4] < maxCount) {
+  while (i < maxI && [image get:centerJ y:i] && stateCount[4] < maxCount) {
     stateCount[4]++;
     i++;
   }
-
   if (stateCount[4] >= maxCount) {
-    return Float.NaN;
+    return NAN;
   }
+
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-  if (5 * [Math abs:stateCountTotal - originalStateCountTotal] >= 2 * originalStateCountTotal) {
-    return Float.NaN;
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
+    return NAN;
   }
-  return [self foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:i] : Float.NaN;
+  return [FinderPatternFinder foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:i] : NAN;
 }
 
 
@@ -300,70 +260,61 @@ int const INTEGER_MATH_SHIFT = 8;
  * check a vertical cross check and locate the real center of the alignment pattern.</p>
  */
 - (float) crossCheckHorizontal:(int)startJ centerI:(int)centerI maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
-  BitMatrix * image = image;
   int maxJ = [image width];
-  NSArray * stateCount = [self crossCheckStateCount];
-  int j = startJ;
+  int* stateCount = [self crossCheckStateCount];
 
-  while (j >= 0 && [image get:j param1:centerI]) {
+  int j = startJ;
+  while (j >= 0 && [image get:j y:centerI]) {
     stateCount[2]++;
     j--;
   }
-
   if (j < 0) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (j >= 0 && ![image get:j param1:centerI] && stateCount[1] <= maxCount) {
+  while (j >= 0 && ![image get:j y:centerI] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     j--;
   }
-
   if (j < 0 || stateCount[1] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (j >= 0 && [image get:j param1:centerI] && stateCount[0] <= maxCount) {
+  while (j >= 0 && [image get:j y:centerI] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     j--;
   }
-
   if (stateCount[0] > maxCount) {
-    return Float.NaN;
+    return NAN;
   }
-  j = startJ + 1;
 
-  while (j < maxJ && [image get:j param1:centerI]) {
+  j = startJ + 1;
+  while (j < maxJ && [image get:j y:centerI]) {
     stateCount[2]++;
     j++;
   }
-
   if (j == maxJ) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (j < maxJ && ![image get:j param1:centerI] && stateCount[3] < maxCount) {
+  while (j < maxJ && ![image get:j y:centerI] && stateCount[3] < maxCount) {
     stateCount[3]++;
     j++;
   }
-
   if (j == maxJ || stateCount[3] >= maxCount) {
-    return Float.NaN;
+    return NAN;
   }
-
-  while (j < maxJ && [image get:j param1:centerI] && stateCount[4] < maxCount) {
+  while (j < maxJ && [image get:j y:centerI] && stateCount[4] < maxCount) {
     stateCount[4]++;
     j++;
   }
-
   if (stateCount[4] >= maxCount) {
-    return Float.NaN;
+    return NAN;
   }
+
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-  if (5 * [Math abs:stateCountTotal - originalStateCountTotal] >= originalStateCountTotal) {
-    return Float.NaN;
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+    return NAN;
   }
-  return [self foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:j] : Float.NaN;
+
+  return [FinderPatternFinder foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:j] : NAN;
 }
 
 
@@ -383,20 +334,19 @@ int const INTEGER_MATH_SHIFT = 8;
  * @param j end of possible finder pattern in row
  * @return true if a finder pattern candidate was found this time
  */
-- (BOOL) handlePossibleCenter:(NSArray *)stateCount i:(int)i j:(int)j {
+- (BOOL) handlePossibleCenter:(int[])stateCount i:(int)i j:(int)j {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
   float centerJ = [self centerFromEnd:stateCount end:j];
   float centerI = [self crossCheckVertical:i centerJ:(int)centerJ maxCount:stateCount[2] originalStateCountTotal:stateCountTotal];
-  if (![Float isNaN:centerI]) {
+  if (!isnan(centerI)) {
     centerJ = [self crossCheckHorizontal:(int)centerJ centerI:(int)centerI maxCount:stateCount[2] originalStateCountTotal:stateCountTotal];
-    if (![Float isNaN:centerJ]) {
+    if (!isnan(centerJ)) {
       float estimatedModuleSize = (float)stateCountTotal / 7.0f;
       BOOL found = NO;
       int max = [possibleCenters count];
-
       for (int index = 0; index < max; index++) {
-        FinderPattern * center = (FinderPattern *)[possibleCenters objectAtIndex:index];
-        if ([center aboutEquals:estimatedModuleSize param1:centerI param2:centerJ]) {
+        QRCodeFinderPattern * center = [possibleCenters objectAtIndex:index];
+        if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
           [center incrementCount];
           found = YES;
           break;
@@ -404,7 +354,7 @@ int const INTEGER_MATH_SHIFT = 8;
       }
 
       if (!found) {
-        ResultPoint * point = [[[FinderPattern alloc] init:centerJ param1:centerI param2:estimatedModuleSize] autorelease];
+        ResultPoint * point = [[[QRCodeFinderPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
         [possibleCenters addObject:point];
         if (resultPointCallback != nil) {
           [resultPointCallback foundPossibleResultPoint:point];
@@ -428,21 +378,18 @@ int const INTEGER_MATH_SHIFT = 8;
   if (max <= 1) {
     return 0;
   }
-  FinderPattern * firstConfirmedCenter = nil;
-
+  QRCodeFinderPattern * firstConfirmedCenter = nil;
   for (int i = 0; i < max; i++) {
-    FinderPattern * center = (FinderPattern *)[possibleCenters objectAtIndex:i];
+    QRCodeFinderPattern * center = [possibleCenters objectAtIndex:i];
     if ([center count] >= CENTER_QUORUM) {
       if (firstConfirmedCenter == nil) {
         firstConfirmedCenter = center;
-      }
-       else {
+      } else {
         hasSkipped = YES;
-        return (int)([Math abs:[firstConfirmedCenter x] - [center x]] - [Math abs:[firstConfirmedCenter y] - [center y]]) / 2;
+        return (int)(abs([firstConfirmedCenter x] - [center x]) - abs([firstConfirmedCenter y] - [center y])) / 2;
       }
     }
   }
-
   return 0;
 }
 
@@ -456,27 +403,50 @@ int const INTEGER_MATH_SHIFT = 8;
   int confirmedCount = 0;
   float totalModuleSize = 0.0f;
   int max = [possibleCenters count];
-
   for (int i = 0; i < max; i++) {
-    FinderPattern * pattern = (FinderPattern *)[possibleCenters objectAtIndex:i];
+    QRCodeFinderPattern * pattern = [possibleCenters objectAtIndex:i];
     if ([pattern count] >= CENTER_QUORUM) {
       confirmedCount++;
       totalModuleSize += [pattern estimatedModuleSize];
     }
   }
-
   if (confirmedCount < 3) {
     return NO;
   }
+
   float average = totalModuleSize / (float)max;
   float totalDeviation = 0.0f;
-
   for (int i = 0; i < max; i++) {
-    FinderPattern * pattern = (FinderPattern *)[possibleCenters objectAtIndex:i];
-    totalDeviation += [Math abs:[pattern estimatedModuleSize] - average];
+    QRCodeFinderPattern * pattern = [possibleCenters objectAtIndex:i];
+    totalDeviation += abs([pattern estimatedModuleSize] - average);
   }
-
   return totalDeviation <= 0.05f * totalModuleSize;
+}
+
+/**
+ * <p>Orders by {@link FinderPattern#getCount()}, descending.</p>
+ */
+NSInteger centerCompare(id center1, id center2, void *context) {
+  float average = [(NSNumber *)context floatValue];
+
+  if ([((QRCodeFinderPattern *)center2) count] == [((QRCodeFinderPattern *)center1) count]) {
+    float dA = abs([((QRCodeFinderPattern *)center2) estimatedModuleSize] - average);
+    float dB = abs([((QRCodeFinderPattern *)center1) estimatedModuleSize] - average);
+    return dA < dB ? 1 : dA == dB ? 0 : -1;
+  } else {
+    return [((QRCodeFinderPattern *)center2) count] - [((QRCodeFinderPattern *)center1) count];
+  }
+}
+
+/**
+ * <p>Orders by furthest from average</p>
+ */
+NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
+  float average = [(NSNumber *)context floatValue];
+
+  float dA = abs([((QRCodeFinderPattern *)center2) estimatedModuleSize] - average);
+  float dB = abs([((QRCodeFinderPattern *)center1) estimatedModuleSize] - average);
+  return dA < dB ? -1 : dA == dB ? 0 : 1;
 }
 
 
@@ -486,54 +456,55 @@ int const INTEGER_MATH_SHIFT = 8;
  * size differs from the average among those patterns the least
  * @throws NotFoundException if 3 such finder patterns do not exist
  */
-- (NSArray *) selectBestPatterns {
+- (NSMutableArray *) selectBestPatterns {
   int startSize = [possibleCenters count];
   if (startSize < 3) {
     @throw [NotFoundException notFoundInstance];
   }
+
   if (startSize > 3) {
     float totalModuleSize = 0.0f;
     float square = 0.0f;
-
     for (int i = 0; i < startSize; i++) {
-      float size = [((FinderPattern *)[possibleCenters objectAtIndex:i]) estimatedModuleSize];
+      float size = [[possibleCenters objectAtIndex:i] estimatedModuleSize];
       totalModuleSize += size;
       square += size * size;
     }
-
     float average = totalModuleSize / (float)startSize;
-    float stdDev = (float)[Math sqrt:square / startSize - average * average];
-    [Collections insertionSort:possibleCenters param1:[[[FurthestFromAverageComparator alloc] init:average] autorelease]];
-    float limit = [Math max:0.2f * average param1:stdDev];
+    float stdDev = (float)sqrt(square / startSize - average * average);
+
+    [possibleCenters sortUsingFunction:furthestFromAverageCompare context:[NSNumber numberWithFloat:average]];
+
+    float limit = MAX(0.2f * average, stdDev);
 
     for (int i = 0; i < [possibleCenters count] && [possibleCenters count] > 3; i++) {
-      FinderPattern * pattern = (FinderPattern *)[possibleCenters objectAtIndex:i];
-      if ([Math abs:[pattern estimatedModuleSize] - average] > limit) {
+      QRCodeFinderPattern * pattern = [possibleCenters objectAtIndex:i];
+      if (abs([pattern estimatedModuleSize] - average) > limit) {
         [possibleCenters removeObjectAtIndex:i];
         i--;
       }
     }
-
   }
+
   if ([possibleCenters count] > 3) {
     float totalModuleSize = 0.0f;
-
     for (int i = 0; i < [possibleCenters count]; i++) {
-      totalModuleSize += [((FinderPattern *)[possibleCenters objectAtIndex:i]) estimatedModuleSize];
+      totalModuleSize += [[possibleCenters objectAtIndex:i] estimatedModuleSize];
     }
 
     float average = totalModuleSize / (float)[possibleCenters count];
-    [Collections insertionSort:possibleCenters param1:[[[CenterComparator alloc] init:average] autorelease]];
-    [possibleCenters setSize:3];
+
+    [possibleCenters sortUsingFunction:centerCompare context:[NSNumber numberWithFloat:average]];
+
+    possibleCenters = [NSMutableArray arrayWithArray:[possibleCenters subarrayWithRange:NSMakeRange(0, 3)]];
   }
-  return [NSArray arrayWithObjects:(FinderPattern *)[possibleCenters objectAtIndex:0], (FinderPattern *)[possibleCenters objectAtIndex:1], (FinderPattern *)[possibleCenters objectAtIndex:2], nil];
+
+  return [NSArray arrayWithObjects:[possibleCenters objectAtIndex:0], [possibleCenters objectAtIndex:1], [possibleCenters objectAtIndex:2], nil];
 }
 
 - (void) dealloc {
   [image release];
   [possibleCenters release];
-  [crossCheckStateCount release];
-  [resultPointCallback release];
   [super dealloc];
 }
 

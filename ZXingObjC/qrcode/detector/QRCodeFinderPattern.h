@@ -13,9 +13,11 @@
   int count;
 }
 
+@property(nonatomic, readonly) int count;
 @property(nonatomic, readonly) float estimatedModuleSize;
-- (id) init:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
-- (int) getCount;
+
+- (id) initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
 - (void) incrementCount;
 - (BOOL) aboutEquals:(float)moduleSize i:(float)i j:(float)j;
+
 @end
