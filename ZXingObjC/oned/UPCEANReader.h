@@ -10,7 +10,9 @@
  * @author alasdair@google.com (Alasdair Mackintosh)
  */
 
-extern int L_AND_G_PATTERNS[20][4];
+extern const int MIDDLE_PATTERN[];
+extern const int* L_PATTERNS[];
+extern const int L_AND_G_PATTERNS[];
 
 @class BitArray, EANManufacturerOrgSupport, Result, UPCEANExtensionSupport;
 
@@ -20,13 +22,13 @@ extern int L_AND_G_PATTERNS[20][4];
   EANManufacturerOrgSupport * eanManSupport;
 }
 
+- (BarcodeFormat) barcodeFormat;
 - (BOOL) checkChecksum:(NSString *)s;
-- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints;
++ (int) decodeDigit:(BitArray *)row counters:(int[])counters rowOffset:(int)rowOffset patterns:(int*[])patterns;
 - (NSArray *) decodeEnd:(BitArray *)row endStart:(int)endStart;
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
+- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints;
 + (NSArray *) findStartGuardPattern:(BitArray *)row;
 + (NSArray *) findGuardPattern:(BitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int[])pattern;
-+ (int) decodeDigit:(BitArray *)row counters:(int[])counters rowOffset:(int)rowOffset patterns:(int*[])patterns;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
-- (BarcodeFormat) barcodeFormat;
 
 @end

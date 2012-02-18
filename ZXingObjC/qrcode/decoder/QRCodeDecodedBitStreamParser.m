@@ -192,13 +192,13 @@ int const GB2312_SUBSET = 1;
 
   while (count > 1) {
     int nextTwoCharsBits = [bits readBits:11];
-    [result appendFormat:@"%c", [self toAlphaNumericChar:nextTwoCharsBits / 45]];
-    [result appendFormat:@"%c", [self toAlphaNumericChar:nextTwoCharsBits % 45]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:nextTwoCharsBits / 45]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:nextTwoCharsBits % 45]];
     count -= 2;
   }
 
   if (count == 1) {
-    [result appendFormat:@"%c", [self toAlphaNumericChar:[bits readBits:6]]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:[bits readBits:6]]];
   }
   if (fc1InEffect) {
     for (int i = start; i < [result length]; i++) {
@@ -206,7 +206,7 @@ int const GB2312_SUBSET = 1;
         if (i < [result length] - 1 && [result characterAtIndex:i + 1] == '%') {
           [result deleteCharactersInRange:NSMakeRange(i + 1, 1)];
         } else {
-          [result insertString:[NSString stringWithFormat:@"%c", (unichar)0x1D]
+          [result insertString:[NSString stringWithFormat:@"%C", (unichar)0x1D]
                        atIndex:i];
         }
       }
@@ -222,9 +222,9 @@ int const GB2312_SUBSET = 1;
     if (threeDigitsBits >= 1000) {
       @throw [FormatException formatInstance];
     }
-    [result appendFormat:@"%c", [self toAlphaNumericChar:threeDigitsBits / 100]];
-    [result appendFormat:@"%c", [self toAlphaNumericChar:(threeDigitsBits / 10) % 10]];
-    [result appendFormat:@"%c", [self toAlphaNumericChar:threeDigitsBits % 10]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:threeDigitsBits / 100]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:(threeDigitsBits / 10) % 10]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:threeDigitsBits % 10]];
     count -= 3;
   }
 
@@ -233,15 +233,15 @@ int const GB2312_SUBSET = 1;
     if (twoDigitsBits >= 100) {
       @throw [FormatException formatInstance];
     }
-    [result appendFormat:@"%c", [self toAlphaNumericChar:twoDigitsBits / 10]];
-    [result appendFormat:@"%c", [self toAlphaNumericChar:twoDigitsBits % 10]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:twoDigitsBits / 10]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:twoDigitsBits % 10]];
   }
    else if (count == 1) {
     int digitBits = [bits readBits:4];
     if (digitBits >= 10) {
       @throw [FormatException formatInstance];
     }
-    [result appendFormat:@"%c", [self toAlphaNumericChar:digitBits]];
+    [result appendFormat:@"%C", [self toAlphaNumericChar:digitBits]];
   }
 }
 
@@ -259,7 +259,7 @@ int const GB2312_SUBSET = 1;
     return ((firstByte & 0x1F) << 16) | secondThirdBytes;
   }
   @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                 reason:[NSString stringWithFormat:@"Bad ECI bits starting with byte: %c", firstByte]
+                                 reason:[NSString stringWithFormat:@"Bad ECI bits starting with byte: %d", firstByte]
                                userInfo:nil];
 }
 

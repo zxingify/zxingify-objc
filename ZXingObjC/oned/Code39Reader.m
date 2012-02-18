@@ -28,7 +28,7 @@ int const ASTERISK_ENCODING = 0x094;
 - (NSString *) decodeExtended:(NSMutableString *)encoded;
 - (NSArray *) findAsteriskPattern:(BitArray *)row;
 - (unichar) patternToChar:(int)pattern;
-- (int) toNarrowWidePattern:(NSArray *)counters;
+- (int) toNarrowWidePattern:(int[])counters;
 
 @end
 
@@ -84,10 +84,9 @@ int const ASTERISK_ENCODING = 0x094;
   }
 
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:9];
+  int counters[9];
   unichar decodedChar;
   int lastStart;
-
   do {
     [OneDReader recordPattern:row start:nextStart counters:counters];
     int pattern = [self toNarrowWidePattern:counters];
@@ -95,11 +94,10 @@ int const ASTERISK_ENCODING = 0x094;
       @throw [NotFoundException notFoundInstance];
     }
     decodedChar = [self patternToChar:pattern];
-    [result appendFormat:@"%c", decodedChar];
+    [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
-
-    for (int i = 0; i < [counters count]; i++) {
-      nextStart += [[counters objectAtIndex:i] intValue];
+    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+      nextStart += counters[i];
     }
 
     while (nextStart < end && ![row get:nextStart]) {
@@ -109,8 +107,8 @@ int const ASTERISK_ENCODING = 0x094;
   [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
 
   int lastPatternSize = 0;
-  for (int i = 0; i < [counters count]; i++) {
-    lastPatternSize += [[counters objectAtIndex:i] intValue];
+  for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    lastPatternSize += counters[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
   if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
@@ -120,25 +118,26 @@ int const ASTERISK_ENCODING = 0x094;
   if (usingCheckDigit) {
     int max = [result length] - 1;
     int total = 0;
-
     for (int i = 0; i < max; i++) {
       total += [ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
     }
-
     if ([result characterAtIndex:max] != ALPHABET[total % 43]) {
       @throw [ChecksumException checksumInstance];
     }
     [result deleteCharactersInRange:NSMakeRange(max, 1)];
   }
+
   if ([result length] == 0) {
     @throw [NotFoundException notFoundInstance];
   }
+
   NSString * resultString;
   if (extendedMode) {
     resultString = [self decodeExtended:result];
   } else {
     resultString = [NSString stringWithString:result];
   }
+
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
   
@@ -152,7 +151,6 @@ int const ASTERISK_ENCODING = 0x094;
 - (NSArray *) findAsteriskPattern:(BitArray *)row {
   int width = [row size];
   int rowOffset = 0;
-
   while (rowOffset < width) {
     if ([row get:rowOffset]) {
       break;
@@ -161,19 +159,15 @@ int const ASTERISK_ENCODING = 0x094;
   }
 
   int counterPosition = 0;
-  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:9];
-  for (int i = 0; i < 9; i++) {
-    [counters addObject:[NSNumber numberWithInt:0]];
-  }
+  int counters[9];
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = [counters count];
+  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition
-                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+      counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         if ([self toNarrowWidePattern:counters] == ASTERISK_ENCODING) {
@@ -181,19 +175,17 @@ int const ASTERISK_ENCODING = 0x094;
             return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
           }
         }
-        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
-
+        patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {
-          [counters replaceObjectAtIndex:y - 2 withObject:[counters objectAtIndex:y]];
+          counters[y - 2] = counters[y];
         }
-
-        [counters replaceObjectAtIndex:patternLength - 2 withObject:[NSNumber numberWithInt:0]];
-        [counters replaceObjectAtIndex:patternLength - 1 withObject:[NSNumber numberWithInt:0]];
+        counters[patternLength - 2] = 0;
+        counters[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+      counters[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -201,61 +193,52 @@ int const ASTERISK_ENCODING = 0x094;
   @throw [NotFoundException notFoundInstance];
 }
 
-- (int) toNarrowWidePattern:(NSArray *)counters {
-  int numCounters = [counters count];
+- (int) toNarrowWidePattern:(int[])counters {
+  int numCounters = sizeof((int*)counters) / sizeof(int);
   int maxNarrowCounter = 0;
   int wideCounters;
-
   do {
     int minCounter = NSIntegerMax;
-
     for (int i = 0; i < numCounters; i++) {
-      int counter = [[counters objectAtIndex:i] intValue];
+      int counter = counters[i];
       if (counter < minCounter && counter > maxNarrowCounter) {
         minCounter = counter;
       }
     }
-
     maxNarrowCounter = minCounter;
     wideCounters = 0;
     int totalWideCountersWidth = 0;
     int pattern = 0;
-
     for (int i = 0; i < numCounters; i++) {
-      int counter = [[counters objectAtIndex:i] intValue];
-      if ([[counters objectAtIndex:i] intValue] > maxNarrowCounter) {
+      int counter = counters[i];
+      if (counters[i] > maxNarrowCounter) {
         pattern |= 1 << (numCounters - 1 - i);
         wideCounters++;
         totalWideCountersWidth += counter;
       }
     }
-
     if (wideCounters == 3) {
       for (int i = 0; i < numCounters && wideCounters > 0; i++) {
-        int counter = [[counters objectAtIndex:i] intValue];
-        if ([[counters objectAtIndex:i] intValue] > maxNarrowCounter) {
+        int counter = counters[i];
+        if (counters[i] > maxNarrowCounter) {
           wideCounters--;
           if ((counter << 1) >= totalWideCountersWidth) {
             return -1;
           }
         }
       }
-
       return pattern;
     }
-  }
-   while (wideCounters > 3);
+  } while (wideCounters > 3);
   return -1;
 }
 
 - (unichar) patternToChar:(int)pattern {
-
   for (int i = 0; i < sizeof(CHARACTER_ENCODINGS) / sizeof(int); i++) {
     if (CHARACTER_ENCODINGS[i] == pattern) {
       return ALPHABET[i];
     }
   }
-
   @throw [NotFoundException notFoundInstance];
 }
 
@@ -303,10 +286,10 @@ int const ASTERISK_ENCODING = 0x094;
         }
         break;
       }
-      [decoded appendFormat:@"%c", decodedChar];
+      [decoded appendFormat:@"%C", decodedChar];
       i++;
     } else {
-      [decoded appendFormat:@"%c", c];
+      [decoded appendFormat:@"%C", c];
     }
   }
 

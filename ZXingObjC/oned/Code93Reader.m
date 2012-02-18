@@ -57,7 +57,7 @@ const int ASTERISK_ENCODING = 0x15E;
       @throw [NotFoundException notFoundInstance];
     }
     decodedChar = [self patternToChar:pattern];
-    [result appendFormat:@"%c", decodedChar];
+    [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       nextStart += counters[i];
@@ -213,10 +213,10 @@ const int ASTERISK_ENCODING = 0x15E;
         }
         break;
       }
-      [decoded appendFormat:@"%c", decodedChar];
+      [decoded appendFormat:@"%C", decodedChar];
       i++;
     } else {
-      [decoded appendFormat:@"%c", c];
+      [decoded appendFormat:@"%C", c];
     }
   }
 
@@ -234,7 +234,7 @@ const int ASTERISK_ENCODING = 0x15E;
   int total = 0;
 
   for (int i = checkPosition - 1; i >= 0; i--) {
-    total += weight * [ALPHABET_STRING rangeOfString:[NSString stringWithFormat:@"%c", [result characterAtIndex:i]]].location;
+    total += weight * [ALPHABET_STRING rangeOfString:[NSString stringWithFormat:@"%C", [result characterAtIndex:i]]].location;
     if (++weight > weightMax) {
       weight = 1;
     }

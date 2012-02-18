@@ -112,7 +112,7 @@ const int BASE256_ENCODE = 6;
     } else if (oneByte <= 128) {
       oneByte = upperShift ? oneByte + 128 : oneByte;
       upperShift = NO;
-      [result appendFormat:@"%c", (unichar)(oneByte - 1)];
+      [result appendFormat:@"%C", (unichar)(oneByte - 1)];
       return ASCII_ENCODE;
     } else if (oneByte == 129) {
       return PAD_ENCODE;
@@ -186,10 +186,10 @@ const int BASE256_ENCODE = 6;
         } else if (cValue < sizeof(C40_BASIC_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_BASIC_SET_CHARS[cValue];
           if (upperShift) {
-            [result appendFormat:@"%c", (unichar)(c40char + 128)];
+            [result appendFormat:@"%C", (unichar)(c40char + 128)];
             upperShift = NO;
           } else {
-            [result appendFormat:@"%c", c40char];
+            [result appendFormat:@"%C", c40char];
           }
         } else {
           @throw [FormatException formatInstance];
@@ -197,10 +197,10 @@ const int BASE256_ENCODE = 6;
         break;
       case 1:
         if (upperShift) {
-          [result appendFormat:@"%c", (unichar)(cValue + 128)];
+          [result appendFormat:@"%C", (unichar)(cValue + 128)];
           upperShift = NO;
         } else {
-          [result appendFormat:@"%c", cValue];
+          [result appendFormat:@"%C", cValue];
         }
         shift = 0;
         break;
@@ -208,10 +208,10 @@ const int BASE256_ENCODE = 6;
         if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
-            [result appendFormat:@"%c", (unichar)(c40char + 128)];
+            [result appendFormat:@"%C", (unichar)(c40char + 128)];
             upperShift = NO;
           } else {
-            [result appendFormat:@"%c", c40char];
+            [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {
           @throw [FormatException formatInstance];
@@ -224,10 +224,10 @@ const int BASE256_ENCODE = 6;
         break;
       case 3:
         if (upperShift) {
-          [result appendFormat:@"%c", (unichar)(cValue + 224)];
+          [result appendFormat:@"%C", (unichar)(cValue + 224)];
           upperShift = NO;
         } else {
-          [result appendFormat:@"%c", (unichar)(cValue + 96)];
+          [result appendFormat:@"%C", (unichar)(cValue + 96)];
         }
         shift = 0;
         break;
@@ -267,10 +267,10 @@ const int BASE256_ENCODE = 6;
         } else if (cValue < sizeof(TEXT_BASIC_SET_CHARS) / sizeof(char)) {
           unichar textChar = TEXT_BASIC_SET_CHARS[cValue];
           if (upperShift) {
-            [result appendFormat:@"%c", (unichar)(textChar + 128)];
+            [result appendFormat:@"%C", (unichar)(textChar + 128)];
             upperShift = NO;
           } else {
-            [result appendFormat:@"%c", textChar];
+            [result appendFormat:@"%C", textChar];
           }
         } else {
           @throw [FormatException formatInstance];
@@ -278,10 +278,10 @@ const int BASE256_ENCODE = 6;
         break;
       case 1:
         if (upperShift) {
-          [result appendFormat:@"%c", (unichar)(cValue + 128)];
+          [result appendFormat:@"%C", (unichar)(cValue + 128)];
           upperShift = NO;
         } else {
-          [result appendFormat:@"%c", cValue];
+          [result appendFormat:@"%C", cValue];
         }
         shift = 0;
         break;
@@ -289,10 +289,10 @@ const int BASE256_ENCODE = 6;
         if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
-            [result appendFormat:@"%c", (unichar)(c40char + 128)];
+            [result appendFormat:@"%C", (unichar)(c40char + 128)];
             upperShift = NO;
           } else {
-            [result appendFormat:@"%c", c40char];
+            [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {
           @throw [FormatException formatInstance];
@@ -307,10 +307,10 @@ const int BASE256_ENCODE = 6;
         if (cValue < sizeof(TEXT_SHIFT3_SET_CHARS) / sizeof(char)) {
           unichar textChar = TEXT_SHIFT3_SET_CHARS[cValue];
           if (upperShift) {
-            [result appendFormat:@"%c", (unichar)(textChar + 128)];
+            [result appendFormat:@"%C", (unichar)(textChar + 128)];
             upperShift = NO;
           } else {
-            [result appendFormat:@"%c", textChar];
+            [result appendFormat:@"%C", textChar];
           }
           shift = 0;
         } else {
@@ -351,9 +351,9 @@ const int BASE256_ENCODE = 6;
       } else if (cValue == 3) {
         [result appendString:@" "];
       } else if (cValue < 14) {
-        [result appendFormat:@"%c", (unichar)(cValue + 44)];
+        [result appendFormat:@"%C", (unichar)(cValue + 44)];
       } else if (cValue < 40) {
-        [result appendFormat:@"%c", (unichar)(cValue + 51)];
+        [result appendFormat:@"%C", (unichar)(cValue + 51)];
       } else {
         @throw [FormatException formatInstance];
       }

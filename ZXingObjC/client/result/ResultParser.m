@@ -116,7 +116,7 @@
       for (int i = backslash; i < max; i++) {
         unichar c = [escaped characterAtIndex:i];
         if (nextIsEscaped || c != '\\') {
-          [unescaped appendFormat:@"%c", c];
+          [unescaped appendFormat:@"%C", c];
           nextIsEscaped = NO;
         } else {
           nextIsEscaped = YES;
@@ -155,13 +155,13 @@
         int firstDigitValue = [self parseHexDigit:[escaped characterAtIndex:++i]];
         int secondDigitValue = [self parseHexDigit:[escaped characterAtIndex:++i]];
         if (firstDigitValue < 0 || secondDigitValue < 0) {
-          [unescaped appendFormat:@"%%%c%c", [escaped characterAtIndex:i - 1], [escaped characterAtIndex:i]];
+          [unescaped appendFormat:@"%%%C%C", [escaped characterAtIndex:i - 1], [escaped characterAtIndex:i]];
         }
-        [unescaped appendFormat:@"%c", (unichar)((firstDigitValue << 4) + secondDigitValue)];
+        [unescaped appendFormat:@"%C", (unichar)((firstDigitValue << 4) + secondDigitValue)];
       }
       break;
     default:
-      [unescaped appendFormat:@"%c", c];
+      [unescaped appendFormat:@"%C", c];
       break;
     }
   }
@@ -280,7 +280,7 @@
     int start = i;
     BOOL done = NO;
     while (!done) {
-      i = [rawText rangeOfString:[NSString stringWithFormat:@"%c", endChar] options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
+      i = [rawText rangeOfString:[NSString stringWithFormat:@"%C", endChar] options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
       if (i < 0) {
         i = [rawText length];
         done = YES;

@@ -174,7 +174,7 @@
     case '\r':
       break;
     default:
-      [result appendFormat:@"%c", c];
+      [result appendFormat:@"%C", c];
     }
   }
 
@@ -213,7 +213,7 @@
       [fragmentBuffer close];
       fragmentBuffer = [NSOutputStream outputStreamToMemory];
       [fragmentBuffer open];
-      [result appendFormat:@"%c", c];
+      [result appendFormat:@"%C", c];
     }
   }
 
@@ -271,10 +271,9 @@
   for (int j = 0; j < length; j++) {
     unichar c = [address characterAtIndex:j];
     if (c == ';') {
-      [newAddress appendFormat:@"%c", ' '];
-    }
-     else {
-      [newAddress appendFormat:@"%c", c];
+      [newAddress appendString:@" "];
+    } else {
+      [newAddress appendFormat:@"%C", c];
     }
   }
 

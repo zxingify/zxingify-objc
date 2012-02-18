@@ -119,7 +119,7 @@
     case '7':
     case '8':
     case '9':
-      [buf appendFormat:@"%c", currentChar];
+      [buf appendFormat:@"%C", currentChar];
       break;
     case ')':
       return [buf description];
@@ -144,7 +144,7 @@
         break;
       }
     } else {
-      [buf appendFormat:@"%c", c];
+      [buf appendFormat:@"%C", c];
     }
   }
 

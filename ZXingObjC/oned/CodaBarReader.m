@@ -66,7 +66,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     if (decodedChar == '!') {
       @throw [NotFoundException notFoundInstance];
     }
-    [result appendFormat:@"%c", decodedChar];
+    [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       nextStart += counters[i];

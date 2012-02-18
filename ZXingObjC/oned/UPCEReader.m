@@ -44,7 +44,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
     int bestMatch = [UPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int **)L_AND_G_PATTERNS];
-    [result appendFormat:@"%c", (unichar)('0' + bestMatch % 10)];
+    [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
 
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       rowOffset += counters[i];
@@ -73,8 +73,8 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-        [resultString insertString:[NSString stringWithFormat:@"%c", (unichar)'0' + numSys] atIndex:0];
-        [resultString appendFormat:@"%c", (unichar)('0' + d)];
+        [resultString insertString:[NSString stringWithFormat:@"%C", (unichar)'0' + numSys] atIndex:0];
+        [resultString appendFormat:@"%C", (unichar)('0' + d)];
         return;
       }
     }
@@ -97,7 +97,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
  */
 + (NSString *) convertUPCEtoUPCA:(NSString *)upce {
   NSMutableString * result = [NSMutableString stringWithCapacity:12];
-  [result appendFormat:@"%c", [upce characterAtIndex:0]];
+  [result appendFormat:@"%C", [upce characterAtIndex:0]];
   unichar lastChar = [upce characterAtIndex:[upce length] - 1];
 
   switch (lastChar) {
@@ -105,7 +105,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   case '1':
   case '2':
     [result appendString:[upce substringToIndex:2]];
-    [result appendFormat:@"%c", lastChar];
+    [result appendFormat:@"%C", lastChar];
     [result appendString:@"0000"];
     [result appendString:[upce substringWithRange:NSMakeRange(2, 3)]];
     break;
@@ -122,10 +122,10 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   default:
     [result appendString:[upce substringToIndex:5]];
     [result appendString:@"0000"];
-    [result appendFormat:@"%c", lastChar];
+    [result appendFormat:@"%C", lastChar];
     break;
   }
-  [result appendFormat:@"%c", [upce characterAtIndex:7]];
+  [result appendFormat:@"%C", [upce characterAtIndex:7]];
   return result;
 }
 
