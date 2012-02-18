@@ -8,8 +8,7 @@
 - (id) initWithSource:(LuminanceSource *)source {
   if (self = [super init]) {
     if (source == nil) {
-      [NSException raise:NSInvalidArgumentException 
-                  format:@"Source must be non-null."];
+      [NSException raise:NSInvalidArgumentException format:@"Source must be non-null."];
     }
     self.luminanceSource = source;
   }

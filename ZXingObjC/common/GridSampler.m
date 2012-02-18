@@ -1,11 +1,12 @@
+#import "BitMatrix.h"
+#import "DefaultGridSampler.h"
 #import "GridSampler.h"
+#import "NotFoundException.h"
+#import "PerspectiveTransform.h"
 
-GridSampler * gridSampler = [[[DefaultGridSampler alloc] init] autorelease];
+static GridSampler * gridSampler = nil;
 
 @implementation GridSampler
-
-@synthesize instance;
-
 
 /**
  * Sets the implementation of GridSampler used by the library. One global
@@ -18,11 +19,18 @@ GridSampler * gridSampler = [[[DefaultGridSampler alloc] init] autorelease];
  */
 + (void) setGridSampler:(GridSampler *)newGridSampler {
   if (newGridSampler == nil) {
-    @throw [[[IllegalArgumentException alloc] init] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Grid sampler must be non-null."];
   }
   gridSampler = newGridSampler;
 }
 
++ (GridSampler *)instance {
+  if (!gridSampler) {
+    gridSampler = [[DefaultGridSampler alloc] init];
+  }
+
+  return gridSampler;
+}
 
 /**
  * Samples an image for a rectangular matrix of bits of the given dimension.
@@ -35,9 +43,15 @@ GridSampler * gridSampler = [[[DefaultGridSampler alloc] init] autorelease];
  * by the given points is invalid or results in sampling outside the image boundaries
  */
 - (BitMatrix *) sampleGrid:(BitMatrix *)image dimensionX:(int)dimensionX dimensionY:(int)dimensionY p1ToX:(float)p1ToX p1ToY:(float)p1ToY p2ToX:(float)p2ToX p2ToY:(float)p2ToY p3ToX:(float)p3ToX p3ToY:(float)p3ToY p4ToX:(float)p4ToX p4ToY:(float)p4ToY p1FromX:(float)p1FromX p1FromY:(float)p1FromY p2FromX:(float)p2FromX p2FromY:(float)p2FromY p3FromX:(float)p3FromX p3FromY:(float)p3FromY p4FromX:(float)p4FromX p4FromY:(float)p4FromY {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 - (BitMatrix *) sampleGrid:(BitMatrix *)image dimensionX:(int)dimensionX dimensionY:(int)dimensionY transform:(PerspectiveTransform *)transform {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 
@@ -56,63 +70,57 @@ GridSampler * gridSampler = [[[DefaultGridSampler alloc] init] autorelease];
  * @param points actual points in x1,y1,...,xn,yn form
  * @throws NotFoundException if an endpoint is lies outside the image boundaries
  */
-+ (void) checkAndNudgePoints:(BitMatrix *)image points:(NSArray *)points {
++ (void) checkAndNudgePoints:(BitMatrix *)image points:(NSMutableArray *)points {
   int width = [image width];
   int height = [image height];
-  BOOL nudged = YES;
 
-  for (int offset = 0; offset < points.length && nudged; offset += 2) {
-    int x = (int)points[offset];
-    int y = (int)points[offset + 1];
+  BOOL nudged = YES;
+  for (int offset = 0; offset < [points count] && nudged; offset += 2) {
+    int x = (int)[[points objectAtIndex:offset] intValue];
+    int y = (int)[[points objectAtIndex:offset + 1] intValue];
     if (x < -1 || x > width || y < -1 || y > height) {
       @throw [NotFoundException notFoundInstance];
     }
     nudged = NO;
     if (x == -1) {
-      points[offset] = 0.0f;
+      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:0.0f]];
       nudged = YES;
-    }
-     else if (x == width) {
-      points[offset] = width - 1;
+    } else if (x == width) {
+      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:width - 1]];
       nudged = YES;
     }
     if (y == -1) {
-      points[offset + 1] = 0.0f;
+      [points replaceObjectAtIndex:offset + 1 withObject:[NSNumber numberWithFloat:0.0f]];
       nudged = YES;
-    }
-     else if (y == height) {
-      points[offset + 1] = height - 1;
+    } else if (y == height) {
+      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:height - 1]];
       nudged = YES;
     }
   }
 
   nudged = YES;
-
-  for (int offset = points.length - 2; offset >= 0 && nudged; offset -= 2) {
-    int x = (int)points[offset];
-    int y = (int)points[offset + 1];
+  for (int offset = [points count] - 2; offset >= 0 && nudged; offset -= 2) {
+    int x = [[points objectAtIndex:offset] intValue];
+    int y = [[points objectAtIndex:offset + 1] intValue];
     if (x < -1 || x > width || y < -1 || y > height) {
       @throw [NotFoundException notFoundInstance];
     }
     nudged = NO;
     if (x == -1) {
-      points[offset] = 0.0f;
+      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:0.0f]];
       nudged = YES;
-    }
-     else if (x == width) {
-      points[offset] = width - 1;
+    } else if (x == width) {
+      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:width - 1]];
       nudged = YES;
     }
     if (y == -1) {
-      points[offset + 1] = 0.0f;
+      [points replaceObjectAtIndex:offset + 1 withObject:[NSNumber numberWithFloat:0.0f]];
       nudged = YES;
-    }
-     else if (y == height) {
-      points[offset + 1] = height - 1;
+    } else if (y == height) {
+      [points replaceObjectAtIndex:offset + 1 withObject:[NSNumber numberWithFloat:height - 1]];
       nudged = YES;
     }
   }
-
 }
 
 @end
