@@ -1,5 +1,3 @@
-#import "Binarizer.h"
-#import "LuminanceSource.h"
 #import "GlobalHistogramBinarizer.h"
 
 /**
@@ -20,11 +18,10 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
+@class Binarizer, BitMatrix, LuminanceSource;
+
 @interface HybridBinarizer : GlobalHistogramBinarizer {
   BitMatrix * matrix;
 }
 
-@property(nonatomic, retain, readonly) BitMatrix * blackMatrix;
-- (id) initWithSource:(LuminanceSource *)source;
-- (Binarizer *) createBinarizer:(LuminanceSource *)source;
 @end
