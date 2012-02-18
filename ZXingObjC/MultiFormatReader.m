@@ -1,7 +1,21 @@
+#import "AztecReader.h"
+#import "BinaryBitmap.h"
+#import "DataMatrixReader.h"
+#import "DecodeHintType.h"
+#import "MultiFormatOneDReader.h"
 #import "MultiFormatReader.h"
+#import "PDF417Reader.h"
+#import "QRCodeReader.h"
+#import "Result.h"
+
+@interface MultiFormatReader ()
+
+- (Result *) decodeInternal:(BinaryBitmap *)image;
+- (void) setHints:(NSMutableDictionary *)hints;
+
+@end
 
 @implementation MultiFormatReader
-
 
 /**
  * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
@@ -26,8 +40,8 @@
  * @return The contents of the image
  * @throws NotFoundException Any errors which occurred
  */
-- (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints {
-  [self setHints:hints];
+- (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)_hints {
+  [self setHints:_hints];
   return [self decodeInternal:image];
 }
 
@@ -55,64 +69,67 @@
  * 
  * @param hints The set of hints to use for subsequent calls to decode(image)
  */
-- (void) setHints:(NSMutableDictionary *)hints {
-  hints = hints;
-  BOOL tryHarder = hints != nil && [hints containsKey:DecodeHintType.TRY_HARDER];
-  NSMutableArray * formats = hints == nil ? nil : (NSMutableArray *)[hints objectForKey:DecodeHintType.POSSIBLE_FORMATS];
-  readers = [[[NSMutableArray alloc] init] autorelease];
+- (void) setHints:(NSMutableDictionary *)_hints {
+  [hints release];
+  hints = [_hints retain];
+
+  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+  NSMutableArray * formats = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePossibleFormats]];
+  readers = [[NSMutableArray alloc] init];
   if (formats != nil) {
-    BOOL addOneDReader = [formats containsObject:BarcodeFormat.UPC_A] || [formats containsObject:BarcodeFormat.UPC_E] || [formats containsObject:BarcodeFormat.EAN_13] || [formats containsObject:BarcodeFormat.EAN_8] || [formats containsObject:BarcodeFormat.CODE_39] || [formats containsObject:BarcodeFormat.CODE_93] || [formats containsObject:BarcodeFormat.CODE_128] || [formats containsObject:BarcodeFormat.ITF] || [formats containsObject:BarcodeFormat.RSS_14] || [formats containsObject:BarcodeFormat.RSS_EXPANDED];
+    BOOL addOneDReader = [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCA]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCE]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan13]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan8]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode39]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode93]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode128]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatITF]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSS14]] ||
+      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSSExpanded]];
     if (addOneDReader && !tryHarder) {
-      [readers addObject:[[[MultiFormatOneDReader alloc] init:hints] autorelease]];
+      [readers addObject:[[[MultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
-    if ([formats containsObject:BarcodeFormat.QR_CODE]) {
+    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatQRCode]]) {
       [readers addObject:[[[QRCodeReader alloc] init] autorelease]];
     }
-    if ([formats containsObject:BarcodeFormat.DATA_MATRIX]) {
+    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatDataMatrix]]) {
       [readers addObject:[[[DataMatrixReader alloc] init] autorelease]];
     }
-    if ([formats containsObject:BarcodeFormat.AZTEC]) {
+    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatAztec]]) {
       [readers addObject:[[[AztecReader alloc] init] autorelease]];
     }
-    if ([formats containsObject:BarcodeFormat.PDF_417]) {
+    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatPDF417]]) {
       [readers addObject:[[[PDF417Reader alloc] init] autorelease]];
     }
     if (addOneDReader && tryHarder) {
-      [readers addObject:[[[MultiFormatOneDReader alloc] init:hints] autorelease]];
+      [readers addObject:[[[MultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
   }
-  if ([readers empty]) {
+  if ([readers count] == 0) {
     if (!tryHarder) {
-      [readers addObject:[[[MultiFormatOneDReader alloc] init:hints] autorelease]];
+      [readers addObject:[[[MultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
     [readers addObject:[[[QRCodeReader alloc] init] autorelease]];
     [readers addObject:[[[DataMatrixReader alloc] init] autorelease]];
     [readers addObject:[[[AztecReader alloc] init] autorelease]];
     [readers addObject:[[[PDF417Reader alloc] init] autorelease]];
     if (tryHarder) {
-      [readers addObject:[[[MultiFormatOneDReader alloc] init:hints] autorelease]];
+      [readers addObject:[[[MultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
   }
 }
 
 - (void) reset {
-  int size = [readers count];
-
-  for (int i = 0; i < size; i++) {
-    Reader * reader = (Reader *)[readers objectAtIndex:i];
+  for (id<Reader> reader in readers) {
     [reader reset];
   }
-
 }
 
 - (Result *) decodeInternal:(BinaryBitmap *)image {
-  int size = [readers count];
-
-  for (int i = 0; i < size; i++) {
-    Reader * reader = (Reader *)[readers objectAtIndex:i];
-
+  for (id<Reader> reader in readers) {
     @try {
-      return [reader decode:image param1:hints];
+      return [reader decode:image hints:hints];
     }
     @catch (ReaderException * re) {
     }

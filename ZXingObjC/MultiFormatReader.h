@@ -1,8 +1,4 @@
-#import "AztecReader.h"
-#import "DataMatrixReader.h"
-#import "MultiFormatOneDReader.h"
-#import "PDF417Reader.h"
-#import "QRCodeReader.h"
+#import "Reader.h"
 
 /**
  * MultiFormatReader is a convenience class and the main entry point into the library for most uses.
@@ -18,9 +14,7 @@
   NSMutableArray * readers;
 }
 
-- (Result *) decode:(BinaryBitmap *)image;
-- (Result *) decode:(BinaryBitmap *)image hints:(NSMutableDictionary *)hints;
 - (Result *) decodeWithState:(BinaryBitmap *)image;
 - (void) setHints:(NSMutableDictionary *)hints;
-- (void) reset;
+
 @end
