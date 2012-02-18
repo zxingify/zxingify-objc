@@ -4,11 +4,13 @@
 #import "DataMatrixReader.h"
 #import "DataMatrixDetector.h"
 #import "DecodeHintType.h"
-#import "DetectorResult.h"
+#import "DecoderResult.h"
+#import "Result.h"
 
 @interface DataMatrixReader ()
 
 - (BitMatrix *) extractPureBits:(BitMatrix *)image;
+- (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image;
 
 @end
 
@@ -43,20 +45,24 @@
     points = [NSArray array];
   } else {
     DetectorResult * detectorResult = [[[[DataMatrixDetector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
-    decoderResult = [decoder decode:[detectorResult bits]];
+    decoderResult = [decoder decodeMatrix:[detectorResult bits]];
     points = [detectorResult points];
   }
-  Result * result = [[[Result alloc] init:[decoderResult text] param1:[decoderResult rawBytes] param2:points param3:BarcodeFormat.DATA_MATRIX] autorelease];
+  Result * result = [[[Result alloc] initWithText:[decoderResult text]
+                                         rawBytes:[decoderResult rawBytes]
+                                     resultPoints:points
+                                           format:kBarcodeFormatDataMatrix] autorelease];
   if ([decoderResult byteSegments] != nil) {
-    [result putMetadata:ResultMetadataType.BYTE_SEGMENTS param1:[decoderResult byteSegments]];
+    [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
   }
   if ([decoderResult eCLevel] != nil) {
-    [result putMetadata:ResultMetadataType.ERROR_CORRECTION_LEVEL param1:[[decoderResult eCLevel] description]];
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[[decoderResult eCLevel] description]];
   }
   return result;
 }
 
 - (void) reset {
+  // do nothing
 }
 
 
@@ -75,48 +81,49 @@
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     @throw [NotFoundException notFoundInstance];
   }
+
   int moduleSize = [self moduleSize:leftTopBlack image:image];
-  int top = leftTopBlack[1];
-  int bottom = rightBottomBlack[1];
-  int left = leftTopBlack[0];
-  int right = rightBottomBlack[0];
+
+  int top = [[leftTopBlack objectAtIndex:1] intValue];
+  int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
+  int left = [[leftTopBlack objectAtIndex:0] intValue];
+  int right = [[rightBottomBlack objectAtIndex:0] intValue];
+
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
   if (matrixWidth == 0 || matrixHeight == 0) {
     @throw [NotFoundException notFoundInstance];
   }
+
   int nudge = moduleSize >> 1;
   top += nudge;
   left += nudge;
-  BitMatrix * bits = [[[BitMatrix alloc] init:matrixWidth param1:matrixHeight] autorelease];
 
+  BitMatrix * bits = [[[BitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + y * moduleSize;
-
     for (int x = 0; x < matrixWidth; x++) {
-      if ([image get:left + x * moduleSize param1:iOffset]) {
-        [bits set:x param1:y];
+      if ([image get:left + x * moduleSize y:iOffset]) {
+        [bits set:x y:y];
       }
     }
-
   }
 
   return bits;
 }
 
-+ (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image {
+- (int) moduleSize:(NSArray *)leftTopBlack image:(BitMatrix *)image {
   int width = [image width];
-  int x = leftTopBlack[0];
-  int y = leftTopBlack[1];
-
-  while (x < width && [image get:x param1:y]) {
+  int x = [[leftTopBlack objectAtIndex:0] intValue];
+  int y = [[leftTopBlack objectAtIndex:1] intValue];
+  while (x < width && [image get:x y:y]) {
     x++;
   }
-
   if (x == width) {
     @throw [NotFoundException notFoundInstance];
   }
-  int moduleSize = x - leftTopBlack[0];
+
+  int moduleSize = x - [[leftTopBlack objectAtIndex:0] intValue];
   if (moduleSize == 0) {
     @throw [NotFoundException notFoundInstance];
   }
