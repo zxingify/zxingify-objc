@@ -7,9 +7,9 @@
  * @see Code93Reader
  */
 
-extern char ALPHABET[];
-extern NSString *ALPHABET_STRING;
-extern int CHARACTER_ENCODINGS[];
+extern char CODE39_ALPHABET[];
+extern NSString *CODE39_ALPHABET_STRING;
+extern int CODE39_CHARACTER_ENCODINGS[];
 
 @class BitArray, Result;
 

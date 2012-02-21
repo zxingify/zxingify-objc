@@ -1,18 +1,15 @@
-#import "BitArray.h"
 #import "CodaBarReader.h"
 #import "NotFoundException.h"
-#import "Result.h"
 #import "ResultPoint.h"
 
-const NSString *ALPHABET_STRING = @"0123456789-$:/.+ABCDTN";
-const char ALPHABET[] = "0123456789-$:/.+ABCDTN";
+char CODA_ALPHABET[] = "0123456789-$:/.+ABCDTN";
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
  * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow. NOTE
  * : c is equal to the  * pattern NOTE : d is equal to the e pattern
  */
-const int CHARACTER_ENCODINGS[22] = {
+const int CODA_CHARACTER_ENCODINGS[22] = {
   0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
   0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
   0x01A, 0x029 //TN
@@ -210,9 +207,9 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     }
 
     if ((wideCounters == 2) || (wideCounters == 3)) {
-      for (int i = 0; i < sizeof(CHARACTER_ENCODINGS) / sizeof(int); i++) {
-        if (CHARACTER_ENCODINGS[i] == pattern) {
-          return ALPHABET[i];
+      for (int i = 0; i < sizeof(CODA_CHARACTER_ENCODINGS) / sizeof(int); i++) {
+        if (CODA_CHARACTER_ENCODINGS[i] == pattern) {
+          return CODA_ALPHABET[i];
         }
       }
 

@@ -3,6 +3,7 @@
 #import "Code128Reader.h"
 #import "FormatException.h"
 #import "NotFoundException.h"
+#import "OneDReader.h"
 #import "Result.h"
 #import "ResultPoint.h"
 
@@ -117,8 +118,9 @@ const int CODE_PATTERNS[107][7] = {
 };
 
 
-int const MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
-int const MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+#define MAX_AVG_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f)
+#define MAX_INDIVIDUAL_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f)
+
 int const CODE_SHIFT = 98;
 int const CODE_CODE_C = 99;
 int const CODE_CODE_B = 100;

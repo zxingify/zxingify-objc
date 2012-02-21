@@ -1,14 +1,11 @@
 #import "OneDReader.h"
-#import "BinaryBitmap.h"
-#import "ChecksumException.h"
 #import "DecodeHintType.h"
 #import "FormatException.h"
 #import "NotFoundException.h"
-#import "ReaderException.h"
-#import "Result.h"
-#import "ResultMetadataType.h"
 #import "ResultPoint.h"
-#import "BitArray.h"
+
+int const INTEGER_MATH_SHIFT = 8;
+int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
 @interface OneDReader ()
 

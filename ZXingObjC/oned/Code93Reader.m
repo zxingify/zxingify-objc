@@ -6,14 +6,14 @@
 #import "Result.h"
 #import "ResultPoint.h"
 
-const NSString *ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
-const char ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
+const NSString *CODE93_ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
+const char CODE93_ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars.
  * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
  */
-const int CHARACTER_ENCODINGS[48] = {
+const int CODE93_CHARACTER_ENCODINGS[48] = {
   0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
   0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
   0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
@@ -22,7 +22,7 @@ const int CHARACTER_ENCODINGS[48] = {
   0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
 };
 
-const int ASTERISK_ENCODING = 0x15E;
+const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface Code93Reader ()
 
@@ -113,7 +113,7 @@ const int ASTERISK_ENCODING = 0x15E;
     }
      else {
       if (counterPosition == patternLength - 1) {
-        if ([self toPattern:counters] == ASTERISK_ENCODING) {
+        if ([self toPattern:counters] == CODE93_ASTERISK_ENCODING) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
         }
         patternStart += counters[0] + counters[1];
@@ -162,9 +162,9 @@ const int ASTERISK_ENCODING = 0x15E;
 }
 
 - (unichar) patternToChar:(int)pattern {
-  for (int i = 0; i < sizeof(CHARACTER_ENCODINGS) / sizeof(int); i++) {
-    if (CHARACTER_ENCODINGS[i] == pattern) {
-      return ALPHABET[i];
+  for (int i = 0; i < sizeof(CODE93_CHARACTER_ENCODINGS) / sizeof(int); i++) {
+    if (CODE93_CHARACTER_ENCODINGS[i] == pattern) {
+      return CODE93_ALPHABET[i];
     }
   }
 
@@ -234,13 +234,13 @@ const int ASTERISK_ENCODING = 0x15E;
   int total = 0;
 
   for (int i = checkPosition - 1; i >= 0; i--) {
-    total += weight * [ALPHABET_STRING rangeOfString:[NSString stringWithFormat:@"%C", [result characterAtIndex:i]]].location;
+    total += weight * [CODE93_ALPHABET_STRING rangeOfString:[NSString stringWithFormat:@"%C", [result characterAtIndex:i]]].location;
     if (++weight > weightMax) {
       weight = 1;
     }
   }
 
-  if ([result characterAtIndex:checkPosition] != ALPHABET[total % 47]) {
+  if ([result characterAtIndex:checkPosition] != CODE93_ALPHABET[total % 47]) {
     @throw [ChecksumException checksumInstance];
   }
 }

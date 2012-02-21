@@ -28,27 +28,27 @@
   int widths[9];
   int codeWidth = 24 + 1 + length;
   for (int i = 0; i < length; i++) {
-    int indexInString = [ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
-    [self toIntArray:CHARACTER_ENCODINGS[indexInString] toReturn:widths];
+    int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     for (int j = 0; j < sizeof(widths) / sizeof(int); j++) {
       codeWidth += widths[j];
     }
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:codeWidth];
-  [self toIntArray:CHARACTER_ENCODINGS[39] toReturn:widths];
+  [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
   int pos = [Code39Writer appendPattern:result pos:0 pattern:widths startColor:1];
   int narrowWhite[1];
   pos += [Code39Writer appendPattern:result pos:pos pattern:narrowWhite startColor:0];
 
   for (int i = length - 1; i >= 0; i--) {
-    int indexInString = [ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
-    [self toIntArray:CHARACTER_ENCODINGS[indexInString] toReturn:widths];
+    int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     pos += [Code39Writer appendPattern:result pos:pos pattern:widths startColor:1];
     pos += [Code39Writer appendPattern:result pos:pos pattern:narrowWhite startColor:0];
   }
 
-  [self toIntArray:CHARACTER_ENCODINGS[39] toReturn:widths];
+  [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
   pos += [Code39Writer appendPattern:result pos:pos pattern:widths startColor:1];
   return result;
 }

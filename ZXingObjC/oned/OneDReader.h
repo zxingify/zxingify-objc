@@ -8,8 +8,8 @@
  * @author Sean Owen
  */
 
-int const INTEGER_MATH_SHIFT = 8;
-int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+extern int const INTEGER_MATH_SHIFT;
+extern int const PATTERN_MATCH_RESULT_SCALE_FACTOR;
 
 @class BitArray, BinaryBitmap, Result;
 

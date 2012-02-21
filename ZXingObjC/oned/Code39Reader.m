@@ -2,18 +2,17 @@
 #import "Code39Reader.h"
 #import "FormatException.h"
 #import "NotFoundException.h"
-#import "Result.h"
 #import "ResultPoint.h"
 
-char ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-const NSString *ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+char CODE39_ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+NSString *CODE39_ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars.
  * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
  * with 1s representing "wide" and 0s representing narrow.
  */
-int CHARACTER_ENCODINGS[44] = {
+int CODE39_CHARACTER_ENCODINGS[44] = {
   0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
   0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
   0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
@@ -21,7 +20,7 @@ int CHARACTER_ENCODINGS[44] = {
   0x0A8, 0x0A2, 0x08A, 0x02A // $-%
 };
 
-int const ASTERISK_ENCODING = 0x094;
+int const CODE39_ASTERISK_ENCODING = 0x094;
 
 @interface Code39Reader ()
 
@@ -119,9 +118,9 @@ int const ASTERISK_ENCODING = 0x094;
     int max = [result length] - 1;
     int total = 0;
     for (int i = 0; i < max; i++) {
-      total += [ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
+      total += [CODE39_ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
     }
-    if ([result characterAtIndex:max] != ALPHABET[total % 43]) {
+    if ([result characterAtIndex:max] != CODE39_ALPHABET[total % 43]) {
       @throw [ChecksumException checksumInstance];
     }
     [result deleteCharactersInRange:NSMakeRange(max, 1)];
@@ -170,7 +169,7 @@ int const ASTERISK_ENCODING = 0x094;
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self toNarrowWidePattern:counters] == ASTERISK_ENCODING) {
+        if ([self toNarrowWidePattern:counters] == CODE39_ASTERISK_ENCODING) {
           if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
             return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
           }
@@ -234,9 +233,9 @@ int const ASTERISK_ENCODING = 0x094;
 }
 
 - (unichar) patternToChar:(int)pattern {
-  for (int i = 0; i < sizeof(CHARACTER_ENCODINGS) / sizeof(int); i++) {
-    if (CHARACTER_ENCODINGS[i] == pattern) {
-      return ALPHABET[i];
+  for (int i = 0; i < sizeof(CODE39_CHARACTER_ENCODINGS) / sizeof(int); i++) {
+    if (CODE39_CHARACTER_ENCODINGS[i] == pattern) {
+      return CODE39_ALPHABET[i];
     }
   }
   @throw [NotFoundException notFoundInstance];

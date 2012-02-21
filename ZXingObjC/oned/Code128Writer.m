@@ -1,11 +1,11 @@
 #import "Code128Reader.h"
 #import "Code128Writer.h"
 
-int const CODE_START_B = 104;
-int const CODE_START_C = 105;
-int const CODE_CODE_B = 100;
-int const CODE_CODE_C = 99;
-int const CODE_STOP = 106;
+#define CODE_START_B 104
+#define CODE_START_C 105
+#define CODE_CODE_B 100
+#define CODE_CODE_C 99
+#define CODE_STOP 106
 
 @interface Code128Writer ()
 

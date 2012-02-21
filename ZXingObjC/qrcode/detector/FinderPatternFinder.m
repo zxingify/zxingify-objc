@@ -3,6 +3,7 @@
 #import "FinderPatternFinder.h"
 #import "FinderPatternInfo.h"
 #import "NotFoundException.h"
+#import "OneDReader.h"
 #import "QRCodeFinderPattern.h"
 #import "ResultPoint.h"
 #import "ResultPointCallback.h"
@@ -10,7 +11,6 @@
 int const CENTER_QUORUM = 2;
 int const MIN_SKIP = 3;
 int const MAX_MODULES = 57;
-int const INTEGER_MATH_SHIFT = 8;
 
 @interface FinderPatternFinder ()
 
