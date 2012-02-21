@@ -1,16 +1,8 @@
-#import "BarcodeFormat.h"
-#import "NotFoundException.h"
-#import "Result.h"
-#import "ResultMetadataType.h"
-#import "ResultPoint.h"
-#import "BitArray.h"
+@class BitArray, Result;
 
-@interface UPCEANExtensionSupport : NSObject {
-  NSArray * decodeMiddleCounters;
-  NSMutableString * decodeRowNSMutableString;
-}
+@interface UPCEANExtensionSupport : NSObject
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row rowOffset:(int)rowOffset;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString;
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
 
 @end
