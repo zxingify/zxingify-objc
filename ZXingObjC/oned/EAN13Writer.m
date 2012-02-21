@@ -1,44 +1,54 @@
+#import "BarcodeFormat.h"
+#import "EAN13Reader.h"
 #import "EAN13Writer.h"
+#import "UPCEANReader.h"
 
-int const codeWidth = 3 + (7 * 6) + 5 + (7 * 6) + 3;
+int const codeWidth = 3 + // start guard
+  (7 * 6) + // left bars
+  5 + // middle guard
+  (7 * 6) + // right bars
+  3; // end guard
 
 @implementation EAN13Writer
 
 - (BitMatrix *)encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
-  if (format != kBarcodeEan13) {
+  if (format != kBarcodeFormatEan13) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:[NSString stringWithFormat:@"Can only encode EAN_13, but got %d", format]
                                  userInfo:nil];
   }
+
   return [super encode:contents format:format width:width height:height hints:hints];
 }
 
 - (NSArray *) encode:(NSString *)contents {
   if ([contents length] != 13) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Requested contents should be 13 digits long, but got " stringByAppendingString:[contents length]]] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 13 digits long, but got %d", [contents length]];
   }
-  int firstDigit = [Integer parseInt:[contents substringFromIndex:0 param1:1]];
-  int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
-  NSArray * result = [NSArray array];
+
+  int firstDigit = [[contents substringToIndex:1] intValue];
+  int parities = FIRST_DIGIT_ENCODINGS[firstDigit];
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:codeWidth];
   int pos = 0;
-  pos += [self appendPattern:result param1:pos param2:UPCEANReader.START_END_PATTERN param3:1];
+
+  pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN startColor:1];
 
   for (int i = 1; i <= 6; i++) {
-    int digit = [Integer parseInt:[contents substringFromIndex:i param1:i + 1]];
+    int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     if ((parities >> (6 - i) & 1) == 1) {
       digit += 10;
     }
-    pos += [self appendPattern:result param1:pos param2:UPCEANReader.L_AND_G_PATTERNS[digit] param3:0];
+    pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)L_AND_G_PATTERNS[digit] startColor:0];
   }
 
-  pos += [self appendPattern:result param1:pos param2:UPCEANReader.MIDDLE_PATTERN param3:0];
+  pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)MIDDLE_PATTERN startColor:0];
 
   for (int i = 7; i <= 12; i++) {
-    int digit = [Integer parseInt:[contents substringFromIndex:i param1:i + 1]];
-    pos += [self appendPattern:result param1:pos param2:UPCEANReader.L_PATTERNS[digit] param3:1];
+    int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
+    pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] startColor:1];
   }
+  pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN startColor:1];
 
-  pos += [self appendPattern:result param1:pos param2:UPCEANReader.START_END_PATTERN param3:1];
   return result;
 }
 

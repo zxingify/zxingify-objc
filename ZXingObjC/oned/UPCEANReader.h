@@ -12,8 +12,8 @@
 
 extern const int START_END_PATTERN[];
 extern const int MIDDLE_PATTERN[];
-extern const int* L_PATTERNS[];
-extern const int L_AND_G_PATTERNS[];
+extern const int L_PATTERNS[][4];
+extern int L_AND_G_PATTERNS[][4];
 
 @class BitArray, EANManufacturerOrgSupport, Result, UPCEANExtensionSupport;
 

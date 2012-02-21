@@ -8,6 +8,8 @@
  * @author alasdair@google.com (Alasdair Mackintosh)
  */
 
+extern int FIRST_DIGIT_ENCODINGS[10];
+
 @interface EAN13Reader : UPCEANReader {
   int* decodeMiddleCounters;
 }
