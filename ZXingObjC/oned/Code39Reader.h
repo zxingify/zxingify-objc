@@ -7,6 +7,10 @@
  * @see Code93Reader
  */
 
+extern char ALPHABET[];
+extern NSString *ALPHABET_STRING;
+extern int CHARACTER_ENCODINGS[];
+
 @class BitArray, Result;
 
 @interface Code39Reader : OneDReader {

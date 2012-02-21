@@ -24,9 +24,9 @@
     [NSException raise:NSInvalidArgumentException 
                 format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
+
   NSMutableArray * widths = [NSMutableArray arrayWithCapacity:9];
   int codeWidth = 24 + 1 + length;
-
   for (int i = 0; i < length; i++) {
     int indexInString = [ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CHARACTER_ENCODINGS[indexInString] toReturn:widths];

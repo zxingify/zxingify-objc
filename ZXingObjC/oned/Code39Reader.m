@@ -5,7 +5,7 @@
 #import "Result.h"
 #import "ResultPoint.h"
 
-const char ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+char ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 const NSString *ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 
 /**
@@ -13,7 +13,7 @@ const NSString *ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%
  * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
  * with 1s representing "wide" and 0s representing narrow.
  */
-const int CHARACTER_ENCODINGS[44] = {
+int CHARACTER_ENCODINGS[44] = {
   0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
   0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
   0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
