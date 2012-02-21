@@ -43,11 +43,11 @@
   NSArray * points;
   if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePureBarcode]]) {
     BitMatrix * bits = [self extractPureBits:[image blackMatrix]];
-    decoderResult = [decoder decode:bits];
+    decoderResult = [decoder decodeMatrix:bits];
     points = [NSArray array];
   } else {
     DetectorResult * detectorResult = [[[[PDF417Detector alloc] initWithImage:image] autorelease] detect];
-    decoderResult = [decoder decode:[detectorResult bits]];
+    decoderResult = [decoder decodeMatrix:[detectorResult bits]];
     points = [detectorResult points];
   }
   return [[[Result alloc] initWithText:[decoderResult text]

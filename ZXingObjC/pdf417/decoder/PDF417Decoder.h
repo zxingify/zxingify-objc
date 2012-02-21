@@ -9,7 +9,7 @@
 
 @interface PDF417Decoder : NSObject
 
-- (DecoderResult *) decode:(BitMatrix *)bits;
-- (DecoderResult *) decodeArray:(NSArray *)image;
+- (DecoderResult *) decode:(BOOL **)image;
+- (DecoderResult *) decodeMatrix:(BitMatrix *)bits;
 
 @end
