@@ -2,18 +2,11 @@
 
 @implementation AI01320xDecoder
 
-- (id) initWithInformation:(BitArray *)information {
-  if (self = [super init:information]) {
-  }
-  return self;
-}
-
 - (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
   if (weight < 10000) {
-    [buf append:@"(3202)"];
-  }
-   else {
-    [buf append:@"(3203)"];
+    [buf appendString:@"(3202)"];
+  } else {
+    [buf appendString:@"(3203)"];
   }
 }
 

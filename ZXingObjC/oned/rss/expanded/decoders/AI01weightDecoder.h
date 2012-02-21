@@ -8,7 +8,6 @@
 
 @interface AI01weightDecoder : AI01decoder
 
-- (id) initWithInformation:(BitArray *)information;
 - (void) encodeCompressedWeight:(NSMutableString *)buf currentPos:(int)currentPos weightSize:(int)weightSize;
 - (void) addWeightCode:(NSMutableString *)buf weight:(int)weight;
 - (int) checkWeight:(int)weight;
