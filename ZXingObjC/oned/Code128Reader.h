@@ -6,6 +6,8 @@
  * @author Sean Owen
  */
 
+extern const int CODE_PATTERNS[][7];
+
 @class BitArray, Result;
 
 @interface Code128Reader : OneDReader

@@ -60,15 +60,15 @@
  * starting color - 0 for white, 1 for black
  * @return the number of elements added to target.
  */
-+ (int) appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(NSArray *)pattern startColor:(int)startColor {
++ (int) appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(int[])pattern startColor:(int)startColor {
   if (startColor != 0 && startColor != 1) {
     [NSException raise:NSInvalidArgumentException format:@"startColor must be either 0 or 1, but got: %d", startColor];
   }
 
   char color = (char)startColor;
   int numAdded = 0;
-  for (int i = 0; i < [pattern count]; i++) {
-    for (int j = 0; j < [[pattern objectAtIndex:i] intValue]; j++) {
+  for (int i = 0; i < sizeof((int*)pattern) / sizeof(int); i++) {
+    for (int j = 0; j < pattern[i]; j++) {
       [target replaceObjectAtIndex:pos withObject:[NSNumber numberWithChar:color]];
       pos += 1;
       numAdded += 1;

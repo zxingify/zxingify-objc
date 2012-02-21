@@ -1,3 +1,4 @@
+#import "Code128Reader.h"
 #import "Code128Writer.h"
 
 int const CODE_START_B = 104;
@@ -6,29 +7,35 @@ int const CODE_CODE_B = 100;
 int const CODE_CODE_C = 99;
 int const CODE_STOP = 106;
 
+@interface Code128Writer ()
+
+- (BOOL) isDigits:(NSString *)value start:(int)start length:(int)length;
+
+@end
+
 @implementation Code128Writer
 
 - (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
-  if (format != BarcodeFormat.CODE_128) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Can only encode CODE_128, but got " stringByAppendingString:format]] autorelease];
+  if (format != kBarcodeFormatCode128) {
+    [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_128"];
   }
-  return [super encode:contents param1:format param2:width param3:height param4:hints];
+  return [super encode:contents format:format width:width height:height hints:hints];
 }
 
 - (NSArray *) encode:(NSString *)contents {
   int length = [contents length];
   if (length < 1 || length > 80) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Contents length should be between 1 and 80 characters, but got " stringByAppendingString:length]] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Contents length should be between 1 and 80 characters, but got %d", length];
   }
 
   for (int i = 0; i < length; i++) {
     unichar c = [contents characterAtIndex:i];
     if (c < ' ' || c > '~') {
-      @throw [[[IllegalArgumentException alloc] init:@"Contents should only contain characters between ' ' and '~'"] autorelease];
+      [NSException raise:NSInvalidArgumentException format:@"Contents should only contain characters between ' ' and '~'"];
     }
   }
 
-  NSMutableArray * patterns = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray * patterns = [NSMutableArray array];
   int checkSum = 0;
   int checkWeight = 1;
   int codeSet = 0;
@@ -39,36 +46,38 @@ int const CODE_STOP = 106;
     int newCodeSet;
     if (length - position >= requiredDigitCount && [self isDigits:contents start:position length:requiredDigitCount]) {
       newCodeSet = CODE_CODE_C;
-    }
-     else {
+    } else {
       newCodeSet = CODE_CODE_B;
     }
+
     int patternIndex;
     if (newCodeSet == codeSet) {
       if (codeSet == CODE_CODE_B) {
         patternIndex = [contents characterAtIndex:position] - ' ';
         position += 1;
-      }
-       else {
-        patternIndex = [Integer parseInt:[contents substringFromIndex:position param1:position + 2]];
+      } else {
+        patternIndex = [[contents substringWithRange:NSMakeRange(position, 2)] intValue];
         position += 2;
       }
-    }
-     else {
+    } else {
       if (codeSet == 0) {
         if (newCodeSet == CODE_CODE_B) {
           patternIndex = CODE_START_B;
-        }
-         else {
+        } else {
           patternIndex = CODE_START_C;
         }
-      }
-       else {
+      } else {
         patternIndex = newCodeSet;
       }
       codeSet = newCodeSet;
     }
-    [patterns addObject:Code128Reader.CODE_PATTERNS[patternIndex]];
+
+    NSMutableArray *pattern = [NSMutableArray array];
+    for (int i = 0; i < sizeof(CODE_PATTERNS[patternIndex]) / sizeof(int); i++) {
+      [pattern addObject:[NSNumber numberWithInt:CODE_PATTERNS[patternIndex][i]]];
+    }
+    [patterns addObject:pattern];
+
     checkSum += patternIndex * checkWeight;
     if (position != 0) {
       checkWeight++;
@@ -76,33 +85,33 @@ int const CODE_STOP = 106;
   }
 
   checkSum %= 103;
-  [patterns addObject:Code128Reader.CODE_PATTERNS[checkSum]];
-  [patterns addObject:Code128Reader.CODE_PATTERNS[CODE_STOP]];
-  int codeWidth = 0;
-  NSEnumerator * patternEnumeration = [patterns elements];
+  NSMutableArray *pattern = [NSMutableArray array];
+  for (int i = 0; i < sizeof(CODE_PATTERNS[checkSum]) / sizeof(int); i++) {
+    [pattern addObject:[NSNumber numberWithInt:CODE_PATTERNS[checkSum][i]]];
+  }
+  [patterns addObject:pattern];
 
-  while ([patternEnumeration hasMoreElements]) {
-    NSArray * pattern = (NSArray *)[patternEnumeration nextObject];
+  pattern = [NSMutableArray array];
+  for (int i = 0; i < sizeof(CODE_PATTERNS[CODE_STOP]) / sizeof(int); i++) {
+    [pattern addObject:[NSNumber numberWithInt:CODE_PATTERNS[CODE_STOP][i]]];
+  }
+  [patterns addObject:pattern];
 
-    for (int i = 0; i < pattern.length; i++) {
-      codeWidth += pattern[i];
+  NSMutableArray *result = [NSMutableArray array];
+  int pos = 0;
+  for (NSArray *patternArray in patterns) {
+    int pattern[[patternArray count]];
+    for(int i = 0; i < [patternArray count]; i++) {
+      pattern[i] = [[patternArray objectAtIndex:i] intValue];
     }
 
-  }
-
-  NSArray * result = [NSArray array];
-  patternEnumeration = [patterns elements];
-  int pos = 0;
-
-  while ([patternEnumeration hasMoreElements]) {
-    NSArray * pattern = (NSArray *)[patternEnumeration nextObject];
-    pos += [self appendPattern:result param1:pos param2:pattern param3:1];
+    pos += [UPCEANWriter appendPattern:result pos:pos pattern:pattern startColor:1];
   }
 
   return result;
 }
 
-+ (BOOL) isDigits:(NSString *)value start:(int)start length:(int)length {
+- (BOOL) isDigits:(NSString *)value start:(int)start length:(int)length {
   int end = start + length;
 
   for (int i = start; i < end; i++) {

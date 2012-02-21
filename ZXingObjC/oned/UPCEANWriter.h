@@ -9,7 +9,7 @@
 
 @interface UPCEANWriter : NSObject <Writer>
 
-+ (int) appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(NSArray *)pattern startColor:(int)startColor;
++ (int) appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(int[])pattern startColor:(int)startColor;
 - (NSArray *) encode:(NSString *)contents;
 
 @end
