@@ -8,14 +8,10 @@
  * @author Sean Owen
  */
 
-@class BitArray, Result;
-
 @interface MultiFormatUPCEANReader : OneDReader {
   NSMutableArray * readers;
 }
 
 - (id) initWithHints:(NSMutableDictionary *)hints;
-- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
-- (void) reset;
 
 @end
