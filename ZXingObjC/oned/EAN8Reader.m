@@ -4,53 +4,43 @@
 
 - (id) init {
   if (self = [super init]) {
-    decodeMiddleCounters = [NSArray array];
+    decodeMiddleCounters[0] = 0;
+    decodeMiddleCounters[1] = 0;
+    decodeMiddleCounters[2] = 0;
+    decodeMiddleCounters[3] = 0;
   }
   return self;
 }
 
 - (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
-  NSArray * counters = decodeMiddleCounters;
-  counters[0] = 0;
-  counters[1] = 0;
-  counters[2] = 0;
-  counters[3] = 0;
+  int counters[4] = {0, 0, 0, 0};
   int end = [row size];
-  int rowOffset = startRange[1];
+  int rowOffset = [[startRange objectAtIndex:1] intValue];
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
-    int bestMatch = [self decodeDigit:row param1:counters param2:rowOffset param3:L_PATTERNS];
-    [result append:(unichar)('0' + bestMatch)];
-
-    for (int i = 0; i < counters.length; i++) {
+    int bestMatch = [UPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int**)L_PATTERNS];
+    [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
+    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       rowOffset += counters[i];
     }
-
   }
 
-  NSArray * middleRange = [self findGuardPattern:row param1:rowOffset param2:YES param3:MIDDLE_PATTERN];
-  rowOffset = middleRange[1];
+  NSArray * middleRange = [UPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN];
+  rowOffset = [[middleRange objectAtIndex:1] intValue];
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
-    int bestMatch = [self decodeDigit:row param1:counters param2:rowOffset param3:L_PATTERNS];
-    [result append:(unichar)('0' + bestMatch)];
-
-    for (int i = 0; i < counters.length; i++) {
+    int bestMatch = [UPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int**)L_PATTERNS];
+    [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
+    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       rowOffset += counters[i];
     }
-
   }
 
   return rowOffset;
 }
 
-- (BarcodeFormat) getBarcodeFormat {
-  return BarcodeFormat.EAN_8;
-}
-
-- (void) dealloc {
-  [decodeMiddleCounters release];
-  [super dealloc];
+- (BarcodeFormat) barcodeFormat {
+  return kBarcodeFormatEan8;
 }
 
 @end

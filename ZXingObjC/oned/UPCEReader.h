@@ -18,9 +18,6 @@
 
 @property (nonatomic, readonly) BarcodeFormat barcodeFormat;
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
-- (NSArray *) decodeEnd:(BitArray *)row endStart:(int)endStart;
-- (BOOL) checkChecksum:(NSString *)s;
 + (NSString *) convertUPCEtoUPCA:(NSString *)upce;
 
 @end

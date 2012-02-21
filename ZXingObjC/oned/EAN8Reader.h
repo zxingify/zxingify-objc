@@ -1,4 +1,3 @@
-#import "BarcodeFormat.h"
 #import "UPCEANReader.h"
 
 /**
@@ -8,10 +7,7 @@
  */
 
 @interface EAN8Reader : UPCEANReader {
-  NSArray * decodeMiddleCounters;
+  int decodeMiddleCounters[4];
 }
 
-- (id) init;
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
-- (BarcodeFormat) getBarcodeFormat;
 @end

@@ -108,7 +108,7 @@ int L_AND_G_PATTERNS[20][4];
     [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] initWithX:([[startGuardRange objectAtIndex:0] intValue] + [[startGuardRange objectAtIndex:1] intValue]) / 2.0f y:rowNumber] autorelease]];
   }
   NSMutableString * result = [NSMutableString string];
-  int endStart = [self decodeMiddle:row startRange:startGuardRange resultString:result];
+  int endStart = [self decodeMiddle:row startRange:startGuardRange result:result];
   if (resultPointCallback != nil) {
     [resultPointCallback foundPossibleResultPoint:[[[ResultPoint alloc] initWithX:endStart y:rowNumber] autorelease]];
   }
@@ -316,7 +316,7 @@ int L_AND_G_PATTERNS[20][4];
  * @return horizontal offset of first pixel after the "middle" that was decoded
  * @throws NotFoundException if decoding could not complete successfully
  */
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
