@@ -1,40 +1,52 @@
+#import "CodaBarReader.h"
+#import "Code128Reader.h"
+#import "Code39Reader.h"
+#import "Code93Reader.h"
+#import "DecodeHintType.h"
+#import "ITFReader.h"
 #import "MultiFormatOneDReader.h"
+#import "MultiFormatUPCEANReader.h"
+#import "RSS14Reader.h"
+#import "RSSExpandedReader.h"
 
 @implementation MultiFormatOneDReader
 
 - (id) initWithHints:(NSMutableDictionary *)hints {
   if (self = [super init]) {
-    NSMutableArray * possibleFormats = hints == nil ? nil : (NSMutableArray *)[hints objectForKey:DecodeHintType.POSSIBLE_FORMATS];
-    BOOL useCode39CheckDigit = hints != nil && [hints objectForKey:DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != nil;
-    readers = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray * possibleFormats = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePossibleFormats]];
+    BOOL useCode39CheckDigit = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeAssumeCode39CheckDigit]] != nil;
+    readers = [[NSMutableArray alloc] init];
     if (possibleFormats != nil) {
-      if ([possibleFormats containsObject:BarcodeFormat.EAN_13] || [possibleFormats containsObject:BarcodeFormat.UPC_A] || [possibleFormats containsObject:BarcodeFormat.EAN_8] || [possibleFormats containsObject:BarcodeFormat.UPC_E]) {
-        [readers addObject:[[[MultiFormatUPCEANReader alloc] init:hints] autorelease]];
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan13]] ||
+          [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCA]] ||
+          [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan8]] ||
+          [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCE]]) {
+        [readers addObject:[[[MultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.CODE_39]) {
-        [readers addObject:[[[Code39Reader alloc] init:useCode39CheckDigit] autorelease]];
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode39]]) {
+        [readers addObject:[[[Code39Reader alloc] initUsingCheckDigit:useCode39CheckDigit] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.CODE_93]) {
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode93]]) {
         [readers addObject:[[[Code93Reader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.CODE_128]) {
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode128]]) {
         [readers addObject:[[[Code128Reader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.ITF]) {
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatITF]]) {
         [readers addObject:[[[ITFReader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.CODABAR]) {
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCodabar]]) {
         [readers addObject:[[[CodaBarReader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.RSS_14]) {
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSS14]]) {
         [readers addObject:[[[RSS14Reader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:BarcodeFormat.RSS_EXPANDED]) {
+      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSSExpanded]]) {
         [readers addObject:[[[RSSExpandedReader alloc] init] autorelease]];
       }
     }
-    if ([readers empty]) {
-      [readers addObject:[[[MultiFormatUPCEANReader alloc] init:hints] autorelease]];
+    if ([readers count] == 0) {
+      [readers addObject:[[[MultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
       [readers addObject:[[[Code39Reader alloc] init] autorelease]];
       [readers addObject:[[[Code93Reader alloc] init] autorelease]];
       [readers addObject:[[[Code128Reader alloc] init] autorelease]];
@@ -47,13 +59,9 @@
 }
 
 - (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints {
-  int size = [readers count];
-
-  for (int i = 0; i < size; i++) {
-    OneDReader * reader = (OneDReader *)[readers objectAtIndex:i];
-
+  for (OneDReader * reader in readers) {
     @try {
-      return [reader decodeRow:rowNumber param1:row param2:hints];
+      return [reader decodeRow:rowNumber row:row hints:hints];
     }
     @catch (ReaderException * re) {
     }
@@ -63,13 +71,9 @@
 }
 
 - (void) reset {
-  int size = [readers count];
-
-  for (int i = 0; i < size; i++) {
-    Reader * reader = (Reader *)[readers objectAtIndex:i];
+  for (id<Reader> reader in readers) {
     [reader reset];
   }
-
 }
 
 - (void) dealloc {
