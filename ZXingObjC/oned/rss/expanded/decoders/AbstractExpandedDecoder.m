@@ -6,6 +6,7 @@
 #import "AI013x0x1xDecoder.h"
 #import "AI01AndOtherAIs.h"
 #import "AnyAIDecoder.h"
+#import "BitArray.h"
 #import "GeneralAppIdDecoder.h"
 
 @implementation AbstractExpandedDecoder

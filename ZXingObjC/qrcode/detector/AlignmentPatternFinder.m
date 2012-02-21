@@ -228,11 +228,11 @@
     for (int index = 0; index < max; index++) {
       AlignmentPattern * center = (AlignmentPattern *)[possibleCenters objectAtIndex:index];
       if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
-        return [[[AlignmentPattern alloc] init:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
+        return [[[AlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
       }
     }
 
-    ResultPoint * point = [[[AlignmentPattern alloc] init:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
+    ResultPoint * point = [[[AlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
     [possibleCenters addObject:point];
     if (resultPointCallback != nil) {
       [resultPointCallback foundPossibleResultPoint:point];
