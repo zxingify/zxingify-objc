@@ -1,6 +1,18 @@
+#import "BitMatrix.h"
+#import "ByteMatrix.h"
+#import "EncodeHintType.h"
+#import "Encoder.h"
+#import "ErrorCorrectionLevel.h"
+#import "QRCode.h"
 #import "QRCodeWriter.h"
 
 int const QUIET_ZONE_SIZE = 4;
+
+@interface QRCodeWriter ()
+
+- (BitMatrix *) renderResult:(QRCode *)code width:(int)width height:(int)height;
+
+@end
 
 @implementation QRCodeWriter
 
@@ -10,47 +22,55 @@ int const QUIET_ZONE_SIZE = 4;
 
 - (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
   if (contents == nil || [contents length] == 0) {
-    @throw [[[IllegalArgumentException alloc] init:@"Found empty contents"] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Found empty contents"];
   }
-  if (format != BarcodeFormat.QR_CODE) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Can only encode QR_CODE, but got " stringByAppendingString:format]] autorelease];
+
+  if (format != kBarcodeFormatQRCode) {
+    [NSException raise:NSInvalidArgumentException format:@"Can only encode QR_CODE"];
   }
+
   if (width < 0 || height < 0) {
-    @throw [[[IllegalArgumentException alloc] init:[@"Requested dimensions are too small: " stringByAppendingString:width] + 'x' + height] autorelease];
+    [NSException raise:NSInvalidArgumentException format:@"Requested dimensions are too small: %dx%d", width, height];
   }
-  ErrorCorrectionLevel * errorCorrectionLevel = ErrorCorrectionLevel.L;
+
+  ErrorCorrectionLevel * errorCorrectionLevel = [ErrorCorrectionLevel errorCorrectionLevelL];
   if (hints != nil) {
-    ErrorCorrectionLevel * requestedECLevel = (ErrorCorrectionLevel *)[hints objectForKey:EncodeHintType.ERROR_CORRECTION];
+    ErrorCorrectionLevel * requestedECLevel = [hints objectForKey:[NSNumber numberWithInt:kEncodeHintTypeErrorCorrection]];
     if (requestedECLevel != nil) {
       errorCorrectionLevel = requestedECLevel;
     }
   }
+
   QRCode * code = [[[QRCode alloc] init] autorelease];
-  [Encoder encode:contents param1:errorCorrectionLevel param2:hints param3:code];
+  [Encoder encode:contents ecLevel:errorCorrectionLevel hints:hints qrCode:code];
   return [self renderResult:code width:width height:height];
 }
 
-+ (BitMatrix *) renderResult:(QRCode *)code width:(int)width height:(int)height {
+- (BitMatrix *) renderResult:(QRCode *)code width:(int)width height:(int)height {
   ByteMatrix * input = [code matrix];
   int inputWidth = [input width];
   int inputHeight = [input height];
   int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
   int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
-  int outputWidth = [Math max:width param1:qrWidth];
-  int outputHeight = [Math max:height param1:qrHeight];
-  int multiple = [Math min:outputWidth / qrWidth param1:outputHeight / qrHeight];
+  int outputWidth = MAX(width, qrWidth);
+  int outputHeight = MAX(height, qrHeight);
+
+  int multiple = MIN(outputWidth / qrWidth, outputHeight / qrHeight);
+  // Padding includes both the quiet zone and the extra white pixels to accommodate the requested
+  // dimensions. For example, if input is 25x25 the QR will be 33x33 including the quiet zone.
+  // If the requested size is 200x160, the multiple will be 4, for a QR of 132x132. These will
+  // handle all the padding from 100x100 (the actual QR) up to 200x160.
   int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
   int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
-  BitMatrix * output = [[[BitMatrix alloc] init:outputWidth param1:outputHeight] autorelease];
+
+  BitMatrix * output = [[[BitMatrix alloc] initWithWidth:outputWidth height:outputHeight] autorelease];
 
   for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
-
     for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
-      if ([input get:inputX param1:inputY] == 1) {
-        [output setRegion:outputX param1:outputY param2:multiple param3:multiple];
+      if ([input get:inputX y:inputY] == 1) {
+        [output setRegion:outputX top:outputY width:multiple height:multiple];
       }
     }
-
   }
 
   return output;
