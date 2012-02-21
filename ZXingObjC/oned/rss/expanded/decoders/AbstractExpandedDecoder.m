@@ -68,7 +68,7 @@
     return [[[AI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"17"] autorelease];
   }
 
-  @throw [NSException exceptionWithName:@"NSInternalInconsistencyException"
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"unknown decoder: %@", information]
                                userInfo:nil];
 }

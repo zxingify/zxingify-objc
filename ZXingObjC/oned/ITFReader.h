@@ -17,6 +17,8 @@
  * @author kevin.osullivan@sita.aero, SITA Lab.
  */
 
+extern int const PATTERNS[10][5];
+
 @class BitArray, Result;
 
 @interface ITFReader : OneDReader {
