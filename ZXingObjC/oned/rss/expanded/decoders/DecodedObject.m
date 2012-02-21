@@ -2,15 +2,13 @@
 
 @implementation DecodedObject
 
+@synthesize theNewPosition;
+
 - (id) initWithNewPosition:(int)aNewPosition {
   if (self = [super init]) {
-    newPosition = aNewPosition;
+    theNewPosition = aNewPosition;
   }
   return self;
-}
-
-- (int) getNewPosition {
-  return newPosition;
 }
 
 @end

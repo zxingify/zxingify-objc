@@ -1,17 +1,19 @@
-
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
+
+@class DecodedInformation;
 
 @interface BlockParsedResult : NSObject {
   DecodedInformation * decodedInformation;
   BOOL finished;
 }
 
-- (id) init;
+@property (nonatomic, readonly) DecodedInformation * decodedInformation;
+@property (nonatomic, readonly) BOOL finished;
+
 - (id) initWithFinished:(BOOL)finished;
-- (id) init:(DecodedInformation *)information finished:(BOOL)finished;
-- (DecodedInformation *) getDecodedInformation;
-- (BOOL) isFinished;
+- (id) initWithInformation:(DecodedInformation *)information finished:(BOOL)finished;
+
 @end

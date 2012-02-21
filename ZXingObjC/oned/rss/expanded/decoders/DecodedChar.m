@@ -4,6 +4,8 @@ unichar const FNC1 = '$';
 
 @implementation DecodedChar
 
+@synthesize value;
+
 - (id) initWithNewPosition:(int)aNewPosition value:(unichar)aValue {
   if (self = [super initWithNewPosition:aNewPosition]) {
     value = aValue;
@@ -11,7 +13,7 @@ unichar const FNC1 = '$';
   return self;
 }
 
-- (BOOL) isFNC1 {
+- (BOOL) fnc1 {
   return value == FNC1;
 }
 

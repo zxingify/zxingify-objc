@@ -4,41 +4,37 @@ int const FNC1 = 10;
 
 @implementation DecodedNumeric
 
-- (id) init:(int)newPosition firstDigit:(int)firstDigit secondDigit:(int)secondDigit {
-  if (self = [super init:newPosition]) {
-    firstDigit = firstDigit;
-    secondDigit = secondDigit;
+@synthesize firstDigit, secondDigit;
+
+- (id) initWithNewPosition:(int)newPosition firstDigit:(int)aFirstDigit secondDigit:(int)aSecondDigit {
+  if (self = [super initWithNewPosition:newPosition]) {
+    firstDigit = aFirstDigit;
+    secondDigit = aSecondDigit;
+
     if (firstDigit < 0 || firstDigit > 10) {
-      @throw [[[IllegalArgumentException alloc] init:[@"Invalid firstDigit: " stringByAppendingString:firstDigit]] autorelease];
+      [NSException raise:NSInvalidArgumentException format:@"Invalid firstDigit: %d", firstDigit];
     }
+
     if (secondDigit < 0 || secondDigit > 10) {
-      @throw [[[IllegalArgumentException alloc] init:[@"Invalid secondDigit: " stringByAppendingString:secondDigit]] autorelease];
+      [NSException raise:NSInvalidArgumentException format:@"Invalid secondDigit: %d", secondDigit];
     }
   }
   return self;
 }
 
-- (int) getFirstDigit {
-  return firstDigit;
-}
-
-- (int) getSecondDigit {
-  return secondDigit;
-}
-
-- (int) getValue {
+- (int) value {
   return firstDigit * 10 + secondDigit;
 }
 
-- (BOOL) isFirstDigitFNC1 {
+- (BOOL) firstDigitFNC1 {
   return firstDigit == FNC1;
 }
 
-- (BOOL) isSecondDigitFNC1 {
+- (BOOL) secondDigitFNC1 {
   return secondDigit == FNC1;
 }
 
-- (BOOL) isAnyFNC1 {
+- (BOOL) anyFNC1 {
   return firstDigit == FNC1 || secondDigit == FNC1;
 }
 

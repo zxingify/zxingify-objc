@@ -27,10 +27,10 @@
 + (AbstractExpandedDecoder *) createDecoder:(BitArray *)information {
   if ([information get:1]) {
     return [[[AI01AndOtherAIs alloc] initWithInformation:information] autorelease];
-  }
-   else if (![information get:2]) {
+  } else if (![information get:2]) {
     return [[[AnyAIDecoder alloc] initWithInformation:information] autorelease];
   }
+
   int fourBitEncodationMethod = [GeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:4];
 
   switch (fourBitEncodationMethod) {
@@ -39,16 +39,16 @@
   case 5:
     return [[[AI01320xDecoder alloc] initWithInformation:information] autorelease];
   }
-  int fiveBitEncodationMethod = [GeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:5];
 
+  int fiveBitEncodationMethod = [GeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:5];
   switch (fiveBitEncodationMethod) {
   case 12:
     return [[[AI01392xDecoder alloc] initWithInformation:information] autorelease];
   case 13:
     return [[[AI01393xDecoder alloc] initWithInformation:information] autorelease];
   }
+  
   int sevenBitEncodationMethod = [GeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:7];
-
   switch (sevenBitEncodationMethod) {
   case 56:
     return [[[AI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"11"] autorelease];
@@ -67,8 +67,10 @@
   case 63:
     return [[[AI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"17"] autorelease];
   }
-  [NSException raise:NSInternalInconsistencyException
-              format:@"unknown decoder: %@", information];
+
+  @throw [NSException exceptionWithName:@"NSInternalInconsistencyException"
+                                 reason:[NSString stringWithFormat:@"unknown decoder: %@", information]
+                               userInfo:nil];
 }
 
 - (void) dealloc {

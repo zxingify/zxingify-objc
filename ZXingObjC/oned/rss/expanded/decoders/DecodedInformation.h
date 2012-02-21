@@ -15,7 +15,7 @@
 @property (nonatomic, readonly) int remainingValue;
 @property (nonatomic, readonly) BOOL remaining;
 
-- (id) init:(int)newPosition newString:(NSString *)newString;
-- (id) init:(int)newPosition newString:(NSString *)newString remainingValue:(int)remainingValue;
+- (id) initWithNewPosition:(int)newPosition newString:(NSString *)newString;
+- (id) initWithNewPosition:(int)newPosition newString:(NSString *)newString remainingValue:(int)remainingValue;
 
 @end

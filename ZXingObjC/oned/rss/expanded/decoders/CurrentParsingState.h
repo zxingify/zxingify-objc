@@ -8,11 +8,13 @@
   int encoding;
 }
 
-- (id) init;
-- (BOOL) isAlpha;
-- (BOOL) isNumeric;
-- (BOOL) isIsoIec646;
+@property (nonatomic, assign) int position;
+
+- (BOOL) alpha;
+- (BOOL) numeric;
+- (BOOL) isoIec646;
 - (void) setNumeric;
 - (void) setAlpha;
 - (void) setIsoIec646;
+
 @end

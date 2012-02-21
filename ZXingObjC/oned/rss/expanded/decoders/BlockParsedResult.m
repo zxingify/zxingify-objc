@@ -1,37 +1,21 @@
 #import "BlockParsedResult.h"
+#import "DecodedInformation.h"
 
 @implementation BlockParsedResult
 
-- (id) init {
-  if (self = [super init]) {
-    finished = YES;
-    decodedInformation = nil;
-  }
+@synthesize decodedInformation, finished;
+
+- (id) initWithFinished:(BOOL)isFinished {
+  self = [self initWithInformation:nil finished:isFinished];
   return self;
 }
 
-- (id) initWithFinished:(BOOL)finished {
+- (id) initWithInformation:(DecodedInformation *)information finished:(BOOL)isFinished {
   if (self = [super init]) {
-    finished = finished;
-    decodedInformation = nil;
+    finished = isFinished;
+    decodedInformation = [information retain];
   }
   return self;
-}
-
-- (id) init:(DecodedInformation *)information finished:(BOOL)finished {
-  if (self = [super init]) {
-    finished = finished;
-    decodedInformation = information;
-  }
-  return self;
-}
-
-- (DecodedInformation *) getDecodedInformation {
-  return decodedInformation;
-}
-
-- (BOOL) isFinished {
-  return finished;
 }
 
 - (void) dealloc {

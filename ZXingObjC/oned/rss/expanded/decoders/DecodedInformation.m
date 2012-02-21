@@ -4,7 +4,7 @@
 
 @synthesize remaining, remainingValue, theNewString;
 
-- (id) init:(int)aNewPosition newString:(NSString *)aNewString {
+- (id) initWithNewPosition:(int)aNewPosition newString:(NSString *)aNewString {
   if (self = [super initWithNewPosition:aNewPosition]) {
     theNewString = [aNewString copy];
     remaining = NO;
@@ -13,8 +13,8 @@
   return self;
 }
 
-- (id) init:(int)aNewPosition newString:(NSString *)aNewString remainingValue:(int)aRemainingValue {
-  if (self = [super initWithNewPosition:newPosition]) {
+- (id) initWithNewPosition:(int)aNewPosition newString:(NSString *)aNewString remainingValue:(int)aRemainingValue {
+  if (self = [super initWithNewPosition:aNewPosition]) {
     remaining = YES;
     remainingValue = aRemainingValue;
     theNewString = [aNewString copy];

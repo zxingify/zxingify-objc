@@ -6,6 +6,8 @@ int const ISO_IEC_646 = 4;
 
 @implementation CurrentParsingState
 
+@synthesize position;
+
 - (id) init {
   if (self = [super init]) {
     position = 0;
@@ -14,15 +16,15 @@ int const ISO_IEC_646 = 4;
   return self;
 }
 
-- (BOOL) isAlpha {
+- (BOOL) alpha {
   return encoding == ALPHA;
 }
 
-- (BOOL) isNumeric {
+- (BOOL) numeric {
   return encoding == NUMERIC;
 }
 
-- (BOOL) isIsoIec646 {
+- (BOOL) isoIec646 {
   return encoding == ISO_IEC_646;
 }
 

@@ -14,7 +14,7 @@
 - (id) initWithInformation:(BitArray *)information;
 - (NSString *) decodeAllCodes:(NSMutableString *)buff initialPosition:(int)initialPosition;
 - (int) extractNumericValueFromBitArray:(int)pos bits:(int)bits;
-- (int) extractNumericValueFromBitArray:(BitArray *)information pos:(int)pos bits:(int)bits;
++ (int) extractNumericValueFromBitArray:(BitArray *)information pos:(int)pos bits:(int)bits;
 - (DecodedInformation *) decodeGeneralPurposeField:(int)pos remaining:(NSString *)remaining;
 
 @end
