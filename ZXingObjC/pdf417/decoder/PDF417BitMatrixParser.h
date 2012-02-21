@@ -1,7 +1,3 @@
-#import "FormatException.h"
-#import "NotFoundException.h"
-#import "BitMatrix.h"
-
 /**
  * <p>
  * This class parses the BitMatrix image into codewords.
@@ -10,19 +6,23 @@
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 
+@class BitMatrix;
+
 @interface PDF417BitMatrixParser : NSObject {
   BitMatrix * bitMatrix;
   int rows;
   int leftColumnECData;
   int rightColumnECData;
   int eraseCount;
-  NSArray * erasures;
+  NSMutableArray * erasures;
   int ecLevel;
 }
 
-@property(nonatomic, retain, readonly) NSArray * erasures;
-@property(nonatomic, readonly) int eCLevel;
+@property(nonatomic, readonly) NSMutableArray * erasures;
+@property(nonatomic, readonly) int ecLevel;
+
 - (id) initWithBitMatrix:(BitMatrix *)bitMatrix;
 - (NSArray *) readCodewords;
-- (int) processRow:(NSArray *)rowCounters rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSArray *)codewords next:(int)next;
+- (int) processRow:(int[])rowCounters rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next;
+
 @end
