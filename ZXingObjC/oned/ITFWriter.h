@@ -1,4 +1,3 @@
-#import "BarcodeFormat.h"
 #import "UPCEANWriter.h"
 
 /**
@@ -7,11 +6,6 @@
  * @author erik.barbara@gmail.com (Erik Barbara)
  */
 
-@class BitMatrix;
-
 @interface ITFWriter : UPCEANWriter
-
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
-- (NSArray *) encode:(NSString *)contents;
 
 @end

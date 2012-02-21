@@ -1,3 +1,5 @@
+#import "BarcodeFormat.h"
+
 /**
  * The base class for all objects which encode/generate a barcode image.
  * 

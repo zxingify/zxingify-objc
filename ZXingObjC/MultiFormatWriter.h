@@ -1,4 +1,3 @@
-#import "BarcodeFormat.h"
 #import "Writer.h"
 
 /**
@@ -8,11 +7,6 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
-@class BitMatrix;
-
 @interface MultiFormatWriter : NSObject <Writer>
-
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height;
-- (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints;
 
 @end
