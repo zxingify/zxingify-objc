@@ -83,7 +83,7 @@ const int MAX_PAIRS = 11;
 - (int) getNextSecondBar:(BitArray *)row initialPos:(int)initialPos;
 - (BOOL) isNotA1left:(RSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
 - (RSSFinderPattern *) parseFoundFinderPattern:(BitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern;
-- (void) reverseCounters:(NSMutableArray *)counters;
+- (void) reverseCounters:(int[])counters;
 
 @end
 
@@ -233,9 +233,10 @@ const int MAX_PAIRS = 11;
 }
 
 - (void) findNextPair:(BitArray *)row previousPairs:(NSMutableArray *)previousPairs forcedOffset:(int)forcedOffset {
-  NSMutableArray * counters = [NSMutableArray arrayWithObjects:[NSNumber numberWithInt:0], [NSNumber numberWithInt:0],
-                               [NSNumber numberWithInt:0], [NSNumber numberWithInt:0], nil];
+  int counters[4] = {0, 0, 0, 0};
+
   int width = [row size];
+
   int rowOffset;
   if (forcedOffset >= 0) {
     rowOffset = forcedOffset;
@@ -246,8 +247,8 @@ const int MAX_PAIRS = 11;
     rowOffset = [[[[lastPair finderPattern] startEnd] objectAtIndex:1] intValue];
   }
   BOOL searchingEvenPair = [previousPairs count] % 2 != 0;
-  BOOL isWhite = NO;
 
+  BOOL isWhite = NO;
   while (rowOffset < width) {
     isWhite = ![row get:rowOffset];
     if (!isWhite) {
@@ -258,49 +259,48 @@ const int MAX_PAIRS = 11;
 
   int counterPosition = 0;
   int patternStart = rowOffset;
-
   for (int x = rowOffset; x < width; x++) {
     BOOL pixel = [row get:x];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition
-                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+      counters[counterPosition]++;
     } else {
       if (counterPosition == 3) {
         if (searchingEvenPair) {
           [self reverseCounters:counters];
         }
+
         if ([AbstractRSSReader isFinderPattern:counters]) {
           startEnd[0] = patternStart;
           startEnd[1] = x;
           return;
         }
+
         if (searchingEvenPair) {
           [self reverseCounters:counters];
         }
-        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
-        [counters replaceObjectAtIndex:0 withObject:[counters objectAtIndex:2]];
-        [counters replaceObjectAtIndex:1 withObject:[counters objectAtIndex:3]];
-        [counters replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:0]];
-        [counters replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:0]];
+
+        patternStart += counters[0] + counters[1];
+        counters[0] = counters[2];
+        counters[1] = counters[3];
+        counters[2] = 0;
+        counters[3] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+      counters[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
-
   @throw [NotFoundException notFoundInstance];
 }
 
-- (void) reverseCounters:(NSMutableArray *)counters {
-  int length = [counters count];
-
-  for (int i = 0; i < length / 2; ++i) {
-    id tmp = [counters objectAtIndex:i];
-    [counters replaceObjectAtIndex:i withObject:[counters objectAtIndex:length - i - 1]];
-    [counters replaceObjectAtIndex:length - i - 1 withObject:tmp];
+- (void) reverseCounters:(int[])counters {
+  int length = sizeof((int*)counters) / sizeof(int);
+  for(int i = 0; i < length / 2; ++i){
+    int tmp = counters[i];
+    counters[i] = counters[length - i - 1];
+    counters[length - i - 1] = tmp;
   }
 }
 
