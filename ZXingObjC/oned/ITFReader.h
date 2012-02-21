@@ -23,7 +23,6 @@
   int narrowLineWidth;
 }
 
-- (Result *) decodeRow:(int)rowNumber row:(BitArray *)row hints:(NSMutableDictionary *)hints;
 - (NSArray *) decodeStart:(BitArray *)row;
 - (NSArray *) decodeEnd:(BitArray *)row;
 
