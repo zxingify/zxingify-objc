@@ -341,7 +341,9 @@
     return [[[DecodedChar alloc] initWithNewPosition:pos + 8 value:' '] autorelease];
   }
 
-  [NSException raise:@"RuntimeException" format:@"Decoding invalid ISO/IEC 646 value: %d", eightBitValue];
+  @throw [NSException exceptionWithName:@"RuntimeException"
+                                 reason:[NSString stringWithFormat:@"Decoding invalid ISO/IEC 646 value: %d", eightBitValue]
+                               userInfo:nil];
 }
 
 - (BOOL) isStillAlpha:(int)pos {
@@ -391,7 +393,9 @@
     return [[[DecodedChar alloc] initWithNewPosition:pos + 6 value:'/'] autorelease];
   }
 
-  [NSException raise:@"RuntimeException" format:@"Decoding invalid alphanumeric value: %d", sixBitValue];
+  @throw [NSException exceptionWithName:@"RuntimeException"
+                                 reason:[NSString stringWithFormat:@"Decoding invalid alphanumeric value: %d", sixBitValue]
+                               userInfo:nil];
 }
 
 - (BOOL) isAlphaTo646ToAlphaLatch:(int)pos {

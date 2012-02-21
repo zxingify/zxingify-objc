@@ -4,8 +4,10 @@
 #import "DecodeHintType.h"
 #import "MultiFormatOneDReader.h"
 #import "MultiFormatReader.h"
+#import "NotFoundException.h"
 #import "PDF417Reader.h"
 #import "QRCodeReader.h"
+#import "ReaderException.h"
 #import "Result.h"
 
 @interface MultiFormatReader ()

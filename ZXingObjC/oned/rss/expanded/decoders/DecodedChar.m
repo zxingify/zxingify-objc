@@ -1,6 +1,6 @@
 #import "DecodedChar.h"
 
-unichar const FNC1 = '$';
+unichar const FNC1char = '$';
 
 @implementation DecodedChar
 
@@ -14,7 +14,7 @@ unichar const FNC1 = '$';
 }
 
 - (BOOL) fnc1 {
-  return value == FNC1;
+  return value == FNC1char;
 }
 
 @end

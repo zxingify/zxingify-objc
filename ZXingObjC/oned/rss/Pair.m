@@ -6,7 +6,7 @@
 @synthesize count, finderPattern;
 
 - (id) initWithValue:(int)aValue checksumPortion:(int)aChecksumPortion finderPattern:(RSSFinderPattern *)aFinderPattern {
-  if (self = [super init:aValue checksumPortion:aChecksumPortion]) {
+  if (self = [super initWithValue:aValue checksumPortion:aChecksumPortion]) {
     finderPattern = [aFinderPattern retain];
   }
   return self;

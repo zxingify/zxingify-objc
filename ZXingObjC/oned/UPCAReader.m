@@ -38,8 +38,8 @@
   return kBarcodeFormatUPCA;
 }
 
-- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
-  return [ean13Reader decodeMiddle:row startRange:startRange resultString:resultString];
+- (int) decodeMiddle:(BitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
+  return [ean13Reader decodeMiddle:row startRange:startRange result:result];
 }
 
 - (Result *) maybeReturnResult:(Result *)result {

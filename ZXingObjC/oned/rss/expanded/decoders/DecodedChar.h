@@ -5,7 +5,7 @@
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 
-extern unichar const FNC1;
+extern unichar const FNC1char;
 
 @interface DecodedChar : DecodedObject {
   unichar value;

@@ -5,7 +5,7 @@
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
 
-extern int const FNC1;
+extern const int FNC1;
 
 @interface DecodedNumeric : DecodedObject {
   int firstDigit;

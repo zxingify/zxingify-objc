@@ -4,7 +4,7 @@
 @interface UPCAWriter ()
 
 - (EAN13Writer *)subWriter;
-+ (NSString *)preencode:(NSString *)contents;
+- (NSString *)preencode:(NSString *)contents;
 
 @end
 
@@ -26,12 +26,12 @@ static EAN13Writer* subWriter = nil;
 }
 
 - (BitMatrix *) encode:(NSString *)contents format:(BarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
-  if (format != kBarcodeUPCA) {
+  if (format != kBarcodeFormatUPCA) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:[NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]
                                  userInfo:nil];
   }
-  return [subWriter encode:[self preencode:contents] format:kBarcodeEan13 width:width height:height hints:hints];
+  return [subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints];
 }
 
 
@@ -39,7 +39,7 @@ static EAN13Writer* subWriter = nil;
  * Transform a UPC-A code into the equivalent EAN-13 code, and add a check digit if it is not
  * already present.
  */
-+ (NSString *) preencode:(NSString *)contents {
+- (NSString *) preencode:(NSString *)contents {
   int length = [contents length];
   if (length == 11) {
     int sum = 0;

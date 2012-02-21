@@ -1,6 +1,6 @@
 #import "DecodedNumeric.h"
 
-int const FNC1 = 10;
+const int FNC1 = 10;
 
 @implementation DecodedNumeric
 
