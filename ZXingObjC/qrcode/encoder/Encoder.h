@@ -13,7 +13,7 @@
 + (Mode *) chooseMode:(NSString *)content;
 + (Mode *) chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding;
 + (void) terminateBits:(int)numDataBytes bits:(BitArray *)bits;
-+ (void) getNumDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(NSMutableArray *)numDataBytesInBlock numECBytesInBlock:(NSMutableArray *)numECBytesInBlock;
++ (void) getNumDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock;
 + (void) interleaveWithECBytes:(BitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks result:(BitArray *)result;
 + (char *) generateECBytes:(char *)dataBytes numEcBytesInBlock:(int)numEcBytesInBlock;
 + (void) appendModeInfo:(Mode *)mode bits:(BitArray *)bits;

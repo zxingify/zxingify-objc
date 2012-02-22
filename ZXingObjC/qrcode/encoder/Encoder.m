@@ -254,7 +254,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
  * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
  * JISX0510:2004 (p.30)
  */
-+ (void) getNumDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(NSMutableArray *)numDataBytesInBlock numECBytesInBlock:(NSMutableArray *)numECBytesInBlock {
++ (void) getNumDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock {
   if (blockID >= numRSBlocks) {
     @throw [WriterException exceptionWithName:@"WriterException" reason:@"Block ID too large" userInfo:nil];
   }
@@ -276,11 +276,11 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     @throw [WriterException exceptionWithName:@"WriterException" reason:@"Total bytes mismatch" userInfo:nil];
   }
   if (blockID < numRsBlocksInGroup1) {
-    [numDataBytesInBlock replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:numDataBytesInGroup1]];
-    [numECBytesInBlock replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:numEcBytesInGroup1]];
+    numDataBytesInBlock[0] = numDataBytesInGroup1;
+    numECBytesInBlock[0] = numEcBytesInGroup1;
   } else {
-    [numDataBytesInBlock replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:numDataBytesInGroup2]];
-    [numECBytesInBlock replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:numEcBytesInGroup2]];
+    numDataBytesInBlock[0] = numDataBytesInGroup2;
+    numECBytesInBlock[0] = numEcBytesInGroup2;
   }
 }
 
@@ -303,20 +303,20 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   NSMutableArray * blocks = [NSMutableArray arrayWithCapacity:numRSBlocks];
 
   for (int i = 0; i < numRSBlocks; ++i) {
-    NSMutableArray * numDataBytesInBlock = [NSMutableArray array];
-    NSMutableArray * numEcBytesInBlock = [NSMutableArray array];
+    int numDataBytesInBlock[1];
+    int numEcBytesInBlock[1];
     [self getNumDataBytesAndNumECBytesForBlockID:numTotalBytes numDataBytes:numDataBytes numRSBlocks:numRSBlocks
                                          blockID:i numDataBytesInBlock:numDataBytesInBlock numECBytesInBlock:numEcBytesInBlock];
 
-    int size = [[numDataBytesInBlock objectAtIndex:0] intValue];
+    int size = numDataBytesInBlock[0];
     char dataBytes[size];
     [bits toBytes:8 * dataBytesOffset array:dataBytes offset:0 numBytes:size];
-    char *ecBytes = [self generateECBytes:(char*)dataBytes numEcBytesInBlock:[[numEcBytesInBlock objectAtIndex:0] intValue]];
+    char *ecBytes = [self generateECBytes:(char*)dataBytes numEcBytesInBlock:numEcBytesInBlock[0]];
     [blocks addObject:[[[BlockPair alloc] initWithData:(char*)dataBytes errorCorrection:ecBytes] autorelease]];
 
     maxNumDataBytes = MAX(maxNumDataBytes, size);
     maxNumEcBytes = MAX(maxNumEcBytes, sizeof(ecBytes) / sizeof(char));
-    dataBytesOffset += [[numDataBytesInBlock objectAtIndex:0] intValue];
+    dataBytesOffset += numDataBytesInBlock[0];
     free(ecBytes);
   }
   if (numDataBytes != dataBytesOffset) {
