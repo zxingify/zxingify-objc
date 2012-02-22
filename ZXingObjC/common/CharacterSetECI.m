@@ -1,12 +1,11 @@
 #import "CharacterSetECI.h"
 
 static NSMutableDictionary * VALUE_TO_ECI = nil;
-static NSMutableDictionary * NAME_TO_ECI = nil;
+static NSMutableDictionary * ENCODING_TO_ECI = nil;
 
 @interface CharacterSetECI ()
 
-+ (void) addCharacterSet:(int)value encodingName:(NSString*)encodingName;
-+ (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodingNames;
++ (void) addCharacterSet:(int)value encoding:(NSStringEncoding)encoding;
 
 @end
 
@@ -16,26 +15,21 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
 
 + (void) initialize {
   VALUE_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
-  NAME_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
-  [self addCharacterSet:0 encodingName:@"Cp437"];
-  [self addCharacterSet:1 encodingName:[NSArray arrayWithObjects:@"ISO8859_1", @"ISO-8859-1", nil]];
-  [self addCharacterSet:2 encodingName:@"Cp437"];
-  [self addCharacterSet:3 encodingName:[NSArray arrayWithObjects:@"ISO8859_1", @"ISO-8859-1", nil]];
-  [self addCharacterSet:4 encodingName:@"ISO8859_2"];
-  [self addCharacterSet:5 encodingName:@"ISO8859_3"];
-  [self addCharacterSet:6 encodingName:@"ISO8859_4"];
-  [self addCharacterSet:7 encodingName:@"ISO8859_5"];
-  [self addCharacterSet:8 encodingName:@"ISO8859_6"];
-  [self addCharacterSet:9 encodingName:@"ISO8859_7"];
-  [self addCharacterSet:10 encodingName:@"ISO8859_8"];
-  [self addCharacterSet:11 encodingName:@"ISO8859_9"];
-  [self addCharacterSet:12 encodingName:@"ISO8859_10"];
-  [self addCharacterSet:13 encodingName:@"ISO8859_11"];
-  [self addCharacterSet:15 encodingName:@"ISO8859_13"];
-  [self addCharacterSet:16 encodingName:@"ISO8859_14"];
-  [self addCharacterSet:17 encodingName:@"ISO8859_15"];
-  [self addCharacterSet:18 encodingName:@"ISO8859_16"];
-  [self addCharacterSet:20 encodingName:[NSArray arrayWithObjects:@"SJIS", @"Shift_JIS", nil]];
+  ENCODING_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
+  [self addCharacterSet:1 encoding:NSISOLatin1StringEncoding];
+  [self addCharacterSet:3 encoding:NSISOLatin1StringEncoding];
+  [self addCharacterSet:4 encoding:NSISOLatin2StringEncoding];
+  [self addCharacterSet:5 encoding:(NSStringEncoding) 0x80000203];
+  [self addCharacterSet:6 encoding:(NSStringEncoding) 0x80000204];
+  [self addCharacterSet:7 encoding:(NSStringEncoding) 0x80000205];
+  [self addCharacterSet:10 encoding:(NSStringEncoding) 0x80000208];
+  [self addCharacterSet:12 encoding:(NSStringEncoding) 0x80000205];
+  [self addCharacterSet:15 encoding:(NSStringEncoding) 0x8000020D];
+  [self addCharacterSet:17 encoding:(NSStringEncoding) 0x8000020F];
+  [self addCharacterSet:20 encoding:NSShiftJISStringEncoding];
+  [self addCharacterSet:21 encoding:NSWindowsCP1250StringEncoding];
+  [self addCharacterSet:22 encoding:NSWindowsCP1251StringEncoding];
+  [self addCharacterSet:23 encoding:NSWindowsCP1252StringEncoding];
 }
 
 - (id) initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
@@ -45,19 +39,10 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
   return self;
 }
 
-+ (void) addCharacterSet:(int)value encodingName:(NSString *)encodingName {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)] autorelease];
++ (void) addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
+  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
-  [NAME_TO_ECI setObject:eci forKey:encodingName];
-}
-
-+ (void) addCharacterSet:(int)value encodingNames:(NSArray *)encodingNames {
-  CharacterSetECI * eci = [[[CharacterSetECI alloc] initWithValue:value encoding:CFStringConvertIANACharSetNameToEncoding((CFStringRef)[encodingNames objectAtIndex:0])] autorelease];
-  [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
-
-  for (NSString *name in encodingNames) {
-    [NAME_TO_ECI setObject:eci forKey:name];
-  }
+  [ENCODING_TO_ECI setObject:eci forKey:[NSNumber numberWithUnsignedInteger:encoding]];
 }
 
 /**
@@ -84,11 +69,11 @@ static NSMutableDictionary * NAME_TO_ECI = nil;
  * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
  * but unsupported
  */
-+ (CharacterSetECI *) getCharacterSetECIByName:(NSString *)name {
-  if (NAME_TO_ECI == nil) {
++ (CharacterSetECI *) getCharacterSetECIByEncoding:(NSStringEncoding)encoding {
+  if (ENCODING_TO_ECI == nil) {
     [self initialize];
   }
-  return [NAME_TO_ECI objectForKey:name];
+  return [ENCODING_TO_ECI objectForKey:[NSNumber numberWithUnsignedInteger:encoding]];
 }
 
 @end

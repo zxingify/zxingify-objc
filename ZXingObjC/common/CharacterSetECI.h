@@ -14,6 +14,6 @@
 @property(nonatomic, readonly) NSStringEncoding encoding;
 
 + (CharacterSetECI *) getCharacterSetECIByValue:(int)value;
-+ (CharacterSetECI *) getCharacterSetECIByName:(NSString *)name;
++ (CharacterSetECI *) getCharacterSetECIByEncoding:(NSStringEncoding)encoding;
 
 @end

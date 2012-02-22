@@ -25,7 +25,7 @@ const int ALPHANUMERIC_TABLE[96] = {
   25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
 };
 
-NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
+const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 @interface Encoder ()
 
@@ -64,8 +64,8 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
 }
 
 + (void) encode:(NSString *)content ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints qrCode:(QRCode *)qrCode {
-  NSString * encoding = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kEncodeHintTypeCharacterSet]];
-  if (encoding == nil) {
+  NSStringEncoding encoding = hints == nil ? 0 : (NSStringEncoding)[[hints objectForKey:[NSNumber numberWithInt:kEncodeHintTypeCharacterSet]] unsignedIntegerValue];
+  if (encoding == 0) {
     encoding = DEFAULT_BYTE_MODE_ENCODING;
   }
 
@@ -83,8 +83,8 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
   BitArray * headerAndDataBits = [[[BitArray alloc] init] autorelease];
 
   // Step 4.5: Append ECI message if applicable
-  if ([mode isEqual:[Mode byteMode]] && ![DEFAULT_BYTE_MODE_ENCODING isEqualToString:encoding]) {
-    CharacterSetECI * eci = [CharacterSetECI getCharacterSetECIByName:encoding];
+  if ([mode isEqual:[Mode byteMode]] && DEFAULT_BYTE_MODE_ENCODING != encoding) {
+    CharacterSetECI * eci = [CharacterSetECI getCharacterSetECIByEncoding:encoding];
     if (eci != nil) {
       [self appendECI:eci bits:headerAndDataBits];
     }
@@ -129,7 +129,7 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
 }
 
 + (Mode *) chooseMode:(NSString *)content {
-  return [self chooseMode:content encoding:nil];
+  return [self chooseMode:content encoding:-1];
 }
 
 
@@ -137,8 +137,8 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
  * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
  * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
  */
-+ (Mode *) chooseMode:(NSString *)content encoding:(NSString *)encoding {
-  if ([@"Shift_JIS" isEqualToString:encoding]) {
++ (Mode *) chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding {
+  if (NSShiftJISStringEncoding == encoding) {
     return [self isOnlyDoubleByteKanji:content] ? [Mode kanjiMode] : [Mode byteMode];
   }
   BOOL hasNumeric = NO;
@@ -390,7 +390,7 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
 /**
  * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
  */
-+ (void) appendBytes:(NSString *)content mode:(Mode *)mode bits:(BitArray *)bits encoding:(NSString *)encoding {
++ (void) appendBytes:(NSString *)content mode:(Mode *)mode bits:(BitArray *)bits encoding:(NSStringEncoding)encoding {
   if ([mode isEqual:[Mode numericMode]]) {
     [self appendNumericBytes:content bits:bits];
   } else if ([mode isEqual:[Mode alphanumericMode]]) {
@@ -450,8 +450,8 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
   }
 }
 
-+ (void) append8BitBytes:(NSString *)content bits:(BitArray *)bits encoding:(NSString *)encoding {
-  char * bytes = (char*)[[content dataUsingEncoding:CFStringConvertIANACharSetNameToEncoding((CFStringRef)encoding)] bytes];
++ (void) append8BitBytes:(NSString *)content bits:(BitArray *)bits encoding:(NSStringEncoding)encoding {
+  char * bytes = (char*)[[content dataUsingEncoding:encoding] bytes];
 
   for (int i = 0; i < sizeof(bytes) / sizeof(char); ++i) {
     [bits appendBits:bytes[i] numBits:8];
