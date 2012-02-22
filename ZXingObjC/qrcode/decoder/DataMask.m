@@ -80,7 +80,7 @@
 @implementation DataMask100
 
 - (BOOL) isMasked:(int)i j:(int)j {
-  return (((i >> 1) + (j / 3)) & 0x01) == 0;
+  return (((int)((unsigned int)i >> 1) + (j / 3)) & 0x01) == 0;
 }
 
 @end

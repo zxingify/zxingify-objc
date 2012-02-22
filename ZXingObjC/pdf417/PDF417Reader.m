@@ -118,7 +118,7 @@
     @throw [NotFoundException notFoundInstance];
   }
 
-  int moduleSize = (x - [[leftTopBlack objectAtIndex:0] intValue]) >> 3;
+  int moduleSize = (int)((unsigned int)(x - [[leftTopBlack objectAtIndex:0] intValue]) >> 3);
   if (moduleSize == 0) {
     @throw [NotFoundException notFoundInstance];
   }

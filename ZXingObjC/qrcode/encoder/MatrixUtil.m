@@ -230,12 +230,10 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 + (int) findMSBSet:(int)value {
   int numDigits = 0;
-
   while (value != 0) {
-    value >>= 1;
+    value = (int)((unsigned int)value >> 1);
     ++numDigits;
   }
-
   return numDigits;
 }
 

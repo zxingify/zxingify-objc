@@ -306,9 +306,9 @@ static NSString* DIGIT_TABLE[] = {
         }
         [correctedBits replaceObjectAtIndex:i * codewordSize + j - offset withObject:[NSNumber numberWithBool:color]];
       }
-      flag >>= 1;
-    }
 
+      flag = (int)(((unsigned int)flag) << 1);
+    }
   }
 
   return correctedBits;

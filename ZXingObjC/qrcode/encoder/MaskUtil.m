@@ -143,7 +143,7 @@
     intermediate = (y + x) % 3;
     break;
   case 4:
-    intermediate = ((y >> 1) + (x / 3)) & 0x1;
+    intermediate = ((int)((unsigned int)y >> 1) + (x / 3)) & 0x1;
     break;
   case 5:
     temp = y * x;

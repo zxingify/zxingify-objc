@@ -774,7 +774,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       @throw [FormatException formatInstance];
     }
     for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
-      if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= rowHeight >> 1) {
+      if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= (int)((unsigned int)rowHeight >> 1)) {
         symbol |= 1L << mask;
       }
     }
@@ -857,7 +857,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   int first = 0;
   int upto = sizeof(SYMBOL_TABLE) / sizeof(int);
   while (first < upto) {
-    int mid = (first + upto) >> 1;
+    int mid = (int)((unsigned int)(first + upto) >> 1);
     if (symbol < SYMBOL_TABLE[mid]) {
       upto = mid;
     } else if (symbol > SYMBOL_TABLE[mid]) {

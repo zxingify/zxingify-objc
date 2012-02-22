@@ -39,7 +39,7 @@
  */
 - (BOOL) get:(int)x y:(int)y {
   int offset = y * rowSize + (x >> 5);
-  return ((bits[offset] >> (x & 0x1f)) & 1) != 0;
+  return ((int)((unsigned int)bits[offset] >> (x & 0x1f)) & 1) != 0;
 }
 
 
@@ -175,7 +175,7 @@
 
   int theBits = bits[bitsOffset];
   int bit = 31;
-  while ((theBits >> bit) == 0) {
+  while ((int)((unsigned int)theBits >> bit) == 0) {
     bit--;
   }
   x += bit;
