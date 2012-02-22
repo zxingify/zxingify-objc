@@ -233,7 +233,12 @@
 }
 
 - (int *) makeArray:(int)aSize {
-  return malloc((aSize + 31) >> 5);
+  int arraySize = (aSize + 31) >> 5;
+  int *newArray = (int*)malloc(arraySize * sizeof(int));
+  for (int i = 0; i < arraySize; i++) {
+    newArray[i] = 0;
+  }
+  return newArray;
 }
 
 - (NSString *) description {
