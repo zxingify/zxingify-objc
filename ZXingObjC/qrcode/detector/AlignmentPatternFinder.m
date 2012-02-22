@@ -244,7 +244,7 @@
 - (void) dealloc {
   [image release];
   [possibleCenters release];
-  free(crossCheckStateCount);
+//  free(crossCheckStateCount);
   [resultPointCallback release];
   [super dealloc];
 }

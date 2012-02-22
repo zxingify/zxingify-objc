@@ -222,7 +222,7 @@
 }
 
 - (void) dealloc {
-  free(bits);
+//  free(bits);
   [super dealloc];
 }
 

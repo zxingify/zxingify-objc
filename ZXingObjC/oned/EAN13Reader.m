@@ -113,7 +113,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
 }
 
 - (void) dealloc {
-  free(decodeMiddleCounters);
+//  free(decodeMiddleCounters);
   [super dealloc];
 }
 

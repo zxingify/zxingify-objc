@@ -16,7 +16,7 @@
 - (id) init {
   if (self = [super init]) {
     self.size = 0;
-    bits = malloc(1 * sizeof(int));
+    bits = (int*)malloc(1 * sizeof(int));
     bitsSize = 1;
     bits[0] = 0;
   }

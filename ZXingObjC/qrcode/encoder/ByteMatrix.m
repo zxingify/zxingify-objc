@@ -21,10 +21,10 @@
 }
 
 - (void)dealloc {
-  for (int i = 0; i < height; i++) {
-    free(bytes[i]);
-  }
-  free(bytes);
+//  for (int i = 0; i < height; i++) {
+//    free(bytes[i]);
+//  }
+//  free(bytes);
 
   [super dealloc];
 }
