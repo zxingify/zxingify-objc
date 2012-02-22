@@ -124,6 +124,10 @@
   NSArray * bCoefficients = other.coefficients;
   int bLength = [bCoefficients count];
   NSMutableArray * product = [NSMutableArray arrayWithCapacity:aLength + bLength - 1];
+  for (int i = 0; i < aLength + bLength - 1; i++) {
+    [product addObject:[NSNumber numberWithInt:0]];
+  }
+  
   for (int i = 0; i < aLength; i++) {
     int aCoeff = [[aCoefficients objectAtIndex:i] intValue];
     for (int j = 0; j < bLength; j++) {

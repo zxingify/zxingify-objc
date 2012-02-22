@@ -27,6 +27,8 @@
   BitMatrix* result = [writer encode:data format:kBarcodeFormatQRCode width:300 height:300];
   
   NSLog(@"Result is %@", result);
+  
+  [writer release];
 }
 
 @end

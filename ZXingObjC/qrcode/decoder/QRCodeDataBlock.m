@@ -43,7 +43,7 @@
   for (QRCodeECB *ecBlock in ecBlockArray) {
     for (int i = 0; i < [ecBlock count]; i++) {
       int numDataCodewords = [ecBlock dataCodewords];
-      int numBlockCodewords = [ecBlocks eCCodewordsPerBlock] + numDataCodewords;
+      int numBlockCodewords = [ecBlocks ecCodewordsPerBlock] + numDataCodewords;
       NSMutableArray *newCodewords = [NSMutableArray arrayWithCapacity:numBlockCodewords];
       for (int j = 0; j < numBlockCodewords; j++) {
         [newCodewords addObject:[NSNull null]];
@@ -65,7 +65,7 @@
   }
 
   longerBlocksStartAt++;
-  int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - [ecBlocks eCCodewordsPerBlock];
+  int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - [ecBlocks ecCodewordsPerBlock];
   int rawCodewordsOffset = 0;
   int numResultBlocks = [result count];
 

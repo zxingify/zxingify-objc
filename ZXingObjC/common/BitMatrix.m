@@ -20,10 +20,11 @@
                                      reason:@"Both dimensions must be greater than 0"
                                    userInfo:nil];
     }
-    width = width;
-    height = height;
+    width = aWidth;
+    height = aHeight;
     rowSize = (width + 31) >> 5;
-    bits = (int*)malloc(rowSize * height * sizeof(int));
+    bitsSize = rowSize * height;
+    bits = (int*)malloc(bitsSize * sizeof(int));
   }
   return self;
 }
@@ -70,7 +71,7 @@
  * Clears all bits (sets to false).
  */
 - (void) clear {
-  int max = sizeof(bits) / sizeof(int);
+  int max = bitsSize;
 
   for (int i = 0; i < max; i++) {
     bits[i] = 0;
@@ -142,10 +143,10 @@
  */
 - (NSArray *) topLeftOnBit {
   int bitsOffset = 0;
-  while (bitsOffset < sizeof(bits) / sizeof(int) && bits[bitsOffset] == 0) {
+  while (bitsOffset < bitsSize && bits[bitsOffset] == 0) {
     bitsOffset++;
   }
-  if (bitsOffset == sizeof(bits) / sizeof(int)) {
+  if (bitsOffset == bitsSize) {
     return nil;
   }
   int y = bitsOffset / rowSize;
@@ -161,7 +162,7 @@
 }
 
 - (NSArray *) bottomRightOnBit {
-  int bitsOffset = (sizeof(bits) / sizeof(int)) - 1;
+  int bitsOffset = bitsSize - 1;
   while (bitsOffset >= 0 && bits[bitsOffset] == 0) {
     bitsOffset--;
   }
@@ -187,10 +188,10 @@
     return NO;
   }
   BitMatrix * other = (BitMatrix *)o;
-  if (width != other.width || height != other.height || rowSize != other->rowSize || sizeof(bits) != sizeof(other->bits)) {
+  if (width != other.width || height != other.height || rowSize != other->rowSize || bitsSize != other->bitsSize) {
     return NO;
   }
-  for (int i = 0; i < sizeof(bits) / sizeof(int); i++) {
+  for (int i = 0; i < bitsSize; i++) {
     if (bits[i] != other->bits[i]) {
       return NO;
     }
@@ -203,7 +204,7 @@
   hash = 31 * hash + width;
   hash = 31 * hash + height;
   hash = 31 * hash + rowSize;
-  for (int i = 0; i < sizeof(bits) / sizeof(int); i++) {
+  for (int i = 0; i < bitsSize; i++) {
     hash = 31 * hash + bits[i];
   }
   return hash;

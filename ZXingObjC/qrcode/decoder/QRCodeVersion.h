@@ -8,11 +8,10 @@
 @class QRCodeECB;
 
 @interface QRCodeECBlocks : NSObject {
-  int ecCodewordsPerBlock;
   NSArray * ecBlocks;
 }
 
-@property(nonatomic, readonly) int eCCodewordsPerBlock;
+@property(nonatomic, readonly) int ecCodewordsPerBlock;
 @property(nonatomic, readonly) int numBlocks;
 @property(nonatomic, readonly) int totalECCodewords;
 @property(nonatomic, retain, readonly) NSArray * ecBlocks;

@@ -6,7 +6,7 @@
 
 @implementation QRCodeECBlocks
 
-@synthesize eCCodewordsPerBlock;
+@synthesize ecCodewordsPerBlock;
 @synthesize numBlocks;
 @synthesize totalECCodewords;
 @synthesize ecBlocks;
@@ -50,7 +50,7 @@
 }
 
 - (void) dealloc {
-  [QRCodeECBlocks release];
+  [ecBlocks release];
   [super dealloc];
 }
 
@@ -110,7 +110,7 @@ int const VERSION_DECODE_INFO[34] = {
     alignmentPatternCenters = anAlignmentPatternCenters;
     ecBlocks = [[NSArray alloc] initWithObjects:ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4, nil];
     int total = 0;
-    int ecCodewords = [ecBlocks1 eCCodewordsPerBlock];
+    int ecCodewords = ecBlocks1.ecCodewordsPerBlock;
 
     for (QRCodeECB *ecBlock in [ecBlocks1 ecBlocks]) {
       total += [ecBlock count] * ([ecBlock dataCodewords] + ecCodewords);
@@ -521,7 +521,7 @@ int const VERSION_DECODE_INFO[34] = {
 
 - (void) dealloc {
   [alignmentPatternCenters release];
-  [QRCodeECBlocks release];
+  [ecBlocks release];
   [super dealloc];
 }
 

@@ -15,7 +15,7 @@
 + (void) terminateBits:(int)numDataBytes bits:(BitArray *)bits;
 + (void) getNumDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock;
 + (void) interleaveWithECBytes:(BitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks result:(BitArray *)result;
-+ (char *) generateECBytes:(char *)dataBytes numEcBytesInBlock:(int)numEcBytesInBlock;
++ (char *) generateECBytes:(char *)dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock;
 + (void) appendModeInfo:(Mode *)mode bits:(BitArray *)bits;
 + (void) appendLengthInfo:(int)numLetters version:(int)version mode:(Mode *)mode bits:(BitArray *)bits;
 + (void) appendBytes:(NSString *)content mode:(Mode *)mode bits:(BitArray *)bits encoding:(NSStringEncoding)encoding;

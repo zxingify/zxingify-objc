@@ -7,6 +7,7 @@
 
 @interface BitArray : NSObject {
   int* bits;
+  int bitsSize;
   int size;
 }
 

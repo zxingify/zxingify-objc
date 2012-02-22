@@ -21,6 +21,7 @@
   int height;
   int rowSize;
   int *bits;
+  int bitsSize;
 }
 
 @property(nonatomic, retain, readonly) NSArray * topLeftOnBit;

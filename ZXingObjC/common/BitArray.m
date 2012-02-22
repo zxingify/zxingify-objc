@@ -16,7 +16,8 @@
 - (id) init {
   if (self = [super init]) {
     self.size = 0;
-    bits = malloc(1);
+    bits = malloc(1 * sizeof(int));
+    bitsSize = 1;
     bits[0] = 0;
   }
   return self;
@@ -35,15 +36,16 @@
 }
 
 - (void) ensureCapacity:(int)aSize {
-  if (aSize > self.size << 5) {
+  if (aSize > bitsSize << 5) {
     int* newBits = [self makeArray:aSize];
     
-    for (int i = 0; i < self.size; i++) {
+    for (int i = 0; i < bitsSize; i++) {
       newBits[i] = bits[i];
     }
 
     free(bits);
     bits = newBits;
+    bitsSize = (aSize + 31) >> 5;
   }
 }
 
@@ -168,7 +170,6 @@
   for (int numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
     [self appendBit:((value >> (numBitsLeft - 1)) & 0x01) == 1];
   }
-
 }
 
 - (void) appendBitArray:(BitArray *)other {
@@ -205,20 +206,16 @@
  * @param numBytes how many bytes to write
  */
 - (void) toBytes:(int)bitOffset array:(char *)array offset:(int)offset numBytes:(int)numBytes {
-
   for (int i = 0; i < numBytes; i++) {
     int theByte = 0;
-
     for (int j = 0; j < 8; j++) {
       if ([self get:bitOffset]) {
         theByte |= 1 << (7 - j);
       }
       bitOffset++;
     }
-
     array[offset + i] = (char)theByte;
   }
-
 }
 
 /**
@@ -226,13 +223,12 @@
  */
 - (void) reverse {
   int newBits[self.size];
-
   for (int i = 0; i < size; i++) {
+    newBits[i] = 0;
     if ([self get:size - i - 1]) {
       newBits[i >> 5] |= 1 << (i & 0x1F);
     }
   }
-
   bits = newBits;
 }
 
@@ -254,7 +250,7 @@
 }
 
 - (void) dealloc {
-  free(bits);
+//  free(bits);
   [super dealloc];
 }
 

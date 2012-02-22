@@ -311,7 +311,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     int size = numDataBytesInBlock[0];
     char dataBytes[size];
     [bits toBytes:8 * dataBytesOffset array:dataBytes offset:0 numBytes:size];
-    char *ecBytes = [self generateECBytes:(char*)dataBytes numEcBytesInBlock:numEcBytesInBlock[0]];
+    char *ecBytes = [self generateECBytes:dataBytes numDataBytes:size numEcBytesInBlock:numEcBytesInBlock[0]];
     [blocks addObject:[[[BlockPair alloc] initWithData:(char*)dataBytes errorCorrection:ecBytes] autorelease]];
 
     maxNumDataBytes = MAX(maxNumDataBytes, size);
@@ -348,8 +348,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
 }
 
-+ (char*) generateECBytes:(char[])dataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
-  int numDataBytes = sizeof((char*)dataBytes) / sizeof(char);
++ (char*) generateECBytes:(char[])dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
   NSMutableArray * toEncode = [NSMutableArray arrayWithCapacity:numDataBytes + numEcBytesInBlock];
   for (int i = 0; i < numDataBytes; i++) {
     [toEncode addObject:[NSNumber numberWithInt:dataBytes[i] & 0xFF]];
@@ -451,9 +450,10 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 }
 
 + (void) append8BitBytes:(NSString *)content bits:(BitArray *)bits encoding:(NSStringEncoding)encoding {
-  char * bytes = (char*)[[content dataUsingEncoding:encoding] bytes];
+  NSData *data = [content dataUsingEncoding:encoding];
+  char * bytes = (char*)[data bytes];
 
-  for (int i = 0; i < sizeof(bytes) / sizeof(char); ++i) {
+  for (int i = 0; i < [data length]; ++i) {
     [bits appendBits:bytes[i] numBits:8];
   }
 }

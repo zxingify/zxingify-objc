@@ -31,7 +31,7 @@
 }
 
 - (ResultPoint *)toResultPoint {
-  return [[ResultPoint alloc] initWithX:x y:y];
+  return [[[ResultPoint alloc] initWithX:x y:y] autorelease];
 }
 
 @end

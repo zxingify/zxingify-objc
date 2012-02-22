@@ -47,9 +47,12 @@ int const INITIALIZATION_THRESHOLD = 0;
     }
   }
 
+  for (int i = 0; i < size; i++) {
+    [logTable addObject:[NSNull null]];
+  }
 
   for (int i = 0; i < size - 1; i++) {
-    [logTable insertObject:[NSNumber numberWithInt:i] atIndex:[[expTable objectAtIndex:i] intValue]];
+    [logTable replaceObjectAtIndex:[[expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
   }
 
   zero = [[[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]] autorelease];
@@ -58,27 +61,51 @@ int const INITIALIZATION_THRESHOLD = 0;
 }
 
 + (GenericGF *)AztecData12 {
-  return [[[GenericGF alloc] initWithPrimitive:0x1069 size:4096] autorelease];
+  static GenericGF *AztecData12 = nil;
+  if (!AztecData12) {
+    AztecData12 = [[GenericGF alloc] initWithPrimitive:0x1069 size:4096];
+  }
+  return AztecData12;
 }
 
 + (GenericGF *)AztecData10 {
-  return [[[GenericGF alloc] initWithPrimitive:0x409 size:1024] autorelease];
+  static GenericGF *AztecData10 = nil;
+  if (!AztecData10) {
+    AztecData10 = [[GenericGF alloc] initWithPrimitive:0x409 size:1024];
+  }
+  return AztecData10;
 }
 
 + (GenericGF *)AztecData6 {
-  return [[[GenericGF alloc] initWithPrimitive:0x43 size:64] autorelease];
+  static GenericGF *AztecData6 = nil;
+  if (!AztecData6) {
+    AztecData6 = [[GenericGF alloc] initWithPrimitive:0x43 size:64];
+  }
+  return AztecData6;
 }
 
 + (GenericGF *)AztecDataParam {
-  return [[[GenericGF alloc] initWithPrimitive:0x13 size:16] autorelease];
+  static GenericGF *AztecDataParam = nil;
+  if (!AztecDataParam) {
+    AztecDataParam = [[GenericGF alloc] initWithPrimitive:0x13 size:16];
+  }
+  return AztecDataParam;
 }
 
 + (GenericGF *)QrCodeField256 {
-  return [[[GenericGF alloc] initWithPrimitive:0x011D size:256] autorelease];
+  static GenericGF *QrCodeField256 = nil;
+  if (!QrCodeField256) {
+    QrCodeField256 = [[GenericGF alloc] initWithPrimitive:0x011D size:256];
+  }
+  return QrCodeField256;
 }
 
 + (GenericGF *)DataMatrixField256 {
-  return [[[GenericGF alloc] initWithPrimitive:0x012D size:256] autorelease];
+  static GenericGF *DataMatrixField256 = nil;
+  if (!DataMatrixField256) {
+    DataMatrixField256 = [[GenericGF alloc] initWithPrimitive:0x012D size:256];
+  }
+  return DataMatrixField256;
 }
 
 + (GenericGF *)AztecData8 {
