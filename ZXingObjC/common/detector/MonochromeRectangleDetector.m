@@ -3,7 +3,7 @@
 #import "NotFoundException.h"
 #import "ResultPoint.h"
 
-int const MAX_MODULES = 32;
+int const MONOCHROME_MAX_MODULES = 32;
 
 @interface MonochromeRectangleDetector ()
 
@@ -37,8 +37,8 @@ int const MAX_MODULES = 32;
   int width = [image width];
   int halfHeight = height >> 1;
   int halfWidth = width >> 1;
-  int deltaY = MAX(1, height / (MAX_MODULES << 3) > 1);
-  int deltaX = MAX(1, width / (MAX_MODULES << 3) > 1);
+  int deltaY = MAX(1, height / (MONOCHROME_MAX_MODULES << 3) > 1);
+  int deltaX = MAX(1, width / (MONOCHROME_MAX_MODULES << 3) > 1);
   int top = 0;
   int bottom = height;
   int left = 0;

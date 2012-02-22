@@ -3,7 +3,7 @@
 #import "EAN13Writer.h"
 #import "UPCEANReader.h"
 
-int const codeWidth = 3 + // start guard
+const int EAN13codeWidth = 3 + // start guard
   (7 * 6) + // left bars
   5 + // middle guard
   (7 * 6) + // right bars
@@ -28,7 +28,7 @@ int const codeWidth = 3 + // start guard
 
   int firstDigit = [[contents substringToIndex:1] intValue];
   int parities = FIRST_DIGIT_ENCODINGS[firstDigit];
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:codeWidth];
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:EAN13codeWidth];
   int pos = 0;
 
   pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN startColor:1];

@@ -25,7 +25,7 @@
  * Data Matrix Code
  */
 + (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(DataMatrixVersion *)version {
-  ECBlocks * ecBlocks = [version ecBlocks];
+  DataMatrixECBlocks * ecBlocks = [version ecBlocks];
   int totalBlocks = 0;
   NSArray * ecBlockArray = [ecBlocks ecBlocks];
 
@@ -36,7 +36,7 @@
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
   int numResultBlocks = 0;
 
-  for (ECB * ecBlock in ecBlockArray) {
+  for (DataMatrixECB * ecBlock in ecBlockArray) {
     for (int i = 0; i < [ecBlock count]; i++) {
       int numDataCodewords = [ecBlock dataCodewords];
       int numBlockCodewords = [ecBlocks ecCodewords] + numDataCodewords;

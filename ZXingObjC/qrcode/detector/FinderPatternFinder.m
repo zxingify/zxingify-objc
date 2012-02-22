@@ -9,8 +9,8 @@
 #import "ResultPointCallback.h"
 
 int const CENTER_QUORUM = 2;
-int const MIN_SKIP = 3;
-int const MAX_MODULES = 57;
+int const FINDER_PATTERN_MIN_SKIP = 3;
+int const FINDER_PATTERN_MAX_MODULES = 57;
 
 @interface FinderPatternFinder ()
 
@@ -52,9 +52,9 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
   int maxI = [image height];
   int maxJ = [image width];
-  int iSkip = (3 * maxI) / (4 * MAX_MODULES);
-  if (iSkip < MIN_SKIP || tryHarder) {
-    iSkip = MIN_SKIP;
+  int iSkip = (3 * maxI) / (4 * FINDER_PATTERN_MAX_MODULES);
+  if (iSkip < FINDER_PATTERN_MIN_SKIP || tryHarder) {
+    iSkip = FINDER_PATTERN_MIN_SKIP;
   }
 
   BOOL done = NO;

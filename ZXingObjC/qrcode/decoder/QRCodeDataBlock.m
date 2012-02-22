@@ -31,7 +31,7 @@
     [NSException raise:NSInvalidArgumentException format:@"Invalid codewords count"];
   }
 
-  ECBlocks * ecBlocks = [version getECBlocksForLevel:ecLevel];
+  QRCodeECBlocks * ecBlocks = [version getECBlocksForLevel:ecLevel];
 
   int totalBlocks = 0;
   NSArray * ecBlockArray = [ecBlocks ecBlocks];
@@ -40,7 +40,7 @@
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
-  for (ECB *ecBlock in ecBlockArray) {
+  for (QRCodeECB *ecBlock in ecBlockArray) {
     for (int i = 0; i < [ecBlock count]; i++) {
       int numDataCodewords = [ecBlock dataCodewords];
       int numBlockCodewords = [ecBlocks eCCodewordsPerBlock] + numDataCodewords;

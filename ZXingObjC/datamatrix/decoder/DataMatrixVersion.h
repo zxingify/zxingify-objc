@@ -5,7 +5,7 @@
  * will be the same across all blocks within one version.</p>
  */
 
-@interface ECBlocks : NSObject {
+@interface DataMatrixECBlocks : NSObject {
   int ecCodewords;
   NSArray * ecBlocks;
 }
@@ -21,7 +21,7 @@
  * parameters is used consecutively in the Data Matrix code version's format.</p>
  */
 
-@interface ECB : NSObject {
+@interface DataMatrixECB : NSObject {
   int count;
   int dataCodewords;
 }
@@ -44,7 +44,7 @@
   int symbolSizeColumns;
   int dataRegionSizeRows;
   int dataRegionSizeColumns;
-  ECBlocks * ecBlocks;
+  DataMatrixECBlocks * ecBlocks;
   int totalCodewords;
 }
 
@@ -54,7 +54,7 @@
 @property(nonatomic, readonly) int dataRegionSizeRows;
 @property(nonatomic, readonly) int dataRegionSizeColumns;
 @property(nonatomic, readonly) int totalCodewords;
-@property(nonatomic, readonly) ECBlocks * ecBlocks;
+@property(nonatomic, readonly) DataMatrixECBlocks * ecBlocks;
 
 + (DataMatrixVersion *) getVersionForDimensions:(int)numRows numColumns:(int)numColumns;
 

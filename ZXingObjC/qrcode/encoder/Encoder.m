@@ -203,7 +203,7 @@ NSString * const DEFAULT_BYTE_MODE_ENCODING = @"ISO-8859-1";
   for (int versionNum = 1; versionNum <= 40; versionNum++) {
     QRCodeVersion * version = [QRCodeVersion getVersionForNumber:versionNum];
     int numBytes = [version totalCodewords];
-    ECBlocks * ecBlocks = [version getECBlocksForLevel:ecLevel];
+    QRCodeECBlocks * ecBlocks = [version getECBlocksForLevel:ecLevel];
     int numEcBytes = [ecBlocks totalECCodewords];
     int numRSBlocks = [ecBlocks numBlocks];
     int numDataBytes = numBytes - numEcBytes;

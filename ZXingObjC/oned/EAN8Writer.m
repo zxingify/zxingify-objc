@@ -2,7 +2,7 @@
 #import "EAN8Writer.h"
 #import "UPCEANReader.h"
 
-int const codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
+int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
 @implementation EAN8Writer
 
@@ -22,7 +22,7 @@ int const codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", [contents length]];
   }
 
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:codeWidth];
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:EAN8codeWidth];
   int pos = 0;
 
   pos += [UPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN startColor:1];

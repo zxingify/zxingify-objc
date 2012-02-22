@@ -7,8 +7,8 @@
  * @author Sean Owen
  */
 
-extern int const MIN_SKIP;
-extern int const MAX_MODULES;
+extern int const FINDER_PATTERN_MIN_SKIP;
+extern int const FINDER_PATTERN_MAX_MODULES;
 
 @class BitMatrix, FinderPatternInfo;
 @protocol ResultPointCallback;

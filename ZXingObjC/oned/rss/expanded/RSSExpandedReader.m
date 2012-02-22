@@ -10,7 +10,7 @@ const int SYMBOL_WIDEST[5] = {7, 5, 4, 3, 1};
 const int EVEN_TOTAL_SUBSET[5] = {4, 20, 52, 104, 204};
 const int GSUM[5] = {0, 348, 1388, 2948, 3988};
 
-const int FINDER_PATTERNS[6][4] = {
+const int RSS_EXPANDED_FINDER_PATTERNS[6][4] = {
   {1,8,4,1}, // A
   {3,6,4,1}, // B
   {3,4,6,1}, // C
@@ -339,7 +339,7 @@ const int MAX_PAIRS = 11;
   int value;
 
   @try {
-    value = [AbstractRSSReader parseFinderValue:counters finderPatterns:(int **)FINDER_PATTERNS];
+    value = [AbstractRSSReader parseFinderValue:counters finderPatterns:(int **)RSS_EXPANDED_FINDER_PATTERNS];
   }
   @catch (NotFoundException * nfe) {
     return nil;

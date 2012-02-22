@@ -12,7 +12,7 @@ int const MACRO_PDF417_TERMINATOR = 922;
 int const MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
 int const MAX_NUMERIC_CODEWORDS = 15;
 
-int const ALPHA = 0;
+int const PDF417_ALPHA = 0;
 int const LOWER = 1;
 int const MIXED = 2;
 int const PUNCT = 3;
@@ -177,14 +177,14 @@ NSString* const EXP900[16] =
  * @param result             The decoded data is appended to the result.
  */
 + (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(int)length result:(NSMutableString *)result {
-  int subMode = ALPHA;
-  int priorToShiftMode = ALPHA;
+  int subMode = PDF417_ALPHA;
+  int priorToShiftMode = PDF417_ALPHA;
   int i = 0;
   while (i < length) {
     int subModeCh = textCompactionData[i];
     unichar ch = 0;
     switch (subMode) {
-    case ALPHA:
+    case PDF417_ALPHA:
       if (subModeCh < 26) {
         ch = (unichar)('A' + subModeCh);
       } else {
@@ -232,7 +232,7 @@ NSString* const EXP900[16] =
         } else if (subModeCh == LL) {
           subMode = LOWER;
         } else if (subModeCh == AL) {
-          subMode = ALPHA;
+          subMode = PDF417_ALPHA;
         } else if (subModeCh == PS) {
           priorToShiftMode = subMode;
           subMode = PUNCT_SHIFT;
@@ -246,7 +246,7 @@ NSString* const EXP900[16] =
         ch = PUNCT_CHARS[subModeCh];
       } else {
         if (subModeCh == PAL) {
-          subMode = ALPHA;
+          subMode = PDF417_ALPHA;
         } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
           [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
         }
@@ -269,7 +269,7 @@ NSString* const EXP900[16] =
         ch = PUNCT_CHARS[subModeCh];
       } else {
         if (subModeCh == PAL) {
-          subMode = ALPHA;
+          subMode = PDF417_ALPHA;
         }
       }
       break;

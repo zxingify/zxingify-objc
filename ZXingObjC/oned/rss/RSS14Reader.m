@@ -13,7 +13,7 @@ const int INSIDE_GSUM[4] = {0,336,1036,1516};
 const int OUTSIDE_ODD_WIDEST[5] = {8,6,4,3,1};
 const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
-const int FINDER_PATTERNS[9][4] = {
+const int RSS14_FINDER_PATTERNS[9][4] = {
   {3,8,2,1},
   {3,5,5,1},
   {3,3,7,1},
@@ -322,7 +322,7 @@ const int FINDER_PATTERNS[9][4] = {
     counters[i] = counters[i-1];
   }
   counters[0] = firstCounter;
-  int value = [AbstractRSSReader parseFinderValue:counters finderPatterns:(int**)FINDER_PATTERNS];
+  int value = [AbstractRSSReader parseFinderValue:counters finderPatterns:(int**)RSS14_FINDER_PATTERNS];
   int start = firstElementStart;
   int end = [[startEnd objectAtIndex:1] intValue];
   if (right) {

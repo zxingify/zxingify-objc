@@ -513,6 +513,9 @@
 		250830361512B1E6006D79E6 /* QRCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830341512B1E6006D79E6 /* QRCodeBitMatrixParser.h */; };
 		250830371512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */; };
 		250830381512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */; };
+		250830461512B2D9006D79E6 /* QRCodeVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830441512B2D8006D79E6 /* QRCodeVersion.h */; };
+		250830471512B2D9006D79E6 /* QRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* QRCodeVersion.m */; };
+		250830481512B2D9006D79E6 /* QRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* QRCodeVersion.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -874,6 +877,8 @@
 		2508302D1512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDF417DecodedBitStreamParser.m; sourceTree = "<group>"; };
 		250830341512B1E6006D79E6 /* QRCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBitMatrixParser.h; sourceTree = "<group>"; };
 		250830351512B1E6006D79E6 /* QRCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBitMatrixParser.m; sourceTree = "<group>"; };
+		250830441512B2D8006D79E6 /* QRCodeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeVersion.h; sourceTree = "<group>"; };
+		250830451512B2D9006D79E6 /* QRCodeVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeVersion.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1364,6 +1369,8 @@
 				250830181512B135006D79E6 /* QRCodeDecodedBitStreamParser.m */,
 				029BD0EF1512A0DA009E6549 /* QRCodeDecoder.h */,
 				029BD0F01512A0DB009E6549 /* QRCodeDecoder.m */,
+				250830441512B2D8006D79E6 /* QRCodeVersion.h */,
+				250830451512B2D9006D79E6 /* QRCodeVersion.m */,
 			);
 			path = decoder;
 			sourceTree = "<group>";
@@ -1689,6 +1696,7 @@
 				2508302E1512B1D7006D79E6 /* PDF417BitMatrixParser.h in Headers */,
 				250830311512B1D7006D79E6 /* PDF417DecodedBitStreamParser.h in Headers */,
 				250830361512B1E6006D79E6 /* QRCodeBitMatrixParser.h in Headers */,
+				250830461512B2D9006D79E6 /* QRCodeVersion.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1955,6 +1963,7 @@
 				2508302F1512B1D7006D79E6 /* PDF417BitMatrixParser.m in Sources */,
 				250830321512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m in Sources */,
 				250830371512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */,
+				250830471512B2D9006D79E6 /* QRCodeVersion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2125,6 +2134,7 @@
 				250830301512B1D7006D79E6 /* PDF417BitMatrixParser.m in Sources */,
 				250830331512B1D7006D79E6 /* PDF417DecodedBitStreamParser.m in Sources */,
 				250830381512B1E6006D79E6 /* QRCodeBitMatrixParser.m in Sources */,
+				250830481512B2D9006D79E6 /* QRCodeVersion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

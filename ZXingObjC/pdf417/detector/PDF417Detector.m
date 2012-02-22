@@ -12,7 +12,7 @@ int const SKEW_THRESHOLD = 2;
 
 // B S B S B S B S Bar/Space pattern
 // 11111111 0 1 0 1 0 1 000
-int const START_PATTERN[8] = {8, 1, 1, 1, 1, 1, 1, 3};
+int const PDF417_START_PATTERN[8] = {8, 1, 1, 1, 1, 1, 1, 3};
 
 // 11111111 0 1 0 1 0 1 000
 int const START_PATTERN_REVERSE[8] = {3, 1, 1, 1, 1, 1, 1, 8};
@@ -124,7 +124,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
   // Top Left
   for (int i = 0; i < height; i++) {
-    NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)START_PATTERN];
+    NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN];
     if (loc != nil) {
       [result replaceObjectAtIndex:0
                         withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
@@ -138,7 +138,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Top Left vertex
     found = NO;
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)START_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN];
       if (loc != nil) {
         [result replaceObjectAtIndex:1
                           withObject:[[[ResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];

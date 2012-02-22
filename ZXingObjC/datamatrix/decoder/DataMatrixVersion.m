@@ -1,11 +1,11 @@
 #import "DataMatrixVersion.h"
 #import "FormatException.h"
 
-@implementation ECBlocks
+@implementation DataMatrixECBlocks
 
 @synthesize ecCodewords, ecBlocks;
 
-- (id) initWithCodewords:(int)theEcCodewords ecBlocks:(ECB *)theEcBlocks {
+- (id) initWithCodewords:(int)theEcCodewords ecBlocks:(DataMatrixECB *)theEcBlocks {
   if (self = [super init]) {
     ecCodewords = theEcCodewords;
     ecBlocks = [NSArray arrayWithObjects:theEcBlocks, nil];
@@ -13,7 +13,7 @@
   return self;
 }
 
-- (id) initWithCodewords:(int)theEcCodewords ecBlocks1:(ECB *)ecBlocks1 ecBlocks2:(ECB *)ecBlocks2 {
+- (id) initWithCodewords:(int)theEcCodewords ecBlocks1:(DataMatrixECB *)ecBlocks1 ecBlocks2:(DataMatrixECB *)ecBlocks2 {
   if (self = [super init]) {
     ecCodewords = theEcCodewords;
     ecBlocks = [NSArray arrayWithObjects:ecBlocks1, ecBlocks2, nil];
@@ -29,7 +29,7 @@
 @end
 
 
-@implementation ECB
+@implementation DataMatrixECB
 
 @synthesize count, dataCodewords;
 
@@ -59,7 +59,7 @@
 @synthesize dataRegionSizeColumns;
 @synthesize totalCodewords;
 
-- (id) initWithVersionNumber:(int)aVersionNumber symbolSizeRows:(int)theSymbolSizeRows symbolSizeColumns:(int)theSymbolSizeColumns dataRegionSizeRows:(int)theDataRegionSizeRows dataRegionSizeColumns:(int)theDataRegionSizeColumns ecBlocks:(ECBlocks *)anEcBlocks {
+- (id) initWithVersionNumber:(int)aVersionNumber symbolSizeRows:(int)theSymbolSizeRows symbolSizeColumns:(int)theSymbolSizeColumns dataRegionSizeRows:(int)theDataRegionSizeRows dataRegionSizeColumns:(int)theDataRegionSizeColumns ecBlocks:(DataMatrixECBlocks *)anEcBlocks {
   if (self = [super init]) {
     versionNumber = aVersionNumber;
     symbolSizeRows = theSymbolSizeRows;
@@ -71,7 +71,7 @@
     int ecCodewords = ecBlocks.ecCodewords;
     NSArray * ecbArray = ecBlocks.ecBlocks;
 
-    for (ECB *ecBlock in ecbArray) {
+    for (DataMatrixECB *ecBlock in ecbArray) {
       total += [ecBlock count] * ([ecBlock dataCodewords] + ecCodewords);
     }
 
@@ -125,8 +125,8 @@
                                          dataRegionSizeRows:8
                                       dataRegionSizeColumns:8
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:5
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:5
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:3] autorelease]] autorelease]] autorelease],
 
           [[[DataMatrixVersion alloc] initWithVersionNumber:2
@@ -135,8 +135,8 @@
                                          dataRegionSizeRows:10
                                       dataRegionSizeColumns:10
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:7
-                                          ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:7
+                                          ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                  dataCodewords:5] autorelease]] autorelease]] autorelease],
 
           [[[DataMatrixVersion alloc] initWithVersionNumber:3
@@ -145,8 +145,8 @@
                                          dataRegionSizeRows:12
                                       dataRegionSizeColumns:12
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:10
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:10
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:8] autorelease]] autorelease]] autorelease],
 
           [[[DataMatrixVersion alloc] initWithVersionNumber:4
@@ -155,8 +155,8 @@
                                          dataRegionSizeRows:14
                                       dataRegionSizeColumns:14
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:12
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:12
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:12] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:5
@@ -165,8 +165,8 @@
                                          dataRegionSizeRows:16
                                       dataRegionSizeColumns:16
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:14
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:14
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:18] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:6
@@ -175,8 +175,8 @@
                                          dataRegionSizeRows:18
                                       dataRegionSizeColumns:18
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:18
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:18
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:22] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:7
@@ -185,8 +185,8 @@
                                          dataRegionSizeRows:20
                                       dataRegionSizeColumns:20
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:20
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:20
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:30] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:8
@@ -195,8 +195,8 @@
                                          dataRegionSizeRows:22
                                       dataRegionSizeColumns:22
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:24
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:24
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:36] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:9
@@ -205,8 +205,8 @@
                                          dataRegionSizeRows:24
                                       dataRegionSizeColumns:24
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:28
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:28
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:44] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:10
@@ -215,8 +215,8 @@
                                          dataRegionSizeRows:14
                                       dataRegionSizeColumns:14
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:36
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:36
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:62] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:11
@@ -225,8 +225,8 @@
                                          dataRegionSizeRows:16
                                       dataRegionSizeColumns:16
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:42
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:42
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:86] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:12
@@ -235,8 +235,8 @@
                                          dataRegionSizeRows:18
                                       dataRegionSizeColumns:18
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:48
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:48
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:114] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:13
@@ -245,8 +245,8 @@
                                          dataRegionSizeRows:20
                                       dataRegionSizeColumns:20
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:56
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:144] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:14
@@ -255,8 +255,8 @@
                                          dataRegionSizeRows:22
                                       dataRegionSizeColumns:22
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:68
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:68
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:174] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:15
@@ -265,8 +265,8 @@
                                          dataRegionSizeRows:24
                                       dataRegionSizeColumns:24
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:42
-                                        ecBlocks:[[[ECB alloc] initWithCount:2
+            [[[DataMatrixECBlocks alloc] initWithCodewords:42
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:2
                                                                dataCodewords:102] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:16
@@ -275,8 +275,8 @@
                                          dataRegionSizeRows:14
                                       dataRegionSizeColumns:14
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:56
-                                        ecBlocks:[[[ECB alloc] initWithCount:2
+            [[[DataMatrixECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:2
                                                                dataCodewords:140] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:17
@@ -285,8 +285,8 @@
                                          dataRegionSizeRows:16
                                       dataRegionSizeColumns:16
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:36
-                                        ecBlocks:[[[ECB alloc] initWithCount:4
+            [[[DataMatrixECBlocks alloc] initWithCodewords:36
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:4
                                                                dataCodewords:92] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:18
@@ -295,8 +295,8 @@
                                          dataRegionSizeRows:18
                                       dataRegionSizeColumns:18
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:48
-                                        ecBlocks:[[[ECB alloc] initWithCount:4
+            [[[DataMatrixECBlocks alloc] initWithCodewords:48
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:4
                                                                dataCodewords:114] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:19
@@ -305,8 +305,8 @@
                                          dataRegionSizeRows:20
                                       dataRegionSizeColumns:20
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:56
-                                        ecBlocks:[[[ECB alloc] initWithCount:4
+            [[[DataMatrixECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:4
                                                                dataCodewords:144] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:20
@@ -315,8 +315,8 @@
                                          dataRegionSizeRows:22
                                       dataRegionSizeColumns:22
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:68
-                                        ecBlocks:[[[ECB alloc] initWithCount:4
+            [[[DataMatrixECBlocks alloc] initWithCodewords:68
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:4
                                                                dataCodewords:174] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:21
@@ -325,8 +325,8 @@
                                          dataRegionSizeRows:24
                                       dataRegionSizeColumns:24
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:56
-                                        ecBlocks:[[[ECB alloc] initWithCount:6
+            [[[DataMatrixECBlocks alloc] initWithCodewords:56
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:6
                                                                dataCodewords:136] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:22
@@ -335,8 +335,8 @@
                                          dataRegionSizeRows:18
                                       dataRegionSizeColumns:18
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:68
-                                        ecBlocks:[[[ECB alloc] initWithCount:6
+            [[[DataMatrixECBlocks alloc] initWithCodewords:68
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:6
                                                                dataCodewords:175] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:23
@@ -345,8 +345,8 @@
                                          dataRegionSizeRows:20
                                       dataRegionSizeColumns:20
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:62
-                                        ecBlocks:[[[ECB alloc] initWithCount:8
+            [[[DataMatrixECBlocks alloc] initWithCodewords:62
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:8
                                                                dataCodewords:163] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:24
@@ -355,10 +355,10 @@
                                          dataRegionSizeRows:22
                                       dataRegionSizeColumns:22
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:62
-                                       ecBlocks1:[[[ECB alloc] initWithCount:8
+            [[[DataMatrixECBlocks alloc] initWithCodewords:62
+                                       ecBlocks1:[[[DataMatrixECB alloc] initWithCount:8
                                                                dataCodewords:156] autorelease]
-                                       ecBlocks2:[[[ECB alloc] initWithCount:2
+                                       ecBlocks2:[[[DataMatrixECB alloc] initWithCount:2
                                                                dataCodewords:155] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:25
@@ -367,8 +367,8 @@
                                          dataRegionSizeRows:6
                                       dataRegionSizeColumns:16
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:7
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:7
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:5] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:26
@@ -377,8 +377,8 @@
                                          dataRegionSizeRows:6
                                       dataRegionSizeColumns:14
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:11
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:11
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:10] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:27
@@ -387,8 +387,8 @@
                                          dataRegionSizeRows:10
                                       dataRegionSizeColumns:24
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:14
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:14
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:16] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:28
@@ -397,8 +397,8 @@
                                          dataRegionSizeRows:10
                                       dataRegionSizeColumns:16
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:18
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:18
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:22] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:29
@@ -407,8 +407,8 @@
                                          dataRegionSizeRows:14
                                       dataRegionSizeColumns:16
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:24
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:24
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:32] autorelease]] autorelease]] autorelease],
           
           [[[DataMatrixVersion alloc] initWithVersionNumber:30
@@ -417,8 +417,8 @@
                                          dataRegionSizeRows:14
                                       dataRegionSizeColumns:22
                                                    ecBlocks:
-            [[[ECBlocks alloc] initWithCodewords:28
-                                        ecBlocks:[[[ECB alloc] initWithCount:1
+            [[[DataMatrixECBlocks alloc] initWithCodewords:28
+                                        ecBlocks:[[[DataMatrixECB alloc] initWithCount:1
                                                                dataCodewords:49] autorelease]] autorelease]] autorelease],
           
            nil];

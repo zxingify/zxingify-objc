@@ -19,7 +19,7 @@ int const DEFAULT_ALLOWED_LENGTHS[9] = { 6, 8, 10, 12, 14, 16, 20, 24, 44 };
  * Note: The end pattern is reversed because the row is reversed before
  * searching for the END_PATTERN
  */
-int const START_PATTERN[4] = {N, N, N, N};
+int const ITF_START_PATTERN[4] = {N, N, N, N};
 int const END_PATTERN_REVERSED[3] = {N, N, W};
 
 /**
@@ -138,7 +138,7 @@ int const PATTERNS[10][5] = {
  */
 - (NSArray *) decodeStart:(BitArray *)row {
   int endStart = [self skipWhiteSpace:row];
-  NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)START_PATTERN];
+  NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)ITF_START_PATTERN];
 
   narrowLineWidth = ([[startPattern objectAtIndex:1] intValue] - [[startPattern objectAtIndex:0] intValue]) >> 2;
 

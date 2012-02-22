@@ -3,9 +3,9 @@
 #import "GeneralAppIdDecoder.h"
 #import "NotFoundException.h"
 
-int const headerSize = 7 + 1;
-int const weightSize = 20;
-int const dateSize = 16;
+int const AI013x0x1xHeaderSize = 7 + 1;
+int const AI013x0x1xWeightSize = 20;
+int const AI013x0x1xDateSize = 16;
 
 @interface AI013x0x1xDecoder ()
 
@@ -24,18 +24,18 @@ int const dateSize = 16;
 }
 
 - (NSString *) parseInformation {
-  if (information.size != headerSize + gtinSize + weightSize + dateSize) {
+  if (information.size != AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize + AI013x0x1xDateSize) {
     @throw [NotFoundException notFoundInstance];
   }
   NSMutableString * buf = [NSMutableString string];
-  [self encodeCompressedGtin:buf currentPos:headerSize];
-  [self encodeCompressedWeight:buf currentPos:headerSize + gtinSize weightSize:weightSize];
-  [self encodeCompressedDate:buf currentPos:headerSize + gtinSize + weightSize];
+  [self encodeCompressedGtin:buf currentPos:AI013x0x1xHeaderSize];
+  [self encodeCompressedWeight:buf currentPos:AI013x0x1xHeaderSize + gtinSize weightSize:AI013x0x1xWeightSize];
+  [self encodeCompressedDate:buf currentPos:AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize];
   return [buf description];
 }
 
 - (void) encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos {
-  int numericDate = [generalDecoder extractNumericValueFromBitArray:currentPos bits:dateSize];
+  int numericDate = [generalDecoder extractNumericValueFromBitArray:currentPos bits:AI013x0x1xDateSize];
   if (numericDate == 38400) {
     return;
   }
