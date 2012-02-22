@@ -19,8 +19,8 @@
 + (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
 + (NSArray *) maybeWrap:(NSString *)value;
 + (NSString *) unescapeBackslash:(NSString *)escaped;
-+ (BOOL) isStringOfDigits:(NSString *)value length:(int)length;
-+ (BOOL) isSubstringOfDigits:(NSString *)value offset:(int)offset length:(int)length;
++ (BOOL) isStringOfDigits:(NSString *)value length:(unsigned int)length;
++ (BOOL) isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length;
 + (NSMutableDictionary *) parseNameValuePairs:(NSString *)uri;
 + (NSArray *) matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSString *) matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;

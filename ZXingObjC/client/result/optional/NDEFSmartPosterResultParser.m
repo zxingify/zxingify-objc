@@ -8,7 +8,7 @@
 @implementation NDEFSmartPosterResultParser
 
 + (NDEFSmartPosterParsedResult *) parse:(Result *)result {
-  char * bytes = [result rawBytes];
+  unsigned char * bytes = [result rawBytes];
   if (bytes == nil) {
     return nil;
   }
@@ -23,22 +23,22 @@
   int offset = 0;
   int recordNumber = 0;
   NDEFRecord * ndefRecord = nil;
-  char * payload = [headerRecord payload];
+  unsigned char * payload = [headerRecord payload];
   int action = ACTION_UNSPECIFIED;
   NSString * title = nil;
   NSString * uri = nil;
 
-  while (offset < sizeof(payload) / sizeof(char) && (ndefRecord = [NDEFRecord readRecord:payload offset:offset]) != nil) {
+  while (offset < [headerRecord payloadLength] && (ndefRecord = [NDEFRecord readRecord:payload offset:offset]) != nil) {
     if (recordNumber == 0 && ![ndefRecord messageBegin]) {
       return nil;
     }
 
     NSString * type = [ndefRecord type];
     if ([TEXT_WELL_KNOWN_TYPE isEqualToString:type]) {
-      NSArray * languageText = [NDEFTextResultParser decodeTextPayload:[ndefRecord payload]];
+      NSArray * languageText = [NDEFTextResultParser decodeTextPayload:[ndefRecord payload] length:[ndefRecord payloadLength]];
       title = [languageText objectAtIndex:1];
     } else if ([URI_WELL_KNOWN_TYPE isEqualToString:type]) {
-      uri = [NDEFURIResultParser decodeURIPayload:[ndefRecord payload]];
+      uri = [NDEFURIResultParser decodeURIPayload:[ndefRecord payload] length:[ndefRecord payloadLength]];
     } else if ([ACTION_WELL_KNOWN_TYPE isEqualToString:type]) {
       action = [ndefRecord payload][0];
     }

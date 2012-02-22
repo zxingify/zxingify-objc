@@ -81,7 +81,7 @@
     totalBytes += dataBlock.numDataCodewords;
   }
 
-  char resultBytes[totalBytes];
+  unsigned char resultBytes[totalBytes];
   int resultOffset = 0;
 
   for (QRCodeDataBlock *dataBlock in dataBlocks) {
@@ -93,7 +93,7 @@
     }
   }
 
-  return [QRCodeDecodedBitStreamParser decode:resultBytes version:version ecLevel:ecLevel hints:hints];
+  return [QRCodeDecodedBitStreamParser decode:resultBytes length:totalBytes version:version ecLevel:ecLevel hints:hints];
 }
 
 

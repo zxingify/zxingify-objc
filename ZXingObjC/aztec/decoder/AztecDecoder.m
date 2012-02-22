@@ -65,7 +65,7 @@ static NSString* DIGIT_TABLE[] = {
 - (NSArray *) correctBits:(NSArray *)rawbits;
 - (NSString *) encodedData:(NSArray *)correctedBits;
 - (NSArray *) extractBits:(BitMatrix *)matrix;
-- (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(int)length;
+- (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(unsigned int)length;
 - (BitMatrix *) removeDashedLines:(BitMatrix *)matrix;
 - (int) table:(unichar)t;
 
@@ -82,7 +82,7 @@ static NSString* DIGIT_TABLE[] = {
   NSArray * rawbits = [self extractBits:matrix];
   NSArray * correctedBits = [self correctBits:rawbits];
   NSString * result = [self encodedData:correctedBits];
-  return [[[DecoderResult alloc] init:nil text:result byteSegments:nil ecLevel:nil] autorelease];
+  return [[[DecoderResult alloc] init:nil length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
 
@@ -418,7 +418,7 @@ static NSString* DIGIT_TABLE[] = {
 /**
  * Reads a code of given length and at given index in an array of bits
  */
-- (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(int)length {
+- (int) readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(unsigned int)length {
   int res = 0;
 
   for (int i = startIndex; i < startIndex + length; i++) {

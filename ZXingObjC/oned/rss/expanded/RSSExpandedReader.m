@@ -123,6 +123,7 @@ const int MAX_PAIRS = 11;
   NSArray * lastPoints = [[((ExpandedPair *)[_pairs lastObject]) finderPattern] resultPoints];
   return [[[Result alloc] initWithText:resultingString
                               rawBytes:nil
+                                length:0
                           resultPoints:[NSArray arrayWithObjects:[firstPoints objectAtIndex:0], [firstPoints objectAtIndex:1], [lastPoints objectAtIndex:0], [lastPoints objectAtIndex:1], nil]
                                 format:kBarcodeFormatRSSExpanded] autorelease];
 }

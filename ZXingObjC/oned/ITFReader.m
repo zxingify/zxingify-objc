@@ -90,6 +90,7 @@ int const PATTERNS[10][5] = {
 
   return [[[Result alloc] initWithText:resultString
                                  rawBytes:nil
+                                length:0
                           resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
                                         [[[ResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
                                 format:kBarcodeFormatITF] autorelease];

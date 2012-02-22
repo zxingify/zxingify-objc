@@ -410,6 +410,7 @@ int const CODE_STOP = 106;
   float right = (float)(nextStart + lastStart) / 2.0f;
   return [[[Result alloc] initWithText:resultString
                               rawBytes:nil
+                                length:0
                           resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
                                         [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
                                 format:kBarcodeFormatCode128] autorelease];

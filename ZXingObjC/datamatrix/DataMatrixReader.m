@@ -52,6 +52,7 @@
   }
   Result * result = [[[Result alloc] initWithText:[decoderResult text]
                                          rawBytes:[decoderResult rawBytes]
+                                           length:[decoderResult length]
                                      resultPoints:points
                                            format:kBarcodeFormatDataMatrix] autorelease];
   if ([decoderResult byteSegments] != nil) {

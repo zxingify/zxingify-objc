@@ -20,7 +20,7 @@
 // penalty to them.
 + (int) applyMaskPenaltyRule2:(ByteMatrix *)matrix {
   int penalty = 0;
-  char** array = [matrix array];
+  unsigned char** array = [matrix array];
   int width = [matrix width];
   int height = [matrix height];
 
@@ -41,7 +41,7 @@
 // penalties twice (i.e. 40 * 2).
 + (int) applyMaskPenaltyRule3:(ByteMatrix *)matrix {
   int penalty = 0;
-  char** array = [matrix array];
+  unsigned char** array = [matrix array];
   int width = [matrix width];
   int height = [matrix height];
 
@@ -104,7 +104,7 @@
 // - 100% => 100
 + (int) applyMaskPenaltyRule4:(ByteMatrix *)matrix {
   int numDarkCells = 0;
-  char** array = [matrix array];
+  unsigned char** array = [matrix array];
   int width = [matrix width];
   int height = [matrix height];
 
@@ -170,7 +170,7 @@
   int prevBit = -1;
   int iLimit = isHorizontal ? [matrix height] : [matrix width];
   int jLimit = isHorizontal ? [matrix width] : [matrix height];
-  char** array = [matrix array];
+  unsigned char** array = [matrix array];
 
   for (int i = 0; i < iLimit; ++i) {
     for (int j = 0; j < jLimit; ++j) {

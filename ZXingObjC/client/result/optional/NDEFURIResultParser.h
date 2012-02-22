@@ -12,6 +12,6 @@
 @interface NDEFURIResultParser : AbstractNDEFResultParser
 
 + (URIParsedResult *) parse:(Result *)result;
-+ (NSString *) decodeURIPayload:(char *)payload;
++ (NSString *) decodeURIPayload:(unsigned char *)payload length:(unsigned int)length;
 
 @end

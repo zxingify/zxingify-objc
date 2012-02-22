@@ -122,6 +122,7 @@ const int RSS14_FINDER_PATTERNS[9][4] = {
   NSArray * rightPoints = [[rightPair finderPattern] resultPoints];
   return [[[Result alloc] initWithText:buffer
                               rawBytes:nil
+                                length:0
                           resultPoints:[NSArray arrayWithObjects:[leftPoints objectAtIndex:0], [leftPoints objectAtIndex:1], [rightPoints objectAtIndex:0], [rightPoints objectAtIndex:1], nil]
                                 format:kBarcodeFormatRSS14] autorelease];
 }

@@ -9,7 +9,8 @@
 
 @interface Result : NSObject {
   NSString * text;
-  char * rawBytes;
+  unsigned char * rawBytes;
+  int length;
   NSMutableArray * resultPoints;
   BarcodeFormat format;
   NSMutableDictionary * resultMetadata;
@@ -17,14 +18,15 @@
 }
 
 @property(nonatomic, readonly) NSString * text;
-@property(nonatomic, readonly) char * rawBytes;
+@property(nonatomic, readonly) unsigned char * rawBytes;
+@property(nonatomic, readonly) int length;
 @property(nonatomic, readonly) NSMutableArray * resultPoints;
 @property(nonatomic, readonly) BarcodeFormat barcodeFormat;
 @property(nonatomic, readonly) NSMutableDictionary * resultMetadata;
 @property(nonatomic, readonly) long timestamp;
 
-- (id) initWithText:(NSString *)text rawBytes:(char *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat)format;
-- (id) initWithText:(NSString *)text rawBytes:(char *)rawBytes resultPoints:(NSArray *)resultPoints format:(BarcodeFormat)format timestamp:(long)timestamp;
+- (id) initWithText:(NSString *)text rawBytes:(unsigned char *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(BarcodeFormat)format;
+- (id) initWithText:(NSString *)text rawBytes:(unsigned char *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(BarcodeFormat)format timestamp:(long)timestamp;
 - (void) putMetadata:(ResultMetadataType)type value:(id)value;
 - (void) putAllMetadata:(NSMutableDictionary *)metadata;
 - (void) addResultPoints:(NSArray *)newPoints;

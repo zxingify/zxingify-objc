@@ -56,8 +56,8 @@ const int BASE256_ENCODE = 6;
 
 @implementation DataMatrixDecodedBitStreamParser
 
-+ (DecoderResult *) decode:(char *)bytes {
-  BitSource * bits = [[[BitSource alloc] initWithBytes:bytes] autorelease];
++ (DecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length {
+  BitSource * bits = [[[BitSource alloc] initWithBytes:bytes length:length] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:100];
   NSMutableString * resultTrailer = [NSMutableString string];
   NSMutableArray * byteSegments = [NSMutableArray arrayWithCapacity:1];
@@ -93,6 +93,7 @@ const int BASE256_ENCODE = 6;
     [result appendString:resultTrailer];
   }
   return [[[DecoderResult alloc] init:bytes
+                               length:length
                                  text:result
                          byteSegments:[byteSegments count] == 0 ? nil : byteSegments
                                ecLevel:nil] autorelease];

@@ -30,7 +30,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 @interface CodaBarReader ()
 
-- (BOOL) arrayContains:(char *)array key:(unichar)key;
+- (BOOL) arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key;
 - (NSMutableArray *) findAsteriskPattern:(BitArray *)row;
 - (unichar) toNarrowWidePattern:(int[])counters;
 
@@ -87,7 +87,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     @throw [NotFoundException notFoundInstance];
   }
   unichar startchar = [result characterAtIndex:0];
-  if (![self arrayContains:(char*)STARTEND_ENCODING key:startchar]) {
+  if (![self arrayContains:(unsigned char*)STARTEND_ENCODING length:8 key:startchar]) {
     @throw [NotFoundException notFoundInstance];
   }
 
@@ -111,6 +111,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   float right = (float)(nextStart + lastStart) / 2.0f;
   return [[[Result alloc] initWithText:result
                               rawBytes:nil
+                                length:0
                           resultPoints:[NSArray arrayWithObjects:
                                         [[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
                                         [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
@@ -141,7 +142,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     } else {
       if (counterPosition == patternLength - 1) {
         @try {
-          if ([self arrayContains:(char*)STARTEND_ENCODING key:[self toNarrowWidePattern:counters]]) {
+          if ([self arrayContains:(unsigned char*)STARTEND_ENCODING length:8 key:[self toNarrowWidePattern:counters]]) {
             if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
               return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart],
                       [NSNumber numberWithInt:i], nil];
@@ -169,9 +170,9 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   @throw [NotFoundException notFoundInstance];
 }
 
-- (BOOL) arrayContains:(char *)array key:(unichar)key {
+- (BOOL) arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key {
   if (array != nil) {
-    for (int i = 0; i < sizeof(array) / sizeof(char); i++) {
+    for (int i = 0; i < length; i++) {
       if (array[i] == key) {
         return YES;
       }

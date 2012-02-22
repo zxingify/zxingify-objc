@@ -31,6 +31,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
   Result * extensionResult = [[[Result alloc] initWithText:result
                                                   rawBytes:nil
+                                                    length:0
                                               resultPoints:[NSArray arrayWithObjects:
                                                             [[[ResultPoint alloc] initWithX:([[extensionStartRange objectAtIndex:0] intValue] + [[extensionStartRange objectAtIndex:1] intValue]) / 2.0f y:(float)rowNumber] autorelease],
                                                             [[[ResultPoint alloc] initWithX:(float)end y:(float)rowNumber] autorelease], nil]

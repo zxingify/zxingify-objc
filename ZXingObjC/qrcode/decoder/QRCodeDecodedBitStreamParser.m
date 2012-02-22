@@ -40,8 +40,8 @@ int const GB2312_SUBSET = 1;
   return self;
 }
 
-+ (DecoderResult *) decode:(char *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
-  BitSource * bits = [[[BitSource alloc] initWithBytes:bytes] autorelease];
++ (DecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
+  BitSource * bits = [[[BitSource alloc] initWithBytes:bytes length:length] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:50];
   CharacterSetECI * currentCharacterSetECI = nil;
   BOOL fc1InEffect = NO;
@@ -93,9 +93,12 @@ int const GB2312_SUBSET = 1;
         }
       }
     }
-  }
-   while (![mode isEqual:[Mode terminatorMode]]);
-  return [[[DecoderResult alloc] init:bytes text:[result description] byteSegments:[byteSegments count] == 0 ? nil : byteSegments ecLevel:ecLevel == nil ? nil : [ecLevel description]] autorelease];
+  } while (![mode isEqual:[Mode terminatorMode]]);
+  return [[[DecoderResult alloc] init:bytes
+                               length:length
+                                 text:[result description]
+                         byteSegments:[byteSegments count] == 0 ? nil : byteSegments
+                              ecLevel:ecLevel == nil ? nil : [ecLevel description]] autorelease];
 }
 
 
@@ -160,7 +163,7 @@ int const GB2312_SUBSET = 1;
   if (count << 3 > [bits available]) {
     @throw [FormatException formatInstance];
   }
-  char readBytes[count];
+  unsigned char readBytes[count];
   NSMutableArray *readBytesArray = [NSMutableArray arrayWithCapacity:count];
 
   for (int i = 0; i < count; i++) {
@@ -175,7 +178,7 @@ int const GB2312_SUBSET = 1;
     encoding = [currentCharacterSetECI encoding];
   }
 
-  [result appendString:[[[NSString alloc] initWithCString:readBytes encoding:encoding] autorelease]];
+  [result appendString:[[[NSString alloc] initWithBytes:readBytes length:count encoding:encoding] autorelease]];
   
   [byteSegments addObject:readBytesArray];
 }

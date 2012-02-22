@@ -7,7 +7,7 @@
 
 @interface BitArray : NSObject {
   int* bits;
-  int bitsSize;
+  int bitsLength;
   int size;
 }
 
@@ -27,7 +27,7 @@
 - (void) appendBits:(int)value numBits:(int)numBits;
 - (void) appendBitArray:(BitArray *)other;
 - (void) xor:(BitArray *)other;
-- (void) toBytes:(int)bitOffset array:(char *)array offset:(int)offset numBytes:(int)numBytes;
+- (void) toBytes:(int)bitOffset array:(unsigned char *)array offset:(int)offset numBytes:(int)numBytes;
 - (void) reverse;
 
 @end

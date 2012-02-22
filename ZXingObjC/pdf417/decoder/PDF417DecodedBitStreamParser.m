@@ -60,7 +60,7 @@ NSString* const EXP900[16] =
 + (NSMutableString *) add:(NSString *)value1 value2:(NSString *)value2;
 + (int) byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 + (NSString *) decodeBase900toBase10:(int[])codewords count:(int)count;
-+ (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(int)length result:(NSMutableString *)result;
++ (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
 + (NSMutableString *) multiply:(NSString *)value1 value2:(int)value2;
 + (int) numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 + (int) textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
@@ -101,7 +101,7 @@ NSString* const EXP900[16] =
       @throw [FormatException formatInstance];
     }
   }
-  return [[[DecoderResult alloc] init:nil text:result byteSegments:nil ecLevel:nil] autorelease];
+  return [[[DecoderResult alloc] init:nil length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
 
@@ -176,7 +176,7 @@ NSString* const EXP900[16] =
  * @param length             The size of the text compaction and byte compaction data.
  * @param result             The decoded data is appended to the result.
  */
-+ (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(int)length result:(NSMutableString *)result {
++ (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
   int subMode = PDF417_ALPHA;
   int priorToShiftMode = PDF417_ALPHA;
   int i = 0;

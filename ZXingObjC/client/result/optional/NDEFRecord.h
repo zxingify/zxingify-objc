@@ -14,15 +14,17 @@ extern NSString * const ACTION_WELL_KNOWN_TYPE;
 @interface NDEFRecord : NSObject {
   int header;
   NSString * type;
-  char * payload;
+  unsigned char * payload;
+  int payloadLength;
   int totalRecordLength;
 }
 
 @property (nonatomic, readonly) NSString * type;
-@property (nonatomic, readonly) char * payload;
+@property (nonatomic, readonly) unsigned char * payload;
+@property (nonatomic, readonly) int payloadLength;
 @property (nonatomic, readonly) int totalRecordLength;
 
-+ (NDEFRecord *) readRecord:(char *)bytes offset:(int)offset;
++ (NDEFRecord *) readRecord:(unsigned char *)bytes offset:(int)offset;
 - (BOOL) messageBegin;
 - (BOOL) messageEnd;
 

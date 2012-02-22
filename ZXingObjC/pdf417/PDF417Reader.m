@@ -52,6 +52,7 @@
   }
   return [[[Result alloc] initWithText:[decoderResult text]
                               rawBytes:[decoderResult rawBytes]
+                                length:[decoderResult length]
                                 resultPoints:points
                                 format:kBarcodeFormatPDF417] autorelease];
 }

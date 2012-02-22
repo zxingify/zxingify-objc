@@ -12,6 +12,6 @@
 
 @interface DataMatrixDecodedBitStreamParser : NSObject
 
-+ (DecoderResult *) decode:(char *)bytes;
++ (DecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length;
 
 @end

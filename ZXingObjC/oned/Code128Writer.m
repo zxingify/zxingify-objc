@@ -9,7 +9,7 @@
 
 @interface Code128Writer ()
 
-- (BOOL) isDigits:(NSString *)value start:(int)start length:(int)length;
+- (BOOL) isDigits:(NSString *)value start:(int)start length:(unsigned int)length;
 
 @end
 
@@ -111,7 +111,7 @@
   return result;
 }
 
-- (BOOL) isDigits:(NSString *)value start:(int)start length:(int)length {
+- (BOOL) isDigits:(NSString *)value start:(int)start length:(unsigned int)length {
   int end = start + length;
 
   for (int i = start; i < end; i++) {

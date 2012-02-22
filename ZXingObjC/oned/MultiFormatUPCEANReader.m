@@ -63,6 +63,7 @@
     if (ean13MayBeUPCA && canReturnUPCA) {
       return [[[Result alloc] initWithText:[[result text] substringFromIndex:1]
                                     rawBytes:nil
+                                    length:0
                                     resultPoints:[result resultPoints]
                                     format:kBarcodeFormatUPCA] autorelease];
     }

@@ -11,9 +11,9 @@
     width = aWidth;
     height = aHeight;
 
-    bytes = (char**)malloc(height * sizeof(char*));
+    bytes = (unsigned char**)malloc(height * sizeof(unsigned char*));
     for (int i = 0; i < height; i++) {
-      bytes[i] = (char*)malloc(width);
+      bytes[i] = (unsigned char*)malloc(width * sizeof(unsigned char));
     }
     [self clear:0];
   }

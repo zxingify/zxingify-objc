@@ -200,7 +200,7 @@
   return -1;
 }
 
-+ (BOOL) isStringOfDigits:(NSString *)value length:(int)length {
++ (BOOL) isStringOfDigits:(NSString *)value length:(unsigned int)length {
   if (value == nil) {
     return NO;
   }
@@ -219,7 +219,7 @@
   return YES;
 }
 
-+ (BOOL) isSubstringOfDigits:(NSString *)value offset:(int)offset length:(int)length {
++ (BOOL) isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length {
   if (value == nil) {
     return NO;
   }

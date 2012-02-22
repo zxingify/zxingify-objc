@@ -11,6 +11,6 @@
 
 @interface QRCodeDecodedBitStreamParser : NSObject
 
-+ (DecoderResult *) decode:(char *)bytes version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
++ (DecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(QRCodeVersion *)version ecLevel:(ErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
 
 @end

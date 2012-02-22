@@ -36,8 +36,11 @@
   }
 
   DecoderResult *decoderResult = [[[[AztecDecoder alloc] init] autorelease] decode:detectorResult];
-  Result * result = [[[Result alloc] initWithText:[decoderResult text] rawBytes:[decoderResult rawBytes]
-                             resultPoints:points format:kBarcodeFormatAztec] autorelease];
+  Result * result = [[[Result alloc] initWithText:[decoderResult text]
+                                         rawBytes:[decoderResult rawBytes]
+                                           length:[decoderResult length]
+                                     resultPoints:points
+                                           format:kBarcodeFormatAztec] autorelease];
   if ([decoderResult byteSegments] != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
   }

@@ -72,7 +72,7 @@
   for (int i = 0; i < dataBlocksCount; i++) {
     totalBytes += [[dataBlocks objectAtIndex:i] numDataCodewords];
   }
-  char resultBytes[totalBytes];
+  unsigned char resultBytes[totalBytes];
 
   for (int j = 0; j < dataBlocksCount; j++) {
     DataMatrixDataBlock * dataBlock = [dataBlocks objectAtIndex:j];
@@ -84,7 +84,7 @@
     }
   }
 
-  return [DataMatrixDecodedBitStreamParser decode:resultBytes];
+  return [DataMatrixDecodedBitStreamParser decode:resultBytes length:totalBytes];
 }
 
 

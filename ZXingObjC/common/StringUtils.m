@@ -10,7 +10,7 @@
  * {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
  * default encoding if none of these can possibly be correct
  */
-+ (NSStringEncoding) guessEncoding:(char *)bytes length:(int)length hints:(NSMutableDictionary *)hints {
++ (NSStringEncoding) guessEncoding:(unsigned char *)bytes length:(unsigned int)length hints:(NSMutableDictionary *)hints {
   BOOL assumeShiftJIS = CFStringGetSystemEncoding() == NSShiftJISStringEncoding || CFStringGetSystemEncoding() == NSJapaneseEUCStringEncoding;
   
   if (hints != nil) {

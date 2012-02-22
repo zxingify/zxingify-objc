@@ -2,7 +2,7 @@
 
 @implementation AbstractNDEFResultParser
 
-+ (NSString *) bytesToString:(char *)bytes offset:(int)offset length:(int)length encoding:(NSStringEncoding)encoding { 
++ (NSString *) bytesToString:(unsigned char *)bytes offset:(int)offset length:(unsigned int)length encoding:(NSStringEncoding)encoding { 
   return [[[NSString alloc] initWithBytes:bytes + offset length:length encoding:encoding] autorelease];
 }
 

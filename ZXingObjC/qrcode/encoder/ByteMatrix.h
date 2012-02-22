@@ -9,14 +9,14 @@
  */
 
 @interface ByteMatrix : NSObject {
-  char **bytes;
+  unsigned char **bytes;
   int width;
   int height;
 }
 
 @property(nonatomic, readonly) int height;
 @property(nonatomic, readonly) int width;
-@property(nonatomic, readonly) char** array;
+@property(nonatomic, readonly) unsigned char** array;
 
 - (id) initWithWidth:(int)width height:(int)height;
 - (char) get:(int)x y:(int)y;

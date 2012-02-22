@@ -4,18 +4,19 @@
 
 @synthesize text;
 @synthesize rawBytes;
+@synthesize length;
 @synthesize resultPoints;
 @synthesize barcodeFormat=format;
 @synthesize resultMetadata;
 @synthesize timestamp;
 
-- (id) initWithText:(NSString *)aText rawBytes:(char *)aRawBytes resultPoints:(NSArray *)aResultPoints format:(BarcodeFormat)aFormat {
-  if (self = [self initWithText:aText rawBytes:aRawBytes resultPoints:aResultPoints format:aFormat timestamp:CFAbsoluteTimeGetCurrent()]) {
+- (id) initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(BarcodeFormat)aFormat {
+  if (self = [self initWithText:aText rawBytes:aRawBytes length:aLength resultPoints:aResultPoints format:aFormat timestamp:CFAbsoluteTimeGetCurrent()]) {
   }
   return self;
 }
 
-- (id) initWithText:(NSString *)aText rawBytes:(char *)aRawBytes resultPoints:(NSArray *)aResultPoints format:(BarcodeFormat)aFormat timestamp:(long)aTimestamp {
+- (id) initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(BarcodeFormat)aFormat timestamp:(long)aTimestamp {
   if (self = [super init]) {
     if (aText == nil && aRawBytes == nil) {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
@@ -24,6 +25,7 @@
     }
     text = [aText copy];
     rawBytes = aRawBytes;
+    length = aLength;
     resultPoints = [[aResultPoints mutableCopy] autorelease];
     format = aFormat;
     resultMetadata = nil;
@@ -62,7 +64,7 @@
 
 - (NSString *) description {
   if (text == nil) {
-    return [NSString stringWithFormat:@"[%d]", sizeof(rawBytes) / sizeof(char)];
+    return [NSString stringWithFormat:@"[%d]", length];
   } else {
     return text;
   }

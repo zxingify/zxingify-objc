@@ -52,7 +52,11 @@
     points = [detectorResult points];
   }
 
-  Result * result = [[[Result alloc] initWithText:[decoderResult text] rawBytes:[decoderResult rawBytes] resultPoints:points format:kBarcodeFormatQRCode] autorelease];
+  Result * result = [[[Result alloc] initWithText:[decoderResult text]
+                                         rawBytes:[decoderResult rawBytes]
+                                           length:[decoderResult length]
+                                     resultPoints:points
+                                           format:kBarcodeFormatQRCode] autorelease];
   if ([decoderResult byteSegments] != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
   }

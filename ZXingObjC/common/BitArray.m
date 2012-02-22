@@ -17,7 +17,7 @@
   if (self = [super init]) {
     self.size = 0;
     bits = (int*)malloc(1 * sizeof(int));
-    bitsSize = 1;
+    bitsLength = 1;
     bits[0] = 0;
   }
   return self;
@@ -36,16 +36,16 @@
 }
 
 - (void) ensureCapacity:(int)aSize {
-  if (aSize > bitsSize << 5) {
+  if (aSize > bitsLength << 5) {
     int* newBits = [self makeArray:aSize];
     
-    for (int i = 0; i < bitsSize; i++) {
+    for (int i = 0; i < bitsLength; i++) {
       newBits[i] = bits[i];
     }
 
     free(bits);
     bits = newBits;
-    bitsSize = (aSize + 31) >> 5;
+    bitsLength = (aSize + 31) >> 5;
   }
 }
 
@@ -205,7 +205,7 @@
  * @param offset position in array to start writing
  * @param numBytes how many bytes to write
  */
-- (void) toBytes:(int)bitOffset array:(char *)array offset:(int)offset numBytes:(int)numBytes {
+- (void) toBytes:(int)bitOffset array:(unsigned char *)array offset:(int)offset numBytes:(int)numBytes {
   for (int i = 0; i < numBytes; i++) {
     int theByte = 0;
     for (int j = 0; j < 8; j++) {

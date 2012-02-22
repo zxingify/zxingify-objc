@@ -101,7 +101,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
     [newResultPoints addObject:[[[ResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset] autorelease]];
   }
 
-  return [[[Result alloc] initWithText:[result text] rawBytes:[result rawBytes] resultPoints:newResultPoints format:[result barcodeFormat]] autorelease];
+  return [[[Result alloc] initWithText:[result text] rawBytes:[result rawBytes] length:[result length] resultPoints:newResultPoints format:[result barcodeFormat]] autorelease];
 }
 
 @end

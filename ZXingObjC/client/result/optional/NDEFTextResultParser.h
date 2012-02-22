@@ -12,6 +12,6 @@
 @interface NDEFTextResultParser : AbstractNDEFResultParser
 
 + (TextParsedResult *) parse:(Result *)result;
-+ (NSArray *) decodeTextPayload:(char *)payload;
++ (NSArray *) decodeTextPayload:(unsigned char *)payload length:(unsigned int)length;
 
 @end

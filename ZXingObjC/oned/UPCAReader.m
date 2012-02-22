@@ -47,6 +47,7 @@
   if ([text characterAtIndex:0] == '0') {
     return [[[Result alloc] initWithText:[text substringFromIndex:1]
                                 rawBytes:nil
+                                  length:0
                             resultPoints:[result resultPoints]
                                   format:kBarcodeFormatUPCA] autorelease];
   } else {

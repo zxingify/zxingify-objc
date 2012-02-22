@@ -7,9 +7,10 @@
  * @param bytes bytes from which this will read bits. Bits will be read from the first byte first.
  * Bits are read within a byte from most-significant to least-significant bit.
  */
-- (id) initWithBytes:(char *)_bytes {
+- (id) initWithBytes:(unsigned char *)aBytes length:(unsigned int)aLength {
   if (self = [super init]) {
-    bytes = _bytes;
+    bytes = aBytes;
+    length = aLength;
   }
   return self;
 }
@@ -63,7 +64,7 @@
  * @return number of bits that can be read successfully
  */
 - (int) available {
-  return 8 * (sizeof(bytes) / sizeof(char) - byteOffset) - bitOffset;
+  return 8 * (length - byteOffset) - bitOffset;
 }
 
 @end

@@ -6,7 +6,7 @@
 @implementation NDEFTextResultParser
 
 + (TextParsedResult *) parse:(Result *)result {
-  char * bytes = [result rawBytes];
+  unsigned char * bytes = [result rawBytes];
   if (bytes == nil) {
     return nil;
   }
@@ -17,11 +17,11 @@
   if (![[ndefRecord type] isEqualToString:TEXT_WELL_KNOWN_TYPE]) {
     return nil;
   }
-  NSArray * languageText = [self decodeTextPayload:[ndefRecord payload]];
+  NSArray * languageText = [self decodeTextPayload:[ndefRecord payload] length:[ndefRecord payloadLength]];
   return [[[TextParsedResult alloc] initWithText:[languageText objectAtIndex:0] language:[languageText objectAtIndex:1]] autorelease];
 }
 
-+ (NSArray *) decodeTextPayload:(char *)payload {
++ (NSArray *) decodeTextPayload:(unsigned char *)payload length:(unsigned int)length {
   char statusByte = payload[0];
   BOOL isUTF16 = (statusByte & 0x80) != 0;
   int languageLength = statusByte & 0x1F;
@@ -29,7 +29,7 @@
   NSStringEncoding encoding = isUTF16 ? NSUTF16StringEncoding : NSUTF8StringEncoding;
   NSString * text = [self bytesToString:payload
                                  offset:1 + languageLength
-                                 length:(sizeof(payload) / sizeof(char)) - languageLength - 1
+                                 length:length - languageLength - 1
                                encoding:encoding];
   return [NSArray arrayWithObjects:language, text, nil];
 }

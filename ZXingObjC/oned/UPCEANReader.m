@@ -132,6 +132,7 @@ int L_AND_G_PATTERNS[20][4];
   BarcodeFormat format = [self barcodeFormat];
   Result * decodeResult = [[[Result alloc] initWithText:resultString
                                                rawBytes:nil
+                                                 length:0
                                            resultPoints:[NSArray arrayWithObjects:[[[ResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
                                                  format:format] autorelease];
 
