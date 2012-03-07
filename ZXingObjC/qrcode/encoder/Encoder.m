@@ -313,7 +313,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     unsigned char dataBytes[size];
     [bits toBytes:8 * dataBytesOffset array:dataBytes offset:0 numBytes:size];
     unsigned char *ecBytes = [self generateECBytes:dataBytes numDataBytes:size numEcBytesInBlock:numEcBytesInBlock[0]];
-    [blocks addObject:[[[BlockPair alloc] initWithData:dataBytes length:size errorCorrection:ecBytes errorCorrectionLength:size] autorelease]];
+    [blocks addObject:[[[BlockPair alloc] initWithData:dataBytes length:size errorCorrection:ecBytes errorCorrectionLength:numEcBytesInBlock[0]] autorelease]];
 
     maxNumDataBytes = MAX(maxNumDataBytes, size);
     maxNumEcBytes = MAX(maxNumEcBytes, numEcBytesInBlock[0]);
@@ -356,6 +356,10 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   for (int i = 0; i < numDataBytes; i++) {
     [toEncode addObject:[NSNumber numberWithInt:dataBytes[i] & 0xFF]];
   }
+  for (int i = 0; i < numEcBytesInBlock; i++) {
+    [toEncode addObject:[NSNumber numberWithInt:0]];
+  }
+
   [[[[ReedSolomonEncoder alloc] initWithField:[GenericGF QrCodeField256]] autorelease] encode:toEncode ecBytes:numEcBytesInBlock];
 
   unsigned char *ecBytes = (unsigned char*)malloc(numEcBytesInBlock * sizeof(unsigned char));

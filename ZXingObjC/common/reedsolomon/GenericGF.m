@@ -34,8 +34,8 @@ int const INITIALIZATION_THRESHOLD = 0;
 }
 
 - (void) initialize {
-  expTable = [NSMutableArray arrayWithCapacity:size];
-  logTable = [NSMutableArray arrayWithCapacity:size];
+  expTable = [[NSMutableArray alloc] initWithCapacity:size];
+  logTable = [[NSMutableArray alloc] initWithCapacity:size];
   int x = 1;
 
   for (int i = 0; i < size; i++) {
@@ -55,8 +55,8 @@ int const INITIALIZATION_THRESHOLD = 0;
     [logTable replaceObjectAtIndex:[[expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
   }
 
-  zero = [[[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]] autorelease];
-  one = [[[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]] autorelease];
+  zero = [[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]];
+  one = [[GenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]];
   initialized = YES;
 }
 

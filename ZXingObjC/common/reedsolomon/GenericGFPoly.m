@@ -131,8 +131,9 @@
   for (int i = 0; i < aLength; i++) {
     int aCoeff = [[aCoefficients objectAtIndex:i] intValue];
     for (int j = 0; j < bLength; j++) {
-      [product addObject:[NSNumber numberWithInt:[GenericGF addOrSubtract:[[product objectAtIndex:i + j] intValue]
-                                                                        b:[field multiply:aCoeff b:[[bCoefficients objectAtIndex:j] intValue]]]]];
+      [product replaceObjectAtIndex:i + j
+                         withObject:[NSNumber numberWithInt:[GenericGF addOrSubtract:[[product objectAtIndex:i + j] intValue]
+                                                                                   b:[field multiply:aCoeff b:[[bCoefficients objectAtIndex:j] intValue]]]]];
     }
   }
   return [[[GenericGFPoly alloc] initWithField:field coefficients:product] autorelease];
@@ -162,9 +163,14 @@
   }
   int size = [coefficients count];
   NSMutableArray * product = [NSMutableArray arrayWithCapacity:size + degree];
-  for (int i = 0; i < size; i++) {
-    [product addObject:[NSNumber numberWithInt:[field multiply:[[coefficients objectAtIndex:i] intValue] b:coefficient]]];
+  for (int i = 0; i < size + degree; i++) {
+    if (i < size) {
+      [product addObject:[NSNumber numberWithInt:[field multiply:[[coefficients objectAtIndex:i] intValue] b:coefficient]]];
+    } else {
+      [product addObject:[NSNumber numberWithInt:0]];
+    }
   }
+
   return [[[GenericGFPoly alloc] initWithField:field coefficients:product] autorelease];
 }
 

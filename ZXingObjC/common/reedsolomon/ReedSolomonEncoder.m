@@ -46,7 +46,7 @@
                                  userInfo:nil];
   }
   GenericGFPoly * generator = [self buildGenerator:ecBytes];
-  NSArray * infoCoefficients = [[toEncode copy] autorelease];
+  NSArray * infoCoefficients = [[[toEncode copy] autorelease] subarrayWithRange:NSMakeRange(0, dataBytes)];
   GenericGFPoly * info = [[[GenericGFPoly alloc] initWithField:field coefficients:infoCoefficients] autorelease];
   info = [info multiplyByMonomial:ecBytes coefficient:1];
   GenericGFPoly * remainder = [[info divide:generator] objectAtIndex:1];
@@ -58,7 +58,7 @@
   }
 
   for (int i = 0; i < [coefficients count]; i++) {
-    [toEncode replaceObjectAtIndex:dataBytes + numZeroCoefficients + i withObject:[coefficients objectAtIndex:dataBytes + numZeroCoefficients + i]];
+    [toEncode replaceObjectAtIndex:dataBytes + numZeroCoefficients + i withObject:[coefficients objectAtIndex:i]];
   }
 }
 
