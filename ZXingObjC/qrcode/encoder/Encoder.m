@@ -105,10 +105,10 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
   // Step 7: Choose the mask pattern and set to "qrCode".
   ByteMatrix * matrix = [[[ByteMatrix alloc] initWithWidth:[qrCode matrixWidth] height:[qrCode matrixWidth]] autorelease];
-  [qrCode setMaskPattern:[self chooseMaskPattern:finalBits ecLevel:[qrCode eCLevel] version:[qrCode version] matrix:matrix]];
+  [qrCode setMaskPattern:[self chooseMaskPattern:finalBits ecLevel:[qrCode ecLevel] version:[qrCode version] matrix:matrix]];
 
   // Step 8.  Build the matrix and set it to "qrCode".
-  [MatrixUtil buildMatrix:finalBits ecLevel:[qrCode eCLevel] version:[qrCode version] maskPattern:[qrCode maskPattern] matrix:matrix];
+  [MatrixUtil buildMatrix:finalBits ecLevel:[qrCode ecLevel] version:[qrCode version] maskPattern:[qrCode maskPattern] matrix:matrix];
   [qrCode setMatrix:matrix];
   // Step 9.  Make sure we have a valid QR Code.
   if (![qrCode valid]) {
@@ -198,7 +198,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
  * modify "qrCode".
  */
 + (void) initQRCode:(int)numInputBytes ecLevel:(ErrorCorrectionLevel *)ecLevel mode:(Mode *)mode qrCode:(QRCode *)qrCode {
-  [qrCode setECLevel:ecLevel];
+  [qrCode setEcLevel:ecLevel];
   [qrCode setMode:mode];
 
   for (int versionNum = 1; versionNum <= 40; versionNum++) {

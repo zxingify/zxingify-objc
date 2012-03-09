@@ -28,6 +28,7 @@
 @property(nonatomic, retain, readonly) NSArray * bottomRightOnBit;
 @property(nonatomic, readonly) int width;
 @property(nonatomic, readonly) int height;
+@property(nonatomic, readonly) int* bits;
 
 - (id) initWithDimension:(int)dimension;
 - (id) initWithWidth:(int)width height:(int)height;

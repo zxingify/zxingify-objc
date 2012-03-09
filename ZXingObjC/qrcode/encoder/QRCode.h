@@ -21,7 +21,7 @@ extern int const NUM_MASK_PATTERNS;
 }
 
 @property(nonatomic, retain) Mode * mode;
-@property(nonatomic, retain) ErrorCorrectionLevel * eCLevel;
+@property(nonatomic, retain) ErrorCorrectionLevel * ecLevel;
 @property(nonatomic) int version;
 @property(nonatomic) int matrixWidth;
 @property(nonatomic) int maskPattern;

@@ -8,7 +8,7 @@ int const NUM_MASK_PATTERNS = 8;
 @implementation QRCode
 
 @synthesize mode;
-@synthesize eCLevel;
+@synthesize ecLevel;
 @synthesize version;
 @synthesize matrixWidth;
 @synthesize maskPattern;

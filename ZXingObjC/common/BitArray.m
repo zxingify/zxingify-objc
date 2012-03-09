@@ -26,7 +26,9 @@
 - (id) initWithSize:(int)aSize {
   if (self = [super init]) {
     self.size = aSize;
+    free(bits);
     bits = [self makeArray:aSize];
+    bitsLength = (aSize + 31) >> 5;
   }
   return self;
 }
@@ -183,17 +185,15 @@
 }
 
 - (void) xor:(BitArray *)other {
-  if (self.size != other.size) {
+  if (bitsLength != other->bitsLength) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Sizes don't match"
                                  userInfo:nil];
-    
   }
 
-  for (int i = 0; i < self.size; i++) {
+  for (int i = 0; i < bitsLength; i++) {
     bits[i] ^= other.bits[i];
   }
-
 }
 
 

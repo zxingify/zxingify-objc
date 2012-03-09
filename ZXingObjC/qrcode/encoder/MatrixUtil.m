@@ -104,6 +104,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 @interface MatrixUtil ()
 
++ (void) clearMatrix:(ByteMatrix *)matrix;
 + (BOOL) isEmpty:(int)value;
 + (BOOL) isValidValue:(int)value;
 + (void) embedTimingPatterns:(ByteMatrix *)matrix;
@@ -119,9 +120,18 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 @implementation MatrixUtil
 
+// Set all cells to -1.  -1 means that the cell is empty (not set yet).
+//
+// JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
+// with the ByteMatrix initialized all to zero.
++ (void) clearMatrix:(ByteMatrix *)matrix {
+  [matrix clear:(char) -1];
+}
+
 // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
 // success, store the result in "matrix" and return true.
 + (void) buildMatrix:(BitArray *)dataBits ecLevel:(ErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ByteMatrix *)matrix {
+  [self clearMatrix:matrix];
   [self embedBasicPatterns:version matrix:matrix];
   [self embedTypeInfo:ecLevel maskPattern:maskPattern matrix:matrix];
   [self maybeEmbedVersionInfo:version matrix:matrix];

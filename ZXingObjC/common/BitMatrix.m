@@ -7,6 +7,7 @@
 @synthesize bottomRightOnBit;
 @synthesize width;
 @synthesize height;
+@synthesize bits;
 
 - (id) initWithDimension:(int)dimension {
   self = [self initWithWidth:dimension height:dimension];
@@ -99,9 +100,9 @@
                                    reason:@"Height and width must be at least 1"
                                  userInfo:nil];
   }
-  int right = left + width;
-  int bottom = top + height;
-  if (bottom > aHeight || right > aWidth) {
+  int right = left + aWidth;
+  int bottom = top + aHeight;
+  if (bottom > self.height || right > self.width) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"The region must fit inside the matrix"
                                  userInfo:nil];
