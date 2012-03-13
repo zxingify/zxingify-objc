@@ -26,6 +26,7 @@
     rowSize = (width + 31) >> 5;
     bitsSize = rowSize * height;
     bits = (int*)malloc(bitsSize * sizeof(int));
+    [self clear];
   }
   return self;
 }
@@ -223,7 +224,7 @@
 }
 
 - (void) dealloc {
-//  free(bits);
+  free(bits);
   [super dealloc];
 }
 

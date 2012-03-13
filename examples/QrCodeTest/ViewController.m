@@ -70,7 +70,7 @@
   UIImage *image2 = [UIImage imageWithCGImage:image];
   CFRelease(image);
 
-//  free(bytes);
+  free(bytes);
   self.imageView.image = image2;
 
   [writer release];
