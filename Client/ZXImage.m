@@ -25,27 +25,36 @@
 
 @synthesize cgimage;
 
-- (ZXImage*)initWithURL:(NSURL const*)url {
+- (ZXImage*)initWithCGImageRef:(CGImageRef)image {
+  self = [super init];
   
-  CGDataProviderRef provider = CGDataProviderCreateWithURL((CFURLRef)url);
+  if (self) {
+    cgimage = image;
+  }
 
-  if (provider) {
-    CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, 0);
+  return self;
+}
 
-    if (source) {
-      cgimage = CGImageSourceCreateImageAtIndex(source, 0, 0);
+- (ZXImage*)initWithURL:(NSURL const*)url {
+  self = [super init];
 
-      CFRelease(source);
+  if (self) {
+    CGDataProviderRef provider = CGDataProviderCreateWithURL((CFURLRef)url);
+
+    if (provider) {
+      CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, 0);
+
+      if (source) {
+        cgimage = CGImageSourceCreateImageAtIndex(source, 0, 0);
+
+        CFRelease(source);
+      }
+
+      CGDataProviderRelease(provider);
     }
-
-    CGDataProviderRelease(provider);
   }
 
-  if (cgimage) {
-    return self;
-  } else {
-    return 0;
-  }
+  return self;
 }
 
 - (size_t)width {

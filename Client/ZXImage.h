@@ -21,6 +21,7 @@
 
 @property (readonly) CGImageRef cgimage;
 
+- (ZXImage*)initWithCGImageRef:(CGImageRef)image;
 - (ZXImage*)initWithURL:(NSURL const*)url;
 - (size_t)width;
 - (size_t)height;
