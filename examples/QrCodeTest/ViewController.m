@@ -1,7 +1,7 @@
-#import "BarcodeFormat.h"
-#import "BitMatrix.h"
-#import "MultiFormatWriter.h"
 #import "ViewController.h"
+#import "ZXBarcodeFormat.h"
+#import "ZXBitMatrix.h"
+#import "ZXMultiFormatWriter.h"
 
 @implementation ViewController
 
@@ -45,8 +45,8 @@
 
   self.imageView.image = nil;
 
-  MultiFormatWriter* writer = [[MultiFormatWriter alloc] init];
-  BitMatrix* result = [writer encode:data format:kBarcodeFormatQRCode width:self.imageView.frame.size.width height:self.imageView.frame.size.width];
+  ZXMultiFormatWriter* writer = [[ZXMultiFormatWriter alloc] init];
+  ZXBitMatrix* result = [writer encode:data format:kBarcodeFormatQRCode width:self.imageView.frame.size.width height:self.imageView.frame.size.width];
 
   int width = result.width;
   int height = result.height;
