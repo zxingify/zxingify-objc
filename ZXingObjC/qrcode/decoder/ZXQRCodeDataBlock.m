@@ -36,7 +36,7 @@
   int totalBlocks = 0;
   NSArray * ecBlockArray = [ecBlocks ecBlocks];
   for (int i = 0; i < [ecBlockArray count]; i++) {
-    totalBlocks += [[ecBlockArray objectAtIndex:i] count];
+    totalBlocks += [(ZXQRCodeECB*)[ecBlockArray objectAtIndex:i] count];
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];

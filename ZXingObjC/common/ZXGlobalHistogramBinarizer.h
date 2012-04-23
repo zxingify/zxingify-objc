@@ -15,7 +15,8 @@
 @class ZXBitArray, ZXBitMatrix, ZXLuminanceSource;
 
 @interface ZXGlobalHistogramBinarizer : ZXBinarizer {
-  NSArray * luminances;
+  unsigned char * luminances;
+  int luminancesCount;
   NSMutableArray * buckets;
 }
 

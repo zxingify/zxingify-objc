@@ -1,5 +1,6 @@
 #import "ZXDataMatrixDataBlock.h"
 #import "ZXDataMatrixVersion.h"
+#import "ZXQRCodeVersion.h"
 
 @implementation ZXDataMatrixDataBlock
 
@@ -30,7 +31,7 @@
   NSArray * ecBlockArray = [ecBlocks ecBlocks];
 
   for (int i = 0; i < [ecBlockArray count]; i++) {
-    totalBlocks += [[ecBlockArray objectAtIndex:i] count];
+    totalBlocks += [(ZXQRCodeECB*)[ecBlockArray objectAtIndex:i] count];
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];

@@ -29,7 +29,7 @@
  * Always use the returned object, and ignore the .length of the array.
  * @return An array containing the luminance data.
  */
-- (NSArray *) getRow:(int)y row:(NSArray *)row {
+- (unsigned char *) getRow:(int)y row:(unsigned char *)row {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

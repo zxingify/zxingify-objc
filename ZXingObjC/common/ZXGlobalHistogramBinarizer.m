@@ -21,7 +21,8 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 - (id) initWithSource:(ZXLuminanceSource *)source {
   if (self = [super initWithSource:source]) {
-    luminances = nil;
+    luminances = NULL;
+    luminancesCount = 0;
     buckets = nil;
   }
   return self;
@@ -32,25 +33,24 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   int width = [source width];
   if (row == nil || [row size] < width) {
     row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
-  }
-   else {
+  } else {
     [row clear];
   }
+
   [self initArrays:width];
-  NSArray * localLuminances = [source getRow:y row:luminances];
+  unsigned char * localLuminances = [source getRow:y row:luminances];
   NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:buckets];
 
   for (int x = 0; x < width; x++) {
-    int pixel = [[localLuminances objectAtIndex:x] intValue] & 0xff;
+    int pixel = localLuminances[x] & 0xff;
     [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
   }
-
   int blackPoint = [self estimateBlackPoint:localBuckets];
-  int left = [[localLuminances objectAtIndex:0] intValue] & 0xff;
-  int center = [[localLuminances objectAtIndex:1] intValue] & 0xff;
 
+  int left = localLuminances[0] & 0xff;
+  int center = localLuminances[1] & 0xff;
   for (int x = 1; x < width - 1; x++) {
-    int right = [[localLuminances objectAtIndex:x + 1] intValue] & 0xff;
+    int right = localLuminances[x + 1] & 0xff;
     int luminance = ((center << 2) - left - right) >> 1;
     if (luminance < blackPoint) {
       [row set:x];
@@ -58,6 +58,8 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     left = center;
     center = right;
   }
+
+  free(localLuminances);
 
   return row;
 }
@@ -72,14 +74,13 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   for (int y = 1; y < 5; y++) {
     int row = height * y / 5;
-    NSArray * localLuminances = [source getRow:row row:luminances];
+    unsigned char * localLuminances = [source getRow:row row:luminances];
     int right = (width << 2) / 5;
-
     for (int x = width / 5; x < right; x++) {
-      int pixel = [[localLuminances objectAtIndex:x] intValue] & 0xff;
+      int pixel = localLuminances[x] & 0xff;
       [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
     }
-
+    free(localLuminances);
   }
 
   int blackPoint = [self estimateBlackPoint:localBuckets];
@@ -94,7 +95,6 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
         [matrix set:x y:y];
       }
     }
-
   }
 
   return matrix;
@@ -105,17 +105,20 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 }
 
 - (void) initArrays:(int)luminanceSize {
-  if (luminances == nil || [luminances count] < luminanceSize) {
-    luminances = [NSArray array];
+  if (luminances == NULL || luminancesCount < luminanceSize) {
+    if (luminances != NULL) {
+      free(luminances);
+    }
+    luminances = (unsigned char*)malloc(luminanceSize * sizeof(char));
+    luminancesCount = luminanceSize;
   }
+
   if (buckets == nil) {
     buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
-  }
-   else {
+  } else {
     for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
       [buckets addObject:[NSNumber numberWithInt:0]];
     }
-
   }
 }
 
@@ -171,7 +174,10 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 }
 
 - (void) dealloc {
-  [luminances release];
+  if (luminances) {
+    free(luminances);
+  }
+
   [buckets release];
   [super dealloc];
 }

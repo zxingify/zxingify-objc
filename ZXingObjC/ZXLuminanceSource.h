@@ -20,7 +20,7 @@
 @property(nonatomic, readonly) BOOL cropSupported;
 @property(nonatomic, readonly) BOOL rotateSupported;
 - (id) init:(int)width height:(int)height;
-- (NSArray *) getRow:(int)y row:(NSArray *)row;
+- (unsigned char *) getRow:(int)y row:(unsigned char *)row;
 - (ZXLuminanceSource *) crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXLuminanceSource *) rotateCounterClockwise;
 @end

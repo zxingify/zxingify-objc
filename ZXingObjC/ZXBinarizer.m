@@ -1,5 +1,13 @@
 #import "ZXBinarizer.h"
 
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#define ZXBlack [[UIColor blackColor] CGColor]
+#define ZXWhite [[UIColor whiteColor] CGColor]
+#else
+#define ZXBlack CGColorGetConstantColor(kCGColorBlack)
+#define ZXWhite CGColorGetConstantColor(kCGColorWhite)
+#endif
+
 @implementation ZXBinarizer
 
 @synthesize luminanceSource;
@@ -68,6 +76,53 @@
 - (void) dealloc {
   [luminanceSource release];
   [super dealloc];
+}
+
+- (CGImageRef)createImage {
+  ZXBitMatrix *matrix = [self blackMatrix];
+  ZXLuminanceSource *source = [self luminanceSource];
+
+  int width = source.width;
+  int height = source.height;
+
+  int bytesPerRow = ((width&0xf)>>4)<<4;
+
+  CGColorSpaceRef gray = CGColorSpaceCreateDeviceGray();
+  CGContextRef context = CGBitmapContextCreate (
+                                                0,
+                                                width,
+                                                height,
+                                                8,      // bits per component
+                                                bytesPerRow,
+                                                gray,
+                                                kCGImageAlphaNone);
+  CGColorSpaceRelease(gray);
+
+  CGRect r = CGRectZero;
+  r.size.width = width;
+  r.size.height = height;
+  CGContextSetFillColorWithColor(context, ZXBlack);
+  CGContextFillRect(context, r);
+
+  r.size.width = 1;
+  r.size.height = 1;
+
+  CGContextSetFillColorWithColor(context, ZXWhite);
+  for(int y=0; y<height; y++) {
+    r.origin.y = height-1-y;
+    for(int x=0; x<width; x++) {
+      if (![matrix get:x y:y]) {
+        r.origin.x = x;
+        CGContextFillRect(context, r);
+      }
+    }
+  }
+  
+  CGImageRef binary = CGBitmapContextCreateImage(context); 
+  
+  CGContextRelease(context);
+  
+  return binary;
 }
 
 @end

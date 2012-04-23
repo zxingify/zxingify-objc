@@ -18,5 +18,6 @@
 - (id) initWithSource:(ZXLuminanceSource *)source;
 - (ZXBitArray *) getBlackRow:(int)y row:(ZXBitArray *)row;
 - (ZXBinarizer *) createBinarizer:(ZXLuminanceSource *)source;
+- (CGImageRef)createImage;
 
 @end
