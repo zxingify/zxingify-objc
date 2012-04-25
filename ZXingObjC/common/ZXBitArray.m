@@ -97,7 +97,7 @@
  * Clears all bits (sets to false).
  */
 - (void) clear {
-  for (int i = 0; i < self.size; i++) {
+  for (int i = 0; i < bitsLength; i++) {
     bits[i] = 0;
   }
 

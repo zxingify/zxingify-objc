@@ -8,8 +8,8 @@
 #define MAX_AVG_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f)
 #define MAX_INDIVIDUAL_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f)
 
-int const W = 3;
-int const N = 1;
+static const int W = 3;
+static const int N = 1;
 
 int const DEFAULT_ALLOWED_LENGTHS[9] = { 6, 8, 10, 12, 14, 16, 20, 24, 44 };
 
@@ -25,7 +25,8 @@ int const END_PATTERN_REVERSED[3] = {N, N, W};
 /**
  * Patterns of Wide / Narrow lines to indicate each digit
  */
-int const PATTERNS[10][5] = {
+const int PATTERNS_LEN = 10;
+const int PATTERNS[PATTERNS_LEN][5] = {
   {N, N, W, W, N}, // 0
   {W, N, N, N, W}, // 1
   {N, W, N, N, W}, // 2
@@ -40,9 +41,9 @@ int const PATTERNS[10][5] = {
 
 @interface ZXITFReader ()
 
-- (int) decodeDigit:(int[])counters;
+- (int) decodeDigit:(int[])counters countersSize:(int)countersSize;
 - (void) decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString;
-- (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern;
+- (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen;
 - (int) skipWhiteSpace:(ZXBitArray *)row;
 - (void) validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern;
 
@@ -117,9 +118,9 @@ int const PATTERNS[10][5] = {
       counterWhite[k] = counterDigitPair[twoK + 1];
     }
 
-    int bestMatch = [self decodeDigit:counterBlack];
+    int bestMatch = [self decodeDigit:counterBlack countersSize:5];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    bestMatch = [self decodeDigit:counterWhite];
+    bestMatch = [self decodeDigit:counterWhite countersSize:5];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
 
     for (int i = 0; i < sizeof(counterDigitPair) / sizeof(int); i++) {
@@ -139,7 +140,7 @@ int const PATTERNS[10][5] = {
  */
 - (NSArray *) decodeStart:(ZXBitArray *)row {
   int endStart = [self skipWhiteSpace:row];
-  NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)ITF_START_PATTERN];
+  NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
 
   narrowLineWidth = ([[startPattern objectAtIndex:1] intValue] - [[startPattern objectAtIndex:0] intValue]) >> 2;
 
@@ -217,7 +218,7 @@ int const PATTERNS[10][5] = {
 
   @try {
     int endStart = [self skipWhiteSpace:row];
-    NSMutableArray * endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int*)END_PATTERN_REVERSED] mutableCopy] autorelease];
+    NSMutableArray * endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int*)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy] autorelease];
     [self validateQuietZone:row startPattern:[[endPattern objectAtIndex:0] intValue]];
     int temp = [[endPattern objectAtIndex:0] intValue];
     [endPattern replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[row size] - [[endPattern objectAtIndex:1] intValue]]];
@@ -239,9 +240,12 @@ int const PATTERNS[10][5] = {
  * ints
  * @throws NotFoundException if pattern is not found
  */
-- (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern {
-  int patternLength = sizeof((int*)pattern) / sizeof(int);
+- (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen {
+  int patternLength = patternLen;
   int counters[patternLength];
+  for (int i=0; i<patternLength; i++) {
+    counters[i] = 0;
+  }
   int width = [row size];
   BOOL isWhite = NO;
 
@@ -253,7 +257,7 @@ int const PATTERNS[10][5] = {
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
         }
         patternStart += counters[0] + counters[1];
@@ -283,13 +287,16 @@ int const PATTERNS[10][5] = {
  * @return The decoded digit
  * @throws NotFoundException if digit cannot be decoded
  */
-- (int) decodeDigit:(int[])counters {
+- (int) decodeDigit:(int[])counters countersSize:(int)countersSize {
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
-  int max = sizeof(PATTERNS) / sizeof(int*);
+  int max = PATTERNS_LEN;
   for (int i = 0; i < max; i++) {
-    int *pattern = (int*)PATTERNS[i];
-    int variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+    int pattern[countersSize];
+    for(int ind = 0; ind<countersSize; ind++){
+      pattern[ind] = PATTERNS[i][ind];
+    }
+    int variance = [ZXOneDReader patternMatchVariance:counters countersSize:countersSize pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = i;

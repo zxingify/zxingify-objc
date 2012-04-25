@@ -10,15 +10,6 @@ const int SYMBOL_WIDEST[5] = {7, 5, 4, 3, 1};
 const int EVEN_TOTAL_SUBSET[5] = {4, 20, 52, 104, 204};
 const int GSUM[5] = {0, 348, 1388, 2948, 3988};
 
-const int RSS_EXPANDED_FINDER_PATTERNS[6][4] = {
-  {1,8,4,1}, // A
-  {3,6,4,1}, // B
-  {3,4,6,1}, // C
-  {3,2,8,1}, // D
-  {2,6,5,1}, // E
-  {2,2,9,1}  // F
-};
-
 const int WEIGHTS[23][8] = {
   {  1,   3,   9,  27,  81,  32,  96,  77},
   { 20,  60, 180, 118, 143,   7,  21,  63},
@@ -331,8 +322,9 @@ const int MAX_PAIRS = 11;
     end = firstElementStart;
     firstCounter = end - startEnd[1];
   }
-  int counters[[decodeFinderCounters count]];
-  for (int i = [decodeFinderCounters count] - 1; i > 0; i--) {
+  int countersLen = [decodeFinderCounters count];
+  int counters[countersLen];
+  for (int i = countersLen - 1; i > 0; i--) {
     counters[i] = [[decodeFinderCounters objectAtIndex:i - 1] intValue];
   }
 
@@ -340,7 +332,7 @@ const int MAX_PAIRS = 11;
   int value;
 
   @try {
-    value = [ZXAbstractRSSReader parseFinderValue:counters finderPatterns:(int **)RSS_EXPANDED_FINDER_PATTERNS];
+    value = [ZXAbstractRSSReader parseFinderValue:counters countersSize:countersLen finderPatternType:RSS_PATTERNS_RSS_EXPANDED_PATTERNS];
   }
   @catch (ZXNotFoundException * nfe) {
     return nil;

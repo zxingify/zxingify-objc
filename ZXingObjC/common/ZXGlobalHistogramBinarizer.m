@@ -115,10 +115,9 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   if (buckets == nil) {
     buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
-  } else {
-    for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-      [buckets addObject:[NSNumber numberWithInt:0]];
-    }
+  }
+  for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
+    [buckets addObject:[NSNumber numberWithInt:0]];
   }
 }
 

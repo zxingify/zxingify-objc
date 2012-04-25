@@ -13,19 +13,6 @@ const int INSIDE_GSUM[4] = {0,336,1036,1516};
 const int OUTSIDE_ODD_WIDEST[5] = {8,6,4,3,1};
 const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
-const int RSS14_FINDER_PATTERNS[9][4] = {
-  {3,8,2,1},
-  {3,5,5,1},
-  {3,3,7,1},
-  {3,1,9,1},
-  {2,7,4,1},
-  {2,5,6,1},
-  {2,3,8,1},
-  {1,5,7,1},
-  {1,3,9,1},
-};
-
-
 @interface ZXRSS14Reader ()
 
 - (void) addOrTally:(NSMutableArray *)possiblePairs pair:(ZXPair *)pair;
@@ -318,12 +305,17 @@ const int RSS14_FINDER_PATTERNS[9][4] = {
   firstElementStart++;
   int firstCounter = [[startEnd objectAtIndex:0] intValue] - firstElementStart;
 
-  int counters[[decodeFinderCounters count]];
+  int countersLen = [decodeFinderCounters count];
+  int counters[countersLen];
+  for (int i = 0; i < countersLen; i++) {
+    counters[i] = [[decodeFinderCounters objectAtIndex:i] intValue];
+  }
+  
   for (int i = (sizeof(counters) / sizeof(int)) - 1; i > 0; i--) {
     counters[i] = counters[i-1];
   }
   counters[0] = firstCounter;
-  int value = [ZXAbstractRSSReader parseFinderValue:counters finderPatterns:(int**)RSS14_FINDER_PATTERNS];
+  int value = [ZXAbstractRSSReader parseFinderValue:counters countersSize:countersLen finderPatternType:RSS_PATTERNS_RSS14_PATTERNS];
   int start = firstElementStart;
   int end = [[startEnd objectAtIndex:1] intValue];
   if (right) {

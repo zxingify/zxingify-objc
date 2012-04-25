@@ -7,7 +7,10 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-const int CODE_PATTERNS[107][7] = {
+static const int CODE_PATTERNS_LENGTH = 107;
+static const int countersLength = 7;
+
+const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
   {2, 1, 2, 2, 2, 2}, // 0
   {2, 2, 2, 1, 2, 2},
   {2, 2, 2, 2, 2, 1},
@@ -114,7 +117,7 @@ const int CODE_PATTERNS[107][7] = {
   {2, 1, 1, 4, 1, 2},
   {2, 1, 1, 2, 1, 4},
   {2, 1, 1, 2, 3, 2}, // 105
-  {2, 3, 3, 1, 1, 1, 2}
+  {2, 3, 3, 1, 1, 1}
 };
 
 
@@ -137,7 +140,7 @@ int const CODE_STOP = 106;
 
 @interface ZXCode128Reader ()
 
-- (int) decodeCode:(ZXBitArray *)row counters:(int[])counters rowOffset:(int)rowOffset;
+- (int) decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset;
 - (NSArray *) findStartPattern:(ZXBitArray *)row;
 
 @end
@@ -169,7 +172,7 @@ int const CODE_STOP = 106;
         int bestVariance = MAX_AVG_VARIANCE;
         int bestMatch = -1;
         for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-          int variance = [ZXOneDReader patternMatchVariance:counters pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:sizeof(counters) / sizeof(int) pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -198,14 +201,14 @@ int const CODE_STOP = 106;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (int) decodeCode:(ZXBitArray *)row counters:(int[])counters rowOffset:(int)rowOffset {
+- (int) decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset {
   [ZXOneDReader recordPattern:row start:rowOffset counters:counters];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
 
   for (int d = 0; d < sizeof(CODE_PATTERNS) / sizeof(int*); d++) {
     int * pattern = (int*)CODE_PATTERNS[d];
-    int variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+    int variance = [ZXOneDReader patternMatchVariance:counters countersSize:countersCount pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = d;
@@ -244,7 +247,7 @@ int const CODE_STOP = 106;
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
   int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
-  int counters[6];
+  int counters[countersLength] = {0,0,0,0,0,0};
 
   int lastCode = 0;
   int code = 0;
@@ -258,7 +261,7 @@ int const CODE_STOP = 106;
 
     lastCode = code;
 
-    code = [self decodeCode:row counters:counters rowOffset:nextStart];
+    code = [self decodeCode:row counters:counters countersCount:countersLength rowOffset:nextStart];
 
     if (code != CODE_STOP) {
       lastCharacterWasPrintable = YES;

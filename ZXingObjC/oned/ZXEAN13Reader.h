@@ -14,4 +14,6 @@ extern int FIRST_DIGIT_ENCODINGS[10];
   int* decodeMiddleCounters;
 }
 
+- (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)resultString;
+
 @end

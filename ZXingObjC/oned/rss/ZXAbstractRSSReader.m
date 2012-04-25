@@ -6,6 +6,32 @@
 float const MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
 float const MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
 
+const int RSS14_FINDER_PATTERNS_LEN = 9;
+const int RSS14_FINDER_PATTERNS_SUB_LEN = 4;
+const int RSS14_FINDER_PATTERNS[RSS14_FINDER_PATTERNS_LEN][RSS14_FINDER_PATTERNS_SUB_LEN] = {
+  {3,8,2,1},
+  {3,5,5,1},
+  {3,3,7,1},
+  {3,1,9,1},
+  {2,7,4,1},
+  {2,5,6,1},
+  {2,3,8,1},
+  {1,5,7,1},
+  {1,3,9,1},
+};
+
+const int RSS_EXPANDED_FINDER_PATTERNS_LEN = 6;
+const int RSS_EXPANDED_FINDER_PATTERNS_SUB_LEN = 4;
+const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXPANDED_FINDER_PATTERNS_SUB_LEN] = {
+  {1,8,4,1}, // A
+  {3,6,4,1}, // B
+  {3,4,6,1}, // C
+  {3,2,8,1}, // D
+  {2,6,5,1}, // E
+  {2,2,9,1}  // F
+};
+
+
 @implementation ZXAbstractRSSReader
 
 - (id) init {
@@ -20,11 +46,26 @@ float const MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
   return self;
 }
 
-+ (int) parseFinderValue:(int[])counters finderPatterns:(int*[])finderPatterns {
-  for (int value = 0; value < sizeof((int*)finderPatterns) / sizeof(int); value++) {
-    if ([self patternMatchVariance:counters pattern:finderPatterns[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
-      return value;
-    }
++ (int) parseFinderValue:(int[])counters countersSize:(int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType {
+  switch (finderPatternType) {
+    case RSS_PATTERNS_RSS14_PATTERNS:
+      for (int value = 0; value < RSS14_FINDER_PATTERNS_LEN; value++) {
+        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int*)RSS14_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+          return value;
+        }
+      }
+      break;
+
+    case RSS_PATTERNS_RSS_EXPANDED_PATTERNS:
+      for (int value = 0; value < RSS_EXPANDED_FINDER_PATTERNS_LEN; value++) {
+        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int*)RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+          return value;
+        }
+      }
+      break;
+      
+    default:
+      break;
   }
 
   @throw [ZXNotFoundException notFoundInstance];

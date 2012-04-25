@@ -17,7 +17,7 @@ extern int const PATTERN_MATCH_RESULT_SCALE_FACTOR;
 
 + (void) recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters;
 + (void) recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters;
-+ (int) patternMatchVariance:(int[])counters pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
++ (int) patternMatchVariance:(int[])counters countersSize:(int)countersSize pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints;
 
 @end

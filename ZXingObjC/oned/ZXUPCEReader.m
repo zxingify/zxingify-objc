@@ -37,13 +37,14 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 }
 
 - (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
-  int counters[4] = {0, 0, 0, 0};
+  const int countersLen = 4;
+  int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
   int rowOffset = [[startRange objectAtIndex:1] intValue];
   int lgPatternFound = 0;
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int **)L_AND_G_PATTERNS];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS];
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
 
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
@@ -60,7 +61,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 }
 
 - (NSArray *) decodeEnd:(ZXBitArray *)row endStart:(int)endStart {
-  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int*)MIDDLE_END_PATTERN];
+  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int*)MIDDLE_END_PATTERN patternLen:sizeof(MIDDLE_END_PATTERN)/sizeof(int)];
 }
 
 - (BOOL) checkChecksum:(NSString *)s {

@@ -49,19 +49,16 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   return self;
 }
 
-- (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange resultString:(NSMutableString *)resultString {
-  int counters[4];
-  counters[0] = 0;
-  counters[1] = 0;
-  counters[2] = 0;
-  counters[3] = 0;
+- (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)resultString {
+  const int countersLen = 4;
+  int counters[countersLen] = { 0, 0, 0, 0 };
   int end = [row size];
   int rowOffset = [[startRange objectAtIndex:1] intValue];
 
   int lgPatternFound = 0;
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int**)L_AND_G_PATTERNS];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       rowOffset += counters[i];
@@ -73,11 +70,11 @@ int FIRST_DIGIT_ENCODINGS[10] = {
 
   [self determineFirstDigit:resultString lgPatternFound:lgPatternFound];
 
-  NSArray * middleRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN];
+  NSArray * middleRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN];
   rowOffset = [[middleRange objectAtIndex:1] intValue];
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int**)L_PATTERNS];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       rowOffset += counters[i];

@@ -16,17 +16,20 @@
 /**
  * Start/end guard pattern.
  */
-int const START_END_PATTERN[3] = {1, 1, 1};
+const int START_END_PATTERN[3] = {1, 1, 1};
 
 /**
  * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
  */
-int const MIDDLE_PATTERN[5] = {1, 1, 1, 1, 1};
+const int MIDDLE_PATTERN_LEN = 5;
+const int MIDDLE_PATTERN[MIDDLE_PATTERN_LEN] = {1, 1, 1, 1, 1};
 
 /**
  * "Odd", or "L" patterns used to encode UPC/EAN digits.
  */
-int const L_PATTERNS[10][4] = {
+const int L_PATTERNS_LEN = 10;
+const int L_PATTERNS_SUB_LEN = 4;
+const int L_PATTERNS[L_PATTERNS_LEN][L_PATTERNS_SUB_LEN] = {
   {3, 2, 1, 1}, // 0
   {2, 2, 2, 1}, // 1
   {2, 1, 2, 2}, // 2
@@ -42,7 +45,30 @@ int const L_PATTERNS[10][4] = {
 /**
  * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
  */
-int L_AND_G_PATTERNS[20][4];
+const int L_AND_G_PATTERNS_LEN = 20;
+const int L_AND_G_PATTERNS_SUB_LEN = 4;
+const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
+  {3, 2, 1, 1}, // 0
+  {2, 2, 2, 1}, // 1
+  {2, 1, 2, 2}, // 2
+  {1, 4, 1, 1}, // 3
+  {1, 1, 3, 2}, // 4
+  {1, 2, 3, 1}, // 5
+  {1, 1, 1, 4}, // 6
+  {1, 3, 1, 2}, // 7
+  {1, 2, 1, 3}, // 8
+  {3, 1, 1, 2}, // 9
+  {1, 1, 2, 3}, // 10 reversed 0
+  {1, 2, 2, 2}, // 11 reversed 1
+  {2, 2, 1, 2}, // 12 reversed 2
+  {1, 1, 4, 1}, // 13 reversed 3
+  {2, 3, 1, 1}, // 14 reversed 4
+  {1, 3, 2, 1}, // 15 reversed 5
+  {4, 1, 1, 1}, // 16 reversed 6
+  {2, 1, 3, 1}, // 17 reversed 7
+  {3, 1, 2, 1}, // 18 reversed 8
+  {2, 1, 1, 3}  // 19 reversed 9
+};
 
 @interface ZXUPCEANReader ()
 
@@ -51,21 +77,6 @@ int L_AND_G_PATTERNS[20][4];
 @end
 
 @implementation ZXUPCEANReader
-
-+ (void) initialize {
-  for (int i = 0; i < 10; i++) {
-    for (int j = 0; j < sizeof(L_PATTERNS[i]) / sizeof(int); j++) {
-      L_AND_G_PATTERNS[i][j] = L_PATTERNS[i][j];
-    }
-  }
-
-  for (int i = 10; i < 20; i++) {
-    int *widths = (int*)L_PATTERNS[i - 10];
-    for (int j = 0; j < sizeof(widths) / sizeof(int); j++) {
-      L_AND_G_PATTERNS[i][j] = widths[sizeof(widths) / sizeof(int) - j - 1];
-    }
-  }
-}
 
 - (id) init {
   if (self = [super init]) {
@@ -82,7 +93,7 @@ int L_AND_G_PATTERNS[20][4];
   int nextStart = 0;
 
   while (!foundStart) {
-    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:(int*)START_END_PATTERN];
+    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:(int*)START_END_PATTERN patternLen:sizeof(START_END_PATTERN)/sizeof(int)];
     int start = [[startRange objectAtIndex:0] intValue];
     nextStart = [[startRange objectAtIndex:1] intValue];
     int quietStart = start - (nextStart - start);
@@ -198,7 +209,7 @@ int L_AND_G_PATTERNS[20][4];
 }
 
 - (NSArray *) decodeEnd:(ZXBitArray *)row endStart:(int)endStart {
-  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:(int*)START_END_PATTERN];
+  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:(int*)START_END_PATTERN patternLen:sizeof(START_END_PATTERN)/sizeof(int)];
 }
 
 
@@ -212,9 +223,13 @@ int L_AND_G_PATTERNS[20][4];
  * @return start/end horizontal offset of guard pattern, as an array of two ints
  * @throws NotFoundException if pattern is not found
  */
-+ (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int[])pattern {
-  int patternLength = sizeof((int*)pattern) / sizeof(int);
++ (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int[])pattern patternLen:(int)patternLen {
+  int patternLength = patternLen;
   int counters[patternLength];
+  int countersCount = sizeof(counters) / sizeof(int);
+  for (int i = 0; i < countersCount; i++) {
+    counters[i] = 0;
+  }
   int width = [row size];
   BOOL isWhite = NO;
 
@@ -233,10 +248,9 @@ int L_AND_G_PATTERNS[20][4];
     BOOL pixel = [row get:x];
     if (pixel ^ isWhite) {
       counters[counterPosition]++;
-    }
-     else {
+    } else {
       if (counterPosition == patternLength - 1) {
-        if ([self patternMatchVariance:(int*)counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:countersCount pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
         }
         patternStart += counters[0] + counters[1];
@@ -273,25 +287,49 @@ int L_AND_G_PATTERNS[20][4];
  * @return horizontal offset of first pixel beyond the decoded digit
  * @throws NotFoundException if digit cannot be decoded
  */
-+ (int) decodeDigit:(ZXBitArray *)row counters:(int[])counters rowOffset:(int)rowOffset patterns:(int*[])patterns {
++ (int) decodeDigit:(ZXBitArray *)row counters:(int[])counters countersLen:(int)countersLen rowOffset:(int)rowOffset patternType:(UPC_EAN_PATTERNS)patternType {
   [self recordPattern:row start:rowOffset counters:counters];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
-  int max = sizeof((int**)patterns) / sizeof(int*);
+  int max = 0;
+  switch (patternType) {
+    case UPC_EAN_PATTERNS_L_PATTERNS:
+      max = L_PATTERNS_LEN;
+      for (int i = 0; i < max; i++) {
+        int pattern[countersLen];
+        for(int j = 0; j< countersLen; j++){
+          pattern[j] = L_PATTERNS[i][j];
+        }
 
-  for (int i = 0; i < max; i++) {
-    int *pattern = (int*)patterns[i];
-    int variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
-    if (variance < bestVariance) {
-      bestVariance = variance;
-      bestMatch = i;
-    }
+        int variance = [self patternMatchVariance:counters countersSize:countersLen pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+        if (variance < bestVariance) {
+          bestVariance = variance;
+          bestMatch = i;
+        }
+      }
+      break;
+    case UPC_EAN_PATTERNS_L_AND_G_PATTERNS:
+      max = L_AND_G_PATTERNS_LEN;
+      for (int i = 0; i < max; i++) {
+        int pattern[countersLen];
+        for(int j = 0; j< countersLen; j++){
+          pattern[j] = L_AND_G_PATTERNS[i][j];
+        }
+        
+        int variance = [self patternMatchVariance:counters countersSize:countersLen pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+        if (variance < bestVariance) {
+          bestVariance = variance;
+          bestMatch = i;
+        }
+      }
+      break;
+    default:
+      break;
   }
 
   if (bestMatch >= 0) {
     return bestMatch;
-  }
-   else {
+  } else {
     @throw [ZXNotFoundException notFoundInstance];
   }
 }

@@ -32,8 +32,8 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 - (float) computeModuleWidth:(NSArray *)vertices;
 - (int) computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
 - (int) round:(float)d;
-- (NSArray *) findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern;
-- (int) patternMatchVariance:(NSArray *)counters pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
+- (NSArray *) findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen;
+- (int) patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXBitMatrix *) sampleGrid:(ZXBitMatrix *)matrix topLeft:(ZXResultPoint *)topLeft bottomLeft:(ZXResultPoint *)bottomLeft topRight:(ZXResultPoint *)topRight bottomRight:(ZXResultPoint *)bottomRight dimension:(int)dimension;
 
 @end
@@ -124,7 +124,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
   // Top Left
   for (int i = 0; i < height; i++) {
-    NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN];
+    NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN patternLen:sizeof(PDF417_START_PATTERN)/sizeof(int)];
     if (loc != nil) {
       [result replaceObjectAtIndex:0
                         withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
@@ -138,7 +138,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Top Left vertex
     found = NO;
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN patternLen:sizeof(PDF417_START_PATTERN)/sizeof(int)];
       if (loc != nil) {
         [result replaceObjectAtIndex:1
                           withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
@@ -153,7 +153,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Bottom Left vertex
     found = NO;
     for (int i = 0; i < height; i++) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN patternLen:sizeof(STOP_PATTERN)/sizeof(int)];
       if (loc != nil) {
         [result replaceObjectAtIndex:2
                           withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
@@ -168,7 +168,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Top right vertex
     found = NO;
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN patternLen:sizeof(STOP_PATTERN)/sizeof(int)];
       if (loc != nil) {
         [result replaceObjectAtIndex:3
                           withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
@@ -215,7 +215,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
   // Top Left
   for (int i = height - 1; i > 0; i--) {
-    NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE];
+    NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE patternLen:sizeof(START_PATTERN_REVERSE)/sizeof(int)];
     if (loc != nil) {
       [result replaceObjectAtIndex:0
                         withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
@@ -229,7 +229,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Top Left vertex
     found = NO;
     for (int i = 0; i < height; i++) {
-      NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE];
+      NSArray * loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE patternLen:sizeof(START_PATTERN_REVERSE)/sizeof(int)];
       if (loc != nil) {
         [result replaceObjectAtIndex:1
                           withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:1] floatValue] y:i] autorelease]];
@@ -244,7 +244,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Bottom Left vertex
     found = NO;
     for (int i = height - 1; i > 0; i--) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE patternLen:sizeof(STOP_PATTERN_REVERSE)/sizeof(int)];
       if (loc != nil) {
         [result replaceObjectAtIndex:2
                           withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
@@ -259,7 +259,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   if (found) { // Found the Top Right vertex
     found = NO;
     for (int i = 0; i < height; i++) {
-      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE];
+      NSArray * loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE patternLen:sizeof(STOP_PATTERN_REVERSE)/sizeof(int)];
       if (loc != nil) {
         [result replaceObjectAtIndex:3
                           withObject:[[[ZXResultPoint alloc] initWithX:[[loc objectAtIndex:0] floatValue] y:i] autorelease]];
@@ -418,11 +418,11 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * being searched for as a pattern
  * @return start/end horizontal offset of guard pattern, as an array of two ints.
  */
-- (NSArray *) findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern {
-  int patternLength = sizeof(pattern) / sizeof(int*);
-  NSMutableArray * counters = [NSMutableArray arrayWithCapacity:patternLength];
+- (NSArray *) findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen {
+  int patternLength = patternLen;
+  int counters[patternLength];
   for (int i = 0; i < patternLength; i++) {
-    [counters addObject:[NSNumber numberWithInt:0]];
+    counters[i] = 0;
   }
   BOOL isWhite = whiteFirst;
 
@@ -431,24 +431,23 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
   for (int x = column; x < column + width; x++) {
     BOOL pixel = [matrix get:x y:row];
     if (pixel ^ isWhite) {
-      [counters replaceObjectAtIndex:counterPosition
-                          withObject:[NSNumber numberWithInt:[[counters objectAtIndex:counterPosition] intValue] + 1]];
+      counters[counterPosition] = counters[counterPosition] + 1;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:patternLength pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
         }
-        patternStart += [[counters objectAtIndex:0] intValue] + [[counters objectAtIndex:1] intValue];
+        patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {
-          [counters replaceObjectAtIndex:y - 2 withObject:[counters objectAtIndex:y]];
+          counters[y - 2] = counters[y];
         }
-        [counters replaceObjectAtIndex:patternLength - 2 withObject:[NSNumber numberWithInt:0]];
-        [counters replaceObjectAtIndex:patternLength - 1 withObject:[NSNumber numberWithInt:0]];
+        counters[patternLength - 2] = 0;
+        counters[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      [counters replaceObjectAtIndex:counterPosition withObject:[NSNumber numberWithInt:1]];
+      counters[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -471,12 +470,12 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * variance between counters and patterns equals the pattern length,
  * higher values mean even more variance
  */
-- (int) patternMatchVariance:(NSArray *)counters pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
-  int numCounters = [counters count];
+- (int) patternMatchVariance:(int*)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
+  int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;
   for (int i = 0; i < numCounters; i++) {
-    total += [[counters objectAtIndex:i] intValue];
+    total += counters[i];
     patternLength += pattern[i];
   }
 
@@ -488,7 +487,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
   int totalVariance = 0;
   for (int x = 0; x < numCounters; x++) {
-    int counter = [[counters objectAtIndex:x] intValue] << 8;
+    int counter = counters[x] << 8;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {

@@ -17,7 +17,8 @@
  * @author kevin.osullivan@sita.aero, SITA Lab.
  */
 
-extern int const PATTERNS[10][5];
+extern const int PATTERNS_LEN;
+extern const int PATTERNS[][5];
 
 @class ZXResult;
 

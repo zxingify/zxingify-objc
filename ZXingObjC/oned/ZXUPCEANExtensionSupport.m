@@ -22,7 +22,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 @implementation ZXUPCEANExtensionSupport
 
 - (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset {
-  NSArray * extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN];
+  NSArray * extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN patternLen:sizeof(EXTENSION_START_PATTERN)/sizeof(int)];
 
   NSMutableString * result = [NSMutableString string];
   int end = [self decodeMiddle:row startRange:extensionStartRange result:result];
@@ -43,14 +43,15 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 }
 
 - (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
-  int counters[4] = {0, 0, 0, 0};
+  const int countersLen = 4;
+  int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
   int rowOffset = [[startRange objectAtIndex:1] intValue];
 
   int lgPatternFound = 0;
 
   for (int x = 0; x < 5 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patterns:(int**)L_AND_G_PATTERNS];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS];
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       rowOffset += counters[i];
