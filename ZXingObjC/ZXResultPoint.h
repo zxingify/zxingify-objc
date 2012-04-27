@@ -6,7 +6,7 @@
  * @author Sean Owen
  */
 
-@interface ZXResultPoint : NSObject {
+@interface ZXResultPoint : NSObject<NSCopying> {
   float x;
   float y;
 }

@@ -15,8 +15,8 @@ extern int const PATTERN_MATCH_RESULT_SCALE_FACTOR;
 
 @interface ZXOneDReader : NSObject <ZXReader>
 
-+ (void) recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters;
-+ (void) recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters;
++ (void) recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize;
++ (void) recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize;
 + (int) patternMatchVariance:(int[])counters countersSize:(int)countersSize pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints;
 

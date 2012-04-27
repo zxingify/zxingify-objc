@@ -2,7 +2,6 @@
 
 @implementation ZXLuminanceSource
 
-@synthesize matrix;
 @synthesize width;
 @synthesize height;
 @synthesize cropSupported;
@@ -44,7 +43,7 @@
  * larger than width * height bytes on some platforms. Do not modify the contents
  * of the result.
  */
-- (NSArray *) matrix {
+- (unsigned char *) matrix {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

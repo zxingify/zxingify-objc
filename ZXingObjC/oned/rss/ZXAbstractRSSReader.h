@@ -7,10 +7,10 @@ typedef enum {
 } RSS_PATTERNS;
 
 @interface ZXAbstractRSSReader : ZXOneDReader {
-  NSArray * decodeFinderCounters;
-  NSArray * dataCharacterCounters;
-  NSArray * oddRoundingErrors;
-  NSArray * evenRoundingErrors;
+  NSMutableArray * decodeFinderCounters;
+  NSMutableArray * dataCharacterCounters;
+  NSMutableArray * oddRoundingErrors;
+  NSMutableArray * evenRoundingErrors;
   NSMutableArray * oddCounts;
   NSMutableArray * evenCounts;
 }

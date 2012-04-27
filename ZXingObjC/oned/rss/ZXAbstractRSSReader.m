@@ -36,12 +36,26 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 
 - (id) init {
   if (self = [super init]) {
-    decodeFinderCounters = [NSArray array];
-    dataCharacterCounters = [NSArray array];
-    oddRoundingErrors = [NSArray array];
-    evenRoundingErrors = [NSArray array];
-    oddCounts = [NSMutableArray array];
-    evenCounts = [NSMutableArray array];
+    dataCharacterCounters = [NSMutableArray arrayWithCapacity:8];
+    for (int i = 0; i < 8; i++) {
+      [dataCharacterCounters addObject:[NSNumber numberWithInt:0]];
+    }
+
+    decodeFinderCounters = [NSMutableArray arrayWithCapacity:4];
+    oddRoundingErrors = [NSMutableArray arrayWithCapacity:4];
+    evenRoundingErrors = [NSMutableArray arrayWithCapacity:4];
+    for (int i = 0; i < 4; i++) {
+      [decodeFinderCounters addObject:[NSNumber numberWithInt:0]];
+      [oddRoundingErrors addObject:[NSNumber numberWithInt:0]];
+      [evenRoundingErrors addObject:[NSNumber numberWithInt:0]];
+    }
+
+    oddCounts = [NSMutableArray arrayWithCapacity:dataCharacterCounters.count / 2];
+    evenCounts = [NSMutableArray arrayWithCapacity:dataCharacterCounters.count / 2];
+    for (int i = 0; i < dataCharacterCounters.count / 2; i++) {
+      [oddCounts addObject:[NSNumber numberWithInt:0]];
+      [evenCounts addObject:[NSNumber numberWithInt:0]];
+    }
   }
   return self;
 }

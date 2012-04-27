@@ -125,7 +125,14 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
   NSArray * imageFiles = [self imageFiles];
   int testCount = [testResults count];
   int passedCounts[testCount];
+  for (int i = 0; i < testCount; i++) {
+    passedCounts[i] = 0;
+  }
+
   int tryHarderCounts[testCount];
+  for (int i = 0; i < testCount; i++) {
+    tryHarderCounts[i] = 0;
+  }
 
   for (NSURL * testImage in imageFiles) {
     NSLog(@"Starting %@", [testImage path]);
@@ -134,7 +141,7 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
 
     NSString * testImageFileName = [[[testImage path] componentsSeparatedByString:@"/"] lastObject];
     NSString * fileBaseName = [testImageFileName substringToIndex:[testImageFileName rangeOfString:@"."].location];
-    NSURL * expectedTextFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase]];
+    NSURL * expectedTextFile = [NSURL fileURLWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase]];
     NSString * expectedText = [NSString stringWithContentsOfURL:expectedTextFile encoding:NSUTF8StringEncoding error:nil];
 
     NSURL * expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:testBase]];

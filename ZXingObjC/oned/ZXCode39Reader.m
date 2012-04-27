@@ -83,11 +83,12 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  int counters[9];
+  const int countersLen = 9;
+  int counters[countersLen];
   unichar decodedChar;
   int lastStart;
   do {
-    [ZXOneDReader recordPattern:row start:nextStart counters:counters];
+    [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
     int pattern = [self toNarrowWidePattern:counters];
     if (pattern < 0) {
       @throw [ZXNotFoundException notFoundInstance];

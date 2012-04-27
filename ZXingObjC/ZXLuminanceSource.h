@@ -14,13 +14,13 @@
   int height;
 }
 
-@property(nonatomic, retain, readonly) NSArray * matrix;
 @property(nonatomic, readonly) int width;
 @property(nonatomic, readonly) int height;
 @property(nonatomic, readonly) BOOL cropSupported;
 @property(nonatomic, readonly) BOOL rotateSupported;
 - (id) init:(int)width height:(int)height;
 - (unsigned char *) getRow:(int)y row:(unsigned char *)row;
+- (unsigned char *) matrix;
 - (ZXLuminanceSource *) crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXLuminanceSource *) rotateCounterClockwise;
 @end

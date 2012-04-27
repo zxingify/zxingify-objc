@@ -29,15 +29,15 @@
   if (self = [super init]) {
     image = [anImage retain];
     possibleCenters = [[NSMutableArray alloc] initWithCapacity:5];
-    for (int i = 0; i < 5; i++) {
-      [possibleCenters addObject:[NSNull null]];
-    }
     startX = aStartX;
     startY = aStartY;
     width = aWidth;
     height = aHeight;
     moduleSize = aModuleSize;
     crossCheckStateCount = (int*)malloc(3 * sizeof(int));
+    for (int i = 0; i < 3; i++) {
+      crossCheckStateCount[i] = 0;
+    }
     resultPointCallback = aResultPointCallback;
   }
   return self;
@@ -242,9 +242,12 @@
 }
 
 - (void) dealloc {
+  if (crossCheckStateCount) {
+    free(crossCheckStateCount);
+  }
+
   [image release];
   [possibleCenters release];
-//  free(crossCheckStateCount);
   [resultPointCallback release];
   [super dealloc];
 }

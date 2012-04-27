@@ -90,11 +90,11 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   }
 
   return [[[ZXResult alloc] initWithText:resultString
-                                 rawBytes:nil
-                                length:0
-                          resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
-                                        [[[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
-                                format:kBarcodeFormatITF] autorelease];
+                                rawBytes:nil
+                                  length:0
+                            resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
+                                          [[[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
+                                  format:kBarcodeFormatITF] autorelease];
 }
 
 
@@ -105,12 +105,17 @@ const int PATTERNS[PATTERNS_LEN][5] = {
  * @throws NotFoundException if decoding could not complete successfully
  */
 - (void) decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
-  int counterDigitPair[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  int counterBlack[5] = {0, 0, 0, 0, 0};
-  int counterWhite[5] = {0, 0, 0, 0, 0};
+  const int counterDigitPairLen = 10;
+  int counterDigitPair[counterDigitPairLen] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  const int counterBlackLen = 5;
+  int counterBlack[counterBlackLen] = {0, 0, 0, 0, 0};
+
+  const int counterWhiteLen = 5;
+  int counterWhite[counterWhiteLen] = {0, 0, 0, 0, 0};
 
   while (payloadStart < payloadEnd) {
-    [ZXOneDReader recordPattern:row start:payloadStart counters:counterDigitPair];
+    [ZXOneDReader recordPattern:row start:payloadStart counters:counterDigitPair countersSize:counterDigitPairLen];
 
     for (int k = 0; k < 5; k++) {
       int twoK = k << 1;
@@ -118,9 +123,9 @@ const int PATTERNS[PATTERNS_LEN][5] = {
       counterWhite[k] = counterDigitPair[twoK + 1];
     }
 
-    int bestMatch = [self decodeDigit:counterBlack countersSize:5];
+    int bestMatch = [self decodeDigit:counterBlack countersSize:counterBlackLen];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    bestMatch = [self decodeDigit:counterWhite countersSize:5];
+    bestMatch = [self decodeDigit:counterWhite countersSize:counterWhiteLen];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
 
     for (int i = 0; i < sizeof(counterDigitPair) / sizeof(int); i++) {

@@ -154,8 +154,8 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * @throws NotFoundException if counters cannot be filled entirely from row before running out
  * of pixels
  */
-+ (void) recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters {
-  int numCounters = sizeof((int*)counters) / sizeof(int);
++ (void) recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
+  int numCounters = countersSize;
 
   for (int i = 0; i < numCounters; i++) {
     counters[i] = 0;
@@ -190,8 +190,8 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   }
 }
 
-+ (void) recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters {
-  int numTransitionsLeft = sizeof((int*)counters) / sizeof(int);
++ (void) recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
+  int numTransitionsLeft = countersSize;
   BOOL last = [row get:start];
 
   while (start > 0 && numTransitionsLeft >= 0) {
@@ -204,7 +204,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   if (numTransitionsLeft >= 0) {
     @throw [ZXNotFoundException notFoundInstance];
   }
-  [self recordPattern:row start:start + 1 counters:counters];
+  [self recordPattern:row start:start + 1 counters:counters countersSize:countersSize];
 }
 
 

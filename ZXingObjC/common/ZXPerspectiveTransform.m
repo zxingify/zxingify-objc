@@ -23,15 +23,15 @@
   return [sToQ times:qToS];
 }
 
-- (void) transformPoints:(NSMutableArray *)points {
-  int max = [points count];
+- (void) transformPoints:(float *)points pointsLen:(int)pointsLen {
+  int max = pointsLen;
 
   for (int i = 0; i < max; i += 2) {
-    float x = [[points objectAtIndex:i] floatValue];
-    float y = [[points objectAtIndex:i + 1] floatValue];
+    float x = points[i];
+    float y = points[i + 1];
     float denominator = a13 * x + a23 * y + a33;
-    [points replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:(a11 * x + a21 * y + a31) / denominator]];
-    [points replaceObjectAtIndex:i + 1 withObject:[NSNumber numberWithFloat:(a12 * x + a22 * y + a32) / denominator]];
+    points[i] = (a11 * x + a21 * y + a31) / denominator;
+    points[i + 1] = (a12 * x + a22 * y + a32) / denominator;
   }
 }
 
@@ -39,15 +39,15 @@
 /**
  * Convenience method, not optimized for performance.
  */
-- (void) transformPoints:(NSMutableArray *)xValues yValues:(NSMutableArray *)yValues {
-  int n = [xValues count];
+- (void) transformPoints:(float *)xValues yValues:(float *)yValues pointsLen:(int)pointsLen {
+  int n = pointsLen;
 
-  for (int i = 0; i < n; i++) {
-    float x = [[xValues objectAtIndex:i] floatValue];
-    float y = [[yValues objectAtIndex:i] floatValue];
+  for (int i = 0; i < n; i ++) {
+    float x = xValues[i];
+    float y = yValues[i];
     float denominator = a13 * x + a23 * y + a33;
-    [xValues replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:(a11 * x + a21 * y + a31) / denominator]];
-    [yValues replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:(a12 * x + a22 * y + a32) / denominator]];
+    xValues[i] = (a11 * x + a21 * y + a31) / denominator;
+    yValues[i] = (a12 * x + a22 * y + a32) / denominator;
   }
 }
 

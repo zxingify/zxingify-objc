@@ -158,7 +158,7 @@ int const CODE_STOP = 106;
   }
 
   int counterPosition = 0;
-  int counters[6];
+  int counters[6] = {0, 0, 0, 0, 0, 0};
   int patternStart = rowOffset;
   BOOL isWhite = NO;
   int patternLength = sizeof(counters) / sizeof(int);
@@ -202,11 +202,11 @@ int const CODE_STOP = 106;
 }
 
 - (int) decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset {
-  [ZXOneDReader recordPattern:row start:rowOffset counters:counters];
+  [ZXOneDReader recordPattern:row start:rowOffset counters:counters countersSize:countersCount];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
 
-  for (int d = 0; d < sizeof(CODE_PATTERNS) / sizeof(int*); d++) {
+  for (int d = 0; d < CODE_PATTERNS_LENGTH; d++) {
     int * pattern = (int*)CODE_PATTERNS[d];
     int variance = [ZXOneDReader patternMatchVariance:counters countersSize:countersCount pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
@@ -247,7 +247,8 @@ int const CODE_STOP = 106;
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
   int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
-  int counters[countersLength] = {0,0,0,0,0,0};
+  const int countersLen = 6;
+  int counters[countersLen] = {0,0,0,0,0,0};
 
   int lastCode = 0;
   int code = 0;
@@ -261,7 +262,7 @@ int const CODE_STOP = 106;
 
     lastCode = code;
 
-    code = [self decodeCode:row counters:counters countersCount:countersLength rowOffset:nextStart];
+    code = [self decodeCode:row counters:counters countersCount:countersLen rowOffset:nextStart];
 
     if (code != CODE_STOP) {
       lastCharacterWasPrintable = YES;

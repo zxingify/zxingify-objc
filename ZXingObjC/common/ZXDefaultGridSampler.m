@@ -23,20 +23,24 @@
     @throw [ZXNotFoundException notFoundInstance];
   }
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
-  NSMutableArray * points = [NSMutableArray arrayWithCapacity:dimensionX << 1];
+  int pointsLen = dimensionX << 1;
+  float points[pointsLen];
+  for (int i = 0; i < pointsLen; i++) {
+    points[i] = 0;
+  }
 
   for (int y = 0; y < dimensionY; y++) {
     int max = dimensionX << 1;
     float iValue = (float)y + 0.5f;
     for (int x = 0; x < max; x += 2) {
-      [points addObject:[NSNumber numberWithFloat:(float)(x >> 1) + 0.5f]];
-      [points addObject:[NSNumber numberWithFloat:iValue]];
+      points[x] = (float) (x >> 1) + 0.5f;
+      points[x + 1] = iValue;
     }
-    [transform transformPoints:points];
+    [transform transformPoints:points pointsLen:pointsLen];
 
-    [ZXGridSampler checkAndNudgePoints:image points:points];
+    [ZXGridSampler checkAndNudgePoints:image points:points pointsLen:pointsLen];
     for (int x = 0; x < max; x += 2) {
-      if ([image get:[[points objectAtIndex:x] intValue] y:[[points objectAtIndex:x + 1] intValue]]) {
+      if ([image get:(int)points[x] y:(int)points[x + 1]]) {
         [bits set:x >> 1 y:y];
       }
     }

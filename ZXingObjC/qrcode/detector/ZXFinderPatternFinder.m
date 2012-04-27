@@ -496,15 +496,17 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
 
     [possibleCenters sortUsingFunction:centerCompare context:[NSNumber numberWithFloat:average]];
 
-    possibleCenters = [NSMutableArray arrayWithArray:[possibleCenters subarrayWithRange:NSMakeRange(0, 3)]];
+    NSMutableArray* newPossibleCenters = [[NSMutableArray alloc] initWithArray:[possibleCenters subarrayWithRange:NSMakeRange(0, 3)]];
+    [possibleCenters release];
+    possibleCenters = newPossibleCenters;
   }
 
-  return [NSArray arrayWithObjects:[possibleCenters objectAtIndex:0], [possibleCenters objectAtIndex:1], [possibleCenters objectAtIndex:2], nil];
+  return [NSMutableArray arrayWithObjects:[possibleCenters objectAtIndex:0], [possibleCenters objectAtIndex:1], [possibleCenters objectAtIndex:2], nil];
 }
 
 - (void) dealloc {
   [image release];
-  [possibleCenters release];
+//  [possibleCenters release];
   [super dealloc];
 }
 

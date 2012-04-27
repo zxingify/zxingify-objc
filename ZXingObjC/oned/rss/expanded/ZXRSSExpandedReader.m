@@ -341,19 +341,12 @@ const int MAX_PAIRS = 11;
 }
 
 - (ZXDataCharacter *) decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
-  int counters[8];
-  counters[0] = 0;
-  counters[1] = 0;
-  counters[2] = 0;
-  counters[3] = 0;
-  counters[4] = 0;
-  counters[5] = 0;
-  counters[6] = 0;
-  counters[7] = 0;
+  const int countersLen = 8;
+  int counters[countersLen] = {0, 0, 0, 0, 0, 0, 0, 0};
   if (leftChar) {
-    [ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters];
+    [ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters countersSize:countersLen];
   } else {
-    [ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] + 1 counters:counters];
+    [ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] + 1 counters:counters countersSize:countersLen];
 
     for (int i = 0, j = (sizeof(counters) / sizeof(int)) - 1; i < j; i++, j--) {
       int temp = counters[i];

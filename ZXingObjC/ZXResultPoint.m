@@ -19,6 +19,10 @@
   return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+  return [[ZXResultPoint allocWithZone:zone] initWithX:x y:y];
+}
+
 - (BOOL) isEqual:(id)other {
   if ([other isKindOfClass:[ZXResultPoint class]]) {
     ZXResultPoint * otherPoint = (ZXResultPoint *)other;

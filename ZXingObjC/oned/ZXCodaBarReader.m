@@ -49,7 +49,8 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   }
 
   NSMutableString * result = [NSMutableString string];
-  int counters[7];
+  const int countersLen = 7;
+  int counters[countersLen];
   int lastStart;
 
   do {
@@ -57,7 +58,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
       counters[i] = 0;
     }
 
-    [ZXOneDReader recordPattern:row start:nextStart counters:counters];
+    [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
 
     unichar decodedChar = [self toNarrowWidePattern:counters];
     if (decodedChar == '!') {

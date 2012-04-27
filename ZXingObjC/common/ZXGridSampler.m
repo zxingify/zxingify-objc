@@ -70,54 +70,54 @@ static ZXGridSampler * gridSampler = nil;
  * @param points actual points in x1,y1,...,xn,yn form
  * @throws NotFoundException if an endpoint is lies outside the image boundaries
  */
-+ (void) checkAndNudgePoints:(ZXBitMatrix *)image points:(NSMutableArray *)points {
++ (void) checkAndNudgePoints:(ZXBitMatrix *)image points:(float *)points pointsLen:(int)pointsLen {
   int width = [image width];
   int height = [image height];
 
   BOOL nudged = YES;
-  for (int offset = 0; offset < [points count] && nudged; offset += 2) {
-    int x = (int)[[points objectAtIndex:offset] intValue];
-    int y = (int)[[points objectAtIndex:offset + 1] intValue];
+  for (int offset = 0; offset < pointsLen && nudged; offset += 2) {
+    int x = (int) points[offset];
+    int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
       @throw [ZXNotFoundException notFoundInstance];
     }
     nudged = NO;
     if (x == -1) {
-      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:0.0f]];
+      points[offset] = 0.0f;
       nudged = YES;
     } else if (x == width) {
-      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:width - 1]];
+      points[offset] = width - 1;
       nudged = YES;
     }
     if (y == -1) {
-      [points replaceObjectAtIndex:offset + 1 withObject:[NSNumber numberWithFloat:0.0f]];
+      points[offset + 1] = 0.0f;
       nudged = YES;
     } else if (y == height) {
-      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:height - 1]];
+      points[offset + 1] = height - 1;
       nudged = YES;
     }
   }
 
   nudged = YES;
-  for (int offset = [points count] - 2; offset >= 0 && nudged; offset -= 2) {
-    int x = [[points objectAtIndex:offset] intValue];
-    int y = [[points objectAtIndex:offset + 1] intValue];
+  for (int offset = pointsLen - 2; offset >= 0 && nudged; offset -= 2) {
+    int x = (int) points[offset];
+    int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
       @throw [ZXNotFoundException notFoundInstance];
     }
     nudged = NO;
     if (x == -1) {
-      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:0.0f]];
+      points[offset] = 0.0f;
       nudged = YES;
     } else if (x == width) {
-      [points replaceObjectAtIndex:offset withObject:[NSNumber numberWithFloat:width - 1]];
+      points[offset] = width - 1;
       nudged = YES;
     }
     if (y == -1) {
-      [points replaceObjectAtIndex:offset + 1 withObject:[NSNumber numberWithFloat:0.0f]];
+      points[offset + 1] = 0.0f;
       nudged = YES;
     } else if (y == height) {
-      [points replaceObjectAtIndex:offset + 1 withObject:[NSNumber numberWithFloat:height - 1]];
+      points[offset + 1] = height - 1;
       nudged = YES;
     }
   }

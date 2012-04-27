@@ -6,7 +6,7 @@ static ZXNotFoundException* instance = nil;
 
 + (ZXNotFoundException *)notFoundInstance {
   if (instance == nil) {
-    instance = [[[ZXNotFoundException alloc] init] autorelease];
+    instance = [[[ZXNotFoundException alloc] initWithName:@"NotFoundException" reason:@"Not Found" userInfo:nil] autorelease];
   }
 
   return instance;

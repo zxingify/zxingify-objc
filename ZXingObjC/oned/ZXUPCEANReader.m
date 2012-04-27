@@ -288,7 +288,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
  * @throws NotFoundException if digit cannot be decoded
  */
 + (int) decodeDigit:(ZXBitArray *)row counters:(int[])counters countersLen:(int)countersLen rowOffset:(int)rowOffset patternType:(UPC_EAN_PATTERNS)patternType {
-  [self recordPattern:row start:rowOffset counters:counters];
+  [self recordPattern:row start:rowOffset counters:counters countersSize:countersLen];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
   int max = 0;

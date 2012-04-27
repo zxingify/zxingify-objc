@@ -169,12 +169,30 @@
     [NSException raise:NSInvalidArgumentException format:@"Requested row is outside the image: %d", y];
   }
 
+  if (row == NULL) {
+    row = (unsigned char*)malloc(width * sizeof(unsigned char));
+  }
+
   int offset = (y + top) * dataWidth + left;
   CFDataGetBytes(data, CFRangeMake(offset, width), row);
 
   return row;
 }
 
+- (unsigned char*) matrix {
+  int size = width * height;
+  unsigned char* result = (unsigned char*)malloc(size * sizeof(unsigned char));
+  if (left == 0 && top == 0 && dataWidth == width && dataHeight == height) {
+    CFDataGetBytes(data, CFRangeMake(0, size), result);
+  } else {
+    for (int row = 0; row < height; row++) {
+      CFDataGetBytes(data,
+                     CFRangeMake((top + row) * dataWidth + left, width),
+                     result + row * width);
+    }
+  }
+  return result;
+}
 
 - (void)initializeWithImage:(CGImageRef)cgimage left:(int)_left top:(int)_top width:(int)_width height:(int)_height {
   data = 0;

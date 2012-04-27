@@ -5,9 +5,9 @@ int const MINIMUM_DIMENSION = 40;
 @interface ZXHybridBinarizer ()
 
 - (void) binarizeEntireImage;
-- (NSArray *) calculateBlackPoints:(NSArray *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
-- (void) calculateThresholdForBlock:(NSArray *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
-- (void) threshold8x8Block:(NSArray *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
+- (NSArray *) calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
+- (void) calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
+- (void) threshold8x8Block:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
 
 @end
 
@@ -38,7 +38,7 @@ int const MINIMUM_DIMENSION = 40;
   if (matrix == nil) {
     ZXLuminanceSource * source = [self luminanceSource];
     if ([source width] >= MINIMUM_DIMENSION && [source height] >= MINIMUM_DIMENSION) {
-      NSArray * _luminances = [source matrix];
+      unsigned char * _luminances = [source matrix];
       int width = [source width];
       int height = [source height];
       int subWidth = width >> 3;
@@ -52,6 +52,11 @@ int const MINIMUM_DIMENSION = 40;
       NSArray * blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
       matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
       [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:matrix];
+
+      if (_luminances) {
+        free(_luminances);
+        _luminances = NULL;
+      }
     } else {
       matrix = [super blackMatrix];
     }
@@ -61,7 +66,7 @@ int const MINIMUM_DIMENSION = 40;
 // For each 8x8 block in the image, calculate the average black point using a 5x5 grid
 // of the blocks around it. Also handles the corner cases (fractional blocks are computed based
 // on the last 8 pixels in the row/column which are also used in the previous block).
-- (void) calculateThresholdForBlock:(NSArray *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)_matrix {
+- (void) calculateThresholdForBlock:(unsigned char *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << 3;
     if ((yoffset + 8) >= height) {
@@ -91,11 +96,11 @@ int const MINIMUM_DIMENSION = 40;
   }
 }
 
-- (void) threshold8x8Block:(NSArray *)_luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)_matrix {
+- (void) threshold8x8Block:(unsigned char *)_luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0; y < 8; y++) {
     int offset = (yoffset + y) * stride + xoffset;
     for (int x = 0; x < 8; x++) {
-      int pixel = [[_luminances objectAtIndex:offset + x] intValue] & 0xff;
+      int pixel = _luminances[offset + x] & 0xff;
       if (pixel < threshold) {
         [_matrix set:xoffset + x y:yoffset + y];
       }
@@ -103,7 +108,7 @@ int const MINIMUM_DIMENSION = 40;
   }
 }
 
-- (NSArray *) calculateBlackPoints:(NSArray *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height {
+- (NSArray *) calculateBlackPoints:(unsigned char *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height {
   NSMutableArray * blackPoints = [NSMutableArray arrayWithCapacity:subHeight];
 
   for (int y = 0; y < subHeight; y++) {
@@ -125,7 +130,7 @@ int const MINIMUM_DIMENSION = 40;
         int offset = (yoffset + yy) * width + xoffset;
 
         for (int xx = 0; xx < 8; xx++) {
-          int pixel = [[_luminances objectAtIndex:offset + xx] intValue] & 0xff;
+          int pixel = _luminances[offset + xx] & 0xff;
           sum += pixel;
           if (pixel < min) {
             min = pixel;

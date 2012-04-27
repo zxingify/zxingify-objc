@@ -156,20 +156,16 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (ZXDataCharacter *) decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar {
-  int counters[[dataCharacterCounters count]];
-  counters[0] = 0;
-  counters[1] = 0;
-  counters[2] = 0;
-  counters[3] = 0;
-  counters[4] = 0;
-  counters[5] = 0;
-  counters[6] = 0;
-  counters[7] = 0;
+  int countersLen = [dataCharacterCounters count];
+  int counters[countersLen];
+  for (int i = 0; i < countersLen; i++) {
+    counters[i] = 0;
+  }
 
   if (outsideChar) {
-    [ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters];
+    [ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters countersSize:countersLen];
   } else {
-    [ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters];
+    [ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters countersSize:countersLen];
 
     for (int i = 0, j = (sizeof(counters) / sizeof(int)) - 1; i < j; i++, j--) {
       int temp = counters[i];
