@@ -26,7 +26,7 @@
     text = [aText copy];
     rawBytes = aRawBytes;
     length = aLength;
-    resultPoints = [[aResultPoints mutableCopy] autorelease];
+    resultPoints = [aResultPoints mutableCopy];
     format = aFormat;
     resultMetadata = nil;
     timestamp = aTimestamp;
@@ -36,7 +36,7 @@
 
 - (void) putMetadata:(ZXResultMetadataType)type value:(id)value {
   if (resultMetadata == nil) {
-    resultMetadata = [[[NSMutableDictionary alloc] init] autorelease];
+    resultMetadata = [[NSMutableDictionary alloc] init];
   }
   [resultMetadata setObject:[NSNumber numberWithInt:type] forKey:value];
 }
@@ -56,9 +56,9 @@
 
 - (void) addResultPoints:(NSArray *)newPoints {
   if (resultPoints == nil) {
-    resultPoints = [[newPoints mutableCopy] autorelease];
+    resultPoints = [newPoints mutableCopy];
   } else if (newPoints != nil && [newPoints count] > 0) {
-    resultPoints = [[[resultPoints arrayByAddingObjectsFromArray:newPoints] mutableCopy] autorelease];
+    resultPoints = [[resultPoints arrayByAddingObjectsFromArray:newPoints] mutableCopy];
   }
 }
 

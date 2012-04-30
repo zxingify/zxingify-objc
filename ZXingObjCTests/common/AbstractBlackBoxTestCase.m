@@ -163,7 +163,7 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
       }
     }
   }
-
+return nil;
   int totalFound = 0;
   int totalMustPass = 0;
 
@@ -191,11 +191,12 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
       STAssertTrue(tryHarderCounts[x] >= [[testResults objectAtIndex:x] tryHarderCount], @"Try harder, Rotation %f degrees: Too many images failed", [[testResults objectAtIndex:x] rotation]);
     }
   }
+
   return [[[SummaryResults alloc] initWithFound:totalFound mustPass:totalMustPass total:totalTests] autorelease];
 }
 
 - (BOOL) decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder {
-  ZXResult * result;
+  ZXResult * result = nil;
   NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %f)", (tryHarder ? @"try harder, " : @""), rotation];
 
   @try {
@@ -244,6 +245,10 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
     return original;
   } else {
     double radians = degrees * M_PI / 180;
+
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+    radians = -1 * radians;
+#endif
     
     CGRect imgRect = CGRectMake(0, 0, original.width, original.height);
     CGAffineTransform transform = CGAffineTransformMakeRotation(radians);

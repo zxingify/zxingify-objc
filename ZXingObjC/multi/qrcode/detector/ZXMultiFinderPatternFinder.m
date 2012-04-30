@@ -92,7 +92,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
       }
 
       float vModSize12 = ([p1 estimatedModuleSize] - [p2 estimatedModuleSize]) / MIN([p1 estimatedModuleSize], [p2 estimatedModuleSize]);
-      float vModSize12A = abs([p1 estimatedModuleSize] - [p2 estimatedModuleSize]);
+      float vModSize12A = fabsf([p1 estimatedModuleSize] - [p2 estimatedModuleSize]);
       if (vModSize12A > DIFF_MODSIZE_CUTOFF && vModSize12 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
         break;
       }
@@ -104,7 +104,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
         }
 
         float vModSize23 = ([p2 estimatedModuleSize] - [p3 estimatedModuleSize]) / MIN([p2 estimatedModuleSize], [p3 estimatedModuleSize]);
-        float vModSize23A = abs([p2 estimatedModuleSize] - [p3 estimatedModuleSize]);
+        float vModSize23A = fabsf([p2 estimatedModuleSize] - [p3 estimatedModuleSize]);
         if (vModSize23A > DIFF_MODSIZE_CUTOFF && vModSize23 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
           break;
         }
@@ -122,13 +122,13 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
           continue;
         }
 
-        float vABBC = abs((dA - dB) / MIN(dA, dB));
+        float vABBC = fabsf((dA - dB) / MIN(dA, dB));
         if (vABBC >= 0.1f) {
           continue;
         }
 
         float dCpy = (float)sqrt(dA * dA + dB * dB);
-        float vPyC = abs((dC - dCpy) / MIN(dC, dCpy));
+        float vPyC = fabsf((dC - dCpy) / MIN(dC, dCpy));
 
         if (vPyC >= 0.1f) {
           continue;

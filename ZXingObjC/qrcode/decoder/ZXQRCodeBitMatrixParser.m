@@ -67,7 +67,7 @@
     formatInfoBits2 = [self copyBit:i j:8 versionBits:formatInfoBits2];
   }
 
-  parsedFormatInfo = [ZXFormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2];
+  parsedFormatInfo = [[ZXFormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2] retain];
   if (parsedFormatInfo != nil) {
     return parsedFormatInfo;
   }

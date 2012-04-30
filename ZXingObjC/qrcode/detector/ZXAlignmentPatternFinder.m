@@ -134,7 +134,7 @@
   float maxVariance = moduleSize / 2.0f;
 
   for (int i = 0; i < 3; i++) {
-    if (abs(moduleSize - stateCount[i]) >= maxVariance) {
+    if (fabsf(moduleSize - stateCount[i]) >= maxVariance) {
       return NO;
     }
   }

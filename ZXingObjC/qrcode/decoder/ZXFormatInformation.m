@@ -58,7 +58,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 
 - (id) initWithFormatInfo:(int)formatInfo {
   if (self = [super init]) {
-    errorCorrectionLevel = [ZXErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03];
+    errorCorrectionLevel = [[ZXErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03] retain];
     dataMask = (char)(formatInfo & 0x07);
   }
   return self;

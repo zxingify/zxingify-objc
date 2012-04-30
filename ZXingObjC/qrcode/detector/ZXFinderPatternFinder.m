@@ -386,7 +386,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
         firstConfirmedCenter = center;
       } else {
         hasSkipped = YES;
-        return (int)(abs([firstConfirmedCenter x] - [center x]) - abs([firstConfirmedCenter y] - [center y])) / 2;
+        return (int)(fabsf([firstConfirmedCenter x] - [center x]) - fabsf([firstConfirmedCenter y] - [center y])) / 2;
       }
     }
   }
@@ -418,7 +418,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float totalDeviation = 0.0f;
   for (int i = 0; i < max; i++) {
     ZXQRCodeFinderPattern * pattern = [possibleCenters objectAtIndex:i];
-    totalDeviation += abs([pattern estimatedModuleSize] - average);
+    totalDeviation += fabsf([pattern estimatedModuleSize] - average);
   }
   return totalDeviation <= 0.05f * totalModuleSize;
 }
@@ -430,8 +430,8 @@ NSInteger centerCompare(id center1, id center2, void *context) {
   float average = [(NSNumber *)context floatValue];
 
   if ([((ZXQRCodeFinderPattern *)center2) count] == [((ZXQRCodeFinderPattern *)center1) count]) {
-    float dA = abs([((ZXQRCodeFinderPattern *)center2) estimatedModuleSize] - average);
-    float dB = abs([((ZXQRCodeFinderPattern *)center1) estimatedModuleSize] - average);
+    float dA = fabsf([((ZXQRCodeFinderPattern *)center2) estimatedModuleSize] - average);
+    float dB = fabsf([((ZXQRCodeFinderPattern *)center1) estimatedModuleSize] - average);
     return dA < dB ? 1 : dA == dB ? 0 : -1;
   } else {
     return [((ZXQRCodeFinderPattern *)center2) count] - [((ZXQRCodeFinderPattern *)center1) count];
@@ -444,8 +444,8 @@ NSInteger centerCompare(id center1, id center2, void *context) {
 NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
   float average = [(NSNumber *)context floatValue];
 
-  float dA = abs([((ZXQRCodeFinderPattern *)center2) estimatedModuleSize] - average);
-  float dB = abs([((ZXQRCodeFinderPattern *)center1) estimatedModuleSize] - average);
+  float dA = fabsf([((ZXQRCodeFinderPattern *)center2) estimatedModuleSize] - average);
+  float dB = fabsf([((ZXQRCodeFinderPattern *)center1) estimatedModuleSize] - average);
   return dA < dB ? -1 : dA == dB ? 0 : 1;
 }
 
@@ -479,7 +479,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
 
     for (int i = 0; i < [possibleCenters count] && [possibleCenters count] > 3; i++) {
       ZXQRCodeFinderPattern * pattern = [possibleCenters objectAtIndex:i];
-      if (abs([pattern estimatedModuleSize] - average) > limit) {
+      if (fabsf([pattern estimatedModuleSize] - average) > limit) {
         [possibleCenters removeObjectAtIndex:i];
         i--;
       }

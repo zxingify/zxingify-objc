@@ -22,6 +22,8 @@
 
 - (void) testBlackBox {
   [super testBlackBox];
+//  int i = 0;
+//  STAssertTrue(i == 0, @"fail");
 }
 
 @end
