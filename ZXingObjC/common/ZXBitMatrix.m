@@ -9,6 +9,14 @@
 @synthesize height;
 @synthesize bits;
 
+- (oneway void) release {
+  [super release];
+}
+
+- (id)retain {
+  return [super retain];
+}
+
 - (id) initWithDimension:(int)dimension {
   self = [self initWithWidth:dimension height:dimension];
   return self;

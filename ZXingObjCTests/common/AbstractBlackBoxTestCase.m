@@ -162,8 +162,10 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
         tryHarderCounts[x]++;
       }
     }
+
+    [image release];
   }
-return nil;
+
   int totalFound = 0;
   int totalMustPass = 0;
 

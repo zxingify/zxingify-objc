@@ -232,7 +232,7 @@ int const VERSION_DECODE_INFO[34] = {
  * See ISO 18004:2006 6.5.1 Table 9
  */
 + (NSArray *) buildVersions {
-  return [[NSArray alloc] initWithObjects:
+  return [[[NSArray alloc] initWithObjects:
           [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:1
                                 alignmentPatternCenters:[NSArray array]
                                               ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:7 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:19]]
@@ -516,7 +516,7 @@ int const VERSION_DECODE_INFO[34] = {
                                               ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:34 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:34 dataCodewords:25]]
                                               ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:20 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:61 dataCodewords:16]]],
 
-          nil];
+          nil] autorelease];
 }
 
 - (void) dealloc {

@@ -22,7 +22,7 @@ extern int const FINDER_PATTERN_MAX_MODULES;
 }
 
 @property (nonatomic, readonly) ZXBitMatrix * image;
-@property (nonatomic, readonly) NSMutableArray * possibleCenters;
+@property (nonatomic, readonly, retain) NSMutableArray * possibleCenters;
 
 - (id) initWithImage:(ZXBitMatrix *)image;
 - (id) initWithImage:(ZXBitMatrix *)image resultPointCallback:(id <ZXResultPointCallback>)resultPointCallback;

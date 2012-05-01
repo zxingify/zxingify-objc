@@ -23,7 +23,7 @@
     if (dimension < 21 || (dimension & 0x03) != 1) {
       @throw [ZXFormatException formatInstance];
     }
-    bitMatrix = aBitMatrix;
+    bitMatrix = [aBitMatrix retain];
   }
   return self;
 }

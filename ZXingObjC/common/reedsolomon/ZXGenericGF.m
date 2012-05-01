@@ -143,7 +143,10 @@ int const INITIALIZATION_THRESHOLD = 0;
   if (coefficient == 0) {
     return zero;
   }
-  NSArray * coefficients = [NSArray arrayWithObject:[NSNumber numberWithInt:coefficient]];
+  NSMutableArray * coefficients = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:coefficient]];
+  for (int i = 1; i < degree + 1; i++) {
+    [coefficients addObject:[NSNumber numberWithInt:0]];
+  }
   return [[[ZXGenericGFPoly alloc] initWithField:self coefficients:coefficients] autorelease];
 }
 
