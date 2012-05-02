@@ -24,23 +24,23 @@
   }
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
   int pointsLen = dimensionX << 1;
-  float points[pointsLen];
+  float pointsf[pointsLen];
   for (int i = 0; i < pointsLen; i++) {
-    points[i] = 0;
+    pointsf[i] = 0;
   }
 
   for (int y = 0; y < dimensionY; y++) {
     int max = dimensionX << 1;
     float iValue = (float)y + 0.5f;
     for (int x = 0; x < max; x += 2) {
-      points[x] = (float) (x >> 1) + 0.5f;
-      points[x + 1] = iValue;
+      pointsf[x] = (float) (x >> 1) + 0.5f;
+      pointsf[x + 1] = iValue;
     }
-    [transform transformPoints:points pointsLen:pointsLen];
+    [transform transformPoints:pointsf pointsLen:pointsLen];
 
-    [ZXGridSampler checkAndNudgePoints:image points:points pointsLen:pointsLen];
+    [ZXGridSampler checkAndNudgePoints:image points:pointsf pointsLen:pointsLen];
     for (int x = 0; x < max; x += 2) {
-      if ([image get:(int)points[x] y:(int)points[x + 1]]) {
+      if ([image get:(int)pointsf[x] y:(int)pointsf[x + 1]]) {
         [bits set:x >> 1 y:y];
       }
     }

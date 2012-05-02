@@ -347,6 +347,8 @@
 		0250D9031545FC9700752941 /* osx-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0250D9011545FC8B00752941 /* osx-Prefix.pch */; };
 		027EA43F1545EA6A00BA753C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		027EA4431545EA6A00BA753C /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */; };
+		029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */; };
+		029A9BC41551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */; };
 		029BCEF215129BD0009E6549 /* ZXAztecDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8115129BD0009E6549 /* ZXAztecDetectorResult.m */; };
 		029BCEF315129BD0009E6549 /* ZXAztecReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8315129BD0009E6549 /* ZXAztecReader.m */; };
 		029BCEF615129BD0009E6549 /* ZXBinarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8C15129BD0009E6549 /* ZXBinarizer.m */; };
@@ -931,6 +933,8 @@
 		0250D9011545FC8B00752941 /* osx-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027EA43E1545EA6A00BA753C /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox2TestCase.h; sourceTree = "<group>"; };
+		029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox2TestCase.m; sourceTree = "<group>"; };
 		029BCD8015129BD0009E6549 /* ZXAztecDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXAztecDetectorResult.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		029BCD8115129BD0009E6549 /* ZXAztecDetectorResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXAztecDetectorResult.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		029BCD8215129BD0009E6549 /* ZXAztecReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecReader.h; sourceTree = "<group>"; };
@@ -2018,6 +2022,8 @@
 			children = (
 				02FB06E815475B6F0067923D /* QRCodeBlackBox1TestCase.h */,
 				02FB06E915475B6F0067923D /* QRCodeBlackBox1TestCase.m */,
+				029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */,
+				029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */,
 			);
 			path = qrcode;
 			sourceTree = "<group>";
@@ -2735,6 +2741,7 @@
 				02F8EEDE1546004E00CC8E70 /* ZXImage.m in Sources */,
 				02FB06E315475B480067923D /* AbstractBlackBoxTestCase.m in Sources */,
 				02FB06EB15475B6F0067923D /* QRCodeBlackBox1TestCase.m in Sources */,
+				029A9BC41551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3091,6 +3098,7 @@
 				02F8EEDC1546004E00CC8E70 /* ZXImage.m in Sources */,
 				02FB06E215475B480067923D /* AbstractBlackBoxTestCase.m in Sources */,
 				02FB06EA15475B6F0067923D /* QRCodeBlackBox1TestCase.m in Sources */,
+				029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

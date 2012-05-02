@@ -1,20 +1,20 @@
-#import "QRCodeBlackBox1TestCase.h"
+#import "QRCodeBlackBox2TestCase.h"
 #import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
-@implementation QRCodeBlackBox1TestCase
+@implementation QRCodeBlackBox2TestCase
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation {
   self = [super initWithInvocation:anInvocation
-                testBasePathSuffix:@"Resources/blackbox/qrcode-1"
+                testBasePathSuffix:@"Resources/blackbox/qrcode-2"
                      barcodeReader:[[[ZXMultiFormatReader alloc] init] autorelease]
                     expectedFormat:kBarcodeFormatQRCode];
 
   if (self) {
-    [self addTest:17 tryHarderCount:17 rotation:0.0f];
-    [self addTest:13 tryHarderCount:13 rotation:90.0f];
-    [self addTest:16 tryHarderCount:16 rotation:180.0f];
-    [self addTest:14 tryHarderCount:14 rotation:270.0f];
+    [self addTest:29 tryHarderCount:29 rotation:0.0f];
+    [self addTest:29 tryHarderCount:29 rotation:90.0f];
+    [self addTest:29 tryHarderCount:29 rotation:180.0f];
+    [self addTest:28 tryHarderCount:28 rotation:270.0f];
   }
 
   return self;

@@ -129,7 +129,10 @@ int const GB2312_SUBSET = 1;
     count--;
   }
 
-  [result appendString:[[[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding] autorelease]];
+  NSString *string = [[[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding] autorelease];
+  if (string) {
+    [result appendString:string];
+  }
 }
 
 + (void) decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
@@ -156,7 +159,10 @@ int const GB2312_SUBSET = 1;
     count--;
   }
 
-  [result appendString:[[[NSString alloc] initWithData:buffer encoding:NSShiftJISStringEncoding] autorelease]];
+  NSString *string = [[[NSString alloc] initWithData:buffer encoding:NSShiftJISStringEncoding] autorelease];
+  if (string) {
+    [result appendString:string];
+  }
 }
 
 + (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(NSMutableDictionary *)hints {
@@ -178,7 +184,10 @@ int const GB2312_SUBSET = 1;
     encoding = [currentCharacterSetECI encoding];
   }
 
-  [result appendString:[[[NSString alloc] initWithBytes:readBytes length:count encoding:encoding] autorelease]];
+  NSString *string = [[[NSString alloc] initWithBytes:readBytes length:count encoding:encoding] autorelease];
+  if (string) {
+    [result appendString:string];
+  }
   
   [byteSegments addObject:readBytesArray];
 }

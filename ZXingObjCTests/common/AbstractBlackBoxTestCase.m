@@ -96,7 +96,9 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
         [[file pathExtension] isEqualToString:@"jpeg"] ||
         [[file pathExtension] isEqualToString:@"gif"] ||
         [[file pathExtension] isEqualToString:@"png"]) {
-      [imageFiles addObject:[NSURL fileURLWithPath:file]];
+      if ([[[file pathComponents] lastObject] isEqualToString:@"33.png"]) {
+        [imageFiles addObject:[NSURL fileURLWithPath:file]];
+      }
     }
   }
 
@@ -117,7 +119,7 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
 
 - (SummaryResults *) testBlackBoxCountingResults:(BOOL)assertOnFailure {
   if (testResults.count == 0) {
-//    STFail(@"No test results");
+    STFail(@"No test results");
     return nil;
   }
   

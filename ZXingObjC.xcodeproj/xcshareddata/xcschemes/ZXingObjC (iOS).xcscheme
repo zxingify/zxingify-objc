@@ -41,6 +41,9 @@
                <Test
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox1TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
