@@ -5,15 +5,15 @@
  * @author Sean Owen
  */
 
-@class ZXBitMatrix, ZXDecoderResult, ZXReedSolomonDecoder;
+@class ZXBitMatrix, ZXDecodeHints, ZXDecodeHints, ZXDecoderResult, ZXReedSolomonDecoder;
 
 @interface ZXQRCodeDecoder : NSObject {
   ZXReedSolomonDecoder * rsDecoder;
 }
 
 - (ZXDecoderResult *) decode:(BOOL **)image;
-- (ZXDecoderResult *) decode:(BOOL **)image hints:(NSMutableDictionary *)hints;
+- (ZXDecoderResult *) decode:(BOOL **)image hints:(ZXDecodeHints *)hints;
 - (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits;
-- (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits hints:(NSMutableDictionary *)hints;
+- (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints;
 
 @end

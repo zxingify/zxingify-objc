@@ -8,10 +8,12 @@
  * @author Sean Owen
  */
 
+@class ZXDecodeHints;
+
 @interface ZXMultiFormatUPCEANReader : ZXOneDReader {
   NSMutableArray * readers;
 }
 
-- (id) initWithHints:(NSMutableDictionary *)hints;
+- (id) initWithHints:(ZXDecodeHints *)hints;
 
 @end

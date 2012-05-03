@@ -18,11 +18,11 @@
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(ZXDecodeHints *)hints {
   return [self maybeReturnResult:[ean13Reader decodeRow:rowNumber row:row startGuardRange:startGuardRange hints:hints]];
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   return [self maybeReturnResult:[ean13Reader decodeRow:rowNumber row:row hints:hints]];
 }
 
@@ -30,7 +30,7 @@
   return [self maybeReturnResult:[ean13Reader decode:image]];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   return [self maybeReturnResult:[ean13Reader decode:image hints:hints]];
 }
 

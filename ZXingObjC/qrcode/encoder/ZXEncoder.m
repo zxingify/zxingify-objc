@@ -4,7 +4,7 @@
 #import "ZXCharacterSetECI.h"
 #import "ZXECI.h"
 #import "ZXEncoder.h"
-#import "ZXEncodeHintType.h"
+#import "ZXEncodeHints.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXGenericGF.h"
 #import "ZXMaskUtil.h"
@@ -63,8 +63,8 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   [self encode:content ecLevel:ecLevel hints:nil qrCode:qrCode];
 }
 
-+ (void) encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints qrCode:(ZXQRCode *)qrCode {
-  NSStringEncoding encoding = hints == nil ? 0 : (NSStringEncoding)[[hints objectForKey:[NSNumber numberWithInt:kEncodeHintTypeCharacterSet]] unsignedIntegerValue];
++ (void) encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints qrCode:(ZXQRCode *)qrCode {
+  NSStringEncoding encoding = hints == nil ? 0 : hints.encoding;
   if (encoding == 0) {
     encoding = DEFAULT_BYTE_MODE_ENCODING;
   }

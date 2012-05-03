@@ -10,7 +10,7 @@
 extern int const FINDER_PATTERN_MIN_SKIP;
 extern int const FINDER_PATTERN_MAX_MODULES;
 
-@class ZXBitMatrix, ZXFinderPatternInfo;
+@class ZXBitMatrix, ZXDecodeHints, ZXFinderPatternInfo;
 @protocol ZXResultPointCallback;
 
 @interface ZXFinderPatternFinder : NSObject {
@@ -26,7 +26,7 @@ extern int const FINDER_PATTERN_MAX_MODULES;
 
 - (id) initWithImage:(ZXBitMatrix *)image;
 - (id) initWithImage:(ZXBitMatrix *)image resultPointCallback:(id <ZXResultPointCallback>)resultPointCallback;
-- (ZXFinderPatternInfo *) find:(NSMutableDictionary *)hints;
+- (ZXFinderPatternInfo *) find:(ZXDecodeHints *)hints;
 + (BOOL) foundPatternCross:(int[])stateCount;
 - (BOOL) handlePossibleCenter:(int[])stateCount i:(int)i j:(int)j;
 

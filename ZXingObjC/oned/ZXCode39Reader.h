@@ -11,7 +11,7 @@ extern char CODE39_ALPHABET[];
 extern NSString *CODE39_ALPHABET_STRING;
 extern int CODE39_CHARACTER_ENCODINGS[];
 
-@class ZXResult;
+@class ZXDecodeHints, ZXResult;
 
 @interface ZXCode39Reader : ZXOneDReader {
   BOOL usingCheckDigit;
@@ -20,6 +20,6 @@ extern int CODE39_CHARACTER_ENCODINGS[];
 
 - (id) initUsingCheckDigit:(BOOL)usingCheckDigit;
 - (id) initUsingCheckDigit:(BOOL)usingCheckDigit extendedMode:(BOOL)extendedMode;
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
 
 @end

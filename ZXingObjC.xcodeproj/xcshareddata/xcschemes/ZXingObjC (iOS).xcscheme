@@ -42,7 +42,7 @@
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox1TestCase">
+                  Identifier = "QRCodeBlackBox2TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

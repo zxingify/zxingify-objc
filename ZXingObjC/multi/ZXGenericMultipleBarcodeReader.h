@@ -15,7 +15,7 @@
  * @author Sean Owen
  */
 
-@protocol ZXReader;
+@protocol ZXDecodeHints, ZXReader;
 
 @interface ZXGenericMultipleBarcodeReader : NSObject <ZXMultipleBarcodeReader> {
   id <ZXReader> delegate;
@@ -23,6 +23,6 @@
 
 - (id) initWithDelegate:(id <ZXReader>)delegate;
 - (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image;
-- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 
 @end

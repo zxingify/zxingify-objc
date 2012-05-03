@@ -10,7 +10,7 @@
 
 @implementation ZXCode39Writer
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatCode39) {
     [NSException raise:NSInvalidArgumentException 
                 format:@"Can only encode CODE_39."];

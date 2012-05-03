@@ -11,7 +11,7 @@ const int EAN13codeWidth = 3 + // start guard
 
 @implementation ZXEAN13Writer
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatEan13) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:[NSString stringWithFormat:@"Can only encode EAN_13, but got %d", format]

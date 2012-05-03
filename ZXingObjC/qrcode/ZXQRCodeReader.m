@@ -1,6 +1,6 @@
 #import "ZXBarcodeFormat.h"
 #import "ZXBitMatrix.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXDecoderResult.h"
 #import "ZXDetectorResult.h"
 #import "ZXNotFoundException.h"
@@ -39,10 +39,10 @@
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   ZXDecoderResult * decoderResult;
   NSArray * points;
-  if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePureBarcode]]) {
+  if (hints != nil && hints.pureBarcode) {
     ZXBitMatrix * bits = [self extractPureBits:[image blackMatrix]];
     decoderResult = [decoder decodeMatrix:bits hints:hints];
     points = [NSArray array];

@@ -9,7 +9,9 @@
  * @author Sean Owen
  */
 
+@class ZXDecodeHints;
+
 @protocol ZXMultipleBarcodeReader <NSObject>
 - (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image;
-- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 @end

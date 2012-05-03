@@ -222,7 +222,7 @@ int const CODE_STOP = 106;
   }
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * startPatternInfo = [self findStartPattern:row];
   int startCode = [[startPatternInfo objectAtIndex:2] intValue];
   int codeSet;

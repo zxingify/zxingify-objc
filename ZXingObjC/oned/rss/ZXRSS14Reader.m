@@ -1,5 +1,5 @@
 #import "ZXBarcodeFormat.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXPair.h"
 #import "ZXResultPointCallback.h"
 #import "ZXRSS14Reader.h"
@@ -20,7 +20,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 - (BOOL) checkChecksum:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair;
 - (ZXResult *) constructResult:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair;
 - (ZXDataCharacter *) decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar;
-- (ZXPair *) decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(NSMutableDictionary *)hints;
+- (ZXPair *) decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(ZXDecodeHints *)hints;
 - (NSArray *) findFinderPattern:(ZXBitArray *)row rowOffset:(int)rowOffset rightFinderPattern:(BOOL)rightFinderPattern;
 - (ZXRSSFinderPattern *) parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber right:(BOOL)right startEnd:(NSArray *)startEnd;
 
@@ -36,7 +36,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   ZXPair * leftPair = [self decodePair:row right:NO rowNumber:rowNumber hints:hints];
   [self addOrTally:possibleLeftPairs pair:leftPair];
   [row reverse];
@@ -130,13 +130,13 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   return checkValue == targetCheckValue;
 }
 
-- (ZXPair *) decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(NSMutableDictionary *)hints {
+- (ZXPair *) decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(ZXDecodeHints *)hints {
 
   @try {
     NSArray * startEnd = [self findFinderPattern:row rowOffset:0 rightFinderPattern:right];
     ZXRSSFinderPattern * pattern = [self parseFoundFinderPattern:row rowNumber:rowNumber right:right startEnd:startEnd];
     
-    id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : (id<ZXResultPointCallback>)[hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]];
+    id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
     if (resultPointCallback != nil) {
       float center = ([[startEnd objectAtIndex:0] intValue] + [[startEnd objectAtIndex:1] intValue]) / 2.0f;
       if (right) {

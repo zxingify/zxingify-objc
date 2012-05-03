@@ -6,7 +6,7 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
-@class ZXBinaryBitmap, ZXDetectorResult;
+@class ZXBinaryBitmap, ZXDecodeHints, ZXDetectorResult;
 
 @interface ZXPDF417Detector : NSObject {
   ZXBinaryBitmap * image;
@@ -14,6 +14,6 @@
 
 - (id) initWithImage:(ZXBinaryBitmap *)image;
 - (ZXDetectorResult *) detect;
-- (ZXDetectorResult *) detect:(NSMutableDictionary *)hints;
+- (ZXDetectorResult *) detect:(ZXDecodeHints *)hints;
 
 @end

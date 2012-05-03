@@ -19,10 +19,10 @@
 
 #if !TARGET_IPHONE_SIMULATOR
 #include "ZXCGImageLuminanceSource.h"
-#include "ZXHybridBinarizer.h"
 #include "ZXBinaryBitmap.h"
+#include "ZXDecodeHints.h"
+#include "ZXHybridBinarizer.h"
 #include "ZXQRCodeReader.h"
-#include "ZXDecodeHintType.h"
 #include "ZXResult.h"
 #include "ZXReaderException.h"
 
@@ -451,7 +451,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
     if (delegate) {
 
-      NSMutableDictionary* hints = [NSMutableDictionary dictionary];
+      ZXDecodeHints* hints = [[[ZXDecodeHints alloc] init] autorelease];
       ZXBinaryBitmap* bitmap = 
         [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
 

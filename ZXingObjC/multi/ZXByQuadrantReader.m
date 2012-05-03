@@ -1,4 +1,5 @@
 #import "ZXByQuadrantReader.h"
+#import "ZXDecodeHints.h"
 #import "ZXNotFoundException.h"
 
 @implementation ZXByQuadrantReader
@@ -14,7 +15,7 @@
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   int width = [image width];
   int height = [image height];
   int halfWidth = width / 2;

@@ -41,7 +41,7 @@
  * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (ZXDecoderResult *) decode:(BOOL **)image hints:(NSMutableDictionary *)hints {
+- (ZXDecoderResult *) decode:(BOOL **)image hints:(ZXDecodeHints *)hints {
   int dimension = sizeof(image) / sizeof(BOOL *);
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
@@ -68,7 +68,7 @@
  * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits hints:(NSMutableDictionary *)hints {
+- (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints {
   ZXQRCodeBitMatrixParser * parser = [[[ZXQRCodeBitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
   ZXQRCodeVersion * version = [parser readVersion];
   ZXErrorCorrectionLevel * ecLevel = [[parser readFormatInformation] errorCorrectionLevel];

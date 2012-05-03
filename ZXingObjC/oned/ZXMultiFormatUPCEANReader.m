@@ -1,4 +1,4 @@
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXEAN8Reader.h"
 #import "ZXEAN13Reader.h"
 #import "ZXMultiFormatUPCEANReader.h"
@@ -10,22 +10,26 @@
 
 @implementation ZXMultiFormatUPCEANReader
 
-- (id) initWithHints:(NSMutableDictionary *)hints {
+- (id) initWithHints:(ZXDecodeHints *)hints {
   if (self = [super init]) {
-    NSMutableArray * possibleFormats = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePossibleFormats]];
     readers = [[NSMutableArray alloc] init];
-    if (possibleFormats != nil) {
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan13]]) {
+
+    if (hints != nil) {
+      if ([hints containsFormat:kBarcodeFormatEan13]) {
         [readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
-      } else if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCA]]) {
+      } else if ([hints containsFormat:kBarcodeFormatUPCA]) {
         [readers addObject:[[[ZXUPCAReader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan8]]) {
+
+      if ([hints containsFormat:kBarcodeFormatEan8]) {
         [readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
       }
-    } else if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCE]]) {
+
+      if ([hints containsFormat:kBarcodeFormatUPCE]) {
         [readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
+      }
     }
+
     if ([readers count] == 0) {
       [readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
       [readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
@@ -35,7 +39,7 @@
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * startGuardPattern = [ZXUPCEANReader findStartGuardPattern:row];
   for (ZXUPCEANReader * reader in readers) {
     ZXResult * result;
@@ -58,8 +62,7 @@
     //
     // But, don't return UPC-A if UPC-A was not a requested format!
     BOOL ean13MayBeUPCA = kBarcodeFormatEan13 == result.barcodeFormat && [[result text] characterAtIndex:0] == '0';
-    NSMutableArray * possibleFormats = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePossibleFormats]];
-    BOOL canReturnUPCA = possibleFormats == nil || [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCA]];
+    BOOL canReturnUPCA = hints == nil || [hints containsFormat:kBarcodeFormatUPCA];
     if (ean13MayBeUPCA && canReturnUPCA) {
       return [[[ZXResult alloc] initWithText:[[result text] substringFromIndex:1]
                                     rawBytes:nil

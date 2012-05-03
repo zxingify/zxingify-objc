@@ -25,7 +25,7 @@ static ZXEAN13Writer* subWriter = nil;
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatUPCA) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:[NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]

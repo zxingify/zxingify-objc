@@ -1,5 +1,5 @@
 #import "ZXBitMatrix.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXFinderPatternInfo.h"
 #import "ZXMultiFinderPatternFinder.h"
 #import "ZXNotFoundException.h"
@@ -146,8 +146,8 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (NSArray *) findMulti:(NSMutableDictionary *)hints {
-  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+- (NSArray *) findMulti:(ZXDecodeHints *)hints {
+  BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = [image height];
   int maxJ = [image width];
   // We are looking for black/white/black/white/black modules in

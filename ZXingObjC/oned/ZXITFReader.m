@@ -1,4 +1,4 @@
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXFormatException.h"
 #import "ZXITFReader.h"
 #import "ZXNotFoundException.h"
@@ -58,7 +58,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * startRange = [self decodeStart:row];
   NSArray * endRange = [self decodeEnd:row];
 
@@ -67,7 +67,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
   NSArray * allowedLengths = nil;
   if (hints != nil) {
-    allowedLengths = [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeAllowedLengths]];
+    allowedLengths = hints.allowedLengths;
   }
   if (allowedLengths == nil) {
     NSMutableArray *temp = [NSMutableArray array];

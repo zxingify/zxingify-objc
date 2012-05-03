@@ -14,10 +14,12 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
+@class ZXDecodeHints;
+
 @protocol ZXReader <NSObject>
 
 - (ZXResult *) decode:(ZXBinaryBitmap *)image;
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 - (void) reset;
 
 @end

@@ -6,14 +6,14 @@
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 
-@class ZXPDF417Decoder, ZXResult;
+@class ZXDecodeHints, ZXPDF417Decoder, ZXResult;
 
 @interface ZXPDF417Reader : NSObject <ZXReader> {
   ZXPDF417Decoder * decoder;
 }
 
 - (ZXResult *) decode:(ZXBinaryBitmap *)image;
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 - (void) reset;
 
 @end

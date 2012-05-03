@@ -11,7 +11,7 @@
   return [self decodeMultiple:image hints:nil];
 }
 
-- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   NSMutableArray * results = [NSMutableArray array];
   NSArray * detectorResult = [[[[ZXMultiDetector alloc] initWithImage:[image blackMatrix]] autorelease] detectMulti:hints];
   for (int i = 0; i < [detectorResult count]; i++) {

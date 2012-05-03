@@ -25,7 +25,7 @@ int const GB2312_SUBSET = 1;
 
 + (void) decodeHanziSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
 + (void) decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(NSMutableDictionary *)hints;
++ (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints;
 + (void) decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect;
 + (void) decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
 + (int) parseECIValue:(ZXBitSource *)bits;
@@ -40,7 +40,7 @@ int const GB2312_SUBSET = 1;
   return self;
 }
 
-+ (ZXDecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints {
++ (ZXDecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints {
   ZXBitSource * bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:50];
   ZXCharacterSetECI * currentCharacterSetECI = nil;
@@ -165,7 +165,7 @@ int const GB2312_SUBSET = 1;
   }
 }
 
-+ (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(NSMutableDictionary *)hints {
++ (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints {
   if (count << 3 > [bits available]) {
     @throw [ZXFormatException formatInstance];
   }

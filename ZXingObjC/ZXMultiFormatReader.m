@@ -1,7 +1,7 @@
 #import "ZXAztecReader.h"
 #import "ZXBinaryBitmap.h"
 #import "ZXDataMatrixReader.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXMultiFormatOneDReader.h"
 #import "ZXMultiFormatReader.h"
 #import "ZXNotFoundException.h"
@@ -13,7 +13,7 @@
 @interface ZXMultiFormatReader ()
 
 - (ZXResult *) decodeInternal:(ZXBinaryBitmap *)image;
-- (void) setHints:(NSMutableDictionary *)hints;
+- (void) setHints:(ZXDecodeHints *)hints;
 
 @end
 
@@ -42,7 +42,7 @@
  * @return The contents of the image
  * @throws NotFoundException Any errors which occurred
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)_hints {
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)_hints {
   [self setHints:_hints];
   return [self decodeInternal:image];
 }
@@ -71,37 +71,36 @@
  * 
  * @param hints The set of hints to use for subsequent calls to decode(image)
  */
-- (void) setHints:(NSMutableDictionary *)_hints {
+- (void) setHints:(ZXDecodeHints *)_hints {
   [hints release];
   hints = [_hints retain];
 
-  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
-  NSMutableArray * formats = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePossibleFormats]];
+  BOOL tryHarder = hints != nil && hints.tryHarder;
   readers = [[NSMutableArray alloc] init];
-  if (formats != nil) {
-    BOOL addZXOneDReader = [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCA]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCE]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan13]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan8]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode39]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode93]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode128]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatITF]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSS14]] ||
-      [formats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSSExpanded]];
+  if (hints != nil) {
+    BOOL addZXOneDReader = [hints containsFormat:kBarcodeFormatUPCA] ||
+      [hints containsFormat:kBarcodeFormatUPCE] ||
+      [hints containsFormat:kBarcodeFormatEan13] ||
+      [hints containsFormat:kBarcodeFormatEan8] ||
+      [hints containsFormat:kBarcodeFormatCode39] ||
+      [hints containsFormat:kBarcodeFormatCode93] ||
+      [hints containsFormat:kBarcodeFormatCode128] ||
+      [hints containsFormat:kBarcodeFormatITF] ||
+      [hints containsFormat:kBarcodeFormatRSS14] ||
+      [hints containsFormat:kBarcodeFormatRSSExpanded];
     if (addZXOneDReader && !tryHarder) {
       [readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
-    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatQRCode]]) {
+    if ([hints containsFormat:kBarcodeFormatQRCode]) {
       [readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
     }
-    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatDataMatrix]]) {
+    if ([hints containsFormat:kBarcodeFormatDataMatrix]) {
       [readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
     }
-    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatAztec]]) {
+    if ([hints containsFormat:kBarcodeFormatAztec]) {
       [readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
     }
-    if ([formats containsObject:[NSNumber numberWithInt:kBarcodeFormatPDF417]]) {
+    if ([hints containsFormat:kBarcodeFormatPDF417]) {
       [readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
     }
     if (addZXOneDReader && tryHarder) {

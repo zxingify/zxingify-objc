@@ -7,10 +7,10 @@
  * @see ZXCode39Reader
  */
 
-@class ZXResult;
+@class ZXDecodeHints, ZXResult;
 
 @interface ZXCode93Reader : ZXOneDReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
 
 @end

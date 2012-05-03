@@ -2,7 +2,7 @@
 #import "ZXCode128Reader.h"
 #import "ZXCode39Reader.h"
 #import "ZXCode93Reader.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXITFReader.h"
 #import "ZXMultiFormatOneDReader.h"
 #import "ZXMultiFormatUPCEANReader.h"
@@ -11,40 +11,47 @@
 
 @implementation ZXMultiFormatOneDReader
 
-- (id) initWithHints:(NSMutableDictionary *)hints {
+- (id) initWithHints:(ZXDecodeHints *)hints {
   if (self = [super init]) {
-    NSMutableArray * possibleFormats = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypePossibleFormats]];
-    BOOL useCode39CheckDigit = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeAssumeCode39CheckDigit]] != nil;
-    readers = [[NSMutableArray alloc] init];
-    if (possibleFormats != nil) {
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan13]] ||
-          [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCA]] ||
-          [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatEan8]] ||
-          [possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatUPCE]]) {
+    BOOL useCode39CheckDigit = hints != nil && hints.assumeCode39CheckDigit;
+    if (hints != nil) {
+      readers = [[NSMutableArray alloc] init];
+      if ([hints containsFormat:kBarcodeFormatEan13] ||
+          [hints containsFormat:kBarcodeFormatUPCA] ||
+          [hints containsFormat:kBarcodeFormatEan8] ||
+          [hints containsFormat:kBarcodeFormatUPCE]) {
         [readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode39]]) {
+
+      if ([hints containsFormat:kBarcodeFormatCode39]) {
         [readers addObject:[[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode93]]) {
+
+      if ([hints containsFormat:kBarcodeFormatCode93]) {
         [readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCode128]]) {
+
+      if ([hints containsFormat:kBarcodeFormatCode128]) {
         [readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatITF]]) {
+
+      if ([hints containsFormat:kBarcodeFormatITF]) {
         [readers addObject:[[[ZXITFReader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatCodabar]]) {
+
+      if ([hints containsFormat:kBarcodeFormatCodabar]) {
         [readers addObject:[[[ZXCodaBarReader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSS14]]) {
+
+      if ([hints containsFormat:kBarcodeFormatRSS14]) {
         [readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
       }
-      if ([possibleFormats containsObject:[NSNumber numberWithInt:kBarcodeFormatRSSExpanded]]) {
+
+      if ([hints containsFormat:kBarcodeFormatRSSExpanded]) {
         [readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
       }
     }
+
     if ([readers count] == 0) {
       [readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
       [readers addObject:[[[ZXCode39Reader alloc] init] autorelease]];
@@ -58,7 +65,7 @@
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   for (ZXOneDReader * reader in readers) {
     @try {
       return [reader decodeRow:rowNumber row:row hints:hints];

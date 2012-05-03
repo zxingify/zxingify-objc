@@ -7,7 +7,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 
 @interface ZXGenericMultipleBarcodeReader ()
 
-- (void) doDecodeMultiple:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset;
+- (void) doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset;
 - (ZXResult *) translateResultPoints:(ZXResult *)result xOffset:(int)xOffset yOffset:(int)yOffset;
 
 @end
@@ -25,7 +25,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   return [self decodeMultiple:image hints:nil];
 }
 
-- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   NSMutableArray * results = [NSMutableArray array];
   [self doDecodeMultiple:image hints:hints results:results xOffset:0 yOffset:0];
   if ([results count] == 0) {
@@ -34,7 +34,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   return results;
 }
 
-- (void) doDecodeMultiple:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset {
+- (void) doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset {
   ZXResult * result;
   @try {
     result = [delegate decode:image hints:hints];

@@ -9,12 +9,14 @@
  * @author dswitkin@google.com (Daniel Switkin)
  */
 
+@class ZXDecodeHints;
+
 @interface ZXMultiFormatReader : NSObject <ZXReader> {
-  NSMutableDictionary * hints;
+  ZXDecodeHints * hints;
   NSMutableArray * readers;
 }
 
 - (ZXResult *) decodeWithState:(ZXBinaryBitmap *)image;
-- (void) setHints:(NSMutableDictionary *)hints;
+- (void) setHints:(ZXDecodeHints *)hints;
 
 @end

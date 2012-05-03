@@ -8,10 +8,10 @@
 
 extern const int CODE_PATTERNS[][7];
 
-@class ZXResult;
+@class ZXDecodeHints, ZXResult;
 
 @interface ZXCode128Reader : ZXOneDReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
 
 @end

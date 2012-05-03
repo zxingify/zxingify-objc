@@ -6,14 +6,14 @@
  * @author bbrown@google.com (Brian Brown)
  */
 
-@class ZXBinaryBitmap, ZXDataMatrixDecoder, ZXResult;
+@class ZXBinaryBitmap, ZXDataMatrixDecoder, ZXDecodeHints, ZXResult;
 
 @interface ZXDataMatrixReader : NSObject <ZXReader> {
   ZXDataMatrixDecoder * decoder;
 }
 
 - (ZXResult *) decode:(ZXBinaryBitmap *)image;
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 - (void) reset;
 
 @end

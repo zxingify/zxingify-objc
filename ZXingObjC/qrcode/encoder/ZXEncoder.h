@@ -3,12 +3,12 @@
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
 
-@class ZXBitArray, ZXErrorCorrectionLevel, ZXMode, ZXQRCode;
+@class ZXBitArray, ZXEncodeHints, ZXErrorCorrectionLevel, ZXMode, ZXQRCode;
 
 @interface ZXEncoder : NSObject
 
 + (void) encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel qrCode:(ZXQRCode *)qrCode;
-+ (void) encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints qrCode:(ZXQRCode *)qrCode;
++ (void) encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints qrCode:(ZXQRCode *)qrCode;
 + (int) alphanumericCode:(int)code;
 + (ZXMode *) chooseMode:(NSString *)content;
 + (ZXMode *) chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding;

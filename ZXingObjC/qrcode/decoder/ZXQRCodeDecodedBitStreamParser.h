@@ -7,10 +7,10 @@
  * @author Sean Owen
  */
 
-@class ZXDecoderResult, ZXErrorCorrectionLevel, ZXQRCodeVersion;
+@class ZXDecodeHints, ZXDecoderResult, ZXErrorCorrectionLevel, ZXQRCodeVersion;
 
 @interface ZXQRCodeDecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(NSMutableDictionary *)hints;
++ (ZXDecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints;
 
 @end

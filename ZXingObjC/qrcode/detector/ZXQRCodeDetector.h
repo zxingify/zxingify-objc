@@ -5,7 +5,7 @@
  * @author Sean Owen
  */
 
-@class ZXAlignmentPattern, ZXBitMatrix, ZXDetectorResult, ZXFinderPatternInfo, ZXPerspectiveTransform, ZXResultPoint;
+@class ZXAlignmentPattern, ZXBitMatrix, ZXDecodeHints, ZXDetectorResult, ZXFinderPatternInfo, ZXPerspectiveTransform, ZXResultPoint;
 @protocol ZXResultPointCallback;
 
 @interface ZXQRCodeDetector : NSObject {
@@ -18,7 +18,7 @@
 
 - (id) initWithImage:(ZXBitMatrix *)image;
 - (ZXDetectorResult *) detect;
-- (ZXDetectorResult *) detect:(NSMutableDictionary *)hints;
+- (ZXDetectorResult *) detect:(ZXDecodeHints *)hints;
 - (ZXDetectorResult *) processFinderPatternInfo:(ZXFinderPatternInfo *)info;
 + (ZXPerspectiveTransform *) createTransform:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft alignmentPattern:(ZXResultPoint *)alignmentPattern dimension:(int)dimension;
 + (int) computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize;

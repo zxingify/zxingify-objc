@@ -10,7 +10,7 @@
  * @see ZXGenericMultipleBarcodeReader
  */
 
-@class ZXBinaryBitmap, ZXResult;
+@class ZXBinaryBitmap, ZXDecodeHints, ZXResult;
 
 @interface ZXByQuadrantReader : NSObject <ZXReader> {
   id<ZXReader> delegate;
@@ -18,7 +18,7 @@
 
 - (id) initWithDelegate:(id<ZXReader>)delegate;
 - (ZXResult *) decode:(ZXBinaryBitmap *)image;
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 - (void) reset;
 
 @end

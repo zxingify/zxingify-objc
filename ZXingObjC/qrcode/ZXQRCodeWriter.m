@@ -1,6 +1,6 @@
 #import "ZXBitMatrix.h"
 #import "ZXByteMatrix.h"
-#import "ZXEncodeHintType.h"
+#import "ZXEncodeHints.h"
 #import "ZXEncoder.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXQRCode.h"
@@ -20,7 +20,7 @@ int const QUIET_ZONE_SIZE = 4;
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (contents == nil || [contents length] == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Found empty contents"];
   }
@@ -35,7 +35,7 @@ int const QUIET_ZONE_SIZE = 4;
 
   ZXErrorCorrectionLevel * errorCorrectionLevel = [ZXErrorCorrectionLevel errorCorrectionLevelL];
   if (hints != nil) {
-    ZXErrorCorrectionLevel * requestedECLevel = [hints objectForKey:[NSNumber numberWithInt:kEncodeHintTypeErrorCorrection]];
+    ZXErrorCorrectionLevel * requestedECLevel = hints.errorCorrectionLevel;
     if (requestedECLevel != nil) {
       errorCorrectionLevel = requestedECLevel;
     }

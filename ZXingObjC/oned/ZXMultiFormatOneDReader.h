@@ -5,10 +5,12 @@
  * @author Sean Owen
  */
 
+@class ZXDecodeHints;
+
 @interface ZXMultiFormatOneDReader : ZXOneDReader {
   NSMutableArray * readers;
 }
 
-- (id) initWithHints:(NSMutableDictionary *)hints;
+- (id) initWithHints:(ZXDecodeHints *)hints;
 
 @end

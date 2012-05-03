@@ -1,5 +1,5 @@
 #import "ZXOneDReader.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXFormatException.h"
 #import "ZXNotFoundException.h"
 #import "ZXResultPoint.h"
@@ -9,7 +9,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
 @interface ZXOneDReader ()
 
-- (ZXResult *) doDecode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (ZXResult *) doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 
 @end
 
@@ -19,13 +19,13 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
 
   @try {
     return [self doDecode:image hints:hints];
   }
   @catch (ZXNotFoundException * nfe) {
-    BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+    BOOL tryHarder = hints != nil && hints.tryHarder;
     if (tryHarder && [image rotateSupported]) {
       ZXBinaryBitmap * rotatedImage = [image rotateCounterClockwise];
       ZXResult * result = [self doDecode:rotatedImage hints:hints];
@@ -71,12 +71,12 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * @return The contents of the decoded barcode
  * @throws NotFoundException Any spontaneous errors which occur
  */
-- (ZXResult *) doDecode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints {
+- (ZXResult *) doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   int width = [image width];
   int height = [image height];
   ZXBitArray * row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
   int middle = height >> 1;
-  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+  BOOL tryHarder = hints != nil && hints.tryHarder;
   int rowStep = MAX(1, height >> (tryHarder ? 8 : 5));
   int maxLines;
   if (tryHarder) {
@@ -103,15 +103,9 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     for (int attempt = 0; attempt < 2; attempt++) {
       if (attempt == 1) {
         [row reverse];
-        if (hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]]) {
-          NSMutableDictionary * newHints = [NSMutableDictionary dictionary];
-          for (id key in [hints allKeys]) {
-            if ([key intValue] != kDecodeHintTypeNeedResultPointCallback) {
-              [newHints setObject:[hints objectForKey:key] forKey:key];
-            }
-          }
-
-          hints = newHints;
+        if (hints != nil && hints.resultPointCallback) {
+          hints = [[hints copy] autorelease];
+          hints.resultPointCallback = nil;
         }
       }
 
@@ -262,7 +256,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * @return {@link Result} containing encoded string and start/end of barcode
  * @throws NotFoundException if an error occurs or barcode cannot be found
  */
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

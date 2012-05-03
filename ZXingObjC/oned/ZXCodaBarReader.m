@@ -38,7 +38,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 @implementation ZXCodaBarReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSMutableArray * start = [self findAsteriskPattern:row];
   [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
   int nextStart = [[start objectAtIndex:1] intValue];

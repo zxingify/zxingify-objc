@@ -6,10 +6,10 @@
  * @author Bas Vijfwinkel
  */
 
-@class ZXBitArray, ZXResult;
+@class ZXBitArray, ZXDecodeHints, ZXResult;
 
 @interface ZXCodaBarReader : ZXOneDReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
 
 @end

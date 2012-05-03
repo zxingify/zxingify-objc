@@ -15,8 +15,10 @@
  * @author Hannes Erven
  */
 
+@class ZXDecodeHints;
+
 @interface ZXMultiFinderPatternFinder : ZXFinderPatternFinder
 
-- (NSArray *) findMulti:(NSMutableDictionary *)hints;
+- (NSArray *) findMulti:(ZXDecodeHints *)hints;
 
 @end

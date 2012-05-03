@@ -1,6 +1,6 @@
 #import "AbstractBlackBoxTestCase.h"
 #import "ZXCGImageLuminanceSource.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXHybridBinarizer.h"
 #import "ZXReaderException.h"
 
@@ -59,11 +59,12 @@
 
 @implementation AbstractBlackBoxTestCase
 
-static NSMutableDictionary* TRY_HARDER_HINT = nil;
+static ZXDecodeHints* TRY_HARDER_HINT = nil;
 
 + (void) initialize {
   if (!TRY_HARDER_HINT) {
-    TRY_HARDER_HINT = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], [NSNumber numberWithInt:kDecodeHintTypeTryHarder], nil];
+    TRY_HARDER_HINT = [[ZXDecodeHints alloc] init];
+    TRY_HARDER_HINT.tryHarder = YES;
   }
 }
 
@@ -96,9 +97,7 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
         [[file pathExtension] isEqualToString:@"jpeg"] ||
         [[file pathExtension] isEqualToString:@"gif"] ||
         [[file pathExtension] isEqualToString:@"png"]) {
-      if ([[[file pathComponents] lastObject] isEqualToString:@"33.png"]) {
-        [imageFiles addObject:[NSURL fileURLWithPath:file]];
-      }
+      [imageFiles addObject:[NSURL fileURLWithPath:file]];
     }
   }
 
@@ -109,7 +108,7 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
   return barcodeReader;
 }
 
-- (NSMutableDictionary *) hints {
+- (ZXDecodeHints *) hints {
   return nil;
 }
 
@@ -204,12 +203,12 @@ static NSMutableDictionary* TRY_HARDER_HINT = nil;
   NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %f)", (tryHarder ? @"try harder, " : @""), rotation];
 
   @try {
-    NSMutableDictionary * hints = [self hints];
+    ZXDecodeHints * hints = [self hints];
     if (tryHarder) {
       if (hints == nil) {
         hints = TRY_HARDER_HINT;
       } else {
-        [hints setObject:[NSNumber numberWithBool:YES] forKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+        hints.tryHarder = YES;
       }
     }
     result = [barcodeReader decode:source hints:hints];

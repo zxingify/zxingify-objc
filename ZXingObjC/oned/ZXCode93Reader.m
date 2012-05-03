@@ -37,7 +37,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @implementation ZXCode93Reader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * start = [self findAsteriskPattern:row];
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = [row size];

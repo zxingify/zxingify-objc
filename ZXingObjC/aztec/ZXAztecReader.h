@@ -1,17 +1,11 @@
 #import "ZXReader.h"
 
-/**
- * This implementation can detect and decode Aztec codes in an image.
- * 
- * @author David Olivier
- */
-
-@class ZXBinaryBitmap, ZXResult;
+@class ZXBinaryBitmap, ZXDecodeHints, ZXResult;
 
 @interface ZXAztecReader : NSObject <ZXReader>
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image;
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(NSMutableDictionary *)hints;
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 - (void)reset;
 
 @end

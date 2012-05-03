@@ -1,5 +1,5 @@
 #import "ZXBitMatrix.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXFinderPatternFinder.h"
 #import "ZXFinderPatternInfo.h"
 #import "ZXNotFoundException.h"
@@ -50,8 +50,8 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   return self;
 }
 
-- (ZXFinderPatternInfo *) find:(NSMutableDictionary *)hints {
-  BOOL tryHarder = hints != nil && [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeTryHarder]];
+- (ZXFinderPatternInfo *) find:(ZXDecodeHints *)hints {
+  BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = [image height];
   int maxJ = [image width];
   int iSkip = (3 * maxI) / (4 * FINDER_PATTERN_MAX_MODULES);

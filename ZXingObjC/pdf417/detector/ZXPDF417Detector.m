@@ -67,7 +67,7 @@ int const STOP_PATTERN_REVERSE[9] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
  * @return {@link ZXDetectorResult} encapsulating results of detecting a PDF417 Code
  * @throws NotFoundException if no PDF417 Code can be found
  */
-- (ZXDetectorResult *) detect:(NSMutableDictionary *)hints {
+- (ZXDetectorResult *) detect:(ZXDecodeHints *)hints {
   ZXBitMatrix * matrix = [image blackMatrix];
 
   NSMutableArray * vertices = [self findVertices:matrix];

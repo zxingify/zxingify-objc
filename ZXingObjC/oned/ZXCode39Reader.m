@@ -73,7 +73,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * start = [self findAsteriskPattern:row];
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = [row size];

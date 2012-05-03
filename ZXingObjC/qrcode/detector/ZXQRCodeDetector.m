@@ -1,7 +1,7 @@
 #import "ZXAlignmentPattern.h"
 #import "ZXAlignmentPatternFinder.h"
 #import "ZXBitMatrix.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXDetectorResult.h"
 #import "ZXFinderPatternFinder.h"
 #import "ZXFinderPatternInfo.h"
@@ -55,8 +55,8 @@
  * @throws NotFoundException if QR Code cannot be found
  * @throws FormatException if a QR Code cannot be decoded
  */
-- (ZXDetectorResult *) detect:(NSMutableDictionary *)hints {
-  resultPointCallback = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]];
+- (ZXDetectorResult *) detect:(ZXDecodeHints *)hints {
+  resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
   ZXFinderPatternFinder * finder = [[[ZXFinderPatternFinder alloc] initWithImage:image resultPointCallback:resultPointCallback] autorelease];
   ZXFinderPatternInfo * info = [finder find:hints];

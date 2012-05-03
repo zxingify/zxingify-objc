@@ -21,7 +21,7 @@ extern const int MIDDLE_PATTERN[];
 extern const int L_PATTERNS[][4];
 extern const int L_AND_G_PATTERNS[][4];
 
-@class ZXEANManufacturerOrgSupport, ZXResult, ZXUPCEANExtensionSupport;
+@class ZXDecodeHints, ZXEANManufacturerOrgSupport, ZXResult, ZXUPCEANExtensionSupport;
 
 @interface ZXUPCEANReader : ZXOneDReader {
   NSMutableString * decodeRowNSMutableString;
@@ -34,7 +34,7 @@ extern const int L_AND_G_PATTERNS[][4];
 + (int) decodeDigit:(ZXBitArray *)row counters:(int[])counters countersLen:(int)countersLen rowOffset:(int)rowOffset patternType:(UPC_EAN_PATTERNS)patternType;
 - (NSArray *) decodeEnd:(ZXBitArray *)row endStart:(int)endStart;
 - (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result;
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints;
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(ZXDecodeHints *)hints;
 + (NSArray *) findStartGuardPattern:(ZXBitArray *)row;
 + (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int[])pattern patternLen:(int)patternLen;
 

@@ -1,5 +1,5 @@
 #import "ZXChecksumException.h"
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXEANManufacturerOrgSupport.h"
 #import "ZXFormatException.h"
 #import "ZXNotFoundException.h"
@@ -105,7 +105,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   return startRange;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   return [self decodeRow:rowNumber row:row startGuardRange:[ZXUPCEANReader findStartGuardPattern:row] hints:hints];
 }
 
@@ -115,8 +115,8 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
  * allows caller to inform method about where the UPC/EAN start pattern is
  * found. This allows this to be computed once and reused across many implementations.</p>
  */
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(NSMutableDictionary *)hints {
-  id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : [hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeNeedResultPointCallback]];
+- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(ZXDecodeHints *)hints {
+  id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
   if (resultPointCallback != nil) {
     [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:([[startGuardRange objectAtIndex:0] intValue] + [[startGuardRange objectAtIndex:1] intValue]) / 2.0f y:rowNumber] autorelease]];
   }

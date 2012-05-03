@@ -8,8 +8,10 @@
  * @author Hannes Erven
  */
 
+@class ZXDecodeHints;
+
 @interface ZXMultiDetector : ZXQRCodeDetector
 
-- (NSArray *) detectMulti:(NSMutableDictionary *)hints;
+- (NSArray *) detectMulti:(ZXDecodeHints *)hints;
 
 @end

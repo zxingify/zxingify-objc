@@ -2,6 +2,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ZXBarcodeFormat.h"
+#import "ZXDecodeHints.h"
 #import "ZXImage.h"
 #import "ZXReader.h"
 
@@ -51,7 +52,7 @@
 - (void) addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
 - (NSArray *) imageFiles;
 - (id<ZXReader>) reader;
-- (NSMutableDictionary *) hints;
+- (ZXDecodeHints *) hints;
 - (void) testBlackBox;
 - (SummaryResults *) testBlackBoxCountingResults:(BOOL)assertOnFailure;
 - (ZXImage *) rotateImage:(ZXImage *)original degrees:(float)degrees;

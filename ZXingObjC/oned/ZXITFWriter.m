@@ -3,7 +3,7 @@
 
 @implementation ZXITFWriter
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatITF) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode ITF"];
   }

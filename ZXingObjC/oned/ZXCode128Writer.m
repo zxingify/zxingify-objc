@@ -15,7 +15,7 @@
 
 @implementation ZXCode128Writer
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(NSMutableDictionary *)hints {
+- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatCode128) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_128"];
   }

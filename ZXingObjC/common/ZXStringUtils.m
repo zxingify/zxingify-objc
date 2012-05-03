@@ -1,4 +1,4 @@
-#import "ZXDecodeHintType.h"
+#import "ZXDecodeHints.h"
 #import "ZXStringUtils.h"
 
 @implementation ZXStringUtils
@@ -10,13 +10,13 @@
  * {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
  * default encoding if none of these can possibly be correct
  */
-+ (NSStringEncoding) guessEncoding:(unsigned char *)bytes length:(unsigned int)length hints:(NSMutableDictionary *)hints {
++ (NSStringEncoding) guessEncoding:(unsigned char *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints {
   BOOL assumeShiftJIS = CFStringGetSystemEncoding() == NSShiftJISStringEncoding || CFStringGetSystemEncoding() == NSJapaneseEUCStringEncoding;
   
   if (hints != nil) {
-    NSString * characterSet = (NSString *)[hints objectForKey:[NSNumber numberWithInt:kDecodeHintTypeCharacterSet]];
-    if (characterSet != nil) {
-      return [characterSet intValue];
+    NSStringEncoding encoding = hints.encoding;
+    if (encoding > 0) {
+      return encoding;
     }
   }
   if (length > 3 && bytes[0] == (char) 0xEF &&
