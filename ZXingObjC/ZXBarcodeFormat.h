@@ -1,7 +1,5 @@
 /**
  * Enumerates barcode formats known to this package. Please keep alphabetized.
- *
- * @author Sean Owen
  */
 typedef enum {
   /**

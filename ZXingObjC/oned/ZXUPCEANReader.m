@@ -1,3 +1,4 @@
+#import "ZXBitArray.h"
 #import "ZXChecksumException.h"
 #import "ZXDecodeHints.h"
 #import "ZXEANManufacturerOrgSupport.h"

@@ -1,3 +1,4 @@
+#import "ZXBitArray.h"
 #import "ZXCodaBarReader.h"
 #import "ZXNotFoundException.h"
 #import "ZXResultPoint.h"

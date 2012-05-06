@@ -1,4 +1,5 @@
 #import "ZXBarcodeFormat.h"
+#import "ZXBitMatrix.h"
 #import "ZXDecodeHints.h"
 #import "ZXDecoderResult.h"
 #import "ZXDetectorResult.h"

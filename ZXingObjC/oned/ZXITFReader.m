@@ -1,3 +1,4 @@
+#import "ZXBitArray.h"
 #import "ZXDecodeHints.h"
 #import "ZXFormatException.h"
 #import "ZXITFReader.h"

@@ -20,7 +20,7 @@
   NSMutableArray * buckets;
 }
 
-- (ZXBitArray *) getBlackRow:(int)y row:(ZXBitArray *)row;
+- (ZXBitArray *) blackRow:(int)y row:(ZXBitArray *)row;
 - (ZXBinarizer *) createBinarizer:(ZXLuminanceSource *)source;
 
 @end

@@ -1,19 +1,12 @@
 /**
- * <p>The main class which implements Aztec Code decoding -- as opposed to locating and extracting
- * the Aztec Code from an image.</p>
- * 
- * @author David Olivier
+ * The main class which implements Aztec Code decoding -- as opposed to locating and extracting
+ * the Aztec Code from an image.
  */
 
 @class ZXAztecDetectorResult, ZXDecoderResult;
 
-@interface ZXAztecDecoder : NSObject {
-  int numCodewords;
-  int codewordSize;
-  ZXAztecDetectorResult * ddata;
-  int invertedBitCount;
-}
+@interface ZXAztecDecoder : NSObject
 
-- (ZXDecoderResult*) decode:(ZXAztecDetectorResult*)detectorResult;
+- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult;
 
 @end

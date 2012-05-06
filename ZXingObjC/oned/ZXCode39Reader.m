@@ -1,3 +1,4 @@
+#import "ZXBitArray.h"
 #import "ZXChecksumException.h"
 #import "ZXCode39Reader.h"
 #import "ZXFormatException.h"

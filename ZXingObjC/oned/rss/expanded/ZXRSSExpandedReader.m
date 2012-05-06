@@ -1,4 +1,5 @@
 #import "ZXAbstractExpandedDecoder.h"
+#import "ZXBitArray.h"
 #import "ZXBitArrayBuilder.h"
 #import "ZXDataCharacter.h"
 #import "ZXExpandedPair.h"

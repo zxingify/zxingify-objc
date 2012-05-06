@@ -1,3 +1,4 @@
+#import "ZXBitArray.h"
 #import "ZXBarcodeFormat.h"
 #import "ZXDecodeHints.h"
 #import "ZXPair.h"

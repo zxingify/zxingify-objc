@@ -6,7 +6,7 @@ static ZXFormatException* instance = nil;
 
 + (ZXFormatException *)formatInstance {
   if (instance == nil) {
-    instance = [[[ZXFormatException alloc] initWithName:@"FormatException" reason:@"Format Exception" userInfo:nil] autorelease];
+    instance = [[ZXFormatException alloc] initWithName:@"FormatException" reason:@"Format Exception" userInfo:nil];
   }
   
   return instance;

@@ -28,7 +28,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   return self;
 }
 
-- (ZXBitArray *) getBlackRow:(int)y row:(ZXBitArray *)row {
+- (ZXBitArray *) blackRow:(int)y row:(ZXBitArray *)row {
   ZXLuminanceSource * source = [self luminanceSource];
   int width = [source width];
   if (row == nil || [row size] < width) {

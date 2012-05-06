@@ -6,9 +6,9 @@ static ZXChecksumException* instance = nil;
 
 + (ZXChecksumException *)checksumInstance {
   if (instance == nil) {
-    instance = [[[ZXChecksumException alloc] initWithName:@"ChecksumException" reason:@"Checksum Exception" userInfo:nil] autorelease];
+    instance = [[ZXChecksumException alloc] initWithName:@"ChecksumException" reason:@"Checksum Exception" userInfo:nil];
   }
-  
+
   return instance;  
 }
 

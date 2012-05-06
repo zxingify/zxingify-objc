@@ -1,3 +1,4 @@
+#import "ZXBitArray.h"
 #import "ZXEAN8Reader.h"
 
 @implementation ZXEAN8Reader
