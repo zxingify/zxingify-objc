@@ -4,16 +4,18 @@
 
 @interface ZXAddressBookAUResultParser ()
 
-+ (NSArray *) matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim;
++ (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim;
 
 @end
 
 @implementation ZXAddressBookAUResultParser
 
-+ (ZXAddressBookParsedResult *) parse:(ZXResult *)result {
++ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
 
-  if (rawText == nil || [rawText rangeOfString:@"MEMORY"].location == NSNotFound || [rawText rangeOfString:@"\r\n"].location == NSNotFound) {
+  if (rawText == nil ||
+      [rawText rangeOfString:@"MEMORY"].location == NSNotFound ||
+      [rawText rangeOfString:@"\r\n"].location == NSNotFound) {
     return nil;
   }
 
@@ -24,19 +26,20 @@
   NSString * note = [self matchSinglePrefixedField:@"MEMORY:" rawText:rawText endChar:'\r' trim:NO];
   NSString * address = [self matchSinglePrefixedField:@"ADD:" rawText:rawText endChar:'\r' trim:YES];
   NSArray * addresses = address == nil ? nil : [NSArray arrayWithObjects:address, nil];
-  return [[[ZXAddressBookParsedResult alloc] init:[self maybeWrap:name]
-                                    pronunciation:pronunciation
-                                     phoneNumbers:phoneNumbers
-                                           emails:emails
-                                             note:note
-                                        addresses:addresses
-                                              org:nil
-                                         birthday:nil
-                                            title:nil
-                                              url:nil] autorelease];
+
+  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
+                                             pronunciation:pronunciation
+                                              phoneNumbers:phoneNumbers
+                                                    emails:emails
+                                                      note:note
+                                                 addresses:addresses
+                                                       org:nil
+                                                  birthday:nil
+                                                     title:nil
+                                                       url:nil] autorelease];
 }
 
-+ (NSArray *) matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {
++ (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {
   NSMutableArray * values = nil;
 
   for (int i = 1; i <= max; i++) {

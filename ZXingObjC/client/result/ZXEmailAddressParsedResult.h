@@ -1,20 +1,12 @@
 #import "ZXParsedResult.h"
 
-/**
- * @author Sean Owen
- */
+@interface ZXEmailAddressParsedResult : ZXParsedResult
 
-@interface ZXEmailAddressParsedResult : ZXParsedResult {
-  NSString * emailAddress;
-  NSString * subject;
-  NSString * body;
-  NSString * mailtoURI;
-}
+@property (nonatomic, copy, readonly) NSString * emailAddress;
+@property (nonatomic, copy, readonly) NSString * subject;
+@property (nonatomic, copy, readonly) NSString * body;
+@property (nonatomic, copy, readonly) NSString * mailtoURI;
 
-@property(nonatomic, retain, readonly) NSString * emailAddress;
-@property(nonatomic, retain, readonly) NSString * subject;
-@property(nonatomic, retain, readonly) NSString * body;
-@property(nonatomic, retain, readonly) NSString * mailtoURI;
-@property(nonatomic, retain, readonly) NSString * displayResult;
-- (id) init:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI;
+- (id)initWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI;
+
 @end

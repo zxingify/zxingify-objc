@@ -4,7 +4,7 @@
 
 @implementation ZXURIResultParser
 
-+ (ZXURIParsedResult *) parse:(ZXResult *)result {
++ (ZXURIParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText != nil && [rawText hasPrefix:@"URL:"]) {
     rawText = [rawText substringFromIndex:4];
@@ -24,7 +24,7 @@
  * intend to strictly check URIs as its only function is to represent what is in a barcode, but, it does
  * need to know when a string is obviously not a URI.
  */
-+ (BOOL) isBasicallyValidURI:(NSString *)uri {
++ (BOOL)isBasicallyValidURI:(NSString *)uri {
   if (uri == nil || [uri rangeOfString:@" "].location != NSNotFound || [uri rangeOfString:@"\n"].location != NSNotFound) {
     return NO;
   }
@@ -38,16 +38,13 @@
   }
   if (colon >= 0) {
     if (period < 0 || period > colon) {
-
       for (int i = 0; i < colon; i++) {
         unichar c = [uri characterAtIndex:i];
         if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z')) {
           return NO;
         }
       }
-
-    }
-     else {
+    } else {
       if (colon >= [uri length] - 2) {
         return NO;
       }
@@ -58,7 +55,6 @@
           return NO;
         }
       }
-
     }
   }
   return YES;

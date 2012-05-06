@@ -1,22 +1,37 @@
 #import "ZXGeoParsedResult.h"
 #import "ZXParsedResultType.h"
 
+@interface ZXGeoParsedResult ()
+
+@property (nonatomic) double latitude;
+@property (nonatomic) double longitude;
+@property (nonatomic) double altitude;
+@property (nonatomic, copy) NSString * query;
+
+@end
+
 @implementation ZXGeoParsedResult
 
 @synthesize latitude;
 @synthesize longitude;
 @synthesize altitude;
 @synthesize query;
-@synthesize displayResult;
 
-- (id) initWithLatitude:(double)aLatitude longitude:(double)aLongitude altitude:(double)anAltitude query:(NSString *)aQuery {
-  if (self = [super initWithType:kParsedResultTypeGeo]) {
+- (id)initWithLatitude:(double)aLatitude longitude:(double)aLongitude altitude:(double)anAltitude query:(NSString *)aQuery {
+  self = [super initWithType:kParsedResultTypeGeo];
+  if (self) {
     self.latitude = aLatitude;
     self.longitude = aLongitude;
     self.altitude = anAltitude;
     self.query = aQuery;
   }
   return self;
+}
+
+- (void) dealloc {
+  [query release];
+
+  [super dealloc];
 }
 
 - (NSString *) geoURI {
@@ -28,10 +43,10 @@
   if (self.query != nil) {
     [result appendFormat:@"?%@", query];
   }
-  return result;
+  return [NSString stringWithString:result];
 }
 
-- (NSString *) displayResult {
+- (NSString *)displayResult {
   NSMutableString *result = [NSMutableString string];
   [result appendFormat:@"%f, %f", self.latitude, self.longitude];
   if (self.altitude > 0.0) {
@@ -41,12 +56,7 @@
   if (self.query != nil) {
     [result appendFormat:@" (%@)", self.query];
   }
-  return result;
-}
-
-- (void) dealloc {
-  [query release];
-  [super dealloc];
+  return [NSString stringWithString:result];
 }
 
 @end

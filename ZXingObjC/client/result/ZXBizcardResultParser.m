@@ -4,14 +4,14 @@
 
 @interface ZXBizcardResultParser ()
 
-+ (NSString *) buildName:(NSString *)firstName lastName:(NSString *)lastName;
-+ (NSArray *) buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3;
++ (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName;
++ (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3;
 
 @end
 
 @implementation ZXBizcardResultParser
 
-+ (ZXAddressBookParsedResult *) parse:(ZXResult *)result {
++ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil || ![rawText hasPrefix:@"BIZCARD:"]) {
     return nil;
@@ -26,19 +26,20 @@
   NSString * phoneNumber2 = [self matchSingleDoCoMoPrefixedField:@"M:" rawText:rawText trim:YES];
   NSString * phoneNumber3 = [self matchSingleDoCoMoPrefixedField:@"F:" rawText:rawText trim:YES];
   NSString * email = [self matchSingleDoCoMoPrefixedField:@"E:" rawText:rawText trim:YES];
-  return [[[ZXAddressBookParsedResult alloc] init:[self maybeWrap:fullName]
-                                    pronunciation:nil
-                                     phoneNumbers:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3]
-                                           emails:[self maybeWrap:email]
-                                             note:nil
-                                        addresses:addresses
-                                              org:org
-                                         birthday:nil
-                                            title:title
-                                              url:nil] autorelease];
+
+  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:fullName]
+                                             pronunciation:nil
+                                              phoneNumbers:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3]
+                                                    emails:[self maybeWrap:email]
+                                                      note:nil
+                                                 addresses:addresses
+                                                       org:org
+                                                  birthday:nil
+                                                     title:title
+                                                       url:nil] autorelease];
 }
 
-+ (NSArray *) buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {
++ (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {
   NSMutableArray * numbers = [NSMutableArray arrayWithCapacity:3];
   if (number1 != nil) {
     [numbers addObject:number1];
@@ -54,19 +55,16 @@
     return nil;
   }
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:size];
-
   for (int i = 0; i < size; i++) {
     [result addObject:[numbers objectAtIndex:i]];
   }
-
   return result;
 }
 
-+ (NSString *) buildName:(NSString *)firstName lastName:(NSString *)lastName {
++ (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName {
   if (firstName == nil) {
     return lastName;
-  }
-   else {
+  } else {
     return lastName == nil ? firstName : [[firstName stringByAppendingString:@" "] stringByAppendingString:lastName];
   }
 }

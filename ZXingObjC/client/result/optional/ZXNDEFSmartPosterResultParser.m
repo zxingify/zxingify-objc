@@ -7,7 +7,7 @@
 
 @implementation ZXNDEFSmartPosterResultParser
 
-+ (ZXNDEFSmartPosterParsedResult *) parse:(ZXResult *)result {
++ (ZXNDEFSmartPosterParsedResult *)parse:(ZXResult *)result {
   unsigned char * bytes = [result rawBytes];
   if (bytes == nil) {
     return nil;

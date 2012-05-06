@@ -4,7 +4,7 @@
 
 @implementation ZXSMSTOMMSTOResultParser
 
-+ (ZXSMSParsedResult *) parse:(ZXResult *)result {
++ (ZXSMSParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil) {
     return nil;

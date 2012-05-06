@@ -4,21 +4,21 @@
 
 @interface ZXVCardResultParser ()
 
-+ (NSString *) decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset;
-+ (NSString *) formatAddress:(NSString *)address;
-+ (void) formatNames:(NSMutableArray *)names;
-+ (BOOL) isLikeVCardDate:(NSString *)value;
-+ (void) maybeAppendFragment:(NSOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
-+ (void) maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
-+ (NSMutableArray *) matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
-+ (NSString *) stripContinuationCRLF:(NSString *)value;
-+ (int) toHexValue:(unichar)c;
++ (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset;
++ (NSString *)formatAddress:(NSString *)address;
++ (void)formatNames:(NSMutableArray *)names;
++ (BOOL)isLikeVCardDate:(NSString *)value;
++ (void)maybeAppendFragment:(NSOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
++ (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
++ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
++ (NSString *)stripContinuationCRLF:(NSString *)value;
++ (int)toHexValue:(unichar)c;
 
 @end
 
 @implementation ZXVCardResultParser
 
-+ (ZXAddressBookParsedResult *) parse:(ZXResult *)result {
++ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil || ![rawText hasPrefix:@"BEGIN:VCARD"]) {
     return nil;
@@ -44,19 +44,20 @@
   }
   NSString * title = [self matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
   NSString * url = [self matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
-  return [[[ZXAddressBookParsedResult alloc] init:names
-                                    pronunciation:nil
-                                     phoneNumbers:phoneNumbers
-                                           emails:emails
-                                             note:note
-                                        addresses:addresses
-                                              org:org
-                                         birthday:birthday
-                                            title:title
-                                              url:url] autorelease];
+
+  return [[[ZXAddressBookParsedResult alloc] initWithNames:names
+                                             pronunciation:nil
+                                              phoneNumbers:phoneNumbers
+                                                    emails:emails
+                                                      note:note
+                                                 addresses:addresses
+                                                       org:org
+                                                  birthday:birthday
+                                                     title:title
+                                                       url:url] autorelease];
 }
 
-+ (NSMutableArray *) matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
++ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
   NSMutableArray * matches = nil;
   int i = 0;
   int max = [rawText length];
@@ -113,11 +114,9 @@
     while ((i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) >= 0) {
       if (i < [rawText length] - 1 && ([rawText characterAtIndex:i + 1] == ' ' || [rawText characterAtIndex:i + 1] == '\t')) {
         i += 2;
-      }
-       else if (quotedPrintable && ([rawText characterAtIndex:i - 1] == '=' || [rawText characterAtIndex:i - 2] == '=')) {
+      } else if (quotedPrintable && ([rawText characterAtIndex:i - 1] == '=' || [rawText characterAtIndex:i - 2] == '=')) {
         i++;
-      }
-       else {
+      } else {
         break;
       }
     }
@@ -137,8 +136,7 @@
       }
       if (quotedPrintable) {
         element = [self decodeQuotedPrintable:element charset:quotedPrintableCharset];
-      }
-       else {
+      } else {
         element = [self stripContinuationCRLF:element];
       }
       [matches addObject:element];
@@ -154,7 +152,7 @@
   return matches;
 }
 
-+ (NSString *) stripContinuationCRLF:(NSString *)value {
++ (NSString *)stripContinuationCRLF:(NSString *)value {
   int length = [value length];
   NSMutableString * result = [NSMutableString stringWithCapacity:length];
   BOOL lastWasLF = NO;
@@ -181,7 +179,7 @@
   return result;
 }
 
-+ (NSString *) decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
++ (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
   int length = [value length];
   NSMutableString * result = [NSMutableString stringWithCapacity:length];
   NSOutputStream * fragmentBuffer = [NSOutputStream outputStreamToMemory];
@@ -222,7 +220,7 @@
   return result;
 }
 
-+ (int) toHexValue:(unichar)c {
++ (int)toHexValue:(unichar)c {
   if (c >= '0' && c <= '9') {
     return c - '0';
   } else if (c >= 'A' && c <= 'F') {
@@ -233,7 +231,7 @@
   @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid character." userInfo:nil];
 }
 
-+ (void) maybeAppendFragment:(NSOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
++ (void)maybeAppendFragment:(NSOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
   NSData *data = [fragmentBuffer propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
 
   if ([data length] > 0) {
@@ -247,12 +245,12 @@
   }
 }
 
-+ (NSString *) matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
++ (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
   NSArray * values = [self matchVCardPrefixedField:prefix rawText:rawText trim:trim];
   return values == nil ? nil : [values objectAtIndex:0];
 }
 
-+ (BOOL) isLikeVCardDate:(NSString *)value {
++ (BOOL)isLikeVCardDate:(NSString *)value {
   if (value == nil) {
     return YES;
   }
@@ -262,7 +260,7 @@
   return [value length] == 10 && [value characterAtIndex:4] == '-' && [value characterAtIndex:7] == '-' && [self isSubstringOfDigits:value offset:0 length:4] && [self isSubstringOfDigits:value offset:5 length:2] && [self isSubstringOfDigits:value offset:8 length:2];
 }
 
-+ (NSString *) formatAddress:(NSString *)address {
++ (NSString *)formatAddress:(NSString *)address {
   if (address == nil) {
     return nil;
   }
@@ -284,10 +282,8 @@
 /**
  * Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like
  * "Reverend John Q. Public III".
- * 
- * @param names name values to format, in place
  */
-+ (void) formatNames:(NSMutableArray *)names {
++ (void)formatNames:(NSMutableArray *)names {
   if (names != nil) {
     for (int i = 0; i < [names count]; i++) {
       NSString *name = [names objectAtIndex:i];
@@ -311,7 +307,7 @@
   }
 }
 
-+ (void) maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
++ (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
   if ([components objectAtIndex:i]) {
     [newName appendFormat:@" %@", [components objectAtIndex:i]];
   }

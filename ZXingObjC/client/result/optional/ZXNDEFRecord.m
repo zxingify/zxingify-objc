@@ -8,22 +8,46 @@ NSString * const URI_WELL_KNOWN_TYPE = @"U";
 NSString * const SMART_POSTER_WELL_KNOWN_TYPE = @"Sp";
 NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
 
+@interface ZXNDEFRecord ()
+
+@property (nonatomic) int header;
+@property (nonatomic) unsigned char * payload;
+@property (nonatomic) int payloadLength;
+@property (nonatomic) int totalRecordLength;
+@property (nonatomic, copy) NSString * type;
+
+@end
+
 @implementation ZXNDEFRecord
 
-@synthesize type, payload, payloadLength, totalRecordLength;
+@synthesize header;
+@synthesize payload;
+@synthesize payloadLength;
+@synthesize totalRecordLength;
+@synthesize type;
 
-- (id) initWithHeader:(int)aHeader type:(NSString *)aType payload:(unsigned char *)aPayload payloadLength:(unsigned int)aPayloadLength totalRecordLength:(unsigned int)aTotalRecordLength {
+- (id)initWithHeader:(int)aHeader type:(NSString *)aType payload:(unsigned char *)aPayload payloadLength:(unsigned int)aPayloadLength totalRecordLength:(unsigned int)aTotalRecordLength {
   if (self = [super init]) {
-    header = aHeader;
-    type = [aType copy];
-    payload = aPayload;
-    payloadLength = aPayloadLength;
-    totalRecordLength = aTotalRecordLength;
+    self.header = aHeader;
+    self.type = aType;
+    self.payload = aPayload;
+    self.payloadLength = aPayloadLength;
+    self.totalRecordLength = aTotalRecordLength;
   }
   return self;
 }
 
-+ (ZXNDEFRecord *) readRecord:(unsigned char *)bytes offset:(int)offset {
+- (void)dealloc {
+  if (payload != NULL) {
+    free(payload);
+    payload = NULL;
+  }
+  [type release];
+
+  [super dealloc];
+}
+
++ (ZXNDEFRecord *)readRecord:(unsigned char *)bytes offset:(int)offset {
   int header = bytes[offset] & 0xFF;
   if (((header ^ SUPPORTED_HEADER) & SUPPORTED_HEADER_MASK) != 0) {
     return nil;
@@ -34,27 +58,25 @@ NSString * const ACTION_WELL_KNOWN_TYPE = @"act";
 
   NSString * type = [ZXAbstractNDEFResultParser bytesToString:bytes offset:offset + 3 length:typeLength encoding:NSASCIIStringEncoding];
 
-  unsigned char payload[payloadLength];
+  unsigned char* payload = (unsigned char*)malloc(payloadLength * sizeof(unsigned char));
   int payloadCount = 0;
   for (int i = offset + 3 + typeLength; i < offset + 3 + typeLength + payloadLength; i++) {
     payload[payloadCount++] = bytes[i];
   }
 
-  return [[[ZXNDEFRecord alloc] initWithHeader:header type:type payload:payload payloadLength:payloadLength totalRecordLength:3 + typeLength + payloadLength] autorelease];
+  return [[[ZXNDEFRecord alloc] initWithHeader:header
+                                          type:type
+                                       payload:payload
+                                 payloadLength:payloadLength
+                             totalRecordLength:3 + typeLength + payloadLength] autorelease];
 }
 
-- (BOOL) messageBegin {
-  return (header & 0x80) != 0;
+- (BOOL)messageBegin {
+  return (self.header & 0x80) != 0;
 }
 
-- (BOOL) messageEnd {
-  return (header & 0x40) != 0;
-}
-
-- (void) dealloc {
-  //free(payload);
-  [type release];
-  [super dealloc];
+- (BOOL)messageEnd {
+  return (self.header & 0x40) != 0;
 }
 
 @end

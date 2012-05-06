@@ -35,16 +35,16 @@
 
 @interface ZXResultParser ()
 
-+ (void) appendKeyValue:(NSString *)uri paramStart:(int)paramStart paramEnd:(int)paramEnd result:(NSMutableDictionary *)result;
-+ (int) findFirstEscape:(NSString *)escaped;
-+ (int) parseHexDigit:(unichar)c;
++ (void)appendKeyValue:(NSString *)uri paramStart:(int)paramStart paramEnd:(int)paramEnd result:(NSMutableDictionary *)result;
++ (int)findFirstEscape:(NSString *)escaped;
++ (int)parseHexDigit:(unichar)c;
 
 @end
 
 @implementation ZXResultParser
 
 + (ZXParsedResult *) parseResult:(ZXResult *)theResult {
-  ZXParsedResult * result;
+  ZXParsedResult * result = nil;
   if ((result = [ZXBookmarkDoCoMoResultParser parse:theResult]) != nil) {
     return result;
   } else if ((result = [ZXAddressBookDoCoMoResultParser parse:theResult]) != nil) {
@@ -87,13 +87,13 @@
   return [[[ZXTextParsedResult alloc] initWithText:[theResult text] language:nil] autorelease];
 }
 
-+ (void) maybeAppend:(NSString *)value result:(NSMutableString *)result {
++ (void)maybeAppend:(NSString *)value result:(NSMutableString *)result {
   if (value != nil) {
     [result appendFormat:@"\n%@", value];
   }
 }
 
-+ (void) maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
++ (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
     for (id i in value) {
       [result appendFormat:@"\n%@", i];
@@ -101,11 +101,11 @@
   }
 }
 
-+ (NSArray *) maybeWrap:(NSString *)value {
++ (NSArray *)maybeWrap:(NSString *)value {
   return value == nil ? nil : [NSArray arrayWithObjects:value, nil];
 }
 
-+ (NSString *) unescapeBackslash:(NSString *)escaped {
++ (NSString *)unescapeBackslash:(NSString *)escaped {
   if (escaped != nil) {
     int backslash = [escaped rangeOfString:@"\\"].location;
     if (backslash >= 0) {
@@ -128,7 +128,7 @@
   return escaped;
 }
 
-+ (NSString *) urlDecode:(NSString *)escaped {
++ (NSString *)urlDecode:(NSString *)escaped {
   if (escaped == nil) {
     return nil;
   }
@@ -169,7 +169,7 @@
   return unescaped;
 }
 
-+ (int) findFirstEscape:(NSString *)escaped {
++ (int)findFirstEscape:(NSString *)escaped {
   int max = [escaped length];
   for (int i = 0; i < max; i++) {
     unichar c = [escaped characterAtIndex:i];
@@ -181,7 +181,7 @@
   return -1;
 }
 
-+ (int) parseHexDigit:(unichar)c {
++ (int)parseHexDigit:(unichar)c {
   if (c >= 'a') {
     if (c <= 'f') {
       return 10 + (c - 'a');
@@ -200,7 +200,7 @@
   return -1;
 }
 
-+ (BOOL) isStringOfDigits:(NSString *)value length:(unsigned int)length {
++ (BOOL)isStringOfDigits:(NSString *)value length:(unsigned int)length {
   if (value == nil) {
     return NO;
   }
@@ -219,7 +219,7 @@
   return YES;
 }
 
-+ (BOOL) isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length {
++ (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length {
   if (value == nil) {
     return NO;
   }
@@ -239,7 +239,7 @@
   return YES;
 }
 
-+ (NSMutableDictionary *) parseNameValuePairs:(NSString *)uri {
++ (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri {
   int paramStart = [uri rangeOfString:@"?"].location;
   if (paramStart < 0) {
     return nil;
@@ -256,7 +256,7 @@
   return result;
 }
 
-+ (void) appendKeyValue:(NSString *)uri paramStart:(int)paramStart paramEnd:(int)paramEnd result:(NSMutableDictionary *)result {
++ (void)appendKeyValue:(NSString *)uri paramStart:(int)paramStart paramEnd:(int)paramEnd result:(NSMutableDictionary *)result {
   int separator = [uri rangeOfString:@"=" options:NSLiteralSearch range:NSMakeRange(paramStart, [uri length] - paramStart)].location;
   if (separator >= 0) {
     NSString * key = [uri substringWithRange:NSMakeRange(paramStart, [uri length] - separator)];
@@ -266,7 +266,7 @@
   }
 }
 
-+ (NSArray *) matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
++ (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
   NSMutableArray * matches = nil;
   int i = 0;
   int max = [rawText length];
@@ -306,7 +306,7 @@
   return matches;
 }
 
-+ (NSString *) matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
++ (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
   NSArray * matches = [self matchPrefixedField:prefix rawText:rawText endChar:endChar trim:trim];
   return matches == nil ? nil : [matches objectAtIndex:0];
 }

@@ -4,13 +4,13 @@
 
 @interface ZXAddressBookDoCoMoResultParser ()
 
-+ (NSString *) parseName:(NSString *)name;
++ (NSString *)parseName:(NSString *)name;
 
 @end
 
 @implementation ZXAddressBookDoCoMoResultParser
 
-+ (ZXAddressBookParsedResult *) parse:(ZXResult *)result {
++ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil || ![rawText hasPrefix:@"MECARD:"]) {
     return nil;
@@ -31,10 +31,20 @@
   }
   NSString * url = [self matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
   NSString * org = [self matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
-  return [[[ZXAddressBookParsedResult alloc] init:[self maybeWrap:name] pronunciation:pronunciation phoneNumbers:phoneNumbers emails:emails note:note addresses:addresses org:org birthday:birthday title:nil url:url] autorelease];
+
+  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
+                                             pronunciation:pronunciation
+                                              phoneNumbers:phoneNumbers
+                                                    emails:emails
+                                                      note:note
+                                                 addresses:addresses
+                                                       org:org
+                                                  birthday:birthday
+                                                     title:nil
+                                                       url:url] autorelease];
 }
 
-+ (NSString *) parseName:(NSString *)name {
++ (NSString *)parseName:(NSString *)name {
   int comma = [name rangeOfString:@","].location;
   if (comma >= 0) {
     return [NSString stringWithFormat:@"%@ %@", [name substringFromIndex:comma + 1], [name substringToIndex:comma]];

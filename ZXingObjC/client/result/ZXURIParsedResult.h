@@ -1,19 +1,11 @@
 #import "ZXParsedResult.h"
 
-/**
- * @author Sean Owen
- */
+@interface ZXURIParsedResult : ZXParsedResult
 
-@interface ZXURIParsedResult : ZXParsedResult {
-  NSString * uri;
-  NSString * title;
-}
+@property (nonatomic, copy, readonly) NSString * uri;
+@property (nonatomic, copy, readonly) NSString * title;
 
-@property(nonatomic, retain, readonly) NSString * uri;
-@property(nonatomic, retain, readonly) NSString * title;
-@property(nonatomic, readonly) BOOL possiblyMaliciousURI;
-@property(nonatomic, retain, readonly) NSString * displayResult;
-
-- (id) initWithUri:(NSString *)uri title:(NSString *)title;
+- (id)initWithUri:(NSString *)uri title:(NSString *)title;
+- (BOOL)possiblyMaliciousURI;
 
 @end

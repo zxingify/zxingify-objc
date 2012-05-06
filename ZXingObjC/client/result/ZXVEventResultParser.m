@@ -5,7 +5,7 @@
 
 @implementation ZXVEventResultParser
 
-+ (ZXCalendarParsedResult *) parse:(ZXResult *)result {
++ (ZXCalendarParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = result.text;
   if (rawText == nil) {
     return nil;
@@ -42,8 +42,7 @@
                                                 description:description
                                                    latitude:latitude
                                                   longitude:longitude] autorelease];
-  }
-  @catch (NSException * iae) {
+  } @catch (NSException * iae) {
     return nil;
   }
 }

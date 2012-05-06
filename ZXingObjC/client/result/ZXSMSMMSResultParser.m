@@ -4,13 +4,13 @@
 
 @interface ZXSMSMMSResultParser ()
 
-+ (void) addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart;
++ (void)addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart;
 
 @end
 
 @implementation ZXSMSMMSResultParser
 
-+ (ZXSMSParsedResult *) parse:(ZXResult *)result {
++ (ZXSMSParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil) {
     return nil;
@@ -54,7 +54,7 @@
                                                 body:body] autorelease];
 }
 
-+ (void) addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart {
++ (void)addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart {
   int numberEnd = [numberPart rangeOfString:@";"].location;
   if (numberEnd < 0) {
     [numbers addObject:numberPart];

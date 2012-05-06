@@ -3,7 +3,7 @@
 
 @implementation ZXGeoResultParser
 
-+ (ZXGeoParsedResult *) parse:(ZXResult *)result {
++ (ZXGeoParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil || (![rawText hasPrefix:@"geo:"] && ![rawText hasPrefix:@"GEO:"])) {
     return nil;

@@ -3,19 +3,13 @@
 /**
  * A simple result type encapsulating a string that has no further
  * interpretation.
- * 
- * @author Sean Owen
  */
 
-@interface ZXTextParsedResult : ZXParsedResult {
-  NSString * text;
-  NSString * language;
-}
+@interface ZXTextParsedResult : ZXParsedResult
 
-@property(nonatomic, retain, readonly) NSString * text;
-@property(nonatomic, retain, readonly) NSString * language;
-@property(nonatomic, retain, readonly) NSString * displayResult;
+@property (nonatomic, copy, readonly) NSString * text;
+@property (nonatomic, copy, readonly) NSString * language;
 
-- (id) initWithText:(NSString *)text language:(NSString *)language;
+- (id)initWithText:(NSString *)text language:(NSString *)language;
 
 @end

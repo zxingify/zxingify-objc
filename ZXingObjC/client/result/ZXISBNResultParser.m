@@ -3,7 +3,7 @@
 
 @implementation ZXISBNResultParser
 
-+ (ZXISBNParsedResult *) parse:(ZXResult *)result {
++ (ZXISBNParsedResult *)parse:(ZXResult *)result {
   ZXBarcodeFormat format = [result barcodeFormat];
   if (format != kBarcodeFormatEan13) {
     return nil;

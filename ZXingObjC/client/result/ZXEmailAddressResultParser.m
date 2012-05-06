@@ -5,7 +5,7 @@
 
 @implementation ZXEmailAddressResultParser
 
-+ (ZXEmailAddressParsedResult *) parse:(ZXResult *)result {
++ (ZXEmailAddressParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil) {
     return nil;
@@ -27,13 +27,19 @@
       subject = [nameValues objectForKey:@"subject"];
       body = [nameValues objectForKey:@"body"];
     }
-    return [[[ZXEmailAddressParsedResult alloc] init:emailAddress subject:subject body:body mailtoURI:rawText] autorelease];
+    return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress
+                                                             subject:subject
+                                                                body:body
+                                                           mailtoURI:rawText] autorelease];
   } else {
     if (![ZXEmailDoCoMoResultParser isBasicallyValidEmailAddress:rawText]) {
       return nil;
     }
     emailAddress = rawText;
-    return [[[ZXEmailAddressParsedResult alloc] init:emailAddress subject:nil body:nil mailtoURI:[@"mailto:" stringByAppendingString:emailAddress]] autorelease];
+    return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress
+                                                             subject:nil
+                                                                body:nil
+                                                           mailtoURI:[@"mailto:" stringByAppendingString:emailAddress]] autorelease];
   }
 }
 

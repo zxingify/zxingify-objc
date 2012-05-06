@@ -1,6 +1,21 @@
 #import "ZXAddressBookParsedResult.h"
 #import "ZXParsedResultType.h"
 
+@interface ZXAddressBookParsedResult ()
+
+@property (nonatomic, retain) NSArray * names;
+@property (nonatomic, copy) NSString * pronunciation;
+@property (nonatomic, retain) NSArray * phoneNumbers;
+@property (nonatomic, retain) NSArray * emails;
+@property (nonatomic, copy) NSString * note;
+@property (nonatomic, retain) NSArray * addresses;
+@property (nonatomic, copy) NSString * title;
+@property (nonatomic, copy) NSString * org;
+@property (nonatomic, copy) NSString * url;
+@property (nonatomic, copy) NSString * birthday;
+
+@end
+
 @implementation ZXAddressBookParsedResult
 
 @synthesize names;
@@ -11,12 +26,13 @@
 @synthesize addresses;
 @synthesize title;
 @synthesize org;
-@synthesize uRL;
+@synthesize url;
 @synthesize birthday;
-@synthesize displayResult;
 
-- (id) init:(NSArray *)aNames pronunciation:(NSString *)aPronunciation phoneNumbers:(NSArray *)aPhoneNumbers emails:(NSArray *)aEmails note:(NSString *)aNote addresses:(NSArray *)anAddresses org:(NSString *)anOrg birthday:(NSString *)aBirthday title:(NSString *)aTitle url:(NSString *)aUrl {
-  if (self = [super initWithType:kParsedResultTypeAddressBook]) {
+- (id)initWithNames:(NSArray *)aNames pronunciation:(NSString *)aPronunciation phoneNumbers:(NSArray *)aPhoneNumbers emails:(NSArray *)aEmails note:(NSString *)aNote addresses:(NSArray *)anAddresses org:(NSString *)anOrg birthday:(NSString *)aBirthday title:(NSString *)aTitle url:(NSString *)aUrl {
+  self = [super initWithType:kParsedResultTypeAddressBook];
+
+  if (self) {
     self.names = aNames;
     self.pronunciation = aPronunciation;
     self.phoneNumbers = aPhoneNumbers;
@@ -26,27 +42,13 @@
     self.org = anOrg;
     self.birthday = aBirthday;
     self.title = aTitle;
-    self.uRL = aUrl;
+    self.url = aUrl;
   }
+
   return self;
 }
 
-- (NSString *) displayResult {
-  NSMutableString * result = [NSMutableString string];
-  [ZXParsedResult maybeAppendArray:names result:result];
-  [ZXParsedResult maybeAppend:pronunciation result:result];
-  [ZXParsedResult maybeAppend:title result:result];
-  [ZXParsedResult maybeAppend:org result:result];
-  [ZXParsedResult maybeAppendArray:addresses result:result];
-  [ZXParsedResult maybeAppendArray:phoneNumbers result:result];
-  [ZXParsedResult maybeAppendArray:emails result:result];
-  [ZXParsedResult maybeAppend:uRL result:result];
-  [ZXParsedResult maybeAppend:birthday result:result];
-  [ZXParsedResult maybeAppend:note result:result];
-  return result;
-}
-
-- (void) dealloc {
+- (void)dealloc {
   [names release];
   [pronunciation release];
   [phoneNumbers release];
@@ -56,8 +58,24 @@
   [org release];
   [birthday release];
   [title release];
-  [uRL release];
+  [url release];
+
   [super dealloc];
+}
+
+- (NSString *)displayResult {
+  NSMutableString * result = [NSMutableString string];
+  [ZXParsedResult maybeAppendArray:self.names result:result];
+  [ZXParsedResult maybeAppend:self.pronunciation result:result];
+  [ZXParsedResult maybeAppend:self.title result:result];
+  [ZXParsedResult maybeAppend:self.org result:result];
+  [ZXParsedResult maybeAppendArray:self.addresses result:result];
+  [ZXParsedResult maybeAppendArray:self.phoneNumbers result:result];
+  [ZXParsedResult maybeAppendArray:self.emails result:result];
+  [ZXParsedResult maybeAppend:self.url result:result];
+  [ZXParsedResult maybeAppend:self.birthday result:result];
+  [ZXParsedResult maybeAppend:self.note result:result];
+  return [NSString stringWithString:result];
 }
 
 @end

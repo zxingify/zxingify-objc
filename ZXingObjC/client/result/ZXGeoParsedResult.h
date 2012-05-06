@@ -1,16 +1,13 @@
 #import "ZXParsedResult.h"
 
-/**
- * @author Sean Owen
- */
-
 @interface ZXGeoParsedResult : ZXParsedResult
 
-@property(nonatomic, assign) double latitude;
-@property(nonatomic, assign) double longitude;
-@property(nonatomic, assign) double altitude;
-@property(nonatomic, copy) NSString * query;
+@property (nonatomic, readonly) double latitude;
+@property (nonatomic, readonly) double longitude;
+@property (nonatomic, readonly) double altitude;
+@property (nonatomic, copy, readonly) NSString * query;
 
-- (id) initWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query;
+- (id)initWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query;
+- (NSString *)geoURI;
 
 @end

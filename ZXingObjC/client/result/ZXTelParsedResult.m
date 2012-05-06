@@ -1,33 +1,43 @@
 #import "ZXTelParsedResult.h"
 
+@interface ZXTelParsedResult ()
+
+@property (nonatomic, copy) NSString * number;
+@property (nonatomic, copy) NSString * telURI;
+@property (nonatomic, copy) NSString * title;
+
+@end
+
 @implementation ZXTelParsedResult
 
 @synthesize number;
 @synthesize telURI;
 @synthesize title;
-@synthesize displayResult;
 
-- (id) initWithNumber:(NSString *)aNumber telURI:(NSString *)aTelURI title:(NSString *)aTitle {
-  if (self = [super initWithType:kParsedResultTypeTel]) {
-    number = [aNumber copy];
-    telURI = [aTelURI copy];
-    title = [aTitle copy];
+- (id)initWithNumber:(NSString *)aNumber telURI:(NSString *)aTelURI title:(NSString *)aTitle {
+  self = [super initWithType:kParsedResultTypeTel];
+  if (self) {
+    self.number = aNumber;
+    self.telURI = aTelURI;
+    self.title = aTitle;
   }
-  return self;
-}
 
-- (NSString *) displayResult {
-  NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  [ZXParsedResult maybeAppend:number result:result];
-  [ZXParsedResult maybeAppend:title result:result];
-  return result;
+  return self;
 }
 
 - (void) dealloc {
   [number release];
   [telURI release];
   [title release];
+
   [super dealloc];
+}
+
+- (NSString *) displayResult {
+  NSMutableString *result = [NSMutableString stringWithCapacity:20];
+  [ZXParsedResult maybeAppend:number result:result];
+  [ZXParsedResult maybeAppend:title result:result];
+  return [NSString stringWithString:result];
 }
 
 @end

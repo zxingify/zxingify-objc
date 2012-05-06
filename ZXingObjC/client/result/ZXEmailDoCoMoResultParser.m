@@ -6,7 +6,7 @@ const unichar ATEXT_SYMBOLS[21] = {'@','.','!','#','$','%','&','\'','*','+','-',
 
 @interface ZXEmailDoCoMoResultParser ()
 
-+ (BOOL) isAtextSymbol:(unichar)c;
++ (BOOL)isAtextSymbol:(unichar)c;
 
 @end
 
@@ -27,7 +27,11 @@ const unichar ATEXT_SYMBOLS[21] = {'@','.','!','#','$','%','&','\'','*','+','-',
   }
   NSString * subject = [self matchSingleDoCoMoPrefixedField:@"SUB:" rawText:rawText trim:NO];
   NSString * body = [self matchSingleDoCoMoPrefixedField:@"BODY:" rawText:rawText trim:NO];
-  return [[[ZXEmailAddressParsedResult alloc] init:to subject:subject body:body mailtoURI:[@"mailto:" stringByAppendingString:to]] autorelease];
+
+  return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:to
+                                                           subject:subject
+                                                              body:body
+                                                         mailtoURI:[@"mailto:" stringByAppendingString:to]] autorelease];
 }
 
 
@@ -37,12 +41,11 @@ const unichar ATEXT_SYMBOLS[21] = {'@','.','!','#','$','%','&','\'','*','+','-',
  * validity. We want to generally be lenient here since this class is only intended to encapsulate what's
  * in a barcode, not "judge" it.
  */
-+ (BOOL) isBasicallyValidEmailAddress:(NSString *)email {
++ (BOOL)isBasicallyValidEmailAddress:(NSString *)email {
   if (email == nil) {
     return NO;
   }
   BOOL atFound = NO;
-
   for (int i = 0; i < [email length]; i++) {
     unichar c = [email characterAtIndex:i];
     if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && ![self isAtextSymbol:c]) {
@@ -55,12 +58,10 @@ const unichar ATEXT_SYMBOLS[21] = {'@','.','!','#','$','%','&','\'','*','+','-',
       atFound = YES;
     }
   }
-
   return atFound;
 }
 
-+ (BOOL) isAtextSymbol:(unichar)c {
-
++ (BOOL)isAtextSymbol:(unichar)c {
   for (int i = 0; i < sizeof(ATEXT_SYMBOLS) / sizeof(unichar); i++) {
     if (c == ATEXT_SYMBOLS[i]) {
       return YES;

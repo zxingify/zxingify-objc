@@ -6,14 +6,12 @@
  * 
  * The fields can come in any order, and there should be tests to see
  * if we can parse them all correctly.
- * 
- * @author Vikram Aggarwal
  */
 
 @class ZXResult, ZXWifiParsedResult;
 
 @interface ZXWifiResultParser : ZXResultParser
 
-+ (ZXWifiParsedResult *) parse:(ZXResult *)result;
++ (ZXWifiParsedResult *)parse:(ZXResult *)result;
 
 @end

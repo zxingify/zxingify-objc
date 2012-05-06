@@ -4,7 +4,7 @@
 
 @implementation ZXSMTPResultParser
 
-+ (ZXEmailAddressParsedResult *) parse:(ZXResult *)result {
++ (ZXEmailAddressParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil) {
     return nil;
@@ -26,7 +26,7 @@
     }
   }
   NSString * mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
-  return [[[ZXEmailAddressParsedResult alloc] init:emailAddress subject:subject body:body mailtoURI:mailtoURI] autorelease];
+  return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress subject:subject body:body mailtoURI:mailtoURI] autorelease];
 }
 
 @end

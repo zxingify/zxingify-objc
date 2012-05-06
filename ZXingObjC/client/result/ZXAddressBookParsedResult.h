@@ -1,24 +1,27 @@
 #import "ZXParsedResult.h"
 
-/**
- * @author Sean Owen
- */
-
 @interface ZXAddressBookParsedResult : ZXParsedResult
 
-@property(nonatomic, retain) NSArray * names;
-@property(nonatomic, copy) NSString * pronunciation;
-@property(nonatomic, retain) NSArray * phoneNumbers;
-@property(nonatomic, retain) NSArray * emails;
-@property(nonatomic, copy) NSString * note;
-@property(nonatomic, retain) NSArray * addresses;
-@property(nonatomic, copy) NSString * title;
-@property(nonatomic, copy) NSString * org;
-@property(nonatomic, copy) NSString * uRL;
-@property(nonatomic, copy) NSString * birthday;
+@property (nonatomic, readonly, retain) NSArray * names;
+@property (nonatomic, readonly, copy) NSString * pronunciation;
+@property (nonatomic, readonly, retain) NSArray * phoneNumbers;
+@property (nonatomic, readonly, retain) NSArray * emails;
+@property (nonatomic, readonly, copy) NSString * note;
+@property (nonatomic, readonly, retain) NSArray * addresses;
+@property (nonatomic, readonly, copy) NSString * title;
+@property (nonatomic, readonly, copy) NSString * org;
+@property (nonatomic, readonly, copy) NSString * url;
+@property (nonatomic, readonly, copy) NSString * birthday;
 
-- (id) init:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers emails:(NSArray *)emails note:(NSString *)note addresses:(NSArray *)addresses org:(NSString *)org birthday:(NSString *)birthday title:(NSString *)title url:(NSString *)url;
-
-- (NSString *) displayResult;
+- (id)initWithNames:(NSArray *)names
+      pronunciation:(NSString *)pronunciation
+       phoneNumbers:(NSArray *)phoneNumbers
+             emails:(NSArray *)emails
+               note:(NSString *)note
+          addresses:(NSArray *)addresses
+                org:(NSString *)org
+           birthday:(NSString *)birthday
+              title:(NSString *)title
+                url:(NSString *)url;
 
 @end

@@ -1,44 +1,53 @@
 #import "ZXSMSParsedResult.h"
 
+@interface ZXSMSParsedResult ()
+
+@property (nonatomic, retain) NSArray * numbers;
+@property (nonatomic, retain) NSArray * vias;
+@property (nonatomic, copy) NSString * subject;
+@property (nonatomic, copy) NSString * body;
+
+@end
+
 @implementation ZXSMSParsedResult
 
-@synthesize sMSURI;
 @synthesize numbers;
 @synthesize vias;
 @synthesize subject;
 @synthesize body;
-@synthesize displayResult;
 
-- (id)initWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)aSubject body:(NSString *)aBody {
-  if (self = [super initWithType:kParsedResultTypeSMS]) {
-    numbers = [NSArray arrayWithObjects:number, nil];
-    vias = [NSArray arrayWithObjects:via, nil];
-    subject = [aSubject copy];
-    body = [aBody copy];
-  }
-  return self;
+- (id)initWithNumber:(NSString *)aNumber via:(NSString *)aVia subject:(NSString *)aSubject body:(NSString *)aBody {
+  return [self initWithNumbers:[NSArray arrayWithObject:aNumber] vias:[NSArray arrayWithObject:aVia] subject:aSubject body:aBody];
 }
 
 - (id)initWithNumbers:(NSArray *)theNumbers vias:(NSArray *)theVias subject:(NSString *)aSubject body:(NSString *)aBody {
-  if (self = [super initWithType:kParsedResultTypeSMS]) {
-    numbers = [theNumbers retain];
-    vias = [theVias retain];
-    subject = [aSubject copy];
-    body = [aBody copy];
+  self = [super initWithType:kParsedResultTypeSMS];
+  if (self) {
+    self.numbers = theNumbers;
+    self.vias = theVias;
+    self.subject = aSubject;
+    self.body = aBody;
   }
+
   return self;
+}
+
+- (void) dealloc {
+  [numbers release];
+  [vias release];
+  [subject release];
+  [body release];
+
+  [super dealloc];
 }
 
 - (NSString *)sMSURI {
   NSMutableString* result = [NSMutableString stringWithString:@"sms:"];
-
   BOOL first = YES;
-
-  for (int i = 0; i < [numbers count]; i++) {
+  for (int i = 0; i < self.numbers.count; i++) {
     if (first) {
       first = NO;
-    }
-     else {
+    } else {
       [result appendString:@","];
     }
     [result appendString:[numbers objectAtIndex:i]];
@@ -64,7 +73,7 @@
       [result appendString:subject];
     }
   }
-  return result;
+  return [NSString stringWithString:result];
 }
 
 - (NSString *)displayResult {
@@ -72,15 +81,7 @@
   [ZXParsedResult maybeAppendArray:numbers result:result];
   [ZXParsedResult maybeAppend:subject result:result];
   [ZXParsedResult maybeAppend:body result:result];
-  return result;
-}
-
-- (void) dealloc {
-  [numbers release];
-  [vias release];
-  [subject release];
-  [body release];
-  [super dealloc];
+  return [NSString stringWithString:result];
 }
 
 @end

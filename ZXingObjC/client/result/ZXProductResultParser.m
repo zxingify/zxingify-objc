@@ -5,7 +5,7 @@
 
 @implementation ZXProductResultParser
 
-+ (ZXProductParsedResult *) parse:(ZXResult *)result {
++ (ZXProductParsedResult *)parse:(ZXResult *)result {
   ZXBarcodeFormat format = [result barcodeFormat];
   if (!(format == kBarcodeFormatUPCA || format == kBarcodeFormatUPCE || format == kBarcodeFormatEan8 || format == kBarcodeFormatEan13)) {
     return nil;

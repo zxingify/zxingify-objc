@@ -2,7 +2,16 @@
 
 @interface ZXCalendarParsedResult ()
 
-- (void) validateDate:(NSString *)date;
+@property(nonatomic, retain) NSString * summary;
+@property(nonatomic, retain) NSString * start;
+@property(nonatomic, retain) NSString * end;
+@property(nonatomic, retain) NSString * location;
+@property(nonatomic, retain) NSString * attendee;
+@property(nonatomic, retain) NSString * description;
+@property(nonatomic) double latitude;
+@property(nonatomic) double longitude;
+
+- (void)validateDate:(NSString *)date;
 
 @end
 
@@ -16,10 +25,10 @@
 @synthesize description;
 @synthesize latitude;
 @synthesize longitude;
-@synthesize displayResult;
 
-- (id) initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
-  if (self = [super initWithType:kParsedResultTypeCalendar]) {
+- (id)initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
+  self = [super initWithType:kParsedResultTypeCalendar];
+  if (self) {
     if (aStart == nil) {
       [NSException raise:NSInvalidArgumentException 
                   format:@"Start is required"];
@@ -30,27 +39,37 @@
     } else {
       [self validateDate:anEnd];
     }
-    summary = [aSummary copy];
-    start = [aStart copy];
-    end = [anEnd copy];
-    location = [aLocation copy];
-    attendee = [anAttendee copy];
-    description = [aDescription copy];
-    latitude = aLatitude;
-    longitude = aLongitude;
+    self.summary = aSummary;
+    self.start = aStart;
+    self.end = anEnd;
+    self.location = aLocation;
+    self.attendee = anAttendee;
+    self.description = aDescription;
+    self.latitude = aLatitude;
+    self.longitude = aLongitude;
   }
   return self;
 }
 
-- (NSString *) displayResult {
+- (void) dealloc {
+  [summary release];
+  [start release];
+  [end release];
+  [location release];
+  [attendee release];
+  [description release];
+  [super dealloc];
+}
+
+- (NSString *)displayResult {
   NSMutableString * result = [NSMutableString stringWithCapacity:100];
-  [ZXParsedResult maybeAppend:summary result:result];
-  [ZXParsedResult maybeAppend:start result:result];
-  [ZXParsedResult maybeAppend:end result:result];
-  [ZXParsedResult maybeAppend:location result:result];
-  [ZXParsedResult maybeAppend:attendee result:result];
-  [ZXParsedResult maybeAppend:description result:result];
-  return result;
+  [ZXParsedResult maybeAppend:self.summary result:result];
+  [ZXParsedResult maybeAppend:self.start result:result];
+  [ZXParsedResult maybeAppend:self.end result:result];
+  [ZXParsedResult maybeAppend:self.location result:result];
+  [ZXParsedResult maybeAppend:self.attendee result:result];
+  [ZXParsedResult maybeAppend:self.description result:result];
+  return [NSString stringWithString:result];
 }
 
 
@@ -94,16 +113,6 @@
       }
     }
   }
-}
-
-- (void) dealloc {
-  [summary release];
-  [start release];
-  [end release];
-  [location release];
-  [attendee release];
-  [description release];
-  [super dealloc];
 }
 
 @end

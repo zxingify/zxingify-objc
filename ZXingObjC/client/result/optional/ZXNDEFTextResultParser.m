@@ -5,7 +5,7 @@
 
 @implementation ZXNDEFTextResultParser
 
-+ (ZXTextParsedResult *) parse:(ZXResult *)result {
++ (ZXTextParsedResult *)parse:(ZXResult *)result {
   unsigned char * bytes = [result rawBytes];
   if (bytes == nil) {
     return nil;
@@ -18,10 +18,11 @@
     return nil;
   }
   NSArray * languageText = [self decodeTextPayload:[ndefRecord payload] length:[ndefRecord payloadLength]];
+
   return [[[ZXTextParsedResult alloc] initWithText:[languageText objectAtIndex:0] language:[languageText objectAtIndex:1]] autorelease];
 }
 
-+ (NSArray *) decodeTextPayload:(unsigned char *)payload length:(unsigned int)length {
++ (NSArray *)decodeTextPayload:(unsigned char *)payload length:(unsigned int)length {
   char statusByte = payload[0];
   BOOL isUTF16 = (statusByte & 0x80) != 0;
   int languageLength = statusByte & 0x1F;

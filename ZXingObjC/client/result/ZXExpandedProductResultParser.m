@@ -4,14 +4,14 @@
 
 @interface ZXExpandedProductResultParser ()
 
-+ (NSString *) findAIvalue:(int)i rawText:(NSString *)rawText;
-+ (NSString *) findValue:(int)i rawText:(NSString *)rawText;
++ (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText;
++ (NSString *)findValue:(int)i rawText:(NSString *)rawText;
 
 @end
 
 @implementation ZXExpandedProductResultParser
 
-+ (ZXExpandedProductParsedResult *) parse:(ZXResult *)result {
++ (ZXExpandedProductParsedResult *)parse:(ZXResult *)result {
   ZXBarcodeFormat format = [result barcodeFormat];
   if (kBarcodeFormatRSSExpanded != format) {
     return nil;
@@ -20,6 +20,7 @@
   if (rawText == nil) {
     return nil;
   }
+
   NSString * productID = @"-";
   NSString * sscc = @"-";
   NSString * lotNumber = @"-";
@@ -34,6 +35,7 @@
   NSString * priceIncrement = @"-";
   NSString * priceCurrency = @"-";
   NSMutableDictionary * uncommonAIs = [NSMutableDictionary dictionary];
+
   int i = 0;
 
   while (i < [rawText length]) {
@@ -44,6 +46,7 @@
     i += [ai length] + 2;
     NSString * value = [self findValue:i rawText:rawText];
     i += [value length];
+
     if ([@"00" isEqualToString:ai]) {
       sscc = value;
     } else if ([@"01" isEqualToString:ai]) {
@@ -81,33 +84,33 @@
     }
   }
 
-  return [[[ZXExpandedProductParsedResult alloc] init:productID
-                                                 sscc:sscc
-                                            lotNumber:lotNumber
-                                       productionDate:productionDate
-                                        packagingDate:packagingDate
-                                       bestBeforeDate:bestBeforeDate
-                                       expirationDate:expirationDate
-                                               weight:weight
-                                           weightType:weightType
-                                      weightIncrement:weightIncrement
-                                                price:price
-                                       priceIncrement:priceIncrement
-                                        priceCurrency:priceCurrency
-                                          uncommonAIs:uncommonAIs] autorelease];
+  return [[[ZXExpandedProductParsedResult alloc] initWithProductID:productID
+                                                              sscc:sscc
+                                                         lotNumber:lotNumber
+                                                    productionDate:productionDate
+                                                     packagingDate:packagingDate
+                                                    bestBeforeDate:bestBeforeDate
+                                                    expirationDate:expirationDate
+                                                            weight:weight
+                                                        weightType:weightType
+                                                   weightIncrement:weightIncrement
+                                                             price:price
+                                                    priceIncrement:priceIncrement
+                                                     priceCurrency:priceCurrency
+                                                       uncommonAIs:uncommonAIs] autorelease];
 }
 
-+ (NSString *) findAIvalue:(int)i rawText:(NSString *)rawText {
++ (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
   NSMutableString * buf = [NSMutableString string];
   unichar c = [rawText characterAtIndex:i];
   if (c != '(') {
     return @"ERROR";
   }
+
   NSString * rawTextAux = [rawText substringFromIndex:i + 1];
 
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar currentChar = [rawTextAux characterAtIndex:index];
-
     switch (currentChar) {
     case '0':
     case '1':
@@ -122,16 +125,16 @@
       [buf appendFormat:@"%C", currentChar];
       break;
     case ')':
-      return [buf description];
+      return [NSString stringWithString:buf];
     default:
       return @"ERROR";
     }
   }
 
-  return [buf description];
+  return [NSString stringWithString:buf];
 }
 
-+ (NSString *) findValue:(int)i rawText:(NSString *)rawText {
++ (NSString *)findValue:(int)i rawText:(NSString *)rawText {
   NSMutableString * buf = [NSMutableString string];
   NSString * rawTextAux = [rawText substringFromIndex:i];
 
@@ -148,7 +151,7 @@
     }
   }
 
-  return buf;
+  return [NSString stringWithString:buf];
 }
 
 @end
