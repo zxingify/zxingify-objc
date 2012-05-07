@@ -92,7 +92,7 @@ static NSString* DIGIT_TABLE[] = {
   NSArray * rawbits = [self extractBits:matrix];
   NSArray * correctedBits = [self correctBits:rawbits];
   NSString * result = [self encodedData:correctedBits];
-  return [[[ZXDecoderResult alloc] init:nil length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
+  return [[[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
 

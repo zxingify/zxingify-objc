@@ -101,7 +101,7 @@ NSString* const EXP900[16] =
       @throw [ZXFormatException formatInstance];
     }
   }
-  return [[[ZXDecoderResult alloc] init:nil length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
+  return [[[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
 

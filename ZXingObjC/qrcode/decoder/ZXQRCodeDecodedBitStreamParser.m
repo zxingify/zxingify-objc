@@ -66,7 +66,7 @@ int const GB2312_SUBSET = 1;
         [bits readBits:16];
       } else if ([mode isEqual:[ZXMode eciMode]]) {
         int value = [self parseECIValue:bits];
-        currentCharacterSetECI = [ZXCharacterSetECI getCharacterSetECIByValue:value];
+        currentCharacterSetECI = [ZXCharacterSetECI characterSetECIByValue:value];
         if (currentCharacterSetECI == nil) {
           @throw [ZXFormatException formatInstance];
         }
@@ -94,11 +94,11 @@ int const GB2312_SUBSET = 1;
       }
     }
   } while (![mode isEqual:[ZXMode terminatorMode]]);
-  return [[[ZXDecoderResult alloc] init:bytes
-                                 length:length
-                                   text:[result description]
-                           byteSegments:[byteSegments count] == 0 ? nil : byteSegments
-                                ecLevel:ecLevel == nil ? nil : [ecLevel description]] autorelease];
+  return [[[ZXDecoderResult alloc] initWithRawBytes:bytes
+                                             length:length
+                                               text:[result description]
+                                       byteSegments:[byteSegments count] == 0 ? nil : byteSegments
+                                            ecLevel:ecLevel == nil ? nil : [ecLevel description]] autorelease];
 }
 
 

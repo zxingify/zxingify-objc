@@ -37,12 +37,12 @@
                                          resultPoints:points
                                                format:kBarcodeFormatAztec] autorelease];
 
-  if ([decoderResult byteSegments] != nil) {
-    [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
+  if (decoderResult.byteSegments != nil) {
+    [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
   }
 
-  if ([decoderResult eCLevel] != nil) {
-    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[decoderResult eCLevel]];
+  if (decoderResult.ecLevel != nil) {
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:decoderResult.ecLevel];
   }
 
   return result;

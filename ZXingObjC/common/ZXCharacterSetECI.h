@@ -3,17 +3,13 @@
 /**
  * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
  * of ISO 18004.
- * 
- * @author Sean Owen
  */
 
-@interface ZXCharacterSetECI : ZXECI {
-  NSStringEncoding encoding;
-}
+@interface ZXCharacterSetECI : ZXECI
 
-@property(nonatomic, readonly) NSStringEncoding encoding;
+@property (nonatomic, readonly) NSStringEncoding encoding;
 
-+ (ZXCharacterSetECI *) getCharacterSetECIByValue:(int)value;
-+ (ZXCharacterSetECI *) getCharacterSetECIByEncoding:(NSStringEncoding)encoding;
++ (ZXCharacterSetECI *)characterSetECIByValue:(int)value;
++ (ZXCharacterSetECI *)characterSetECIByEncoding:(NSStringEncoding)encoding;
 
 @end

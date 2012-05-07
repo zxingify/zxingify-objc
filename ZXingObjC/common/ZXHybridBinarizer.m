@@ -4,43 +4,53 @@ int const MINIMUM_DIMENSION = 40;
 
 @interface ZXHybridBinarizer ()
 
-- (void) binarizeEntireImage;
-- (NSArray *) calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
-- (void) calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
-- (void) threshold8x8Block:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
+@property (nonatomic, retain) ZXBitMatrix * matrix;
+
+- (void)binarizeEntireImage;
+- (NSArray *)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
+- (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
+- (void)threshold8x8Block:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
 
 @end
 
 @implementation ZXHybridBinarizer
 
-@synthesize blackMatrix;
+@synthesize matrix;
 
 - (id) initWithSource:(ZXLuminanceSource *)aSource {
-  if (self = [super initWithSource:aSource]) {
-    matrix = nil;
+  self = [super initWithSource:aSource];
+  if (self) {
+    self.matrix = nil;
   }
+
   return self;
 }
 
-- (ZXBitMatrix *) blackMatrix {
+- (void) dealloc {
+  [matrix release];
+
+  [super dealloc];
+}
+
+- (ZXBitMatrix *)blackMatrix {
   [self binarizeEntireImage];
   return matrix;
 }
 
-- (ZXBinarizer *) createBinarizer:(ZXLuminanceSource *)source {
+- (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source {
   return [[[ZXHybridBinarizer alloc] initWithSource:source] autorelease];
 }
 
 // Calculates the final BitMatrix once for all requests. This could be called once from the
 // constructor instead, but there are some advantages to doing it lazily, such as making
 // profiling easier, and not doing heavy lifting when callers don't expect it.
-- (void) binarizeEntireImage {
-  if (matrix == nil) {
+- (void)binarizeEntireImage {
+  if (self.matrix == nil) {
     ZXLuminanceSource * source = [self luminanceSource];
     if ([source width] >= MINIMUM_DIMENSION && [source height] >= MINIMUM_DIMENSION) {
-      unsigned char * _luminances = [source matrix];
-      int width = [source width];
-      int height = [source height];
+      unsigned char * _luminances = source.matrix;
+      int width = source.width;
+      int height = source.height;
       int subWidth = width >> 3;
       if ((width & 0x07) != 0) {
         subWidth++;
@@ -58,7 +68,7 @@ int const MINIMUM_DIMENSION = 40;
         _luminances = NULL;
       }
     } else {
-      matrix = [super blackMatrix];
+      self.matrix = [super blackMatrix];
     }
   }
 }
@@ -66,7 +76,7 @@ int const MINIMUM_DIMENSION = 40;
 // For each 8x8 block in the image, calculate the average black point using a 5x5 grid
 // of the blocks around it. Also handles the corner cases (fractional blocks are computed based
 // on the last 8 pixels in the row/column which are also used in the previous block).
-- (void) calculateThresholdForBlock:(unsigned char *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)_matrix {
+- (void)calculateThresholdForBlock:(unsigned char *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << 3;
     if ((yoffset + 8) >= height) {
@@ -96,7 +106,7 @@ int const MINIMUM_DIMENSION = 40;
   }
 }
 
-- (void) threshold8x8Block:(unsigned char *)_luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)_matrix {
+- (void)threshold8x8Block:(unsigned char *)_luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0; y < 8; y++) {
     int offset = (yoffset + y) * stride + xoffset;
     for (int x = 0; x < 8; x++) {
@@ -108,7 +118,7 @@ int const MINIMUM_DIMENSION = 40;
   }
 }
 
-- (NSArray *) calculateBlackPoints:(unsigned char *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height {
+- (NSArray *)calculateBlackPoints:(unsigned char *)_luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height {
   NSMutableArray * blackPoints = [NSMutableArray arrayWithCapacity:subHeight];
 
   for (int y = 0; y < subHeight; y++) {
@@ -152,11 +162,6 @@ int const MINIMUM_DIMENSION = 40;
   }
 
   return blackPoints;
-}
-
-- (void) dealloc {
-  [matrix release];
-  [super dealloc];
 }
 
 @end

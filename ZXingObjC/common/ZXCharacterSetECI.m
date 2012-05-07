@@ -5,7 +5,9 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
 
 @interface ZXCharacterSetECI ()
 
-+ (void) addCharacterSet:(int)value encoding:(NSStringEncoding)encoding;
+@property (nonatomic) NSStringEncoding encoding;
+
++ (void)addCharacterSet:(int)value encoding:(NSStringEncoding)encoding;
 
 @end
 
@@ -13,7 +15,7 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
 
 @synthesize encoding;
 
-+ (void) initialize {
++ (void)initialize {
   VALUE_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
   ENCODING_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
   [self addCharacterSet:1 encoding:NSISOLatin1StringEncoding];
@@ -32,26 +34,22 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
   [self addCharacterSet:23 encoding:NSWindowsCP1252StringEncoding];
 }
 
-- (id) initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
-  if (self = [super initWithValue:value]) {
-    encoding = anEncoding;
+- (id)initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
+  self = [super initWithValue:value];
+  if (self) {
+    self.encoding = anEncoding;
   }
+
   return self;
 }
 
-+ (void) addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
++ (void)addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
   ZXCharacterSetECI * eci = [[[ZXCharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
   [ENCODING_TO_ECI setObject:eci forKey:[NSNumber numberWithUnsignedInteger:encoding]];
 }
 
-/**
- * @param value character set ECI value
- * @return CharacterSetECI representing ECI of given value, or null if it is legal but
- * unsupported
- * @throws IllegalArgumentException if ECI value is invalid
- */
-+ (ZXCharacterSetECI *) getCharacterSetECIByValue:(int)value {
++ (ZXCharacterSetECI *)characterSetECIByValue:(int)value {
   if (VALUE_TO_ECI == nil) {
     [self initialize];
   }
@@ -64,12 +62,7 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
 }
 
 
-/**
- * @param name character set ECI encoding name
- * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
- * but unsupported
- */
-+ (ZXCharacterSetECI *) getCharacterSetECIByEncoding:(NSStringEncoding)encoding {
++ (ZXCharacterSetECI *)characterSetECIByEncoding:(NSStringEncoding)encoding {
   if (ENCODING_TO_ECI == nil) {
     [self initialize];
   }

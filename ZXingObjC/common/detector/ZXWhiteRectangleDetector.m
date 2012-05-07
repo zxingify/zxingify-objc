@@ -1,21 +1,20 @@
 #import "ZXNotFoundException.h"
 #import "ZXWhiteRectangleDetector.h"
 
-@interface ZXWhiteRectangleDetector () {
-  int height;
-  int width;
-  int leftInit;
-  int rightInit;
-  int downInit;
-  int upInit;
-}
+@interface ZXWhiteRectangleDetector ()
 
 @property (nonatomic, retain) ZXBitMatrix *image;
+@property (nonatomic, assign) int height;
+@property (nonatomic, assign) int width;
+@property (nonatomic, assign) int leftInit;
+@property (nonatomic, assign) int rightInit;
+@property (nonatomic, assign) int downInit;
+@property (nonatomic, assign) int upInit;
 
-- (NSArray *) centerEdges:(ZXResultPoint *)y z:(ZXResultPoint *)z x:(ZXResultPoint *)x t:(ZXResultPoint *)t;
-- (BOOL) containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal;
-- (ZXResultPoint *) getBlackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
-- (int) distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
+- (NSArray *)centerEdges:(ZXResultPoint *)y z:(ZXResultPoint *)z x:(ZXResultPoint *)x t:(ZXResultPoint *)t;
+- (BOOL)containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal;
+- (ZXResultPoint *)blackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
+- (int)distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
 
 @end
 
@@ -25,76 +24,84 @@ int const CORR = 1;
 @implementation ZXWhiteRectangleDetector
 
 @synthesize image;
+@synthesize height;
+@synthesize width;
+@synthesize leftInit;
+@synthesize rightInit;
+@synthesize downInit;
+@synthesize upInit;
 
-/**
- * @throws NotFoundException if image is too small
- */
-- (id) initWithImage:(ZXBitMatrix *)anImage {
-  if (self = [super init]) {
+- (id)initWithImage:(ZXBitMatrix *)anImage {
+  self = [super init];
+  if (self) {
     self.image = anImage;
-    height = [anImage height];
-    width = [anImage width];
-    leftInit = (width - INIT_SIZE) >> 1;
-    rightInit = (width + INIT_SIZE) >> 1;
-    upInit = (height - INIT_SIZE) >> 1;
-    downInit = (height + INIT_SIZE) >> 1;
-    if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width) {
+    self.height = anImage.height;
+    self.width = anImage.width;
+    self.leftInit = (self.width - INIT_SIZE) >> 1;
+    self.rightInit = (self.width + INIT_SIZE) >> 1;
+    self.upInit = (self.height - INIT_SIZE) >> 1;
+    self.downInit = (self.height + INIT_SIZE) >> 1;
+    if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
       @throw [ZXNotFoundException notFoundInstance];
     }
   }
+
   return self;
 }
 
-
-/**
- * @throws NotFoundException if image is too small
- */
-- (id) initWithImage:(ZXBitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y {
-  if (self = [super init]) {
+- (id)initWithImage:(ZXBitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y {
+  self = [super init];
+  if (self) {
     self.image = anImage;
-    height = [anImage height];
-    width = [anImage width];
+    self.height = anImage.height;
+    self.width = anImage.width;
     int halfsize = initSize >> 1;
-    leftInit = x - halfsize;
-    rightInit = x + halfsize;
-    upInit = y - halfsize;
-    downInit = y + halfsize;
-    if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width) {
+    self.leftInit = x - halfsize;
+    self.rightInit = x + halfsize;
+    self.upInit = y - halfsize;
+    self.downInit = y + halfsize;
+    if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
       @throw [ZXNotFoundException notFoundInstance];
     }
   }
+
   return self;
 }
 
+- (void)dealloc {
+  [image release];
+
+  [super dealloc];
+}
 
 /**
- * <p>
  * Detects a candidate barcode-like rectangular region within an image. It
  * starts around the center of the image, increases the size of the candidate
  * region until it finds a white rectangular region.
- * </p>
  * 
- * @return {@link ResultPoint[]} describing the corners of the rectangular
+ * Returns a ResultPoint NSArray describing the corners of the rectangular
  * region. The first and last points are opposed on the diagonal, as
  * are the second and third. The first point will be the topmost
  * point and the last, the bottommost. The second point will be
  * leftmost and the third, the rightmost
- * @throws NotFoundException if no Data Matrix Code can be found
  */
-- (NSArray *) detect {
-  int left = leftInit;
-  int right = rightInit;
-  int up = upInit;
-  int down = downInit;
+- (NSArray *)detect {
+  int left = self.leftInit;
+  int right = self.rightInit;
+  int up = self.upInit;
+  int down = self.downInit;
   BOOL sizeExceeded = NO;
   BOOL aBlackPointFoundOnBorder = YES;
   BOOL atLeastOneBlackPointFoundOnBorder = NO;
 
   while (aBlackPointFoundOnBorder) {
     aBlackPointFoundOnBorder = NO;
-    BOOL rightBorderNotWhite = YES;
 
-    while (rightBorderNotWhite && right < width) {
+    // .....
+    // .   |
+    // .....
+    BOOL rightBorderNotWhite = YES;
+    while (rightBorderNotWhite && right < self.width) {
       rightBorderNotWhite = [self containsBlackPoint:up b:down fixed:right horizontal:NO];
       if (rightBorderNotWhite) {
         right++;
@@ -102,13 +109,16 @@ int const CORR = 1;
       }
     }
 
-    if (right >= width) {
+    if (right >= self.width) {
       sizeExceeded = YES;
       break;
     }
-    BOOL bottomBorderNotWhite = YES;
 
-    while (bottomBorderNotWhite && down < height) {
+    // .....
+    // .   .
+    // .___.
+    BOOL bottomBorderNotWhite = YES;
+    while (bottomBorderNotWhite && down < self.height) {
       bottomBorderNotWhite = [self containsBlackPoint:left b:right fixed:down horizontal:YES];
       if (bottomBorderNotWhite) {
         down++;
@@ -116,12 +126,15 @@ int const CORR = 1;
       }
     }
 
-    if (down >= height) {
+    if (down >= self.height) {
       sizeExceeded = YES;
       break;
     }
-    BOOL leftBorderNotWhite = YES;
 
+    // .....
+    // |   .
+    // .....
+    BOOL leftBorderNotWhite = YES;
     while (leftBorderNotWhite && left >= 0) {
       leftBorderNotWhite = [self containsBlackPoint:up b:down fixed:left horizontal:NO];
       if (leftBorderNotWhite) {
@@ -134,8 +147,11 @@ int const CORR = 1;
       sizeExceeded = YES;
       break;
     }
-    BOOL topBorderNotWhite = YES;
 
+    // .___.
+    // .   .
+    // .....
+    BOOL topBorderNotWhite = YES;
     while (topBorderNotWhite && up >= 0) {
       topBorderNotWhite = [self containsBlackPoint:left b:right fixed:up horizontal:YES];
       if (topBorderNotWhite) {
@@ -148,6 +164,7 @@ int const CORR = 1;
       sizeExceeded = YES;
       break;
     }
+
     if (aBlackPointFoundOnBorder) {
       atLeastOneBlackPointFoundOnBorder = YES;
     }
@@ -155,10 +172,10 @@ int const CORR = 1;
 
   if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
     int maxSize = right - left;
-    ZXResultPoint * z = nil;
 
+    ZXResultPoint * z = nil;
     for (int i = 1; i < maxSize; i++) {
-      z = [self getBlackPointOnSegment:left aY:down - i bX:left + i bY:down];
+      z = [self blackPointOnSegment:left aY:down - i bX:left + i bY:down];
       if (z != nil) {
         break;
       }
@@ -167,10 +184,10 @@ int const CORR = 1;
     if (z == nil) {
       @throw [ZXNotFoundException notFoundInstance];
     }
-    ZXResultPoint * t = nil;
 
+    ZXResultPoint * t = nil;
     for (int i = 1; i < maxSize; i++) {
-      t = [self getBlackPointOnSegment:left aY:up + i bX:left + i bY:up];
+      t = [self blackPointOnSegment:left aY:up + i bX:left + i bY:up];
       if (t != nil) {
         break;
       }
@@ -179,10 +196,10 @@ int const CORR = 1;
     if (t == nil) {
       @throw [ZXNotFoundException notFoundInstance];
     }
-    ZXResultPoint * x = nil;
 
+    ZXResultPoint * x = nil;
     for (int i = 1; i < maxSize; i++) {
-      x = [self getBlackPointOnSegment:right aY:up + i bX:right - i bY:up];
+      x = [self blackPointOnSegment:right aY:up + i bX:right - i bY:up];
       if (x != nil) {
         break;
       }
@@ -191,10 +208,10 @@ int const CORR = 1;
     if (x == nil) {
       @throw [ZXNotFoundException notFoundInstance];
     }
-    ZXResultPoint * y = nil;
 
+    ZXResultPoint * y = nil;
     for (int i = 1; i < maxSize; i++) {
-      y = [self getBlackPointOnSegment:right aY:down - i bX:right - i bY:down];
+      y = [self blackPointOnSegment:right aY:down - i bX:right - i bY:down];
       if (y != nil) {
         break;
       }
@@ -204,22 +221,21 @@ int const CORR = 1;
       @throw [ZXNotFoundException notFoundInstance];
     }
     return [self centerEdges:y z:z x:x t:t];
-  }
-   else {
+  } else {
     @throw [ZXNotFoundException notFoundInstance];
   }
 }
 
 
 /**
- * Ends up being a bit faster than Math.round(). This merely rounds its
+ * Ends up being a bit faster than round(). This merely rounds its
  * argument to the nearest int, where x.5 rounds up.
  */
-- (int) round:(float)d {
+- (int)round:(float)d {
   return (int)(d + 0.5f);
 }
 
-- (ZXResultPoint *) getBlackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
+- (ZXResultPoint *)blackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
   int dist = [self distanceL2:aX aY:aY bX:bX bY:bY];
   float xStep = (bX - aX) / dist;
   float yStep = (bY - aY) / dist;
@@ -235,7 +251,7 @@ int const CORR = 1;
   return nil;
 }
 
-- (int) distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
+- (int)distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
   float xDiff = aX - bX;
   float yDiff = aY - bY;
   return [self round:(float)sqrt(xDiff * xDiff + yDiff * yDiff)];
@@ -244,27 +260,31 @@ int const CORR = 1;
 
 /**
  * recenters the points of a constant distance towards the center
- * 
- * @param y bottom most point
- * @param z left most point
- * @param x right most point
- * @param t top most point
- * @return {@link ResultPoint}[] describing the corners of the rectangular
+ *
+ * returns a ResultPoint NSArray describing the corners of the rectangular
  * region. The first and last points are opposed on the diagonal, as
  * are the second and third. The first point will be the topmost
  * point and the last, the bottommost. The second point will be
  * leftmost and the third, the rightmost
  */
-- (NSArray *) centerEdges:(ZXResultPoint *)y z:(ZXResultPoint *)z x:(ZXResultPoint *)x t:(ZXResultPoint *)t {
-  float yi = [y x];
-  float yj = [y y];
-  float zi = [z x];
-  float zj = [z y];
-  float xi = [x x];
-  float xj = [x y];
-  float ti = [t x];
-  float tj = [t y];
-  if (yi < width / 2) {
+- (NSArray *)centerEdges:(ZXResultPoint *)y z:(ZXResultPoint *)z x:(ZXResultPoint *)x t:(ZXResultPoint *)t {
+  //
+  //       t            t
+  //  z                      x
+  //        x    OR    z
+  //   y                    y
+  //
+
+  float yi = y.x;
+  float yj = y.y;
+  float zi = z.x;
+  float zj = z.y;
+  float xi = x.x;
+  float xj = x.y;
+  float ti = t.x;
+  float tj = t.y;
+
+  if (yi < self.width / 2) {
     return [NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:ti - CORR y:tj + CORR] autorelease],
             [[[ZXResultPoint alloc] initWithX:zi + CORR y:zj + CORR] autorelease],
             [[[ZXResultPoint alloc] initWithX:xi - CORR y:xj - CORR] autorelease],
@@ -280,38 +300,23 @@ int const CORR = 1;
 
 /**
  * Determines whether a segment contains a black point
- * 
- * @param a          min value of the scanned coordinate
- * @param b          max value of the scanned coordinate
- * @param fixed      value of fixed coordinate
- * @param horizontal set to true if scan must be horizontal, false if vertical
- * @return true if a black point has been found, else false.
  */
-- (BOOL) containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal {
+- (BOOL)containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal {
   if (horizontal) {
-
     for (int x = a; x <= b; x++) {
-      if ([image get:x y:fixed]) {
+      if ([self.image get:x y:fixed]) {
         return YES;
       }
     }
-
-  }
-   else {
-
+  } else {
     for (int y = a; y <= b; y++) {
-      if ([image get:fixed y:y]) {
+      if ([self.image get:fixed y:y]) {
         return YES;
       }
     }
-
   }
-  return NO;
-}
 
-- (void) dealloc {
-  [image release];
-  [super dealloc];
+  return NO;
 }
 
 @end

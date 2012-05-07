@@ -1,9 +1,6 @@
-
 /**
- * <p>Thrown when an exception occurs during Reed-Solomon decoding, such as when
- * there are too many errors to correct.</p>
- * 
- * @author Sean Owen
+ * Thrown when an exception occurs during Reed-Solomon decoding, such as when
+ * there are too many errors to correct.
  */
 
 @interface ZXReedSolomonException : NSException

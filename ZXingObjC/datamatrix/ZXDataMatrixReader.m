@@ -55,11 +55,11 @@
                                            length:[decoderResult length]
                                      resultPoints:points
                                            format:kBarcodeFormatDataMatrix] autorelease];
-  if ([decoderResult byteSegments] != nil) {
-    [result putMetadata:kResultMetadataTypeByteSegments value:[decoderResult byteSegments]];
+  if (decoderResult.byteSegments != nil) {
+    [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
   }
-  if ([decoderResult eCLevel] != nil) {
-    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[[decoderResult eCLevel] description]];
+  if (decoderResult.ecLevel != nil) {
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[decoderResult.ecLevel description]];
   }
   return result;
 }

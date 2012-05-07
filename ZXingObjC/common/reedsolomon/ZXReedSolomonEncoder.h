@@ -1,17 +1,12 @@
 /**
- * <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
- * 
- * @author Sean Owen
- * @author William Rucklidge
+ * Implements Reed-Solomon enbcoding, as the name implies.
  */
 
 @class ZXGenericGF;
 
-@interface ZXReedSolomonEncoder : NSObject {
-  ZXGenericGF * field;
-  NSMutableArray * cachedGenerators;
-}
+@interface ZXReedSolomonEncoder : NSObject
 
-- (id) initWithField:(ZXGenericGF *)field;
-- (void) encode:(NSMutableArray *)toEncode ecBytes:(int)ecBytes;
+- (id)initWithField:(ZXGenericGF *)field;
+- (void)encode:(NSMutableArray *)toEncode ecBytes:(int)ecBytes;
+
 @end

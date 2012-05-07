@@ -11,10 +11,10 @@
 
 @interface ZXBinarizer : NSObject
 
-@property (nonatomic, retain) ZXLuminanceSource* luminanceSource;
-@property (nonatomic, retain) ZXBitMatrix* blackMatrix;
+@property (nonatomic, retain, readonly) ZXLuminanceSource* luminanceSource;
 
 - (id)initWithSource:(ZXLuminanceSource *)source;
+- (ZXBitMatrix *)blackMatrix;
 - (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row;
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source;
 - (CGImageRef)createImage;

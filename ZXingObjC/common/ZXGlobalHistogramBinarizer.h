@@ -7,20 +7,13 @@
  * and gradients.
  * 
  * Faster mobile devices and all desktop applications should probably use ZXHybridBinarizer instead.
- * 
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
  */
 
 @class ZXBitArray, ZXBitMatrix, ZXLuminanceSource;
 
-@interface ZXGlobalHistogramBinarizer : ZXBinarizer {
-  unsigned char * luminances;
-  int luminancesCount;
-  NSMutableArray * buckets;
-}
+@interface ZXGlobalHistogramBinarizer : ZXBinarizer
 
-- (ZXBitArray *) blackRow:(int)y row:(ZXBitArray *)row;
-- (ZXBinarizer *) createBinarizer:(ZXLuminanceSource *)source;
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row;
+- (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source;
 
 @end

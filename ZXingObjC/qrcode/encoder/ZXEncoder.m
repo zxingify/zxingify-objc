@@ -84,7 +84,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
   // Step 4.5: Append ECI message if applicable
   if ([mode isEqual:[ZXMode byteMode]] && DEFAULT_BYTE_MODE_ENCODING != encoding) {
-    ZXCharacterSetECI * eci = [ZXCharacterSetECI getCharacterSetECIByEncoding:encoding];
+    ZXCharacterSetECI * eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
     if (eci != nil) {
       [self appendECI:eci bits:headerAndDataBits];
     }

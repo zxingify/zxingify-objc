@@ -14,14 +14,10 @@
  * but for now it was not a win to use local blocks for 1D.
  * 
  * This Binarizer is the default for the unit tests and the recommended class for library users.
- * 
- * @author dswitkin@google.com (Daniel Switkin)
  */
 
 @class ZXBinarizer, ZXBitMatrix, ZXLuminanceSource;
 
-@interface ZXHybridBinarizer : ZXGlobalHistogramBinarizer {
-  ZXBitMatrix * matrix;
-}
+@interface ZXHybridBinarizer : ZXGlobalHistogramBinarizer
 
 @end

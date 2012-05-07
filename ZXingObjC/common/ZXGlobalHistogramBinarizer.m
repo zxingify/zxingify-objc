@@ -10,40 +10,58 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 @interface ZXGlobalHistogramBinarizer ()
 
-- (void) initArrays:(int)luminanceSize;
-- (int) estimateBlackPoint:(NSArray *)buckets;
+@property (nonatomic, assign) unsigned char * luminances;
+@property (nonatomic, assign) int luminancesCount;
+@property (nonatomic, retain) NSMutableArray * buckets;
+
+- (void)initArrays:(int)luminanceSize;
+- (int)estimateBlackPoint:(NSArray *)buckets;
 
 @end
 
 @implementation ZXGlobalHistogramBinarizer
 
-@synthesize blackMatrix;
+@synthesize luminances;
+@synthesize luminancesCount;
+@synthesize buckets;
 
-- (id) initWithSource:(ZXLuminanceSource *)source {
-  if (self = [super initWithSource:source]) {
-    luminances = NULL;
-    luminancesCount = 0;
-    buckets = nil;
+- (id)initWithSource:(ZXLuminanceSource *)source {
+  self = [super initWithSource:source];
+  if (self) {
+    self.luminances = NULL;
+    self.luminancesCount = 0;
+    self.buckets = nil;
   }
+
   return self;
 }
 
-- (ZXBitArray *) blackRow:(int)y row:(ZXBitArray *)row {
-  ZXLuminanceSource * source = [self luminanceSource];
-  int width = [source width];
-  if (row == nil || [row size] < width) {
+- (void)dealloc {
+  if (luminances != NULL) {
+    free(luminances);
+    luminances = NULL;
+  }
+  [buckets release];
+
+  [super dealloc];
+}
+
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row {
+  ZXLuminanceSource * source = self.luminanceSource;
+  int width = source.width;
+  if (row == nil || row.size < width) {
     row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
   } else {
     [row clear];
   }
 
   [self initArrays:width];
-  unsigned char * localLuminances = [source getRow:y row:luminances];
+  unsigned char * localLuminances = [source getRow:y row:self.luminances];
   NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:buckets];
-
   for (int x = 0; x < width; x++) {
     int pixel = localLuminances[x] & 0xff;
-    [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
+    [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT
+                            withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
 
@@ -62,30 +80,29 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   return row;
 }
 
-- (ZXBitMatrix *) blackMatrix {
-  ZXLuminanceSource * source = [self luminanceSource];
-  int width = [source width];
-  int height = [source height];
+- (ZXBitMatrix *)blackMatrix {
+  ZXLuminanceSource * source = self.luminanceSource;
+  int width = source.width;
+  int height = source.height;
   ZXBitMatrix * matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
-  [self initArrays:width];
-  NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:buckets];
 
+  [self initArrays:width];
+  NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:self.buckets];
   for (int y = 1; y < 5; y++) {
     int row = height * y / 5;
-    unsigned char * localLuminances = [source getRow:row row:luminances];
+    unsigned char * localLuminances = [source getRow:row row:self.luminances];
     int right = (width << 2) / 5;
     for (int x = width / 5; x < right; x++) {
       int pixel = localLuminances[x] & 0xff;
-      [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
+      [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT
+                              withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
     }
   }
-
   int blackPoint = [self estimateBlackPoint:localBuckets];
-  unsigned char * localLuminances = [source matrix];
 
+  unsigned char * localLuminances = source.matrix;
   for (int y = 0; y < height; y++) {
     int offset = y * width;
-
     for (int x = 0; x < width; x++) {
       int pixel = localLuminances[offset + x] & 0xff;
       if (pixel < blackPoint) {
@@ -97,28 +114,28 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   return matrix;
 }
 
-- (ZXBinarizer *) createBinarizer:(ZXLuminanceSource *)source {
+- (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source {
   return [[[ZXGlobalHistogramBinarizer alloc] initWithSource:source] autorelease];
 }
 
-- (void) initArrays:(int)luminanceSize {
-  if (luminances == NULL || luminancesCount < luminanceSize) {
-    if (luminances != NULL) {
-      free(luminances);
+- (void)initArrays:(int)luminanceSize {
+  if (self.luminances == NULL || self.luminancesCount < luminanceSize) {
+    if (self.luminances != NULL) {
+      free(self.luminances);
     }
-    luminances = (unsigned char*)malloc(luminanceSize * sizeof(unsigned char));
-    luminancesCount = luminanceSize;
+    self.luminances = (unsigned char*)malloc(luminanceSize * sizeof(unsigned char));
+    self.luminancesCount = luminanceSize;
   }
 
-  if (buckets == nil) {
-    buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
+  if (self.buckets == nil) {
+    self.buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
   }
   for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-    [buckets addObject:[NSNumber numberWithInt:0]];
+    [self.buckets addObject:[NSNumber numberWithInt:0]];
   }
 }
 
-- (int) estimateBlackPoint:(NSArray *)otherBuckets {
+- (int)estimateBlackPoint:(NSArray *)otherBuckets {
   int numBuckets = [otherBuckets count];
   int maxBucketCount = 0;
   int firstPeak = 0;
@@ -136,7 +153,6 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   int secondPeak = 0;
   int secondPeakScore = 0;
-
   for (int x = 0; x < numBuckets; x++) {
     int distanceToBiggest = x - firstPeak;
     int score = [[otherBuckets objectAtIndex:x] intValue] * distanceToBiggest * distanceToBiggest;
@@ -151,12 +167,13 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     firstPeak = secondPeak;
     secondPeak = temp;
   }
+
   if (secondPeak - firstPeak <= numBuckets >> 4) {
     @throw [ZXNotFoundException notFoundInstance];
   }
+
   int bestValley = secondPeak - 1;
   int bestValleyScore = -1;
-
   for (int x = secondPeak - 1; x > firstPeak; x--) {
     int fromFirst = x - firstPeak;
     int score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - [[otherBuckets objectAtIndex:x] intValue]);
@@ -167,15 +184,6 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   }
 
   return bestValley << LUMINANCE_SHIFT;
-}
-
-- (void) dealloc {
-  if (luminances) {
-    free(luminances);
-  }
-
-  [buckets release];
-  [super dealloc];
 }
 
 @end

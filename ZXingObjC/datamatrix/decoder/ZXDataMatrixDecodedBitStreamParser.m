@@ -92,11 +92,11 @@ const int BASE256_ENCODE = 6;
   if ([resultTrailer length] > 0) {
     [result appendString:resultTrailer];
   }
-  return [[[ZXDecoderResult alloc] init:bytes
-                                 length:length
-                                   text:result
-                           byteSegments:[byteSegments count] == 0 ? nil : byteSegments
-                                ecLevel:nil] autorelease];
+  return [[[ZXDecoderResult alloc] initWithRawBytes:bytes
+                                             length:length
+                                               text:result
+                                       byteSegments:[byteSegments count] == 0 ? nil : byteSegments
+                                            ecLevel:nil] autorelease];
 }
 
 

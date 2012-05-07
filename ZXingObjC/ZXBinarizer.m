@@ -8,10 +8,15 @@
 #define ZXWhite CGColorGetConstantColor(kCGColorWhite)
 #endif
 
+@interface ZXBinarizer ()
+
+@property (nonatomic, retain) ZXLuminanceSource* luminanceSource;
+
+@end
+
 @implementation ZXBinarizer
 
 @synthesize luminanceSource;
-@synthesize blackMatrix;
 
 - (id)initWithSource:(ZXLuminanceSource *)source {
   self = [super init];

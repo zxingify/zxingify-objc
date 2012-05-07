@@ -5,59 +5,80 @@ int const INITIALIZATION_THRESHOLD = 0;
 
 @interface ZXGenericGF ()
 
-- (void) initialize;
+@property (nonatomic, retain) ZXGenericGFPoly * zero;
+@property (nonatomic, retain) ZXGenericGFPoly * one;
+@property (nonatomic, assign) int size;
+@property (nonatomic, retain) NSMutableArray * expTable;
+@property (nonatomic, retain) NSMutableArray * logTable;
+@property (nonatomic, assign) int primitive;
+@property (nonatomic, assign) BOOL initialized;
+
+- (void)initialize;
 
 @end
 
+
 @implementation ZXGenericGF
 
+@synthesize zero;
+@synthesize one;
 @synthesize size;
+@synthesize expTable;
+@synthesize logTable;
+@synthesize primitive;
+@synthesize initialized;
 
 
 /**
  * Create a representation of GF(size) using the given primitive polynomial.
- * 
- * @param primitive irreducible polynomial whose coefficients are represented by
- * the bits of an int, where the least-significant bit represents the constant
- * coefficient
  */
-- (id) initWithPrimitive:(int)aPrimitive size:(int)aSize {
-  if (self = [super init]) {
-    initialized = NO;
-    primitive = aPrimitive;
-    size = aSize;
-    if (size <= INITIALIZATION_THRESHOLD) {
+- (id)initWithPrimitive:(int)aPrimitive size:(int)aSize {
+  self = [super init];
+  if (self) {
+    self.initialized = NO;
+    self.primitive = aPrimitive;
+    self.size = aSize;
+    if (self.size <= INITIALIZATION_THRESHOLD) {
       [self initialize];
     }
   }
+
   return self;
 }
 
-- (void) initialize {
-  expTable = [[NSMutableArray alloc] initWithCapacity:size];
-  logTable = [[NSMutableArray alloc] initWithCapacity:size];
-  int x = 1;
+- (void) dealloc {
+  [expTable release];
+  [logTable release];
+  [zero release];
+  [one release];
+  
+  [super dealloc];
+}
 
+- (void)initialize {
+  self.expTable = [NSMutableArray arrayWithCapacity:size];
+  self.logTable = [NSMutableArray arrayWithCapacity:size];
+  int x = 1;
   for (int i = 0; i < size; i++) {
-    [expTable addObject:[NSNumber numberWithInt:x]];
+    [self.expTable addObject:[NSNumber numberWithInt:x]];
     x <<= 1;
-    if (x >= size) {
-      x ^= primitive;
-      x &= size - 1;
+    if (x >= self.size) {
+      x ^= self.primitive;
+      x &= self.size - 1;
     }
   }
 
-  for (int i = 0; i < size; i++) {
-    [logTable addObject:[NSNull null]];
+  for (int i = 0; i < self.size; i++) {
+    [self.logTable addObject:[NSNumber numberWithInt:0]];
   }
 
-  for (int i = 0; i < size - 1; i++) {
-    [logTable replaceObjectAtIndex:[[expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
+  for (int i = 0; i < self.size - 1; i++) {
+    [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
   }
 
-  zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]];
-  one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]];
-  initialized = YES;
+  self.zero = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]] autorelease];
+  self.one = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]] autorelease];
+  self.initialized = YES;
 }
 
 + (ZXGenericGF *)AztecData12 {
@@ -112,28 +133,24 @@ int const INITIALIZATION_THRESHOLD = 0;
   return [self DataMatrixField256];
 }
 
-- (void) checkInit {
-  if (!initialized) {
+- (void)checkInit {
+  if (!self.initialized) {
     [self initialize];
   }
 }
 
-- (ZXGenericGFPoly *) zero {
+- (ZXGenericGFPoly *)zero {
   [self checkInit];
 
   return zero;
 }
 
-- (ZXGenericGFPoly *) one {
+- (ZXGenericGFPoly *)one {
   [self checkInit];
 
   return one;
 }
 
-
-/**
- * @return the monomial representing coefficient * x^degree
- */
 - (ZXGenericGFPoly *) buildMonomial:(int)degree coefficient:(int)coefficient {
   [self checkInit];
 
@@ -153,54 +170,37 @@ int const INITIALIZATION_THRESHOLD = 0;
 
 /**
  * Implements both addition and subtraction -- they are the same in GF(size).
- * 
- * @return sum/difference of a and b
  */
-+ (int) addOrSubtract:(int)a b:(int)b {
++ (int)addOrSubtract:(int)a b:(int)b {
   return a ^ b;
 }
 
 
-/**
- * @return 2 to the power of a in GF(size)
- */
-- (int) exp:(int)a {
+- (int)exp:(int)a {
   [self checkInit];
-  return [[expTable objectAtIndex:a] intValue];
+  return [[self.expTable objectAtIndex:a] intValue];
 }
 
-
-/**
- * @return base 2 log of a in GF(size)
- */
-- (int) log:(int)a {
+- (int)log:(int)a {
   [self checkInit];
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [[logTable objectAtIndex:a] intValue];
+  return [[self.logTable objectAtIndex:a] intValue];
 }
 
 
-/**
- * @return multiplicative inverse of a
- */
-- (int) inverse:(int)a {
+- (int)inverse:(int)a {
   [self checkInit];
 
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [[expTable objectAtIndex:size - [[logTable objectAtIndex:a] intValue] - 1] intValue];
+  return [[self.expTable objectAtIndex:self.size - [[self.logTable objectAtIndex:a] intValue] - 1] intValue];
 }
 
 
-/**
- * @param a
- * @param b
- * @return product of a and b in GF(size)
- */
-- (int) multiply:(int)a b:(int)b {
+- (int)multiply:(int)a b:(int)b {
   [self checkInit];
 
   if (a == 0 || b == 0) {
@@ -211,16 +211,8 @@ int const INITIALIZATION_THRESHOLD = 0;
     a++;
   }
 
-  int logSum = [[logTable objectAtIndex:a] intValue] + [[logTable objectAtIndex:b] intValue];
-  return [[expTable objectAtIndex:(logSum % size) + logSum / size] intValue];
-}
-
-- (void) dealloc {
-  [expTable release];
-  [logTable release];
-  [zero release];
-  [one release];
-  [super dealloc];
+  int logSum = [[self.logTable objectAtIndex:a] intValue] + [[self.logTable objectAtIndex:b] intValue];
+  return [[self.expTable objectAtIndex:(logSum % self.size) + logSum / self.size] intValue];
 }
 
 @end
