@@ -15,8 +15,7 @@
 @synthesize field;
 
 - (id)initWithField:(ZXGenericGF *)aField coefficients:(NSArray *)aCoefficients {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     if (aCoefficients == nil || [aCoefficients count] == 0) {
       [NSException raise:NSInvalidArgumentException format:@"Coefficients must be provided."];
     }
@@ -40,7 +39,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [field release];
   [coefficients release];
 

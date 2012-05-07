@@ -19,15 +19,14 @@
 @synthesize field;
 
 - (id)initWithField:(ZXGenericGF *)aField {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.field = aField;
   }
 
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [field release];
 
   [super dealloc];

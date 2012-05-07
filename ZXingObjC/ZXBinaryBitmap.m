@@ -16,8 +16,7 @@
 @synthesize matrix;
 
 - (id)initWithBinarizer:(ZXBinarizer *)aBinarizer {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     if (aBinarizer == nil) {
       [NSException raise:NSInvalidArgumentException 
                   format:@"Binarizer must be non-null."];

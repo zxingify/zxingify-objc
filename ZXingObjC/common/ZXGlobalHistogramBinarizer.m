@@ -26,8 +26,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 @synthesize buckets;
 
 - (id)initWithSource:(ZXLuminanceSource *)source {
-  self = [super initWithSource:source];
-  if (self) {
+  if (self = [super initWithSource:source]) {
     self.luminances = NULL;
     self.luminancesCount = 0;
     self.buckets = nil;

@@ -18,8 +18,7 @@
 @synthesize size;
 
 - (id)init {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.size = 0;
     self.bits = (int*)malloc(1 * sizeof(int));
     self.bitsLength = 1;
@@ -30,8 +29,7 @@
 }
 
 - (id)initWithSize:(int)aSize {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.size = aSize;
     self.bits = [self makeArray:aSize];
     self.bitsLength = (aSize + 31) >> 5;

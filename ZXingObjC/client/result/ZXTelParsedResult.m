@@ -15,8 +15,7 @@
 @synthesize title;
 
 - (id)initWithNumber:(NSString *)aNumber telURI:(NSString *)aTelURI title:(NSString *)aTitle {
-  self = [super initWithType:kParsedResultTypeTel];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeTel]) {
     self.number = aNumber;
     self.telURI = aTelURI;
     self.title = aTitle;
@@ -25,7 +24,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [number release];
   [telURI release];
   [title release];
@@ -33,7 +32,7 @@
   [super dealloc];
 }
 
-- (NSString *) displayResult {
+- (NSString *)displayResult {
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   [ZXParsedResult maybeAppend:number result:result];
   [ZXParsedResult maybeAppend:title result:result];

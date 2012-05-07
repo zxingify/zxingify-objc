@@ -16,8 +16,7 @@
 @synthesize password;
 
 - (id)initWithNetworkEncryption:(NSString *)aNetworkEncryption ssid:(NSString *)anSsid password:(NSString *)aPassword {
-  self = [super initWithType:kParsedResultTypeWifi];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeWifi]) {
     self.ssid = anSsid;
     self.networkEncryption = aNetworkEncryption;
     self.password = aPassword;

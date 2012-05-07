@@ -5,72 +5,76 @@
 
 @interface ZXDataMatrixBitMatrixParser ()
 
+@property (nonatomic, retain) ZXBitMatrix* mappingBitMatrix;
+@property (nonatomic, retain) ZXBitMatrix* readMappingMatrix;
+@property (nonatomic, retain) ZXDataMatrixVersion* version;
+
 - (ZXDataMatrixVersion *) readVersion:(ZXBitMatrix *)bitMatrix;
 
 @end
 
 @implementation ZXDataMatrixBitMatrixParser
 
+@synthesize mappingBitMatrix;
+@synthesize readMappingMatrix;
 @synthesize version;
 
-/**
- * @param bitMatrix {@link BitMatrix} to parse
- * @throws FormatException if dimension is < 8 or > 144 or not 0 mod 2
- */
-- (id) initWithBitMatrix:(ZXBitMatrix *)bitMatrix {
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix {
   if (self = [super init]) {
-    int dimension = [bitMatrix height];
+    int dimension = bitMatrix.height;
     if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
       @throw [ZXFormatException formatInstance];
     }
-    version = [self readVersion:bitMatrix];
-    mappingBitMatrix = [self extractDataRegion:bitMatrix];
-    readMappingMatrix = [[[ZXBitMatrix alloc] initWithWidth:[mappingBitMatrix width]
-                                                   height:[mappingBitMatrix height]] autorelease];
+    self.version = [self readVersion:bitMatrix];
+    self.mappingBitMatrix = [self extractDataRegion:bitMatrix];
+    self.readMappingMatrix = [[[ZXBitMatrix alloc] initWithWidth:mappingBitMatrix.width
+                                                          height:mappingBitMatrix.height] autorelease];
   }
+  
   return self;
 }
 
-/**
- * <p>Creates the version object based on the dimension of the original bit matrix from 
- * the datamatrix code.</p>
- * 
- * <p>See ISO 16022:2006 Table 7 - ECC 200 symbol attributes</p>
- * 
- * @param bitMatrix Original {@link BitMatrix} including alignment patterns
- * @return {@link Version} encapsulating the Data Matrix Code's "version"
- * @throws FormatException if the dimensions of the mapping matrix are not valid
- * Data Matrix dimensions.
- */
-- (ZXDataMatrixVersion *) readVersion:(ZXBitMatrix *)bitMatrix {
-  int numRows = [bitMatrix height];
-  int numColumns = [bitMatrix width];
-  return [ZXDataMatrixVersion getVersionForDimensions:numRows numColumns:numColumns];
+- (void) dealloc {
+  [mappingBitMatrix release];
+  [readMappingMatrix release];
+  [version release];
+  
+  [super dealloc];
 }
 
 
 /**
- * <p>Reads the bits in the {@link BitMatrix} representing the mapping matrix (No alignment patterns)
- * in the correct order in order to reconstitute the codewords bytes contained within the
- * Data Matrix Code.</p>
+ * Creates the version object based on the dimension of the original bit matrix from 
+ * the datamatrix code.
  * 
- * @return bytes encoded within the Data Matrix Code
- * @throws FormatException if the exact number of bytes expected is not read
+ * See ISO 16022:2006 Table 7 - ECC 200 symbol attributes
  */
-- (NSArray *) readCodewords {
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:[version totalCodewords]];
+- (ZXDataMatrixVersion *)readVersion:(ZXBitMatrix *)bitMatrix {
+  int numRows = bitMatrix.height;
+  int numColumns = bitMatrix.width;
+  return [ZXDataMatrixVersion versionForDimensions:numRows numColumns:numColumns];
+}
 
+
+/**
+ * Reads the bits in the {@link BitMatrix} representing the mapping matrix (No alignment patterns)
+ * in the correct order in order to reconstitute the codewords bytes contained within the
+ * Data Matrix Code.
+ */
+- (NSArray *)readCodewords {
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:version.totalCodewords];
+  
   int row = 4;
   int column = 0;
-
-  int numRows = [mappingBitMatrix height];
-  int numColumns = [mappingBitMatrix width];
-
+  
+  int numRows = mappingBitMatrix.height;
+  int numColumns = mappingBitMatrix.width;
+  
   BOOL corner1Read = NO;
   BOOL corner2Read = NO;
   BOOL corner3Read = NO;
   BOOL corner4Read = NO;
-
+  
   do {
     if ((row == numRows) && (column == 0) && !corner1Read) {
       [result addObject:[NSNumber numberWithInt:[self readCorner1:numRows numColumns:numColumns]]];
@@ -102,7 +106,7 @@
       } while ((row >= 0) && (column < numColumns));
       row += 1;
       column += 3;
-
+      
       do {
         if ((row >= 0) && (column < numColumns) && ![readMappingMatrix get:column y:row]) {
           [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
@@ -114,8 +118,8 @@
       column += 1;
     }
   } while ((row < numRows) || (column < numColumns));
-
-  if ([result count] != [version totalCodewords]) {
+  
+  if ([result count] != version.totalCodewords) {
     @throw [ZXFormatException formatInstance];
   }
   return result;
@@ -123,15 +127,9 @@
 
 
 /**
- * <p>Reads a bit of the mapping matrix accounting for boundary wrapping.</p>
- * 
- * @param row Row to read in the mapping matrix
- * @param column Column to read in the mapping matrix
- * @param numRows Number of rows in the mapping matrix
- * @param numColumns Number of columns in the mapping matrix
- * @return value of the given bit in the mapping matrix
+ * Reads a bit of the mapping matrix accounting for boundary wrapping.
  */
-- (BOOL) readModule:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns {
+- (BOOL)readModule:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns {
   if (row < 0) {
     row += numRows;
     column += 4 - ((numRows + 4) & 0x07);
@@ -146,17 +144,11 @@
 
 
 /**
- * <p>Reads the 8 bits of the standard Utah-shaped pattern.</p>
+ * Reads the 8 bits of the standard Utah-shaped pattern.
  * 
- * <p>See ISO 16022:2006, 5.8.1 Figure 6</p>
- * 
- * @param row Current row in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
- * @param column Current column in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
- * @param numRows Number of rows in the mapping matrix
- * @param numColumns Number of columns in the mapping matrix
- * @return byte from the utah shape
+ * See ISO 16022:2006, 5.8.1 Figure 6
  */
-- (int) readUtah:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns {
+- (int)readUtah:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
   if ([self readModule:row - 2 column:column - 2 numRows:numRows numColumns:numColumns]) {
     currentByte |= 1;
@@ -194,15 +186,11 @@
 
 
 /**
- * <p>Reads the 8 bits of the special corner condition 1.</p>
+ * Reads the 8 bits of the special corner condition 1.
  * 
- * <p>See ISO 16022:2006, Figure F.3</p>
- * 
- * @param numRows Number of rows in the mapping matrix
- * @param numColumns Number of columns in the mapping matrix
- * @return byte from the Corner condition 1
+ * See ISO 16022:2006, Figure F.3
  */
-- (int) readCorner1:(int)numRows numColumns:(int)numColumns {
+- (int)readCorner1:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
   if ([self readModule:numRows - 1 column:0 numRows:numRows numColumns:numColumns]) {
     currentByte |= 1;
@@ -240,15 +228,11 @@
 
 
 /**
- * <p>Reads the 8 bits of the special corner condition 2.</p>
+ * Reads the 8 bits of the special corner condition 2.
  * 
- * <p>See ISO 16022:2006, Figure F.4</p>
- * 
- * @param numRows Number of rows in the mapping matrix
- * @param numColumns Number of columns in the mapping matrix
- * @return byte from the Corner condition 2
+ * See ISO 16022:2006, Figure F.4
  */
-- (int) readCorner2:(int)numRows numColumns:(int)numColumns {
+- (int)readCorner2:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
   if ([self readModule:numRows - 3 column:0 numRows:numRows numColumns:numColumns]) {
     currentByte |= 1;
@@ -286,15 +270,11 @@
 
 
 /**
- * <p>Reads the 8 bits of the special corner condition 3.</p>
+ * Reads the 8 bits of the special corner condition 3.
  * 
- * <p>See ISO 16022:2006, Figure F.5</p>
- * 
- * @param numRows Number of rows in the mapping matrix
- * @param numColumns Number of columns in the mapping matrix
- * @return byte from the Corner condition 3
+ * See ISO 16022:2006, Figure F.5
  */
-- (int) readCorner3:(int)numRows numColumns:(int)numColumns {
+- (int)readCorner3:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
   if ([self readModule:numRows - 1 column:0 numRows:numRows numColumns:numColumns]) {
     currentByte |= 1;
@@ -332,15 +312,11 @@
 
 
 /**
- * <p>Reads the 8 bits of the special corner condition 4.</p>
+ * Reads the 8 bits of the special corner condition 4.
  * 
- * <p>See ISO 16022:2006, Figure F.6</p>
- * 
- * @param numRows Number of rows in the mapping matrix
- * @param numColumns Number of columns in the mapping matrix
- * @return byte from the Corner condition 4
+ * See ISO 16022:2006, Figure F.6
  */
-- (int) readCorner4:(int)numRows numColumns:(int)numColumns {
+- (int)readCorner4:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
   if ([self readModule:numRows - 3 column:0 numRows:numRows numColumns:numColumns]) {
     currentByte |= 1;
@@ -378,29 +354,26 @@
 
 
 /**
- * <p>Extracts the data region from a {@link BitMatrix} that contains
- * alignment patterns.</p>
- * 
- * @param bitMatrix Original {@link BitMatrix} with alignment patterns
- * @return BitMatrix that has the alignment patterns removed
+ * Extracts the data region from a {@link BitMatrix} that contains
+ * alignment patterns.
  */
-- (ZXBitMatrix *) extractDataRegion:(ZXBitMatrix *)bitMatrix {
-  int symbolSizeRows = [version symbolSizeRows];
-  int symbolSizeColumns = [version symbolSizeColumns];
-
-  if ([bitMatrix height] != symbolSizeRows) {
+- (ZXBitMatrix *)extractDataRegion:(ZXBitMatrix *)bitMatrix {
+  int symbolSizeRows = version.symbolSizeRows;
+  int symbolSizeColumns = version.symbolSizeColumns;
+  
+  if (bitMatrix.height != symbolSizeRows) {
     [NSException raise:NSInvalidArgumentException format:@"Dimension of bitMarix must match the version size"];
   }
-
-  int dataRegionSizeRows = [version dataRegionSizeRows];
-  int dataRegionSizeColumns = [version dataRegionSizeColumns];
-
+  
+  int dataRegionSizeRows = version.dataRegionSizeRows;
+  int dataRegionSizeColumns = version.dataRegionSizeColumns;
+  
   int numDataRegionsRow = symbolSizeRows / dataRegionSizeRows;
   int numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns;
-
+  
   int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
   int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
-
+  
   ZXBitMatrix * bitMatrixWithoutAlignment = [[[ZXBitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow] autorelease];
   for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
     int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
@@ -419,15 +392,8 @@
       }
     }
   }
-
+  
   return bitMatrixWithoutAlignment;
-}
-
-- (void) dealloc {
-  [mappingBitMatrix release];
-  [readMappingMatrix release];
-  [version release];
-  [super dealloc];
 }
 
 @end

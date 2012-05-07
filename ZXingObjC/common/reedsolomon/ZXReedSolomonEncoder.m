@@ -15,9 +15,8 @@
 @synthesize cachedGenerators;
 @synthesize field;
 
-- (id) initWithField:(ZXGenericGF *)aField {
-  self = [super init];
-  if (self) {
+- (id)initWithField:(ZXGenericGF *)aField {
+  if (self = [super init]) {
     if (![[ZXGenericGF QrCodeField256] isEqual:aField]) {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
                                      reason:@"Only QR Code is supported at this time"

@@ -1,21 +1,16 @@
 /**
- * <p>Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into
+ * Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into
  * multiple blocks, each of which is a unit of data and error-correction codewords. Each
- * is represented by an instance of this class.</p>
- * 
- * @author bbrown@google.com (Brian Brown)
+ * is represented by an instance of this class.
  */
 
 @class ZXDataMatrixVersion;
 
-@interface ZXDataMatrixDataBlock : NSObject {
-  int numDataCodewords;
-  NSMutableArray * codewords;
-}
+@interface ZXDataMatrixDataBlock : NSObject
 
-@property (nonatomic, readonly) int numDataCodewords;
-@property (nonatomic, readonly) NSMutableArray * codewords;
+@property (nonatomic, assign, readonly) int numDataCodewords;
+@property (nonatomic, retain, readonly) NSMutableArray * codewords;
 
-+ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version;
++ (NSArray *)dataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version;
 
 @end

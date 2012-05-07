@@ -19,8 +19,7 @@
 @synthesize luminanceSource;
 
 - (id)initWithSource:(ZXLuminanceSource *)source {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     if (source == nil) {
       [NSException raise:NSInvalidArgumentException format:@"Source must be non-null."];
     }

@@ -20,8 +20,7 @@ int const MONOCHROME_MAX_MODULES = 32;
 @synthesize image;
 
 - (id)initWithImage:(ZXBitMatrix *)anImage {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.image = anImage;
   }
 

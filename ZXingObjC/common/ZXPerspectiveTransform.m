@@ -26,9 +26,8 @@
 @synthesize a32;
 @synthesize a33;
 
-- (id) initWithA11:(float)_a11 a21:(float)_a21 a31:(float)_a31 a12:(float)_a12 a22:(float)_a22 a32:(float)_a32 a13:(float)_a13 a23:(float)_a23 a33:(float)_a33 {
-  self = [super init];
-  if (self) {
+- (id)initWithA11:(float)_a11 a21:(float)_a21 a31:(float)_a31 a12:(float)_a12 a22:(float)_a22 a32:(float)_a32 a13:(float)_a13 a23:(float)_a23 a33:(float)_a33 {
+  if (self = [super init]) {
     self.a11 = _a11;
     self.a12 = _a12;
     self.a13 = _a13;

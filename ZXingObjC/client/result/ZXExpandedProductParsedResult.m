@@ -57,8 +57,7 @@ NSString * const POUND = @"LB";
          priceIncrement:(NSString *)aPriceIncrement
           priceCurrency:(NSString *)aPriceCurrency
             uncommonAIs:(NSMutableDictionary *)theUncommonAIs {
-  self = [super initWithType:kParsedResultTypeProduct];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeProduct]) {
     self.productID = aProductID;
     self.sscc = anSscc;
     self.lotNumber = aLotNumber;

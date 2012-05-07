@@ -11,6 +11,8 @@
 
 @interface ZXDataMatrixReader ()
 
+@property (nonatomic, retain) ZXDataMatrixDecoder * decoder;
+
 - (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image;
 - (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
 
@@ -18,43 +20,47 @@
 
 @implementation ZXDataMatrixReader
 
-- (id) init {
+@synthesize decoder;
+
+- (id)init {
   if (self = [super init]) {
-    decoder = [[[ZXDataMatrixDecoder alloc] init] autorelease];
+    self.decoder = [[[ZXDataMatrixDecoder alloc] init] autorelease];
   }
+
   return self;
+}
+
+- (void) dealloc {
+  [decoder release];
+
+  [super dealloc];
 }
 
 
 /**
  * Locates and decodes a Data Matrix code in an image.
- * 
- * @return a String representing the content encoded by the Data Matrix code
- * @throws NotFoundException if a Data Matrix code cannot be found
- * @throws FormatException if a Data Matrix code cannot be decoded
- * @throws ChecksumException if error correction fails
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image {
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   ZXDecoderResult * decoderResult;
   NSArray * points;
   if (hints != nil && hints.pureBarcode) {
-    ZXBitMatrix * bits = [self extractPureBits:[image blackMatrix]];
+    ZXBitMatrix * bits = [self extractPureBits:image.blackMatrix];
     decoderResult = [decoder decodeMatrix:bits];
     points = [NSArray array];
   } else {
-    ZXDetectorResult * detectorResult = [[[[ZXDataMatrixDetector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
-    decoderResult = [decoder decodeMatrix:[detectorResult bits]];
-    points = [detectorResult points];
+    ZXDetectorResult * detectorResult = [[[[ZXDataMatrixDetector alloc] initWithImage:image.blackMatrix] autorelease] detect];
+    decoderResult = [decoder decodeMatrix:detectorResult.bits];
+    points = detectorResult.points;
   }
-  ZXResult * result = [[[ZXResult alloc] initWithText:[decoderResult text]
-                                         rawBytes:[decoderResult rawBytes]
-                                           length:[decoderResult length]
-                                     resultPoints:points
-                                           format:kBarcodeFormatDataMatrix] autorelease];
+  ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
+                                             rawBytes:decoderResult.rawBytes
+                                               length:decoderResult.length
+                                         resultPoints:points
+                                               format:kBarcodeFormatDataMatrix] autorelease];
   if (decoderResult.byteSegments != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
   }
@@ -74,13 +80,10 @@
  * which contains only an unrotated, unskewed, image of a code, with some white border
  * around it. This is a specialized method that works exceptionally fast in this special
  * case.
- * 
- * @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
- * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
  */
-- (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image {
-  NSArray * leftTopBlack = [image topLeftOnBit];
-  NSArray * rightBottomBlack = [image bottomRightOnBit];
+- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image {
+  NSArray * leftTopBlack = image.topLeftOnBit;
+  NSArray * rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     @throw [ZXNotFoundException notFoundInstance];
   }
@@ -115,8 +118,8 @@
   return bits;
 }
 
-- (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
-  int width = [image width];
+- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
+  int width = image.width;
   int x = [[leftTopBlack objectAtIndex:0] intValue];
   int y = [[leftTopBlack objectAtIndex:1] intValue];
   while (x < width && [image get:x y:y]) {
@@ -131,11 +134,6 @@
     @throw [ZXNotFoundException notFoundInstance];
   }
   return moduleSize;
-}
-
-- (void) dealloc {
-  [decoder release];
-  [super dealloc];
 }
 
 @end

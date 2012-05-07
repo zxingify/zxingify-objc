@@ -21,8 +21,7 @@
 }
 
 - (id)initWithNumbers:(NSArray *)theNumbers vias:(NSArray *)theVias subject:(NSString *)aSubject body:(NSString *)aBody {
-  self = [super initWithType:kParsedResultTypeSMS];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeSMS]) {
     self.numbers = theNumbers;
     self.vias = theVias;
     self.subject = aSubject;

@@ -24,8 +24,7 @@
 }
 
 - (id)initWithWidth:(int)aWidth height:(int)aHeight {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     if (aWidth < 1 || aHeight < 1) {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
                                      reason:@"Both dimensions must be greater than 0"

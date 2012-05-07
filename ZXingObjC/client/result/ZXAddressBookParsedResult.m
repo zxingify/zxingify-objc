@@ -30,9 +30,7 @@
 @synthesize birthday;
 
 - (id)initWithNames:(NSArray *)aNames pronunciation:(NSString *)aPronunciation phoneNumbers:(NSArray *)aPhoneNumbers emails:(NSArray *)aEmails note:(NSString *)aNote addresses:(NSArray *)anAddresses org:(NSString *)anOrg birthday:(NSString *)aBirthday title:(NSString *)aTitle url:(NSString *)aUrl {
-  self = [super initWithType:kParsedResultTypeAddressBook];
-
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeAddressBook]) {
     self.names = aNames;
     self.pronunciation = aPronunciation;
     self.phoneNumbers = aPhoneNumbers;

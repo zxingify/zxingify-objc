@@ -16,8 +16,7 @@
 
 - (id)initWithBits:(ZXBitMatrix *)_bits points:(NSArray *)_points compact:(BOOL)_compact
       nbDatablocks:(int)_nbDatablocks nbLayers:(int)_nbLayers {
-  self = [super initWithBits:_bits points:_points];
-  if (self) {
+  if (self = [super initWithBits:_bits points:_points]) {
     self.compact = _compact;
     self.nbDatablocks = _nbDatablocks;
     self.nbLayers = _nbLayers;

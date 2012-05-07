@@ -20,8 +20,7 @@ int const ACTION_OPEN = 2;
 @synthesize uri;
 
 - (id)initWithAction:(int)anAction uri:(NSString *)aUri title:(NSString *)aTitle {
-  self = [super initWithType:kParsedResultTypeNDEFSMartPoster];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeNDEFSMartPoster]) {
     self.action = anAction;
     self.uri = aUri;
     self.title = aTitle;
@@ -30,7 +29,7 @@ int const ACTION_OPEN = 2;
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [title release];
   [uri release];
 

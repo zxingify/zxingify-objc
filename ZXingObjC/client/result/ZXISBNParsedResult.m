@@ -11,15 +11,14 @@
 @synthesize isbn;
 
 - (id)initWithIsbn:(NSString *)anIsbn {
-  self = [super initWithType:kParsedResultTypeISBN];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeISBN]) {
     self.isbn = anIsbn;
   }
 
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [isbn release];
 
   [super dealloc];

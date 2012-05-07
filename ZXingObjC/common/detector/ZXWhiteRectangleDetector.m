@@ -32,8 +32,7 @@ int const CORR = 1;
 @synthesize upInit;
 
 - (id)initWithImage:(ZXBitMatrix *)anImage {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.image = anImage;
     self.height = anImage.height;
     self.width = anImage.width;
@@ -50,8 +49,7 @@ int const CORR = 1;
 }
 
 - (id)initWithImage:(ZXBitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.image = anImage;
     self.height = anImage.height;
     self.width = anImage.width;

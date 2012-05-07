@@ -18,8 +18,7 @@
 @synthesize mailtoURI;
 
 - (id)initWithEmailAddress:(NSString *)anEmailAddress subject:(NSString *)aSubject body:(NSString *)aBody mailtoURI:(NSString *)aMailtoURI {
-  self = [super initWithType:kParsedResultTypeEmailAddress];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeEmailAddress]) {
     self.emailAddress = anEmailAddress;
     self.subject = aSubject;
     self.body = aBody;
@@ -29,7 +28,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [emailAddress release];
   [subject release];
   [body release];

@@ -17,16 +17,15 @@ int const MINIMUM_DIMENSION = 40;
 
 @synthesize matrix;
 
-- (id) initWithSource:(ZXLuminanceSource *)aSource {
-  self = [super initWithSource:aSource];
-  if (self) {
+- (id)initWithSource:(ZXLuminanceSource *)aSource {
+  if (self = [super initWithSource:aSource]) {
     self.matrix = nil;
   }
 
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [matrix release];
 
   [super dealloc];

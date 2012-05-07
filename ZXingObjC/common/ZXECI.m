@@ -13,8 +13,7 @@
 @synthesize value;
 
 - (id)initWithValue:(int)aValue {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.value = aValue;
   }
 

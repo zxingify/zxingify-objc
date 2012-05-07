@@ -17,8 +17,7 @@
 @synthesize title;
 
 - (id)initWithUri:(NSString *)aUri title:(NSString *)aTitle {
-  self = [super initWithType:kParsedResultTypeURI];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeURI]) {
     self.uri = [self massageURI:aUri];
     self.title = aTitle;
   }
@@ -26,7 +25,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [uri release];
   [title release];
 

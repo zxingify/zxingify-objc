@@ -13,9 +13,8 @@
 @synthesize bits;
 @synthesize points;
 
-- (id) initWithBits:(ZXBitMatrix *)theBits points:(NSArray *)thePoints {
-  self = [super init];
-  if (self) {
+- (id)initWithBits:(ZXBitMatrix *)theBits points:(NSArray *)thePoints {
+  if (self = [super init]) {
     self.bits = theBits;
     self.points = thePoints;
   }
@@ -23,7 +22,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [bits release];
   [points release];
 

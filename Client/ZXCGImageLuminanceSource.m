@@ -110,9 +110,7 @@
                                        top:(size_t)_top
                                      width:(size_t)_width
                                     height:(size_t)_height {
-  self = [super init];
-
-  if (self) {
+  if (self = [super init]) {
     [self initializeWithImage:_image left:_left top:_top width:_width height:_height];
   }
 

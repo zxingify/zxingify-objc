@@ -26,9 +26,7 @@
 @synthesize cgimage;
 
 - (ZXImage*)initWithCGImageRef:(CGImageRef)image {
-  self = [super init];
-  
-  if (self) {
+  if (self = [super init]) {
     cgimage = image;
   }
 
@@ -36,9 +34,7 @@
 }
 
 - (ZXImage*)initWithURL:(NSURL const*)url {
-  self = [super init];
-
-  if (self) {
+  if (self = [super init]) {
     CGDataProviderRef provider = CGDataProviderCreateWithURL((CFURLRef)url);
 
     if (provider) {

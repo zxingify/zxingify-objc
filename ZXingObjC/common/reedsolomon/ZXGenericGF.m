@@ -33,8 +33,7 @@ int const INITIALIZATION_THRESHOLD = 0;
  * Create a representation of GF(size) using the given primitive polynomial.
  */
 - (id)initWithPrimitive:(int)aPrimitive size:(int)aSize {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.initialized = NO;
     self.primitive = aPrimitive;
     self.size = aSize;
@@ -46,7 +45,7 @@ int const INITIALIZATION_THRESHOLD = 0;
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [expTable release];
   [logTable release];
   [zero release];

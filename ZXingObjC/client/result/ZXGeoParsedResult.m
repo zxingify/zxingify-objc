@@ -18,13 +18,13 @@
 @synthesize query;
 
 - (id)initWithLatitude:(double)aLatitude longitude:(double)aLongitude altitude:(double)anAltitude query:(NSString *)aQuery {
-  self = [super initWithType:kParsedResultTypeGeo];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeGeo]) {
     self.latitude = aLatitude;
     self.longitude = aLongitude;
     self.altitude = anAltitude;
     self.query = aQuery;
   }
+
   return self;
 }
 

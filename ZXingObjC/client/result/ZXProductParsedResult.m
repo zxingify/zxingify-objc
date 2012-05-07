@@ -17,8 +17,7 @@
 }
 
 - (id)initWithProductID:(NSString *)aProductID normalizedProductID:(NSString *)aNormalizedProductID {
-  self = [super initWithType:kParsedResultTypeProduct];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeProduct]) {
     self.normalizedProductID = aNormalizedProductID;
     self.productID = aProductID;
   }

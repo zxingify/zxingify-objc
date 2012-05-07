@@ -14,8 +14,7 @@
 @synthesize language;
 
 - (id)initWithText:(NSString *)aText language:(NSString *)aLanguage {
-  self = [super initWithType:kParsedResultTypeText];
-  if (self) {
+  if (self = [super initWithType:kParsedResultTypeText]) {
     self.text = aText;
     self.language = aLanguage;
   }
@@ -23,7 +22,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [text release];
   [language release];
 

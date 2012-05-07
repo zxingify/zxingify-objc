@@ -2,48 +2,57 @@
 #import "ZXDataMatrixVersion.h"
 #import "ZXQRCodeVersion.h"
 
+@interface ZXDataMatrixDataBlock ()
+
+@property (nonatomic, assign) int numDataCodewords;
+@property (nonatomic, retain) NSMutableArray * codewords;
+
+@end
+
 @implementation ZXDataMatrixDataBlock
 
-@synthesize codewords, numDataCodewords;
+@synthesize codewords;
+@synthesize numDataCodewords;
 
-- (id) initWithNumDataCodewords:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
+- (id)initWithNumDataCodewords:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
   if (self = [super init]) {
-    numDataCodewords = theNumDataCodewords;
-    codewords = [theCodewords retain];
+    self.numDataCodewords = theNumDataCodewords;
+    self.codewords = theCodewords;
   }
+
   return self;
+}
+
+- (void)dealloc {
+  [codewords release];
+
+  [super dealloc];
 }
 
 
 /**
- * <p>When Data Matrix Codes use multiple data blocks, they actually interleave the bytes of each of them.
+ * When Data Matrix Codes use multiple data blocks, they actually interleave the bytes of each of them.
  * That is, the first byte of data block 1 to n is written, then the second bytes, and so on. This
- * method will separate the data into original blocks.</p>
- * 
- * @param rawCodewords bytes as read directly from the Data Matrix Code
- * @param version version of the Data Matrix Code
- * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
- * Data Matrix Code
+ * method will separate the data into original blocks.
  */
-+ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version {
-  ZXDataMatrixECBlocks * ecBlocks = [version ecBlocks];
-  int totalBlocks = 0;
-  NSArray * ecBlockArray = [ecBlocks ecBlocks];
++ (NSArray *)dataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version {
+  ZXDataMatrixECBlocks * ecBlocks = version.ecBlocks;
 
+  int totalBlocks = 0;
+  NSArray * ecBlockArray = ecBlocks.ecBlocks;
   for (int i = 0; i < [ecBlockArray count]; i++) {
     totalBlocks += [(ZXQRCodeECB*)[ecBlockArray objectAtIndex:i] count];
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
   int numResultBlocks = 0;
-
   for (ZXDataMatrixECB * ecBlock in ecBlockArray) {
-    for (int i = 0; i < [ecBlock count]; i++) {
-      int numDataCodewords = [ecBlock dataCodewords];
-      int numBlockCodewords = [ecBlocks ecCodewords] + numDataCodewords;
+    for (int i = 0; i < ecBlock.count; i++) {
+      int numDataCodewords = ecBlock.dataCodewords;
+      int numBlockCodewords = ecBlocks.ecCodewords + numDataCodewords;
       NSMutableArray *tempCodewords = [NSMutableArray arrayWithCapacity:numBlockCodewords];
       for (int j = 0; j < numBlockCodewords; j++) {
-        [tempCodewords addObject:[NSNull null]];
+        [tempCodewords addObject:[NSNumber numberWithInt:0]];
       }
       [result addObject:[[[ZXDataMatrixDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:tempCodewords] autorelease]];
       numResultBlocks++;
@@ -51,10 +60,9 @@
   }
 
   int longerBlocksTotalCodewords = [[[result objectAtIndex:0] codewords] count];
-  int longerBlocksNumDataCodewords = longerBlocksTotalCodewords - [ecBlocks ecCodewords];
+  int longerBlocksNumDataCodewords = longerBlocksTotalCodewords - ecBlocks.ecCodewords;
   int shorterBlocksNumDataCodewords = longerBlocksNumDataCodewords - 1;
   int rawCodewordsOffset = 0;
-
   for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:i
@@ -62,16 +70,14 @@
     }
   }
 
-  BOOL specialVersion = [version versionNumber] == 24;
+  BOOL specialVersion = version.versionNumber == 24;
   int numLongerBlocks = specialVersion ? 8 : numResultBlocks;
-
   for (int j = 0; j < numLongerBlocks; j++) {
     [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:longerBlocksNumDataCodewords - 1
                                                     withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
   }
 
   int max = [[[result objectAtIndex:0] codewords] count];
-
   for (int i = longerBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = specialVersion && j > 7 ? i - 1 : i;
@@ -85,11 +91,6 @@
                 format:@"Codewords size mismatch"];
   }
   return result;
-}
-
-- (void) dealloc {
-  [codewords release];
-  [super dealloc];
 }
 
 @end

@@ -35,8 +35,7 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
 }
 
 - (id)initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
-  self = [super initWithValue:value];
-  if (self) {
+  if (self = [super initWithValue:value]) {
     self.encoding = anEncoding;
   }
 

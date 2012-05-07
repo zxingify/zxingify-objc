@@ -17,12 +17,11 @@
 @synthesize length;
 
 /**
- * byts is the bytes from which this will read bits. Bits will be read from the first byte first.
+ * bytes is the bytes from which this will read bits. Bits will be read from the first byte first.
  * Bits are read within a byte from most-significant to least-significant bit.
  */
 - (id)initWithBytes:(unsigned char *)aBytes length:(unsigned int)aLength {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.bytes = aBytes;
     self.length = aLength;
   }

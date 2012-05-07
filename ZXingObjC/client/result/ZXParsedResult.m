@@ -11,8 +11,7 @@
 @synthesize type;
 
 - (id)initWithType:(ZXParsedResultType)aType {
-  self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.type = aType;
   }
 
