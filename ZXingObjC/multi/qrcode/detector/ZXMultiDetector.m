@@ -4,8 +4,8 @@
 
 @implementation ZXMultiDetector
 
-- (NSArray *) detectMulti:(ZXDecodeHints *)hints {
-  ZXMultiFinderPatternFinder * finder = [[[ZXMultiFinderPatternFinder alloc] initWithImage:image] autorelease];
+- (NSArray *)detectMulti:(ZXDecodeHints *)hints {
+  ZXMultiFinderPatternFinder * finder = [[[ZXMultiFinderPatternFinder alloc] initWithImage:self.image] autorelease];
   NSArray * info = [finder findMulti:hints];
 
   if (info == nil || [info count] == 0) {

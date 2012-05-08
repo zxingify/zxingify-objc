@@ -162,31 +162,31 @@
   [super dealloc];
 }
 
-- (unsigned char *) getRow:(int)y row:(unsigned char *)row {
+- (unsigned char *)row:(int)y row:(unsigned char *)row {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException format:@"Requested row is outside the image: %d", y];
   }
 
   if (row == NULL) {
-    row = (unsigned char*)malloc(width * sizeof(unsigned char));
+    row = (unsigned char*)malloc(self.width * sizeof(unsigned char));
   }
 
   int offset = (y + top) * dataWidth + left;
-  CFDataGetBytes(data, CFRangeMake(offset, width), row);
+  CFDataGetBytes(data, CFRangeMake(offset, self.width), row);
 
   return row;
 }
 
 - (unsigned char*) matrix {
-  int size = width * height;
+  int size = self.width * self.height;
   unsigned char* result = (unsigned char*)malloc(size * sizeof(unsigned char));
-  if (left == 0 && top == 0 && dataWidth == width && dataHeight == height) {
+  if (left == 0 && top == 0 && dataWidth == self.width && dataHeight == self.height) {
     CFDataGetBytes(data, CFRangeMake(0, size), result);
   } else {
-    for (int row = 0; row < height; row++) {
+    for (int row = 0; row < self.height; row++) {
       CFDataGetBytes(data,
-                     CFRangeMake((top + row) * dataWidth + left, width),
-                     result + row * width);
+                     CFRangeMake((top + row) * dataWidth + left, self.width),
+                     result + row * self.width);
     }
   }
   return result;
@@ -197,50 +197,50 @@
   image = cgimage;
   left = _left;
   top = _top;
-  width = _width;
-  height = _height;
+  self->width = _width;
+  self->height = _height;
   dataWidth = CGImageGetWidth(cgimage);
   dataHeight = CGImageGetHeight(cgimage);
   
-  if (left + width > dataWidth ||
-      top + height > dataHeight ||
+  if (left + self.width > dataWidth ||
+      top + self.height > dataHeight ||
       top < 0 ||
       left < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
   }
   
-  CGColorSpaceRef space = CGImageGetColorSpace(image);
+  CGColorSpaceRef space = CGImageGetColorSpace(self.image);
   CGColorSpaceModel model = CGColorSpaceGetModel(space);
   
   if (model != kCGColorSpaceModelMonochrome ||
-      CGImageGetBitsPerComponent(image) != 8 ||
-      CGImageGetBitsPerPixel(image) != 8) {
-    
+      CGImageGetBitsPerComponent(self.image) != 8 ||
+      CGImageGetBitsPerPixel(self.image) != 8) {
+
     CGColorSpaceRef gray = CGColorSpaceCreateDeviceGray();
-    
+
     CGContextRef ctx = CGBitmapContextCreate(0,
-                                             width,
-                                             height, 
+                                             self.width,
+                                             self.height, 
                                              8,
-                                             width,
+                                             self.width,
                                              gray, 
                                              kCGImageAlphaNone);
-    
+
     CGColorSpaceRelease(gray);
-    
+
     if (top || left) {
-      CGContextClipToRect(ctx, CGRectMake(0, 0, width, height));
+      CGContextClipToRect(ctx, CGRectMake(0, 0, self.width, self.height));
     }
     
-    CGContextDrawImage(ctx, CGRectMake(-left, -top, width, height), image);
+    CGContextDrawImage(ctx, CGRectMake(-left, -top, self.width, self.height), image);
     
     image = CGBitmapContextCreateImage(ctx); 
     
-    bytesPerRow = width;
+    bytesPerRow = self.width;
     top = 0;
     left = 0;
-    dataWidth = width;
-    dataHeight = height;
+    dataWidth = self.width;
+    dataHeight = self.height;
     
     CGContextRelease(ctx);
   } else {

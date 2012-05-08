@@ -38,12 +38,11 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
 @implementation ZXMultiFinderPatternFinder
 
 /**
- * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
+ * Returns the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
  * those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
  * size differs from the average among those patterns the least
- * @throws NotFoundException if 3 such finder patterns do not exist
  */
-- (NSArray *) selectBestPatterns {
+- (NSArray *)selectBestPatterns {
   NSMutableArray *_possibleCenters = [NSMutableArray arrayWithArray:[self possibleCenters]];
   int size = [_possibleCenters count];
 
@@ -146,7 +145,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (NSArray *) findMulti:(ZXDecodeHints *)hints {
+- (NSArray *)findMulti:(ZXDecodeHints *)hints {
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = [image height];
   int maxJ = [image width];

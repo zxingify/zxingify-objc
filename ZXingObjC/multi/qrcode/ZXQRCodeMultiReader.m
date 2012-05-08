@@ -7,22 +7,22 @@
 
 @implementation ZXQRCodeMultiReader
 
-- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image {
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image {
   return [self decodeMultiple:image hints:nil];
 }
 
-- (NSArray *) decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   NSMutableArray * results = [NSMutableArray array];
   NSArray * detectorResult = [[[[ZXMultiDetector alloc] initWithImage:[image blackMatrix]] autorelease] detectMulti:hints];
   for (int i = 0; i < [detectorResult count]; i++) {
     @try {
       ZXDecoderResult * decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits]];
       NSArray * points = [[detectorResult objectAtIndex:i] points];
-      ZXResult * result = [[[ZXResult alloc] initWithText:[decoderResult text]
-                                             rawBytes:[decoderResult rawBytes]
-                                               length:[decoderResult length]
-                                         resultPoints:points
-                                               format:kBarcodeFormatQRCode] autorelease];
+      ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
+                                                 rawBytes:decoderResult.rawBytes
+                                                   length:decoderResult.length
+                                             resultPoints:points
+                                                   format:kBarcodeFormatQRCode] autorelease];
       if (decoderResult.byteSegments != nil) {
         [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
       }
