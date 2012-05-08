@@ -1,6 +1,8 @@
+#import "ZXBinaryBitmap.h"
 #import "ZXByQuadrantReader.h"
 #import "ZXDecodeHints.h"
 #import "ZXNotFoundException.h"
+#import "ZXResult.h"
 
 @interface ZXByQuadrantReader ()
 

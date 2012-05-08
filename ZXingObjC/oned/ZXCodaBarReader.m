@@ -1,6 +1,7 @@
 #import "ZXBitArray.h"
 #import "ZXCodaBarReader.h"
 #import "ZXNotFoundException.h"
+#import "ZXResult.h"
 #import "ZXResultPoint.h"
 
 char CODA_ALPHABET[] = "0123456789-$:/.+ABCDTN";

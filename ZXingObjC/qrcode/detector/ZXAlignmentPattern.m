@@ -15,7 +15,7 @@
  * position and size -- meaning, it is at nearly the same center with nearly the same size.</p>
  */
 - (BOOL) aboutEquals:(float)moduleSize i:(float)i j:(float)j {
-  if (fabsf(i - y) <= moduleSize && fabsf(j - x) <= moduleSize) {
+  if (fabsf(i - self.y) <= moduleSize && fabsf(j - self.x) <= moduleSize) {
     float moduleSizeDiff = fabsf(moduleSize - estimatedModuleSize);
     return moduleSizeDiff <= 1.0f || moduleSizeDiff / estimatedModuleSize <= 1.0f;
   }

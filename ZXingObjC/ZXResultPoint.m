@@ -2,7 +2,10 @@
 
 @interface ZXResultPoint ()
 
-+ (float) crossProductZ:(ZXResultPoint *)pointA pointB:(ZXResultPoint *)pointB pointC:(ZXResultPoint *)pointC;
+@property (nonatomic, assign) float x;
+@property (nonatomic, assign) float y;
+
++ (float)crossProductZ:(ZXResultPoint *)pointA pointB:(ZXResultPoint *)pointB pointC:(ZXResultPoint *)pointC;
 
 @end
 
@@ -11,11 +14,12 @@
 @synthesize x;
 @synthesize y;
 
-- (id) initWithX:(float)anX y:(float)aY {
+- (id)initWithX:(float)anX y:(float)aY {
   if (self = [super init]) {
-    x = anX;
-    y = aY;
+    self.x = anX;
+    self.y = aY;
   }
+
   return self;
 }
 
@@ -23,28 +27,28 @@
   return [[ZXResultPoint allocWithZone:zone] initWithX:x y:y];
 }
 
-- (BOOL) isEqual:(id)other {
+- (BOOL)isEqual:(id)other {
   if ([other isKindOfClass:[ZXResultPoint class]]) {
     ZXResultPoint * otherPoint = (ZXResultPoint *)other;
-    return x == otherPoint.x && y == otherPoint.y;
+    return self.x == otherPoint.x && self.y == otherPoint.y;
   }
   return NO;
 }
 
-- (NSUInteger) hash {
+- (NSUInteger)hash {
   return 31 * *((int*)(&x)) + *((int*)(&y));
 }
 
-- (NSString *) description {
-  return [NSString stringWithFormat:@"(%f,%f)", x, y];
+- (NSString *)description {
+  return [NSString stringWithFormat:@"(%f,%f)", self.x, self.y];
 }
 
 
 /**
- * <p>Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
+ * Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
  * BC < AC and the angle between BC and BA is less than 180 degrees.
  */
-+ (void) orderBestPatterns:(NSMutableArray *)patterns {
++ (void)orderBestPatterns:(NSMutableArray *)patterns {
   float zeroOneDistance = [self distance:[patterns objectAtIndex:0] pattern2:[patterns objectAtIndex:1]];
   float oneTwoDistance = [self distance:[patterns objectAtIndex:1] pattern2:[patterns objectAtIndex:2]];
   float zeroTwoDistance = [self distance:[patterns objectAtIndex:0] pattern2:[patterns objectAtIndex:2]];
@@ -77,11 +81,11 @@
 
 
 /**
- * @return distance between two points
+ * Returns distance between two points
  */
-+ (float) distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2 {
-  float xDiff = [pattern1 x] - [pattern2 x];
-  float yDiff = [pattern1 y] - [pattern2 y];
++ (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2 {
+  float xDiff = pattern1.x - pattern2.x;
+  float yDiff = pattern1.y - pattern2.y;
   return sqrtf(xDiff * xDiff + yDiff * yDiff);
 }
 

@@ -5,6 +5,7 @@
 #import "ZXNotFoundException.h"
 #import "ZXReaderException.h"
 #import "ZXReader.h"
+#import "ZXResult.h"
 #import "ZXUPCAReader.h"
 #import "ZXUPCEReader.h"
 

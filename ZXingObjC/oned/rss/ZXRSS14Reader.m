@@ -2,6 +2,7 @@
 #import "ZXBarcodeFormat.h"
 #import "ZXDecodeHints.h"
 #import "ZXPair.h"
+#import "ZXResult.h"
 #import "ZXResultPointCallback.h"
 #import "ZXRSS14Reader.h"
 #import "ZXRSSFinderPattern.h"

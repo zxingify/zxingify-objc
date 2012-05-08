@@ -3,6 +3,7 @@
 #import "ZXBitArrayBuilder.h"
 #import "ZXDataCharacter.h"
 #import "ZXExpandedPair.h"
+#import "ZXResult.h"
 #import "ZXRSSExpandedReader.h"
 #import "ZXRSSFinderPattern.h"
 #import "ZXRSSUtils.h"

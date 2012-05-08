@@ -1,81 +1,93 @@
 #import "ZXResult.h"
 
+@interface ZXResult ()
+
+@property (nonatomic, copy)   NSString * text;
+@property (nonatomic, assign) unsigned char * rawBytes;
+@property (nonatomic, assign) int length;
+@property (nonatomic, retain) NSMutableArray * resultPoints;
+@property (nonatomic, assign) ZXBarcodeFormat barcodeFormat;
+@property (nonatomic, retain) NSMutableDictionary * resultMetadata;
+@property (nonatomic, assign) long timestamp;
+
+@end
+
 @implementation ZXResult
 
 @synthesize text;
 @synthesize rawBytes;
 @synthesize length;
 @synthesize resultPoints;
-@synthesize barcodeFormat=format;
+@synthesize barcodeFormat;
 @synthesize resultMetadata;
 @synthesize timestamp;
 
-- (id) initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(ZXBarcodeFormat)aFormat {
-  if (self = [self initWithText:aText rawBytes:aRawBytes length:aLength resultPoints:aResultPoints format:aFormat timestamp:CFAbsoluteTimeGetCurrent()]) {
-  }
-  return self;
+- (id)initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(ZXBarcodeFormat)aFormat {
+  return [self initWithText:aText rawBytes:aRawBytes length:aLength resultPoints:aResultPoints format:aFormat timestamp:CFAbsoluteTimeGetCurrent()];
 }
 
-- (id) initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(ZXBarcodeFormat)aFormat timestamp:(long)aTimestamp {
+- (id)initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(ZXBarcodeFormat)aFormat timestamp:(long)aTimestamp {
   if (self = [super init]) {
     if (aText == nil && aRawBytes == nil) {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
                                      reason:@"Text and bytes are null"
                                    userInfo:nil];
     }
-    text = [aText copy];
-    rawBytes = aRawBytes;
-    length = aLength;
-    resultPoints = [aResultPoints mutableCopy];
-    format = aFormat;
-    resultMetadata = nil;
-    timestamp = aTimestamp;
+
+    self.text = aText;
+    self.rawBytes = aRawBytes;
+    self.length = aLength;
+    self.resultPoints = [[aResultPoints mutableCopy] autorelease];
+    self.barcodeFormat = aFormat;
+    self.resultMetadata = nil;
+    self.timestamp = aTimestamp;
   }
+
   return self;
 }
 
-- (void) putMetadata:(ZXResultMetadataType)type value:(id)value {
-  if (resultMetadata == nil) {
-    resultMetadata = [[NSMutableDictionary alloc] init];
-  }
-  [resultMetadata setObject:[NSNumber numberWithInt:type] forKey:value];
-}
-
-- (void) putAllMetadata:(NSMutableDictionary *)metadata {
-  if (metadata != nil) {
-    if (self.resultMetadata == nil) {
-      resultMetadata = [metadata retain];
-    } else {
-      for (id key in [metadata allKeys]) {
-        id value = [metadata objectForKey:key];
-        [resultMetadata setObject:value forKey:key];
-      }
-    }
-  }
-}
-
-- (void) addResultPoints:(NSArray *)newPoints {
-  if (resultPoints == nil) {
-    resultPoints = [newPoints mutableCopy];
-  } else if (newPoints != nil && [newPoints count] > 0) {
-    resultPoints = [[resultPoints arrayByAddingObjectsFromArray:newPoints] mutableCopy];
-  }
-}
-
-- (NSString *) description {
-  if (text == nil) {
-    return [NSString stringWithFormat:@"[%d]", length];
-  } else {
-    return text;
-  }
-}
-
-- (void) dealloc {
+- (void)dealloc {
   [text release];
   [resultPoints release];
   [resultMetadata release];
 
   [super dealloc];
+}
+
+- (void)putMetadata:(ZXResultMetadataType)type value:(id)value {
+  if (self.resultMetadata == nil) {
+    self.resultMetadata = [NSMutableDictionary dictionary];
+  }
+  [self.resultMetadata setObject:[NSNumber numberWithInt:type] forKey:value];
+}
+
+- (void)putAllMetadata:(NSMutableDictionary *)metadata {
+  if (metadata != nil) {
+    if (self.resultMetadata == nil) {
+      self.resultMetadata = metadata;
+    } else {
+      for (id key in [metadata allKeys]) {
+        id value = [metadata objectForKey:key];
+        [self.resultMetadata setObject:value forKey:key];
+      }
+    }
+  }
+}
+
+- (void)addResultPoints:(NSArray *)newPoints {
+  if (self.resultPoints == nil) {
+    self.resultPoints = [[newPoints mutableCopy] autorelease];
+  } else if (newPoints != nil && [newPoints count] > 0) {
+    [self.resultPoints addObjectsFromArray:newPoints];
+  }
+}
+
+- (NSString *)description {
+  if (self.text == nil) {
+    return [NSString stringWithFormat:@"[%d]", self.length];
+  } else {
+    return self.text;
+  }
 }
 
 @end

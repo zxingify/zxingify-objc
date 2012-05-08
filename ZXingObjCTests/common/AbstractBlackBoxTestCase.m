@@ -1,8 +1,10 @@
 #import "AbstractBlackBoxTestCase.h"
+#import "ZXBinaryBitmap.h"
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXDecodeHints.h"
 #import "ZXHybridBinarizer.h"
 #import "ZXReaderException.h"
+#import "ZXResult.h"
 
 @implementation SummaryResults
 

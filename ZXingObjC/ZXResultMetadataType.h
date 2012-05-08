@@ -1,8 +1,6 @@
 /**
  * Represents some type of metadata about the result of the decoding that the decoder
  * wishes to communicate back to the caller.
- * 
- * @author Sean Owen
  */
 
 typedef enum {

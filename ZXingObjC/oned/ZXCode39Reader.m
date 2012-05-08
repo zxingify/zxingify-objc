@@ -3,6 +3,7 @@
 #import "ZXCode39Reader.h"
 #import "ZXFormatException.h"
 #import "ZXNotFoundException.h"
+#import "ZXResult.h"
 #import "ZXResultPoint.h"
 
 char CODE39_ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";

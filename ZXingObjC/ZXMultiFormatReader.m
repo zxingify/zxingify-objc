@@ -12,38 +12,33 @@
 
 @interface ZXMultiFormatReader ()
 
-- (ZXResult *) decodeInternal:(ZXBinaryBitmap *)image;
-- (void) setHints:(ZXDecodeHints *)hints;
+@property (nonatomic, retain) NSMutableArray * readers;
+
+- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image;
 
 @end
 
 @implementation ZXMultiFormatReader
 
+@synthesize hints;
+@synthesize readers;
+
 /**
  * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
  * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
  * Use setHints() followed by decodeWithState() for continuous scan applications.
- * 
- * @param image The pixel data to decode
- * @return The contents of the image
- * @throws NotFoundException Any errors which occurred
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image {
-  [self setHints:nil];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image {
+  self.hints = nil;
   return [self decodeInternal:image];
 }
 
 
 /**
  * Decode an image using the hints provided. Does not honor existing state.
- * 
- * @param image The pixel data to decode
- * @param hints The hints to use, clearing the previous state.
- * @return The contents of the image
- * @throws NotFoundException Any errors which occurred
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)_hints {
-  [self setHints:_hints];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)_hints {
+  self.hints = _hints;
   return [self decodeInternal:image];
 }
 
@@ -51,14 +46,10 @@
 /**
  * Decode an image using the state set up by calling setHints() previously. Continuous scan
  * clients will get a <b>large</b> speed increase by using this instead of decode().
- * 
- * @param image The pixel data to decode
- * @return The contents of the image
- * @throws NotFoundException Any errors which occurred
  */
-- (ZXResult *) decodeWithState:(ZXBinaryBitmap *)image {
-  if (readers == nil) {
-    [self setHints:nil];
+- (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image {
+  if (self.readers == nil) {
+    self.hints = nil;
   }
   return [self decodeInternal:image];
 }
@@ -68,15 +59,13 @@
  * This method adds state to the ZXMultiFormatReader. By setting the hints once, subsequent calls
  * to decodeWithState(image) can reuse the same set of readers without reallocating memory. This
  * is important for performance in continuous scan clients.
- * 
- * @param hints The set of hints to use for subsequent calls to decode(image)
  */
-- (void) setHints:(ZXDecodeHints *)_hints {
+- (void)setHints:(ZXDecodeHints *)_hints {
   [hints release];
   hints = [_hints retain];
 
   BOOL tryHarder = hints != nil && hints.tryHarder;
-  readers = [[NSMutableArray alloc] init];
+  self.readers = [NSMutableArray array];
   if (hints != nil) {
     BOOL addZXOneDReader = [hints containsFormat:kBarcodeFormatUPCA] ||
       [hints containsFormat:kBarcodeFormatUPCE] ||
@@ -89,48 +78,48 @@
       [hints containsFormat:kBarcodeFormatRSS14] ||
       [hints containsFormat:kBarcodeFormatRSSExpanded];
     if (addZXOneDReader && !tryHarder) {
-      [readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
     if ([hints containsFormat:kBarcodeFormatQRCode]) {
-      [readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
     }
     if ([hints containsFormat:kBarcodeFormatDataMatrix]) {
-      [readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
     }
     if ([hints containsFormat:kBarcodeFormatAztec]) {
-      [readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
     }
     if ([hints containsFormat:kBarcodeFormatPDF417]) {
-      [readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
     }
     if (addZXOneDReader && tryHarder) {
-      [readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
   }
-  if ([readers count] == 0) {
+  if ([self.readers count] == 0) {
     if (!tryHarder) {
-      [readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
-    [readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
-    [readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
-    [readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
-    [readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
+    [self.readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
+    [self.readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
+    [self.readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
+    [self.readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
     if (tryHarder) {
-      [readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
   }
 }
 
-- (void) reset {
-  for (id<ZXReader> reader in readers) {
+- (void)reset {
+  for (id<ZXReader> reader in self.readers) {
     [reader reset];
   }
 }
 
-- (ZXResult *) decodeInternal:(ZXBinaryBitmap *)image {
-  for (id<ZXReader> reader in readers) {
+- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image {
+  for (id<ZXReader> reader in self.readers) {
     @try {
-      return [reader decode:image hints:hints];
+      return [reader decode:image hints:self.hints];
     }
     @catch (ZXReaderException * re) {
     }
@@ -139,9 +128,10 @@
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [hints release];
   [readers release];
+
   [super dealloc];
 }
 

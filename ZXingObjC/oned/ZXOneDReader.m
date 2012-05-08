@@ -1,8 +1,10 @@
+#import "ZXBinaryBitmap.h"
 #import "ZXBitArray.h"
 #import "ZXDecodeHints.h"
 #import "ZXFormatException.h"
 #import "ZXNotFoundException.h"
 #import "ZXOneDReader.h"
+#import "ZXResult.h"
 #import "ZXResultPoint.h"
 
 int const INTEGER_MATH_SHIFT = 8;
