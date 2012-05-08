@@ -26,21 +26,21 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
-- (void) checkChecksums:(NSMutableString *)result;
-- (void) checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax;
-- (NSString *) decodeExtended:(NSMutableString *)encoded;
-- (NSArray *) findAsteriskPattern:(ZXBitArray *)row;
-- (unichar) patternToChar:(int)pattern;
-- (int) toPattern:(int[])counters;
+- (void)checkChecksums:(NSMutableString *)result;
+- (void)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax;
+- (NSString *)decodeExtended:(NSMutableString *)encoded;
+- (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
+- (unichar)patternToChar:(int)pattern;
+- (int)toPattern:(int[])counters;
 
 @end
 
 @implementation ZXCode93Reader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * start = [self findAsteriskPattern:row];
   int nextStart = [[start objectAtIndex:1] intValue];
-  int end = [row size];
+  int end = row.size;
 
   while (nextStart < end && ![row get:nextStart]) {
     nextStart++;
@@ -86,14 +86,16 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
   return [[[ZXResult alloc] initWithText:resultString
-                              rawBytes:nil
-                                length:0
-                          resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                format:kBarcodeFormatCode93] autorelease];
+                                rawBytes:nil
+                                  length:0
+                            resultPoints:[NSArray arrayWithObjects:
+                                          [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                  format:kBarcodeFormatCode93] autorelease];
 }
 
-- (NSArray *) findAsteriskPattern:(ZXBitArray *)row {
-  int width = [row size];
+- (NSArray *)findAsteriskPattern:(ZXBitArray *)row {
+  int width = row.size;
   int rowOffset = 0;
   while (rowOffset < width) {
     if ([row get:rowOffset]) {
@@ -103,17 +105,16 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   }
 
   int counterPosition = 0;
-  int counters[6];
+  const int patternLength = 6;
+  int counters[patternLength] = {0, 0, 0, 0, 0, 0};
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
     if (pixel ^ isWhite) {
       counters[counterPosition]++;
-    }
-     else {
+    } else {
       if (counterPosition == patternLength - 1) {
         if ([self toPattern:counters] == CODE93_ASTERISK_ENCODING) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
@@ -136,7 +137,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (int) toPattern:(int[])counters {
+- (int)toPattern:(int[])counters {
   int max = sizeof((int*)counters) / sizeof(int);
   int sum = 0;
   for (int i = 0; i < max; i++) {
@@ -163,7 +164,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   return pattern;
 }
 
-- (unichar) patternToChar:(int)pattern {
+- (unichar)patternToChar:(int)pattern {
   for (int i = 0; i < sizeof(CODE93_CHARACTER_ENCODINGS) / sizeof(int); i++) {
     if (CODE93_CHARACTER_ENCODINGS[i] == pattern) {
       return CODE93_ALPHABET[i];
@@ -173,7 +174,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (NSString *) decodeExtended:(NSMutableString *)encoded {
+- (NSString *)decodeExtended:(NSMutableString *)encoded {
   int length = [encoded length];
   NSMutableString * decoded = [NSMutableString stringWithCapacity:length];
   for (int i = 0; i < length; i++) {
@@ -225,13 +226,13 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   return decoded;
 }
 
-- (void) checkChecksums:(NSMutableString *)result {
+- (void)checkChecksums:(NSMutableString *)result {
   int length = [result length];
   [self checkOneChecksum:result checkPosition:length - 2 weightMax:20];
   [self checkOneChecksum:result checkPosition:length - 1 weightMax:15];
 }
 
-- (void) checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax {
+- (void)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax {
   int weight = 1;
   int total = 0;
 

@@ -140,15 +140,15 @@ int const CODE_STOP = 106;
 
 @interface ZXCode128Reader ()
 
-- (int) decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset;
-- (NSArray *) findStartPattern:(ZXBitArray *)row;
+- (int)decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset;
+- (NSArray *)findStartPattern:(ZXBitArray *)row;
 
 @end
 
 @implementation ZXCode128Reader
 
-- (NSArray *) findStartPattern:(ZXBitArray *)row {
-  int width = [row size];
+- (NSArray *)findStartPattern:(ZXBitArray *)row {
+  int width = row.size;
   int rowOffset = 0;
   while (rowOffset < width) {
     if ([row get:rowOffset]) {
@@ -158,10 +158,10 @@ int const CODE_STOP = 106;
   }
 
   int counterPosition = 0;
-  int counters[6] = {0, 0, 0, 0, 0, 0};
+  const int patternLength = 6;
+  int counters[patternLength] = {0, 0, 0, 0, 0, 0};
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
@@ -201,7 +201,7 @@ int const CODE_STOP = 106;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (int) decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset {
+- (int)decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset {
   [ZXOneDReader recordPattern:row start:rowOffset counters:counters countersSize:countersCount];
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
@@ -222,7 +222,7 @@ int const CODE_STOP = 106;
   }
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * startPatternInfo = [self findStartPattern:row];
   int startCode = [[startPatternInfo objectAtIndex:2] intValue];
   int codeSet;
@@ -413,11 +413,11 @@ int const CODE_STOP = 106;
   float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
   return [[[ZXResult alloc] initWithText:resultString
-                              rawBytes:nil
-                                length:0
-                          resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                        [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                format:kBarcodeFormatCode128] autorelease];
+                                rawBytes:nil
+                                  length:0
+                            resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                  format:kBarcodeFormatCode128] autorelease];
 }
 
 @end

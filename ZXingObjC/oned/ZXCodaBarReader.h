@@ -1,15 +1,13 @@
 #import "ZXOneDReader.h"
 
 /**
- * <p>Decodes Codabar barcodes.</p>
- * 
- * @author Bas Vijfwinkel
+ * Decodes Codabar barcodes.
  */
 
 @class ZXBitArray, ZXDecodeHints, ZXResult;
 
 @interface ZXCodaBarReader : ZXOneDReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
 
 @end

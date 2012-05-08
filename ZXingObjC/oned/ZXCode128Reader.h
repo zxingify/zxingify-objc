@@ -1,9 +1,7 @@
 #import "ZXOneDReader.h"
 
 /**
- * <p>Decodes Code 128 barcodes.</p>
- * 
- * @author Sean Owen
+ * Decodes Code 128 barcodes.
  */
 
 extern const int CODE_PATTERNS[][7];
@@ -12,6 +10,6 @@ extern const int CODE_PATTERNS[][7];
 
 @interface ZXCode128Reader : ZXOneDReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
 
 @end

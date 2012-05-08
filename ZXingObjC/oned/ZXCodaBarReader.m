@@ -32,15 +32,15 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 @interface ZXCodaBarReader ()
 
-- (BOOL) arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key;
-- (NSMutableArray *) findAsteriskPattern:(ZXBitArray *)row;
-- (unichar) toNarrowWidePattern:(int[])counters;
+- (BOOL)arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key;
+- (NSMutableArray *)findAsteriskPattern:(ZXBitArray *)row;
+- (unichar)toNarrowWidePattern:(int[])counters;
 
 @end
 
 @implementation ZXCodaBarReader
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSMutableArray * start = [self findAsteriskPattern:row];
   [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
   int nextStart = [[start objectAtIndex:1] intValue];
@@ -113,16 +113,16 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
   return [[[ZXResult alloc] initWithText:result
-                              rawBytes:nil
-                                length:0
-                          resultPoints:[NSArray arrayWithObjects:
-                                        [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                        [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                format:kBarcodeFormatCodabar] autorelease];
+                                rawBytes:nil
+                                  length:0
+                            resultPoints:[NSArray arrayWithObjects:
+                                          [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                  format:kBarcodeFormatCodabar] autorelease];
 }
 
-- (NSMutableArray *) findAsteriskPattern:(ZXBitArray *)row {
-  int width = [row size];
+- (NSMutableArray *)findAsteriskPattern:(ZXBitArray *)row {
+  int width = row.size;
   int rowOffset = 0;
 
   while (rowOffset < width) {
@@ -133,10 +133,10 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   }
 
   int counterPosition = 0;
-  int counters[7];
+  const int patternLength = 7;
+  int counters[patternLength] = {0, 0, 0, 0, 0, 0, 0};
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
@@ -151,8 +151,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
                       [NSNumber numberWithInt:i], nil];
             }
           }
-        }
-        @catch (NSException * re) {
+        } @catch (NSException * re) {
         }
         
         patternStart += counters[0] + counters[1];
@@ -180,7 +179,6 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
         return YES;
       }
     }
-
   }
   return NO;
 }

@@ -26,21 +26,27 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 
 @interface ZXCode39Reader ()
 
-- (NSString *) decodeExtended:(NSMutableString *)encoded;
-- (NSArray *) findAsteriskPattern:(ZXBitArray *)row;
-- (unichar) patternToChar:(int)pattern;
-- (int) toNarrowWidePattern:(int[])counters;
+@property (nonatomic, assign) BOOL extendedMode;
+@property (nonatomic, assign) BOOL usingCheckDigit;
+
+- (NSString *)decodeExtended:(NSMutableString *)encoded;
+- (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
+- (unichar)patternToChar:(int)pattern;
+- (int)toNarrowWidePattern:(int[])counters;
 
 @end
 
 @implementation ZXCode39Reader
+
+@synthesize extendedMode;
+@synthesize usingCheckDigit;
 
 
 /**
  * Creates a reader that assumes all encoded data is data, and does not treat the final
  * character as a check digit. It will not decoded "extended Code 39" sequences.
  */
-- (id) init {
+- (id)init {
   return [self initUsingCheckDigit:NO extendedMode:NO];
 }
 
@@ -48,11 +54,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 /**
  * Creates a reader that can be configured to check the last character as a check digit.
  * It will not decoded "extended Code 39" sequences.
- * 
- * @param usingCheckDigit if true, treat the last data character as a check digit, not
- * data, and verify that the checksum passes.
  */
-- (id) initUsingCheckDigit:(BOOL)isUsingCheckDigit {  
+- (id)initUsingCheckDigit:(BOOL)isUsingCheckDigit {  
   return [self initUsingCheckDigit:isUsingCheckDigit extendedMode:NO];
 }
 
@@ -61,17 +64,13 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
  * Creates a reader that can be configured to check the last character as a check digit,
  * or optionally attempt to decode "extended Code 39" sequences that are used to encode
  * the full ASCII character set.
- * 
- * @param usingCheckDigit if true, treat the last data character as a check digit, not
- * data, and verify that the checksum passes.
- * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
- * text.
  */
-- (id) initUsingCheckDigit:(BOOL)isUsingCheckDigit extendedMode:(BOOL)isExtendedMode {
+- (id)initUsingCheckDigit:(BOOL)isUsingCheckDigit extendedMode:(BOOL)isExtendedMode {
   if (self = [super init]) {
-    usingCheckDigit = isUsingCheckDigit;
-    extendedMode = isExtendedMode;
+    self.usingCheckDigit = isUsingCheckDigit;
+    self.extendedMode = isExtendedMode;
   }
+
   return self;
 }
 
@@ -144,15 +143,15 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   float right = (float)(nextStart + lastStart) / 2.0f;
   
   return [[[ZXResult alloc] initWithText:resultString
-                              rawBytes:nil
-                                length:0
-                          resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                        [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                format:kBarcodeFormatCode39] autorelease];
+                                rawBytes:nil
+                                  length:0
+                            resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                  format:kBarcodeFormatCode39] autorelease];
 }
 
-- (NSArray *) findAsteriskPattern:(ZXBitArray *)row {
-  int width = [row size];
+- (NSArray *)findAsteriskPattern:(ZXBitArray *)row {
+  int width = row.size;
   int rowOffset = 0;
   while (rowOffset < width) {
     if ([row get:rowOffset]) {
@@ -196,7 +195,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (int) toNarrowWidePattern:(int[])counters {
+- (int)toNarrowWidePattern:(int[])counters {
   int numCounters = sizeof((int*)counters) / sizeof(int);
   int maxNarrowCounter = 0;
   int wideCounters;
@@ -236,7 +235,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   return -1;
 }
 
-- (unichar) patternToChar:(int)pattern {
+- (unichar)patternToChar:(int)pattern {
   for (int i = 0; i < sizeof(CODE39_CHARACTER_ENCODINGS) / sizeof(int); i++) {
     if (CODE39_CHARACTER_ENCODINGS[i] == pattern) {
       return CODE39_ALPHABET[i];
@@ -245,7 +244,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (NSString *) decodeExtended:(NSMutableString *)encoded {
+- (NSString *)decodeExtended:(NSMutableString *)encoded {
   int length = [encoded length];
   NSMutableString * decoded = [NSMutableString stringWithCapacity:length];
 

@@ -1,28 +1,47 @@
 #import "ZXBitArray.h"
 #import "ZXEAN8Reader.h"
 
+@interface ZXEAN8Reader ()
+
+@property (nonatomic, assign) int* decodeMiddleCounters;
+
+@end
+
 @implementation ZXEAN8Reader
 
-- (id) init {
+@synthesize decodeMiddleCounters;
+
+- (id)init {
   if (self = [super init]) {
-    decodeMiddleCounters[0] = 0;
-    decodeMiddleCounters[1] = 0;
-    decodeMiddleCounters[2] = 0;
-    decodeMiddleCounters[3] = 0;
+    self.decodeMiddleCounters = (int*)malloc(sizeof(4) * sizeof(int));
+    self.decodeMiddleCounters[0] = 0;
+    self.decodeMiddleCounters[1] = 0;
+    self.decodeMiddleCounters[2] = 0;
+    self.decodeMiddleCounters[3] = 0;
   }
+
   return self;
 }
 
-- (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
+- (void)dealloc {
+  if (self.decodeMiddleCounters != NULL) {
+    free(self.decodeMiddleCounters);
+    self.decodeMiddleCounters = NULL;
+  }
+
+  [super dealloc];
+}
+
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
   const int countersLen = 4;
   int counters[countersLen] = {0, 0, 0, 0};
-  int end = [row size];
+  int end = row.size;
   int rowOffset = [[startRange objectAtIndex:1] intValue];
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS];
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    for (int i = 0; i < countersLen; i++) {
       rowOffset += counters[i];
     }
   }
@@ -33,7 +52,7 @@
   for (int x = 0; x < 4 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS];
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    for (int i = 0; i < countersLen; i++) {
       rowOffset += counters[i];
     }
   }

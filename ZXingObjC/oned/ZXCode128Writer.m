@@ -9,20 +9,20 @@
 
 @interface ZXCode128Writer ()
 
-- (BOOL) isDigits:(NSString *)value start:(int)start length:(unsigned int)length;
+- (BOOL)isDigits:(NSString *)value start:(int)start length:(unsigned int)length;
 
 @end
 
 @implementation ZXCode128Writer
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatCode128) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_128"];
   }
   return [super encode:contents format:format width:width height:height hints:hints];
 }
 
-- (NSArray *) encode:(NSString *)contents {
+- (NSArray *)encode:(NSString *)contents {
   int length = [contents length];
   if (length < 1 || length > 80) {
     [NSException raise:NSInvalidArgumentException format:@"Contents length should be between 1 and 80 characters, but got %d", length];
@@ -111,7 +111,7 @@
   return result;
 }
 
-- (BOOL) isDigits:(NSString *)value start:(int)start length:(unsigned int)length {
+- (BOOL)isDigits:(NSString *)value start:(int)start length:(unsigned int)length {
   int end = start + length;
 
   for (int i = start; i < end; i++) {

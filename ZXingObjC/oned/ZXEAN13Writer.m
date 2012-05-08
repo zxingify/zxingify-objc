@@ -21,7 +21,7 @@ const int EAN13codeWidth = 3 + // start guard
   return [super encode:contents format:format width:width height:height hints:hints];
 }
 
-- (NSArray *) encode:(NSString *)contents {
+- (NSArray *)encode:(NSString *)contents {
   if ([contents length] != 13) {
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 13 digits long, but got %d", [contents length]];
   }
