@@ -2,7 +2,7 @@
 
 @implementation ZXRSSUtils
 
-+ (NSArray *) getRSSwidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
++ (NSArray *)rssWidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
   NSMutableArray *widths = [NSMutableArray arrayWithCapacity:elements];
   int bar;
   int narrowMask = 0;
@@ -40,7 +40,7 @@
   return widths;
 }
 
-+ (int) getRSSvalue:(NSArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
++ (int)rssValue:(NSArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
   int elements = [widths count];
   int n = 0;
   for (NSNumber *i in widths) {
@@ -71,7 +71,7 @@
   return val;
 }
 
-+ (int) combins:(int)n r:(int)r {
++ (int)combins:(int)n r:(int)r {
   int maxDenom;
   int minDenom;
   if (n - r > r) {
@@ -97,7 +97,7 @@
   return val;
 }
 
-+ (NSArray *) elements:(NSArray *)eDist N:(int)N K:(int)K {
++ (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K {
   NSMutableArray * widths = [NSMutableArray arrayWithCapacity:[eDist count] + 2];
   int twoK = K << 1;
   [widths addObject:[NSNumber numberWithInt:1]];

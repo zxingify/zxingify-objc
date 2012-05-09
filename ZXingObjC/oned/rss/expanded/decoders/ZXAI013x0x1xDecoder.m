@@ -9,33 +9,47 @@ int const AI013x0x1xDateSize = 16;
 
 @interface ZXAI013x0x1xDecoder ()
 
-- (void) encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos;
+@property (nonatomic, copy) NSString * dateCode;
+@property (nonatomic, copy) NSString * firstAIdigits;
+
+- (void)encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos;
 
 @end
 
 @implementation ZXAI013x0x1xDecoder
 
-- (id) initWithInformation:(ZXBitArray *)anInformation firstAIdigits:(NSString *)aFirstAIdigits dateCode:(NSString *)aDateCode {
+@synthesize dateCode;
+@synthesize firstAIdigits;
+
+- (id)initWithInformation:(ZXBitArray *)anInformation firstAIdigits:(NSString *)aFirstAIdigits dateCode:(NSString *)aDateCode {
   if (self = [super initWithInformation:anInformation]) {
-    dateCode = [aDateCode copy];
-    firstAIdigits = [aFirstAIdigits copy];
+    self.dateCode = aDateCode;
+    self.firstAIdigits = aFirstAIdigits;
   }
+
   return self;
 }
 
-- (NSString *) parseInformation {
-  if (information.size != AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize + AI013x0x1xDateSize) {
+- (void)dealloc {
+  [dateCode release];
+  [firstAIdigits release];
+
+  [super dealloc];
+}
+
+- (NSString *)parseInformation {
+  if (self.information.size != AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize + AI013x0x1xDateSize) {
     @throw [ZXNotFoundException notFoundInstance];
   }
   NSMutableString * buf = [NSMutableString string];
   [self encodeCompressedGtin:buf currentPos:AI013x0x1xHeaderSize];
   [self encodeCompressedWeight:buf currentPos:AI013x0x1xHeaderSize + gtinSize weightSize:AI013x0x1xWeightSize];
   [self encodeCompressedDate:buf currentPos:AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize];
-  return [buf description];
+  return buf;
 }
 
-- (void) encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos {
-  int numericDate = [generalDecoder extractNumericValueFromBitArray:currentPos bits:AI013x0x1xDateSize];
+- (void)encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos {
+  int numericDate = [self.generalDecoder extractNumericValueFromBitArray:currentPos bits:AI013x0x1xDateSize];
   if (numericDate == 38400) {
     return;
   }
@@ -59,19 +73,13 @@ int const AI013x0x1xDateSize = 16;
   [buf appendFormat:@"%d", day];
 }
 
-- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
+- (void)addWeightCode:(NSMutableString *)buf weight:(int)weight {
   int lastAI = weight / 100000;
   [buf appendFormat:@"(%@%d)", firstAIdigits, lastAI];
 }
 
-- (int) checkWeight:(int)weight {
+- (int)checkWeight:(int)weight {
   return weight % 100000;
-}
-
-- (void) dealloc {
-  [dateCode release];
-  [firstAIdigits release];
-  [super dealloc];
 }
 
 @end

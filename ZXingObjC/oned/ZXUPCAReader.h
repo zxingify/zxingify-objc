@@ -1,14 +1,9 @@
 #import "ZXUPCEANReader.h"
 
 /**
- * <p>Implements decoding of the UPC-A format.</p>
- * 
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
+ * Implements decoding of the UPC-A format.
  */
 
-@interface ZXUPCAReader : ZXUPCEANReader {
-  ZXUPCEANReader * ean13Reader;
-}
+@interface ZXUPCAReader : ZXUPCEANReader
 
 @end

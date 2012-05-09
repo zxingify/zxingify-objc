@@ -9,34 +9,51 @@
 
 @interface ZXGeneralAppIdDecoder ()
 
-- (ZXDecodedChar *) decodeAlphanumeric:(int)pos;
-- (ZXDecodedChar *) decodeIsoIec646:(int)pos;
-- (ZXDecodedNumeric *) decodeNumeric:(int)pos;
-- (BOOL) isAlphaOr646ToNumericLatch:(int)pos;
-- (BOOL) isAlphaTo646ToAlphaLatch:(int)pos;
-- (BOOL) isNumericToAlphaNumericLatch:(int)pos;
-- (BOOL) isStillAlpha:(int)pos;
-- (BOOL) isStillIsoIec646:(int)pos;
-- (BOOL) isStillNumeric:(int)pos;
-- (ZXBlockParsedResult *) parseAlphaBlock;
-- (ZXDecodedInformation *) parseBlocks;
-- (ZXBlockParsedResult *) parseIsoIec646Block;
-- (ZXBlockParsedResult *) parseNumericBlock;
+@property (nonatomic, retain) ZXBitArray * information;
+@property (nonatomic, retain) ZXCurrentParsingState * current;
+@property (nonatomic, retain) NSMutableString * buffer;
+
+- (ZXDecodedChar *)decodeAlphanumeric:(int)pos;
+- (ZXDecodedChar *)decodeIsoIec646:(int)pos;
+- (ZXDecodedNumeric *)decodeNumeric:(int)pos;
+- (BOOL)isAlphaOr646ToNumericLatch:(int)pos;
+- (BOOL)isAlphaTo646ToAlphaLatch:(int)pos;
+- (BOOL)isNumericToAlphaNumericLatch:(int)pos;
+- (BOOL)isStillAlpha:(int)pos;
+- (BOOL)isStillIsoIec646:(int)pos;
+- (BOOL)isStillNumeric:(int)pos;
+- (ZXBlockParsedResult *)parseAlphaBlock;
+- (ZXDecodedInformation *)parseBlocks;
+- (ZXBlockParsedResult *)parseIsoIec646Block;
+- (ZXBlockParsedResult *)parseNumericBlock;
 
 @end
 
 @implementation ZXGeneralAppIdDecoder
 
-- (id) initWithInformation:(ZXBitArray *)anInformation {
+@synthesize information;
+@synthesize current;
+@synthesize buffer;
+
+- (id)initWithInformation:(ZXBitArray *)anInformation {
   if (self = [super init]) {
-    current = [[ZXCurrentParsingState alloc] init];
-    buffer = [[NSMutableString alloc] init];
-    information = [anInformation retain];
+    self.current = [[[ZXCurrentParsingState alloc] init] autorelease];
+    self.buffer = [NSMutableString string];
+    self.information = anInformation;
   }
+
   return self;
 }
 
-- (NSString *) decodeAllCodes:(NSMutableString *)buff initialPosition:(int)initialPosition {
+- (void)dealloc {
+  [information release];
+  [current release];
+  [buffer release];
+
+  [super dealloc];
+}
+
+- (NSString *)decodeAllCodes:(NSMutableString *)buff initialPosition:(int)initialPosition {
   int currentPosition = initialPosition;
   NSString * remaining = nil;
   do {
@@ -58,31 +75,31 @@
   return [NSString stringWithString:buff];
 }
 
-- (BOOL) isStillNumeric:(int)pos {
-  if (pos + 7 > information.size) {
-    return pos + 4 <= information.size;
+- (BOOL)isStillNumeric:(int)pos {
+  if (pos + 7 > self.information.size) {
+    return pos + 4 <= self.information.size;
   }
 
   for (int i = pos; i < pos + 3; ++i) {
-    if ([information get:i]) {
+    if ([self.information get:i]) {
       return YES;
     }
   }
 
-  return [information get:pos + 3];
+  return [self.information get:pos + 3];
 }
 
-- (ZXDecodedNumeric *) decodeNumeric:(int)pos {
-  if (pos + 7 > information.size) {
+- (ZXDecodedNumeric *)decodeNumeric:(int)pos {
+  if (pos + 7 > self.information.size) {
     int numeric = [self extractNumericValueFromBitArray:pos bits:4];
     if (numeric == 0) {
-      return [[[ZXDecodedNumeric alloc] initWithNewPosition:information.size
-                                               firstDigit:FNC1
-                                              secondDigit:FNC1] autorelease];
+      return [[[ZXDecodedNumeric alloc] initWithNewPosition:self.information.size
+                                                 firstDigit:FNC1
+                                                secondDigit:FNC1] autorelease];
     }
-    return [[[ZXDecodedNumeric alloc] initWithNewPosition:information.size
-                                             firstDigit:numeric - 1
-                                            secondDigit:FNC1] autorelease];
+    return [[[ZXDecodedNumeric alloc] initWithNewPosition:self.information.size
+                                               firstDigit:numeric - 1
+                                              secondDigit:FNC1] autorelease];
   }
   int numeric = [self extractNumericValueFromBitArray:pos bits:7];
 
@@ -90,15 +107,15 @@
   int digit2 = (numeric - 8) % 11;
 
   return [[[ZXDecodedNumeric alloc] initWithNewPosition:pos + 7
-                                               firstDigit:digit1
-                                               secondDigit:digit2] autorelease];
+                                             firstDigit:digit1
+                                            secondDigit:digit2] autorelease];
 }
 
-- (int) extractNumericValueFromBitArray:(int)pos bits:(int)bits {
+- (int)extractNumericValueFromBitArray:(int)pos bits:(int)bits {
   return [ZXGeneralAppIdDecoder extractNumericValueFromBitArray:information pos:pos bits:bits];
 }
 
-+ (int) extractNumericValueFromBitArray:(ZXBitArray *)information pos:(int)pos bits:(int)bits {
++ (int)extractNumericValueFromBitArray:(ZXBitArray *)information pos:(int)pos bits:(int)bits {
   if (bits > 32) {
     [NSException raise:NSInvalidArgumentException format:@"extractNumberValueFromBitArray can't handle more than 32 bits"];
   }
@@ -113,143 +130,142 @@
   return value;
 }
 
-- (ZXDecodedInformation *) decodeGeneralPurposeField:(int)pos remaining:(NSString *)remaining {
-  [buffer setString:@""];
+- (ZXDecodedInformation *)decodeGeneralPurposeField:(int)pos remaining:(NSString *)remaining {
+  [self.buffer setString:@""];
 
   if (remaining != nil) {
-    [buffer appendString:remaining];
+    [self.buffer appendString:remaining];
   }
 
-  current.position = pos;
+  self.current.position = pos;
 
   ZXDecodedInformation * lastDecoded = [self parseBlocks];
   if (lastDecoded != nil && [lastDecoded remaining]) {
-    return [[[ZXDecodedInformation alloc] initWithNewPosition:current.position
-                                                  newString:buffer
-                                             remainingValue:[lastDecoded remainingValue]] autorelease];
+    return [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
+                                                    newString:self.buffer
+                                               remainingValue:lastDecoded.remainingValue] autorelease];
   }
-  return [[[ZXDecodedInformation alloc] initWithNewPosition:current.position newString:buffer] autorelease];
+  return [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position newString:self.buffer] autorelease];
 }
 
-- (ZXDecodedInformation *) parseBlocks {
+- (ZXDecodedInformation *)parseBlocks {
   BOOL isFinished;
   ZXBlockParsedResult * result;
   do {
-    int initialPosition = current.position;
+    int initialPosition = self.current.position;
 
-    if ([current alpha]) {
+    if (self.current.alpha) {
       result = [self parseAlphaBlock];
-      isFinished = [result finished];
-    } else if ([current isoIec646]) {
+      isFinished = result.finished;
+    } else if (self.current.isoIec646) {
       result = [self parseIsoIec646Block];
-      isFinished = [result finished];
+      isFinished = result.finished;
     } else {
       result = [self parseNumericBlock];
-      isFinished = [result finished];
+      isFinished = result.finished;
     }
 
-    BOOL positionChanged = initialPosition != current.position;
+    BOOL positionChanged = initialPosition != self.current.position;
     if (!positionChanged && !isFinished) {
       break;
     }
-  }
-   while (!isFinished);
-  return [result decodedInformation];
+  } while (!isFinished);
+  return result.decodedInformation;
 }
 
-- (ZXBlockParsedResult *) parseNumericBlock {
-  while ([self isStillNumeric:current.position]) {
-    ZXDecodedNumeric * numeric = [self decodeNumeric:current.position];
-    current.position = numeric.theNewPosition;
+- (ZXBlockParsedResult *)parseNumericBlock {
+  while ([self isStillNumeric:self.current.position]) {
+    ZXDecodedNumeric * numeric = [self decodeNumeric:self.current.position];
+    self.current.position = numeric.theNewPosition;
 
     if ([numeric firstDigitFNC1]) {
       ZXDecodedInformation * _information;
       if ([numeric secondDigitFNC1]) {
-        _information = [[[ZXDecodedInformation alloc] initWithNewPosition:current.position
-                                                              newString:buffer] autorelease];
+        _information = [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
+                                                                newString:self.buffer] autorelease];
       } else {
-        _information = [[[ZXDecodedInformation alloc] initWithNewPosition:current.position
-                                                              newString:buffer
-                                                         remainingValue:[numeric secondDigit]] autorelease];
+        _information = [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
+                                                                newString:self.buffer
+                                                           remainingValue:numeric.secondDigit] autorelease];
       }
       return [[[ZXBlockParsedResult alloc] initWithInformation:_information finished:YES] autorelease];
     }
-    [buffer appendFormat:@"%d", [numeric firstDigit]];
+    [buffer appendFormat:@"%d", numeric.firstDigit];
 
-    if ([numeric secondDigitFNC1]) {
-      ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:current.position
-                                                                                newString:buffer] autorelease];
+    if (numeric.secondDigitFNC1) {
+      ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
+                                                                                     newString:self.buffer] autorelease];
       return [[[ZXBlockParsedResult alloc] initWithInformation:_information finished:YES] autorelease];
     }
-    [buffer appendFormat:@"%d", [numeric secondDigit]];
+    [self.buffer appendFormat:@"%d", numeric.secondDigit];
   }
 
-  if ([self isNumericToAlphaNumericLatch:current.position]) {
-    [current setAlpha];
-    current.position += 4;
+  if ([self isNumericToAlphaNumericLatch:self.current.position]) {
+    [self.current setAlpha];
+    self.current.position += 4;
   }
   return [[[ZXBlockParsedResult alloc] initWithFinished:NO] autorelease];
 }
 
-- (ZXBlockParsedResult *) parseIsoIec646Block {
-  while ([self isStillIsoIec646:current.position]) {
-    ZXDecodedChar * iso = [self decodeIsoIec646:current.position];
-    current.position = iso.theNewPosition;
+- (ZXBlockParsedResult *)parseIsoIec646Block {
+  while ([self isStillIsoIec646:self.current.position]) {
+    ZXDecodedChar * iso = [self decodeIsoIec646:self.current.position];
+    self.current.position = iso.theNewPosition;
 
-    if ([iso fnc1]) {
-      ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:current.position
-                                                                                   newString:buffer] autorelease];
+    if (iso.fnc1) {
+      ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
+                                                                                     newString:self.buffer] autorelease];
       return [[[ZXBlockParsedResult alloc] initWithInformation:_information finished:YES] autorelease];
     }
-    [buffer appendFormat:@"%C", [iso value]];
+    [buffer appendFormat:@"%C", iso.value];
   }
 
-  if ([self isAlphaOr646ToNumericLatch:current.position]) {
-    current.position += 3;
-    [current setNumeric];
+  if ([self isAlphaOr646ToNumericLatch:self.current.position]) {
+    self.current.position += 3;
+    [self.current setNumeric];
   } else if ([self isAlphaTo646ToAlphaLatch:current.position]) {
-    if (current.position + 5 < information.size) {
-      current.position += 5;
+    if (self.current.position + 5 < self.information.size) {
+      self.current.position += 5;
     } else {
-      current.position = information.size;
+      self.current.position = self.information.size;
     }
 
-    [current setAlpha];
+    [self.current setAlpha];
   }
   return [[[ZXBlockParsedResult alloc] initWithFinished:NO] autorelease];
 }
 
-- (ZXBlockParsedResult *) parseAlphaBlock {
-  while ([self isStillAlpha:current.position]) {
-    ZXDecodedChar * alpha = [self decodeAlphanumeric:current.position];
-    current.position = alpha.theNewPosition;
+- (ZXBlockParsedResult *)parseAlphaBlock {
+  while ([self isStillAlpha:self.current.position]) {
+    ZXDecodedChar * alpha = [self decodeAlphanumeric:self.current.position];
+    self.current.position = alpha.theNewPosition;
 
-    if ([alpha fnc1]) {
-      ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:current.position
-                                                                                   newString:buffer] autorelease];
+    if (alpha.fnc1) {
+      ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
+                                                                                     newString:self.buffer] autorelease];
       return [[[ZXBlockParsedResult alloc] initWithInformation:_information finished:YES] autorelease];
     }
 
-    [buffer appendFormat:@"%C", [alpha value]];
+    [self.buffer appendFormat:@"%C", alpha.value];
   }
 
-  if ([self isAlphaOr646ToNumericLatch:current.position]) {
-    current.position += 3;
-    [current setNumeric];
-  } else if ([self isAlphaTo646ToAlphaLatch:current.position]) {
-    if (current.position + 5 < information.size) {
-      current.position += 5;
+  if ([self isAlphaOr646ToNumericLatch:self.current.position]) {
+    self.current.position += 3;
+    [self.current setNumeric];
+  } else if ([self isAlphaTo646ToAlphaLatch:self.current.position]) {
+    if (self.current.position + 5 < self.information.size) {
+      self.current.position += 5;
     } else {
-      current.position = information.size;
+      self.current.position = self.information.size;
     }
 
-    [current setIsoIec646];
+    [self.current setIsoIec646];
   }
   return [[[ZXBlockParsedResult alloc] initWithFinished:NO] autorelease];
 }
 
-- (BOOL) isStillIsoIec646:(int)pos {
-  if (pos + 5 > information.size) {
+- (BOOL)isStillIsoIec646:(int)pos {
+  if (pos + 5 > self.information.size) {
     return NO;
   }
 
@@ -258,7 +274,7 @@
     return YES;
   }
 
-  if (pos + 7 > information.size) {
+  if (pos + 7 > self.information.size) {
     return NO;
   }
 
@@ -267,7 +283,7 @@
     return YES;
   }
 
-  if (pos + 8 > information.size) {
+  if (pos + 8 > self.information.size) {
     return NO;
   }
 
@@ -275,7 +291,7 @@
   return eightBitValue >= 232 && eightBitValue < 253;
 }
 
-- (ZXDecodedChar *) decodeIsoIec646:(int)pos {
+- (ZXDecodedChar *)decodeIsoIec646:(int)pos {
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue == 15) {
     return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1] autorelease];
@@ -346,8 +362,8 @@
                                userInfo:nil];
 }
 
-- (BOOL) isStillAlpha:(int)pos {
-  if (pos + 5 > information.size) {
+- (BOOL)isStillAlpha:(int)pos {
+  if (pos + 5 > self.information.size) {
     return NO;
   }
 
@@ -356,7 +372,7 @@
     return YES;
   }
 
-  if (pos + 6 > information.size) {
+  if (pos + 6 > self.information.size) {
     return NO;
   }
 
@@ -364,7 +380,7 @@
   return sixBitValue >= 16 && sixBitValue < 63;
 }
 
-- (ZXDecodedChar *) decodeAlphanumeric:(int)pos {
+- (ZXDecodedChar *)decodeAlphanumeric:(int)pos {
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue == 15) {
     return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1] autorelease];
@@ -398,17 +414,17 @@
                                userInfo:nil];
 }
 
-- (BOOL) isAlphaTo646ToAlphaLatch:(int)pos {
-  if (pos + 1 > information.size) {
+- (BOOL)isAlphaTo646ToAlphaLatch:(int)pos {
+  if (pos + 1 > self.information.size) {
     return NO;
   }
 
-  for (int i = 0; i < 5 && i + pos < information.size; ++i) {
+  for (int i = 0; i < 5 && i + pos < self.information.size; ++i) {
     if (i == 2) {
-      if (![information get:pos + 2]) {
+      if (![self.information get:pos + 2]) {
         return NO;
       }
-    } else if ([information get:pos + i]) {
+    } else if ([self.information get:pos + i]) {
       return NO;
     }
   }
@@ -416,13 +432,13 @@
   return YES;
 }
 
-- (BOOL) isAlphaOr646ToNumericLatch:(int)pos {
-  if (pos + 3 > information.size) {
+- (BOOL)isAlphaOr646ToNumericLatch:(int)pos {
+  if (pos + 3 > self.information.size) {
     return NO;
   }
 
   for (int i = pos; i < pos + 3; ++i) {
-    if ([information get:i]) {
+    if ([self.information get:i]) {
       return NO;
     }
   }
@@ -430,25 +446,18 @@
   return YES;
 }
 
-- (BOOL) isNumericToAlphaNumericLatch:(int)pos {
-  if (pos + 1 > information.size) {
+- (BOOL)isNumericToAlphaNumericLatch:(int)pos {
+  if (pos + 1 > self.information.size) {
     return NO;
   }
 
-  for (int i = 0; i < 4 && i + pos < information.size; ++i) {
-    if ([information get:pos + i]) {
+  for (int i = 0; i < 4 && i + pos < self.information.size; ++i) {
+    if ([self.information get:pos + i]) {
       return NO;
     }
   }
 
   return YES;
-}
-
-- (void) dealloc {
-  [information release];
-  [current release];
-  [buffer release];
-  [super dealloc];
 }
 
 @end

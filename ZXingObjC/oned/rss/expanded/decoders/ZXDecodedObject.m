@@ -1,13 +1,20 @@
 #import "ZXDecodedObject.h"
 
+@interface ZXDecodedObject ()
+
+@property (nonatomic, assign) int theNewPosition;
+
+@end
+
 @implementation ZXDecodedObject
 
 @synthesize theNewPosition;
 
-- (id) initWithNewPosition:(int)aNewPosition {
+- (id)initWithNewPosition:(int)aNewPosition {
   if (self = [super init]) {
-    theNewPosition = aNewPosition;
+    self.theNewPosition = aNewPosition;
   }
+
   return self;
 }
 

@@ -7,8 +7,8 @@ int const AI013x0xWeightSize = 15;
 
 @implementation ZXAI013x0xDecoder
 
-- (NSString *) parseInformation {
-  if (information.size != AI013x0xHeaderSize + gtinSize + AI013x0xWeightSize) {
+- (NSString *)parseInformation {
+  if (self.information.size != AI013x0xHeaderSize + gtinSize + AI013x0xWeightSize) {
     @throw [ZXNotFoundException notFoundInstance];
   }
 

@@ -100,12 +100,13 @@
   NSMutableArray *result = [NSMutableArray array];
   int pos = 0;
   for (NSArray *patternArray in patterns) {
-    int pattern[[patternArray count]];
-    for(int i = 0; i < [patternArray count]; i++) {
+    int patternLen = [patternArray count];
+    int pattern[patternLen];
+    for(int i = 0; i < patternLen; i++) {
       pattern[i] = [[patternArray objectAtIndex:i] intValue];
     }
 
-    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:pattern startColor:1];
+    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:pattern patternLen:patternLen startColor:1];
   }
 
   return result;

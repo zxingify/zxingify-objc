@@ -1,20 +1,12 @@
-
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
-
-@interface ZXCurrentParsingState : NSObject {
-  int position;
-  int encoding;
-}
+@interface ZXCurrentParsingState : NSObject
 
 @property (nonatomic, assign) int position;
 
-- (BOOL) alpha;
-- (BOOL) numeric;
-- (BOOL) isoIec646;
-- (void) setNumeric;
-- (void) setAlpha;
-- (void) setIsoIec646;
+- (BOOL)alpha;
+- (BOOL)numeric;
+- (BOOL)isoIec646;
+- (void)setNumeric;
+- (void)setAlpha;
+- (void)setIsoIec646;
 
 @end

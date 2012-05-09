@@ -5,17 +5,17 @@
 
 @interface ZXUPCEANWriter ()
 
-- (ZXBitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height;
+- (ZXBitMatrix *)renderResult:(NSArray *)code width:(int)width height:(int)height;
 
 @end
 
 @implementation ZXUPCEANWriter
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (contents == nil || [contents length] == 0) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Found empty contents"
@@ -31,10 +31,7 @@
 }
 
 
-/**
- * @return a byte array of horizontal pixels (0 = white, 1 = black)
- */
-- (ZXBitMatrix *) renderResult:(NSArray *)code width:(int)width height:(int)height {
+- (ZXBitMatrix *)renderResult:(NSArray *)code width:(int)width height:(int)height {
   int inputWidth = [code count];
   int fullWidth = inputWidth + ((sizeof((int*)START_END_PATTERN) / sizeof(int)) << 1);
   int outputWidth = MAX(width, fullWidth);
@@ -55,19 +52,15 @@
 
 /**
  * Appends the given pattern to the target array starting at pos.
- * 
- * @param startColor
- * starting color - 0 for white, 1 for black
- * @return the number of elements added to target.
  */
-+ (int) appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(int[])pattern startColor:(int)startColor {
++ (int)appendPattern:(NSMutableArray *)target pos:(int)pos pattern:(int*)pattern patternLen:(unsigned int)patternLen startColor:(int)startColor {
   if (startColor != 0 && startColor != 1) {
     [NSException raise:NSInvalidArgumentException format:@"startColor must be either 0 or 1, but got: %d", startColor];
   }
 
   char color = (char)startColor;
   int numAdded = 0;
-  for (int i = 0; i < sizeof((int*)pattern) / sizeof(int); i++) {
+  for (int i = 0; i < patternLen; i++) {
     for (int j = 0; j < pattern[i]; j++) {
       [target replaceObjectAtIndex:pos withObject:[NSNumber numberWithChar:color]];
       pos += 1;
@@ -78,11 +71,7 @@
   return numAdded;
 }
 
-
-/**
- * @return a byte array of horizontal pixels (0 = white, 1 = black)
- */
-- (NSArray *) encode:(NSString *)contents {
+- (NSArray *)encode:(NSString *)contents {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

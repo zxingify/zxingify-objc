@@ -6,14 +6,14 @@ int const gtinSize = 40;
 
 @interface ZXAI01decoder ()
 
-- (void) appendCheckDigit:(NSMutableString *)buf currentPos:(int)currentPos;
+- (void)appendCheckDigit:(NSMutableString *)buf currentPos:(int)currentPos;
 
 @end
 
 
 @implementation ZXAI01decoder
 
-- (void) encodeCompressedGtin:(NSMutableString *)buf currentPos:(int)currentPos {
+- (void)encodeCompressedGtin:(NSMutableString *)buf currentPos:(int)currentPos {
   [buf appendString:@"(01)"];
   int initialPosition = [buf length];
   [buf appendString:@"9"];
@@ -21,9 +21,9 @@ int const gtinSize = 40;
   [self encodeCompressedGtinWithoutAI:buf currentPos:currentPos initialBufferPosition:initialPosition];
 }
 
-- (void) encodeCompressedGtinWithoutAI:(NSMutableString *)buf currentPos:(int)currentPos initialBufferPosition:(int)initialBufferPosition {
+- (void)encodeCompressedGtinWithoutAI:(NSMutableString *)buf currentPos:(int)currentPos initialBufferPosition:(int)initialBufferPosition {
   for (int i = 0; i < 4; ++i) {
-    int currentBlock = [generalDecoder extractNumericValueFromBitArray:currentPos + 10 * i bits:10];
+    int currentBlock = [self.generalDecoder extractNumericValueFromBitArray:currentPos + 10 * i bits:10];
     if (currentBlock / 100 == 0) {
       [buf appendString:@"0"];
     }
@@ -36,7 +36,7 @@ int const gtinSize = 40;
   [self appendCheckDigit:buf currentPos:initialBufferPosition];
 }
 
-- (void) appendCheckDigit:(NSMutableString *)buf currentPos:(int)currentPos {
+- (void)appendCheckDigit:(NSMutableString *)buf currentPos:(int)currentPos {
   int checkDigit = 0;
   for (int i = 0; i < 13; i++) {
     int digit = [buf characterAtIndex:i + currentPos] - '0';

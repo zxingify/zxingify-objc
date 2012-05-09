@@ -1,22 +1,13 @@
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
-
 @class ZXDataCharacter, ZXRSSFinderPattern;
 
-@interface ZXExpandedPair : NSObject {
-  BOOL mayBeLast;
-  ZXDataCharacter * leftChar;
-  ZXDataCharacter * rightChar;
-  ZXRSSFinderPattern * finderPattern;
-}
+@interface ZXExpandedPair : NSObject
 
-@property (nonatomic, readonly) ZXDataCharacter * leftChar;
-@property (nonatomic, readonly) ZXDataCharacter * rightChar;
-@property (nonatomic, readonly) ZXRSSFinderPattern * finderPattern;
-@property (nonatomic, readonly) BOOL mayBeLast;
+@property (nonatomic, retain, readonly) ZXDataCharacter * leftChar;
+@property (nonatomic, retain, readonly) ZXDataCharacter * rightChar;
+@property (nonatomic, retain, readonly) ZXRSSFinderPattern * finderPattern;
+@property (nonatomic, assign, readonly) BOOL mayBeLast;
+@property (nonatomic, assign, readonly) BOOL mustBeLast;
 
-- (id) initWithLeftChar:(ZXDataCharacter *)leftChar rightChar:(ZXDataCharacter *)rightChar finderPattern:(ZXRSSFinderPattern *)finderPattern mayBeLast:(BOOL)mayBeLast;
-- (BOOL) mustBeLast;
+- (id)initWithLeftChar:(ZXDataCharacter *)leftChar rightChar:(ZXDataCharacter *)rightChar finderPattern:(ZXRSSFinderPattern *)finderPattern mayBeLast:(BOOL)mayBeLast;
 
 @end

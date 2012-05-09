@@ -5,7 +5,7 @@
 
 @implementation ZXBitArrayBuilder
 
-+ (ZXBitArray *) buildBitArray:(NSArray *)pairs {
++ (ZXBitArray *)buildBitArray:(NSArray *)pairs {
   int charNumber = ([pairs count] << 1) - 1;
   if ([((ZXExpandedPair *)[pairs lastObject]) rightChar] == nil) {
     charNumber -= 1;

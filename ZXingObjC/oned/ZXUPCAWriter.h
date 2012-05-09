@@ -1,9 +1,7 @@
 #import "ZXWriter.h"
 
 /**
- * This object renders a UPC-A code as a {@link BitMatrix}.
- * 
- * @author qwandor@google.com (Andrew Walbran)
+ * This object renders a UPC-A code as a ZXBitMatrix.
  */
 
 @interface ZXUPCAWriter : NSObject <ZXWriter>

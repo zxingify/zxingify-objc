@@ -1,13 +1,7 @@
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- */
+@interface ZXDecodedObject : NSObject
 
-@interface ZXDecodedObject : NSObject {
-  int theNewPosition;
-}
+@property (nonatomic, assign, readonly) int theNewPosition;
 
-@property (nonatomic, readonly) int theNewPosition;
-
-- (id) initWithNewPosition:(int)newPosition;
+- (id)initWithNewPosition:(int)newPosition;
 
 @end

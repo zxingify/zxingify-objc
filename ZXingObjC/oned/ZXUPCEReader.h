@@ -2,20 +2,13 @@
 #import "ZXUPCEANReader.h"
 
 /**
- * <p>Implements decoding of the UPC-E format.</p>
- * <p/>
- * <p><a href="http://www.barcodeisland.com/upce.phtml">This</a> is a great reference for
- * UPC-E information.</p>
+ * Implements decoding of the UPC-E format.
  * 
- * @author Sean Owen
+ * http://www.barcodeisland.com/upce.phtml is a great reference for UPC-E information.
  */
 
-@interface ZXUPCEReader : ZXUPCEANReader {
-  int decodeMiddleCounters[4];
-}
+@interface ZXUPCEReader : ZXUPCEANReader
 
-@property (nonatomic, readonly) ZXBarcodeFormat barcodeFormat;
-
-+ (NSString *) convertUPCEtoUPCA:(NSString *)upce;
++ (NSString *)convertUPCEtoUPCA:(NSString *)upce;
 
 @end

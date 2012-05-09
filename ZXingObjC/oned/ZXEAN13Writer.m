@@ -31,23 +31,23 @@ const int EAN13codeWidth = 3 + // start guard
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:EAN13codeWidth];
   int pos = 0;
 
-  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN startColor:1];
+  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
 
   for (int i = 1; i <= 6; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     if ((parities >> (6 - i) & 1) == 1) {
       digit += 10;
     }
-    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)L_AND_G_PATTERNS[digit] startColor:0];
+    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)L_AND_G_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:0];
   }
 
-  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)MIDDLE_PATTERN startColor:0];
+  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:0];
 
   for (int i = 7; i <= 12; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] startColor:1];
+    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:1];
   }
-  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN startColor:1];
+  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
 
   return result;
 }

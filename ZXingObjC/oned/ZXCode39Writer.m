@@ -38,19 +38,21 @@
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:codeWidth];
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
-  int pos = [ZXCode39Writer appendPattern:result pos:0 pattern:widths startColor:1];
-  int narrowWhite[1] = {0};
-  pos += [ZXCode39Writer appendPattern:result pos:pos pattern:narrowWhite startColor:0];
+  int pos = [ZXCode39Writer appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:1];
+
+  const int narrowWhiteLen = 1;
+  int narrowWhite[narrowWhiteLen] = {0};
+  pos += [ZXCode39Writer appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
 
   for (int i = length - 1; i >= 0; i--) {
     int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
-    pos += [ZXCode39Writer appendPattern:result pos:pos pattern:widths startColor:1];
-    pos += [ZXCode39Writer appendPattern:result pos:pos pattern:narrowWhite startColor:0];
+    pos += [ZXCode39Writer appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:1];
+    pos += [ZXCode39Writer appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
   }
 
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
-  pos += [ZXCode39Writer appendPattern:result pos:pos pattern:widths startColor:1];
+  pos += [ZXCode39Writer appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:1];
   return result;
 }
 

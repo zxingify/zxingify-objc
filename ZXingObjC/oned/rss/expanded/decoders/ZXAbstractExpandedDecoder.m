@@ -9,23 +9,41 @@
 #import "ZXBitArray.h"
 #import "ZXGeneralAppIdDecoder.h"
 
+@interface ZXAbstractExpandedDecoder ()
+
+@property (nonatomic, retain) ZXGeneralAppIdDecoder * generalDecoder;
+@property (nonatomic, retain) ZXBitArray * information;
+
+@end
+
 @implementation ZXAbstractExpandedDecoder
 
-- (id) initWithInformation:(ZXBitArray *)anInformation {
+@synthesize generalDecoder;
+@synthesize information;
+
+- (id)initWithInformation:(ZXBitArray *)anInformation {
   if (self = [super init]) {
-    information = [anInformation retain];
-    generalDecoder = [[ZXGeneralAppIdDecoder alloc] initWithInformation:information];
+    self.information = anInformation;
+    self.generalDecoder = [[[ZXGeneralAppIdDecoder alloc] initWithInformation:anInformation] autorelease];
   }
+
   return self;
 }
 
-- (NSString *) parseInformation {
+- (void)dealloc {
+  [information release];
+  [generalDecoder release];
+
+  [super dealloc];
+}
+
+- (NSString *)parseInformation {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
 }
 
-+ (ZXAbstractExpandedDecoder *) createDecoder:(ZXBitArray *)information {
++ (ZXAbstractExpandedDecoder *)createDecoder:(ZXBitArray *)information {
   if ([information get:1]) {
     return [[[ZXAI01AndOtherAIs alloc] initWithInformation:information] autorelease];
   } else if (![information get:2]) {
@@ -72,12 +90,6 @@
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"unknown decoder: %@", information]
                                userInfo:nil];
-}
-
-- (void) dealloc {
-  [information release];
-  [generalDecoder release];
-  [super dealloc];
 }
 
 @end

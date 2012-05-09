@@ -1,17 +1,12 @@
-/**
- * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
- * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
- */
-
 @class ZXBitArray, ZXGeneralAppIdDecoder;
 
-@interface ZXAbstractExpandedDecoder : NSObject {
-  ZXBitArray * information;
-  ZXGeneralAppIdDecoder * generalDecoder;
-}
+@interface ZXAbstractExpandedDecoder : NSObject
 
-- (id) initWithInformation:(ZXBitArray *)information;
-- (NSString *) parseInformation;
-+ (ZXAbstractExpandedDecoder *) createDecoder:(ZXBitArray *)information;
+@property (nonatomic, retain, readonly) ZXGeneralAppIdDecoder * generalDecoder;
+@property (nonatomic, retain, readonly) ZXBitArray * information;
+
+- (id)initWithInformation:(ZXBitArray *)information;
+- (NSString *)parseInformation;
++ (ZXAbstractExpandedDecoder *)createDecoder:(ZXBitArray *)information;
 
 @end

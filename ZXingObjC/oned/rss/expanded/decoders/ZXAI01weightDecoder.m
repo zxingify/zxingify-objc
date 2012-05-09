@@ -3,8 +3,8 @@
 
 @implementation ZXAI01weightDecoder
 
-- (void) encodeCompressedWeight:(NSMutableString *)buf currentPos:(int)currentPos weightSize:(int)weightSize {
-  int originalWeightNumeric = [generalDecoder extractNumericValueFromBitArray:currentPos bits:weightSize];
+- (void)encodeCompressedWeight:(NSMutableString *)buf currentPos:(int)currentPos weightSize:(int)weightSize {
+  int originalWeightNumeric = [self.generalDecoder extractNumericValueFromBitArray:currentPos bits:weightSize];
   [self addWeightCode:buf weight:originalWeightNumeric];
 
   int weightNumeric = [self checkWeight:originalWeightNumeric];
@@ -20,13 +20,13 @@
   [buf appendFormat:@"%d", weightNumeric];
 }
 
-- (void) addWeightCode:(NSMutableString *)buf weight:(int)weight {
+- (void)addWeightCode:(NSMutableString *)buf weight:(int)weight {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
 }
 
-- (int) checkWeight:(int)weight {
+- (int)checkWeight:(int)weight {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

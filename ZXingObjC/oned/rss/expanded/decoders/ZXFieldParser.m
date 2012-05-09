@@ -9,8 +9,8 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
 
 @interface ZXFieldParser ()
 
-+ (NSString *) processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation;
-+ (NSString *) processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation;
++ (NSString *)processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation;
++ (NSString *)processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation;
 
 @end
 
@@ -171,7 +171,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   }
 }
 
-+ (NSString *) parseFieldsInGeneralPurpose:(NSString *)rawInformation {
++ (NSString *)parseFieldsInGeneralPurpose:(NSString *)rawInformation {
   [self setup];
 
   if ([rawInformation length] == 0) {
@@ -190,7 +190,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                         rawInformation:rawInformation];
       }
       return [self processFixedAI:2
-                   fieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                        fieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
                    rawInformation:rawInformation];
     }
   }
@@ -247,7 +247,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-+ (NSString *) processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation {
++ (NSString *)processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation {
   if ([rawInformation length] < aiSize) {
     @throw [ZXNotFoundException notFoundInstance];
   }
@@ -265,8 +265,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   int maxSize;
   if ([rawInformation length] < aiSize + variableFieldSize) {
     maxSize = [rawInformation length];
-  }
-   else {
+  } else {
     maxSize = aiSize + variableFieldSize;
   }
   NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, maxSize)];

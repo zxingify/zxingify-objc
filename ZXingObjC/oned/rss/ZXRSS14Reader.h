@@ -6,11 +6,6 @@
 
 @class ZXDecodeHints, ZXResult;
 
-@interface ZXRSS14Reader : ZXAbstractRSSReader {
-  NSMutableArray * possibleLeftPairs;
-  NSMutableArray * possibleRightPairs;
-}
-
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
+@interface ZXRSS14Reader : ZXAbstractRSSReader
 
 @end

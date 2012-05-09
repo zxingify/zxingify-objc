@@ -12,17 +12,17 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
 @interface ZXUPCEANExtensionSupport ()
 
-- (int) determineCheckDigit:(int)lgPatternFound;
-- (int) extensionChecksum:(NSString *)s;
-- (NSMutableDictionary *) parseExtensionString:(NSString *)raw;
-- (NSNumber *) parseExtension2String:(NSString *)raw;
-- (NSString *) parseExtension5String:(NSString *)raw;
+- (int)determineCheckDigit:(int)lgPatternFound;
+- (int)extensionChecksum:(NSString *)s;
+- (NSMutableDictionary *)parseExtensionString:(NSString *)raw;
+- (NSNumber *)parseExtension2String:(NSString *)raw;
+- (NSString *)parseExtension5String:(NSString *)raw;
 
 @end
 
 @implementation ZXUPCEANExtensionSupport
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset {
   NSArray * extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN patternLen:sizeof(EXTENSION_START_PATTERN)/sizeof(int)];
 
   NSMutableString * result = [NSMutableString string];
@@ -31,19 +31,19 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   NSMutableDictionary * extensionData = [self parseExtensionString:result];
 
   ZXResult * extensionResult = [[[ZXResult alloc] initWithText:result
-                                                  rawBytes:nil
-                                                    length:0
-                                              resultPoints:[NSArray arrayWithObjects:
-                                                            [[[ZXResultPoint alloc] initWithX:([[extensionStartRange objectAtIndex:0] intValue] + [[extensionStartRange objectAtIndex:1] intValue]) / 2.0f y:(float)rowNumber] autorelease],
-                                                            [[[ZXResultPoint alloc] initWithX:(float)end y:(float)rowNumber] autorelease], nil]
-                                                    format:kBarcodeFormatUPCEANExtension] autorelease];
+                                                      rawBytes:NULL
+                                                        length:0
+                                                  resultPoints:[NSArray arrayWithObjects:
+                                                                [[[ZXResultPoint alloc] initWithX:([[extensionStartRange objectAtIndex:0] intValue] + [[extensionStartRange objectAtIndex:1] intValue]) / 2.0f y:(float)rowNumber] autorelease],
+                                                                [[[ZXResultPoint alloc] initWithX:(float)end y:(float)rowNumber] autorelease], nil]
+                                                        format:kBarcodeFormatUPCEANExtension] autorelease];
   if (extensionData != nil) {
     [extensionResult putAllMetadata:extensionData];
   }
   return extensionResult;
 }
 
-- (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
   const int countersLen = 4;
   int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
@@ -54,7 +54,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   for (int x = 0; x < 5 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS];
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    for (int i = 0; i < countersLen; i++) {
       rowOffset += counters[i];
     }
     if (bestMatch >= 10) {
@@ -70,7 +70,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
     }
   }
 
-  if ([result length] != 5) {
+  if (result.length != 5) {
     @throw [ZXNotFoundException notFoundInstance];
   }
 
@@ -82,7 +82,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return rowOffset;
 }
 
-- (int) extensionChecksum:(NSString *)s {
+- (int)extensionChecksum:(NSString *)s {
   int length = [s length];
   int sum = 0;
   for (int i = length - 2; i >= 0; i -= 2) {
@@ -96,7 +96,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return sum % 10;
 }
 
-- (int) determineCheckDigit:(int)lgPatternFound {
+- (int)determineCheckDigit:(int)lgPatternFound {
   for (int d = 0; d < 10; d++) {
     if (lgPatternFound == CHECK_DIGIT_ENCODINGS[d]) {
       return d;
@@ -106,12 +106,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 }
 
 
-/**
- * @param raw raw content of extension
- * @return formatted interpretation of raw content as a {@link Hashtable} mapping
- * one {@link ResultMetadataType} to appropriate value, or <code>null</code> if not known
- */
-- (NSMutableDictionary *) parseExtensionString:(NSString *)raw {
+- (NSMutableDictionary *)parseExtensionString:(NSString *)raw {
   ZXResultMetadataType type;
   id value;
 
@@ -135,11 +130,11 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return result;
 }
 
-- (NSNumber *) parseExtension2String:(NSString *)raw {
+- (NSNumber *)parseExtension2String:(NSString *)raw {
   return [NSNumber numberWithInt:[raw intValue]];
 }
 
-- (NSString *) parseExtension5String:(NSString *)raw {
+- (NSString *)parseExtension5String:(NSString *)raw {
   NSString * currency;
   switch ([raw characterAtIndex:0]) {
   case '0':

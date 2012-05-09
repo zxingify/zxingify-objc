@@ -2,12 +2,12 @@
 #import "ZXNotFoundException.h"
 #import "ZXUPCEReader.h"
 
-
 /**
  * The pattern that marks the middle, and end, of a UPC-E pattern.
  * There is no "second half" to a UPC-E barcode.
  */
-const int MIDDLE_END_PATTERN[6] = {1, 1, 1, 1, 1, 1};
+const int MIDDLE_END_PATTERN_LEN = 6;
+const int MIDDLE_END_PATTERN[MIDDLE_END_PATTERN_LEN] = {1, 1, 1, 1, 1, 1};
 
 /**
  * See {@link #L_AND_G_PATTERNS}; these values similarly represent patterns of
@@ -21,23 +21,38 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 
 @interface ZXUPCEReader ()
 
-- (void) determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound;
+@property (nonatomic, assign) int* decodeMiddleCounters;
+
+- (void)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound;
 
 @end
 
 @implementation ZXUPCEReader
 
-- (id) init {
+@synthesize decodeMiddleCounters;
+
+- (id)init {
   if (self = [super init]) {
-    decodeMiddleCounters[0] = 0;
-    decodeMiddleCounters[1] = 0;
-    decodeMiddleCounters[2] = 0;
-    decodeMiddleCounters[3] = 0;
+    self.decodeMiddleCounters = (int*)malloc(sizeof(4) * sizeof(int));
+    self.decodeMiddleCounters[0] = 0;
+    self.decodeMiddleCounters[1] = 0;
+    self.decodeMiddleCounters[2] = 0;
+    self.decodeMiddleCounters[3] = 0;
   }
+
   return self;
 }
 
-- (int) decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
+- (void)dealloc {
+  if (self.decodeMiddleCounters != NULL) {
+    free(self.decodeMiddleCounters);
+    self.decodeMiddleCounters = NULL;
+  }
+
+  [super dealloc];
+}
+
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
   const int countersLen = 4;
   int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
@@ -61,18 +76,16 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   return rowOffset;
 }
 
-- (NSArray *) decodeEnd:(ZXBitArray *)row endStart:(int)endStart {
-  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int*)MIDDLE_END_PATTERN patternLen:sizeof(MIDDLE_END_PATTERN)/sizeof(int)];
+- (NSArray *)decodeEnd:(ZXBitArray *)row endStart:(int)endStart {
+  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int*)MIDDLE_END_PATTERN patternLen:MIDDLE_END_PATTERN_LEN];
 }
 
-- (BOOL) checkChecksum:(NSString *)s {
+- (BOOL)checkChecksum:(NSString *)s {
   return [super checkChecksum:[ZXUPCEReader convertUPCEtoUPCA:s]];
 }
 
-- (void) determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
-
+- (void)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
   for (int numSys = 0; numSys <= 1; numSys++) {
-
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
         [resultString insertString:[NSString stringWithFormat:@"%C", (unichar)'0' + numSys] atIndex:0];
@@ -80,24 +93,19 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
         return;
       }
     }
-
   }
 
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (ZXBarcodeFormat) barcodeFormat {
+- (ZXBarcodeFormat)barcodeFormat {
   return kBarcodeFormatUPCE;
 }
 
-
 /**
  * Expands a UPC-E value back into its full, equivalent UPC-A code value.
- * 
- * @param upce UPC-E code as string of digits
- * @return equivalent UPC-A code as string of digits
  */
-+ (NSString *) convertUPCEtoUPCA:(NSString *)upce {
++ (NSString *)convertUPCEtoUPCA:(NSString *)upce {
   NSMutableString * result = [NSMutableString stringWithCapacity:12];
   [result appendFormat:@"%C", [upce characterAtIndex:0]];
   unichar lastChar = [upce characterAtIndex:[upce length] - 1];
@@ -128,7 +136,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
     break;
   }
   [result appendFormat:@"%C", [upce characterAtIndex:7]];
-  return result;
+  return [NSString stringWithString:result];
 }
 
 @end

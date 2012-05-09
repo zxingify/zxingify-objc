@@ -1,12 +1,20 @@
 #import "ZXRSSFinderPattern.h"
 
+@interface ZXRSSFinderPattern ()
+
+@property (nonatomic, assign) int value;
+@property (nonatomic, retain) NSArray * startEnd;
+@property (nonatomic, retain) NSArray * resultPoints;
+
+@end
+
 @implementation ZXRSSFinderPattern
 
 @synthesize value;
 @synthesize startEnd;
 @synthesize resultPoints;
 
-- (id) initWithValue:(int)aValue startEnd:(NSArray *)aStartEnd start:(int)aStart end:(int)anEnd rowNumber:(int)aRowNumber {
+- (id)initWithValue:(int)aValue startEnd:(NSArray *)aStartEnd start:(int)aStart end:(int)anEnd rowNumber:(int)aRowNumber {
   if (self = [super init]) {
     self.value = aValue;
     self.startEnd = aStartEnd;
@@ -15,12 +23,14 @@
                          [[[ZXResultPoint alloc] initWithX:(float)anEnd y:(float)aRowNumber] autorelease],
                          nil];
   }
+
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [startEnd release];
   [resultPoints release];
+
   [super dealloc];
 }
 

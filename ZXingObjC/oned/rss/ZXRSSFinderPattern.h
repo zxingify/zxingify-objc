@@ -1,15 +1,11 @@
 #import "ZXResultPoint.h"
 
-@interface ZXRSSFinderPattern : NSObject {
-  int value;
-  NSArray * startEnd;
-  NSArray * resultPoints;
-}
+@interface ZXRSSFinderPattern : NSObject
 
-@property(nonatomic, assign) int value;
-@property(nonatomic, retain) NSArray * startEnd;
-@property(nonatomic, retain) NSArray * resultPoints;
+@property (nonatomic, assign, readonly) int value;
+@property (nonatomic, retain, readonly) NSArray * startEnd;
+@property (nonatomic, retain, readonly) NSArray * resultPoints;
 
-- (id) initWithValue:(int)value startEnd:(NSArray *)startEnd start:(int)start end:(int)end rowNumber:(int)rowNumber;
+- (id)initWithValue:(int)value startEnd:(NSArray *)startEnd start:(int)start end:(int)end rowNumber:(int)rowNumber;
 
 @end
