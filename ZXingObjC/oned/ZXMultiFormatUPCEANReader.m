@@ -9,45 +9,59 @@
 #import "ZXUPCAReader.h"
 #import "ZXUPCEReader.h"
 
+@interface ZXMultiFormatUPCEANReader ()
+
+@property (nonatomic, retain) NSMutableArray * readers;
+
+@end
+
 @implementation ZXMultiFormatUPCEANReader
 
-- (id) initWithHints:(ZXDecodeHints *)hints {
+@synthesize readers;
+
+- (id)initWithHints:(ZXDecodeHints *)hints {
   if (self = [super init]) {
-    readers = [[NSMutableArray alloc] init];
+    self.readers = [NSMutableArray array];
 
     if (hints != nil) {
       if ([hints containsFormat:kBarcodeFormatEan13]) {
-        [readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
       } else if ([hints containsFormat:kBarcodeFormatUPCA]) {
-        [readers addObject:[[[ZXUPCAReader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXUPCAReader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatEan8]) {
-        [readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatUPCE]) {
-        [readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
       }
     }
 
-    if ([readers count] == 0) {
-      [readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
-      [readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
-      [readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
+    if ([self.readers count] == 0) {
+      [self.readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
     }
   }
+
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (void)dealloc {
+  [readers release];
+
+  [super dealloc];
+}
+
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * startGuardPattern = [ZXUPCEANReader findStartGuardPattern:row];
-  for (ZXUPCEANReader * reader in readers) {
+  for (ZXUPCEANReader * reader in self.readers) {
     ZXResult * result;
     @try {
       result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints];
-    }
-    @catch (ZXReaderException * re) {
+    } @catch (ZXReaderException * re) {
       continue;
     }
     // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
@@ -62,14 +76,14 @@
     // result if appropriate.
     //
     // But, don't return UPC-A if UPC-A was not a requested format!
-    BOOL ean13MayBeUPCA = kBarcodeFormatEan13 == result.barcodeFormat && [[result text] characterAtIndex:0] == '0';
+    BOOL ean13MayBeUPCA = kBarcodeFormatEan13 == result.barcodeFormat && [result.text characterAtIndex:0] == '0';
     BOOL canReturnUPCA = hints == nil || [hints containsFormat:kBarcodeFormatUPCA];
     if (ean13MayBeUPCA && canReturnUPCA) {
       return [[[ZXResult alloc] initWithText:[[result text] substringFromIndex:1]
                                     rawBytes:nil
-                                    length:0
-                                    resultPoints:[result resultPoints]
-                                    format:kBarcodeFormatUPCA] autorelease];
+                                      length:0
+                                resultPoints:result.resultPoints
+                                      format:kBarcodeFormatUPCA] autorelease];
     }
     return result;
   }
@@ -77,16 +91,10 @@
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (void) reset {
-  for (id<ZXReader> reader in readers) {
+- (void)reset {
+  for (id<ZXReader> reader in self.readers) {
     [reader reset];
   }
-
-}
-
-- (void) dealloc {
-  [readers release];
-  [super dealloc];
 }
 
 @end

@@ -31,36 +31,65 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   {2,2,9,1}  // F
 };
 
+@interface ZXAbstractRSSReader ()
+
+@property (nonatomic, retain) NSMutableArray * decodeFinderCounters;
+@property (nonatomic, retain) NSMutableArray * dataCharacterCounters;
+@property (nonatomic, retain) NSMutableArray * oddRoundingErrors;
+@property (nonatomic, retain) NSMutableArray * evenRoundingErrors;
+@property (nonatomic, retain) NSMutableArray * oddCounts;
+@property (nonatomic, retain) NSMutableArray * evenCounts;
+
+@end
 
 @implementation ZXAbstractRSSReader
 
-- (id) init {
+@synthesize decodeFinderCounters;
+@synthesize dataCharacterCounters;
+@synthesize oddRoundingErrors;
+@synthesize evenRoundingErrors;
+@synthesize oddCounts;
+@synthesize evenCounts;
+
+- (id)init {
   if (self = [super init]) {
-    dataCharacterCounters = [NSMutableArray arrayWithCapacity:8];
+    self.dataCharacterCounters = [NSMutableArray arrayWithCapacity:8];
     for (int i = 0; i < 8; i++) {
-      [dataCharacterCounters addObject:[NSNumber numberWithInt:0]];
+      [self.dataCharacterCounters addObject:[NSNumber numberWithInt:0]];
     }
 
-    decodeFinderCounters = [NSMutableArray arrayWithCapacity:4];
-    oddRoundingErrors = [NSMutableArray arrayWithCapacity:4];
-    evenRoundingErrors = [NSMutableArray arrayWithCapacity:4];
+    self.decodeFinderCounters = [NSMutableArray arrayWithCapacity:4];
+    self.oddRoundingErrors = [NSMutableArray arrayWithCapacity:4];
+    self.evenRoundingErrors = [NSMutableArray arrayWithCapacity:4];
     for (int i = 0; i < 4; i++) {
-      [decodeFinderCounters addObject:[NSNumber numberWithInt:0]];
-      [oddRoundingErrors addObject:[NSNumber numberWithInt:0]];
-      [evenRoundingErrors addObject:[NSNumber numberWithInt:0]];
+      [self.decodeFinderCounters addObject:[NSNumber numberWithInt:0]];
+      [self.oddRoundingErrors addObject:[NSNumber numberWithInt:0]];
+      [self.evenRoundingErrors addObject:[NSNumber numberWithInt:0]];
     }
 
-    oddCounts = [NSMutableArray arrayWithCapacity:dataCharacterCounters.count / 2];
-    evenCounts = [NSMutableArray arrayWithCapacity:dataCharacterCounters.count / 2];
-    for (int i = 0; i < dataCharacterCounters.count / 2; i++) {
-      [oddCounts addObject:[NSNumber numberWithInt:0]];
-      [evenCounts addObject:[NSNumber numberWithInt:0]];
+    self.oddCounts = [NSMutableArray arrayWithCapacity:dataCharacterCounters.count / 2];
+    self.evenCounts = [NSMutableArray arrayWithCapacity:dataCharacterCounters.count / 2];
+    for (int i = 0; i < self.dataCharacterCounters.count / 2; i++) {
+      [self.oddCounts addObject:[NSNumber numberWithInt:0]];
+      [self.evenCounts addObject:[NSNumber numberWithInt:0]];
     }
   }
+
   return self;
 }
 
-+ (int) parseFinderValue:(int[])counters countersSize:(int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType {
+- (void)dealloc {
+  [decodeFinderCounters release];
+  [dataCharacterCounters release];
+  [oddRoundingErrors release];
+  [evenRoundingErrors release];
+  [oddCounts release];
+  [evenCounts release];
+
+  [super dealloc];
+}
+
++ (int)parseFinderValue:(int[])counters countersSize:(int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType {
   switch (finderPatternType) {
     case RSS_PATTERNS_RSS14_PATTERNS:
       for (int value = 0; value < RSS14_FINDER_PATTERNS_LEN; value++) {
@@ -85,7 +114,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-+ (int) count:(int[])array {
++ (int)count:(int[])array {
   int count = 0;
 
   for (int i = 0; i < sizeof((int*)array) / sizeof(int); i++) {
@@ -95,7 +124,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   return count;
 }
 
-+ (int) countArray:(NSArray*)array {
++ (int)countArray:(NSArray*)array {
   int count = 0;
   
   for (NSNumber *i in array) {
@@ -105,7 +134,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   return count;
 }
 
-+ (void) increment:(NSMutableArray *)array errors:(NSArray *)errors {
++ (void)increment:(NSMutableArray *)array errors:(NSArray *)errors {
   int index = 0;
   float biggestError = [[errors objectAtIndex:0] intValue];
 
@@ -119,7 +148,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   [array replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:[[array objectAtIndex:index] intValue] + 1]];
 }
 
-+ (void) decrement:(NSMutableArray *)array errors:(NSArray *)errors {
++ (void)decrement:(NSMutableArray *)array errors:(NSArray *)errors {
   int index = 0;
   float biggestError = [[errors objectAtIndex:0] intValue];
 
@@ -133,7 +162,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   [array replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:[[array objectAtIndex:index] intValue] - 1]];
 }
 
-+ (BOOL) isFinderPattern:(int[])counters {
++ (BOOL)isFinderPattern:(int[])counters {
   int firstTwoSum = counters[0] + counters[1];
   int sum = firstTwoSum + counters[2] + counters[3];
   float ratio = (float)firstTwoSum / (float)sum;
@@ -153,16 +182,6 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
     return maxCounter < 10 * minCounter;
   }
   return NO;
-}
-
-- (void) dealloc {
-  [decodeFinderCounters release];
-  [dataCharacterCounters release];
-  [oddRoundingErrors release];
-  [evenRoundingErrors release];
-  [oddCounts release];
-  [evenCounts release];
-  [super dealloc];
 }
 
 @end

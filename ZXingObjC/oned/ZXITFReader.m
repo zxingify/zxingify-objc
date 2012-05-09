@@ -42,24 +42,29 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 @interface ZXITFReader ()
 
-- (int) decodeDigit:(int[])counters countersSize:(int)countersSize;
-- (void) decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString;
-- (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen;
-- (int) skipWhiteSpace:(ZXBitArray *)row;
-- (void) validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern;
+@property (nonatomic, assign) int narrowLineWidth;
+
+- (int)decodeDigit:(int[])counters countersSize:(int)countersSize;
+- (void)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString;
+- (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen;
+- (int)skipWhiteSpace:(ZXBitArray *)row;
+- (void)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern;
 
 @end
 
 @implementation ZXITFReader
 
-- (id) init {
+@synthesize narrowLineWidth;
+
+- (id)init {
   if (self = [super init]) {
-    narrowLineWidth = -1;
+    self.narrowLineWidth = -1;
   }
+
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * startRange = [self decodeStart:row];
   NSArray * endRange = [self decodeEnd:row];
 
@@ -93,19 +98,14 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   return [[[ZXResult alloc] initWithText:resultString
                                 rawBytes:nil
                                   length:0
-                            resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
+                            resultPoints:[NSArray arrayWithObjects:
+                                          [[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
                                           [[[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
                                   format:kBarcodeFormatITF] autorelease];
 }
 
 
-/**
- * @param row          row of black/white values to search
- * @param payloadStart offset of start pattern
- * @param resultString {@link NSMutableString} to append decoded chars to
- * @throws NotFoundException if decoding could not complete successfully
- */
-- (void) decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
+- (void)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
   const int counterDigitPairLen = 10;
   int counterDigitPair[counterDigitPairLen] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -138,17 +138,12 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 /**
  * Identify where the start of the middle / payload section starts.
- * 
- * @param row row of black/white values to search
- * @return Array, containing index of start of 'start block' and end of
- * 'start block'
- * @throws NotFoundException
  */
-- (NSArray *) decodeStart:(ZXBitArray *)row {
+- (NSArray *)decodeStart:(ZXBitArray *)row {
   int endStart = [self skipWhiteSpace:row];
   NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
 
-  narrowLineWidth = ([[startPattern objectAtIndex:1] intValue] - [[startPattern objectAtIndex:0] intValue]) >> 2;
+  self.narrowLineWidth = ([[startPattern objectAtIndex:1] intValue] - [[startPattern objectAtIndex:0] intValue]) >> 2;
 
   [self validateQuietZone:row startPattern:[[startPattern objectAtIndex:0] intValue]];
 
@@ -166,13 +161,9 @@ const int PATTERNS[PATTERNS_LEN][5] = {
  * quiet zone after the end pattern.
  * 
  * ref: http://www.barcode-1.net/i25code.html
- * 
- * @param row bit array representing the scanned barcode.
- * @param startPattern index into row of the start or end pattern.
- * @throws NotFoundException if the quiet zone cannot be found, a ZXReaderException is thrown.
  */
-- (void) validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern {
-  int quietCount = narrowLineWidth * 10;
+- (void)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern {
+  int quietCount = self.narrowLineWidth * 10;
 
   for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
     if ([row get:i]) {
@@ -188,12 +179,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 /**
  * Skip all whitespace until we get to the first black line.
- * 
- * @param row row of black/white values to search
- * @return index of the first black line.
- * @throws NotFoundException Throws exception if no black lines are found in the row
  */
-- (int) skipWhiteSpace:(ZXBitArray *)row {
+- (int)skipWhiteSpace:(ZXBitArray *)row {
   int width = [row size];
   int endStart = 0;
 
@@ -213,13 +200,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 /**
  * Identify where the end of the middle / payload section ends.
- * 
- * @param row row of black/white values to search
- * @return Array, containing index of start of 'end block' and end of 'end
- * block'
- * @throws NotFoundException
  */
-- (NSArray *) decodeEnd:(ZXBitArray *)row {
+- (NSArray *)decodeEnd:(ZXBitArray *)row {
   [row reverse];
 
   @try {
@@ -230,29 +212,18 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     [endPattern replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[row size] - [[endPattern objectAtIndex:1] intValue]]];
     [endPattern replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:[row size] - temp]];
     return endPattern;
-  }
-  @finally {
+  } @finally {
     [row reverse];
   }
 }
 
-
-/**
- * @param row       row of black/white values to search
- * @param rowOffset position to start search
- * @param pattern   pattern of counts of number of black and white pixels that are
- * being searched for as a pattern
- * @return start/end horizontal offset of guard pattern, as an array of two
- * ints
- * @throws NotFoundException if pattern is not found
- */
-- (NSArray *) findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen {
+- (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen {
   int patternLength = patternLen;
   int counters[patternLength];
   for (int i=0; i<patternLength; i++) {
     counters[i] = 0;
   }
-  int width = [row size];
+  int width = row.size;
   BOOL isWhite = NO;
 
   int counterPosition = 0;
@@ -288,12 +259,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 /**
  * Attempts to decode a sequence of ITF black/white lines into single
  * digit.
- * 
- * @param counters the counts of runs of observed black/white/black/... values
- * @return The decoded digit
- * @throws NotFoundException if digit cannot be decoded
  */
-- (int) decodeDigit:(int[])counters countersSize:(int)countersSize {
+- (int)decodeDigit:(int[])counters countersSize:(int)countersSize {
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
   int max = PATTERNS_LEN;

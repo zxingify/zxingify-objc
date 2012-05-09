@@ -60,7 +60,7 @@
   return rowOffset;
 }
 
-- (ZXBarcodeFormat) barcodeFormat {
+- (ZXBarcodeFormat)barcodeFormat {
   return kBarcodeFormatEan8;
 }
 

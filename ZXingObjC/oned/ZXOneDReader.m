@@ -12,22 +12,20 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
 @interface ZXOneDReader ()
 
-- (ZXResult *) doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
+- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
 
 @end
 
 @implementation ZXOneDReader
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image {
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
-
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   @try {
     return [self doDecode:image hints:hints];
-  }
-  @catch (ZXNotFoundException * nfe) {
+  } @catch (ZXNotFoundException * nfe) {
     BOOL tryHarder = hints != nil && hints.tryHarder;
     if (tryHarder && [image rotateSupported]) {
       ZXBinaryBitmap * rotatedImage = [image rotateCounterClockwise];
@@ -44,19 +42,19 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       for (int i = 0; i < [points count]; i++) {
         [points replaceObjectAtIndex:i
                           withObject:[[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint*)[points objectAtIndex:i] y]             
-                                                                   y:[(ZXResultPoint*)[points objectAtIndex:i] x]]
+                                                                     y:[(ZXResultPoint*)[points objectAtIndex:i] x]]
                                       autorelease]];
       }
 
       return result;
-    }
-     else {
+    } else {
       @throw nfe;
     }
   }
 }
 
-- (void) reset {
+- (void)reset {
+  
 }
 
 
@@ -68,15 +66,10 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily
  * decided that moving up and down by about 1/16 of the image is pretty good; we try more of the
  * image if "trying harder".
- * 
- * @param image The image to decode
- * @param hints Any hints that were requested
- * @return The contents of the decoded barcode
- * @throws NotFoundException Any spontaneous errors which occur
  */
-- (ZXResult *) doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
-  int width = [image width];
-  int height = [image height];
+- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+  int width = image.width;
+  int height = image.height;
   ZXBitArray * row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
   int middle = height >> 1;
   BOOL tryHarder = hints != nil && hints.tryHarder;
@@ -98,8 +91,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
     @try {
       row = [image blackRow:rowNumber row:row];
-    }
-    @catch (ZXNotFoundException * nfe) {
+    } @catch (ZXNotFoundException * nfe) {
       continue;
     }
 
@@ -119,11 +111,11 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
           NSMutableArray * points = [result resultPoints];
           [points replaceObjectAtIndex:0
                             withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:0] x]
-                                                                     y:[(ZXResultPoint*)[points objectAtIndex:0] y]]
+                                                                       y:[(ZXResultPoint*)[points objectAtIndex:0] y]]
                                         autorelease]];
           [points replaceObjectAtIndex:1
                             withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:1] x]
-                                                                     y:[(ZXResultPoint*)[points objectAtIndex:1] y]]
+                                                                       y:[(ZXResultPoint*)[points objectAtIndex:1] y]]
                                         autorelease]];
         }
         return result;
@@ -131,7 +123,6 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       @catch (ZXReaderException * re) {
       }
     }
-
   }
 
   @throw [ZXNotFoundException notFoundInstance];
@@ -144,21 +135,15 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * of the array. If the row starts on a white pixel at the given start point, then the first count
  * recorded is the run of white pixels starting from that point; likewise it is the count of a run
  * of black pixels if the row begin on a black pixels at that point.
- * 
- * @param row row to count from
- * @param start offset into row to start at
- * @param counters array into which to record counts
- * @throws NotFoundException if counters cannot be filled entirely from row before running out
- * of pixels
  */
-+ (void) recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
++ (void)recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
   int numCounters = countersSize;
 
   for (int i = 0; i < numCounters; i++) {
     counters[i] = 0;
   }
 
-  int end = [row size];
+  int end = row.size;
   if (start >= end) {
     @throw [ZXNotFoundException notFoundInstance];
   }
@@ -187,7 +172,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   }
 }
 
-+ (void) recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
++ (void)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
   int numTransitionsLeft = countersSize;
   BOOL last = [row get:start];
 
@@ -210,15 +195,12 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * target pattern. This is reported as the ratio of the total variance from the expected pattern
  * proportions across all pattern elements, to the length of the pattern.
  * 
- * @param counters observed counters
- * @param pattern expected pattern
- * @param maxIndividualVariance The most any counter can differ before we give up
- * @return ratio of total variance between counters and pattern compared to total pattern size,
+ * Returns ratio of total variance between counters and pattern compared to total pattern size,
  * where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
  * the total variance between counters and patterns equals the pattern length, higher values mean
  * even more variance
  */
-+ (int) patternMatchVariance:(int[])counters countersSize:(int)countersSize pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (int)patternMatchVariance:(int[])counters countersSize:(int)countersSize pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;
@@ -250,16 +232,10 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
 
 /**
- * <p>Attempts to decode a one-dimensional barcode format given a single row of
- * an image.</p>
- * 
- * @param rowNumber row number from top of the row
- * @param row the black/white pixel data of the row
- * @param hints decode hints
- * @return {@link Result} containing encoded string and start/end of barcode
- * @throws NotFoundException if an error occurs or barcode cannot be found
+ * Attempts to decode a one-dimensional barcode format given a single row of
+ * an image.
  */
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

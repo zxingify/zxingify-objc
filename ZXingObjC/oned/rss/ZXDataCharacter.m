@@ -1,15 +1,23 @@
 #import "ZXDataCharacter.h"
 
+@interface ZXDataCharacter ()
+
+@property (nonatomic, assign) int value;
+@property (nonatomic, assign) int checksumPortion;
+
+@end
+
 @implementation ZXDataCharacter
 
 @synthesize value;
 @synthesize checksumPortion;
 
-- (id) initWithValue:(int)aValue checksumPortion:(int)aChecksumPortion {
+- (id)initWithValue:(int)aValue checksumPortion:(int)aChecksumPortion {
   if (self = [super init]) {
-    value = aValue;
-    checksumPortion = aChecksumPortion;
+    self.value = aValue;
+    self.checksumPortion = aChecksumPortion;
   }
+
   return self;
 }
 

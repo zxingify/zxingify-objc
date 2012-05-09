@@ -1,16 +1,9 @@
 #import "ZXOneDReader.h"
 
-/**
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- */
-
 @class ZXDecodeHints;
 
-@interface ZXMultiFormatOneDReader : ZXOneDReader {
-  NSMutableArray * readers;
-}
+@interface ZXMultiFormatOneDReader : ZXOneDReader
 
-- (id) initWithHints:(ZXDecodeHints *)hints;
+- (id)initWithHints:(ZXDecodeHints *)hints;
 
 @end

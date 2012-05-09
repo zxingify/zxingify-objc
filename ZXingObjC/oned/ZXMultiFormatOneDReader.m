@@ -9,83 +9,92 @@
 #import "ZXRSS14Reader.h"
 #import "ZXRSSExpandedReader.h"
 
+@interface ZXMultiFormatOneDReader ()
+
+@property (nonatomic, retain) NSMutableArray * readers;
+
+@end
+
 @implementation ZXMultiFormatOneDReader
 
-- (id) initWithHints:(ZXDecodeHints *)hints {
+@synthesize readers;
+
+- (id)initWithHints:(ZXDecodeHints *)hints {
   if (self = [super init]) {
     BOOL useCode39CheckDigit = hints != nil && hints.assumeCode39CheckDigit;
     if (hints != nil) {
-      readers = [[NSMutableArray alloc] init];
+      self.readers = [NSMutableArray array];
       if ([hints containsFormat:kBarcodeFormatEan13] ||
           [hints containsFormat:kBarcodeFormatUPCA] ||
           [hints containsFormat:kBarcodeFormatEan8] ||
           [hints containsFormat:kBarcodeFormatUPCE]) {
-        [readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
+        [self.readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode39]) {
-        [readers addObject:[[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit] autorelease]];
+        [self.readers addObject:[[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode93]) {
-        [readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode128]) {
-        [readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatITF]) {
-        [readers addObject:[[[ZXITFReader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXITFReader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCodabar]) {
-        [readers addObject:[[[ZXCodaBarReader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXCodaBarReader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatRSS14]) {
-        [readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
       }
 
       if ([hints containsFormat:kBarcodeFormatRSSExpanded]) {
-        [readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
+        [self.readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
       }
     }
 
-    if ([readers count] == 0) {
-      [readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
-      [readers addObject:[[[ZXCode39Reader alloc] init] autorelease]];
-      [readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
-      [readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
-      [readers addObject:[[[ZXITFReader alloc] init] autorelease]];
-      [readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
-      [readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
+    if ([self.readers count] == 0) {
+      [self.readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[[ZXCode39Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXITFReader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
     }
   }
+
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
-  for (ZXOneDReader * reader in readers) {
+- (void)dealloc {
+  [readers release];
+
+  [super dealloc];
+}
+
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+  for (ZXOneDReader * reader in self.readers) {
     @try {
       return [reader decodeRow:rowNumber row:row hints:hints];
-    }
-    @catch (ZXReaderException * re) {
+    } @catch (ZXReaderException * re) {
     }
   }
 
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (void) reset {
-  for (id<ZXReader> reader in readers) {
+- (void)reset {
+  for (id<ZXReader> reader in self.readers) {
     [reader reset];
   }
-}
-
-- (void) dealloc {
-  [readers release];
-  [super dealloc];
 }
 
 @end

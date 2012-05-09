@@ -3,7 +3,7 @@
 
 @implementation ZXITFWriter
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (format != kBarcodeFormatITF) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode ITF"];
   }
@@ -11,7 +11,7 @@
   return [super encode:contents format:format width:width height:height hints:hints];
 }
 
-- (NSArray *) encode:(NSString *)contents {
+- (NSArray *)encode:(NSString *)contents {
   int length = [contents length];
   if (length > 80) {
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d", length];

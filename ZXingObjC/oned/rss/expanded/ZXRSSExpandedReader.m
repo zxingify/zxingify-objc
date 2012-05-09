@@ -324,10 +324,10 @@ const int MAX_PAIRS = 11;
     end = firstElementStart;
     firstCounter = end - startEnd[1];
   }
-  int countersLen = [decodeFinderCounters count];
+  int countersLen = [self.decodeFinderCounters count];
   int counters[countersLen];
   for (int i = countersLen - 1; i > 0; i--) {
-    counters[i] = [[decodeFinderCounters objectAtIndex:i - 1] intValue];
+    counters[i] = [[self.decodeFinderCounters objectAtIndex:i - 1] intValue];
   }
 
   counters[0] = firstCounter;
@@ -359,10 +359,10 @@ const int MAX_PAIRS = 11;
   }
   int numModules = 17;
   float elementWidth = (float)[ZXAbstractRSSReader count:counters] / (float)numModules;
-  NSMutableArray * _oddCounts = [[oddCounts mutableCopy] autorelease];
-  NSMutableArray * _evenCounts = [[evenCounts mutableCopy] autorelease];
-  NSMutableArray * _oddRoundingErrors = [[oddRoundingErrors mutableCopy] autorelease];
-  NSMutableArray * _evenRoundingErrors = [[evenRoundingErrors mutableCopy] autorelease];
+  NSMutableArray * _oddCounts = [NSMutableArray arrayWithArray:self.oddCounts];
+  NSMutableArray * _evenCounts = [NSMutableArray arrayWithArray:self.evenCounts];
+  NSMutableArray * _oddRoundingErrors = [NSMutableArray arrayWithArray:self.oddRoundingErrors];
+  NSMutableArray * _evenRoundingErrors = [NSMutableArray arrayWithArray:self.evenRoundingErrors];
 
   for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
     float value = 1.0f * counters[i] / elementWidth;
@@ -426,8 +426,8 @@ const int MAX_PAIRS = 11;
 }
 
 - (void) adjustOddEvenCounts:(int)numModules {
-  int oddSum = [ZXAbstractRSSReader countArray:oddCounts];
-  int evenSum = [ZXAbstractRSSReader countArray:evenCounts];
+  int oddSum = [ZXAbstractRSSReader countArray:self.oddCounts];
+  int evenSum = [ZXAbstractRSSReader countArray:self.evenCounts];
   int mismatch = oddSum + evenSum - numModules;
   BOOL oddParityBad = (oddSum & 0x01) == 1;
   BOOL evenParityBad = (evenSum & 0x01) == 0;
@@ -495,19 +495,19 @@ const int MAX_PAIRS = 11;
     if (decrementOdd) {
       @throw [ZXNotFoundException notFoundInstance];
     }
-    [ZXAbstractRSSReader increment:oddCounts errors:oddRoundingErrors];
+    [ZXAbstractRSSReader increment:self.oddCounts errors:self.oddRoundingErrors];
   }
   if (decrementOdd) {
-    [ZXAbstractRSSReader decrement:oddCounts errors:oddRoundingErrors];
+    [ZXAbstractRSSReader decrement:self.oddCounts errors:self.oddRoundingErrors];
   }
   if (incrementEven) {
     if (decrementEven) {
       @throw [ZXNotFoundException notFoundInstance];
     }
-    [ZXAbstractRSSReader increment:evenCounts errors:oddRoundingErrors];
+    [ZXAbstractRSSReader increment:self.evenCounts errors:self.oddRoundingErrors];
   }
   if (decrementEven) {
-    [ZXAbstractRSSReader decrement:evenCounts errors:evenRoundingErrors];
+    [ZXAbstractRSSReader decrement:self.evenCounts errors:self.evenRoundingErrors];
   }
 }
 
