@@ -1,4 +1,3 @@
-// -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
  * Copyright 2011 ZXing authors
  *
@@ -17,17 +16,6 @@
 
 #include "ZXCaptureView.h"
 
-@implementation ZXCaptureView {
-}
-
-- (ZXCaptureView*)init {
-  if ((self = [super init])) {
-  }
-  return self;
-}
-
-- (void) dealloc {
-  [super dealloc];
-}
+@implementation ZXCaptureView
 
 @end

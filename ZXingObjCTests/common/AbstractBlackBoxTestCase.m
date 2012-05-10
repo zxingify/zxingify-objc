@@ -6,95 +6,84 @@
 #import "ZXReaderException.h"
 #import "ZXResult.h"
 
-@implementation SummaryResults
-
-@synthesize totalFound;
-@synthesize totalMustPass;
-@synthesize totalTests;
-
-- (id) init {
-  if (self = [super init]) {
-    totalFound = 0;
-    totalMustPass = 0;
-    totalTests = 0;
-  }
-  return self;
-}
-
-- (id) initWithFound:(int)found mustPass:(int)mustPass total:(int)total {
-  if (self = [super init]) {
-    totalFound = found;
-    totalMustPass = mustPass;
-    totalTests = total;
-  }
-  return self;
-}
-
-- (void) add:(SummaryResults *)other {
-  totalFound += other.totalFound;
-  totalMustPass += other.totalMustPass;
-  totalTests += other.totalTests;
-}
-
-- (NSString *) description {
-  return [NSString stringWithFormat:@"\nSUMMARY RESULTS:\n  Decoded %d images out of %d (%d%%, %d required)", totalFound, totalTests, (totalFound * 100 / totalTests), totalMustPass];
-}
-
-@end
-
 @implementation TestResult
 
 @synthesize mustPassCount;
 @synthesize tryHarderCount;
 @synthesize rotation;
 
-- (id) initWithMustPassCount:(int)mustPass tryHarderCount:(int)tryHarder rotation:(float)rot {
+- (id)initWithMustPassCount:(int)mustPass tryHarderCount:(int)tryHarder rotation:(float)rot {
   if (self = [super init]) {
     mustPassCount = mustPass;
     tryHarderCount = tryHarder;
     rotation = rot;
   }
+
   return self;
 }
 
 @end
 
+@interface AbstractBlackBoxTestCase ()
+
+@property (nonatomic, retain) id<ZXReader> barcodeReader;
+@property (nonatomic, assign) ZXBarcodeFormat expectedFormat;
+@property (nonatomic, copy) NSString * testBase;
+@property (nonatomic, retain) NSMutableArray * testResults;
+
+- (NSArray *)imageFiles;
+- (ZXDecodeHints *)hints;
+- (void)runTests;
+- (void)testBlackBoxCountingResults:(BOOL)assertOnFailure;
+- (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees;
+
+@end
+
 @implementation AbstractBlackBoxTestCase
+
+@synthesize barcodeReader;
+@synthesize expectedFormat;
+@synthesize testBase;
+@synthesize testResults;
 
 static ZXDecodeHints* TRY_HARDER_HINT = nil;
 
-+ (void) initialize {
++ (void)initialize {
   if (!TRY_HARDER_HINT) {
     TRY_HARDER_HINT = [[ZXDecodeHints alloc] init];
     TRY_HARDER_HINT.tryHarder = YES;
   }
 }
 
-- (id) initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)reader expectedFormat:(ZXBarcodeFormat)format {
+- (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)reader expectedFormat:(ZXBarcodeFormat)format {
   if (self = [super initWithInvocation:anInvocation]) {
-    testBase = [testBasePathSuffix retain];
-    barcodeReader = [reader retain];
-    expectedFormat = format;
-    testResults = [[NSMutableArray alloc] init];
+    self.testBase = testBasePathSuffix;
+    self.barcodeReader = reader;
+    self.expectedFormat = format;
+    self.testResults = [NSMutableArray array];
   }
+
   return self;
 }
 
+- (void)dealloc {
+  [barcodeReader release];
+  [testBase release];
+  [testResults release];
+
+  [super dealloc];
+}
 
 /**
  * Adds a new test for the current directory of images.
- * 
- * @param mustPassCount The number of images which must decode for the test to pass.
- * @param tryHarderCount The number of images which must pass using the try harder flag.
- * @param rotation The rotation in degrees clockwise to use for this test.
  */
-- (void) addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation {
-  [testResults addObject:[[[TestResult alloc] initWithMustPassCount:mustPassCount tryHarderCount:tryHarderCount rotation:rotation] autorelease]];
+- (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation {
+  [self.testResults addObject:[[[TestResult alloc] initWithMustPassCount:mustPassCount tryHarderCount:tryHarderCount rotation:rotation] autorelease]];
 }
 
-- (NSArray *) imageFiles {
+- (NSArray *)imageFiles {
   NSMutableArray *imageFiles = [NSMutableArray array];
-  for (NSString *file in [[NSBundle bundleForClass:[self class]] pathsForResourcesOfType:nil inDirectory:testBase]) {
+  for (NSString *file in [[NSBundle bundleForClass:[self class]] pathsForResourcesOfType:nil inDirectory:self.testBase]) {
     if ([[file pathExtension] isEqualToString:@"jpg"] ||
         [[file pathExtension] isEqualToString:@"jpeg"] ||
         [[file pathExtension] isEqualToString:@"gif"] ||
@@ -106,27 +95,22 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   return imageFiles;
 }
 
-- (id<ZXReader>) reader {
-  return barcodeReader;
-}
-
-- (ZXDecodeHints *) hints {
+- (ZXDecodeHints *)hints {
   return nil;
 }
 
-- (void) runTests {
+- (void)runTests {
   [self testBlackBoxCountingResults:YES];
 }
 
-- (SummaryResults *) testBlackBoxCountingResults:(BOOL)assertOnFailure {
+- (void)testBlackBoxCountingResults:(BOOL)assertOnFailure {
   if (testResults.count == 0) {
     STFail(@"No test results");
-    return nil;
   }
-  
+
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSArray * imageFiles = [self imageFiles];
-  int testCount = [testResults count];
+  int testCount = [self.testResults count];
   int passedCounts[testCount];
   for (int i = 0; i < testCount; i++) {
     passedCounts[i] = 0;
@@ -154,7 +138,7 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
     }
 
     for (int x = 0; x < testCount; x++) {
-      float rotation = [[testResults objectAtIndex:x] rotation];
+      float rotation = [[self.testResults objectAtIndex:x] rotation];
       ZXImage * rotatedImage = [self rotateImage:image degrees:rotation];
       ZXLuminanceSource * source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
       ZXBinaryBitmap * bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
@@ -173,13 +157,13 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   int totalMustPass = 0;
 
   for (int x = 0; x < testCount; x++) {
-    NSLog(@"Rotation %f degrees:", [[testResults objectAtIndex:x] rotation]);
-    NSLog(@"\t%d of %d images passed (%d required)", passedCounts[x], [imageFiles count], [[testResults objectAtIndex:x] mustPassCount]);
-    NSLog(@"\t%d of %d images passed with try harder (%d required)", tryHarderCounts[x], [imageFiles count], [[testResults objectAtIndex:x] tryHarderCount]);
+    NSLog(@"Rotation %f degrees:", [[self.testResults objectAtIndex:x] rotation]);
+    NSLog(@"\t%d of %d images passed (%d required)", passedCounts[x], [imageFiles count], [[self.testResults objectAtIndex:x] mustPassCount]);
+    NSLog(@"\t%d of %d images passed with try harder (%d required)", tryHarderCounts[x], [imageFiles count], [[self.testResults objectAtIndex:x] tryHarderCount]);
     totalFound += passedCounts[x];
     totalFound += tryHarderCounts[x];
-    totalMustPass += [[testResults objectAtIndex:x] mustPassCount];
-    totalMustPass += [[testResults objectAtIndex:x] tryHarderCount];
+    totalMustPass += [[self.testResults objectAtIndex:x] mustPassCount];
+    totalMustPass += [[self.testResults objectAtIndex:x] tryHarderCount];
   }
 
   int totalTests = [imageFiles count] * testCount * 2;
@@ -192,15 +176,13 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
 
   if (assertOnFailure) {
     for (int x = 0; x < testCount; x++) {
-      STAssertTrue(passedCounts[x] >= [[testResults objectAtIndex:x] mustPassCount], @"Rotation %f degrees: Too many images failed", [[testResults objectAtIndex:x] rotation]);
-      STAssertTrue(tryHarderCounts[x] >= [[testResults objectAtIndex:x] tryHarderCount], @"Try harder, Rotation %f degrees: Too many images failed", [[testResults objectAtIndex:x] rotation]);
+      STAssertTrue(passedCounts[x] >= [[self.testResults objectAtIndex:x] mustPassCount], @"Rotation %f degrees: Too many images failed", [[self.testResults objectAtIndex:x] rotation]);
+      STAssertTrue(tryHarderCounts[x] >= [[self.testResults objectAtIndex:x] tryHarderCount], @"Try harder, Rotation %f degrees: Too many images failed", [[self.testResults objectAtIndex:x] rotation]);
     }
   }
-
-  return [[[SummaryResults alloc] initWithFound:totalFound mustPass:totalMustPass total:totalTests] autorelease];
 }
 
-- (BOOL) decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder {
+- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder {
   ZXResult * result = nil;
   NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %f)", (tryHarder ? @"try harder, " : @""), rotation];
 
@@ -213,24 +195,24 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
         hints.tryHarder = YES;
       }
     }
-    result = [barcodeReader decode:source hints:hints];
+    result = [self.barcodeReader decode:source hints:hints];
   } @catch (ZXReaderException * re) {
     NSLog(@"%@%@", re, suffix);
     return NO;
   }
 
-  if (expectedFormat != result.barcodeFormat) {
+  if (self.expectedFormat != result.barcodeFormat) {
     NSLog(@"Format mismatch: expected '%d' but got '%d'%@", expectedFormat, result.barcodeFormat, suffix);
     return NO;
   }
 
-  NSString * resultText = [result text];
+  NSString * resultText = result.text;
   if (![expectedText isEqualToString:resultText]) {
     NSLog(@"Mismatch: expected '%@' but got '%@'%@", expectedText, resultText, suffix);
     return NO;
   }
 
-  NSMutableDictionary * resultMetadata = [result resultMetadata];
+  NSMutableDictionary * resultMetadata = result.resultMetadata;
   for (id keyObj in [expectedMetadata allKeys]) {
     ZXResultMetadataType key = [keyObj intValue];
     id expectedValue = [expectedMetadata objectForKey:keyObj];
@@ -245,7 +227,7 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
 }
 
 // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
-- (ZXImage *) rotateImage:(ZXImage *)original degrees:(float)degrees {
+- (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees {
   if (degrees == 0.0f) {
     return original;
   } else {
@@ -289,13 +271,6 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
 
     return [[[ZXImage alloc] initWithCGImageRef:rotatedImage] autorelease];
   }
-}
-
-- (void) dealloc {
-  [testBase release];
-  [barcodeReader release];
-  [testResults release];
-  [super dealloc];
 }
 
 @end

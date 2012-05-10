@@ -704,11 +704,22 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   int height = bitMatrix.height;
 
   self.erasures = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
+  for (int i = 0; i < MAX_CW_CAPACITY; i++) {
+    [self.erasures addObject:[NSNumber numberWithInt:0]];
+  }
 
   float moduleWidth = 1.0f;
 
   int rowCounters[width];
+  for (int i = 0; i < width; i++) {
+    rowCounters[i] = 0;
+  }
+  
   NSMutableArray *codewords = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
+  for (int i = 0; i < MAX_CW_CAPACITY; i++) {
+    [codewords addObject:[NSNumber numberWithInt:0]];
+  }
+
   int next = 0;
   int matchingConsecutiveScans = 0;
   BOOL rowInProgress = NO;
@@ -721,13 +732,13 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     int rowDifference = 0;
 
     for (int j = 0; j < width; j++) {
-      if ([bitMatrix get:j y:i] != [bitMatrix get:j y:i - 1]) {
+      if ([self.bitMatrix get:j y:i] != [self.bitMatrix get:j y:i - 1]) {
         rowDifference++;
       }
     }
     if (rowDifference <= moduleWidth * MAX_ROW_DIFFERENCE) {
       for (int j = 0; j < width; j++) {
-        if ([bitMatrix get:j y:i]) {
+        if ([self.bitMatrix get:j y:i]) {
           rowCounters[j]++;
         }
       }
@@ -764,7 +775,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     rowNumber++;
     self.rows = rowNumber;
   }
-  self.erasures = [[[erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy] autorelease];
+  self.erasures = [[[self.erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy] autorelease];
   return [codewords subarrayWithRange:NSMakeRange(0, self.eraseCount)];
 }
 

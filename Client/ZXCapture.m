@@ -1,4 +1,3 @@
-// -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
  * Copyright 2011 ZXing authors
  *

@@ -1,4 +1,3 @@
-// -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
  * Copyright 2011 ZXing authors
  *
@@ -17,9 +16,6 @@
 
 #include "ZXView.h"
 
-@interface ZXCaptureView : ZXView {
-}
-
-- (ZXCaptureView*)init;
+@interface ZXCaptureView : ZXView
 
 @end

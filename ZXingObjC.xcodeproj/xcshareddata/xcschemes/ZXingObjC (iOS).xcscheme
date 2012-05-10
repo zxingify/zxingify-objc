@@ -26,7 +26,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -42,7 +42,7 @@
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox2TestCase">
+                  Identifier = "QRCodeBlackBox1TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

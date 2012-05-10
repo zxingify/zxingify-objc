@@ -1,4 +1,3 @@
-// -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
  * Copyright 2011 ZXing authors
  *
@@ -15,11 +14,9 @@
  * limitations under the License.
  */
 
-@interface ZXImage : NSObject {
-    CGImageRef cgimage;
-}
+@interface ZXImage : NSObject
 
-@property (readonly) CGImageRef cgimage;
+@property (assign, readonly) CGImageRef cgimage;
 
 - (ZXImage*)initWithCGImageRef:(CGImageRef)image;
 - (ZXImage*)initWithURL:(NSURL const*)url;
