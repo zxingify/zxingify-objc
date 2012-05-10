@@ -122,7 +122,7 @@ int const GB2312_SUBSET = 1;
     count--;
   }
 
-  NSString *string = [[[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding] autorelease];
+  NSString *string = [[[NSString alloc] initWithData:buffer encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)] autorelease];
   if (string) {
     [result appendString:string];
   }
