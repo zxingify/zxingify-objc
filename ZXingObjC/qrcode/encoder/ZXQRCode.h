@@ -1,38 +1,22 @@
-/**
- * @author satorux@google.com (Satoru Takabayashi) - creator
- * @author dswitkin@google.com (Daniel Switkin) - ported from C++
- */
-
 extern int const NUM_MASK_PATTERNS;
 
 @class ZXByteMatrix, ZXErrorCorrectionLevel, ZXMode;
 
-@interface ZXQRCode : NSObject {
-  ZXMode * mode;
-  ZXErrorCorrectionLevel * ecLevel;
-  int version;
-  int matrixWidth;
-  int maskPattern;
-  int numTotalBytes;
-  int numDataBytes;
-  int numECBytes;
-  int numRSBlocks;
-  ZXByteMatrix * matrix;
-}
+@interface ZXQRCode : NSObject
 
-@property(nonatomic, retain) ZXMode * mode;
-@property(nonatomic, retain) ZXErrorCorrectionLevel * ecLevel;
-@property(nonatomic) int version;
-@property(nonatomic) int matrixWidth;
-@property(nonatomic) int maskPattern;
-@property(nonatomic) int numTotalBytes;
-@property(nonatomic) int numDataBytes;
-@property(nonatomic) int numECBytes;
-@property(nonatomic) int numRSBlocks;
-@property(nonatomic, retain) ZXByteMatrix * matrix;
-@property(nonatomic, readonly) BOOL valid;
+@property (nonatomic, retain) ZXMode * mode;
+@property (nonatomic, retain) ZXErrorCorrectionLevel * ecLevel;
+@property (nonatomic, assign) int version;
+@property (nonatomic, assign) int matrixWidth;
+@property (nonatomic, assign) int maskPattern;
+@property (nonatomic, assign) int numTotalBytes;
+@property (nonatomic, assign) int numDataBytes;
+@property (nonatomic, assign) int numECBytes;
+@property (nonatomic, assign) int numRSBlocks;
+@property (nonatomic, retain) ZXByteMatrix * matrix;
 
-- (int) at:(int)x y:(int)y;
-+ (BOOL) isValidMaskPattern:(int)maskPattern;
+- (int)at:(int)x y:(int)y;
+- (BOOL)isValid;
++ (BOOL)isValidMaskPattern:(int)maskPattern;
 
 @end

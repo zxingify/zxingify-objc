@@ -53,7 +53,7 @@
 - (NSArray *) imageFiles;
 - (id<ZXReader>) reader;
 - (ZXDecodeHints *) hints;
-- (void) testBlackBox;
+- (void) runTests;
 - (SummaryResults *) testBlackBoxCountingResults:(BOOL)assertOnFailure;
 - (ZXImage *) rotateImage:(ZXImage *)original degrees:(float)degrees;
 

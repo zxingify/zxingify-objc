@@ -1,66 +1,76 @@
 #import "ZXByteMatrix.h"
 
+@interface ZXByteMatrix ()
+
+@property (nonatomic, assign) int height;
+@property (nonatomic, assign) int width;
+@property (nonatomic, assign) unsigned char** array;
+
+@end
+
 @implementation ZXByteMatrix
 
-@synthesize array=bytes;
+@synthesize array;
 @synthesize height;
 @synthesize width;
 
-- (id) initWithWidth:(int)aWidth height:(int)aHeight {
+- (id)initWithWidth:(int)aWidth height:(int)aHeight {
   if (self = [super init]) {
-    width = aWidth;
-    height = aHeight;
+    self.width = aWidth;
+    self.height = aHeight;
 
-    bytes = (unsigned char**)malloc(height * sizeof(unsigned char*));
-    for (int i = 0; i < height; i++) {
-      bytes[i] = (unsigned char*)malloc(width * sizeof(unsigned char));
+    self.array = (unsigned char**)malloc(aHeight * sizeof(unsigned char*));
+    for (int i = 0; i < aHeight; i++) {
+      self.array[i] = (unsigned char*)malloc(aWidth * sizeof(unsigned char));
     }
     [self clear:0];
   }
+
   return self;
 }
 
 - (void)dealloc {
-//  for (int i = 0; i < height; i++) {
-//    free(bytes[i]);
-//  }
-//  free(bytes);
+  if (self.array != NULL) {
+    for (int i = 0; i < height; i++) {
+      free(self.array[i]);
+    }
+    free(self.array);
+    self.array = NULL;
+  }
 
   [super dealloc];
 }
 
-- (char) get:(int)x y:(int)y {
-  return bytes[y][x];
+- (char)get:(int)x y:(int)y {
+  return self.array[y][x];
 }
 
-- (void) set:(int)x y:(int)y charValue:(char)value {
-  bytes[y][x] = value;
+- (void)set:(int)x y:(int)y charValue:(char)value {
+  self.array[y][x] = value;
 }
 
-- (void) set:(int)x y:(int)y intValue:(int)value {
-  bytes[y][x] = (char)value;
+- (void)set:(int)x y:(int)y intValue:(int)value {
+  self.array[y][x] = (char)value;
 }
 
-- (void) set:(int)x y:(int)y boolValue:(BOOL)value {
-  bytes[y][x] = (char)value;
+- (void)set:(int)x y:(int)y boolValue:(BOOL)value {
+  self.array[y][x] = (char)value;
 }
 
 - (void) clear:(char)value {
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      bytes[y][x] = value;
+  for (int y = 0; y < self.height; ++y) {
+    for (int x = 0; x < self.width; ++x) {
+      self.array[y][x] = value;
     }
   }
 }
 
-- (NSString *) description {
+- (NSString *)description {
   NSMutableString * result = [NSMutableString string];
 
-  for (int y = 0; y < height; ++y) {
-
-    for (int x = 0; x < width; ++x) {
-
-      switch (bytes[y][x]) {
+  for (int y = 0; y < self.height; ++y) {
+    for (int x = 0; x < self.width; ++x) {
+      switch (self.array[y][x]) {
       case 0:
         [result appendString:@" 0"];
         break;
@@ -76,7 +86,7 @@
     [result appendString:@"\n"];
   }
 
-  return result;
+  return [NSString stringWithString:result];
 }
 
 @end

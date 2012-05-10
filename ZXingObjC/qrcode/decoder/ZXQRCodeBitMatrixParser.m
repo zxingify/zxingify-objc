@@ -7,38 +7,47 @@
 
 @interface ZXQRCodeBitMatrixParser ()
 
-- (int) copyBit:(int)i j:(int)j versionBits:(int)versionBits;
+@property (nonatomic, retain) ZXBitMatrix * bitMatrix;
+@property (nonatomic, retain) ZXFormatInformation * parsedFormatInfo;
+@property (nonatomic, retain) ZXQRCodeVersion * parsedVersion;
+
+- (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits;
 
 @end
 
 @implementation ZXQRCodeBitMatrixParser
 
-/**
- * @param bitMatrix {@link BitMatrix} to parse
- * @throws FormatException if dimension is not >= 21 and 1 mod 4
- */
-- (id) initWithBitMatrix:(ZXBitMatrix *)aBitMatrix {
+@synthesize bitMatrix;
+@synthesize parsedFormatInfo;
+@synthesize parsedVersion;
+
+- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix {
   if (self = [super init]) {
-    int dimension = [aBitMatrix height];
+    int dimension = aBitMatrix.height;
     if (dimension < 21 || (dimension & 0x03) != 1) {
       @throw [ZXFormatException formatInstance];
     }
-    bitMatrix = [aBitMatrix retain];
+    self.bitMatrix = aBitMatrix;
+    self.parsedFormatInfo = nil;
+    self.parsedVersion = nil;
   }
   return self;
 }
 
+- (void)dealloc {
+  [bitMatrix release];
+  [parsedVersion release];
+  [parsedFormatInfo release];
+
+  [super dealloc];
+}
 
 /**
- * <p>Reads format information from one of its two locations within the QR Code.</p>
- * 
- * @return {@link FormatInformation} encapsulating the QR Code's format info
- * @throws FormatException if both format information locations cannot be parsed as
- * the valid encoding of format information
+ * Reads format information from one of its two locations within the QR Code.
  */
-- (ZXFormatInformation *) readFormatInformation {
-  if (parsedFormatInfo != nil) {
-    return parsedFormatInfo;
+- (ZXFormatInformation *)readFormatInformation {
+  if (self.parsedFormatInfo != nil) {
+    return self.parsedFormatInfo;
   }
   int formatInfoBits1 = 0;
 
@@ -54,7 +63,7 @@
     formatInfoBits1 = [self copyBit:8 j:j versionBits:formatInfoBits1];
   }
 
-  int dimension = [bitMatrix height];
+  int dimension = self.bitMatrix.height;
   int formatInfoBits2 = 0;
   int jMin = dimension - 7;
 
@@ -67,29 +76,25 @@
     formatInfoBits2 = [self copyBit:i j:8 versionBits:formatInfoBits2];
   }
 
-  parsedFormatInfo = [[ZXFormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2] retain];
-  if (parsedFormatInfo != nil) {
-    return parsedFormatInfo;
+  self.parsedFormatInfo = [ZXFormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2];
+  if (self.parsedFormatInfo != nil) {
+    return self.parsedFormatInfo;
   }
   @throw [ZXFormatException formatInstance];
 }
 
 
 /**
- * <p>Reads version information from one of its two locations within the QR Code.</p>
- * 
- * @return {@link Version} encapsulating the QR Code's version
- * @throws FormatException if both version information locations cannot be parsed as
- * the valid encoding of version information
+ * Reads version information from one of its two locations within the QR Code.
  */
-- (ZXQRCodeVersion *) readVersion {
-  if (parsedVersion != nil) {
-    return parsedVersion;
+- (ZXQRCodeVersion *)readVersion {
+  if (self.parsedVersion != nil) {
+    return self.parsedVersion;
   }
-  int dimension = [bitMatrix height];
+  int dimension = self.bitMatrix.height;
   int provisionalVersion = (dimension - 17) >> 2;
   if (provisionalVersion <= 6) {
-    return [ZXQRCodeVersion getVersionForNumber:provisionalVersion];
+    return [ZXQRCodeVersion versionForNumber:provisionalVersion];
   }
   int versionBits = 0;
   int ijMin = dimension - 11;
@@ -102,45 +107,40 @@
 
   }
 
-  parsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
-  if (parsedVersion != nil && [parsedVersion dimensionForVersion] == dimension) {
-    return parsedVersion;
+  self.parsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
+  if (self.parsedVersion != nil && [self.parsedVersion dimensionForVersion] == dimension) {
+    return self.parsedVersion;
   }
   versionBits = 0;
 
   for (int i = 5; i >= 0; i--) {
-
     for (int j = dimension - 9; j >= ijMin; j--) {
       versionBits = [self copyBit:i j:j versionBits:versionBits];
     }
-
   }
 
-  parsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
-  if (parsedVersion != nil && [parsedVersion dimensionForVersion] == dimension) {
-    return parsedVersion;
+  self.parsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
+  if (self.parsedVersion != nil && self.parsedVersion.dimensionForVersion == dimension) {
+    return self.parsedVersion;
   }
   @throw [ZXFormatException formatInstance];
 }
 
-- (int) copyBit:(int)i j:(int)j versionBits:(int)versionBits {
-  return [bitMatrix get:i y:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
+- (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits {
+  return [self.bitMatrix get:i y:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
 }
 
 
 /**
- * <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
+ * Reads the bits in the {@link BitMatrix} representing the finder pattern in the
  * correct order in order to reconstitute the codewords bytes contained within the
- * QR Code.</p>
- * 
- * @return bytes encoded within the QR Code
- * @throws FormatException if the exact number of bytes expected is not read
+ * QR Code.
  */
-- (NSArray *) readCodewords {
+- (NSArray *)readCodewords {
   ZXFormatInformation * formatInfo = [self readFormatInformation];
   ZXQRCodeVersion * version = [self readVersion];
   ZXDataMask * dataMask = [ZXDataMask forReference:(int)[formatInfo dataMask]];
-  int dimension = [bitMatrix height];
+  int dimension = self.bitMatrix.height;
   [dataMask unmaskBitMatrix:bitMatrix dimension:dimension];
   ZXBitMatrix * functionPattern = [version buildFunctionPattern];
   BOOL readingUp = YES;
@@ -161,7 +161,7 @@
         if (![functionPattern get:j - col y:i]) {
           bitsRead++;
           currentByte <<= 1;
-          if ([bitMatrix get:j - col y:i]) {
+          if ([self.bitMatrix get:j - col y:i]) {
             currentByte |= 1;
           }
           if (bitsRead == 8) {
@@ -172,7 +172,6 @@
           }
         }
       }
-
     }
 
     readingUp ^= YES;
@@ -182,13 +181,6 @@
     @throw [ZXFormatException formatInstance];
   }
   return result;
-}
-
-- (void) dealloc {
-  [bitMatrix release];
-  [parsedVersion release];
-  [parsedFormatInfo release];
-  [super dealloc];
 }
 
 @end

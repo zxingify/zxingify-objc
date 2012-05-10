@@ -114,7 +114,7 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   return nil;
 }
 
-- (void) testBlackBox {
+- (void) runTests {
   [self testBlackBoxCountingResults:YES];
 }
 

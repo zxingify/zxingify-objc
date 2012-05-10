@@ -104,33 +104,30 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 @interface ZXMatrixUtil ()
 
-+ (void) clearMatrix:(ZXByteMatrix *)matrix;
-+ (BOOL) isEmpty:(int)value;
-+ (BOOL) isValidValue:(int)value;
-+ (void) embedTimingPatterns:(ZXByteMatrix *)matrix;
-+ (void) embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix;
-+ (void) embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void) embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void) embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void) embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void) embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix;
-+ (void) maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix;
++ (void)clearMatrix:(ZXByteMatrix *)matrix;
++ (BOOL)isEmpty:(int)value;
++ (BOOL)isValidValue:(int)value;
++ (void)embedTimingPatterns:(ZXByteMatrix *)matrix;
++ (void)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix;
++ (void)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (void)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (void)embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (void)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix;
++ (void)maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix;
 
 @end
 
 @implementation ZXMatrixUtil
 
 // Set all cells to -1.  -1 means that the cell is empty (not set yet).
-//
-// JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
-// with the ZXByteMatrix initialized all to zero.
 + (void) clearMatrix:(ZXByteMatrix *)matrix {
   [matrix clear:(char) -1];
 }
 
 // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
 // success, store the result in "matrix" and return true.
-+ (void) buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
++ (void)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
   [self clearMatrix:matrix];
   [self embedBasicPatterns:version matrix:matrix];
   [self embedTypeInfo:ecLevel maskPattern:maskPattern matrix:matrix];
@@ -138,14 +135,14 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   [self embedDataBits:dataBits maskPattern:maskPattern matrix:matrix];
 }
 
-+ (void) embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
++ (void)embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
   [self embedPositionDetectionPatternsAndSeparators:matrix];
   [self embedDarkDotAtLeftBottomCorner:matrix];
   [self maybeEmbedPositionAdjustmentPatterns:version matrix:matrix];
   [self embedTimingPatterns:matrix];
 }
 
-+ (void) embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
++ (void)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
   ZXBitArray * typeInfoBits = [[[ZXBitArray alloc] init] autorelease];
   [self makeTypeInfoBits:ecLevel maskPattern:maskPattern bits:typeInfoBits];
 
@@ -158,17 +155,15 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
       int x2 = [matrix width] - i - 1;
       int y2 = 8;
       [matrix set:x2 y:y2 boolValue:bit];
-    }
-     else {
+    } else {
       int x2 = 8;
       int y2 = [matrix height] - 7 + (i - 8);
       [matrix set:x2 y:y2 boolValue:bit];
     }
   }
-
 }
 
-+ (void) maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix {
++ (void)maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix {
   if (version < 7) {
     return;
   }
@@ -177,19 +172,16 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   int bitIndex = 6 * 3 - 1;
 
   for (int i = 0; i < 6; ++i) {
-
     for (int j = 0; j < 3; ++j) {
       BOOL bit = [versionInfoBits get:bitIndex];
       bitIndex--;
       [matrix set:i y:[matrix height] - 11 + j boolValue:bit];
       [matrix set:[matrix height] - 11 + j y:i boolValue:bit];
     }
-
   }
-
 }
 
-+ (void) embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
++ (void)embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
   int bitIndex = 0;
   int direction = -1;
   int x = [matrix width] - 1;
@@ -201,7 +193,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     }
 
     while (y >= 0 && y < [matrix height]) {
-
       for (int i = 0; i < 2; ++i) {
         int xx = x - i;
         if (![self isEmpty:[matrix get:xx y:y]]) {
@@ -211,12 +202,11 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
         if (bitIndex < [dataBits size]) {
           bit = [dataBits get:bitIndex];
           ++bitIndex;
-        }
-         else {
+        } else {
           bit = NO;
         }
         if (maskPattern != -1) {
-          if ([ZXMaskUtil getDataMaskBit:maskPattern x:xx y:y]) {
+          if ([ZXMaskUtil dataMaskBit:maskPattern x:xx y:y]) {
             bit = !bit;
           }
         }
@@ -233,12 +223,12 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
   if (bitIndex != [dataBits size]) {
     @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                           reason:[NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]
-                                         userInfo:nil] autorelease];
+                                             reason:[NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]
+                                           userInfo:nil] autorelease];
   }
 }
 
-+ (int) findMSBSet:(int)value {
++ (int)findMSBSet:(int)value {
   int numDigits = 0;
   while (value != 0) {
     value = (int)((unsigned int)value >> 1);
@@ -247,7 +237,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return numDigits;
 }
 
-+ (int) calculateBCHCode:(int)value poly:(int)poly {
++ (int)calculateBCHCode:(int)value poly:(int)poly {
   int msbSetInPoly = [self findMSBSet:poly];
   value <<= msbSetInPoly - 1;
 
@@ -258,11 +248,11 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return value;
 }
 
-+ (void) makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits {
++ (void)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits {
   if (![ZXQRCode isValidMaskPattern:maskPattern]) {
     @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                           reason:@"Invalid mask pattern"
-                                         userInfo:nil] autorelease];
+                                             reason:@"Invalid mask pattern"
+                                           userInfo:nil] autorelease];
   }
   int typeInfo = ([ecLevel bits] << 3) | maskPattern;
   [bits appendBits:typeInfo numBits:5];
@@ -273,32 +263,31 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   [bits xor:maskBits];
   if ([bits size] != 15) {
     @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                           reason:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
-                                         userInfo:nil] autorelease];
+                                             reason:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
+                                           userInfo:nil] autorelease];
   }
 }
 
-+ (void) makeVersionInfoBits:(int)version bits:(ZXBitArray *)bits {
++ (void)makeVersionInfoBits:(int)version bits:(ZXBitArray *)bits {
   [bits appendBits:version numBits:6];
   int bchCode = [self calculateBCHCode:version poly:VERSION_INFO_POLY];
   [bits appendBits:bchCode numBits:12];
   if ([bits size] != 18) {
     @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                           reason:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
-                                         userInfo:nil] autorelease];
+                                             reason:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
+                                           userInfo:nil] autorelease];
   }
 }
 
-+ (BOOL) isEmpty:(int)value {
++ (BOOL)isEmpty:(int)value {
   return value == -1;
 }
 
-+ (BOOL) isValidValue:(int)value {
++ (BOOL)isValidValue:(int)value {
   return value == -1 || value == 0 || value == 1;
 }
 
-+ (void) embedTimingPatterns:(ZXByteMatrix *)matrix {
-
++ (void)embedTimingPatterns:(ZXByteMatrix *)matrix {
   for (int i = 8; i < [matrix width] - 8; ++i) {
     int bit = (i + 1) % 2;
     if (![self isValidValue:[matrix get:i y:6]]) {
@@ -314,48 +303,42 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
       [matrix set:6 y:i boolValue:bit];
     }
   }
-
 }
 
-+ (void) embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix {
-  if ([matrix get:8 y:[matrix height] - 8] == 0) {
++ (void)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix {
+  if ([matrix get:8 y:matrix.height - 8] == 0) {
     @throw [[[ZXWriterException alloc] init] autorelease];
   }
-  [matrix set:8 y:[matrix height] - 8 intValue:1];
+  [matrix set:8 y:matrix.height - 8 intValue:1];
 }
 
-+ (void) embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (void)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int x = 0; x < 8; ++x) {
     if (![self isEmpty:[matrix get:xStart + x y:yStart]]) {
       @throw [[[ZXWriterException alloc] init] autorelease];
     }
     [matrix set:xStart + x y:yStart intValue:HORIZONTAL_SEPARATION_PATTERN[0][x]];
   }
-
 }
 
-+ (void) embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (void)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 7; ++y) {
     if (![self isEmpty:[matrix get:xStart y:yStart + y]]) {
       @throw [[[ZXWriterException alloc] init] autorelease];
     }
     [matrix set:xStart y:yStart + y intValue:VERTICAL_SEPARATION_PATTERN[y][0]];
   }
-
 }
 
-+ (void) embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 5; ++y) {
-
     for (int x = 0; x < 5; ++x) {
       if (![self isEmpty:[matrix get:xStart + x y:yStart + y]]) {
         @throw [[[ZXWriterException alloc] init] autorelease];
       }
       [matrix set:xStart + x y:yStart + y intValue:POSITION_ADJUSTMENT_PATTERN[y][x]];
     }
-
   }
-
 }
 
 + (void) embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
@@ -372,7 +355,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 }
 
-+ (void) embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix {
++ (void)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix {
   int pdpWidth = sizeof(POSITION_DETECTION_PATTERN[0]) / sizeof(int);
   [self embedPositionDetectionPattern:0 yStart:0 matrix:matrix];
   [self embedPositionDetectionPattern:[matrix width] - pdpWidth yStart:0 matrix:matrix];
@@ -387,7 +370,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   [self embedVerticalSeparationPattern:vspSize yStart:[matrix height] - vspSize matrix:matrix];
 }
 
-+ (void) maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
++ (void)maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
   if (version < 2) {
     return;
   }
@@ -395,7 +378,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   int numCoordinates = sizeof(POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index]) / sizeof(int);
 
   for (int i = 0; i < numCoordinates; ++i) {
-
     for (int j = 0; j < numCoordinates; ++j) {
       int y = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index][i];
       int x = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index][j];
@@ -406,9 +388,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
         [self embedPositionAdjustmentPattern:x - 2 yStart:y - 2 matrix:matrix];
       }
     }
-
   }
-
 }
 
 @end

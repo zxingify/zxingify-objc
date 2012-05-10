@@ -23,24 +23,18 @@ int const GB2312_SUBSET = 1;
 
 @interface ZXQRCodeDecodedBitStreamParser ()
 
-+ (void) decodeHanziSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (void) decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints;
-+ (void) decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect;
-+ (void) decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (int) parseECIValue:(ZXBitSource *)bits;
++ (void)decodeHanziSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
++ (void)decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
++ (void)decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints;
++ (void)decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect;
++ (void)decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
++ (int)parseECIValue:(ZXBitSource *)bits;
 
 @end
 
 @implementation ZXQRCodeDecodedBitStreamParser
 
-- (id) init {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
-+ (ZXDecoderResult *) decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints {
++ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints {
   ZXBitSource * bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:50];
   ZXCharacterSetECI * currentCharacterSetECI = nil;
@@ -73,12 +67,12 @@ int const GB2312_SUBSET = 1;
       } else {
         if ([mode isEqual:[ZXMode hanziMode]]) {
           int subset = [bits readBits:4];
-          int countHanzi = [bits readBits:[mode getCharacterCountBits:version]];
+          int countHanzi = [bits readBits:[mode characterCountBits:version]];
           if (subset == GB2312_SUBSET) {
             [self decodeHanziSegment:bits result:result count:countHanzi];
           }
         } else {
-          int count = [bits readBits:[mode getCharacterCountBits:version]];
+          int count = [bits readBits:[mode characterCountBits:version]];
           if ([mode isEqual:[ZXMode numericMode]]) {
             [self decodeNumericSegment:bits result:result count:count];
           } else if ([mode isEqual:[ZXMode alphanumericMode]]) {
@@ -96,17 +90,17 @@ int const GB2312_SUBSET = 1;
   } while (![mode isEqual:[ZXMode terminatorMode]]);
   return [[[ZXDecoderResult alloc] initWithRawBytes:bytes
                                              length:length
-                                               text:[result description]
-                                       byteSegments:[byteSegments count] == 0 ? nil : byteSegments
-                                            ecLevel:ecLevel == nil ? nil : [ecLevel description]] autorelease];
+                                               text:result.description
+                                       byteSegments:byteSegments.count == 0 ? nil : byteSegments
+                                            ecLevel:ecLevel == nil ? nil : ecLevel.description] autorelease];
 }
 
 
 /**
  * See specification GBT 18284-2000
  */
-+ (void) decodeHanziSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
-  if (count * 13 > [bits available]) {
++ (void)decodeHanziSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
+  if (count * 13 > bits.available) {
     @throw [ZXFormatException formatInstance];
   }
 
@@ -116,8 +110,7 @@ int const GB2312_SUBSET = 1;
     int assembledTwoBytes = ((twoBytes / 0x060) << 8) | (twoBytes % 0x060);
     if (assembledTwoBytes < 0x003BF) {
       assembledTwoBytes += 0x0A1A1;
-    }
-     else {
+    } else {
       assembledTwoBytes += 0x0A6A1;
     }
     char bytes[2];
@@ -135,8 +128,8 @@ int const GB2312_SUBSET = 1;
   }
 }
 
-+ (void) decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
-  if (count * 13 > [bits available]) {
++ (void)decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
+  if (count * 13 > bits.available) {
     @throw [ZXFormatException formatInstance];
   }
 
@@ -146,8 +139,7 @@ int const GB2312_SUBSET = 1;
     int assembledTwoBytes = ((twoBytes / 0x0C0) << 8) | (twoBytes % 0x0C0);
     if (assembledTwoBytes < 0x01F00) {
       assembledTwoBytes += 0x08140;
-    }
-     else {
+    } else {
       assembledTwoBytes += 0x0C140;
     }
     char bytes[2];
@@ -165,8 +157,8 @@ int const GB2312_SUBSET = 1;
   }
 }
 
-+ (void) decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints {
-  if (count << 3 > [bits available]) {
++ (void)decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints {
+  if (count << 3 > bits.available) {
     @throw [ZXFormatException formatInstance];
   }
   unsigned char readBytes[count];
@@ -192,15 +184,15 @@ int const GB2312_SUBSET = 1;
   [byteSegments addObject:readBytesArray];
 }
 
-+ (unichar) toAlphaNumericChar:(int)value {
++ (unichar)toAlphaNumericChar:(int)value {
   if (value >= 45) {
     @throw [ZXFormatException formatInstance];
   }
   return ALPHANUMERIC_CHARS[value];
 }
 
-+ (void) decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect {
-  int start = [result length];
++ (void)decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect {
+  int start = result.length;
 
   while (count > 1) {
     int nextTwoCharsBits = [bits readBits:11];
@@ -223,12 +215,10 @@ int const GB2312_SUBSET = 1;
         }
       }
     }
-
   }
 }
 
-+ (void) decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
-
++ (void)decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
   while (count >= 3) {
     int threeDigitsBits = [bits readBits:10];
     if (threeDigitsBits >= 1000) {
@@ -247,8 +237,7 @@ int const GB2312_SUBSET = 1;
     }
     [result appendFormat:@"%C", [self toAlphaNumericChar:twoDigitsBits / 10]];
     [result appendFormat:@"%C", [self toAlphaNumericChar:twoDigitsBits % 10]];
-  }
-   else if (count == 1) {
+  } else if (count == 1) {
     int digitBits = [bits readBits:4];
     if (digitBits >= 10) {
       @throw [ZXFormatException formatInstance];
@@ -257,16 +246,14 @@ int const GB2312_SUBSET = 1;
   }
 }
 
-+ (int) parseECIValue:(ZXBitSource *)bits {
++ (int)parseECIValue:(ZXBitSource *)bits {
   int firstByte = [bits readBits:8];
   if ((firstByte & 0x80) == 0) {
     return firstByte & 0x7F;
-  }
-   else if ((firstByte & 0xC0) == 0x80) {
+  } else if ((firstByte & 0xC0) == 0x80) {
     int secondByte = [bits readBits:8];
     return ((firstByte & 0x3F) << 8) | secondByte;
-  }
-   else if ((firstByte & 0xE0) == 0xC0) {
+  } else if ((firstByte & 0xE0) == 0xC0) {
     int secondThirdBytes = [bits readBits:16];
     return ((firstByte & 0x1F) << 16) | secondThirdBytes;
   }

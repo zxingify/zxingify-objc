@@ -17,65 +17,66 @@ int const NUM_MASK_PATTERNS = 8;
 @synthesize numECBytes;
 @synthesize numRSBlocks;
 @synthesize matrix;
-@synthesize valid;
 
-- (id) init {
+- (id)init {
   if (self = [super init]) {
-    mode = nil;
-    ecLevel = nil;
-    version = -1;
-    matrixWidth = -1;
-    maskPattern = -1;
-    numTotalBytes = -1;
-    numDataBytes = -1;
-    numECBytes = -1;
-    numRSBlocks = -1;
-    matrix = nil;
+    self.mode = nil;
+    self.ecLevel = nil;
+    self.version = -1;
+    self.matrixWidth = -1;
+    self.maskPattern = -1;
+    self.numTotalBytes = -1;
+    self.numDataBytes = -1;
+    self.numECBytes = -1;
+    self.numRSBlocks = -1;
+    self.matrix = nil;
   }
+
   return self;
 }
 
-- (int) at:(int)x y:(int)y {
-  int value = [matrix get:x y:y];
+- (void)dealloc {
+  [mode release];
+  [ecLevel release];
+  [matrix release];
+
+  [super dealloc];
+}
+
+- (int)at:(int)x y:(int)y {
+  int value = [self.matrix get:x y:y];
   if (!(value == 0 || value == 1)) {
     [NSException raise:NSInternalInconsistencyException format:@"Bad value"];
   }
   return value;
 }
 
-- (BOOL) valid {
-  return mode != nil && ecLevel != nil && version != -1 && matrixWidth != -1 && maskPattern != -1 && numTotalBytes != -1 && numDataBytes != -1 && numECBytes != -1 && numRSBlocks != -1 && [ZXQRCode isValidMaskPattern:maskPattern] && numTotalBytes == numDataBytes + numECBytes && matrix != nil && matrixWidth == [matrix width] && [matrix width] == [matrix height];
+- (BOOL)isValid {
+  return self.mode != nil && self.ecLevel != nil && self.version != -1 && self.matrixWidth != -1 && self.maskPattern != -1 && self.numTotalBytes != -1 && self.numDataBytes != -1 && self.numECBytes != -1 && self.numRSBlocks != -1 && [ZXQRCode isValidMaskPattern:self.maskPattern] && self.numTotalBytes == self.numDataBytes + self.numECBytes && self.matrix != nil && self.matrixWidth == self.matrix.width && self.matrix.width == self.matrix.height;
 }
 
-- (NSString *) description {
+- (NSString *)description {
   NSMutableString *result = [NSMutableString stringWithCapacity:200];
-  [result appendFormat:@"<<\n mode: %@", mode];
-  [result appendFormat:@"\n ecLevel: %@", ecLevel];
-  [result appendFormat:@"\n version: %d", version];
-  [result appendFormat:@"\n matrixWidth: %d", matrixWidth];
-  [result appendFormat:@"\n maskPattern: %d", maskPattern];
-  [result appendFormat:@"\n numTotalBytes: %d", numTotalBytes];
-  [result appendFormat:@"\n numDataBytes: %d", numDataBytes];
-  [result appendFormat:@"\n numECBytes: %d", numECBytes];
-  [result appendFormat:@"\n numRSBlocks: %d", numRSBlocks];
-  if (matrix == nil) {
+  [result appendFormat:@"<<\n mode: %@", self.mode];
+  [result appendFormat:@"\n ecLevel: %@", self.ecLevel];
+  [result appendFormat:@"\n version: %d", self.version];
+  [result appendFormat:@"\n matrixWidth: %d", self.matrixWidth];
+  [result appendFormat:@"\n maskPattern: %d", self.maskPattern];
+  [result appendFormat:@"\n numTotalBytes: %d", self.numTotalBytes];
+  [result appendFormat:@"\n numDataBytes: %d", self.numDataBytes];
+  [result appendFormat:@"\n numECBytes: %d", self.numECBytes];
+  [result appendFormat:@"\n numRSBlocks: %d", self.numRSBlocks];
+  if (self.matrix == nil) {
     [result appendString:@"\n matrix: null\n"];
   } else {
-    [result appendFormat:@"\n matrix:\n%@", [matrix description]];
+    [result appendFormat:@"\n matrix:\n%@", [self.matrix description]];
   }
   [result appendString:@">>\n"];
   return result;
 }
 
-+ (BOOL) isValidMaskPattern:(int)maskPattern {
++ (BOOL)isValidMaskPattern:(int)maskPattern {
   return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
-}
-
-- (void) dealloc {
-  [mode release];
-  [ecLevel release];
-  [matrix release];
-  [super dealloc];
 }
 
 @end

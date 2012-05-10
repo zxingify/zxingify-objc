@@ -1,15 +1,10 @@
-@interface ZXBlockPair : NSObject {
-  unsigned char * dataBytes;
-  unsigned char * errorCorrectionBytes;
-  int errorCorrectionLength;
-  int length;
-}
+@interface ZXBlockPair : NSObject
 
-@property(nonatomic, readonly) unsigned char * dataBytes;
-@property(nonatomic, readonly) unsigned char * errorCorrectionBytes;
-@property(nonatomic, readonly) int errorCorrectionLength;
-@property(nonatomic, readonly) int length;
+@property (nonatomic, assign, readonly) unsigned char * dataBytes;
+@property (nonatomic, assign, readonly) unsigned char * errorCorrectionBytes;
+@property (nonatomic, assign, readonly) int errorCorrectionLength;
+@property (nonatomic, assign, readonly) int length;
 
-- (id) initWithData:(unsigned char *)data length:(unsigned int)length errorCorrection:(unsigned char *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength;
+- (id)initWithData:(unsigned char *)data length:(unsigned int)length errorCorrection:(unsigned char *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength;
 
 @end

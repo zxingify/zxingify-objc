@@ -11,7 +11,7 @@
 
 @implementation ZXDataMask000
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   return ((i + j) & 0x01) == 0;
 }
 
@@ -28,7 +28,7 @@
 
 @implementation ZXDataMask001
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   return (i & 0x01) == 0;
 }
 
@@ -45,7 +45,7 @@
 
 @implementation ZXDataMask010
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   return j % 3 == 0;
 }
 
@@ -62,7 +62,7 @@
 
 @implementation ZXDataMask011
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   return (i + j) % 3 == 0;
 }
 
@@ -79,7 +79,7 @@
 
 @implementation ZXDataMask100
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   return (((int)((unsigned int)i >> 1) + (j / 3)) & 0x01) == 0;
 }
 
@@ -96,7 +96,7 @@
 
 @implementation ZXDataMask101
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   int temp = i * j;
   return (temp & 0x01) + (temp % 3) == 0;
 }
@@ -114,7 +114,7 @@
 
 @implementation ZXDataMask110
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   int temp = i * j;
   return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
 }
@@ -132,7 +132,7 @@
 
 @implementation ZXDataMask111
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
 }
 
@@ -144,13 +144,10 @@
 static NSArray* DATA_MASKS = nil;
 
 /**
- * <p>Implementations of this method reverse the data masking process applied to a QR Code and
- * make its bits ready to read.</p>
- * 
- * @param bits representation of QR Code bits
- * @param dimension dimension of QR Code, represented by bits, being unmasked
+ * Implementations of this method reverse the data masking process applied to a QR Code and
+ * make its bits ready to read.
  */
-- (void) unmaskBitMatrix:(ZXBitMatrix *)bits dimension:(int)dimension {
+- (void)unmaskBitMatrix:(ZXBitMatrix *)bits dimension:(int)dimension {
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if ([self isMasked:i j:j]) {
@@ -160,19 +157,14 @@ static NSArray* DATA_MASKS = nil;
   }
 }
 
-- (BOOL) isMasked:(int)i j:(int)j {
+- (BOOL)isMasked:(int)i j:(int)j {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
 }
 
 
-/**
- * @param reference a value between 0 and 7 indicating one of the eight possible
- * data mask patterns a QR Code may use
- * @return ZXDataMask encapsulating the data mask pattern
- */
-+ (ZXDataMask *) forReference:(int)reference {
++ (ZXDataMask *)forReference:(int)reference {
   if (!DATA_MASKS) {
     /**
      * See ISO 18004:2006 6.8.1

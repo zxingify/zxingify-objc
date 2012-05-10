@@ -2,54 +2,63 @@
 #import "ZXQRCodeDataBlock.h"
 #import "ZXQRCodeVersion.h"
 
+@interface ZXQRCodeDataBlock ()
+
+@property (nonatomic, retain) NSMutableArray * codewords;
+@property (nonatomic, assign) int numDataCodewords;
+
+@end
+
 @implementation ZXQRCodeDataBlock
 
-@synthesize codewords, numDataCodewords;
+@synthesize codewords;
+@synthesize numDataCodewords;
 
-- (id) init:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
+- (id)initWithNumDataCodewords:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
   if (self = [super init]) {
-    numDataCodewords = theNumDataCodewords;
-    codewords = [theCodewords retain];
+    self.numDataCodewords = theNumDataCodewords;
+    self.codewords = theCodewords;
   }
+
   return self;
+}
+
+- (void)dealloc {
+  [codewords release];
+
+  [super dealloc];
 }
 
 
 /**
- * <p>When QR Codes use multiple data blocks, they are actually interleaved.
+ * When QR Codes use multiple data blocks, they are actually interleaved.
  * That is, the first byte of data block 1 to n is written, then the second bytes, and so on. This
- * method will separate the data into original blocks.</p>
- * 
- * @param rawCodewords bytes as read directly from the QR Code
- * @param version version of the QR Code
- * @param ecLevel error-correction level of the QR Code
- * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
- * QR Code
+ * method will separate the data into original blocks.
  */
-+ (NSArray *) getDataBlocks:(NSArray *)rawCodewords version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel {
-  if ([rawCodewords count] != [version totalCodewords]) {
++ (NSArray *)dataBlocks:(NSArray *)rawCodewords version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel {
+  if (rawCodewords.count != version.totalCodewords) {
     [NSException raise:NSInvalidArgumentException format:@"Invalid codewords count"];
   }
 
-  ZXQRCodeECBlocks * ecBlocks = [version getECBlocksForLevel:ecLevel];
+  ZXQRCodeECBlocks * ecBlocks = [version ecBlocksForLevel:ecLevel];
 
   int totalBlocks = 0;
-  NSArray * ecBlockArray = [ecBlocks ecBlocks];
-  for (int i = 0; i < [ecBlockArray count]; i++) {
+  NSArray * ecBlockArray = ecBlocks.ecBlocks;
+  for (int i = 0; i < ecBlockArray.count; i++) {
     totalBlocks += [(ZXQRCodeECB*)[ecBlockArray objectAtIndex:i] count];
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
   for (ZXQRCodeECB *ecBlock in ecBlockArray) {
-    for (int i = 0; i < [ecBlock count]; i++) {
-      int numDataCodewords = [ecBlock dataCodewords];
-      int numBlockCodewords = [ecBlocks ecCodewordsPerBlock] + numDataCodewords;
+    for (int i = 0; i < ecBlock.count; i++) {
+      int numDataCodewords = ecBlock.dataCodewords;
+      int numBlockCodewords = ecBlocks.ecCodewordsPerBlock + numDataCodewords;
       NSMutableArray *newCodewords = [NSMutableArray arrayWithCapacity:numBlockCodewords];
       for (int j = 0; j < numBlockCodewords; j++) {
         [newCodewords addObject:[NSNull null]];
       }
 
-      [result addObject:[[[ZXQRCodeDataBlock alloc] init:numDataCodewords codewords:newCodewords] autorelease]];
+      [result addObject:[[[ZXQRCodeDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:newCodewords] autorelease]];
     }
   }
 
@@ -65,7 +74,7 @@
   }
 
   longerBlocksStartAt++;
-  int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - [ecBlocks ecCodewordsPerBlock];
+  int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - ecBlocks.ecCodewordsPerBlock;
   int rawCodewordsOffset = 0;
   int numResultBlocks = [result count];
 
@@ -88,11 +97,6 @@
   }
 
   return result;
-}
-
-- (void) dealloc {
-  [codewords release];
-  [super dealloc];
 }
 
 @end

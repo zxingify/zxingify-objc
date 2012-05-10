@@ -146,7 +146,7 @@
  * See ISO 16022:2006 5.5.1 Table 7
  */
 + (NSArray *)buildVersions {
-  return [[[NSArray alloc] initWithObjects:
+  return [[NSArray alloc] initWithObjects:
            [[[ZXDataMatrixVersion alloc] initWithVersionNumber:1
                                                 symbolSizeRows:10
                                              symbolSizeColumns:10
@@ -449,7 +449,7 @@
                                                      ecBlocks:
                [[[ZXDataMatrixECB alloc] initWithCount:1 dataCodewords:49] autorelease]] autorelease]] autorelease],
 
-           nil] autorelease];
+          nil];
 }
 
 @end

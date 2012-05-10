@@ -14,34 +14,40 @@
 
 @interface ZXQRCodeDecoder ()
 
+@property (nonatomic, retain) ZXReedSolomonDecoder * rsDecoder;
+
 - (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords;
 
 @end
 
 @implementation ZXQRCodeDecoder
 
-- (id) init {
+@synthesize rsDecoder;
+
+- (id)init {
   if (self = [super init]) {
-    rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
+    self.rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
   }
+
   return self;
 }
 
-- (ZXDecoderResult *) decode:(BOOL **)image length:(unsigned int)length {
+- (void)dealloc {
+  [rsDecoder release];
+
+  [super dealloc];
+}
+
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length {
   return [self decode:image length:length hints:nil];
 }
 
 
 /**
- * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
- * "true" is taken to mean a black module.</p>
- * 
- * @param image booleans representing white/black QR Code modules
- * @return text and bytes encoded within the QR Code
- * @throws FormatException if the QR Code cannot be decoded
- * @throws ChecksumException if error correction fails
+ * Convenience method that can decode a QR Code represented as a 2D array of booleans.
+ * "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *) decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints {
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints {
   int dimension = length;
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
@@ -55,26 +61,21 @@
   return [self decodeMatrix:bits hints:hints];
 }
 
-- (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits {
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits {
   return [self decodeMatrix:bits hints:nil];
 }
 
 
 /**
- * <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
- * 
- * @param bits booleans representing white/black QR Code modules
- * @return text and bytes encoded within the QR Code
- * @throws FormatException if the QR Code cannot be decoded
- * @throws ChecksumException if error correction fails
+ * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints {
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints {
   ZXQRCodeBitMatrixParser * parser = [[[ZXQRCodeBitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
   ZXQRCodeVersion * version = [parser readVersion];
   ZXErrorCorrectionLevel * ecLevel = [[parser readFormatInformation] errorCorrectionLevel];
 
   NSArray * codewords = [parser readCodewords];
-  NSArray * dataBlocks = [ZXQRCodeDataBlock getDataBlocks:codewords version:version ecLevel:ecLevel];
+  NSArray * dataBlocks = [ZXQRCodeDataBlock dataBlocks:codewords version:version ecLevel:ecLevel];
 
   int totalBytes = 0;
   for (ZXQRCodeDataBlock *dataBlock in dataBlocks) {
@@ -98,14 +99,10 @@
 
 
 /**
- * <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
- * correct the errors in-place using Reed-Solomon error correction.</p>
- * 
- * @param codewordBytes data and error correction codewords
- * @param numDataCodewords number of codewords that are data bytes
- * @throws ChecksumException if error correction fails
+ * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
+ * correct the errors in-place using Reed-Solomon error correction.
  */
-- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
+- (void)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
   int numCodewords = [codewordBytes count];
   NSMutableArray * codewordsInts = [NSMutableArray arrayWithCapacity:numCodewords];
 
@@ -117,19 +114,13 @@
 
   @try {
     [rsDecoder decode:codewordsInts twoS:numECCodewords];
-  }
-  @catch (ZXReedSolomonException * rse) {
+  } @catch (ZXReedSolomonException * rse) {
     @throw [ZXChecksumException checksumInstance];
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
     [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:[[codewordsInts objectAtIndex:i] charValue]]];
   }
-}
-
-- (void) dealloc {
-  [rsDecoder release];
-  [super dealloc];
 }
 
 @end

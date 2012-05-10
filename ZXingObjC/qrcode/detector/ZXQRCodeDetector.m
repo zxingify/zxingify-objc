@@ -16,47 +16,50 @@
 
 @interface ZXQRCodeDetector ()
 
-- (float) calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern;
-+ (int) round:(float)d;
-- (ZXBitMatrix *) sampleGrid:(ZXBitMatrix *)image transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension;
-- (float) sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
-- (float) sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
+@property (nonatomic, retain) ZXBitMatrix * image;
+@property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
+
+- (float)calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern;
++ (int)round:(float)d;
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension;
+- (float)sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
+- (float)sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
 
 @end
 
 @implementation ZXQRCodeDetector
 
-@synthesize image, resultPointCallback;
+@synthesize image;
+@synthesize resultPointCallback;
 
-- (id) initWithImage:(ZXBitMatrix *)anImage {
+- (id)initWithImage:(ZXBitMatrix *)anImage {
   if (self = [super init]) {
-    image = [anImage retain];
+    self.image = anImage;
   }
+
   return self;
+}
+
+- (void)dealloc {
+  [image release];
+
+  [super dealloc];
 }
 
 
 /**
- * <p>Detects a QR Code in an image, simply.</p>
- * 
- * @return {@link ZXDetectorResult} encapsulating results of detecting a QR Code
- * @throws NotFoundException if no QR Code can be found
+ * Detects a QR Code in an image, simply.
  */
-- (ZXDetectorResult *) detect {
+- (ZXDetectorResult *)detect {
   return [self detect:nil];
 }
 
 
 /**
- * <p>Detects a QR Code in an image, simply.</p>
- * 
- * @param hints optional hints to detector
- * @return {@link NotFoundException} encapsulating results of detecting a QR Code
- * @throws NotFoundException if QR Code cannot be found
- * @throws FormatException if a QR Code cannot be decoded
+ * Detects a QR Code in an image, simply.
  */
-- (ZXDetectorResult *) detect:(ZXDecodeHints *)hints {
-  resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
+- (ZXDetectorResult *)detect:(ZXDecodeHints *)hints {
+  self.resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
   ZXFinderPatternFinder * finder = [[[ZXFinderPatternFinder alloc] initWithImage:image resultPointCallback:resultPointCallback] autorelease];
   ZXFinderPatternInfo * info = [finder find:hints];
@@ -64,17 +67,17 @@
   return [self processFinderPatternInfo:info];
 }
 
-- (ZXDetectorResult *) processFinderPatternInfo:(ZXFinderPatternInfo *)info {
-  ZXQRCodeFinderPattern * topLeft = [info topLeft];
-  ZXQRCodeFinderPattern * topRight = [info topRight];
-  ZXQRCodeFinderPattern * bottomLeft = [info bottomLeft];
+- (ZXDetectorResult *)processFinderPatternInfo:(ZXFinderPatternInfo *)info {
+  ZXQRCodeFinderPattern * topLeft = info.topLeft;
+  ZXQRCodeFinderPattern * topRight = info.topRight;
+  ZXQRCodeFinderPattern * bottomLeft = info.bottomLeft;
 
   float moduleSize = [self calculateModuleSize:topLeft topRight:topRight bottomLeft:bottomLeft];
   if (moduleSize < 1.0f) {
     @throw [ZXNotFoundException notFoundInstance];
   }
   int dimension = [ZXQRCodeDetector computeDimension:topLeft topRight:topRight bottomLeft:bottomLeft moduleSize:moduleSize];
-  ZXQRCodeVersion * provisionalVersion = [ZXQRCodeVersion getProvisionalVersionForDimension:dimension];
+  ZXQRCodeVersion * provisionalVersion = [ZXQRCodeVersion provisionalVersionForDimension:dimension];
   int modulesBetweenFPCenters = [provisionalVersion dimensionForVersion] - 7;
 
   ZXAlignmentPattern * alignmentPattern = nil;
@@ -90,8 +93,7 @@
       @try {
         alignmentPattern = [self findAlignmentInRegion:moduleSize estAlignmentX:estAlignmentX estAlignmentY:estAlignmentY allowanceFactor:(float)i];
         break;
-      }
-      @catch (ZXNotFoundException * re) {
+      } @catch (ZXNotFoundException * re) {
       }
     }
   }
@@ -107,50 +109,42 @@
   return [[[ZXDetectorResult alloc] initWithBits:bits points:points] autorelease];
 }
 
-+ (ZXPerspectiveTransform *) createTransform:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft alignmentPattern:(ZXResultPoint *)alignmentPattern dimension:(int)dimension {
++ (ZXPerspectiveTransform *)createTransform:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft alignmentPattern:(ZXResultPoint *)alignmentPattern dimension:(int)dimension {
   float dimMinusThree = (float)dimension - 3.5f;
   float bottomRightX;
   float bottomRightY;
   float sourceBottomRightX;
   float sourceBottomRightY;
   if (alignmentPattern != nil) {
-    bottomRightX = [alignmentPattern x];
-    bottomRightY = [alignmentPattern y];
+    bottomRightX = alignmentPattern.x;
+    bottomRightY = alignmentPattern.y;
     sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
   } else {
-    bottomRightX = ([topRight x] - [topLeft x]) + [bottomLeft x];
-    bottomRightY = ([topRight y] - [topLeft y]) + [bottomLeft y];
+    bottomRightX = (topRight.x - topLeft.x) + bottomLeft.x;
+    bottomRightY = (topRight.y - topLeft.y) + bottomLeft.y;
     sourceBottomRightX = sourceBottomRightY = dimMinusThree;
   }
-  return [ZXPerspectiveTransform quadrilateralToQuadrilateral:3.5f
-                                                         y0:3.5f
-                                                         x1:dimMinusThree
-                                                         y1:3.5f
-                                                         x2:sourceBottomRightX
-                                                         y2:sourceBottomRightY
-                                                         x3:3.5f
-                                                         y3:dimMinusThree
-                                                        x0p:[topLeft x]
-                                                        y0p:[topLeft y]
-                                                        x1p:[topRight x]
-                                                        y1p:[topRight y]
-                                                        x2p:bottomRightX
-                                                        y2p:bottomRightY
-                                                        x3p:[bottomLeft x]
-                                                        y3p:[bottomLeft y]];
+  return [ZXPerspectiveTransform quadrilateralToQuadrilateral:3.5f y0:3.5f
+                                                           x1:dimMinusThree y1:3.5f
+                                                           x2:sourceBottomRightX y2:sourceBottomRightY
+                                                           x3:3.5f y3:dimMinusThree
+                                                          x0p:topLeft.x y0p:topLeft.y
+                                                          x1p:topRight.x y1p:topRight.y
+                                                          x2p:bottomRightX y2p:bottomRightY
+                                                          x3p:bottomLeft.x y3p:bottomLeft.y];
 }
 
-- (ZXBitMatrix *) sampleGrid:(ZXBitMatrix *)anImage transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension {
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension {
   ZXGridSampler * sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:anImage dimensionX:dimension dimensionY:dimension transform:transform];
 }
 
 
 /**
- * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
- * of the finder patterns and estimated module size.</p>
+ * Computes the dimension (number of modules on a size) of the QR Code based on the position
+ * of the finder patterns and estimated module size.
  */
-+ (int) computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize {
++ (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize {
   int tltrCentersDimension = [ZXQRCodeDetector round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleSize];
   int tlblCentersDimension = [ZXQRCodeDetector round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleSize];
   int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
@@ -170,20 +164,15 @@
 
 
 /**
- * <p>Computes an average estimated module size based on estimated derived from the positions
- * of the three finder patterns.</p>
+ * Computes an average estimated module size based on estimated derived from the positions
+ * of the three finder patterns.
  */
-- (float) calculateModuleSize:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft {
+- (float)calculateModuleSize:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft {
   return ([self calculateModuleSizeOneWay:topLeft otherPattern:topRight] + [self calculateModuleSizeOneWay:topLeft otherPattern:bottomLeft]) / 2.0f;
 }
 
 
-/**
- * <p>Estimates module size based on two finder patterns -- it uses
- * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
- * width of each, measuring along the axis between their centers.</p>
- */
-- (float) calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern {
+- (float)calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern {
   float moduleSizeEst1 = [self sizeOfBlackWhiteBlackRunBothWays:(int)[pattern x] fromY:(int)[pattern y] toX:(int)[otherPattern x] toY:(int)[otherPattern y]];
   float moduleSizeEst2 = [self sizeOfBlackWhiteBlackRunBothWays:(int)[otherPattern x] fromY:(int)[otherPattern y] toX:(int)[pattern x] toY:(int)[pattern y]];
   if (isnan(moduleSizeEst1)) {
@@ -196,21 +185,16 @@
 }
 
 
-/**
- * See {@link #sizeOfBlackWhiteBlackRun(int, int, int, int)}; computes the total width of
- * a finder pattern by looking for a black-white-black run from the center in the direction
- * of another point (another finder pattern center), and in the opposite direction too.</p>
- */
-- (float) sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
+- (float)sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
   float result = [self sizeOfBlackWhiteBlackRun:fromX fromY:fromY toX:toX toY:toY];
   float scale = 1.0f;
   int otherToX = fromX - (toX - fromX);
   if (otherToX < 0) {
     scale = (float)fromX / (float)(fromX - otherToX);
     otherToX = 0;
-  } else if (otherToX > [image width]) {
-    scale = (float)([image width] - fromX) / (float)(otherToX - fromX);
-    otherToX = [image width];
+  } else if (otherToX > self.image.width) {
+    scale = (float)(self.image.width - fromX) / (float)(otherToX - fromX);
+    otherToX = self.image.width;
   }
   int otherToY = (int)(fromY - (toY - fromY) * scale);
 
@@ -219,9 +203,9 @@
     scale = (float)fromY / (float)(fromY - otherToY);
     otherToY = 0;
   }
-   else if (otherToY > [image height]) {
-    scale = (float)([image height] - fromY) / (float)(otherToY - fromY);
-    otherToY = [image height];
+   else if (otherToY > self.image.height) {
+    scale = (float)(self.image.height - fromY) / (float)(otherToY - fromY);
+    otherToY = self.image.height;
   }
   otherToX = (int)(fromX + (otherToX - fromX) * scale);
 
@@ -231,14 +215,14 @@
 
 
 /**
- * <p>This method traces a line from a point in the image, in the direction towards another point.
+ * This method traces a line from a point in the image, in the direction towards another point.
  * It begins in a black region, and keeps going until it finds white, then black, then white again.
- * It reports the distance from the start to this point.</p>
+ * It reports the distance from the start to this point.
  * 
- * <p>This is used when figuring out how wide a finder pattern is, when the finder pattern
- * may be skewed or rotated.</p>
+ * This is used when figuring out how wide a finder pattern is, when the finder pattern
+ * may be skewed or rotated.
  */
-- (float) sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
+- (float)sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
   BOOL steep = abs(toY - fromY) > abs(toX - fromX);
   if (steep) {
     int temp = fromX;
@@ -261,11 +245,11 @@
     int realY = steep ? x : y;
 
     if (state == 1) {
-      if ([image get:realX y:realY]) {
+      if ([self.image get:realX y:realY]) {
         state++;
       }
     } else {
-      if (![image get:realX y:realY]) {
+      if (![self.image get:realX y:realY]) {
         state++;
       }
     }
@@ -295,37 +279,30 @@
 
 
 /**
- * <p>Attempts to locate an alignment pattern in a limited region of the image, which is
- * guessed to contain it. This method uses {@link ZXAlignmentPattern}.</p>
- * 
- * @param overallEstModuleSize estimated module size so far
- * @param estAlignmentX x coordinate of center of area probably containing alignment pattern
- * @param estAlignmentY y coordinate of above
- * @param allowanceFactor number of pixels in all directions to search from the center
- * @return {@link ZXAlignmentPattern} if found, or null otherwise
- * @throws NotFoundException if an unexpected error occurs during detection
+ * Attempts to locate an alignment pattern in a limited region of the image, which is
+ * guessed to contain it. This method uses ZXAlignmentPattern.
  */
-- (ZXAlignmentPattern *) findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor {
+- (ZXAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor {
   int allowance = (int)(allowanceFactor * overallEstModuleSize);
   int alignmentAreaLeftX = MAX(0, estAlignmentX - allowance);
-  int alignmentAreaRightX = MIN([image width] - 1, estAlignmentX + allowance);
+  int alignmentAreaRightX = MIN(self.image.width - 1, estAlignmentX + allowance);
   if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
     @throw [ZXNotFoundException notFoundInstance];
   }
 
   int alignmentAreaTopY = MAX(0, estAlignmentY - allowance);
-  int alignmentAreaBottomY = MIN([image height] - 1, estAlignmentY + allowance);
+  int alignmentAreaBottomY = MIN(self.image.height - 1, estAlignmentY + allowance);
   if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
     @throw [ZXNotFoundException notFoundInstance];
   }
 
-  ZXAlignmentPatternFinder * alignmentFinder = [[[ZXAlignmentPatternFinder alloc] initWithImage:image
-                                                                                     startX:alignmentAreaLeftX
-                                                                                     startY:alignmentAreaTopY
-                                                                                      width:alignmentAreaRightX - alignmentAreaLeftX
-                                                                                     height:alignmentAreaBottomY - alignmentAreaTopY
+  ZXAlignmentPatternFinder * alignmentFinder = [[[ZXAlignmentPatternFinder alloc] initWithImage:self.image
+                                                                                         startX:alignmentAreaLeftX
+                                                                                         startY:alignmentAreaTopY
+                                                                                          width:alignmentAreaRightX - alignmentAreaLeftX
+                                                                                         height:alignmentAreaBottomY - alignmentAreaTopY
                                                                                      moduleSize:overallEstModuleSize
-                                                                                     resultPointCallback:resultPointCallback] autorelease];
+                                                                            resultPointCallback:self.resultPointCallback] autorelease];
   return [alignmentFinder find];
 }
 
@@ -334,14 +311,8 @@
  * Ends up being a bit faster than Math.round(). This merely rounds its argument to the nearest int,
  * where x.5 rounds up.
  */
-+ (int) round:(float)d {
++ (int)round:(float)d {
   return (int)(d + 0.5f);
-}
-
-- (void) dealloc {
-  [image release];
-  [resultPointCallback release];
-  [super dealloc];
 }
 
 @end

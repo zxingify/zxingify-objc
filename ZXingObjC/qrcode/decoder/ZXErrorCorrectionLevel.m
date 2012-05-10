@@ -1,42 +1,45 @@
 #import "ZXErrorCorrectionLevel.h"
 
+@interface ZXErrorCorrectionLevel ()
+
+@property (nonatomic, assign) int bits;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, assign) int ordinal;
+
+@end
+
 @implementation ZXErrorCorrectionLevel
 
 static NSArray* FOR_BITS = nil;
 
 @synthesize bits;
 @synthesize name;
+@synthesize ordinal;
 
 - (id)initWithOrdinal:(int)anOrdinal bits:(int)theBits name:(NSString *)aName {
   if (self = [super init]) {
-    ordinal = anOrdinal;
-    bits = theBits;
-    name = [aName copy];
+    self.ordinal = anOrdinal;
+    self.bits = theBits;
+    self.name = aName;
   }
+
   return self;
 }
 
 - (void)dealloc {
   [name release];
+
   [super dealloc];
 }
 
-- (int) ordinal {
-  return ordinal;
-}
-
-- (NSString *) description {
-  return name;
+- (NSString *)description {
+  return self.name;
 }
 
 
-/**
- * @param bits int containing the two bits encoding a QR Code's error correction level
- * @return ErrorCorrectionLevel representing the encoded error correction level
- */
-+ (ZXErrorCorrectionLevel *) forBits:(int)bits {
++ (ZXErrorCorrectionLevel *)forBits:(int)bits {
   if (!FOR_BITS) {
-    FOR_BITS = [NSArray arrayWithObjects:[ZXErrorCorrectionLevel errorCorrectionLevelM],
+    FOR_BITS = [[NSArray alloc] initWithObjects:[ZXErrorCorrectionLevel errorCorrectionLevelM],
                 [ZXErrorCorrectionLevel errorCorrectionLevelL], [ZXErrorCorrectionLevel errorCorrectionLevelH],
                 [ZXErrorCorrectionLevel errorCorrectionLevelQ], nil];
   }

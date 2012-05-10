@@ -21,7 +21,7 @@
 }
 
 - (void) testBlackBox {
-  [super testBlackBox];
+  [super runTests];
 }
 
 @end

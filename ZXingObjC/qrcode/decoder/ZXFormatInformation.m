@@ -6,7 +6,8 @@ int const FORMAT_INFO_MASK_QR = 0x5412;
 /**
  * See ISO 18004:2006, Annex C, Table C.1
  */
-int const FORMAT_INFO_DECODE_LOOKUP[32][2] = {
+int const FORMAT_INFO_DECODE_LOOKUP_LEN = 32;
+int const FORMAT_INFO_DECODE_LOOKUP[FORMAT_INFO_DECODE_LOOKUP_LEN][2] = {
   {0x5412, 0x00},
   {0x5125, 0x01},
   {0x5E7C, 0x02},
@@ -48,23 +49,34 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 
 @interface ZXFormatInformation ()
 
-+ (ZXFormatInformation *) doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2;
+@property (nonatomic, retain) ZXErrorCorrectionLevel * errorCorrectionLevel;
+@property (nonatomic, assign) char dataMask;
+
++ (ZXFormatInformation *)doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2;
 
 @end
 
 @implementation ZXFormatInformation
 
-@synthesize dataMask, errorCorrectionLevel;
+@synthesize dataMask;
+@synthesize errorCorrectionLevel;
 
-- (id) initWithFormatInfo:(int)formatInfo {
+- (id)initWithFormatInfo:(int)formatInfo {
   if (self = [super init]) {
-    errorCorrectionLevel = [[ZXErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03] retain];
-    dataMask = (char)(formatInfo & 0x07);
+    self.errorCorrectionLevel = [ZXErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03];
+    self.dataMask = (char)(formatInfo & 0x07);
   }
+
   return self;
 }
 
-+ (int) numBitsDiffering:(int)a b:(int)b {
+- (void)dealloc {
+  [errorCorrectionLevel release];
+
+  [super dealloc];
+}
+
++ (int)numBitsDiffering:(int)a b:(int)b {
   a ^= b;
   return BITS_SET_IN_HALF_BYTE[a & 0x0F] +
       BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 4 & 0x0F)] +
@@ -76,15 +88,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
       BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 28 & 0x0F)];
 }
 
-
-/**
- * @param maskedFormatInfo1 format info indicator, with mask still applied
- * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
- * to establish best match
- * @return information about the format it specifies, or <code>null</code>
- * if doesn't seem to match any known pattern
- */
-+ (ZXFormatInformation *) decodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
++ (ZXFormatInformation *)decodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
   ZXFormatInformation * formatInfo = [self doDecodeFormatInformation:maskedFormatInfo1 maskedFormatInfo2:maskedFormatInfo2];
   if (formatInfo != nil) {
     return formatInfo;
@@ -92,11 +96,11 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   return [self doDecodeFormatInformation:maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR maskedFormatInfo2:maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR];
 }
 
-+ (ZXFormatInformation *) doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
++ (ZXFormatInformation *)doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
   int bestDifference = NSIntegerMax;
   int bestFormatInfo = 0;
 
-  for (int i = 0; i < sizeof(FORMAT_INFO_DECODE_LOOKUP) / sizeof(int*); i++) {
+  for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP_LEN; i++) {
     int targetInfo = FORMAT_INFO_DECODE_LOOKUP[i][0];
     if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
       return [[[ZXFormatInformation alloc] initWithFormatInfo:FORMAT_INFO_DECODE_LOOKUP[i][1]] autorelease];
@@ -121,21 +125,16 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   return nil;
 }
 
-- (int) hash {
-  return ([errorCorrectionLevel ordinal] << 3) | (int)dataMask;
+- (NSUInteger)hash {
+  return (self.errorCorrectionLevel.ordinal << 3) | (int)self.dataMask;
 }
 
-- (BOOL) isEqualTo:(NSObject *)o {
+- (BOOL)isEqual:(id)o {
   if (![o isKindOfClass:[ZXFormatInformation class]]) {
     return NO;
   }
   ZXFormatInformation * other = (ZXFormatInformation *)o;
-  return errorCorrectionLevel == other->errorCorrectionLevel && dataMask == other->dataMask;
-}
-
-- (void) dealloc {
-  [errorCorrectionLevel release];
-  [super dealloc];
+  return self.errorCorrectionLevel == other.errorCorrectionLevel && self.dataMask == other.dataMask;
 }
 
 @end

@@ -12,8 +12,10 @@
 
 @interface ZXQRCodeReader ()
 
-- (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image;
-- (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
+@property (nonatomic, retain) ZXQRCodeDecoder * decoder;
+
+- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
+- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
 
 @end
 
@@ -21,26 +23,28 @@
 
 @synthesize decoder;
 
-- (id) init {
+- (id)init {
   if (self = [super init]) {
-    decoder = [[[ZXQRCodeDecoder alloc] init] autorelease];
+    self.decoder = [[[ZXQRCodeDecoder alloc] init] autorelease];
   }
+
   return self;
+}
+
+- (void)dealloc {
+  [decoder release];
+
+  [super dealloc];
 }
 
 /**
  * Locates and decodes a QR code in an image.
- * 
- * @return a String representing the content encoded by the QR code
- * @throws NotFoundException if a QR code cannot be found
- * @throws FormatException if a QR code cannot be decoded
- * @throws ChecksumException if error correction fails
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image {
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   ZXDecoderResult * decoderResult;
   NSArray * points;
   if (hints != nil && hints.pureBarcode) {
@@ -53,11 +57,11 @@
     points = [detectorResult points];
   }
 
-  ZXResult * result = [[[ZXResult alloc] initWithText:[decoderResult text]
-                                         rawBytes:[decoderResult rawBytes]
-                                           length:[decoderResult length]
-                                     resultPoints:points
-                                           format:kBarcodeFormatQRCode] autorelease];
+  ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
+                                             rawBytes:decoderResult.rawBytes
+                                               length:decoderResult.length
+                                         resultPoints:points
+                                               format:kBarcodeFormatQRCode] autorelease];
   if (decoderResult.byteSegments != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
   }
@@ -67,7 +71,7 @@
   return result;
 }
 
-- (void) reset {
+- (void)reset {
   // do nothing
 }
 
@@ -77,13 +81,10 @@
  * which contains only an unrotated, unskewed, image of a code, with some white border
  * around it. This is a specialized method that works exceptionally fast in this special
  * case.
- * 
- * @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
- * @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
  */
-- (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image {
-  NSArray * leftTopBlack = [image topLeftOnBit];
-  NSArray * rightBottomBlack = [image bottomRightOnBit];
+- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image {
+  NSArray * leftTopBlack = image.topLeftOnBit;
+  NSArray * rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     @throw [ZXNotFoundException notFoundInstance];
   }
@@ -120,9 +121,9 @@
   return bits;
 }
 
-- (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
-  int height = [image height];
-  int width = [image width];
+- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
+  int height = image.height;
+  int width = image.width;
   int x = [[leftTopBlack objectAtIndex:0] intValue];
   int y = [[leftTopBlack objectAtIndex:1] intValue];
   while (x < width && y < height && [image get:x y:y]) {
@@ -138,11 +139,6 @@
     @throw [ZXNotFoundException notFoundInstance];
   }
   return moduleSize;
-}
-
-- (void) dealloc {
-  [decoder release];
-  [super dealloc];
 }
 
 @end

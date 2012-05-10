@@ -1,10 +1,8 @@
 /**
- * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
- * markers at three corners of a QR Code.</p>
+ * This class attempts to find finder patterns in a QR Code. Finder patterns are the square
+ * markers at three corners of a QR Code.
  * 
- * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
- * 
- * @author Sean Owen
+ * This class is thread-safe but not reentrant. Each thread must allocate its own object.
  */
 
 extern int const FINDER_PATTERN_MIN_SKIP;
@@ -13,16 +11,10 @@ extern int const FINDER_PATTERN_MAX_MODULES;
 @class ZXBitMatrix, ZXDecodeHints, ZXFinderPatternInfo;
 @protocol ZXResultPointCallback;
 
-@interface ZXFinderPatternFinder : NSObject {
-  ZXBitMatrix * image;
-  NSMutableArray * possibleCenters;
-  BOOL hasSkipped;
-  int crossCheckStateCount[5];
-  id <ZXResultPointCallback> resultPointCallback;
-}
+@interface ZXFinderPatternFinder : NSObject
 
-@property (nonatomic, readonly) ZXBitMatrix * image;
-@property (nonatomic, readonly, retain) NSMutableArray * possibleCenters;
+@property (nonatomic, retain, readonly) ZXBitMatrix * image;
+@property (nonatomic, retain, readonly) NSMutableArray * possibleCenters;
 
 - (id) initWithImage:(ZXBitMatrix *)image;
 - (id) initWithImage:(ZXBitMatrix *)image resultPointCallback:(id <ZXResultPointCallback>)resultPointCallback;

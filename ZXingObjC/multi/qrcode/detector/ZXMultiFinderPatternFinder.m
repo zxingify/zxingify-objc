@@ -79,13 +79,13 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
   NSMutableArray * results = [NSMutableArray array];
 
   for (int i1 = 0; i1 < (size - 2); i1++) {
-    ZXQRCodeFinderPattern * p1 = [possibleCenters objectAtIndex:i1];
+    ZXQRCodeFinderPattern * p1 = [self.possibleCenters objectAtIndex:i1];
     if (p1 == nil) {
       continue;
     }
 
     for (int i2 = i1 + 1; i2 < (size - 1); i2++) {
-      ZXQRCodeFinderPattern * p2 = [possibleCenters objectAtIndex:i2];
+      ZXQRCodeFinderPattern * p2 = [self.possibleCenters objectAtIndex:i2];
       if (p2 == nil) {
         continue;
       }
@@ -97,7 +97,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
       }
 
       for (int i3 = i2 + 1; i3 < size; i3++) {
-        ZXQRCodeFinderPattern * p3 = [possibleCenters objectAtIndex:i3];
+        ZXQRCodeFinderPattern * p3 = [self.possibleCenters objectAtIndex:i3];
         if (p3 == nil) {
           continue;
         }
@@ -147,8 +147,8 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
 
 - (NSArray *)findMulti:(ZXDecodeHints *)hints {
   BOOL tryHarder = hints != nil && hints.tryHarder;
-  int maxI = [image height];
-  int maxJ = [image width];
+  int maxI = self.image.height;
+  int maxJ = self.image.width;
   // We are looking for black/white/black/white/black modules in
   // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
   
@@ -171,7 +171,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
     int currentState = 0;
 
     for (int j = 0; j < maxJ; j++) {
-      if ([image get:j y:i]) {
+      if ([self.image get:j y:i]) {
         if ((currentState & 1) == 1) {
           currentState++;
         }
@@ -184,7 +184,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
               if (!confirmed) {
                 do {
                   j++;
-                } while (j < maxJ && ![image get:j y:i]);
+                } while (j < maxJ && ![self.image get:j y:i]);
                 j--;
               }
               currentState = 0;

@@ -1,17 +1,13 @@
 #import "ZXResultPoint.h"
 
 /**
- * <p>Encapsulates an alignment pattern, which are the smaller square patterns found in
- * all but the simplest QR Codes.</p>
- * 
- * @author Sean Owen
+ * Encapsulates an alignment pattern, which are the smaller square patterns found in
+ * all but the simplest QR Codes.
  */
 
-@interface ZXAlignmentPattern : ZXResultPoint {
-  float estimatedModuleSize;
-}
+@interface ZXAlignmentPattern : ZXResultPoint
 
-- (id) initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
-- (BOOL) aboutEquals:(float)moduleSize i:(float)i j:(float)j;
+- (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
+- (BOOL)aboutEquals:(float)moduleSize i:(float)i j:(float)j;
 
 @end

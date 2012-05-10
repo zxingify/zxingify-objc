@@ -6,54 +6,76 @@
 
 @interface ZXAlignmentPatternFinder ()
 
-- (float) centerFromEnd:(int *)stateCount end:(int)end;
-- (BOOL) foundPatternCross:(int *)stateCount;
-- (ZXAlignmentPattern *) handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j;
+@property (nonatomic, retain) ZXBitMatrix * image;
+@property (nonatomic, retain) NSMutableArray * possibleCenters;
+@property (nonatomic, assign) int startX;
+@property (nonatomic, assign) int startY;
+@property (nonatomic, assign) int width;
+@property (nonatomic, assign) int height;
+@property (nonatomic, assign) float moduleSize;
+@property (nonatomic, assign) int * crossCheckStateCount;
+@property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
+
+- (float)centerFromEnd:(int *)stateCount end:(int)end;
+- (BOOL)foundPatternCross:(int *)stateCount;
+- (ZXAlignmentPattern *)handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j;
 
 @end
 
 @implementation ZXAlignmentPatternFinder
 
+@synthesize image;
+@synthesize possibleCenters;
+@synthesize startX;
+@synthesize startY;
+@synthesize width;
+@synthesize height;
+@synthesize moduleSize;
+@synthesize crossCheckStateCount;
+@synthesize resultPointCallback;
 
 /**
- * <p>Creates a finder that will look in a portion of the whole image.</p>
- * 
- * @param image image to search
- * @param startX left column from which to start searching
- * @param startY top row from which to start searching
- * @param width width of region to search
- * @param height height of region to search
- * @param moduleSize estimated module size so far
+ * Creates a finder that will look in a portion of the whole image.
  */
-- (id) initWithImage:(ZXBitMatrix *)anImage startX:(int)aStartX startY:(int)aStartY width:(int)aWidth height:(int)aHeight moduleSize:(float)aModuleSize resultPointCallback:(id <ZXResultPointCallback>)aResultPointCallback {
+- (id)initWithImage:(ZXBitMatrix *)anImage startX:(int)aStartX startY:(int)aStartY width:(int)aWidth height:(int)aHeight moduleSize:(float)aModuleSize resultPointCallback:(id <ZXResultPointCallback>)aResultPointCallback {
   if (self = [super init]) {
-    image = [anImage retain];
-    possibleCenters = [[NSMutableArray alloc] initWithCapacity:5];
-    startX = aStartX;
-    startY = aStartY;
-    width = aWidth;
-    height = aHeight;
-    moduleSize = aModuleSize;
-    crossCheckStateCount = (int*)malloc(3 * sizeof(int));
+    self.image = anImage;
+    self.possibleCenters = [NSMutableArray arrayWithCapacity:5];
+    self.startX = aStartX;
+    self.startY = aStartY;
+    self.width = aWidth;
+    self.height = aHeight;
+    self.moduleSize = aModuleSize;
+    self.crossCheckStateCount = (int*)malloc(3 * sizeof(int));
     for (int i = 0; i < 3; i++) {
-      crossCheckStateCount[i] = 0;
+      self.crossCheckStateCount[i] = 0;
     }
-    resultPointCallback = aResultPointCallback;
+    self.resultPointCallback = aResultPointCallback;
   }
+
   return self;
+}
+
+- (void) dealloc {
+  if (self.crossCheckStateCount != NULL) {
+    free(self.crossCheckStateCount);
+    self.crossCheckStateCount = NULL;
+  }
+
+  [image release];
+  [possibleCenters release];
+
+  [super dealloc];
 }
 
 
 /**
- * <p>This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
- * it's pretty performance-critical and so is written to be fast foremost.</p>
- * 
- * @return {@link ZXAlignmentPattern} if found
- * @throws NotFoundException if not found
+ * This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
+ * it's pretty performance-critical and so is written to be fast foremost.
  */
-- (ZXAlignmentPattern *) find {
-  int maxJ = startX + width;
-  int middleI = startY + (height >> 1);
+- (ZXAlignmentPattern *)find {
+  int maxJ = self.startX + self.width;
+  int middleI = self.startY + (self.height >> 1);
   int stateCount[3];
 
   for (int iGen = 0; iGen < height; iGen++) {
@@ -63,18 +85,17 @@
     stateCount[2] = 0;
     int j = startX;
 
-    while (j < maxJ && ![image get:j y:i]) {
+    while (j < maxJ && ![self.image get:j y:i]) {
       j++;
     }
 
     int currentState = 0;
 
     while (j < maxJ) {
-      if ([image get:j y:i]) {
+      if ([self.image get:j y:i]) {
         if (currentState == 1) {
           stateCount[currentState]++;
-        }
-         else {
+        } else {
           if (currentState == 2) {
             if ([self foundPatternCross:stateCount]) {
               ZXAlignmentPattern * confirmed = [self handlePossibleCenter:stateCount i:i j:j];
@@ -86,13 +107,11 @@
             stateCount[1] = 1;
             stateCount[2] = 0;
             currentState = 1;
-          }
-           else {
+          } else {
             stateCount[++currentState]++;
           }
         }
-      }
-       else {
+      } else {
         if (currentState == 1) {
           currentState++;
         }
@@ -109,8 +128,8 @@
     }
   }
 
-  if ([possibleCenters count] > 0) {
-    return [possibleCenters objectAtIndex:0];
+  if ([self.possibleCenters count] > 0) {
+    return [self.possibleCenters objectAtIndex:0];
   }
   @throw [ZXNotFoundException notFoundInstance];
 }
@@ -120,21 +139,15 @@
  * Given a count of black/white/black pixels just seen and an end position,
  * figures the location of the center of this black/white/black run.
  */
-- (float) centerFromEnd:(int *)stateCount end:(int)end {
+- (float)centerFromEnd:(int *)stateCount end:(int)end {
   return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
 }
 
-
-/**
- * @param stateCount count of black/white/black pixels just read
- * @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
- * used by alignment patterns to be considered a match
- */
-- (BOOL) foundPatternCross:(int *)stateCount {
-  float maxVariance = moduleSize / 2.0f;
+- (BOOL)foundPatternCross:(int *)stateCount {
+  float maxVariance = self.moduleSize / 2.0f;
 
   for (int i = 0; i < 3; i++) {
-    if (fabsf(moduleSize - stateCount[i]) >= maxVariance) {
+    if (fabsf(self.moduleSize - stateCount[i]) >= maxVariance) {
       return NO;
     }
   }
@@ -144,25 +157,16 @@
 
 
 /**
- * <p>After a horizontal scan finds a potential alignment pattern, this method
+ * After a horizontal scan finds a potential alignment pattern, this method
  * "cross-checks" by scanning down vertically through the center of the possible
- * alignment pattern to see if the same proportion is detected.</p>
- * 
- * @param startI row where an alignment pattern was detected
- * @param centerJ center of the section that appears to cross an alignment pattern
- * @param maxCount maximum reasonable number of modules that should be
- * observed in any reading state, based on the results of the horizontal scan
- * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
+ * alignment pattern to see if the same proportion is detected.
  */
-- (float) crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
-  int maxI = [image height];
-  int stateCount[3];
-  stateCount[0] = 0;
-  stateCount[1] = 0;
-  stateCount[2] = 0;
+- (float)crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
+  int maxI = self.image.height;
+  int stateCount[3] = {0, 0, 0};
   int i = startI;
 
-  while (i >= 0 && [image get:centerJ y:i] && stateCount[1] <= maxCount) {
+  while (i >= 0 && [self.image get:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i--;
   }
@@ -171,7 +175,7 @@
     return NAN;
   }
 
-  while (i >= 0 && ![image get:centerJ y:i] && stateCount[0] <= maxCount) {
+  while (i >= 0 && ![self.image get:centerJ y:i] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
@@ -181,7 +185,7 @@
   }
   i = startI + 1;
 
-  while (i < maxI && [image get:centerJ y:i] && stateCount[1] <= maxCount) {
+  while (i < maxI && [self.image get:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i++;
   }
@@ -190,7 +194,7 @@
     return NAN;
   }
 
-  while (i < maxI && ![image get:centerJ y:i] && stateCount[2] <= maxCount) {
+  while (i < maxI && ![self.image get:centerJ y:i] && stateCount[2] <= maxCount) {
     stateCount[2]++;
     i++;
   }
@@ -207,49 +211,33 @@
 
 
 /**
- * <p>This is called when a horizontal scan finds a possible alignment pattern. It will
+ * This is called when a horizontal scan finds a possible alignment pattern. It will
  * cross check with a vertical scan, and if successful, will see if this pattern had been
  * found on a previous horizontal scan. If so, we consider it confirmed and conclude we have
- * found the alignment pattern.</p>
- * 
- * @param stateCount reading state module counts from horizontal scan
- * @param i row where alignment pattern may be found
- * @param j end of possible alignment pattern in row
- * @return {@link ZXAlignmentPattern} if we have found the same pattern twice, or null if not
+ * found the alignment pattern.
  */
-- (ZXAlignmentPattern *) handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j {
+- (ZXAlignmentPattern *)handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
   float centerJ = [self centerFromEnd:stateCount end:j];
   float centerI = [self crossCheckVertical:i centerJ:(int)centerJ maxCount:2 * stateCount[1] originalStateCountTotal:stateCountTotal];
   if (!isnan(centerI)) {
     float estimatedModuleSize = (float)(stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
-    int max = [possibleCenters count];
+    int max = self.possibleCenters.count;
 
     for (int index = 0; index < max; index++) {
-      ZXAlignmentPattern * center = (ZXAlignmentPattern *)[possibleCenters objectAtIndex:index];
+      ZXAlignmentPattern * center = (ZXAlignmentPattern *)[self.possibleCenters objectAtIndex:index];
       if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
         return [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
       }
     }
 
     ZXResultPoint * point = [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
-    [possibleCenters addObject:point];
-    if (resultPointCallback != nil) {
-      [resultPointCallback foundPossibleResultPoint:point];
+    [self.possibleCenters addObject:point];
+    if (self.resultPointCallback != nil) {
+      [self.resultPointCallback foundPossibleResultPoint:point];
     }
   }
   return nil;
-}
-
-- (void) dealloc {
-  if (crossCheckStateCount) {
-    free(crossCheckStateCount);
-  }
-
-  [image release];
-  [possibleCenters release];
-  [resultPointCallback release];
-  [super dealloc];
 }
 
 @end

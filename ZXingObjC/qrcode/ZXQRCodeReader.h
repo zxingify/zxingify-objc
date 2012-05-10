@@ -2,16 +2,12 @@
 
 /**
  * This implementation can detect and decode QR Codes in an image.
- * 
- * @author Sean Owen
  */
 
 @class ZXBinaryBitmap, ZXQRCodeDecoder, ZXResult;
 
-@interface ZXQRCodeReader : NSObject <ZXReader> {
-  ZXQRCodeDecoder * decoder;
-}
+@interface ZXQRCodeReader : NSObject <ZXReader>
 
-@property (nonatomic, readonly) ZXQRCodeDecoder * decoder;
+@property (nonatomic, retain, readonly) ZXQRCodeDecoder * decoder;
 
 @end

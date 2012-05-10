@@ -10,17 +10,17 @@ int const QUIET_ZONE_SIZE = 4;
 
 @interface ZXQRCodeWriter ()
 
-- (ZXBitMatrix *) renderResult:(ZXQRCode *)code width:(int)width height:(int)height;
+- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height;
 
 @end
 
 @implementation ZXQRCodeWriter
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
   return [self encode:contents format:format width:width height:height hints:nil];
 }
 
-- (ZXBitMatrix *) encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
   if (contents == nil || [contents length] == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Found empty contents"];
   }
@@ -46,10 +46,10 @@ int const QUIET_ZONE_SIZE = 4;
   return [self renderResult:code width:width height:height];
 }
 
-- (ZXBitMatrix *) renderResult:(ZXQRCode *)code width:(int)width height:(int)height {
-  ZXByteMatrix * input = [code matrix];
-  int inputWidth = [input width];
-  int inputHeight = [input height];
+- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height {
+  ZXByteMatrix * input = code.matrix;
+  int inputWidth = input.width;
+  int inputHeight = input.height;
   int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
   int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
   int outputWidth = MAX(width, qrWidth);

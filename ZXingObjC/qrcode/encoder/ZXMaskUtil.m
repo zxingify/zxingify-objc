@@ -4,7 +4,7 @@
 
 @interface ZXMaskUtil ()
 
-+ (int) applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal;
++ (int)applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal;
 
 @end
 
@@ -12,17 +12,17 @@
 
 // Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
 // give penalty to them. Example: 00000 or 11111.
-+ (int) applyMaskPenaltyRule1:(ZXByteMatrix *)matrix {
++ (int)applyMaskPenaltyRule1:(ZXByteMatrix *)matrix {
   return [self applyMaskPenaltyRule1Internal:matrix isHorizontal:YES] + [self applyMaskPenaltyRule1Internal:matrix isHorizontal:NO];
 }
 
 // Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
 // penalty to them.
-+ (int) applyMaskPenaltyRule2:(ZXByteMatrix *)matrix {
++ (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix {
   int penalty = 0;
-  unsigned char** array = [matrix array];
-  int width = [matrix width];
-  int height = [matrix height];
+  unsigned char** array = matrix.array;
+  int width = matrix.width;
+  int height = matrix.height;
 
   for (int y = 0; y < height - 1; ++y) {
     for (int x = 0; x < width - 1; ++x) {
@@ -39,11 +39,11 @@
 // Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
 // 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
 // penalties twice (i.e. 40 * 2).
-+ (int) applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
++ (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
   int penalty = 0;
-  unsigned char** array = [matrix array];
-  int width = [matrix width];
-  int height = [matrix height];
+  unsigned char** array = matrix.array;
+  int width = matrix.width;
+  int height = matrix.height;
 
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
@@ -102,11 +102,11 @@
 // -  55% =>  10
 // -  55% =>  20
 // - 100% => 100
-+ (int) applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
++ (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
   int numDarkCells = 0;
-  unsigned char** array = [matrix array];
-  int width = [matrix width];
-  int height = [matrix height];
+  unsigned char** array = matrix.array;
+  int width = matrix.width;
+  int height = matrix.height;
 
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
@@ -121,7 +121,7 @@
   return abs((int)(darkRatio * 100 - 50)) / 5 * 10;
 }
 
-+ (BOOL) getDataMaskBit:(int)maskPattern x:(int)x y:(int)y {
++ (BOOL)dataMaskBit:(int)maskPattern x:(int)x y:(int)y {
   if (![ZXQRCode isValidMaskPattern:maskPattern]) {
     [NSException raise:NSInvalidArgumentException 
                 format:@"Invalid mask pattern."];
@@ -164,13 +164,13 @@
   return intermediate == 0;
 }
 
-+ (int) applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal {
++ (int)applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal {
   int penalty = 0;
   int numSameBitCells = 0;
   int prevBit = -1;
-  int iLimit = isHorizontal ? [matrix height] : [matrix width];
-  int jLimit = isHorizontal ? [matrix width] : [matrix height];
-  unsigned char** array = [matrix array];
+  int iLimit = isHorizontal ? matrix.height : matrix.width;
+  int jLimit = isHorizontal ? matrix.width : matrix.height;
+  unsigned char** array = matrix.array;
 
   for (int i = 0; i < iLimit; ++i) {
     for (int j = 0; j < jLimit; ++j) {

@@ -1,25 +1,16 @@
 /**
- * <p>Encapsulates a QR Code's format information, including the data mask used and
- * error correction level.</p>
- * 
- * @author Sean Owen
- * @see DataMask
- * @see ErrorCorrectionLevel
+ * Encapsulates a QR Code's format information, including the data mask used and
+ * error correction level.
  */
 
 @class ZXErrorCorrectionLevel;
 
-@interface ZXFormatInformation : NSObject {
-  ZXErrorCorrectionLevel * errorCorrectionLevel;
-  char dataMask;
-}
+@interface ZXFormatInformation : NSObject
 
-@property (nonatomic, readonly) ZXErrorCorrectionLevel * errorCorrectionLevel;
-@property (nonatomic, readonly) char dataMask;
+@property (nonatomic, retain, readonly) ZXErrorCorrectionLevel * errorCorrectionLevel;
+@property (nonatomic, assign, readonly) char dataMask;
 
-+ (int) numBitsDiffering:(int)a b:(int)b;
-+ (ZXFormatInformation *) decodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2;
-- (int) hash;
-- (BOOL) isEqualTo:(NSObject *)o;
++ (int)numBitsDiffering:(int)a b:(int)b;
++ (ZXFormatInformation *)decodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2;
 
 @end
