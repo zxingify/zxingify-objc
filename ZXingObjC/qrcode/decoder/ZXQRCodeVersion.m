@@ -279,8 +279,8 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
                                      alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:22], nil]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:15 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:55]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:44]]
-                                                   ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:17]]
-                                                   ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:13]]],
+                                                   ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:17]]
+                                                   ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:4
                                      alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], nil]
