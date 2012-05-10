@@ -1,13 +1,11 @@
 /**
- * <p>This class contains the methods for decoding the PDF417 codewords.</p>
- * 
- * @author SITA Lab (kevin.osullivan@sita.aero)
+ * This class contains the methods for decoding the PDF417 codewords.
  */
 
 @class ZXDecoderResult;
 
 @interface ZXPDF417DecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *) decode:(NSArray *)codewords;
++ (ZXDecoderResult *)decode:(NSArray *)codewords;
 
 @end

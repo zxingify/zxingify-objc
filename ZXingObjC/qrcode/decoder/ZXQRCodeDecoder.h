@@ -11,8 +11,8 @@
   ZXReedSolomonDecoder * rsDecoder;
 }
 
-- (ZXDecoderResult *) decode:(BOOL **)image;
-- (ZXDecoderResult *) decode:(BOOL **)image hints:(ZXDecodeHints *)hints;
+- (ZXDecoderResult *) decode:(BOOL **)image length:(unsigned int)length;
+- (ZXDecoderResult *) decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints;
 - (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits;
 - (ZXDecoderResult *) decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints;
 

@@ -647,27 +647,48 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 
 @interface ZXPDF417BitMatrixParser ()
 
-- (int) codeword:(long)symbol;
-- (int) findCodewordIndex:(long)symbol;
+@property (nonatomic, retain) ZXBitMatrix * bitMatrix;
+@property (nonatomic, assign) int rows;
+@property (nonatomic, assign) int leftColumnECData;
+@property (nonatomic, assign) int rightColumnECData;
+@property (nonatomic, assign) int eraseCount;
+@property (nonatomic, retain) NSMutableArray * erasures;
+@property (nonatomic, assign) int ecLevel;
+
+- (int)codeword:(long)symbol;
+- (int)findCodewordIndex:(long)symbol;
 
 @end
 
 @implementation ZXPDF417BitMatrixParser
 
+@synthesize bitMatrix;
+@synthesize rows;
+@synthesize leftColumnECData;
+@synthesize rightColumnECData;
+@synthesize eraseCount;
 @synthesize erasures;
 @synthesize ecLevel;
 
-- (id) initWithBitMatrix:(ZXBitMatrix *)aBitMatrix {
+- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix {
   if (self = [super init]) {
-    rows = 0;
-    leftColumnECData = 0;
-    rightColumnECData = 0;
-    eraseCount = 0;
-    erasures = nil;
-    ecLevel = -1;
-    bitMatrix = [aBitMatrix retain];
+    self.rows = 0;
+    self.leftColumnECData = 0;
+    self.rightColumnECData = 0;
+    self.eraseCount = 0;
+    self.erasures = nil;
+    self.ecLevel = -1;
+    self.bitMatrix = aBitMatrix;
   }
+
   return self;
+}
+
+- (void)dealloc {
+  [bitMatrix release];
+  [erasures release];
+
+  [super dealloc];
 }
 
 
@@ -677,14 +698,12 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * symbols in the barcode. When it finds a number of consecutive rows which
  * are the same, it assumes that this is a row of codewords and processes
  * them into a codeword array.
- * 
- * @return an array of codewords.
  */
-- (NSArray *) readCodewords {
-  int width = [bitMatrix width];
-  int height = [bitMatrix height];
+- (NSArray *)readCodewords {
+  int width = bitMatrix.width;
+  int height = bitMatrix.height;
 
-  erasures = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
+  self.erasures = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
 
   float moduleWidth = 1.0f;
 
@@ -720,12 +739,12 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       }
     } else {
       if (rowInProgress) {
-        next = [self processRow:rowCounters rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
+        next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
         if (next == -1) {
           return nil;
         }
 
-        for (int j = 0; j < sizeof(rowCounters) / sizeof(int); j++) {
+        for (int j = 0; j < width; j++) {
           rowCounters[j] = 0;
         }
         rowNumber++;
@@ -741,12 +760,12 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     if (rowNumber >= MAX_ROWS) {
       return nil;
     }
-    next = [self processRow:rowCounters rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
+    next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
     rowNumber++;
-    rows = rowNumber;
+    self.rows = rowNumber;
   }
-  erasures = [[[erasures subarrayWithRange:NSMakeRange(0, eraseCount)] mutableCopy] autorelease];
-  return [codewords subarrayWithRange:NSMakeRange(0, eraseCount)];
+  self.erasures = [[[erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy] autorelease];
+  return [codewords subarrayWithRange:NSMakeRange(0, self.eraseCount)];
 }
 
 
@@ -755,22 +774,13 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * Each PDF417 symbol character consists of four bar elements and four space
  * elements, each of which can be one to six modules wide. The four bar and
  * four space elements shall measure 17 modules in total.
- * 
- * @param rowCounters an array containing the counts of black pixels for each column
- * in the row.
- * @param rowNumber   the current row number of codewords.
- * @param rowHeight   the height of this row in pixels.
- * @param codewords   the codeword array to save codewords into.
- * @param next        the next available index into the codewords array.
- * @return the next available index into the codeword array after processing
- * this row.
  */
-- (int) processRow:(int[])rowCounters rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next {
-  int width = [bitMatrix width];
+- (int)processRow:(int*)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next {
+  int width = bitMatrix.width;
   int columnNumber = 0;
   long symbol = 0;
   for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
-    if (i + MODULES_IN_SYMBOL > sizeof((int*)rowCounters) / sizeof(int)) {
+    if (i + MODULES_IN_SYMBOL > rowCountersLen) {
       @throw [ZXFormatException formatInstance];
     }
     for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
@@ -781,9 +791,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     if (columnNumber > 0) {
       int cw = [self codeword:symbol];
       if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
-        [erasures addObject:[NSNumber numberWithInt:next]];
+        [self.erasures addObject:[NSNumber numberWithInt:next]];
         next++;
-        eraseCount++;
+        self.eraseCount++;
       } else {
         [codewords replaceObjectAtIndex:next++ withObject:[NSNumber numberWithInt:cw]];
       }
@@ -813,9 +823,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       case 1:
         break;
       case 2:
-        rightColumnECData = [[codewords objectAtIndex:next] intValue];
-        if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
-          ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
+        self.rightColumnECData = [[codewords objectAtIndex:next] intValue];
+        if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
+          ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
         }
         break;
       }
@@ -828,11 +838,8 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 
 /**
  * Translate the symbol into a codeword.
- * 
- * @param symbol
- * @return the codeword corresponding to the symbol.
  */
-- (int) codeword:(long)symbol {
+- (int)codeword:(long)symbol {
   long sym = symbol;
   sym &= 0x3ffff;
   int i = [self findCodewordIndex:sym];
@@ -849,11 +856,8 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 /**
  * Use a binary search to find the index of the codeword corresponding to
  * this symbol.
- * 
- * @param symbol the symbol from the barcode.
- * @return the index into the codeword table.
  */
-- (int) findCodewordIndex:(long)symbol {
+- (int)findCodewordIndex:(long)symbol {
   int first = 0;
   int upto = sizeof(SYMBOL_TABLE) / sizeof(int);
   while (first < upto) {
@@ -870,11 +874,4 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   return -1;
 }
 
-- (void) dealloc {
-  [bitMatrix release];
-  [erasures release];
-  [super dealloc];
-}
-
 @end
-

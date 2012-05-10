@@ -12,54 +12,60 @@
 
 @interface ZXPDF417Reader ()
 
-- (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image;
-- (int) findPatternStart:(int)x y:(int)y image:(ZXBitMatrix *)image;
-- (int) findPatternEnd:(int)x y:(int)y image:(ZXBitMatrix *)image;
-- (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
+@property (nonatomic, retain) ZXPDF417Decoder * decoder;
+
+- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
+- (int)findPatternStart:(int)x y:(int)y image:(ZXBitMatrix *)image;
+- (int)findPatternEnd:(int)x y:(int)y image:(ZXBitMatrix *)image;
+- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
 
 @end
 
 @implementation ZXPDF417Reader
 
-- (id) init {
+@synthesize decoder;
+
+- (id)init {
   if (self = [super init]) {
-    decoder = [[ZXPDF417Decoder alloc] init];
+    self.decoder = [[[ZXPDF417Decoder alloc] init] autorelease];
   }
   return self;
 }
 
 
+- (void)dealloc {
+  [decoder release];
+
+  [super dealloc];
+}
+
 /**
  * Locates and decodes a PDF417 code in an image.
- * 
- * @return a String representing the content encoded by the PDF417 code
- * @throws NotFoundException if a PDF417 code cannot be found,
- * @throws FormatException if a PDF417 cannot be decoded
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image {
   return [self decode:image hints:nil];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
   ZXDecoderResult * decoderResult;
   NSArray * points;
   if (hints != nil && hints.pureBarcode) {
-    ZXBitMatrix * bits = [self extractPureBits:[image blackMatrix]];
+    ZXBitMatrix * bits = [self extractPureBits:image.blackMatrix];
     decoderResult = [decoder decodeMatrix:bits];
     points = [NSArray array];
   } else {
     ZXDetectorResult * detectorResult = [[[[ZXPDF417Detector alloc] initWithImage:image] autorelease] detect];
-    decoderResult = [decoder decodeMatrix:[detectorResult bits]];
-    points = [detectorResult points];
+    decoderResult = [decoder decodeMatrix:detectorResult.bits];
+    points = detectorResult.points;
   }
-  return [[[ZXResult alloc] initWithText:[decoderResult text]
-                              rawBytes:[decoderResult rawBytes]
-                                length:[decoderResult length]
-                                resultPoints:points
-                                format:kBarcodeFormatPDF417] autorelease];
+  return [[[ZXResult alloc] initWithText:decoderResult.text
+                                rawBytes:decoderResult.rawBytes
+                                  length:decoderResult.length
+                            resultPoints:points
+                                  format:kBarcodeFormatPDF417] autorelease];
 }
 
-- (void) reset {
+- (void)reset {
   // do nothing
 }
 
@@ -69,13 +75,10 @@
  * which contains only an unrotated, unskewed, image of a code, with some white border
  * around it. This is a specialized method that works exceptionally fast in this special
  * case.
- * 
- * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
- * @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
  */
-- (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image {
-  NSArray * leftTopBlack = [image topLeftOnBit];
-  NSArray * rightBottomBlack = [image bottomRightOnBit];
+- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image {
+  NSArray * leftTopBlack = image.topLeftOnBit;
+  NSArray * rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     @throw [ZXNotFoundException notFoundInstance];
   }
@@ -110,7 +113,7 @@
   return bits;
 }
 
-- (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
+- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
   int x = [[leftTopBlack objectAtIndex:0] intValue];
   int y = [[leftTopBlack objectAtIndex:1] intValue];
   int width = [image width];
@@ -129,8 +132,8 @@
   return moduleSize;
 }
 
-- (int) findPatternStart:(int)x y:(int)y image:(ZXBitMatrix *)image {
-  int width = [image width];
+- (int)findPatternStart:(int)x y:(int)y image:(ZXBitMatrix *)image {
+  int width = image.width;
   int start = x;
 
   int transitions = 0;
@@ -149,8 +152,8 @@
   return start;
 }
 
-- (int) findPatternEnd:(int)x y:(int)y image:(ZXBitMatrix *)image {
-  int width = [image width];
+- (int)findPatternEnd:(int)x y:(int)y image:(ZXBitMatrix *)image {
+  int width = image.width;
   int end = width - 1;
 
   while (end > x && ![image get:end y:y]) {
@@ -171,11 +174,6 @@
     @throw [ZXNotFoundException notFoundInstance];
   }
   return end;
-}
-
-- (void) dealloc {
-  [decoder release];
-  [super dealloc];
 }
 
 @end

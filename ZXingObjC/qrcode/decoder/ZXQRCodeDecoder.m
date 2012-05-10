@@ -27,8 +27,8 @@
   return self;
 }
 
-- (ZXDecoderResult *) decode:(BOOL **)image {
-  return [self decode:image hints:nil];
+- (ZXDecoderResult *) decode:(BOOL **)image length:(unsigned int)length {
+  return [self decode:image length:length hints:nil];
 }
 
 
@@ -41,8 +41,8 @@
  * @throws FormatException if the QR Code cannot be decoded
  * @throws ChecksumException if error correction fails
  */
-- (ZXDecoderResult *) decode:(BOOL **)image hints:(ZXDecodeHints *)hints {
-  int dimension = sizeof(image) / sizeof(BOOL *);
+- (ZXDecoderResult *) decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints {
+  int dimension = length;
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {

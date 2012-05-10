@@ -57,19 +57,19 @@ NSString* const EXP900[16] =
 
 @interface ZXPDF417DecodedBitStreamParser ()
 
-+ (NSMutableString *) add:(NSString *)value1 value2:(NSString *)value2;
-+ (int) byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (NSString *) decodeBase900toBase10:(int[])codewords count:(int)count;
-+ (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
-+ (NSMutableString *) multiply:(NSString *)value1 value2:(int)value2;
-+ (int) numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (int) textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
++ (NSMutableString *)add:(NSString *)value1 value2:(NSString *)value2;
++ (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
++ (NSString *)decodeBase900toBase10:(int*)codewords count:(int)count;
++ (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
++ (NSMutableString *)multiply:(NSString *)value1 value2:(int)value2;
++ (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
++ (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 
 @end
 
 @implementation ZXPDF417DecodedBitStreamParser
 
-+ (ZXDecoderResult *) decode:(NSArray *)codewords {
++ (ZXDecoderResult *)decode:(NSArray *)codewords {
   NSMutableString * result = [NSMutableString stringWithCapacity:100];
   int codeIndex = 1;
   int code = [[codewords objectAtIndex:codeIndex++] intValue];
@@ -109,13 +109,8 @@ NSString* const EXP900[16] =
  * Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
  * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as
  * well as selected control characters.
- * 
- * @param codewords The array of codewords (data + error)
- * @param codeIndex The current index into the codeword array.
- * @param result    The decoded data is appended to the result.
- * @return The next index into the codeword array.
  */
-+ (int) textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   int textCompactionData[[[codewords objectAtIndex:0] intValue] << 1];
   int byteCompactionData[[[codewords objectAtIndex:0] intValue] << 1];
 
@@ -169,14 +164,8 @@ NSString* const EXP900[16] =
  * Compaction mode encodes up to 2 characters per codeword. The compaction rules
  * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
  * switches are defined in 5.4.2.3.
- * 
- * @param textCompactionData The text compaction data.
- * @param byteCompactionData The byte compaction data if there
- * was a mode shift.
- * @param length             The size of the text compaction and byte compaction data.
- * @param result             The decoded data is appended to the result.
  */
-+ (void) decodeTextCompaction:(int[])textCompactionData byteCompactionData:(int[])byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
++ (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
   int subMode = PDF417_ALPHA;
   int priorToShiftMode = PDF417_ALPHA;
   int i = 0;
@@ -286,14 +275,8 @@ NSString* const EXP900[16] =
  * Byte Compaction mode (see 5.4.3) permits all 256 possible 8-bit byte values to be encoded.
  * This includes all ASCII characters value 0 to 127 inclusive and provides for international
  * character set support.
- * 
- * @param mode      The byte compaction mode i.e. 901 or 924
- * @param codewords The array of codewords (data + error)
- * @param codeIndex The current index into the codeword array.
- * @param result    The decoded data is appended to the result.
- * @return The next index into the codeword array.
  */
-+ (int) byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   if (mode == BYTE_COMPACTION_MODE_LATCH) {
     int count = 0;
     long value = 0;
@@ -368,13 +351,8 @@ NSString* const EXP900[16] =
 
 /**
  * Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.
- * 
- * @param codewords The array of codewords (data + error)
- * @param codeIndex The current index into the codeword array.
- * @param result    The decoded data is appended to the result.
- * @return The next index into the codeword array.
  */
-+ (int) numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   int count = 0;
   BOOL end = NO;
 
@@ -410,10 +388,6 @@ NSString* const EXP900[16] =
 
 /**
  * Convert a list of Numeric Compacted codewords from Base 900 to Base 10.
- *
- * @param codewords The array of codewords
- * @param count     The number of codewords
- * @return The decoded string representing the Numeric data.
  */
 /*
    EXAMPLE
@@ -455,7 +429,7 @@ NSString* const EXP900[16] =
    tokens for the numbers.
    BigDecimal is not supported by J2ME.
  */
-+ (NSString *) decodeBase900toBase10:(int[])codewords count:(int)count {
++ (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
   NSMutableString * accum = nil;
   for (int i = 0; i < count; i++) {
     NSMutableString * value = [self multiply:EXP900[count - i - 1] value2:codewords[i]];
@@ -483,12 +457,8 @@ NSString* const EXP900[16] =
 
 /**
  * Multiplies two String numbers
- * 
- * @param value1 Any number represented as a string.
- * @param value2 A number <= 999.
- * @return the result of value1 * value2.
  */
-+ (NSMutableString *) multiply:(NSString *)value1 value2:(int)value2 {
++ (NSMutableString *)multiply:(NSString *)value1 value2:(int)value2 {
   NSMutableString * result = [NSMutableString stringWithCapacity:[value1 length]];
   for (int i = 0; i < [value1 length]; i++) {
     [result appendString:@"0"];
@@ -514,12 +484,8 @@ NSString* const EXP900[16] =
 
 /**
  * Add two numbers which are represented as strings.
- * 
- * @param value1
- * @param value2
- * @return the result of value1 + value2
  */
-+ (NSMutableString *) add:(NSString *)value1 value2:(NSString *)value2 {
++ (NSMutableString *)add:(NSString *)value1 value2:(NSString *)value2 {
   NSMutableString * temp1 = [NSMutableString stringWithCapacity:5];
   NSMutableString * temp2 = [NSMutableString stringWithCapacity:5];
   NSMutableString * result = [NSMutableString stringWithCapacity:[value1 length]];
