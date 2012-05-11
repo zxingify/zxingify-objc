@@ -830,6 +830,8 @@
 		029BD1281512A0FA009E6549 /* ZXWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEEE15129BD0009E6549 /* ZXWriter.h */; };
 		029BD1291512A0FA009E6549 /* ZXWriterException.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCEEF15129BD0009E6549 /* ZXWriterException.h */; };
 		029BD12A1512A0FA009E6549 /* ZXWriterException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEF015129BD0009E6549 /* ZXWriterException.m */; };
+		029C9DA3155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */; };
+		029C9DA4155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */; };
 		02AAC8881553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC8891553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC88A1553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
@@ -1273,6 +1275,8 @@
 		029BD0F01512A0DB009E6549 /* ZXQRCodeDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeDecoder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		029BD1021512A0EF009E6549 /* ZXQRCodeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXQRCodeDetector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		029BD1031512A0EF009E6549 /* ZXQRCodeDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeDetector.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		029C9DA1155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox5TestCase.h; sourceTree = "<group>"; };
+		029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox5TestCase.m; sourceTree = "<group>"; };
 		02AAC8871553384700D4FF0D /* ZXEncodeHints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEncodeHints.m; sourceTree = "<group>"; };
 		02D26EE2151288DB007F8DC6 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D26EE5151288DB007F8DC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2048,6 +2052,8 @@
 				02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */,
 				02070C5B155C681A00E3BBFE /* QRCodeBlackBox4TestCase.h */,
 				02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */,
+				029C9DA1155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.h */,
+				029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */,
 			);
 			path = qrcode;
 			sourceTree = "<group>";
@@ -2772,6 +2778,7 @@
 				02AAC88B1553384900D4FF0D /* ZXEncodeHints.m in Sources */,
 				02070C59155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */,
 				02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */,
+				029C9DA4155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3135,6 +3142,7 @@
 				02AAC8891553384900D4FF0D /* ZXEncodeHints.m in Sources */,
 				02070C58155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */,
 				02070C5D155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */,
+				029C9DA3155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
