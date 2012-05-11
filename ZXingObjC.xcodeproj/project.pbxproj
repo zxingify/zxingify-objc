@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		02070C58155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */; };
 		02070C59155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */; };
+		02070C5D155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
+		02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
 		0250D79E1545EE5900752941 /* ZXAztecDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8115129BD0009E6549 /* ZXAztecDetectorResult.m */; };
 		0250D79F1545EE5900752941 /* ZXAztecReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8315129BD0009E6549 /* ZXAztecReader.m */; };
 		0250D7A01545EE5900752941 /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFBA15129EDB009E6549 /* ZXAztecDecoder.m */; };
@@ -941,6 +943,8 @@
 /* Begin PBXFileReference section */
 		02070C56155C678C00E3BBFE /* QRCodeBlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox3TestCase.h; sourceTree = "<group>"; };
 		02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox3TestCase.m; sourceTree = "<group>"; };
+		02070C5B155C681A00E3BBFE /* QRCodeBlackBox4TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox4TestCase.h; sourceTree = "<group>"; };
+		02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox4TestCase.m; sourceTree = "<group>"; };
 		0250D9001545FC8B00752941 /* ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		0250D9011545FC8B00752941 /* osx-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2042,6 +2046,8 @@
 				029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */,
 				02070C56155C678C00E3BBFE /* QRCodeBlackBox3TestCase.h */,
 				02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */,
+				02070C5B155C681A00E3BBFE /* QRCodeBlackBox4TestCase.h */,
+				02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */,
 			);
 			path = qrcode;
 			sourceTree = "<group>";
@@ -2765,6 +2771,7 @@
 				029A9BFC15532B3400CCADE7 /* ZXDecodeHints.m in Sources */,
 				02AAC88B1553384900D4FF0D /* ZXEncodeHints.m in Sources */,
 				02070C59155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */,
+				02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3127,6 +3134,7 @@
 				029A9BFA15532B3400CCADE7 /* ZXDecodeHints.m in Sources */,
 				02AAC8891553384900D4FF0D /* ZXEncodeHints.m in Sources */,
 				02070C58155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */,
+				02070C5D155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

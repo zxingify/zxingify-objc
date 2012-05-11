@@ -42,7 +42,7 @@
   ZXGenericGFPoly * poly = [[[ZXGenericGFPoly alloc] initWithField:field coefficients:received] autorelease];
   NSMutableArray * syndromeCoefficients = [NSMutableArray arrayWithCapacity:twoS];
   for (int i = 0; i < twoS; i++) {
-    [syndromeCoefficients addObject:[NSNull null]];
+    [syndromeCoefficients addObject:[NSNumber numberWithInt:0]];
   }
 
   BOOL dataMatrix = [self.field isEqual:[ZXGenericGF DataMatrixField256]];

@@ -79,7 +79,7 @@
 /**
  * Clears all bits (sets to false).
  */
-- (void) clear {
+- (void)clear {
   int max = self.bitsSize;
 
   for (int i = 0; i < max; i++) {
@@ -139,7 +139,7 @@
  * 
  * Returns {x,y} coordinate of top-left-most 1 bit, or null if it is all white
  */
-- (NSArray *) topLeftOnBit {
+- (NSArray *)topLeftOnBit {
   int bitsOffset = 0;
   while (bitsOffset < self.bitsSize && self.bits[bitsOffset] == 0) {
     bitsOffset++;
@@ -159,7 +159,7 @@
   return [NSArray arrayWithObjects:[NSNumber numberWithInt:x], [NSNumber numberWithInt:y], nil];
 }
 
-- (NSArray *) bottomRightOnBit {
+- (NSArray *)bottomRightOnBit {
   int bitsOffset = self.bitsSize - 1;
   while (bitsOffset >= 0 && self.bits[bitsOffset] == 0) {
     bitsOffset--;
@@ -208,7 +208,7 @@
   return hash;
 }
 
-- (NSString *) description {
+- (NSString *)description {
   NSMutableString * result = [NSMutableString stringWithCapacity:self.height * (self.width + 1)];
   for (int y = 0; y < self.height; y++) {
     for (int x = 0; x < self.width; x++) {

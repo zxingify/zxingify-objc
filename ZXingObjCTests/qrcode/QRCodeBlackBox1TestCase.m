@@ -20,7 +20,7 @@
   return self;
 }
 
-- (void) testBlackBox {
+- (void)testBlackBox {
   [super runTests];
 }
 
