@@ -62,6 +62,9 @@
                <Test
                   Identifier = "AztecBlackBox2TestCase">
                </Test>
+               <Test
+                  Identifier = "DataMatrixBlackBox1TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
