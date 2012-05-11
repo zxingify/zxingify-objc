@@ -425,19 +425,19 @@ const int BASE256_ENCODE = 6;
     @throw [ZXFormatException formatInstance];
   }
 
-  NSMutableArray * bytes = [NSMutableArray arrayWithCapacity:count];
-  NSMutableData * data = [NSMutableData dataWithLength:count];
+  NSMutableArray * bytesArray = [NSMutableArray arrayWithCapacity:count];
+  unsigned char bytes[count];
   for (int i = 0; i < count; i++) {
     if ([bits available] < 8) {
       @throw [ZXFormatException formatInstance];
     }
     char byte = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
-    [bytes addObject:[NSNumber numberWithChar:byte]];
-    [data appendBytes:&byte length:sizeof(char)];
+    bytes[i] = byte;
+    [bytesArray addObject:[NSNumber numberWithChar:byte]];
   }
-  [byteSegments addObject:bytes];
+  [byteSegments addObject:bytesArray];
 
-  [result appendString:[[[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding] autorelease]];
+  [result appendString:[[[NSString alloc] initWithBytes:bytes length:count encoding:NSISOLatin1StringEncoding] autorelease]];
 }
 
 
