@@ -832,6 +832,8 @@
 		029BD12A1512A0FA009E6549 /* ZXWriterException.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCEF015129BD0009E6549 /* ZXWriterException.m */; };
 		029C9DA3155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */; };
 		029C9DA4155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */; };
+		029C9DA9155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA8155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m */; };
+		029C9DAA155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA8155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m */; };
 		02AAC8881553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC8891553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC88A1553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
@@ -1277,6 +1279,8 @@
 		029BD1031512A0EF009E6549 /* ZXQRCodeDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeDetector.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		029C9DA1155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox5TestCase.h; sourceTree = "<group>"; };
 		029C9DA2155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox5TestCase.m; sourceTree = "<group>"; };
+		029C9DA7155D6BEC00A53DA0 /* AztecBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AztecBlackBox1TestCase.h; path = aztec/AztecBlackBox1TestCase.h; sourceTree = "<group>"; };
+		029C9DA8155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AztecBlackBox1TestCase.m; path = aztec/AztecBlackBox1TestCase.m; sourceTree = "<group>"; };
 		02AAC8871553384700D4FF0D /* ZXEncodeHints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEncodeHints.m; sourceTree = "<group>"; };
 		02D26EE2151288DB007F8DC6 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D26EE5151288DB007F8DC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1896,6 +1900,15 @@
 			path = encoder;
 			sourceTree = "<group>";
 		};
+		029C9DA6155D6BBB00A53DA0 /* aztec */ = {
+			isa = PBXGroup;
+			children = (
+				029C9DA7155D6BEC00A53DA0 /* AztecBlackBox1TestCase.h */,
+				029C9DA8155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m */,
+			);
+			name = aztec;
+			sourceTree = "<group>";
+		};
 		02D26ED7151288DB007F8DC6 = {
 			isa = PBXGroup;
 			children = (
@@ -1998,6 +2011,7 @@
 		02D26EFB151288DB007F8DC6 /* ZXingObjCTests */ = {
 			isa = PBXGroup;
 			children = (
+				029C9DA6155D6BBB00A53DA0 /* aztec */,
 				02FB06DF15475B480067923D /* common */,
 				02FB06E715475B6F0067923D /* qrcode */,
 				02FB06F115475BCE0067923D /* Resources */,
@@ -2779,6 +2793,7 @@
 				02070C59155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */,
 				02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */,
 				029C9DA4155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */,
+				029C9DAA155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3143,6 +3158,7 @@
 				02070C58155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */,
 				02070C5D155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */,
 				029C9DA3155D6B5B00A53DA0 /* QRCodeBlackBox5TestCase.m in Sources */,
+				029C9DA9155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

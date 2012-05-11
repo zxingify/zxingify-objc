@@ -105,7 +105,7 @@
   NSArray * corners = [self matrixCornerPoints:bullEyeCornerPoints];
 
   // 5. Sample the grid
-  ZXBitMatrix *bits = [self sampleGrid:image
+  ZXBitMatrix *bits = [self sampleGrid:self.image
                                topLeft:[corners objectAtIndex:self.shift % 4]
                             bottomLeft:[corners objectAtIndex:(self.shift + 3) % 4]
                            bottomRight:[corners objectAtIndex:(self.shift + 2) % 4]
@@ -133,13 +133,13 @@
   NSArray *rescd = [self sampleLine:p2 p2:p3 size:2 * self.nbCenterLayers + 1];
   NSArray *resda = [self sampleLine:p3 p2:p0 size:2 * self.nbCenterLayers + 1];
 
-  if ([resab objectAtIndex:0] && [resab objectAtIndex:2 * self.nbCenterLayers]) {
+  if ([[resab objectAtIndex:0] boolValue] && [[resab objectAtIndex:2 * self.nbCenterLayers] boolValue]) {
     self.shift = 0;
-  } else if ([resbc objectAtIndex:0] && [resbc objectAtIndex:2 * self.nbCenterLayers]) {
+  } else if ([[resbc objectAtIndex:0] boolValue] && [[resbc objectAtIndex:2 * self.nbCenterLayers] boolValue]) {
     self.shift = 1;
-  } else if ([rescd objectAtIndex:0] && [rescd objectAtIndex:2 * self.nbCenterLayers]) {
+  } else if ([[rescd objectAtIndex:0] boolValue] && [[rescd objectAtIndex:2 * self.nbCenterLayers] boolValue]) {
     self.shift = 2;
-  } else if ([resda objectAtIndex:0] && [resda objectAtIndex:2 * self.nbCenterLayers]) {
+  } else if ([[resda objectAtIndex:0] boolValue] && [[resda objectAtIndex:2 * self.nbCenterLayers] boolValue]) {
     self.shift = 3;
   } else {
     @throw [ZXNotFoundException notFoundInstance];
@@ -441,14 +441,14 @@
                        p3ToY:dimension - 0.5f
                        p4ToX:0.5f
                        p4ToY:dimension - 0.5f
-                     p1FromX:[topLeft x]
-                     p1FromY:[topLeft y]
-                     p2FromX:[topRight x]
-                     p2FromY:[topRight y]
-                     p3FromX:[bottomRight x]
-                     p3FromY:[bottomRight y]
-                     p4FromX:[bottomLeft x]
-                     p4FromY:[bottomLeft y]];
+                     p1FromX:topLeft.x
+                     p1FromY:topLeft.y
+                     p2FromX:topRight.x
+                     p2FromY:topRight.y
+                     p3FromX:bottomRight.x
+                     p3FromY:bottomRight.y
+                     p4FromX:bottomLeft.x
+                     p4FromY:bottomLeft.y];
 }
 
 

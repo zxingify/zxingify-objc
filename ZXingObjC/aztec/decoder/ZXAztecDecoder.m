@@ -258,7 +258,7 @@ static NSString* DIGIT_TABLE[] = {
     int flag = 1;
 
     for (int j = 1; j <= codewordSize; j++) {
-      if ([rawbits objectAtIndex:codewordSize * i + codewordSize - j + offset]) {
+      if ([[rawbits objectAtIndex:codewordSize * i + codewordSize - j + offset] boolValue]) {
         [dataWords replaceObjectAtIndex:i withObject:
          [NSNumber numberWithInt:[[dataWords objectAtIndex:i] intValue] + flag]];
       }
@@ -308,7 +308,7 @@ static NSString* DIGIT_TABLE[] = {
         [correctedBits replaceObjectAtIndex:i * self.codewordSize + j - offset withObject:[NSNumber numberWithBool:color]];
       }
 
-      flag = (int)(((unsigned int)flag) << 1);
+      flag = (int)(((unsigned int)flag) >> 1);
     }
   }
 
