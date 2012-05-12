@@ -74,6 +74,9 @@
                <Test
                   Identifier = "FalsePositivesBlackBoxTestCase">
                </Test>
+               <Test
+                  Identifier = "FalsePositives2BlackBoxTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
