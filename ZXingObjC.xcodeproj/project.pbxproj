@@ -909,6 +909,8 @@
 		250101E3155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101E1155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m */; };
 		250101EA155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101E9155EB9DB00D1D979 /* PartialBlackBoxTestCase.m */; };
 		250101EB155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101E9155EB9DB00D1D979 /* PartialBlackBoxTestCase.m */; };
+		250101EE155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */; };
+		250101EF155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */; };
 		250830011512AFD4006D79E6 /* ZXEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25082FFF1512AFD4006D79E6 /* ZXEncoder.h */; };
 		250830021512AFD4006D79E6 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* ZXEncoder.m */; };
 		250830031512AFD4006D79E6 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* ZXEncoder.m */; };
@@ -1340,6 +1342,8 @@
 		250101E1155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FalsePositives2BlackBoxTestCase.m; path = negative/FalsePositives2BlackBoxTestCase.m; sourceTree = "<group>"; };
 		250101E8155EB9DB00D1D979 /* PartialBlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PartialBlackBoxTestCase.h; path = negative/PartialBlackBoxTestCase.h; sourceTree = "<group>"; };
 		250101E9155EB9DB00D1D979 /* PartialBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartialBlackBoxTestCase.m; path = negative/PartialBlackBoxTestCase.m; sourceTree = "<group>"; };
+		250101EC155EBABD00D1D979 /* UnsupportedBlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnsupportedBlackBoxTestCase.h; path = negative/UnsupportedBlackBoxTestCase.h; sourceTree = "<group>"; };
+		250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnsupportedBlackBoxTestCase.m; path = negative/UnsupportedBlackBoxTestCase.m; sourceTree = "<group>"; };
 		25082FFF1512AFD4006D79E6 /* ZXEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXEncoder.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		250830001512AFD4006D79E6 /* ZXEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXEncoder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2508300D1512B0B1006D79E6 /* ZXDataMatrixDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDataBlock.h; sourceTree = "<group>"; };
@@ -2126,6 +2130,8 @@
 				250101DD155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m */,
 				250101E8155EB9DB00D1D979 /* PartialBlackBoxTestCase.h */,
 				250101E9155EB9DB00D1D979 /* PartialBlackBoxTestCase.m */,
+				250101EC155EBABD00D1D979 /* UnsupportedBlackBoxTestCase.h */,
+				250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */,
 			);
 			name = negative;
 			sourceTree = "<group>";
@@ -2859,6 +2865,7 @@
 				250101DF155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m in Sources */,
 				250101E3155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */,
 				250101EB155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */,
+				250101EF155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3231,6 +3238,7 @@
 				250101DE155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m in Sources */,
 				250101E2155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */,
 				250101EA155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */,
+				250101EE155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
