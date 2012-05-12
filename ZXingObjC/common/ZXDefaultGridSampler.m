@@ -53,7 +53,13 @@
 
     [ZXGridSampler checkAndNudgePoints:image points:pointsf pointsLen:pointsLen];
     for (int x = 0; x < max; x += 2) {
-      if ([image get:(int)pointsf[x] y:(int)pointsf[x + 1]]) {
+      int xx = (int)pointsf[x];
+      int yy = (int)pointsf[x + 1];
+      if (xx < 0 || yy < 0 || xx >= image.width || yy >= image.height) {
+        @throw [ZXNotFoundException notFoundInstance];
+      }
+
+      if ([image get:xx y:yy]) {
         [bits set:x >> 1 y:y];
       }
     }

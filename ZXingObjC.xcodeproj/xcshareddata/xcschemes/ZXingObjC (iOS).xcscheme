@@ -65,6 +65,15 @@
                <Test
                   Identifier = "DataMatrixBlackBox1TestCase">
                </Test>
+               <Test
+                  Identifier = "AbstractNegativeBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "DataMatrixBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "FalsePositivesBlackBoxTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

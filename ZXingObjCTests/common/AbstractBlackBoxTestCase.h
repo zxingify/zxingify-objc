@@ -5,20 +5,15 @@
 #import "ZXImage.h"
 #import "ZXReader.h"
 
-@interface TestResult : NSObject
-
-@property (nonatomic, readonly) int mustPassCount;
-@property (nonatomic, readonly) int tryHarderCount;
-@property (nonatomic, readonly) float rotation;
-
-- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
-
-@end
-
 @interface AbstractBlackBoxTestCase : SenTestCase
+
+@property (nonatomic, retain, readonly) id<ZXReader> barcodeReader;
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat;
 - (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
 - (void)runTests;
+
+- (NSArray *)imageFiles;
+- (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees;
 
 @end

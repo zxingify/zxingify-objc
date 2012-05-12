@@ -899,8 +899,14 @@
 		02FDEDC9155D9CFD00D9AA13 /* AztecBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDC7155D9CFD00D9AA13 /* AztecBlackBox2TestCase.m */; };
 		02FDEDEA155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDE9155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m */; };
 		02FDEDEB155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDE9155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m */; };
-		02FDEDEE155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDED155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m */; };
-		02FDEDEF155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDED155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m */; };
+		250101D8155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */; };
+		250101D9155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */; };
+		250101DA155E22EF00D1D979 /* DataMatrixBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDED155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m */; };
+		250101DB155E22F000D1D979 /* DataMatrixBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FDEDED155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m */; };
+		250101DE155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101DD155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m */; };
+		250101DF155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101DD155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m */; };
+		250101E2155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101E1155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m */; };
+		250101E3155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101E1155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m */; };
 		250830011512AFD4006D79E6 /* ZXEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25082FFF1512AFD4006D79E6 /* ZXEncoder.h */; };
 		250830021512AFD4006D79E6 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* ZXEncoder.m */; };
 		250830031512AFD4006D79E6 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* ZXEncoder.m */; };
@@ -1324,6 +1330,12 @@
 		02FDEDE9155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataMatrixBlackBox1TestCase.m; path = datamatrix/DataMatrixBlackBox1TestCase.m; sourceTree = "<group>"; };
 		02FDEDEC155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataMatrixBlackBox2TestCase.h; path = datamatrix/DataMatrixBlackBox2TestCase.h; sourceTree = "<group>"; };
 		02FDEDED155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataMatrixBlackBox2TestCase.m; path = datamatrix/DataMatrixBlackBox2TestCase.m; sourceTree = "<group>"; };
+		250101D6155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractNegativeBlackBoxTestCase.h; sourceTree = "<group>"; };
+		250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractNegativeBlackBoxTestCase.m; sourceTree = "<group>"; };
+		250101DC155E230800D1D979 /* FalsePositivesBlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FalsePositivesBlackBoxTestCase.h; path = negative/FalsePositivesBlackBoxTestCase.h; sourceTree = "<group>"; };
+		250101DD155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FalsePositivesBlackBoxTestCase.m; path = negative/FalsePositivesBlackBoxTestCase.m; sourceTree = "<group>"; };
+		250101E0155E305000D1D979 /* FalsePositives2BlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FalsePositives2BlackBoxTestCase.h; path = negative/FalsePositives2BlackBoxTestCase.h; sourceTree = "<group>"; };
+		250101E1155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FalsePositives2BlackBoxTestCase.m; path = negative/FalsePositives2BlackBoxTestCase.m; sourceTree = "<group>"; };
 		25082FFF1512AFD4006D79E6 /* ZXEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXEncoder.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		250830001512AFD4006D79E6 /* ZXEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXEncoder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2508300D1512B0B1006D79E6 /* ZXDataMatrixDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDataBlock.h; sourceTree = "<group>"; };
@@ -2028,6 +2040,7 @@
 				029C9DA6155D6BBB00A53DA0 /* aztec */,
 				02FB06DF15475B480067923D /* common */,
 				02FDEDE7155DBAEA00D9AA13 /* datamatrix */,
+				250101D0155E1A8400D1D979 /* negative */,
 				02FB06E715475B6F0067923D /* qrcode */,
 				02FB06F115475BCE0067923D /* Resources */,
 				02D26EFC151288DB007F8DC6 /* Supporting Files */,
@@ -2066,6 +2079,8 @@
 			children = (
 				02FB06E015475B480067923D /* AbstractBlackBoxTestCase.h */,
 				02FB06E115475B480067923D /* AbstractBlackBoxTestCase.m */,
+				250101D6155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.h */,
+				250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -2096,6 +2111,17 @@
 				02FDEDED155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m */,
 			);
 			name = datamatrix;
+			sourceTree = "<group>";
+		};
+		250101D0155E1A8400D1D979 /* negative */ = {
+			isa = PBXGroup;
+			children = (
+				250101E0155E305000D1D979 /* FalsePositives2BlackBoxTestCase.h */,
+				250101E1155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m */,
+				250101DC155E230800D1D979 /* FalsePositivesBlackBoxTestCase.h */,
+				250101DD155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m */,
+			);
+			name = negative;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2822,7 +2848,10 @@
 				029C9DAA155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */,
 				02FDEDC9155D9CFD00D9AA13 /* AztecBlackBox2TestCase.m in Sources */,
 				02FDEDEB155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m in Sources */,
-				02FDEDEF155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m in Sources */,
+				250101D9155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m in Sources */,
+				250101DB155E22F000D1D979 /* DataMatrixBlackBox2TestCase.m in Sources */,
+				250101DF155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m in Sources */,
+				250101E3155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3190,7 +3219,10 @@
 				029C9DA9155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */,
 				02FDEDC8155D9CFD00D9AA13 /* AztecBlackBox2TestCase.m in Sources */,
 				02FDEDEA155DBB0F00D9AA13 /* DataMatrixBlackBox1TestCase.m in Sources */,
-				02FDEDEE155DC63F00D9AA13 /* DataMatrixBlackBox2TestCase.m in Sources */,
+				250101D8155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m in Sources */,
+				250101DA155E22EF00D1D979 /* DataMatrixBlackBox2TestCase.m in Sources */,
+				250101DE155E230800D1D979 /* FalsePositivesBlackBoxTestCase.m in Sources */,
+				250101E2155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

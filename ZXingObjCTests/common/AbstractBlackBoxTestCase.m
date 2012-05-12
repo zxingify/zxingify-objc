@@ -6,6 +6,16 @@
 #import "ZXReaderException.h"
 #import "ZXResult.h"
 
+@interface TestResult : NSObject
+
+@property (nonatomic, readonly) int mustPassCount;
+@property (nonatomic, readonly) int tryHarderCount;
+@property (nonatomic, readonly) float rotation;
+
+- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
+
+@end
+
 @implementation TestResult
 
 @synthesize mustPassCount;
@@ -31,11 +41,9 @@
 @property (nonatomic, copy) NSString * testBase;
 @property (nonatomic, retain) NSMutableArray * testResults;
 
-- (NSArray *)imageFiles;
 - (ZXDecodeHints *)hints;
 - (void)runTests;
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure;
-- (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees;
 
 @end
 
