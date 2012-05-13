@@ -172,7 +172,7 @@ int const CODE_STOP = 106;
         int bestVariance = MAX_AVG_VARIANCE;
         int bestMatch = -1;
         for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:sizeof(counters) / sizeof(int) pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -274,7 +274,7 @@ int const CODE_STOP = 106;
     }
 
     lastStart = nextStart;
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    for (int i = 0; i < countersLen; i++) {
       nextStart += counters[i];
     }
 
@@ -288,7 +288,7 @@ int const CODE_STOP = 106;
     switch (codeSet) {
     case CODE_CODE_A:
       if (code < 64) {
-        [result appendFormat:@" %C", (unichar)code];
+        [result appendFormat:@"%C", (unichar)(' ' + code)];
       } else if (code < 96) {
         [result appendFormat:@"%C", (unichar)(code - 64)];
       } else {
@@ -320,7 +320,7 @@ int const CODE_STOP = 106;
       break;
     case CODE_CODE_B:
       if (code < 96) {
-        [result appendFormat:@" %C", (unichar)code];
+        [result appendFormat:@"%C", (unichar)(' ' + code)];
       } else {
         if (code != CODE_STOP) {
           lastCharacterWasPrintable = NO;
@@ -353,9 +353,8 @@ int const CODE_STOP = 106;
         if (code < 10) {
           [result appendString:@"0"];
         }
-        [result appendFormat:@"%C", (unichar)code];
-      }
-       else {
+        [result appendFormat:@"%d", code];
+      } else {
         if (code != CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }

@@ -92,10 +92,10 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
 - (NSArray *)imageFiles {
   NSMutableArray *imageFiles = [NSMutableArray array];
   for (NSString *file in [[NSBundle bundleForClass:[self class]] pathsForResourcesOfType:nil inDirectory:self.testBase]) {
-    if ([[file pathExtension] isEqualToString:@"jpg"] ||
-        [[file pathExtension] isEqualToString:@"jpeg"] ||
-        [[file pathExtension] isEqualToString:@"gif"] ||
-        [[file pathExtension] isEqualToString:@"png"]) {
+    if ([[[file pathExtension] lowercaseString] isEqualToString:@"jpg"] ||
+        [[[file pathExtension] lowercaseString] isEqualToString:@"jpeg"] ||
+        [[[file pathExtension] lowercaseString] isEqualToString:@"gif"] ||
+        [[[file pathExtension] lowercaseString] isEqualToString:@"png"]) {
       [imageFiles addObject:[NSURL fileURLWithPath:file]];
     }
   }

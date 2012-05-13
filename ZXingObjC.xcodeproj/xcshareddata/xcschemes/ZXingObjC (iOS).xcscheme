@@ -92,6 +92,9 @@
                <Test
                   Identifier = "Code39ExtendedBlackBox2TestCase">
                </Test>
+               <Test
+                  Identifier = "Code93BlackBox1TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
