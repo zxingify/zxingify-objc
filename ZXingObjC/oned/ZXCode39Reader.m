@@ -74,7 +74,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   return self;
 }
 
-- (ZXResult *) decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   NSArray * start = [self findAsteriskPattern:row];
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = [row size];
@@ -133,7 +133,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   NSString * resultString;
-  if (extendedMode) {
+  if (self.extendedMode) {
     resultString = [self decodeExtended:result];
   } else {
     resultString = [NSString stringWithString:result];
