@@ -32,7 +32,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
 - (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
 - (unichar)patternToChar:(int)pattern;
-- (int)toNarrowWidePattern:(int[])counters;
+- (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen;
 
 @end
 
@@ -90,7 +90,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   int lastStart;
   do {
     [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
-    int pattern = [self toNarrowWidePattern:counters];
+    int pattern = [self toNarrowWidePattern:(int*)counters countersLen:countersLen];
     if (pattern < 0) {
       @throw [ZXNotFoundException notFoundInstance];
     }
@@ -161,10 +161,10 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   int counterPosition = 0;
-  int counters[9];
+  const int patternLength = 9;
+  int counters[patternLength] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   int patternStart = rowOffset;
   BOOL isWhite = NO;
-  int patternLength = sizeof(counters) / sizeof(int);
 
   for (int i = rowOffset; i < width; i++) {
     BOOL pixel = [row get:i];
@@ -172,7 +172,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self toNarrowWidePattern:counters] == CODE39_ASTERISK_ENCODING) {
+        if ([self toNarrowWidePattern:counters countersLen:patternLength] == CODE39_ASTERISK_ENCODING) {
           if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
             return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
           }
@@ -195,8 +195,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (int)toNarrowWidePattern:(int[])counters {
-  int numCounters = sizeof((int*)counters) / sizeof(int);
+- (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen {
+  int numCounters = countersLen;
   int maxNarrowCounter = 0;
   int wideCounters;
   do {

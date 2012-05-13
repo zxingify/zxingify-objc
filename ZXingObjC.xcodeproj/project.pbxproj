@@ -911,6 +911,8 @@
 		250101EB155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101E9155EB9DB00D1D979 /* PartialBlackBoxTestCase.m */; };
 		250101EE155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */; };
 		250101EF155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */; };
+		250101F8155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101F7155F1DED00D1D979 /* Code39BlackBox1TestCase.m */; };
+		250101F9155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 250101F7155F1DED00D1D979 /* Code39BlackBox1TestCase.m */; };
 		250830011512AFD4006D79E6 /* ZXEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25082FFF1512AFD4006D79E6 /* ZXEncoder.h */; };
 		250830021512AFD4006D79E6 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* ZXEncoder.m */; };
 		250830031512AFD4006D79E6 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830001512AFD4006D79E6 /* ZXEncoder.m */; };
@@ -1344,6 +1346,8 @@
 		250101E9155EB9DB00D1D979 /* PartialBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartialBlackBoxTestCase.m; path = negative/PartialBlackBoxTestCase.m; sourceTree = "<group>"; };
 		250101EC155EBABD00D1D979 /* UnsupportedBlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnsupportedBlackBoxTestCase.h; path = negative/UnsupportedBlackBoxTestCase.h; sourceTree = "<group>"; };
 		250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnsupportedBlackBoxTestCase.m; path = negative/UnsupportedBlackBoxTestCase.m; sourceTree = "<group>"; };
+		250101F6155F1DED00D1D979 /* Code39BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox1TestCase.h; path = oned/Code39BlackBox1TestCase.h; sourceTree = "<group>"; };
+		250101F7155F1DED00D1D979 /* Code39BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code39BlackBox1TestCase.m; path = oned/Code39BlackBox1TestCase.m; sourceTree = "<group>"; };
 		25082FFF1512AFD4006D79E6 /* ZXEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXEncoder.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		250830001512AFD4006D79E6 /* ZXEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXEncoder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2508300D1512B0B1006D79E6 /* ZXDataMatrixDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDataBlock.h; sourceTree = "<group>"; };
@@ -2049,6 +2053,7 @@
 				02FB06DF15475B480067923D /* common */,
 				02FDEDE7155DBAEA00D9AA13 /* datamatrix */,
 				250101D0155E1A8400D1D979 /* negative */,
+				250101F5155F1DDB00D1D979 /* oned */,
 				02FB06E715475B6F0067923D /* qrcode */,
 				02FB06F115475BCE0067923D /* Resources */,
 				02D26EFC151288DB007F8DC6 /* Supporting Files */,
@@ -2134,6 +2139,15 @@
 				250101ED155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m */,
 			);
 			name = negative;
+			sourceTree = "<group>";
+		};
+		250101F5155F1DDB00D1D979 /* oned */ = {
+			isa = PBXGroup;
+			children = (
+				250101F6155F1DED00D1D979 /* Code39BlackBox1TestCase.h */,
+				250101F7155F1DED00D1D979 /* Code39BlackBox1TestCase.m */,
+			);
+			name = oned;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2866,6 +2880,7 @@
 				250101E3155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */,
 				250101EB155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */,
 				250101EF155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */,
+				250101F9155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3239,6 +3254,7 @@
 				250101E2155E305000D1D979 /* FalsePositives2BlackBoxTestCase.m in Sources */,
 				250101EA155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */,
 				250101EE155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */,
+				250101F8155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

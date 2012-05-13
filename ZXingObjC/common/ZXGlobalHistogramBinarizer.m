@@ -128,9 +128,13 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   if (self.buckets == nil) {
     self.buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
-  }
-  for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-    [self.buckets addObject:[NSNumber numberWithInt:0]];
+    for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
+      [self.buckets addObject:[NSNumber numberWithInt:0]];
+    }
+  } else {
+    for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
+      [self.buckets replaceObjectAtIndex:x withObject:[NSNumber numberWithInt:0]];
+    }
   }
 }
 

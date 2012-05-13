@@ -42,16 +42,10 @@
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox1TestCase">
-               </Test>
-               <Test
                   Identifier = "QRCodeBlackBox2TestCase">
                </Test>
                <Test
                   Identifier = "QRCodeBlackBox3TestCase">
-               </Test>
-               <Test
-                  Identifier = "QRCodeBlackBox4TestCase">
                </Test>
                <Test
                   Identifier = "QRCodeBlackBox5TestCase">
@@ -79,6 +73,15 @@
                </Test>
                <Test
                   Identifier = "PartialBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "UnsupportedBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39BlackBox1TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

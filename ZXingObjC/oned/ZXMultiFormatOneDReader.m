@@ -22,8 +22,8 @@
 - (id)initWithHints:(ZXDecodeHints *)hints {
   if (self = [super init]) {
     BOOL useCode39CheckDigit = hints != nil && hints.assumeCode39CheckDigit;
+    self.readers = [NSMutableArray array];
     if (hints != nil) {
-      self.readers = [NSMutableArray array];
       if ([hints containsFormat:kBarcodeFormatEan13] ||
           [hints containsFormat:kBarcodeFormatUPCA] ||
           [hints containsFormat:kBarcodeFormatEan8] ||
