@@ -943,6 +943,8 @@
 		250830461512B2D9006D79E6 /* ZXQRCodeVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830441512B2D8006D79E6 /* ZXQRCodeVersion.h */; };
 		250830471512B2D9006D79E6 /* ZXQRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */; };
 		250830481512B2D9006D79E6 /* ZXQRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */; };
+		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
+		2561A6F3155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1368,6 +1370,8 @@
 		250830351512B1E6006D79E6 /* ZXQRCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeBitMatrixParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		250830441512B2D8006D79E6 /* ZXQRCodeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXQRCodeVersion.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeVersion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
+		2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code39BlackBox3TestCase.m; path = oned/Code39BlackBox3TestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2146,6 +2150,8 @@
 			children = (
 				250101F6155F1DED00D1D979 /* Code39BlackBox1TestCase.h */,
 				250101F7155F1DED00D1D979 /* Code39BlackBox1TestCase.m */,
+				2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */,
+				2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -2881,6 +2887,7 @@
 				250101EB155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */,
 				250101EF155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */,
 				250101F9155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */,
+				2561A6F3155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3255,6 +3262,7 @@
 				250101EA155EB9DD00D1D979 /* PartialBlackBoxTestCase.m in Sources */,
 				250101EE155EBABE00D1D979 /* UnsupportedBlackBoxTestCase.m in Sources */,
 				250101F8155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */,
+				2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
