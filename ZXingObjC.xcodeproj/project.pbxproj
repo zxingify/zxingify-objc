@@ -951,6 +951,8 @@
 		2561A6FC155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */; };
 		2561A6FF155F7164008C7AE9 /* Code128BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */; };
 		2561A700155F7164008C7AE9 /* Code128BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */; };
+		2561A703155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */; };
+		2561A704155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1384,6 +1386,8 @@
 		2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code93BlackBox1TestCase.m; path = oned/Code93BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6FD155F7164008C7AE9 /* Code128BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox1TestCase.h; path = oned/Code128BlackBox1TestCase.h; sourceTree = "<group>"; };
 		2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox1TestCase.m; path = oned/Code128BlackBox1TestCase.m; sourceTree = "<group>"; };
+		2561A701155F75E7008C7AE9 /* Code128BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox2TestCase.h; path = oned/Code128BlackBox2TestCase.h; sourceTree = "<group>"; };
+		2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox2TestCase.m; path = oned/Code128BlackBox2TestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2170,6 +2174,8 @@
 				2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */,
 				2561A6FD155F7164008C7AE9 /* Code128BlackBox1TestCase.h */,
 				2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */,
+				2561A701155F75E7008C7AE9 /* Code128BlackBox2TestCase.h */,
+				2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -2909,6 +2915,7 @@
 				2561A6F8155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */,
 				2561A6FC155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */,
 				2561A700155F7164008C7AE9 /* Code128BlackBox1TestCase.m in Sources */,
+				2561A704155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3287,6 +3294,7 @@
 				2561A6F7155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */,
 				2561A6FB155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */,
 				2561A6FF155F7164008C7AE9 /* Code128BlackBox1TestCase.m in Sources */,
+				2561A703155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -120,9 +120,8 @@ const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
   {2, 3, 3, 1, 1, 1}
 };
 
-
-#define MAX_AVG_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f)
-#define MAX_INDIVIDUAL_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f)
+static int MAX_AVG_VARIANCE = -1;
+static int MAX_INDIVIDUAL_VARIANCE = -1;
 
 int const CODE_SHIFT = 98;
 int const CODE_CODE_C = 99;
@@ -146,6 +145,16 @@ int const CODE_STOP = 106;
 @end
 
 @implementation ZXCode128Reader
+
++ (void)initialize {
+  if (MAX_AVG_VARIANCE == -1) {
+    MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
+  }
+
+  if (MAX_INDIVIDUAL_VARIANCE == -1) {
+    MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+  }
+}
 
 - (NSArray *)findStartPattern:(ZXBitArray *)row {
   int width = row.size;
