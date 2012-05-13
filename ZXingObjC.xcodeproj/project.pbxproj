@@ -947,6 +947,8 @@
 		2561A6F3155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
 		2561A6F7155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F6155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m */; };
 		2561A6F8155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F6155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m */; };
+		2561A6FB155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */; };
+		2561A6FC155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1376,6 +1378,8 @@
 		2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code39BlackBox3TestCase.m; path = oned/Code39BlackBox3TestCase.m; sourceTree = "<group>"; };
 		2561A6F5155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39ExtendedBlackBox2TestCase.h; path = oned/Code39ExtendedBlackBox2TestCase.h; sourceTree = "<group>"; };
 		2561A6F6155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code39ExtendedBlackBox2TestCase.m; path = oned/Code39ExtendedBlackBox2TestCase.m; sourceTree = "<group>"; };
+		2561A6F9155F701D008C7AE9 /* Code93BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code93BlackBox1TestCase.h; path = oned/Code93BlackBox1TestCase.h; sourceTree = "<group>"; };
+		2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code93BlackBox1TestCase.m; path = oned/Code93BlackBox1TestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2158,6 +2162,8 @@
 				2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */,
 				2561A6F5155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.h */,
 				2561A6F6155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m */,
+				2561A6F9155F701D008C7AE9 /* Code93BlackBox1TestCase.h */,
+				2561A6FA155F701D008C7AE9 /* Code93BlackBox1TestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -2895,6 +2901,7 @@
 				250101F9155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */,
 				2561A6F3155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */,
 				2561A6F8155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */,
+				2561A6FC155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3271,6 +3278,7 @@
 				250101F8155F1DED00D1D979 /* Code39BlackBox1TestCase.m in Sources */,
 				2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */,
 				2561A6F7155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */,
+				2561A6FB155F701D008C7AE9 /* Code93BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

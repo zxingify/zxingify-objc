@@ -31,7 +31,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
 - (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
 - (unichar)patternToChar:(int)pattern;
-- (int)toPattern:(int[])counters;
+- (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen;
 
 @end
 
@@ -53,14 +53,14 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   int lastStart;
   do {
     [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
-    int pattern = [self toPattern:counters];
+    int pattern = [self toPattern:counters countersLen:countersLen];
     if (pattern < 0) {
       @throw [ZXNotFoundException notFoundInstance];
     }
     decodedChar = [self patternToChar:pattern];
     [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
+    for (int i = 0; i < countersLen; i++) {
       nextStart += counters[i];
     }
 
@@ -116,7 +116,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self toPattern:counters] == CODE93_ASTERISK_ENCODING) {
+        if ([self toPattern:counters countersLen:patternLength] == CODE93_ASTERISK_ENCODING) {
           return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
         }
         patternStart += counters[0] + counters[1];
@@ -137,8 +137,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   @throw [ZXNotFoundException notFoundInstance];
 }
 
-- (int)toPattern:(int[])counters {
-  int max = sizeof((int*)counters) / sizeof(int);
+- (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen {
+  int max = countersLen;
   int sum = 0;
   for (int i = 0; i < max; i++) {
     sum += counters[i];
