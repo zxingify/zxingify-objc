@@ -101,7 +101,7 @@ const int MAX_PAIRS = 11;
   [super dealloc];
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(NSMutableDictionary *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
   [self reset];
   [self decodeRow2pairs:rowNumber row:row];
   return [self constructResult:self.pairs];

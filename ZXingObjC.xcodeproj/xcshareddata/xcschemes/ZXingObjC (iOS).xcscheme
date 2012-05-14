@@ -48,15 +48,6 @@
                   Identifier = "QRCodeBlackBox3TestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox5TestCase">
-               </Test>
-               <Test
-                  Identifier = "AztecBlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "AztecBlackBox2TestCase">
-               </Test>
-               <Test
                   Identifier = "DataMatrixBlackBox1TestCase">
                </Test>
                <Test
@@ -78,31 +69,7 @@
                   Identifier = "UnsupportedBlackBoxTestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox4TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code39BlackBox1TestCase">
-               </Test>
-               <Test
                   Identifier = "QRCodeBlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code39BlackBox3TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code39ExtendedBlackBox2TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code93BlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code128BlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code128BlackBox2TestCase">
-               </Test>
-               <Test
-                  Identifier = "Code128BlackBox3TestCase">
                </Test>
                <Test
                   Identifier = "EAN8BlackBox1TestCase">
@@ -127,6 +94,42 @@
                </Test>
                <Test
                   Identifier = "ITFBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox5TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "AztecBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "AztecBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39BlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39ExtendedBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code93BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code128BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code128BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code128BlackBox3TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

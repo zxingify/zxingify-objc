@@ -176,7 +176,7 @@
   return row;
 }
 
-- (unsigned char*) matrix {
+- (unsigned char*)matrix {
   int size = self.width * self.height;
   unsigned char* result = (unsigned char*)malloc(size * sizeof(unsigned char));
   if (left == 0 && top == 0 && dataWidth == self.width && dataHeight == self.height) {
@@ -250,5 +250,54 @@
   data = CGDataProviderCopyData(provider);
 }
 
+- (BOOL)rotateSupported {
+  return YES;
+}
+
+- (ZXLuminanceSource*)rotateCounterClockwise {
+  double radians = 270.0f * M_PI / 180;
+
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+  radians = -1 * radians;
+#endif
+
+  int sourceWidth = self.width;
+  int sourceHeight = self.height;
+
+  CGRect imgRect = CGRectMake(0, 0, sourceWidth, sourceHeight);
+  CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
+  CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
+
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef context = CGBitmapContextCreate(NULL,
+                                               rotatedRect.size.width,
+                                               rotatedRect.size.height,
+                                               CGImageGetBitsPerComponent(self.image),
+                                               0,
+                                               colorSpace,
+                                               kCGImageAlphaPremultipliedFirst);
+  CGContextSetAllowsAntialiasing(context, FALSE);
+  CGContextSetInterpolationQuality(context, kCGInterpolationNone);
+  CGColorSpaceRelease(colorSpace);
+
+  CGContextTranslateCTM(context,
+                        +(rotatedRect.size.width/2),
+                        +(rotatedRect.size.height/2));
+  CGContextRotateCTM(context, radians);
+
+  CGContextDrawImage(context, CGRectMake(-imgRect.size.width/2,
+                                         -imgRect.size.height/2,
+                                         imgRect.size.width,
+                                         imgRect.size.height),
+                     self.image);
+
+  CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
+  CFMakeCollectable(rotatedImage);
+
+  CFRelease(context);
+
+  int _width = self.width;
+  return [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage left:top top:sourceWidth - (left + _width) width:self.height height:_width] autorelease];
+}
 
 @end
