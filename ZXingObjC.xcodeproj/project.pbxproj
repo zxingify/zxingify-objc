@@ -957,6 +957,8 @@
 		258FE01A15605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01E15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */; };
 		258FE01F15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */; };
+		258FE02215606023004B9C9A /* EAN13BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE02115606023004B9C9A /* EAN13BlackBox1TestCase.m */; };
+		258FE02315606023004B9C9A /* EAN13BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE02115606023004B9C9A /* EAN13BlackBox1TestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1396,6 +1398,8 @@
 		258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox3TestCase.m; path = oned/Code128BlackBox3TestCase.m; sourceTree = "<group>"; };
 		258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8BlackBox1TestCase.h; path = oned/EAN8BlackBox1TestCase.h; sourceTree = "<group>"; };
 		258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAN8BlackBox1TestCase.m; path = oned/EAN8BlackBox1TestCase.m; sourceTree = "<group>"; };
+		258FE02015606023004B9C9A /* EAN13BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN13BlackBox1TestCase.h; path = oned/EAN13BlackBox1TestCase.h; sourceTree = "<group>"; };
+		258FE02115606023004B9C9A /* EAN13BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAN13BlackBox1TestCase.m; path = oned/EAN13BlackBox1TestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2188,6 +2192,8 @@
 				258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */,
 				258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */,
 				258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */,
+				258FE02015606023004B9C9A /* EAN13BlackBox1TestCase.h */,
+				258FE02115606023004B9C9A /* EAN13BlackBox1TestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -2930,6 +2936,7 @@
 				2561A704155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */,
 				258FE01A15605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */,
 				258FE01F15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */,
+				258FE02315606023004B9C9A /* EAN13BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3311,6 +3318,7 @@
 				2561A703155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */,
 				258FE01915605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */,
 				258FE01E15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */,
+				258FE02215606023004B9C9A /* EAN13BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -68,8 +68,12 @@ int FIRST_DIGIT_ENCODINGS[10] = {
 }
 
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)resultString {
+  int *counters = self.decodeMiddleCounters;
+  counters[0] = 0;
+  counters[1] = 0;
+  counters[2] = 0;
+  counters[3] = 0;
   const int countersLen = 4;
-  int counters[countersLen] = { 0, 0, 0, 0 };
   int end = row.size;
   int rowOffset = [[startRange objectAtIndex:1] intValue];
 
@@ -102,7 +106,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   return rowOffset;
 }
 
-- (ZXBarcodeFormat) barcodeFormat {
+- (ZXBarcodeFormat)barcodeFormat {
   return kBarcodeFormatEan13;
 }
 
