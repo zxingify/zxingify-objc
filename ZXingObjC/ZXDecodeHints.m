@@ -18,14 +18,6 @@
 @synthesize resultPointCallback;
 @synthesize tryHarder;
 
-- (id)init {
-  if (self = [super init]) {
-    self.allowedLengths = [NSMutableArray array];
-  }
-
-  return self;
-}
-
 - (id)copyWithZone:(NSZone *)zone {
   ZXDecodeHints *result = [[[self class] allocWithZone:zone] init];
   if (result) {

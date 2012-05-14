@@ -6,11 +6,11 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-#define MAX_AVG_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f)
-#define MAX_INDIVIDUAL_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f)
+static int MAX_AVG_VARIANCE;
+static int MAX_INDIVIDUAL_VARIANCE;
 
-static const int W = 3;
-static const int N = 1;
+static const int W = 3; // Pixel width of a wide line
+static const int N = 1; // Pixel width of a narrow line
 
 int const DEFAULT_ALLOWED_LENGTHS[9] = { 6, 8, 10, 12, 14, 16, 20, 24, 44 };
 
@@ -55,6 +55,11 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 @implementation ZXITFReader
 
 @synthesize narrowLineWidth;
+
++ (void)initialize {
+  MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
+  MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+}
 
 - (id)init {
   if (self = [super init]) {
@@ -129,7 +134,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     bestMatch = [self decodeDigit:counterWhite countersSize:counterWhiteLen];
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
 
-    for (int i = 0; i < sizeof(counterDigitPair) / sizeof(int); i++) {
+    for (int i = 0; i < counterDigitPairLen; i++) {
       payloadStart += counterDigitPair[i];
     }
   }

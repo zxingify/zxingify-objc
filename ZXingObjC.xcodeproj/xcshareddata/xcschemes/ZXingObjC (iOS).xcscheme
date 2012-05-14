@@ -119,6 +119,12 @@
                <Test
                   Identifier = "EAN13BlackBox4TestCase">
                </Test>
+               <Test
+                  Identifier = "EAN13BlackBox5BlurryTestCase">
+               </Test>
+               <Test
+                  Identifier = "ITFBlackBox1TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
