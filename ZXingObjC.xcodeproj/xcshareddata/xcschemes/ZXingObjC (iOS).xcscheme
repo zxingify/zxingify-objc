@@ -131,6 +131,9 @@
                <Test
                   Identifier = "Code128BlackBox3TestCase">
                </Test>
+               <Test
+                  Identifier = "RSSExpandedBlackBox2TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

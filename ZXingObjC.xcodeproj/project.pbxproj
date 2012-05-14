@@ -836,6 +836,8 @@
 		029C9DAA155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029C9DA8155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m */; };
 		02A0D94A15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */; };
 		02A0D94B15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */; };
+		02A0D94F15618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */; };
+		02A0D95015618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */; };
 		02AAC8881553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC8891553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC88A1553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
@@ -1333,6 +1335,8 @@
 		029C9DA8155D6BEC00A53DA0 /* AztecBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AztecBlackBox1TestCase.m; path = aztec/AztecBlackBox1TestCase.m; sourceTree = "<group>"; };
 		02A0D94815617E06008F07B6 /* RSSExpandedBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox2TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox2TestCase.h; sourceTree = "<group>"; };
 		02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox2TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox2TestCase.m; sourceTree = "<group>"; };
+		02A0D94D15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox3TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox3TestCase.h; sourceTree = "<group>"; };
+		02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox3TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox3TestCase.m; sourceTree = "<group>"; };
 		02AAC8871553384700D4FF0D /* ZXEncodeHints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEncodeHints.m; sourceTree = "<group>"; };
 		02D26EE2151288DB007F8DC6 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D26EE5151288DB007F8DC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2258,6 +2262,8 @@
 				258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */,
 				02A0D94815617E06008F07B6 /* RSSExpandedBlackBox2TestCase.h */,
 				02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */,
+				02A0D94D15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.h */,
+				02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */,
 			);
 			name = expanded;
 			sourceTree = "<group>";
@@ -3009,6 +3015,7 @@
 				258FE03B15609D60004B9C9A /* ITFBlackBox2TestCase.m in Sources */,
 				258FE04115609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */,
 				02A0D94B15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */,
+				02A0D95015618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3399,6 +3406,7 @@
 				258FE03A15609D60004B9C9A /* ITFBlackBox2TestCase.m in Sources */,
 				258FE04015609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */,
 				02A0D94A15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */,
+				02A0D94F15618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
