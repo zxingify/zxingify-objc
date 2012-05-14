@@ -107,6 +107,18 @@
                <Test
                   Identifier = "EAN8BlackBox1TestCase">
                </Test>
+               <Test
+                  Identifier = "EAN13BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox4TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
