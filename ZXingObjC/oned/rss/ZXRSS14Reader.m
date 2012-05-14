@@ -99,8 +99,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (ZXResult *)constructResult:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair {
-  long symbolValue = 4537077L * leftPair.value + rightPair.value;
-  NSString * text = [[NSNumber numberWithLong:symbolValue] stringValue];
+  long long symbolValue = 4537077LL * leftPair.value + rightPair.value;
+  NSString * text = [[NSNumber numberWithLongLong:symbolValue] stringValue];
   NSMutableString * buffer = [NSMutableString stringWithCapacity:14];
 
   for (int i = 13 - [text length]; i > 0; i--) {

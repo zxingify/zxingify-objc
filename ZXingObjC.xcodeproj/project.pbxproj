@@ -838,6 +838,10 @@
 		02A0D94B15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */; };
 		02A0D94F15618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */; };
 		02A0D95015618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */; };
+		02A0D95315618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D95215618A80008F07B6 /* RSS14BlackBox1TestCase.m */; };
+		02A0D95415618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D95215618A80008F07B6 /* RSS14BlackBox1TestCase.m */; };
+		02A0D95715618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D95615618C4A008F07B6 /* RSS14BlackBox2TestCase.m */; };
+		02A0D95815618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A0D95615618C4A008F07B6 /* RSS14BlackBox2TestCase.m */; };
 		02AAC8881553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC8891553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
 		02AAC88A1553384900D4FF0D /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AAC8871553384700D4FF0D /* ZXEncodeHints.m */; };
@@ -1337,6 +1341,10 @@
 		02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox2TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox2TestCase.m; sourceTree = "<group>"; };
 		02A0D94D15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox3TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox3TestCase.h; sourceTree = "<group>"; };
 		02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox3TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox3TestCase.m; sourceTree = "<group>"; };
+		02A0D95115618A80008F07B6 /* RSS14BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSS14BlackBox1TestCase.h; path = oned/rss/RSS14BlackBox1TestCase.h; sourceTree = "<group>"; };
+		02A0D95215618A80008F07B6 /* RSS14BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSS14BlackBox1TestCase.m; path = oned/rss/RSS14BlackBox1TestCase.m; sourceTree = "<group>"; };
+		02A0D95515618C4A008F07B6 /* RSS14BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSS14BlackBox2TestCase.h; path = oned/rss/RSS14BlackBox2TestCase.h; sourceTree = "<group>"; };
+		02A0D95615618C4A008F07B6 /* RSS14BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSS14BlackBox2TestCase.m; path = oned/rss/RSS14BlackBox2TestCase.m; sourceTree = "<group>"; };
 		02AAC8871553384700D4FF0D /* ZXEncodeHints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEncodeHints.m; sourceTree = "<group>"; };
 		02D26EE2151288DB007F8DC6 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D26EE5151288DB007F8DC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2251,6 +2259,10 @@
 			isa = PBXGroup;
 			children = (
 				258FE03D15609E8F004B9C9A /* expanded */,
+				02A0D95115618A80008F07B6 /* RSS14BlackBox1TestCase.h */,
+				02A0D95215618A80008F07B6 /* RSS14BlackBox1TestCase.m */,
+				02A0D95515618C4A008F07B6 /* RSS14BlackBox2TestCase.h */,
+				02A0D95615618C4A008F07B6 /* RSS14BlackBox2TestCase.m */,
 			);
 			name = rss;
 			sourceTree = "<group>";
@@ -3016,6 +3028,8 @@
 				258FE04115609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */,
 				02A0D94B15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */,
 				02A0D95015618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */,
+				02A0D95415618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */,
+				02A0D95815618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3407,6 +3421,8 @@
 				258FE04015609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */,
 				02A0D94A15617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m in Sources */,
 				02A0D94F15618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */,
+				02A0D95315618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */,
+				02A0D95715618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
