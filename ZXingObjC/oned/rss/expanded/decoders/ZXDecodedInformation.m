@@ -15,7 +15,13 @@
 @synthesize theNewString;
 
 - (id)initWithNewPosition:(int)aNewPosition newString:(NSString *)aNewString {
-  return [self initWithNewPosition:aNewPosition newString:aNewString remainingValue:0];
+  if (self = [super initWithNewPosition:aNewPosition]) {
+    self.remaining = NO;
+    self.remainingValue = 0;
+    self.theNewString = aNewString;
+  }
+
+  return self;
 }
 
 - (id)initWithNewPosition:(int)aNewPosition newString:(NSString *)aNewString remainingValue:(int)aRemainingValue {

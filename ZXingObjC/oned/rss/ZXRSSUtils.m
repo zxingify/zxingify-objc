@@ -40,25 +40,31 @@
   return widths;
 }
 
-+ (int)rssValue:(NSArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
-  int elements = [widths count];
++ (int)rssValue:(int *)widths widthsLen:(unsigned int)widthsLen maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
+  int elements = widthsLen;
   int n = 0;
-  for (NSNumber *i in widths) {
-    n += [i intValue];
+  for (int i = 0; i < elements; i++) {
+    n += widths[i];
   }
   int val = 0;
   int narrowMask = 0;
   for (int bar = 0; bar < elements - 1; bar++) {
     int elmWidth;
-    for (elmWidth = 1, narrowMask |= (1 << bar); elmWidth < [[widths objectAtIndex:bar] intValue]; elmWidth++, narrowMask &= ~(1 << bar)) {
+    for (elmWidth = 1, narrowMask |= (1 << bar);
+         elmWidth < widths[bar];
+         elmWidth++, narrowMask &= ~(1 << bar)) {
       int subVal = [self combins:n - elmWidth - 1 r:elements - bar - 2];
-      if (noNarrow && (narrowMask == 0) && (n - elmWidth - (elements - bar - 1) >= elements - bar - 1)) {
-        subVal -= [self combins:n - elmWidth - (elements - bar) r:elements - bar - 2];
+      if (noNarrow && (narrowMask == 0) &&
+          (n - elmWidth - (elements - bar - 1) >= elements - bar - 1)) {
+        subVal -= [self combins:n - elmWidth - (elements - bar)
+                              r:elements - bar - 2];
       }
       if (elements - bar - 1 > 1) {
         int lessVal = 0;
-        for (int mxwElement = n - elmWidth - (elements - bar - 2); mxwElement > maxWidth; mxwElement--) {
-          lessVal += [self combins:n - elmWidth - mxwElement - 1 r:elements - bar - 3];
+        for (int mxwElement = n - elmWidth - (elements - bar - 2);
+             mxwElement > maxWidth; mxwElement--) {
+          lessVal += [self combins:n - elmWidth - mxwElement - 1
+                                 r:elements - bar - 3];
         }
         subVal -= lessVal * (elements - 1 - bar);
       } else if (n - elmWidth > maxWidth) {

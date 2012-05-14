@@ -190,7 +190,7 @@
       }
       return [[[ZXBlockParsedResult alloc] initWithInformation:_information finished:YES] autorelease];
     }
-    [buffer appendFormat:@"%d", numeric.firstDigit];
+    [self.buffer appendFormat:@"%d", numeric.firstDigit];
 
     if (numeric.secondDigitFNC1) {
       ZXDecodedInformation * _information = [[[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
@@ -217,7 +217,7 @@
                                                                                      newString:self.buffer] autorelease];
       return [[[ZXBlockParsedResult alloc] initWithInformation:_information finished:YES] autorelease];
     }
-    [buffer appendFormat:@"%C", iso.value];
+    [self.buffer appendFormat:@"%C", iso.value];
   }
 
   if ([self isAlphaOr646ToNumericLatch:self.current.position]) {
@@ -294,7 +294,7 @@
 - (ZXDecodedChar *)decodeIsoIec646:(int)pos {
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue == 15) {
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1] autorelease];
+    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1char] autorelease];
   }
 
   if (fiveBitValue >= 5 && fiveBitValue < 15) {
@@ -383,7 +383,7 @@
 - (ZXDecodedChar *)decodeAlphanumeric:(int)pos {
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue == 15) {
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1] autorelease];
+    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1char] autorelease];
   }
 
   if (fiveBitValue >= 5 && fiveBitValue < 15) {

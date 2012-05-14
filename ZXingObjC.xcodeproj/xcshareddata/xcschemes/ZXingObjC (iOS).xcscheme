@@ -125,6 +125,9 @@
                <Test
                   Identifier = "ITFBlackBox1TestCase">
                </Test>
+               <Test
+                  Identifier = "ITFBlackBox2TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
