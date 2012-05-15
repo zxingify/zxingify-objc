@@ -18,6 +18,14 @@
 @synthesize resultPointCallback;
 @synthesize tryHarder;
 
+- (id)init {
+  if (self = [super init]) {
+    self.barcodeFormats = [NSMutableArray array];
+  }
+
+  return self;
+}
+
 - (id)copyWithZone:(NSZone *)zone {
   ZXDecodeHints *result = [[[self class] allocWithZone:zone] init];
   if (result) {
@@ -51,12 +59,16 @@
   [self.barcodeFormats addObject:[NSNumber numberWithInt:format]];
 }
 
-- (void)removePossibleFormat:(ZXBarcodeFormat)format {
-  [self.barcodeFormats removeObject:[NSNumber numberWithInt:format]];
-}
-
 - (BOOL)containsFormat:(ZXBarcodeFormat)format {
   return [self.barcodeFormats containsObject:[NSNumber numberWithInt:format]];
+}
+
+- (int)numberOfPossibleFormats {
+  return self.barcodeFormats.count;
+}
+
+- (void)removePossibleFormat:(ZXBarcodeFormat)format {
+  [self.barcodeFormats removeObject:[NSNumber numberWithInt:format]];
 }
 
 @end

@@ -140,6 +140,9 @@
                <Test
                   Identifier = "RSS14BlackBox1TestCase">
                </Test>
+               <Test
+                  Identifier = "RSS14BlackBox2TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

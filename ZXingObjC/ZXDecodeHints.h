@@ -49,7 +49,8 @@
  * Image is known to be of one of a few possible formats.
  */
 - (void)addPossibleFormat:(ZXBarcodeFormat)format;
-- (void)removePossibleFormat:(ZXBarcodeFormat)format;
 - (BOOL)containsFormat:(ZXBarcodeFormat)format;
+- (int)numberOfPossibleFormats;
+- (void)removePossibleFormat:(ZXBarcodeFormat)format;
 
 @end

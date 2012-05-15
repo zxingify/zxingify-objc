@@ -349,6 +349,8 @@
 		0250D8EE1545FB3B00752941 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02D26EFE151288DB007F8DC6 /* InfoPlist.strings */; };
 		0250D9021545FC9000752941 /* ios-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0250D9001545FC8B00752941 /* ios-Prefix.pch */; };
 		0250D9031545FC9700752941 /* osx-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0250D9011545FC8B00752941 /* osx-Prefix.pch */; };
+		0268208C1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */; };
+		0268208D1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */; };
 		027EA43F1545EA6A00BA753C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		027EA4431545EA6A00BA753C /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */; };
 		029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */; };
@@ -1007,6 +1009,8 @@
 		02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox4TestCase.m; sourceTree = "<group>"; };
 		0250D9001545FC8B00752941 /* ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		0250D9011545FC8B00752941 /* osx-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		0268208A1562EAD1008F42C2 /* UPCABlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox1TestCase.h; path = oned/UPCABlackBox1TestCase.h; sourceTree = "<group>"; };
+		0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox1TestCase.m; path = oned/UPCABlackBox1TestCase.m; sourceTree = "<group>"; };
 		027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027EA43E1545EA6A00BA753C /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox2TestCase.h; sourceTree = "<group>"; };
@@ -2251,6 +2255,8 @@
 				258FE03815609D60004B9C9A /* ITFBlackBox2TestCase.h */,
 				258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */,
 				258FE03C15609E8A004B9C9A /* rss */,
+				0268208A1562EAD1008F42C2 /* UPCABlackBox1TestCase.h */,
+				0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -3030,6 +3036,7 @@
 				02A0D95015618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */,
 				02A0D95415618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */,
 				02A0D95815618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */,
+				0268208D1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3423,6 +3430,7 @@
 				02A0D94F15618A18008F07B6 /* RSSExpandedBlackBox3TestCase.m in Sources */,
 				02A0D95315618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */,
 				02A0D95715618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */,
+				0268208C1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

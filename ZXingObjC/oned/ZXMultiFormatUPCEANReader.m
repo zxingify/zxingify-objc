@@ -77,7 +77,7 @@
     //
     // But, don't return UPC-A if UPC-A was not a requested format!
     BOOL ean13MayBeUPCA = kBarcodeFormatEan13 == result.barcodeFormat && [result.text characterAtIndex:0] == '0';
-    BOOL canReturnUPCA = hints == nil || [hints containsFormat:kBarcodeFormatUPCA];
+    BOOL canReturnUPCA = hints == nil || [hints numberOfPossibleFormats] == 0 || [hints containsFormat:kBarcodeFormatUPCA];
     if (ean13MayBeUPCA && canReturnUPCA) {
       return [[[ZXResult alloc] initWithText:[[result text] substringFromIndex:1]
                                     rawBytes:nil
