@@ -143,6 +143,21 @@
                <Test
                   Identifier = "RSS14BlackBox2TestCase">
                </Test>
+               <Test
+                  Identifier = "UPCABlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox3ReflectiveTestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox5TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

@@ -351,6 +351,16 @@
 		0250D9031545FC9700752941 /* osx-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0250D9011545FC8B00752941 /* osx-Prefix.pch */; };
 		0268208C1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */; };
 		0268208D1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */; };
+		026820951562F29D008F42C2 /* UPCABlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820941562F29D008F42C2 /* UPCABlackBox2TestCase.m */; };
+		026820961562F29D008F42C2 /* UPCABlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820941562F29D008F42C2 /* UPCABlackBox2TestCase.m */; };
+		0268209C1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268209B1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m */; };
+		0268209D1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268209B1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m */; };
+		026820A41562F93C008F42C2 /* UPCABlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820A31562F93C008F42C2 /* UPCABlackBox4TestCase.m */; };
+		026820A51562F93C008F42C2 /* UPCABlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820A31562F93C008F42C2 /* UPCABlackBox4TestCase.m */; };
+		026820AC1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820AB1562F9CA008F42C2 /* UPCABlackBox5TestCase.m */; };
+		026820AD1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820AB1562F9CA008F42C2 /* UPCABlackBox5TestCase.m */; };
+		026820B41562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */; };
+		026820B51562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */; };
 		027EA43F1545EA6A00BA753C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		027EA4431545EA6A00BA753C /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */; };
 		029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */; };
@@ -1011,6 +1021,16 @@
 		0250D9011545FC8B00752941 /* osx-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		0268208A1562EAD1008F42C2 /* UPCABlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox1TestCase.h; path = oned/UPCABlackBox1TestCase.h; sourceTree = "<group>"; };
 		0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox1TestCase.m; path = oned/UPCABlackBox1TestCase.m; sourceTree = "<group>"; };
+		026820931562F29D008F42C2 /* UPCABlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox2TestCase.h; path = oned/UPCABlackBox2TestCase.h; sourceTree = "<group>"; };
+		026820941562F29D008F42C2 /* UPCABlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox2TestCase.m; path = oned/UPCABlackBox2TestCase.m; sourceTree = "<group>"; };
+		0268209A1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox3ReflectiveTestCase.h; path = oned/UPCABlackBox3ReflectiveTestCase.h; sourceTree = "<group>"; };
+		0268209B1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox3ReflectiveTestCase.m; path = oned/UPCABlackBox3ReflectiveTestCase.m; sourceTree = "<group>"; };
+		026820A21562F93C008F42C2 /* UPCABlackBox4TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox4TestCase.h; path = oned/UPCABlackBox4TestCase.h; sourceTree = "<group>"; };
+		026820A31562F93C008F42C2 /* UPCABlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox4TestCase.m; path = oned/UPCABlackBox4TestCase.m; sourceTree = "<group>"; };
+		026820AA1562F9CA008F42C2 /* UPCABlackBox5TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox5TestCase.h; path = oned/UPCABlackBox5TestCase.h; sourceTree = "<group>"; };
+		026820AB1562F9CA008F42C2 /* UPCABlackBox5TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox5TestCase.m; path = oned/UPCABlackBox5TestCase.m; sourceTree = "<group>"; };
+		026820B21562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox6BlurryTestCase.h; path = oned/UPCABlackBox6BlurryTestCase.h; sourceTree = "<group>"; };
+		026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox6BlurryTestCase.m; path = oned/UPCABlackBox6BlurryTestCase.m; sourceTree = "<group>"; };
 		027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027EA43E1545EA6A00BA753C /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox2TestCase.h; sourceTree = "<group>"; };
@@ -2257,6 +2277,16 @@
 				258FE03C15609E8A004B9C9A /* rss */,
 				0268208A1562EAD1008F42C2 /* UPCABlackBox1TestCase.h */,
 				0268208B1562EAD1008F42C2 /* UPCABlackBox1TestCase.m */,
+				026820931562F29D008F42C2 /* UPCABlackBox2TestCase.h */,
+				026820941562F29D008F42C2 /* UPCABlackBox2TestCase.m */,
+				0268209A1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.h */,
+				0268209B1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m */,
+				026820A21562F93C008F42C2 /* UPCABlackBox4TestCase.h */,
+				026820A31562F93C008F42C2 /* UPCABlackBox4TestCase.m */,
+				026820AA1562F9CA008F42C2 /* UPCABlackBox5TestCase.h */,
+				026820AB1562F9CA008F42C2 /* UPCABlackBox5TestCase.m */,
+				026820B21562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.h */,
+				026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -3037,6 +3067,11 @@
 				02A0D95415618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */,
 				02A0D95815618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */,
 				0268208D1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */,
+				026820961562F29D008F42C2 /* UPCABlackBox2TestCase.m in Sources */,
+				0268209D1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m in Sources */,
+				026820A51562F93C008F42C2 /* UPCABlackBox4TestCase.m in Sources */,
+				026820AD1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */,
+				026820B51562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3431,6 +3466,11 @@
 				02A0D95315618A80008F07B6 /* RSS14BlackBox1TestCase.m in Sources */,
 				02A0D95715618C4A008F07B6 /* RSS14BlackBox2TestCase.m in Sources */,
 				0268208C1562EAD1008F42C2 /* UPCABlackBox1TestCase.m in Sources */,
+				026820951562F29D008F42C2 /* UPCABlackBox2TestCase.m in Sources */,
+				0268209C1562F2FA008F42C2 /* UPCABlackBox3ReflectiveTestCase.m in Sources */,
+				026820A41562F93C008F42C2 /* UPCABlackBox4TestCase.m in Sources */,
+				026820AC1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */,
+				026820B41562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

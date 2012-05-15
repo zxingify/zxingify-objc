@@ -284,7 +284,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
       max = L_PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
         int pattern[countersLen];
-        for(int j = 0; j< countersLen; j++){
+        for(int j = 0; j < countersLen; j++){
           pattern[j] = L_PATTERNS[i][j];
         }
 
