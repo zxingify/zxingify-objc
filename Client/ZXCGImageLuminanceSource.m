@@ -20,6 +20,7 @@
 @interface ZXCGImageLuminanceSource ()
 
 - (void)initializeWithImage:(CGImageRef)image left:(int)left top:(int)top width:(int)width height:(int)height;
+- (void)fillGrayscale:(unsigned char*)array offset:(int)offset size:(int)size;
 
 @end
 
@@ -155,7 +156,7 @@
     CGImageRelease(image);
   }
   if (data) {
-    CFRelease(data);
+    free(data);
   }
 
   [super dealloc];
@@ -171,23 +172,24 @@
   }
 
   int offset = (y + top) * dataWidth + left;
-  CFDataGetBytes(data, CFRangeMake(offset, self.width), row);
+  [self fillGrayscale:row offset:offset size:self.width];
 
   return row;
 }
 
 - (unsigned char*)matrix {
   int size = self.width * self.height;
+
   unsigned char* result = (unsigned char*)malloc(size * sizeof(unsigned char));
+
   if (left == 0 && top == 0 && dataWidth == self.width && dataHeight == self.height) {
-    CFDataGetBytes(data, CFRangeMake(0, size), result);
+    [self fillGrayscale:result offset:0 size:size];
   } else {
     for (int row = 0; row < self.height; row++) {
-      CFDataGetBytes(data,
-                     CFRangeMake((top + row) * dataWidth + left, self.width),
-                     result + row * self.width);
+      [self fillGrayscale:result + row * self.width offset:(top + row) * dataWidth + left size:self.width];
     }
   }
+
   return result;
 }
 
@@ -208,46 +210,42 @@
     [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
   }
   
-  CGColorSpaceRef space = CGImageGetColorSpace(self.image);
-  CGColorSpaceModel model = CGColorSpaceGetModel(space);
-  
-  if (model != kCGColorSpaceModelMonochrome ||
-      CGImageGetBitsPerComponent(self.image) != 8 ||
-      CGImageGetBitsPerPixel(self.image) != 8) {
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef context = CGBitmapContextCreate(0, self.width, self.height, 8, self.width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipLast);
+  CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+  CGContextSetShouldAntialias(context, NO);
 
-    CGColorSpaceRef gray = CGColorSpaceCreateDeviceGray();
-
-    CGContextRef ctx = CGBitmapContextCreate(0,
-                                             self.width,
-                                             self.height, 
-                                             8,
-                                             self.width,
-                                             gray, 
-                                             kCGImageAlphaNone);
-
-    CGColorSpaceRelease(gray);
-
-    if (top || left) {
-      CGContextClipToRect(ctx, CGRectMake(0, 0, self.width, self.height));
-    }
-    
-    CGContextDrawImage(ctx, CGRectMake(-left, -top, self.width, self.height), image);
-    
-    image = CGBitmapContextCreateImage(ctx); 
-    
-    bytesPerRow = self.width;
-    top = 0;
-    left = 0;
-    dataWidth = self.width;
-    dataHeight = self.height;
-    
-    CGContextRelease(ctx);
-  } else {
-    CGImageRetain(image);
+  if (top || left) {
+    CGContextClipToRect(context, CGRectMake(0, 0, self.width, self.height));
   }
   
-  CGDataProviderRef provider = CGImageGetDataProvider(image);
-  data = CGDataProviderCopyData(provider);
+  CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), image);
+
+  CGImageRetain(image);
+
+  data = (uint32_t *) malloc(self.width * self.height * sizeof(uint32_t));
+  memcpy(data, CGBitmapContextGetData(context), self.width * self.height * sizeof(uint32_t));
+  CGContextRelease(context);
+  CGColorSpaceRelease(colorSpace);
+
+  top = 0;
+  left = 0;
+  dataWidth = self.width;
+  dataHeight = self.height;
+}
+
+- (void)fillGrayscale:(unsigned char*)array offset:(int)offset size:(int)size {
+  static double redRatio = 77.0f/255.0f;
+  static double greenRatio = 149.0f/255.0f;
+  static double blueRatio = 29.0f/255.0f;
+
+  for (int i = 0; i < size; i++) {
+    uint32_t rgbPixel=data[offset+i];
+    int red = (rgbPixel>>24)&255;
+    int green = (rgbPixel>>16)&255;
+    int blue = (rgbPixel>>8)&255;
+    array[i] = roundf(redRatio * red + greenRatio * green + blueRatio * blue);
+  }
 }
 
 - (BOOL)rotateSupported {

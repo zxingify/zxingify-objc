@@ -1,13 +1,13 @@
 #import "AztecBlackBox1TestCase.h"
+#import "ZXAztecReader.h"
 #import "ZXBarcodeFormat.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation AztecBlackBox1TestCase
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation {
   self = [super initWithInvocation:anInvocation
                 testBasePathSuffix:@"Resources/blackbox/aztec-1"
-                     barcodeReader:[[[ZXMultiFormatReader alloc] init] autorelease]
+                     barcodeReader:[[[ZXAztecReader alloc] init] autorelease]
                     expectedFormat:kBarcodeFormatAztec];
 
   if (self) {
