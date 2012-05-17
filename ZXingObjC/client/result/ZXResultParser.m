@@ -108,7 +108,7 @@
 + (NSString *)unescapeBackslash:(NSString *)escaped {
   if (escaped != nil) {
     int backslash = [escaped rangeOfString:@"\\"].location;
-    if (backslash >= 0) {
+    if (backslash != NSNotFound) {
       int max = [escaped length];
       NSMutableString * unescaped = [NSMutableString stringWithCapacity:max - 1];
       [unescaped appendString:[escaped substringToIndex:backslash]];
@@ -134,7 +134,7 @@
   }
 
   int first = [self findFirstEscape:escaped];
-  if (first < 0) {
+  if (first == NSNotFound) {
     return escaped;
   }
 
@@ -241,13 +241,13 @@
 
 + (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri {
   int paramStart = [uri rangeOfString:@"?"].location;
-  if (paramStart < 0) {
+  if (paramStart == NSNotFound) {
     return nil;
   }
   NSMutableDictionary * result = [NSMutableDictionary dictionaryWithCapacity:3];
   paramStart++;
   int paramEnd;
-  while ((paramEnd = [uri rangeOfString:@"&" options:NSLiteralSearch range:NSMakeRange(paramStart, [uri length] - paramStart)].location) >= 0) {
+  while ((paramEnd = [uri rangeOfString:@"&" options:NSLiteralSearch range:NSMakeRange(paramStart, [uri length] - paramStart)].location) != NSNotFound) {
     [self appendKeyValue:uri paramStart:paramStart paramEnd:paramEnd result:result];
     paramStart = paramEnd + 1;
   }
@@ -258,7 +258,7 @@
 
 + (void)appendKeyValue:(NSString *)uri paramStart:(int)paramStart paramEnd:(int)paramEnd result:(NSMutableDictionary *)result {
   int separator = [uri rangeOfString:@"=" options:NSLiteralSearch range:NSMakeRange(paramStart, [uri length] - paramStart)].location;
-  if (separator >= 0) {
+  if (separator != NSNotFound) {
     NSString * key = [uri substringWithRange:NSMakeRange(paramStart, [uri length] - separator)];
     NSString * value = [uri substringWithRange:NSMakeRange(separator + 1, [uri length] - paramEnd)];
     value = [self urlDecode:value];
@@ -272,8 +272,8 @@
   int max = [rawText length];
 
   while (i < max) {
-    i = [rawText rangeOfString:prefix options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
-    if (i < 0) {
+    i = [rawText rangeOfString:prefix options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i - 1)].location;
+    if (i == NSNotFound) {
       break;
     }
     i += [prefix length];
@@ -281,7 +281,7 @@
     BOOL done = NO;
     while (!done) {
       i = [rawText rangeOfString:[NSString stringWithFormat:@"%C", endChar] options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
-      if (i < 0) {
+      if (i == NSNotFound) {
         i = [rawText length];
         done = YES;
       } else if ([rawText characterAtIndex:i - 1] == '\\') {
@@ -290,7 +290,7 @@
         if (matches == nil) {
           matches = [NSMutableArray arrayWithCapacity:3];
         }
-        NSString * element = [self unescapeBackslash:[rawText substringWithRange:NSMakeRange(start, [rawText length] - i)]];
+        NSString * element = [self unescapeBackslash:[rawText substringWithRange:NSMakeRange(start, i - start)]];
         if (trim) {
           element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         }

@@ -8,7 +8,7 @@
 + (NSString *)formatAddress:(NSString *)address;
 + (void)formatNames:(NSMutableArray *)names;
 + (BOOL)isLikeVCardDate:(NSString *)value;
-+ (void)maybeAppendFragment:(NSOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
++ (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
 + (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 + (NSString *)stripContinuationCRLF:(NSString *)value;
@@ -64,7 +64,7 @@
 
   while (i < max) {
     i = [rawText rangeOfString:prefix options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
-    if (i < 0) {
+    if (i == NSNotFound) {
       break;
     }
 
@@ -88,9 +88,9 @@
       int j = metadataStart + 1;
       while (j <= i) {
         if ([rawText characterAtIndex:j] == ';' || [rawText characterAtIndex:j] == ':') {
-          NSString * metadata = [rawText substringWithRange:NSMakeRange(metadataStart + 1, [rawText length] - j)];
+          NSString * metadata = [rawText substringWithRange:NSMakeRange(metadataStart + 1, j - metadataStart -1)];
           int equals = [metadata rangeOfString:@"="].location;
-          if (equals >= 0) {
+          if (equals != NSNotFound) {
             NSString * key = [metadata substringToIndex:equals];
             NSString * value = [metadata substringFromIndex:equals + 1];
             if ([@"ENCODING" caseInsensitiveCompare:key] == NSOrderedSame) {
@@ -111,7 +111,7 @@
 
     int matchStart = i;
 
-    while ((i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) >= 0) {
+    while ((i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) != NSNotFound) {
       if (i < [rawText length] - 1 && ([rawText characterAtIndex:i + 1] == ' ' || [rawText characterAtIndex:i + 1] == '\t')) {
         i += 2;
       } else if (quotedPrintable && ([rawText characterAtIndex:i - 1] == '=' || [rawText characterAtIndex:i - 2] == '=')) {
@@ -130,7 +130,7 @@
       if ([rawText characterAtIndex:i - 1] == '\r') {
         i--;
       }
-      NSString * element = [rawText substringWithRange:NSMakeRange(matchStart, [rawText length] - i)];
+      NSString * element = [rawText substringWithRange:NSMakeRange(matchStart, i - matchStart)];
       if (trim) {
         element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
       }
@@ -182,8 +182,7 @@
 + (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
   int length = [value length];
   NSMutableString * result = [NSMutableString stringWithCapacity:length];
-  NSOutputStream * fragmentBuffer = [NSOutputStream outputStreamToMemory];
-  [fragmentBuffer open];
+  NSMutableData * fragmentBuffer = [NSMutableData data];
 
   for (int i = 0; i < length; i++) {
     unichar c = [value characterAtIndex:i];
@@ -200,23 +199,19 @@
         } else {
           unichar nextNextChar = [value characterAtIndex:i + 2];
 
-          uint32_t encodedByte = (uint32_t)16 * [self toHexValue:nextChar] + [self toHexValue:nextNextChar];
-          [fragmentBuffer write:(uint8_t *)&encodedByte maxLength:sizeof(encodedByte)];
+          int encodedByte = 16 * [self toHexValue:nextChar] + [self toHexValue:nextNextChar];
+          [fragmentBuffer appendBytes:&encodedByte length:1];
           i += 2;
         }
       }
       break;
     default:
       [self maybeAppendFragment:fragmentBuffer charset:charset result:result];
-      [fragmentBuffer close];
-      fragmentBuffer = [NSOutputStream outputStreamToMemory];
-      [fragmentBuffer open];
       [result appendFormat:@"%C", c];
     }
   }
 
   [self maybeAppendFragment:fragmentBuffer charset:charset result:result];
-  [fragmentBuffer close];
   return result;
 }
 
@@ -231,16 +226,15 @@
   @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid character." userInfo:nil];
 }
 
-+ (void)maybeAppendFragment:(NSOutputStream *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
-  NSData *data = [fragmentBuffer propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
-
-  if ([data length] > 0) {
++ (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
+  if ([fragmentBuffer length] > 0) {
     NSString * fragment;
     if (charset == nil || CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset) == kCFStringEncodingInvalidId) {
-      fragment = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+      fragment = [[[NSString alloc] initWithData:fragmentBuffer encoding:NSUTF8StringEncoding] autorelease];
     } else {
-      fragment = [[[NSString alloc] initWithData:data encoding:CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset))] autorelease];
+      fragment = [[[NSString alloc] initWithData:fragmentBuffer encoding:CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset))] autorelease];
     }
+    [fragmentBuffer setLength:0];
     [result appendString:fragment];
   }
 }
@@ -290,8 +284,8 @@
       NSMutableArray * components = [NSMutableArray arrayWithCapacity:5];
       int start = 0;
       int end;
-      while ((end = [name rangeOfString:@";" options:NSLiteralSearch range:NSMakeRange(start, [name length] - start)].location) > 0) {
-        [components addObject:[name substringWithRange:NSMakeRange(start, [name length] - end)]];
+      while ((end = [name rangeOfString:@";" options:NSLiteralSearch range:NSMakeRange(start, [name length] - start)].location) != NSNotFound && end > 0) {
+        [components addObject:[name substringWithRange:NSMakeRange(start, [name length] - end - 1)]];
         start = end + 1;
       }
 
@@ -308,7 +302,7 @@
 }
 
 + (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
-  if ([components objectAtIndex:i]) {
+  if ([components count] > i && [components objectAtIndex:i]) {
     [newName appendFormat:@" %@", [components objectAtIndex:i]];
   }
 }

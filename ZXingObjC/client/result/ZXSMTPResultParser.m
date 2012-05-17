@@ -16,11 +16,11 @@
   NSString * subject = nil;
   NSString * body = nil;
   int colon = [emailAddress rangeOfString:@":"].location;
-  if (colon >= 0) {
+  if (colon != NSNotFound) {
     subject = [emailAddress substringFromIndex:colon + 1];
     emailAddress = [emailAddress substringToIndex:colon];
     colon = [subject rangeOfString:@":"].location;
-    if (colon >= 0) {
+    if (colon != NSNotFound) {
       body = [subject substringFromIndex:colon + 1];
       subject = [subject substringToIndex:colon];
     }

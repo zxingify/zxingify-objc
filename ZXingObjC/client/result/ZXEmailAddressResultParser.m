@@ -14,7 +14,7 @@
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
     emailAddress = [rawText substringFromIndex:7];
     int queryStart = [emailAddress rangeOfString:@"?"].location;
-    if (queryStart >= 0) {
+    if (queryStart != NSNotFound) {
       emailAddress = [emailAddress substringToIndex:queryStart];
     }
     NSMutableDictionary * nameValues = [self parseNameValuePairs:rawText];

@@ -164,6 +164,9 @@
                <Test
                   Identifier = "PDF417BlackBox1TestCase">
                </Test>
+               <Test
+                  Identifier = "PDF417BlackBox2TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

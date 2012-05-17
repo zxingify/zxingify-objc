@@ -46,7 +46,7 @@
 
 + (NSString *)parseName:(NSString *)name {
   int comma = [name rangeOfString:@","].location;
-  if (comma >= 0) {
+  if (comma != NSNotFound) {
     return [NSString stringWithFormat:@"%@ %@", [name substringFromIndex:comma + 1], [name substringToIndex:comma]];
   }
   return name;

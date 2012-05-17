@@ -31,7 +31,7 @@
 
   int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
   NSString * smsURIWithoutQuery;
-  if (queryStart < 0 || !querySyntax) {
+  if (queryStart == NSNotFound || !querySyntax) {
     smsURIWithoutQuery = [rawText substringFromIndex:4];
   } else {
     smsURIWithoutQuery = [rawText substringWithRange:NSMakeRange(4, [rawText length] - queryStart)];
@@ -56,7 +56,7 @@
 
 + (void)addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart {
   int numberEnd = [numberPart rangeOfString:@";"].location;
-  if (numberEnd < 0) {
+  if (numberEnd == NSNotFound) {
     [numbers addObject:numberPart];
     [vias addObject:nil];
   } else {

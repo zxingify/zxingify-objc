@@ -10,7 +10,7 @@
     return nil;
   }
   int titleEnd = [rawText rangeOfString:@":" options:NSLiteralSearch range:NSMakeRange(6, [rawText length] - 6)].location;
-  if (titleEnd < 0) {
+  if (titleEnd == NSNotFound) {
     return nil;
   }
   NSString * title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, [rawText length] - titleEnd)];

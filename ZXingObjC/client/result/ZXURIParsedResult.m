@@ -55,7 +55,7 @@
   }
 
   int hostEnd = [uri rangeOfString:@"/" options:0 range:NSMakeRange(hostStart, uriLength - hostStart)].location;
-  if (hostEnd < 0) {
+  if (hostEnd == NSNotFound) {
     hostEnd = uriLength;
   }
   int at = [uri rangeOfString:@"@" options:0 range:NSMakeRange(hostStart, uriLength - hostStart)].location;
@@ -76,7 +76,7 @@
 - (NSString *)massageURI:(NSString *)aUri {
   NSString *_uri = [aUri stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   int protocolEnd = [_uri rangeOfString:@":"].location;
-  if (protocolEnd < 0) {
+  if (protocolEnd == NSNotFound) {
     // No protocol, assume http
     _uri = [NSString stringWithFormat:@"http://%@", _uri];
   } else if ([self isColonFollowedByPortNumber:_uri protocolEnd:protocolEnd]) {
@@ -90,7 +90,7 @@
 
 - (BOOL)isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {
   int nextSlash = [aUri rangeOfString:@"/" options:0 range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
-  if (nextSlash < 0) {
+  if (nextSlash == NSNotFound) {
     nextSlash = [self.uri length];
   }
   if (nextSlash <= protocolEnd + 1) {

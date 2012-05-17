@@ -29,15 +29,15 @@
     return NO;
   }
   int period = [uri rangeOfString:@"."].location;
-  if (period >= [uri length] - 2) {
+  if (period != NSNotFound && period >= [uri length] - 2) {
     return NO;
   }
   int colon = [uri rangeOfString:@":"].location;
-  if (period < 0 && colon < 0) {
+  if (period == NSNotFound && colon == NSNotFound) {
     return NO;
   }
-  if (colon >= 0) {
-    if (period < 0 || period > colon) {
+  if (colon != NSNotFound) {
+    if (period == NSNotFound || period > colon) {
       for (int i = 0; i < colon; i++) {
         unichar c = [uri characterAtIndex:i];
         if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z')) {

@@ -11,6 +11,8 @@
 		02070C59155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */; };
 		02070C5D155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
 		02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
+		0237901E15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */; };
+		0237901F15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */; };
 		0250D79E1545EE5900752941 /* ZXAztecDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8115129BD0009E6549 /* ZXAztecDetectorResult.m */; };
 		0250D79F1545EE5900752941 /* ZXAztecReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8315129BD0009E6549 /* ZXAztecReader.m */; };
 		0250D7A01545EE5900752941 /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCFBA15129EDB009E6549 /* ZXAztecDecoder.m */; };
@@ -1021,6 +1023,8 @@
 		02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox3TestCase.m; sourceTree = "<group>"; };
 		02070C5B155C681A00E3BBFE /* QRCodeBlackBox4TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox4TestCase.h; sourceTree = "<group>"; };
 		02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox4TestCase.m; sourceTree = "<group>"; };
+		0237901C15655FE6008E42BC /* AddressBookParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressBookParsedResultTestCase.h; path = client/result/AddressBookParsedResultTestCase.h; sourceTree = "<group>"; };
+		0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddressBookParsedResultTestCase.m; path = client/result/AddressBookParsedResultTestCase.m; sourceTree = "<group>"; };
 		0250D9001545FC8B00752941 /* ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		0250D9011545FC8B00752941 /* osx-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		0268208A1562EAD1008F42C2 /* UPCABlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox1TestCase.h; path = oned/UPCABlackBox1TestCase.h; sourceTree = "<group>"; };
@@ -1534,6 +1538,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0237901915655FC3008E42BC /* client */ = {
+			isa = PBXGroup;
+			children = (
+				0237901B15655FCA008E42BC /* result */,
+			);
+			name = client;
+			sourceTree = "<group>";
+		};
+		0237901B15655FCA008E42BC /* result */ = {
+			isa = PBXGroup;
+			children = (
+				0237901C15655FE6008E42BC /* AddressBookParsedResultTestCase.h */,
+				0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */,
+			);
+			name = result;
+			sourceTree = "<group>";
+		};
 		029BCD7F15129BD0009E6549 /* aztec */ = {
 			isa = PBXGroup;
 			children = (
@@ -2158,6 +2179,7 @@
 			isa = PBXGroup;
 			children = (
 				029C9DA6155D6BBB00A53DA0 /* aztec */,
+				0237901915655FC3008E42BC /* client */,
 				02FB06DF15475B480067923D /* common */,
 				02FDEDE7155DBAEA00D9AA13 /* datamatrix */,
 				250101D0155E1A8400D1D979 /* negative */,
@@ -3094,6 +3116,7 @@
 				026820B51562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */,
 				25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */,
 				251741A31564AAA20006A257 /* PDF417BlackBox2TestCase.m in Sources */,
+				0237901F15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3495,6 +3518,7 @@
 				026820B41562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */,
 				25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */,
 				251741A21564AAA20006A257 /* PDF417BlackBox2TestCase.m in Sources */,
+				0237901E15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

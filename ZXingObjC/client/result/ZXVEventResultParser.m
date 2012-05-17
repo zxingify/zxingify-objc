@@ -11,7 +11,7 @@
     return nil;
   }
   int vEventStart = [rawText rangeOfString:@"BEGIN:VEVENT"].location;
-  if (vEventStart < 0) {
+  if (vEventStart == NSNotFound) {
     return nil;
   }
 
