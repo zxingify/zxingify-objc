@@ -86,17 +86,21 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   } else {
     [self correctCodeWordVertices:vertices upsideDown:NO];
   }
+
   if (vertices == nil) {
     @throw [ZXNotFoundException notFoundInstance];
   }
+
   float moduleWidth = [self computeModuleWidth:vertices];
   if (moduleWidth < 1.0f) {
     @throw [ZXNotFoundException notFoundInstance];
   }
+
   int dimension = [self computeDimension:[vertices objectAtIndex:4] topRight:[vertices objectAtIndex:6] bottomLeft:[vertices objectAtIndex:5] bottomRight:[vertices objectAtIndex:7] moduleWidth:moduleWidth];
   if (dimension < 1) {
     @throw [ZXNotFoundException notFoundInstance];
   }
+
   ZXBitMatrix * bits = [self sampleGrid:matrix topLeft:[vertices objectAtIndex:4] bottomLeft:[vertices objectAtIndex:5] topRight:[vertices objectAtIndex:6] bottomRight:[vertices objectAtIndex:7] dimension:dimension];
   return [[[ZXDetectorResult alloc] initWithBits:bits points:[NSArray arrayWithObjects:[vertices objectAtIndex:4], [vertices objectAtIndex:5], [vertices objectAtIndex:6], [vertices objectAtIndex:7], nil]] autorelease];
 }

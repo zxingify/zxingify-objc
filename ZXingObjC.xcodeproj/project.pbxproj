@@ -963,6 +963,8 @@
 		250830461512B2D9006D79E6 /* ZXQRCodeVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 250830441512B2D8006D79E6 /* ZXQRCodeVersion.h */; };
 		250830471512B2D9006D79E6 /* ZXQRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */; };
 		250830481512B2D9006D79E6 /* ZXQRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */; };
+		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
+		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
 		2561A6F3155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
 		2561A6F7155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F6155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m */; };
@@ -1438,6 +1440,8 @@
 		250830351512B1E6006D79E6 /* ZXQRCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeBitMatrixParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		250830441512B2D8006D79E6 /* ZXQRCodeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXQRCodeVersion.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeVersion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
+		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
 		2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code39BlackBox3TestCase.m; path = oned/Code39BlackBox3TestCase.m; sourceTree = "<group>"; };
 		2561A6F5155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39ExtendedBlackBox2TestCase.h; path = oned/Code39ExtendedBlackBox2TestCase.h; sourceTree = "<group>"; };
@@ -2155,6 +2159,7 @@
 				250101D0155E1A8400D1D979 /* negative */,
 				250101F5155F1DDB00D1D979 /* oned */,
 				02FB06E715475B6F0067923D /* qrcode */,
+				25585C271564A13B00DDFFDB /* pdf417 */,
 				02FB06F115475BCE0067923D /* Resources */,
 				02D26EFC151288DB007F8DC6 /* Supporting Files */,
 			);
@@ -2289,6 +2294,15 @@
 				026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */,
 			);
 			name = oned;
+			sourceTree = "<group>";
+		};
+		25585C271564A13B00DDFFDB /* pdf417 */ = {
+			isa = PBXGroup;
+			children = (
+				25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */,
+				25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */,
+			);
+			name = pdf417;
 			sourceTree = "<group>";
 		};
 		258FE03C15609E8A004B9C9A /* rss */ = {
@@ -3072,6 +3086,7 @@
 				026820A51562F93C008F42C2 /* UPCABlackBox4TestCase.m in Sources */,
 				026820AD1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */,
 				026820B51562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */,
+				25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3471,6 +3486,7 @@
 				026820A41562F93C008F42C2 /* UPCABlackBox4TestCase.m in Sources */,
 				026820AC1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */,
 				026820B41562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */,
+				25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -279,9 +279,9 @@ NSString* const EXP900[16] =
 + (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   if (mode == BYTE_COMPACTION_MODE_LATCH) {
     int count = 0;
-    long value = 0;
-    NSMutableString * decodedData = [NSMutableString stringWithCapacity:6];
-    int byteCompactedCodewords[6];
+    long long value = 0;
+    char decodedData[6] = {0, 0, 0, 0, 0, 0};
+    int byteCompactedCodewords[6] = {0, 0, 0, 0, 0, 0};
     BOOL end = NO;
     while ((codeIndex < [[codewords objectAtIndex:0] intValue]) && !end) {
       int code = [[codewords objectAtIndex:codeIndex++] intValue];
@@ -303,10 +303,10 @@ NSString* const EXP900[16] =
       }
       if ((count % 5 == 0) && (count > 0)) {
         for (int j = 0; j < 6; ++j) {
-          [decodedData replaceCharactersInRange:NSMakeRange(5-j, 1) withString:[NSString stringWithFormat:@"%C", (unichar)(value % 256)]];
+          decodedData[5 - j] = (char) (value % 256);
           value >>= 8;
         }
-        [result appendString:decodedData];
+        [result appendString:[NSString stringWithCString:decodedData encoding:NSASCIIStringEncoding]];
         count = 0;
       }
     }

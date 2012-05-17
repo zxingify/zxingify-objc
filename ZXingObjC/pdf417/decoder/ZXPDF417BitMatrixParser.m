@@ -776,7 +776,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     self.rows = rowNumber;
   }
   self.erasures = [[[self.erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy] autorelease];
-  return [codewords subarrayWithRange:NSMakeRange(0, self.eraseCount)];
+  return [codewords subarrayWithRange:NSMakeRange(0, next)];
 }
 
 

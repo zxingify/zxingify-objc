@@ -13,6 +13,7 @@
 - (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
 - (void)runTests;
 
+- (ZXDecodeHints *)hints;
 - (NSArray *)imageFiles;
 - (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees;
 
