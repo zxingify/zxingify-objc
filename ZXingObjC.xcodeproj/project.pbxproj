@@ -363,6 +363,8 @@
 		026820AD1562F9CA008F42C2 /* UPCABlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820AB1562F9CA008F42C2 /* UPCABlackBox5TestCase.m */; };
 		026820B41562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */; };
 		026820B51562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */; };
+		026DDB251565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */; };
+		026DDB261565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */; };
 		027EA43F1545EA6A00BA753C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		027EA4431545EA6A00BA753C /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */; };
 		029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */; };
@@ -1039,6 +1041,8 @@
 		026820AB1562F9CA008F42C2 /* UPCABlackBox5TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox5TestCase.m; path = oned/UPCABlackBox5TestCase.m; sourceTree = "<group>"; };
 		026820B21562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCABlackBox6BlurryTestCase.h; path = oned/UPCABlackBox6BlurryTestCase.h; sourceTree = "<group>"; };
 		026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCABlackBox6BlurryTestCase.m; path = oned/UPCABlackBox6BlurryTestCase.m; sourceTree = "<group>"; };
+		026DDB231565A3F5009615B1 /* CalendarParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarParsedResultTestCase.h; path = client/result/CalendarParsedResultTestCase.h; sourceTree = "<group>"; };
+		026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarParsedResultTestCase.m; path = client/result/CalendarParsedResultTestCase.m; sourceTree = "<group>"; };
 		027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027EA43E1545EA6A00BA753C /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox2TestCase.h; sourceTree = "<group>"; };
@@ -1551,6 +1555,8 @@
 			children = (
 				0237901C15655FE6008E42BC /* AddressBookParsedResultTestCase.h */,
 				0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */,
+				026DDB231565A3F5009615B1 /* CalendarParsedResultTestCase.h */,
+				026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */,
 			);
 			name = result;
 			sourceTree = "<group>";
@@ -3117,6 +3123,7 @@
 				25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */,
 				251741A31564AAA20006A257 /* PDF417BlackBox2TestCase.m in Sources */,
 				0237901F15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */,
+				026DDB261565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3519,6 +3526,7 @@
 				25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */,
 				251741A21564AAA20006A257 /* PDF417BlackBox2TestCase.m in Sources */,
 				0237901E15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */,
+				026DDB251565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

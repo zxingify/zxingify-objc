@@ -167,6 +167,9 @@
                <Test
                   Identifier = "PDF417BlackBox2TestCase">
                </Test>
+               <Test
+                  Identifier = "AddressBookParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
