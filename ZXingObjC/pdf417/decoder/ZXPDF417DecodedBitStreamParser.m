@@ -111,8 +111,14 @@ NSString* const EXP900[16] =
  * well as selected control characters.
  */
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
-  int textCompactionData[[[codewords objectAtIndex:0] intValue] << 1];
-  int byteCompactionData[[[codewords objectAtIndex:0] intValue] << 1];
+  int count = [[codewords objectAtIndex:0] intValue] << 1;
+  int textCompactionData[count];
+  int byteCompactionData[count];
+
+  for (int i = 0; i < count; i++) {
+    textCompactionData[0] = 0;
+    byteCompactionData[0] = 0;
+  }
 
   int index = 0;
   BOOL end = NO;
@@ -357,6 +363,9 @@ NSString* const EXP900[16] =
   BOOL end = NO;
 
   int numericCodewords[MAX_NUMERIC_CODEWORDS];
+  for (int i = 0; i < MAX_NUMERIC_CODEWORDS; i++) {
+    numericCodewords[i] = 0;
+  }
 
   while (codeIndex < [[codewords objectAtIndex:0] intValue] && !end) {
     int code = [[codewords objectAtIndex:codeIndex++] intValue];

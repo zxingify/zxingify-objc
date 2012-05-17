@@ -161,6 +161,9 @@
                <Test
                   Identifier = "UPCABlackBox6BlurryTestCase">
                </Test>
+               <Test
+                  Identifier = "PDF417BlackBox1TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

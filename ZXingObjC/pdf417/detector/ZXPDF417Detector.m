@@ -310,7 +310,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float correction = length * deltay / deltax;
     [vertices replaceObjectAtIndex:6
                         withObject:[[[ZXResultPoint alloc] initWithX:[(ZXResultPoint*)[vertices objectAtIndex:6] x]
-                                                                   y:[(ZXResultPoint*)[vertices objectAtIndex:6] y] + correction] autorelease]];
+                                                                   y:[(ZXResultPoint*)[vertices objectAtIndex:6] y] - correction] autorelease]];
   }
   
   skew = [(ZXResultPoint*)[vertices objectAtIndex:7] y] - [(ZXResultPoint*)[vertices objectAtIndex:5] y];
@@ -334,7 +334,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float correction = length * deltay / deltax;
     [vertices replaceObjectAtIndex:7
                         withObject:[[[ZXResultPoint alloc] initWithX:[(ZXResultPoint*)[vertices objectAtIndex:7] x]
-                                                                   y:[(ZXResultPoint*)[vertices objectAtIndex:7] y] + correction] autorelease]];
+                                                                   y:[(ZXResultPoint*)[vertices objectAtIndex:7] y] - correction] autorelease]];
   }
 }
 
