@@ -182,6 +182,9 @@
                <Test
                   Identifier = "ISBNParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "GeoParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

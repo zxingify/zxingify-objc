@@ -178,7 +178,7 @@
     }
   }
 
-  return -1;
+  return NSNotFound;
 }
 
 + (int)parseHexDigit:(unichar)c {
@@ -186,18 +186,17 @@
     if (c <= 'f') {
       return 10 + (c - 'a');
     }
-  }
-   else if (c >= 'A') {
+  } else if (c >= 'A') {
     if (c <= 'F') {
       return 10 + (c - 'A');
     }
-  }
-   else if (c >= '0') {
+  } else if (c >= '0') {
     if (c <= '9') {
       return c - '0';
     }
   }
-  return -1;
+
+  return NSNotFound;
 }
 
 + (BOOL)isStringOfDigits:(NSString *)value length:(unsigned int)length {
@@ -259,8 +258,8 @@
 + (void)appendKeyValue:(NSString *)uri paramStart:(int)paramStart paramEnd:(int)paramEnd result:(NSMutableDictionary *)result {
   int separator = [uri rangeOfString:@"=" options:NSLiteralSearch range:NSMakeRange(paramStart, [uri length] - paramStart)].location;
   if (separator != NSNotFound) {
-    NSString * key = [uri substringWithRange:NSMakeRange(paramStart, [uri length] - separator)];
-    NSString * value = [uri substringWithRange:NSMakeRange(separator + 1, [uri length] - paramEnd)];
+    NSString * key = [uri substringWithRange:NSMakeRange(paramStart, separator - paramStart)];
+    NSString * value = [uri substringWithRange:NSMakeRange(separator + 1, paramEnd - separator - 1)];
     value = [self urlDecode:value];
     [result setObject:value forKey:key];
   }

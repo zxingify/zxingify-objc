@@ -24,4 +24,8 @@
   [super dealloc];
 }
 
+- (NSString*)displayResult {
+  return self.isbn;
+}
+
 @end

@@ -32,4 +32,8 @@
   [super dealloc];
 }
 
+- (NSString*)displayResult {
+  return self.productID;
+}
+
 @end

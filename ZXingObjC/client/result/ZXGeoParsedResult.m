@@ -34,7 +34,7 @@
   [super dealloc];
 }
 
-- (NSString *) geoURI {
+- (NSString *)geoURI {
   NSMutableString *result = [NSMutableString string];
   [result appendFormat:@"geo:%f,%f", self.latitude, self.longitude];
   if (self.altitude > 0) {

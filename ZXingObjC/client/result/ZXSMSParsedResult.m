@@ -17,7 +17,17 @@
 @synthesize body;
 
 - (id)initWithNumber:(NSString *)aNumber via:(NSString *)aVia subject:(NSString *)aSubject body:(NSString *)aBody {
-  return [self initWithNumbers:[NSArray arrayWithObject:aNumber] vias:[NSArray arrayWithObject:aVia] subject:aSubject body:aBody];
+  NSArray* theNumbers = nil;
+  if (aNumber) {
+    theNumbers = [NSArray arrayWithObject:aNumber];
+  }
+
+  NSArray* theVias = nil;
+  if (aVia) {
+    theVias = [NSArray arrayWithObject:aVia];
+  }
+  
+  return [self initWithNumbers:theNumbers vias:theVias subject:aSubject body:aBody];
 }
 
 - (id)initWithNumbers:(NSArray *)theNumbers vias:(NSArray *)theVias subject:(NSString *)aSubject body:(NSString *)aBody {

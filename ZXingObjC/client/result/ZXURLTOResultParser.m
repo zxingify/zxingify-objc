@@ -13,7 +13,7 @@
   if (titleEnd == NSNotFound) {
     return nil;
   }
-  NSString * title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, [rawText length] - titleEnd)];
+  NSString * title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, titleEnd - 6)];
   NSString * uri = [rawText substringFromIndex:titleEnd + 1];
   return [[[ZXURIParsedResult alloc] initWithUri:uri title:title] autorelease];
 }

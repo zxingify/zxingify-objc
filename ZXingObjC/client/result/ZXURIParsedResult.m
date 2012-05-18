@@ -91,14 +91,14 @@
 - (BOOL)isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {
   int nextSlash = [aUri rangeOfString:@"/" options:0 range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
   if (nextSlash == NSNotFound) {
-    nextSlash = [self.uri length];
+    nextSlash = [aUri length];
   }
   if (nextSlash <= protocolEnd + 1) {
     return NO;
   }
 
   for (int x = protocolEnd + 1; x < nextSlash; x++) {
-    if ([self.uri characterAtIndex:x] < '0' || [self.uri characterAtIndex:x] > '9') {
+    if ([aUri characterAtIndex:x] < '0' || [aUri characterAtIndex:x] > '9') {
       return NO;
     }
   }
