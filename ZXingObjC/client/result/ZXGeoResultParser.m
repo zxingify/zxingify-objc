@@ -22,7 +22,7 @@
   if (latitudeEnd == NSNotFound) {
     return nil;
   }
-  int longitudeEnd = [geoURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(latitudeEnd + 1, [geoURIWithoutQuery length] - latitudeEnd + 1)].location;
+  int longitudeEnd = [geoURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(latitudeEnd + 1, [geoURIWithoutQuery length] - latitudeEnd - 1)].location;
   double latitude;
   double longitude;
   double altitude;
@@ -35,7 +35,7 @@
     longitude = [[geoURIWithoutQuery substringFromIndex:latitudeEnd + 1] doubleValue];
     altitude = 0.0;
   } else {
-    longitude = [[geoURIWithoutQuery substringWithRange:NSMakeRange(latitudeEnd + 1, [geoURIWithoutQuery length] - longitudeEnd)] doubleValue];
+    longitude = [[geoURIWithoutQuery substringWithRange:NSMakeRange(latitudeEnd + 1, longitudeEnd - latitudeEnd - 1)] doubleValue];
     altitude = [[geoURIWithoutQuery substringFromIndex:longitudeEnd + 1] doubleValue];
   }
   if (longitude > 180.0 || longitude < -180.0 || altitude < 0) {

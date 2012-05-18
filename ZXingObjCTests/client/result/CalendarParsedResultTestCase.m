@@ -31,7 +31,6 @@
 
 static double EPSILON = 0.0000000001;
 
-
 - (void)testStartEnd {
   [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
                            @"DTSTART:20080504T123456Z\r\n"

@@ -173,6 +173,12 @@
                <Test
                   Identifier = "CalendarParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "EmailAddressParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ExpandedProductParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

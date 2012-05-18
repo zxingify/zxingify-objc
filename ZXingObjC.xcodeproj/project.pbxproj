@@ -971,6 +971,10 @@
 		250830481512B2D9006D79E6 /* ZXQRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */; };
 		251741A21564AAA20006A257 /* PDF417BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741A11564AAA20006A257 /* PDF417BlackBox2TestCase.m */; };
 		251741A31564AAA20006A257 /* PDF417BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741A11564AAA20006A257 /* PDF417BlackBox2TestCase.m */; };
+		251741AA1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */; };
+		251741AB1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */; };
+		251741AF1565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */; };
+		251741B01565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1456,6 +1460,10 @@
 		250830451512B2D9006D79E6 /* ZXQRCodeVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXQRCodeVersion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		251741A01564AAA20006A257 /* PDF417BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox2TestCase.h; path = pdf417/PDF417BlackBox2TestCase.h; sourceTree = "<group>"; };
 		251741A11564AAA20006A257 /* PDF417BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox2TestCase.m; path = pdf417/PDF417BlackBox2TestCase.m; sourceTree = "<group>"; };
+		251741A81565DD7C0006A257 /* ExpandedProductParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExpandedProductParsedResultTestCase.h; path = client/result/ExpandedProductParsedResultTestCase.h; sourceTree = "<group>"; };
+		251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExpandedProductParsedResultTestCase.m; path = client/result/ExpandedProductParsedResultTestCase.m; sourceTree = "<group>"; };
+		251741AD1565DF5A0006A257 /* GeoParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeoParsedResultTestCase.h; path = client/result/GeoParsedResultTestCase.h; sourceTree = "<group>"; };
+		251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeoParsedResultTestCase.m; path = client/result/GeoParsedResultTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -1563,6 +1571,10 @@
 				026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */,
 				026DDB281565AA86009615B1 /* EmailAddressParsedResultTestCase.h */,
 				026DDB291565AA86009615B1 /* EmailAddressParsedResultTestCase.m */,
+				251741A81565DD7C0006A257 /* ExpandedProductParsedResultTestCase.h */,
+				251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */,
+				251741AD1565DF5A0006A257 /* GeoParsedResultTestCase.h */,
+				251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */,
 			);
 			name = result;
 			sourceTree = "<group>";
@@ -3131,6 +3143,8 @@
 				0237901F15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */,
 				026DDB261565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */,
 				026DDB2B1565AA86009615B1 /* EmailAddressParsedResultTestCase.m in Sources */,
+				251741AB1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */,
+				251741B01565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3535,6 +3549,8 @@
 				0237901E15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */,
 				026DDB251565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */,
 				026DDB2A1565AA86009615B1 /* EmailAddressParsedResultTestCase.m in Sources */,
+				251741AA1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */,
+				251741AF1565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
