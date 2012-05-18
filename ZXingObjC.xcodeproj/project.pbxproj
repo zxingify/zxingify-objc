@@ -975,6 +975,8 @@
 		251741AB1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */; };
 		251741AF1565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */; };
 		251741B01565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */; };
+		251741B31565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */; };
+		251741B41565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1464,6 +1466,8 @@
 		251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExpandedProductParsedResultTestCase.m; path = client/result/ExpandedProductParsedResultTestCase.m; sourceTree = "<group>"; };
 		251741AD1565DF5A0006A257 /* GeoParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeoParsedResultTestCase.h; path = client/result/GeoParsedResultTestCase.h; sourceTree = "<group>"; };
 		251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeoParsedResultTestCase.m; path = client/result/GeoParsedResultTestCase.m; sourceTree = "<group>"; };
+		251741B11565E42D0006A257 /* ISBNParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISBNParsedResultTestCase.h; path = client/result/ISBNParsedResultTestCase.h; sourceTree = "<group>"; };
+		251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISBNParsedResultTestCase.m; path = client/result/ISBNParsedResultTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -1575,6 +1579,8 @@
 				251741A91565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m */,
 				251741AD1565DF5A0006A257 /* GeoParsedResultTestCase.h */,
 				251741AE1565DF5A0006A257 /* GeoParsedResultTestCase.m */,
+				251741B11565E42D0006A257 /* ISBNParsedResultTestCase.h */,
+				251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */,
 			);
 			name = result;
 			sourceTree = "<group>";
@@ -3145,6 +3151,7 @@
 				026DDB2B1565AA86009615B1 /* EmailAddressParsedResultTestCase.m in Sources */,
 				251741AB1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */,
 				251741B01565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */,
+				251741B41565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3551,6 +3558,7 @@
 				026DDB2A1565AA86009615B1 /* EmailAddressParsedResultTestCase.m in Sources */,
 				251741AA1565DD7C0006A257 /* ExpandedProductParsedResultTestCase.m in Sources */,
 				251741AF1565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */,
+				251741B31565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

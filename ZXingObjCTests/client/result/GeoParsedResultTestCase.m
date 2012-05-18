@@ -1,9 +1,5 @@
 #import "GeoParsedResultTestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXGeoParsedResult.h"
-#import "ZXParsedResult.h"
-#import "ZXParsedResultType.h"
-#import "ZXResult.h"
 #import "ZXResultParser.h"
 
 @interface GeoParsedResultTestCase ()

@@ -179,6 +179,9 @@
                <Test
                   Identifier = "ExpandedProductParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "ISBNParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
