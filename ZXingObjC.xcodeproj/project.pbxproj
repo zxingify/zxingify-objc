@@ -991,6 +991,8 @@
 		2561A700155F7164008C7AE9 /* Code128BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */; };
 		2561A703155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */; };
 		2561A704155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */; };
+		258994D91565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */; };
+		258994DA1565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */; };
 		258FE01915605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01A15605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01E15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */; };
@@ -1484,6 +1486,8 @@
 		2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox1TestCase.m; path = oned/Code128BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A701155F75E7008C7AE9 /* Code128BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox2TestCase.h; path = oned/Code128BlackBox2TestCase.h; sourceTree = "<group>"; };
 		2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox2TestCase.m; path = oned/Code128BlackBox2TestCase.m; sourceTree = "<group>"; };
+		258994D71565FE2000B403C3 /* ProductParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductParsedResultTestCase.h; path = client/result/ProductParsedResultTestCase.h; sourceTree = "<group>"; };
+		258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductParsedResultTestCase.m; path = client/result/ProductParsedResultTestCase.m; sourceTree = "<group>"; };
 		258FE01715605EDF004B9C9A /* Code128BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox3TestCase.h; path = oned/Code128BlackBox3TestCase.h; sourceTree = "<group>"; };
 		258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox3TestCase.m; path = oned/Code128BlackBox3TestCase.m; sourceTree = "<group>"; };
 		258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8BlackBox1TestCase.h; path = oned/EAN8BlackBox1TestCase.h; sourceTree = "<group>"; };
@@ -1587,6 +1591,8 @@
 				251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */,
 				251741B51565E5CB0006A257 /* ParsedReaderResultTestCase.h */,
 				251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */,
+				258994D71565FE2000B403C3 /* ProductParsedResultTestCase.h */,
+				258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */,
 			);
 			name = result;
 			sourceTree = "<group>";
@@ -3159,6 +3165,7 @@
 				251741B01565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */,
 				251741B41565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */,
 				251741B81565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */,
+				258994DA1565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3567,6 +3574,7 @@
 				251741AF1565DF5A0006A257 /* GeoParsedResultTestCase.m in Sources */,
 				251741B31565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */,
 				251741B71565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */,
+				258994D91565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

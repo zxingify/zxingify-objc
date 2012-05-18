@@ -185,6 +185,9 @@
                <Test
                   Identifier = "GeoParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "ParsedReaderResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

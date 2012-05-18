@@ -106,34 +106,34 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
  * Expands a UPC-E value back into its full, equivalent UPC-A code value.
  */
 + (NSString *)convertUPCEtoUPCA:(NSString *)upce {
+  NSString * upceChars = [upce substringWithRange:NSMakeRange(1, 6)];
   NSMutableString * result = [NSMutableString stringWithCapacity:12];
   [result appendFormat:@"%C", [upce characterAtIndex:0]];
-  unichar lastChar = [upce characterAtIndex:[upce length] - 1];
-
+  unichar lastChar = [upceChars characterAtIndex:5];
   switch (lastChar) {
-  case '0':
-  case '1':
-  case '2':
-    [result appendString:[upce substringToIndex:2]];
-    [result appendFormat:@"%C", lastChar];
-    [result appendString:@"0000"];
-    [result appendString:[upce substringWithRange:NSMakeRange(2, 3)]];
-    break;
-  case '3':
-    [result appendString:[upce substringToIndex:3]];
-    [result appendString:@"00000"];
-    [result appendString:[upce substringWithRange:NSMakeRange(3, 2)]];
-    break;
-  case '4':
-    [result appendString:[upce substringToIndex:4]];
-    [result appendString:@"00000"];
-    [result appendString:[upce substringWithRange:NSMakeRange(4, 1)]];
-    break;
-  default:
-    [result appendString:[upce substringToIndex:5]];
-    [result appendString:@"0000"];
-    [result appendFormat:@"%C", lastChar];
-    break;
+    case '0':
+    case '1':
+    case '2':
+      [result appendString:[upceChars substringToIndex:2]];
+      [result appendFormat:@"%C", lastChar];
+      [result appendString:@"0000"];
+      [result appendString:[upceChars substringWithRange:NSMakeRange(2, 3)]];
+      break;
+    case '3':
+      [result appendString:[upceChars substringToIndex:3]];
+      [result appendString:@"00000"];
+      [result appendString:[upceChars substringWithRange:NSMakeRange(3, 2)]];
+      break;
+    case '4':
+      [result appendString:[upceChars substringToIndex:4]];
+      [result appendString:@"00000"];
+      [result appendString:[upceChars substringWithRange:NSMakeRange(4, 1)]];
+      break;
+    default:
+      [result appendString:[upceChars substringToIndex:5]];
+      [result appendString:@"0000"];
+      [result appendFormat:@"%C", lastChar];
+      break;
   }
   [result appendFormat:@"%C", [upce characterAtIndex:7]];
   return [NSString stringWithString:result];
