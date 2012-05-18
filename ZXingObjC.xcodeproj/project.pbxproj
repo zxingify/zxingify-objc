@@ -367,6 +367,8 @@
 		026DDB261565A3F5009615B1 /* CalendarParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */; };
 		026DDB2A1565AA86009615B1 /* EmailAddressParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB291565AA86009615B1 /* EmailAddressParsedResultTestCase.m */; };
 		026DDB2B1565AA86009615B1 /* EmailAddressParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB291565AA86009615B1 /* EmailAddressParsedResultTestCase.m */; };
+		026DDB4B1566C609009615B1 /* SMSMMSParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB4A1566C609009615B1 /* SMSMMSParsedResultTestCase.m */; };
+		026DDB4C1566C609009615B1 /* SMSMMSParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 026DDB4A1566C609009615B1 /* SMSMMSParsedResultTestCase.m */; };
 		027EA43F1545EA6A00BA753C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		027EA4431545EA6A00BA753C /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */; };
 		029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A9BC21551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m */; };
@@ -1057,6 +1059,8 @@
 		026DDB241565A3F5009615B1 /* CalendarParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarParsedResultTestCase.m; path = client/result/CalendarParsedResultTestCase.m; sourceTree = "<group>"; };
 		026DDB281565AA86009615B1 /* EmailAddressParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmailAddressParsedResultTestCase.h; path = client/result/EmailAddressParsedResultTestCase.h; sourceTree = "<group>"; };
 		026DDB291565AA86009615B1 /* EmailAddressParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EmailAddressParsedResultTestCase.m; path = client/result/EmailAddressParsedResultTestCase.m; sourceTree = "<group>"; };
+		026DDB491566C609009615B1 /* SMSMMSParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSMMSParsedResultTestCase.h; path = client/result/SMSMMSParsedResultTestCase.h; sourceTree = "<group>"; };
+		026DDB4A1566C609009615B1 /* SMSMMSParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMSMMSParsedResultTestCase.m; path = client/result/SMSMMSParsedResultTestCase.m; sourceTree = "<group>"; };
 		027EA42C1545EA6A00BA753C /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027EA43E1545EA6A00BA753C /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox2TestCase.h; sourceTree = "<group>"; };
@@ -1593,6 +1597,8 @@
 				251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */,
 				258994D71565FE2000B403C3 /* ProductParsedResultTestCase.h */,
 				258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */,
+				026DDB491566C609009615B1 /* SMSMMSParsedResultTestCase.h */,
+				026DDB4A1566C609009615B1 /* SMSMMSParsedResultTestCase.m */,
 			);
 			name = result;
 			sourceTree = "<group>";
@@ -3166,6 +3172,7 @@
 				251741B41565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */,
 				251741B81565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */,
 				258994DA1565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */,
+				026DDB4C1566C609009615B1 /* SMSMMSParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3575,6 +3582,7 @@
 				251741B31565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */,
 				251741B71565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */,
 				258994D91565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */,
+				026DDB4B1566C609009615B1 /* SMSMMSParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

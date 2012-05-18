@@ -188,6 +188,9 @@
                <Test
                   Identifier = "ParsedReaderResultTestCase">
                </Test>
+               <Test
+                  Identifier = "ProductParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
