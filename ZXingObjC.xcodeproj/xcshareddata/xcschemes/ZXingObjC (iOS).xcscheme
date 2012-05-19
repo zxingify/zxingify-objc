@@ -206,6 +206,9 @@
                <Test
                   Identifier = "QRCodeBlackBox1TestCase">
                </Test>
+               <Test
+                  Identifier = "BitMatrixTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
