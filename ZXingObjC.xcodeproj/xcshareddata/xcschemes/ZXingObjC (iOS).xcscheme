@@ -194,6 +194,9 @@
                <Test
                   Identifier = "SMSMMSParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "TelParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
