@@ -983,6 +983,8 @@
 		251741B41565E42D0006A257 /* ISBNParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */; };
 		251741B71565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */; };
 		251741B81565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */; };
+		2543C17915674200001BC3F0 /* BitArrayTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2543C17815674200001BC3F0 /* BitArrayTestCase.m */; };
+		2543C17A15674200001BC3F0 /* BitArrayTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2543C17815674200001BC3F0 /* BitArrayTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1486,6 +1488,8 @@
 		251741B21565E42D0006A257 /* ISBNParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISBNParsedResultTestCase.m; path = client/result/ISBNParsedResultTestCase.m; sourceTree = "<group>"; };
 		251741B51565E5CB0006A257 /* ParsedReaderResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParsedReaderResultTestCase.h; path = client/result/ParsedReaderResultTestCase.h; sourceTree = "<group>"; };
 		251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParsedReaderResultTestCase.m; path = client/result/ParsedReaderResultTestCase.m; sourceTree = "<group>"; };
+		2543C17715674200001BC3F0 /* BitArrayTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitArrayTestCase.h; sourceTree = "<group>"; };
+		2543C17815674200001BC3F0 /* BitArrayTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitArrayTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -2291,6 +2295,8 @@
 				02FB06E115475B480067923D /* AbstractBlackBoxTestCase.m */,
 				250101D6155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.h */,
 				250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */,
+				2543C17715674200001BC3F0 /* BitArrayTestCase.h */,
+				2543C17815674200001BC3F0 /* BitArrayTestCase.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -3194,6 +3200,7 @@
 				026DDB521566C97A009615B1 /* TelParsedResultTestCase.m in Sources */,
 				258994F415673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */,
 				258994F915673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */,
+				2543C17A15674200001BC3F0 /* BitArrayTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3607,6 +3614,7 @@
 				026DDB511566C97A009615B1 /* TelParsedResultTestCase.m in Sources */,
 				258994F315673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */,
 				258994F815673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */,
+				2543C17915674200001BC3F0 /* BitArrayTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

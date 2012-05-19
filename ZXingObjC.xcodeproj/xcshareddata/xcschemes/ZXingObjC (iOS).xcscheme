@@ -200,6 +200,9 @@
                <Test
                   Identifier = "URIParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "WifiParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
