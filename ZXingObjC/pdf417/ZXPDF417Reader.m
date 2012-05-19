@@ -104,8 +104,8 @@
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + y * moduleSize;
     for (int x = 0; x < matrixWidth; x++) {
-      if ([image get:left + x * moduleSize y:iOffset]) {
-        [bits set:x y:y];
+      if ([image getX:left + x * moduleSize y:iOffset]) {
+        [bits setX:x y:y];
       }
     }
   }
@@ -117,7 +117,7 @@
   int x = [[leftTopBlack objectAtIndex:0] intValue];
   int y = [[leftTopBlack objectAtIndex:1] intValue];
   int width = [image width];
-  while (x < width && [image get:x y:y]) {
+  while (x < width && [image getX:x y:y]) {
     x++;
   }
   if (x == width) {
@@ -140,7 +140,7 @@
   BOOL black = YES;
   while (start < width - 1 && transitions < 8) {
     start++;
-    BOOL newBlack = [image get:start y:y];
+    BOOL newBlack = [image getX:start y:y];
     if (black != newBlack) {
       transitions++;
     }
@@ -156,14 +156,14 @@
   int width = image.width;
   int end = width - 1;
 
-  while (end > x && ![image get:end y:y]) {
+  while (end > x && ![image getX:end y:y]) {
     end--;
   }
   int transitions = 0;
   BOOL black = YES;
   while (end > x && transitions < 9) {
     end--;
-    BOOL newBlack = [image get:end y:y];
+    BOOL newBlack = [image getX:end y:y];
     if (black != newBlack) {
       transitions++;
     }

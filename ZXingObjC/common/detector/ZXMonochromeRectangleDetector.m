@@ -152,14 +152,14 @@ int const MONOCHROME_MAX_MODULES = 32;
   
   int start = center;
   while (start >= minDim) {
-    if (horizontal ? [self.image get:start y:fixedDimension] : [self.image get:fixedDimension y:start]) {
+    if (horizontal ? [self.image getX:start y:fixedDimension] : [self.image getX:fixedDimension y:start]) {
       start--;
     } else {
       int whiteRunStart = start;
 
       do {
         start--;
-      } while (start >= minDim && !(horizontal ? [self.image get:start y:fixedDimension] : [self.image get:fixedDimension y:start]));
+      } while (start >= minDim && !(horizontal ? [self.image getX:start y:fixedDimension] : [self.image getX:fixedDimension y:start]));
       int whiteRunSize = whiteRunStart - start;
       if (start < minDim || whiteRunSize > maxWhiteRun) {
         start = whiteRunStart;
@@ -172,14 +172,14 @@ int const MONOCHROME_MAX_MODULES = 32;
   int end = center;
 
   while (end < maxDim) {
-    if (horizontal ? [self.image get:end y:fixedDimension] : [self.image get:fixedDimension y:end]) {
+    if (horizontal ? [self.image getX:end y:fixedDimension] : [self.image getX:fixedDimension y:end]) {
       end++;
     } else {
       int whiteRunStart = end;
 
       do {
         end++;
-      } while (end < maxDim && !(horizontal ? [self.image get:end y:fixedDimension] : [self.image get:fixedDimension y:end]));
+      } while (end < maxDim && !(horizontal ? [self.image getX:end y:fixedDimension] : [self.image getX:fixedDimension y:end]));
       int whiteRunSize = end - whiteRunStart;
       if (end >= maxDim || whiteRunSize > maxWhiteRun) {
         end = whiteRunStart;

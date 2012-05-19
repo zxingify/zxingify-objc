@@ -150,15 +150,15 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     BOOL bit = [typeInfoBits get:[typeInfoBits size] - 1 - i];
     int x1 = TYPE_INFO_COORDINATES[i][0];
     int y1 = TYPE_INFO_COORDINATES[i][1];
-    [matrix set:x1 y:y1 boolValue:bit];
+    [matrix setX:x1 y:y1 boolValue:bit];
     if (i < 8) {
       int x2 = [matrix width] - i - 1;
       int y2 = 8;
-      [matrix set:x2 y:y2 boolValue:bit];
+      [matrix setX:x2 y:y2 boolValue:bit];
     } else {
       int x2 = 8;
       int y2 = [matrix height] - 7 + (i - 8);
-      [matrix set:x2 y:y2 boolValue:bit];
+      [matrix setX:x2 y:y2 boolValue:bit];
     }
   }
 }
@@ -175,8 +175,8 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     for (int j = 0; j < 3; ++j) {
       BOOL bit = [versionInfoBits get:bitIndex];
       bitIndex--;
-      [matrix set:i y:[matrix height] - 11 + j boolValue:bit];
-      [matrix set:[matrix height] - 11 + j y:i boolValue:bit];
+      [matrix setX:i y:[matrix height] - 11 + j boolValue:bit];
+      [matrix setX:[matrix height] - 11 + j y:i boolValue:bit];
     }
   }
 }
@@ -195,7 +195,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     while (y >= 0 && y < [matrix height]) {
       for (int i = 0; i < 2; ++i) {
         int xx = x - i;
-        if (![self isEmpty:[matrix get:xx y:y]]) {
+        if (![self isEmpty:[matrix getX:xx y:y]]) {
           continue;
         }
         BOOL bit;
@@ -210,7 +210,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
             bit = !bit;
           }
         }
-        [matrix set:xx y:y boolValue:bit];
+        [matrix setX:xx y:y boolValue:bit];
       }
 
       y += direction;
@@ -290,53 +290,53 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 + (void)embedTimingPatterns:(ZXByteMatrix *)matrix {
   for (int i = 8; i < [matrix width] - 8; ++i) {
     int bit = (i + 1) % 2;
-    if (![self isValidValue:[matrix get:i y:6]]) {
+    if (![self isValidValue:[matrix getX:i y:6]]) {
       @throw [[[ZXWriterException alloc] init] autorelease];
     }
-    if ([self isEmpty:[matrix get:i y:6]]) {
-      [matrix set:i y:6 boolValue:bit];
+    if ([self isEmpty:[matrix getX:i y:6]]) {
+      [matrix setX:i y:6 boolValue:bit];
     }
-    if (![self isValidValue:[matrix get:6 y:i]]) {
+    if (![self isValidValue:[matrix getX:6 y:i]]) {
       @throw [[[ZXWriterException alloc] init] autorelease];
     }
-    if ([self isEmpty:[matrix get:6 y:i]]) {
-      [matrix set:6 y:i boolValue:bit];
+    if ([self isEmpty:[matrix getX:6 y:i]]) {
+      [matrix setX:6 y:i boolValue:bit];
     }
   }
 }
 
 + (void)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix {
-  if ([matrix get:8 y:matrix.height - 8] == 0) {
+  if ([matrix getX:8 y:matrix.height - 8] == 0) {
     @throw [[[ZXWriterException alloc] init] autorelease];
   }
-  [matrix set:8 y:matrix.height - 8 intValue:1];
+  [matrix setX:8 y:matrix.height - 8 intValue:1];
 }
 
 + (void)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int x = 0; x < 8; ++x) {
-    if (![self isEmpty:[matrix get:xStart + x y:yStart]]) {
+    if (![self isEmpty:[matrix getX:xStart + x y:yStart]]) {
       @throw [[[ZXWriterException alloc] init] autorelease];
     }
-    [matrix set:xStart + x y:yStart intValue:HORIZONTAL_SEPARATION_PATTERN[0][x]];
+    [matrix setX:xStart + x y:yStart intValue:HORIZONTAL_SEPARATION_PATTERN[0][x]];
   }
 }
 
 + (void)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 7; ++y) {
-    if (![self isEmpty:[matrix get:xStart y:yStart + y]]) {
+    if (![self isEmpty:[matrix getX:xStart y:yStart + y]]) {
       @throw [[[ZXWriterException alloc] init] autorelease];
     }
-    [matrix set:xStart y:yStart + y intValue:VERTICAL_SEPARATION_PATTERN[y][0]];
+    [matrix setX:xStart y:yStart + y intValue:VERTICAL_SEPARATION_PATTERN[y][0]];
   }
 }
 
 + (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 5; ++y) {
     for (int x = 0; x < 5; ++x) {
-      if (![self isEmpty:[matrix get:xStart + x y:yStart + y]]) {
+      if (![self isEmpty:[matrix getX:xStart + x y:yStart + y]]) {
         @throw [[[ZXWriterException alloc] init] autorelease];
       }
-      [matrix set:xStart + x y:yStart + y intValue:POSITION_ADJUSTMENT_PATTERN[y][x]];
+      [matrix setX:xStart + x y:yStart + y intValue:POSITION_ADJUSTMENT_PATTERN[y][x]];
     }
   }
 }
@@ -345,10 +345,10 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   for (int y = 0; y < 7; ++y) {
 
     for (int x = 0; x < 7; ++x) {
-      if (![self isEmpty:[matrix get:xStart + x y:yStart + y]]) {
+      if (![self isEmpty:[matrix getX:xStart + x y:yStart + y]]) {
         @throw [[[ZXWriterException alloc] init] autorelease];
       }
-      [matrix set:xStart + x y:yStart + y intValue:POSITION_DETECTION_PATTERN[y][x]];
+      [matrix setX:xStart + x y:yStart + y intValue:POSITION_DETECTION_PATTERN[y][x]];
     }
 
   }
@@ -384,7 +384,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
       if (x == -1 || y == -1) {
         continue;
       }
-      if ([self isEmpty:[matrix get:x y:y]]) {
+      if ([self isEmpty:[matrix getX:x y:y]]) {
         [self embedPositionAdjustmentPattern:x - 2 yStart:y - 2 matrix:matrix];
       }
     }

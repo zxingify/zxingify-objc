@@ -352,10 +352,10 @@ static NSString* DIGIT_TABLE[] = {
 
     for (int i = 0; i < 2 * size - 4; i++) {
       [rawbits replaceObjectAtIndex:rawbitsOffset + i
-                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + flip y:matrixOffset + i / 2]]];
+                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + flip y:matrixOffset + i / 2]]];
 
       [rawbits replaceObjectAtIndex:rawbitsOffset + 2 * size - 4 + i
-                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + i / 2 y:matrixOffset + size - 1 - flip]]];
+                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + i / 2 y:matrixOffset + size - 1 - flip]]];
 
       flip = (flip + 1) % 2;
     }
@@ -363,10 +363,10 @@ static NSString* DIGIT_TABLE[] = {
     flip = 0;
     for (int i = 2 * size + 1; i > 5; i--) {
       [rawbits replaceObjectAtIndex:rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1
-                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + size - 1 - flip y:matrixOffset + i / 2 - 1]]];
+                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + size - 1 - flip y:matrixOffset + i / 2 - 1]]];
 
       [rawbits replaceObjectAtIndex:rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1
-                         withObject:[NSNumber numberWithBool:[matrix get:matrixOffset + i / 2 - 1 y:matrixOffset + flip]]];
+                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + i / 2 - 1 y:matrixOffset + flip]]];
 
       flip = (flip + 1) % 2;
     }
@@ -399,8 +399,8 @@ static NSString* DIGIT_TABLE[] = {
       if ((matrix.width / 2 - y) % 16 == 0) {
         continue;
       }
-      if ([matrix get:x y:y]) {
-        [newMatrix set:nx y:ny];
+      if ([matrix getX:x y:y]) {
+        [newMatrix setX:nx y:ny];
       }
       ny++;
     }

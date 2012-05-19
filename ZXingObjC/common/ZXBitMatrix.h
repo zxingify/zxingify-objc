@@ -22,12 +22,12 @@
 - (id)initWithDimension:(int)dimension;
 - (id)initWithWidth:(int)width height:(int)height;
 
-- (BOOL)get:(int)x y:(int)y;
-- (void)set:(int)x y:(int)y;
-- (void)flip:(int)x y:(int)y;
+- (BOOL)getX:(int)x y:(int)y;
+- (void)setX:(int)x y:(int)y;
+- (void)flipX:(int)x y:(int)y;
 - (void)clear;
-- (void)setRegion:(int)left top:(int)top width:(int)width height:(int)height;
-- (ZXBitArray *) row:(int)y row:(ZXBitArray *)row;
+- (void)setRegionAtLeft:(int)left top:(int)top width:(int)width height:(int)height;
+- (ZXBitArray *)rowAtY:(int)y row:(ZXBitArray *)row;
 - (NSArray *)topLeftOnBit;
 - (NSArray *)bottomRightOnBit;
 

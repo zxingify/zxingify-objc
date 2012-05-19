@@ -98,7 +98,7 @@
       corner4Read = YES;
     } else {
       do {
-        if ((row < numRows) && (column >= 0) && ![readMappingMatrix get:column y:row]) {
+        if ((row < numRows) && (column >= 0) && ![readMappingMatrix getX:column y:row]) {
           [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
         }
         row -= 2;
@@ -108,7 +108,7 @@
       column += 3;
       
       do {
-        if ((row >= 0) && (column < numColumns) && ![readMappingMatrix get:column y:row]) {
+        if ((row >= 0) && (column < numColumns) && ![readMappingMatrix getX:column y:row]) {
           [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
         }
         row += 2;
@@ -138,8 +138,8 @@
     column += numColumns;
     row += 4 - ((numColumns + 4) & 0x07);
   }
-  [readMappingMatrix set:column y:row];
-  return [mappingBitMatrix get:column y:row];
+  [readMappingMatrix setX:column y:row];
+  return [mappingBitMatrix getX:column y:row];
 }
 
 
@@ -384,9 +384,9 @@
         int writeRowOffset = dataRegionRowOffset + i;
         for (int j = 0; j < dataRegionSizeColumns; ++j) {
           int readColumnOffset = dataRegionColumn * (dataRegionSizeColumns + 2) + 1 + j;
-          if ([bitMatrix get:readColumnOffset y:readRowOffset]) {
+          if ([bitMatrix getX:readColumnOffset y:readRowOffset]) {
             int writeColumnOffset = dataRegionColumnOffset + j;
-            [bitMatrixWithoutAlignment set:writeColumnOffset y:writeRowOffset];
+            [bitMatrixWithoutAlignment setX:writeColumnOffset y:writeRowOffset];
           }
         }
       }

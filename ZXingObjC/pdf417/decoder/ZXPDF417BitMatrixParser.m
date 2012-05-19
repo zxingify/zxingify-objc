@@ -732,13 +732,13 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     int rowDifference = 0;
 
     for (int j = 0; j < width; j++) {
-      if ([self.bitMatrix get:j y:i] != [self.bitMatrix get:j y:i - 1]) {
+      if ([self.bitMatrix getX:j y:i] != [self.bitMatrix getX:j y:i - 1]) {
         rowDifference++;
       }
     }
     if (rowDifference <= moduleWidth * MAX_ROW_DIFFERENCE) {
       for (int j = 0; j < width; j++) {
-        if ([self.bitMatrix get:j y:i]) {
+        if ([self.bitMatrix getX:j y:i]) {
           rowCounters[j]++;
         }
       }

@@ -127,7 +127,7 @@
 }
 
 - (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits {
-  return [self.bitMatrix get:i y:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
+  return [self.bitMatrix getX:i y:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
 }
 
 
@@ -158,10 +158,10 @@
       int i = readingUp ? dimension - 1 - count : count;
 
       for (int col = 0; col < 2; col++) {
-        if (![functionPattern get:j - col y:i]) {
+        if (![functionPattern getX:j - col y:i]) {
           bitsRead++;
           currentByte <<= 1;
-          if ([self.bitMatrix get:j - col y:i]) {
+          if ([self.bitMatrix getX:j - col y:i]) {
             currentByte |= 1;
           }
           if (bitsRead == 8) {

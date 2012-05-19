@@ -151,7 +151,7 @@ static NSArray* DATA_MASKS = nil;
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if ([self isMasked:i j:j]) {
-        [bits flip:j y:i];
+        [bits flipX:j y:i];
       }
     }
   }

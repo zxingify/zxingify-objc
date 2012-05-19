@@ -41,10 +41,10 @@
   return self;
 }
 
-- (void) dealloc {
-  if (bits != NULL) {
-    free(bits);
-    bits = NULL;
+- (void)dealloc {
+  if (self.bits != NULL) {
+    free(self.bits);
+    self.bits = NULL;
   }
 
   [super dealloc];
@@ -53,7 +53,7 @@
 /**
  * Gets the requested bit, where true means black.
  */
-- (BOOL)get:(int)x y:(int)y {
+- (BOOL)getX:(int)x y:(int)y {
   int offset = y * self.rowSize + (x >> 5);
   return ((int)((unsigned int)self.bits[offset] >> (x & 0x1f)) & 1) != 0;
 }
@@ -61,7 +61,7 @@
 /**
  * Sets the given bit to true.
  */
-- (void)set:(int)x y:(int)y {
+- (void)setX:(int)x y:(int)y {
   int offset = y * self.rowSize + (x >> 5);
   self.bits[offset] |= 1 << (x & 0x1f);
 }
@@ -70,7 +70,7 @@
 /**
  * Flips the given bit.
  */
-- (void)flip:(int)x y:(int)y {
+- (void)flipX:(int)x y:(int)y {
   int offset = y * self.rowSize + (x >> 5);
   self.bits[offset] ^= 1 << (x & 0x1f);
 }
@@ -91,7 +91,7 @@
 /**
  * Sets a square region of the bit matrix to true.
  */
-- (void)setRegion:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
+- (void)setRegionAtLeft:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
   if (top < 0 || left < 0) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Left and top must be nonnegative"
@@ -121,7 +121,7 @@
 /**
  * A fast method to retrieve one row of data from the matrix as a BitArray.
  */
-- (ZXBitArray *)row:(int)y row:(ZXBitArray *)row {
+- (ZXBitArray *)rowAtY:(int)y row:(ZXBitArray *)row {
   if (row == nil || [row size] < self.width) {
     row = [[[ZXBitArray alloc] initWithSize:self.width] autorelease];
   }
@@ -212,7 +212,7 @@
   NSMutableString * result = [NSMutableString stringWithCapacity:self.height * (self.width + 1)];
   for (int y = 0; y < self.height; y++) {
     for (int x = 0; x < self.width; x++) {
-      [result appendString:[self get:x y:y] ? @"X " : @"  "];
+      [result appendString:[self getX:x y:y] ? @"X " : @"  "];
     }
     [result appendString:@"\n"];
   }

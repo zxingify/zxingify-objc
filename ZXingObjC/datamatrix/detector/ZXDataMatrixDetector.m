@@ -348,9 +348,9 @@
   int ystep = fromY < toY ? 1 : -1;
   int xstep = fromX < toX ? 1 : -1;
   int transitions = 0;
-  BOOL inBlack = [self.image get:steep ? fromY : fromX y:steep ? fromX : fromY];
+  BOOL inBlack = [self.image getX:steep ? fromY : fromX y:steep ? fromX : fromY];
   for (int x = fromX, y = fromY; x != toX; x += xstep) {
-    BOOL isBlack = [self.image get:steep ? y : x y:steep ? x : y];
+    BOOL isBlack = [self.image getX:steep ? y : x y:steep ? x : y];
     if (isBlack != inBlack) {
       transitions++;
       inBlack = isBlack;

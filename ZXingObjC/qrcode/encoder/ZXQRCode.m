@@ -44,7 +44,7 @@ int const NUM_MASK_PATTERNS = 8;
 }
 
 - (int)at:(int)x y:(int)y {
-  int value = [self.matrix get:x y:y];
+  int value = [self.matrix getX:x y:y];
   if (!(value == 0 || value == 1)) {
     [NSException raise:NSInternalInconsistencyException format:@"Bad value"];
   }

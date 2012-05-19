@@ -111,7 +111,7 @@ int const MINIMUM_DIMENSION = 40;
     for (int x = 0; x < 8; x++) {
       int pixel = _luminances[offset + x] & 0xff;
       if (pixel < threshold) {
-        [_matrix set:xoffset + x y:yoffset + y];
+        [_matrix setX:xoffset + x y:yoffset + y];
       }
     }
   }

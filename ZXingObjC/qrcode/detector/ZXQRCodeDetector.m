@@ -245,11 +245,11 @@
     int realY = steep ? x : y;
 
     if (state == 1) {
-      if ([self.image get:realX y:realY]) {
+      if ([self.image getX:realX y:realY]) {
         state++;
       }
     } else {
-      if (![self.image get:realX y:realY]) {
+      if (![self.image getX:realX y:realY]) {
         state++;
       }
     }

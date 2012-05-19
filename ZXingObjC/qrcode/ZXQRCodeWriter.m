@@ -67,8 +67,8 @@ int const QUIET_ZONE_SIZE = 4;
 
   for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
     for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
-      if ([input get:inputX y:inputY] == 1) {
-        [output setRegion:outputX top:outputY width:multiple height:multiple];
+      if ([input getX:inputX y:inputY] == 1) {
+        [output setRegionAtLeft:outputX top:outputY width:multiple height:multiple];
       }
     }
   }

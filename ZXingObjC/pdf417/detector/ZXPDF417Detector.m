@@ -418,7 +418,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   int counterPosition = 0;
   int patternStart = column;
   for (int x = column; x < column + width; x++) {
-    BOOL pixel = [matrix get:x y:row];
+    BOOL pixel = [matrix getX:x y:row];
     if (pixel ^ isWhite) {
       counters[counterPosition] = counters[counterPosition] + 1;
     } else {

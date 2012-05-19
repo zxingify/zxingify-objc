@@ -53,7 +53,7 @@
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if (image[i][j]) {
-        [bits set:j y:i];
+        [bits setX:j y:i];
       }
     }
   }

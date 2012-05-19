@@ -241,7 +241,7 @@ int const CORR = 1;
   for (int i = 0; i < dist; i++) {
     int x = [self round:aX + i * xStep];
     int y = [self round:aY + i * yStep];
-    if ([self.image get:x y:y]) {
+    if ([self.image getX:x y:y]) {
       return [[[ZXResultPoint alloc] initWithX:x y:y] autorelease];
     }
   }
@@ -302,13 +302,13 @@ int const CORR = 1;
 - (BOOL)containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal {
   if (horizontal) {
     for (int x = a; x <= b; x++) {
-      if ([self.image get:x y:fixed]) {
+      if ([self.image getX:x y:fixed]) {
         return YES;
       }
     }
   } else {
     for (int y = a; y <= b; y++) {
-      if ([self.image get:fixed y:y]) {
+      if ([self.image getX:fixed y:y]) {
         return YES;
       }
     }

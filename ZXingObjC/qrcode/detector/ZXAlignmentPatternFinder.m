@@ -85,14 +85,14 @@
     stateCount[2] = 0;
     int j = startX;
 
-    while (j < maxJ && ![self.image get:j y:i]) {
+    while (j < maxJ && ![self.image getX:j y:i]) {
       j++;
     }
 
     int currentState = 0;
 
     while (j < maxJ) {
-      if ([self.image get:j y:i]) {
+      if ([self.image getX:j y:i]) {
         if (currentState == 1) {
           stateCount[currentState]++;
         } else {
@@ -166,7 +166,7 @@
   int stateCount[3] = {0, 0, 0};
   int i = startI;
 
-  while (i >= 0 && [self.image get:centerJ y:i] && stateCount[1] <= maxCount) {
+  while (i >= 0 && [self.image getX:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i--;
   }
@@ -175,7 +175,7 @@
     return NAN;
   }
 
-  while (i >= 0 && ![self.image get:centerJ y:i] && stateCount[0] <= maxCount) {
+  while (i >= 0 && ![self.image getX:centerJ y:i] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
@@ -185,7 +185,7 @@
   }
   i = startI + 1;
 
-  while (i < maxI && [self.image get:centerJ y:i] && stateCount[1] <= maxCount) {
+  while (i < maxI && [self.image getX:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i++;
   }
@@ -194,7 +194,7 @@
     return NAN;
   }
 
-  while (i < maxI && ![self.image get:centerJ y:i] && stateCount[2] <= maxCount) {
+  while (i < maxI && ![self.image getX:centerJ y:i] && stateCount[2] <= maxCount) {
     stateCount[2]++;
     i++;
   }

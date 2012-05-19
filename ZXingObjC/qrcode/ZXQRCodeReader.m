@@ -113,8 +113,8 @@
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + y * moduleSize;
     for (int x = 0; x < matrixWidth; x++) {
-      if ([image get:left + x * moduleSize y:iOffset]) {
-        [bits set:x y:y];
+      if ([image getX:left + x * moduleSize y:iOffset]) {
+        [bits setX:x y:y];
       }
     }
   }
@@ -126,7 +126,7 @@
   int width = image.width;
   int x = [[leftTopBlack objectAtIndex:0] intValue];
   int y = [[leftTopBlack objectAtIndex:1] intValue];
-  while (x < width && y < height && [image get:x y:y]) {
+  while (x < width && y < height && [image getX:x y:y]) {
     x++;
     y++;
   }

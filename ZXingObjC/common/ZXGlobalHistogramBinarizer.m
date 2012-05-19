@@ -105,7 +105,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     for (int x = 0; x < width; x++) {
       int pixel = localLuminances[offset + x] & 0xff;
       if (pixel < blackPoint) {
-        [matrix set:x y:y];
+        [matrix setX:x y:y];
       }
     }
   }

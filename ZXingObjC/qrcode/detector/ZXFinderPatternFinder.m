@@ -80,7 +80,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     int currentState = 0;
 
     for (int j = 0; j < maxJ; j++) {
-      if ([image get:j y:i]) {
+      if ([image getX:j y:i]) {
         if ((currentState & 1) == 1) {
           currentState++;
         }
@@ -192,21 +192,21 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   int stateCount[5] = {0, 0, 0, 0, 0};
 
   int i = startI;
-  while (i >= 0 && [self.image get:centerJ y:i]) {
+  while (i >= 0 && [self.image getX:centerJ y:i]) {
     stateCount[2]++;
     i--;
   }
   if (i < 0) {
     return NAN;
   }
-  while (i >= 0 && ![self.image get:centerJ y:i] && stateCount[1] <= maxCount) {
+  while (i >= 0 && ![self.image getX:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i--;
   }
   if (i < 0 || stateCount[1] > maxCount) {
     return NAN;
   }
-  while (i >= 0 && [self.image get:centerJ y:i] && stateCount[0] <= maxCount) {
+  while (i >= 0 && [self.image getX:centerJ y:i] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
@@ -215,21 +215,21 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   }
 
   i = startI + 1;
-  while (i < maxI && [self.image get:centerJ y:i]) {
+  while (i < maxI && [self.image getX:centerJ y:i]) {
     stateCount[2]++;
     i++;
   }
   if (i == maxI) {
     return NAN;
   }
-  while (i < maxI && ![self.image get:centerJ y:i] && stateCount[3] < maxCount) {
+  while (i < maxI && ![self.image getX:centerJ y:i] && stateCount[3] < maxCount) {
     stateCount[3]++;
     i++;
   }
   if (i == maxI || stateCount[3] >= maxCount) {
     return NAN;
   }
-  while (i < maxI && [self.image get:centerJ y:i] && stateCount[4] < maxCount) {
+  while (i < maxI && [self.image getX:centerJ y:i] && stateCount[4] < maxCount) {
     stateCount[4]++;
     i++;
   }
@@ -255,21 +255,21 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   int stateCount[5] = {0, 0, 0, 0, 0};
 
   int j = startJ;
-  while (j >= 0 && [self.image get:j y:centerI]) {
+  while (j >= 0 && [self.image getX:j y:centerI]) {
     stateCount[2]++;
     j--;
   }
   if (j < 0) {
     return NAN;
   }
-  while (j >= 0 && ![self.image get:j y:centerI] && stateCount[1] <= maxCount) {
+  while (j >= 0 && ![self.image getX:j y:centerI] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     j--;
   }
   if (j < 0 || stateCount[1] > maxCount) {
     return NAN;
   }
-  while (j >= 0 && [self.image get:j y:centerI] && stateCount[0] <= maxCount) {
+  while (j >= 0 && [self.image getX:j y:centerI] && stateCount[0] <= maxCount) {
     stateCount[0]++;
     j--;
   }
@@ -278,21 +278,21 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   }
 
   j = startJ + 1;
-  while (j < maxJ && [self.image get:j y:centerI]) {
+  while (j < maxJ && [self.image getX:j y:centerI]) {
     stateCount[2]++;
     j++;
   }
   if (j == maxJ) {
     return NAN;
   }
-  while (j < maxJ && ![self.image get:j y:centerI] && stateCount[3] < maxCount) {
+  while (j < maxJ && ![self.image getX:j y:centerI] && stateCount[3] < maxCount) {
     stateCount[3]++;
     j++;
   }
   if (j == maxJ || stateCount[3] >= maxCount) {
     return NAN;
   }
-  while (j < maxJ && [self.image get:j y:centerI] && stateCount[4] < maxCount) {
+  while (j < maxJ && [self.image getX:j y:centerI] && stateCount[4] < maxCount) {
     stateCount[4]++;
     j++;
   }

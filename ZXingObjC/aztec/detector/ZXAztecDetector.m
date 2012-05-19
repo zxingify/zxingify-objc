@@ -501,7 +501,7 @@
   float py = p1.y;
 
   for (int i = 0; i < size; i++) {
-    [res addObject:[NSNumber numberWithBool:[self.image get:[self round:px] y:[self round:py]]]];
+    [res addObject:[NSNumber numberWithBool:[self.image getX:[self round:px] y:[self round:py]]]];
     px += dx;
     py += dy;
   }
@@ -555,12 +555,12 @@
   float px = p1.x;
   float py = p1.y;
 
-  BOOL colorModel = [self.image get:p1.x y:p1.y];
+  BOOL colorModel = [self.image getX:p1.x y:p1.y];
 
   for (int i = 0; i < d; i++) {
     px += dx;
     py += dy;
-    if ([self.image get:[self round:px] y:[self round:py]] != colorModel) {
+    if ([self.image getX:[self round:px] y:[self round:py]] != colorModel) {
       error++;
     }
   }
@@ -586,7 +586,7 @@
   int x = init.x + dx;
   int y = init.y + dy;
 
-  while ([self isValidX:x y:y] && [self.image get:x y:y] == color) {
+  while ([self isValidX:x y:y] && [self.image getX:x y:y] == color) {
     x += dx;
     y += dy;
   }
@@ -594,12 +594,12 @@
   x -= dx;
   y -= dy;
 
-  while ([self isValidX:x y:y] && [self.image get:x y:y] == color) {
+  while ([self isValidX:x y:y] && [self.image getX:x y:y] == color) {
     x += dx;
   }
   x -= dx;
 
-  while ([self isValidX:x y:y] && [self.image get:x y:y] == color) {
+  while ([self isValidX:x y:y] && [self.image getX:x y:y] == color) {
     y += dy;
   }
   y -= dy;

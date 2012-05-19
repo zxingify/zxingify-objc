@@ -226,9 +226,9 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
 - (ZXBitMatrix *)buildFunctionPattern {
   int dimension = [self dimensionForVersion];
   ZXBitMatrix * bitMatrix = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
-  [bitMatrix setRegion:0 top:0 width:9 height:9];
-  [bitMatrix setRegion:dimension - 8 top:0 width:8 height:9];
-  [bitMatrix setRegion:0 top:dimension - 8 width:9 height:8];
+  [bitMatrix setRegionAtLeft:0 top:0 width:9 height:9];
+  [bitMatrix setRegionAtLeft:dimension - 8 top:0 width:8 height:9];
+  [bitMatrix setRegionAtLeft:0 top:dimension - 8 width:9 height:8];
   int max = self.alignmentPatternCenters.count;
 
   for (int x = 0; x < max; x++) {
@@ -238,15 +238,15 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
       if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0)) {
         continue;
       }
-      [bitMatrix setRegion:[[self.alignmentPatternCenters objectAtIndex:y] intValue] - 2 top:i width:5 height:5];
+      [bitMatrix setRegionAtLeft:[[self.alignmentPatternCenters objectAtIndex:y] intValue] - 2 top:i width:5 height:5];
     }
   }
 
-  [bitMatrix setRegion:6 top:9 width:1 height:dimension - 17];
-  [bitMatrix setRegion:9 top:6 width:dimension - 17 height:1];
+  [bitMatrix setRegionAtLeft:6 top:9 width:1 height:dimension - 17];
+  [bitMatrix setRegionAtLeft:9 top:6 width:dimension - 17 height:1];
   if (self.versionNumber > 6) {
-    [bitMatrix setRegion:dimension - 11 top:0 width:3 height:6];
-    [bitMatrix setRegion:0 top:dimension - 11 width:6 height:3];
+    [bitMatrix setRegionAtLeft:dimension - 11 top:0 width:3 height:6];
+    [bitMatrix setRegionAtLeft:0 top:dimension - 11 width:6 height:3];
   }
   return bitMatrix;
 }

@@ -26,7 +26,7 @@ int const MAX_EC_CODEWORDS = 512;
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if (image[j][i]) {
-        [bits set:j y:i];
+        [bits setX:j y:i];
       }
     }
   }

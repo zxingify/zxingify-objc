@@ -171,7 +171,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
     int currentState = 0;
 
     for (int j = 0; j < maxJ; j++) {
-      if ([self.image get:j y:i]) {
+      if ([self.image getX:j y:i]) {
         if ((currentState & 1) == 1) {
           currentState++;
         }
@@ -184,7 +184,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
               if (!confirmed) {
                 do {
                   j++;
-                } while (j < maxJ && ![self.image get:j y:i]);
+                } while (j < maxJ && ![self.image getX:j y:i]);
                 j--;
               }
               currentState = 0;

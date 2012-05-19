@@ -997,6 +997,8 @@
 		2561A700155F7164008C7AE9 /* Code128BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */; };
 		2561A703155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */; };
 		2561A704155F75E7008C7AE9 /* Code128BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */; };
+		256A88471567ECFA007C38B7 /* BitMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 256A88461567ECFA007C38B7 /* BitMatrixTestCase.m */; };
+		256A88481567ECFA007C38B7 /* BitMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 256A88461567ECFA007C38B7 /* BitMatrixTestCase.m */; };
 		258994D91565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */; };
 		258994DA1565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */; };
 		258994F315673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */; };
@@ -1502,6 +1504,8 @@
 		2561A6FE155F7164008C7AE9 /* Code128BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox1TestCase.m; path = oned/Code128BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A701155F75E7008C7AE9 /* Code128BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox2TestCase.h; path = oned/Code128BlackBox2TestCase.h; sourceTree = "<group>"; };
 		2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox2TestCase.m; path = oned/Code128BlackBox2TestCase.m; sourceTree = "<group>"; };
+		256A88451567ECFA007C38B7 /* BitMatrixTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixTestCase.h; sourceTree = "<group>"; };
+		256A88461567ECFA007C38B7 /* BitMatrixTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitMatrixTestCase.m; sourceTree = "<group>"; };
 		258994D71565FE2000B403C3 /* ProductParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductParsedResultTestCase.h; path = client/result/ProductParsedResultTestCase.h; sourceTree = "<group>"; };
 		258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductParsedResultTestCase.m; path = client/result/ProductParsedResultTestCase.m; sourceTree = "<group>"; };
 		258994F115673BCD00B403C3 /* URIParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URIParsedResultTestCase.h; sourceTree = "<group>"; };
@@ -2297,6 +2301,8 @@
 				250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */,
 				2543C17715674200001BC3F0 /* BitArrayTestCase.h */,
 				2543C17815674200001BC3F0 /* BitArrayTestCase.m */,
+				256A88451567ECFA007C38B7 /* BitMatrixTestCase.h */,
+				256A88461567ECFA007C38B7 /* BitMatrixTestCase.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -3201,6 +3207,7 @@
 				258994F415673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */,
 				258994F915673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */,
 				2543C17A15674200001BC3F0 /* BitArrayTestCase.m in Sources */,
+				256A88481567ECFA007C38B7 /* BitMatrixTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3615,6 +3622,7 @@
 				258994F315673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */,
 				258994F815673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */,
 				2543C17915674200001BC3F0 /* BitArrayTestCase.m in Sources */,
+				256A88471567ECFA007C38B7 /* BitMatrixTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

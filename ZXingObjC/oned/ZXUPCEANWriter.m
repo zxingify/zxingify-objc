@@ -43,7 +43,7 @@
   ZXBitMatrix * output = [[[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight] autorelease];
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
     if ([[code objectAtIndex:inputX] intValue] == 1) {
-      [output setRegion:outputX top:0 width:multiple height:outputHeight];
+      [output setRegionAtLeft:outputX top:0 width:multiple height:outputHeight];
     }
   }
   return output;

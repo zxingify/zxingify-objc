@@ -111,9 +111,6 @@
                   Identifier = "PartialBlackBoxTestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox1TestCase">
-               </Test>
-               <Test
                   Identifier = "QRCodeBlackBox2TestCase">
                </Test>
                <Test
@@ -202,6 +199,12 @@
                </Test>
                <Test
                   Identifier = "WifiParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "BitArrayTestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox1TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

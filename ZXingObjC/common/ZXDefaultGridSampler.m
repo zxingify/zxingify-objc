@@ -59,8 +59,8 @@
         @throw [ZXNotFoundException notFoundInstance];
       }
 
-      if ([image get:xx y:yy]) {
-        [bits set:x >> 1 y:y];
+      if ([image getX:xx y:yy]) {
+        [bits setX:x >> 1 y:y];
       }
     }
   }

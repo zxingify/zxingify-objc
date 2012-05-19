@@ -108,7 +108,7 @@
   for(int y=0; y<height; y++) {
     r.origin.y = height-1-y;
     for(int x=0; x<width; x++) {
-      if (![matrix get:x y:y]) {
+      if (![matrix getX:x y:y]) {
         r.origin.x = x;
         CGContextFillRect(context, r);
       }
