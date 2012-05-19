@@ -197,6 +197,9 @@
                <Test
                   Identifier = "TelParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "URIParsedResultTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

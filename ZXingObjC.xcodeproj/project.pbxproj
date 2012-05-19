@@ -999,6 +999,8 @@
 		258994DA1565FE2000B403C3 /* ProductParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */; };
 		258994F315673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */; };
 		258994F415673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */; };
+		258994F815673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F715673F1600B403C3 /* WifiParsedResultTestCase.m */; };
+		258994F915673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F715673F1600B403C3 /* WifiParsedResultTestCase.m */; };
 		258FE01915605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01A15605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01E15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */; };
@@ -1500,6 +1502,8 @@
 		258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductParsedResultTestCase.m; path = client/result/ProductParsedResultTestCase.m; sourceTree = "<group>"; };
 		258994F115673BCD00B403C3 /* URIParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URIParsedResultTestCase.h; sourceTree = "<group>"; };
 		258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URIParsedResultTestCase.m; sourceTree = "<group>"; };
+		258994F615673F1600B403C3 /* WifiParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiParsedResultTestCase.h; sourceTree = "<group>"; };
+		258994F715673F1600B403C3 /* WifiParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WifiParsedResultTestCase.m; sourceTree = "<group>"; };
 		258FE01715605EDF004B9C9A /* Code128BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox3TestCase.h; path = oned/Code128BlackBox3TestCase.h; sourceTree = "<group>"; };
 		258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox3TestCase.m; path = oned/Code128BlackBox3TestCase.m; sourceTree = "<group>"; };
 		258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8BlackBox1TestCase.h; path = oned/EAN8BlackBox1TestCase.h; sourceTree = "<group>"; };
@@ -1611,6 +1615,8 @@
 				026DDB501566C97A009615B1 /* TelParsedResultTestCase.m */,
 				258994F115673BCD00B403C3 /* URIParsedResultTestCase.h */,
 				258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */,
+				258994F615673F1600B403C3 /* WifiParsedResultTestCase.h */,
+				258994F715673F1600B403C3 /* WifiParsedResultTestCase.m */,
 			);
 			name = result;
 			sourceTree = "<group>";
@@ -3187,6 +3193,7 @@
 				026DDB4C1566C609009615B1 /* SMSMMSParsedResultTestCase.m in Sources */,
 				026DDB521566C97A009615B1 /* TelParsedResultTestCase.m in Sources */,
 				258994F415673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */,
+				258994F915673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3599,6 +3606,7 @@
 				026DDB4B1566C609009615B1 /* SMSMMSParsedResultTestCase.m in Sources */,
 				026DDB511566C97A009615B1 /* TelParsedResultTestCase.m in Sources */,
 				258994F315673BCD00B403C3 /* URIParsedResultTestCase.m in Sources */,
+				258994F815673F1600B403C3 /* WifiParsedResultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
