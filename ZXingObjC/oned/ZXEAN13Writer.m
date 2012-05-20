@@ -29,6 +29,9 @@ const int EAN13codeWidth = 3 + // start guard
   int firstDigit = [[contents substringToIndex:1] intValue];
   int parities = FIRST_DIGIT_ENCODINGS[firstDigit];
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:EAN13codeWidth];
+  for (int i = 0; i < EAN13codeWidth; i++) {
+    [result addObject:[NSNumber numberWithInt:0]];
+  }
   int pos = 0;
 
   pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];

@@ -230,6 +230,9 @@
                <Test
                   Identifier = "DecodedBitStreamParserTestCase">
                </Test>
+               <Test
+                  Identifier = "EAN8WriterTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
