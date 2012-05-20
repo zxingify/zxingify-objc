@@ -39,16 +39,34 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "AbstractReedSolomonTestCase">
+               </Test>
+               <Test
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
                <Test
                   Identifier = "AbstractNegativeBlackBoxTestCase">
                </Test>
                <Test
+                  Identifier = "AddressBookParsedResultTestCase">
+               </Test>
+               <Test
                   Identifier = "AztecBlackBox1TestCase">
                </Test>
                <Test
                   Identifier = "AztecBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "BitArrayTestCase">
+               </Test>
+               <Test
+                  Identifier = "BitMatrixTestCase">
+               </Test>
+               <Test
+                  Identifier = "BitSourceTestCase">
+               </Test>
+               <Test
+                  Identifier = "CalendarParsedResultTestCase">
                </Test>
                <Test
                   Identifier = "Code39BlackBox1TestCase">
@@ -90,10 +108,13 @@
                   Identifier = "EAN13BlackBox3TestCase">
                </Test>
                <Test
-                  Identifier = "EAN13BlackBox4TestCase">
+                  Identifier = "EAN13BlackBox5BlurryTestCase">
                </Test>
                <Test
-                  Identifier = "EAN13BlackBox5BlurryTestCase">
+                  Identifier = "EmailAddressParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ExpandedProductParsedResultTestCase">
                </Test>
                <Test
                   Identifier = "FalsePositives2BlackBoxTestCase">
@@ -102,13 +123,37 @@
                   Identifier = "FalsePositivesBlackBoxTestCase">
                </Test>
                <Test
+                  Identifier = "GeoParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ISBNParsedResultTestCase">
+               </Test>
+               <Test
                   Identifier = "ITFBlackBox1TestCase">
                </Test>
                <Test
                   Identifier = "ITFBlackBox2TestCase">
                </Test>
                <Test
+                  Identifier = "ParsedReaderResultTestCase">
+               </Test>
+               <Test
                   Identifier = "PartialBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "PDF417BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "PDF417BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "PerspectiveTransformTestCase">
+               </Test>
+               <Test
+                  Identifier = "ProductParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox1TestCase">
                </Test>
                <Test
                   Identifier = "QRCodeBlackBox2TestCase">
@@ -138,6 +183,12 @@
                   Identifier = "RSSExpandedBlackBox3TestCase">
                </Test>
                <Test
+                  Identifier = "SMSMMSParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "TelParsedResultTestCase">
+               </Test>
+               <Test
                   Identifier = "UnsupportedBlackBoxTestCase">
                </Test>
                <Test
@@ -147,52 +198,10 @@
                   Identifier = "UPCABlackBox2TestCase">
                </Test>
                <Test
-                  Identifier = "UPCABlackBox3ReflectiveTestCase">
-               </Test>
-               <Test
-                  Identifier = "UPCABlackBox4TestCase">
-               </Test>
-               <Test
                   Identifier = "UPCABlackBox5TestCase">
                </Test>
                <Test
                   Identifier = "UPCABlackBox6BlurryTestCase">
-               </Test>
-               <Test
-                  Identifier = "PDF417BlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "PDF417BlackBox2TestCase">
-               </Test>
-               <Test
-                  Identifier = "AddressBookParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "CalendarParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "EmailAddressParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "ExpandedProductParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "ISBNParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "GeoParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "ParsedReaderResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "ProductParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "SMSMMSParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "TelParsedResultTestCase">
                </Test>
                <Test
                   Identifier = "URIParsedResultTestCase">
@@ -201,16 +210,10 @@
                   Identifier = "WifiParsedResultTestCase">
                </Test>
                <Test
-                  Identifier = "BitArrayTestCase">
+                  Identifier = "EAN13BlackBox4TestCase">
                </Test>
                <Test
-                  Identifier = "QRCodeBlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "BitMatrixTestCase">
-               </Test>
-               <Test
-                  Identifier = "BitSourceTestCase">
+                  Identifier = "UPCABlackBox3ReflectiveTestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

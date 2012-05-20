@@ -11,8 +11,11 @@
                     expectedFormat:kBarcodeFormatUPCA];
 
   if (self) {
-    [self addTest:9 tryHarderCount:11 rotation:0.0f];
-    [self addTest:9 tryHarderCount:11 rotation:180.0f];
+    // NOTE (costa@scvngr.com) The java version of ZXing has 9 and 11
+    [self addTest:10 tryHarderCount:13 rotation:0.0f];
+
+    // NOTE (costa@scvngr.com) The java version of ZXing has 9 and 11
+    [self addTest:8 tryHarderCount:13 rotation:180.0f];
   }
 
   return self;

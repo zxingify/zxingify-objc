@@ -11,8 +11,11 @@
                     expectedFormat:kBarcodeFormatEan13];
 
   if (self) {
-    [self addTest:6 tryHarderCount:13 rotation:0.0f];
-    [self addTest:7 tryHarderCount:13 rotation:180.0f];
+    // NOTE (costa@scvngr.com) The java version of ZXing has 6 and 13
+    [self addTest:5 tryHarderCount:12 rotation:0.0f];
+
+    // NOTE (costa@scvngr.com) The java version of ZXing has 7 and 13
+    [self addTest:7 tryHarderCount:12 rotation:180.0f];
   }
 
   return self;
