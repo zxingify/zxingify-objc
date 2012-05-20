@@ -209,6 +209,9 @@
                <Test
                   Identifier = "BitMatrixTestCase">
                </Test>
+               <Test
+                  Identifier = "BitSourceTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

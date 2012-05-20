@@ -1029,6 +1029,8 @@
 		258FE03B15609D60004B9C9A /* ITFBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */; };
 		258FE04015609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
 		258FE04115609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
+		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
+		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1540,6 +1542,8 @@
 		258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITFBlackBox2TestCase.m; path = oned/ITFBlackBox2TestCase.m; sourceTree = "<group>"; };
 		258FE03E15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox1TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.h; sourceTree = "<group>"; };
 		258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox1TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
+		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2315,6 +2319,8 @@
 				256A884B1567FB12007C38B7 /* BitSourceBuilder.m */,
 				256A884E1567FFAE007C38B7 /* BitSourceTestCase.h */,
 				256A884F1567FFAE007C38B7 /* BitSourceTestCase.m */,
+				25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */,
+				25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -3222,6 +3228,7 @@
 				256A88481567ECFA007C38B7 /* BitMatrixTestCase.m in Sources */,
 				256A884D1567FB12007C38B7 /* BitSourceBuilder.m in Sources */,
 				256A88511567FFAE007C38B7 /* BitSourceTestCase.m in Sources */,
+				25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3639,6 +3646,7 @@
 				256A88471567ECFA007C38B7 /* BitMatrixTestCase.m in Sources */,
 				256A884C1567FB12007C38B7 /* BitSourceBuilder.m in Sources */,
 				256A88501567FFAE007C38B7 /* BitSourceTestCase.m in Sources */,
+				25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
