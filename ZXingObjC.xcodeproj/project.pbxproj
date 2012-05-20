@@ -989,6 +989,8 @@
 		2545FCC41569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */; };
 		2545FCC51569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */; };
 		2545FCC61569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */; };
+		2545FCC915696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC815696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m */; };
+		2545FCCA15696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC815696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1506,6 +1508,8 @@
 		2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractReedSolomonTestCase.m; sourceTree = "<group>"; };
 		2545FCC11569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonDecoderDataMatrixTestCase.h; sourceTree = "<group>"; };
 		2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReedSolomonDecoderDataMatrixTestCase.m; sourceTree = "<group>"; };
+		2545FCC715696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonDecoderQRCodeTestCase.h; sourceTree = "<group>"; };
+		2545FCC815696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReedSolomonDecoderQRCodeTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -2434,6 +2438,8 @@
 				2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */,
 				2545FCC11569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.h */,
 				2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */,
+				2545FCC715696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.h */,
+				2545FCC815696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m */,
 			);
 			path = reedsolomon;
 			sourceTree = "<group>";
@@ -3251,6 +3257,7 @@
 				25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */,
 				2545FCC41569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */,
 				2545FCC61569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */,
+				2545FCCA15696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3671,6 +3678,7 @@
 				25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */,
 				2545FCC31569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */,
 				2545FCC51569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */,
+				2545FCC915696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
