@@ -1,5 +1,5 @@
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface BitSourceTestCase : SenTestCase
+@interface BinaryUtilTest : SenTestCase
 
 @end

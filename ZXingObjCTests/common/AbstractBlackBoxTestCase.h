@@ -1,5 +1,4 @@
 #import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
 #import "ZXBarcodeFormat.h"
 #import "ZXDecodeHints.h"
 #import "ZXImage.h"

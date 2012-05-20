@@ -1001,6 +1001,10 @@
 		2545FCDB1569979D008E53D2 /* EAN13WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCD91569979D008E53D2 /* EAN13WriterTestCase.m */; };
 		2545FCDE15699865008E53D2 /* EANManufacturerOrgSupportTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCDD15699864008E53D2 /* EANManufacturerOrgSupportTest.m */; };
 		2545FCDF15699865008E53D2 /* EANManufacturerOrgSupportTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCDD15699864008E53D2 /* EANManufacturerOrgSupportTest.m */; };
+		2545FCE215699974008E53D2 /* BinaryUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE115699974008E53D2 /* BinaryUtil.m */; };
+		2545FCE315699974008E53D2 /* BinaryUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE115699974008E53D2 /* BinaryUtil.m */; };
+		2545FCE615699AE0008E53D2 /* BinaryUtilTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE515699AE0008E53D2 /* BinaryUtilTest.m */; };
+		2545FCE715699AE0008E53D2 /* BinaryUtilTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE515699AE0008E53D2 /* BinaryUtilTest.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1530,6 +1534,10 @@
 		2545FCD91569979D008E53D2 /* EAN13WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAN13WriterTestCase.m; path = oned/EAN13WriterTestCase.m; sourceTree = "<group>"; };
 		2545FCDC15699864008E53D2 /* EANManufacturerOrgSupportTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EANManufacturerOrgSupportTest.h; path = oned/EANManufacturerOrgSupportTest.h; sourceTree = "<group>"; };
 		2545FCDD15699864008E53D2 /* EANManufacturerOrgSupportTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EANManufacturerOrgSupportTest.m; path = oned/EANManufacturerOrgSupportTest.m; sourceTree = "<group>"; };
+		2545FCE015699974008E53D2 /* BinaryUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BinaryUtil.h; path = oned/rss/expanded/BinaryUtil.h; sourceTree = "<group>"; };
+		2545FCE115699974008E53D2 /* BinaryUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BinaryUtil.m; path = oned/rss/expanded/BinaryUtil.m; sourceTree = "<group>"; };
+		2545FCE415699AE0008E53D2 /* BinaryUtilTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BinaryUtilTest.h; path = oned/rss/expanded/BinaryUtilTest.h; sourceTree = "<group>"; };
+		2545FCE515699AE0008E53D2 /* BinaryUtilTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BinaryUtilTest.m; path = oned/rss/expanded/BinaryUtilTest.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -1550,10 +1558,10 @@
 		256A884F1567FFAE007C38B7 /* BitSourceTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitSourceTestCase.m; sourceTree = "<group>"; };
 		258994D71565FE2000B403C3 /* ProductParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductParsedResultTestCase.h; path = client/result/ProductParsedResultTestCase.h; sourceTree = "<group>"; };
 		258994D81565FE2000B403C3 /* ProductParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductParsedResultTestCase.m; path = client/result/ProductParsedResultTestCase.m; sourceTree = "<group>"; };
-		258994F115673BCD00B403C3 /* URIParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URIParsedResultTestCase.h; sourceTree = "<group>"; };
-		258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URIParsedResultTestCase.m; sourceTree = "<group>"; };
-		258994F615673F1600B403C3 /* WifiParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiParsedResultTestCase.h; sourceTree = "<group>"; };
-		258994F715673F1600B403C3 /* WifiParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WifiParsedResultTestCase.m; sourceTree = "<group>"; };
+		258994F115673BCD00B403C3 /* URIParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URIParsedResultTestCase.h; path = client/result/URIParsedResultTestCase.h; sourceTree = "<group>"; };
+		258994F215673BCD00B403C3 /* URIParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = URIParsedResultTestCase.m; path = client/result/URIParsedResultTestCase.m; sourceTree = "<group>"; };
+		258994F615673F1600B403C3 /* WifiParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WifiParsedResultTestCase.h; path = client/result/WifiParsedResultTestCase.h; sourceTree = "<group>"; };
+		258994F715673F1600B403C3 /* WifiParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WifiParsedResultTestCase.m; path = client/result/WifiParsedResultTestCase.m; sourceTree = "<group>"; };
 		258FE01715605EDF004B9C9A /* Code128BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox3TestCase.h; path = oned/Code128BlackBox3TestCase.h; sourceTree = "<group>"; };
 		258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox3TestCase.m; path = oned/Code128BlackBox3TestCase.m; sourceTree = "<group>"; };
 		258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8BlackBox1TestCase.h; path = oned/EAN8BlackBox1TestCase.h; sourceTree = "<group>"; };
@@ -2508,6 +2516,10 @@
 		258FE03D15609E8F004B9C9A /* expanded */ = {
 			isa = PBXGroup;
 			children = (
+				2545FCE015699974008E53D2 /* BinaryUtil.h */,
+				2545FCE115699974008E53D2 /* BinaryUtil.m */,
+				2545FCE415699AE0008E53D2 /* BinaryUtilTest.h */,
+				2545FCE515699AE0008E53D2 /* BinaryUtilTest.m */,
 				258FE03E15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.h */,
 				258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */,
 				02A0D94815617E06008F07B6 /* RSSExpandedBlackBox2TestCase.h */,
@@ -3301,6 +3313,8 @@
 				2545FCD7156995D2008E53D2 /* EAN8WriterTestCase.m in Sources */,
 				2545FCDB1569979D008E53D2 /* EAN13WriterTestCase.m in Sources */,
 				2545FCDF15699865008E53D2 /* EANManufacturerOrgSupportTest.m in Sources */,
+				2545FCE315699974008E53D2 /* BinaryUtil.m in Sources */,
+				2545FCE715699AE0008E53D2 /* BinaryUtilTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3727,6 +3741,8 @@
 				2545FCD6156995D2008E53D2 /* EAN8WriterTestCase.m in Sources */,
 				2545FCDA1569979D008E53D2 /* EAN13WriterTestCase.m in Sources */,
 				2545FCDE15699865008E53D2 /* EANManufacturerOrgSupportTest.m in Sources */,
+				2545FCE215699974008E53D2 /* BinaryUtil.m in Sources */,
+				2545FCE615699AE0008E53D2 /* BinaryUtilTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -51,9 +51,6 @@
                   Identifier = "AddressBookParsedResultTestCase">
                </Test>
                <Test
-                  Identifier = "AztecBlackBox1TestCase">
-               </Test>
-               <Test
                   Identifier = "AztecBlackBox2TestCase">
                </Test>
                <Test
@@ -235,6 +232,12 @@
                </Test>
                <Test
                   Identifier = "EAN13WriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "EANManufacturerOrgSupportTest">
+               </Test>
+               <Test
+                  Identifier = "AztecBlackBox1TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>
