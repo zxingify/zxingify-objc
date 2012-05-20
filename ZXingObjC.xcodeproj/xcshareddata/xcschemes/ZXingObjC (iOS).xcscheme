@@ -215,6 +215,9 @@
                <Test
                   Identifier = "UPCABlackBox3ReflectiveTestCase">
                </Test>
+               <Test
+                  Identifier = "UPCABlackBox4TestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

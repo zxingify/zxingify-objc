@@ -985,6 +985,10 @@
 		251741B81565E5CB0006A257 /* ParsedReaderResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */; };
 		2543C17915674200001BC3F0 /* BitArrayTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2543C17815674200001BC3F0 /* BitArrayTestCase.m */; };
 		2543C17A15674200001BC3F0 /* BitArrayTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2543C17815674200001BC3F0 /* BitArrayTestCase.m */; };
+		2545FCC31569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */; };
+		2545FCC41569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */; };
+		2545FCC51569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */; };
+		2545FCC61569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1498,6 +1502,10 @@
 		251741B61565E5CB0006A257 /* ParsedReaderResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParsedReaderResultTestCase.m; path = client/result/ParsedReaderResultTestCase.m; sourceTree = "<group>"; };
 		2543C17715674200001BC3F0 /* BitArrayTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitArrayTestCase.h; sourceTree = "<group>"; };
 		2543C17815674200001BC3F0 /* BitArrayTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitArrayTestCase.m; sourceTree = "<group>"; };
+		2545FCBF1569556E008E53D2 /* AbstractReedSolomonTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractReedSolomonTestCase.h; sourceTree = "<group>"; };
+		2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractReedSolomonTestCase.m; sourceTree = "<group>"; };
+		2545FCC11569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonDecoderDataMatrixTestCase.h; sourceTree = "<group>"; };
+		2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReedSolomonDecoderDataMatrixTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -2321,6 +2329,7 @@
 				256A884F1567FFAE007C38B7 /* BitSourceTestCase.m */,
 				25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */,
 				25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */,
+				2545FCBE1569556E008E53D2 /* reedsolomon */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -2416,6 +2425,17 @@
 				026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */,
 			);
 			name = oned;
+			sourceTree = "<group>";
+		};
+		2545FCBE1569556E008E53D2 /* reedsolomon */ = {
+			isa = PBXGroup;
+			children = (
+				2545FCBF1569556E008E53D2 /* AbstractReedSolomonTestCase.h */,
+				2545FCC01569556E008E53D2 /* AbstractReedSolomonTestCase.m */,
+				2545FCC11569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.h */,
+				2545FCC21569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m */,
+			);
+			path = reedsolomon;
 			sourceTree = "<group>";
 		};
 		25585C271564A13B00DDFFDB /* pdf417 */ = {
@@ -3229,6 +3249,8 @@
 				256A884D1567FB12007C38B7 /* BitSourceBuilder.m in Sources */,
 				256A88511567FFAE007C38B7 /* BitSourceTestCase.m in Sources */,
 				25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */,
+				2545FCC41569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */,
+				2545FCC61569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3647,6 +3669,8 @@
 				256A884C1567FB12007C38B7 /* BitSourceBuilder.m in Sources */,
 				256A88501567FFAE007C38B7 /* BitSourceTestCase.m in Sources */,
 				25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */,
+				2545FCC31569556E008E53D2 /* AbstractReedSolomonTestCase.m in Sources */,
+				2545FCC51569556E008E53D2 /* ReedSolomonDecoderDataMatrixTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
