@@ -227,6 +227,9 @@
                <Test
                   Identifier = "ReedSolomonEncoderQRCodeTestCase">
                </Test>
+               <Test
+                  Identifier = "DecodedBitStreamParserTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

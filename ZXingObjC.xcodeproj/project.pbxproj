@@ -995,6 +995,8 @@
 		2545FCCE15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCCC15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.m */; };
 		2545FCD215696E09008E53D2 /* DecodedBitStreamParserTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCD115696E09008E53D2 /* DecodedBitStreamParserTestCase.m */; };
 		2545FCD315696E09008E53D2 /* DecodedBitStreamParserTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCD115696E09008E53D2 /* DecodedBitStreamParserTestCase.m */; };
+		2545FCD6156995D2008E53D2 /* EAN8WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCD5156995D1008E53D2 /* EAN8WriterTestCase.m */; };
+		2545FCD7156995D2008E53D2 /* EAN8WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCD5156995D1008E53D2 /* EAN8WriterTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
@@ -1518,6 +1520,8 @@
 		2545FCCC15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReedSolomonEncoderQRCodeTestCase.m; sourceTree = "<group>"; };
 		2545FCD015696E09008E53D2 /* DecodedBitStreamParserTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecodedBitStreamParserTestCase.h; path = datamatrix/decoder/DecodedBitStreamParserTestCase.h; sourceTree = "<group>"; };
 		2545FCD115696E09008E53D2 /* DecodedBitStreamParserTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DecodedBitStreamParserTestCase.m; path = datamatrix/decoder/DecodedBitStreamParserTestCase.m; sourceTree = "<group>"; };
+		2545FCD4156995D1008E53D2 /* EAN8WriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8WriterTestCase.h; path = oned/EAN8WriterTestCase.h; sourceTree = "<group>"; };
+		2545FCD5156995D1008E53D2 /* EAN8WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAN8WriterTestCase.m; path = oned/EAN8WriterTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
@@ -2409,6 +2413,8 @@
 				258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */,
 				258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */,
 				258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */,
+				2545FCD4156995D1008E53D2 /* EAN8WriterTestCase.h */,
+				2545FCD5156995D1008E53D2 /* EAN8WriterTestCase.m */,
 				258FE02015606023004B9C9A /* EAN13BlackBox1TestCase.h */,
 				258FE02115606023004B9C9A /* EAN13BlackBox1TestCase.m */,
 				258FE02415609926004B9C9A /* EAN13BlackBox2TestCase.h */,
@@ -3280,6 +3286,7 @@
 				2545FCCA15696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m in Sources */,
 				2545FCCE15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.m in Sources */,
 				2545FCD315696E09008E53D2 /* DecodedBitStreamParserTestCase.m in Sources */,
+				2545FCD7156995D2008E53D2 /* EAN8WriterTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3703,6 +3710,7 @@
 				2545FCC915696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m in Sources */,
 				2545FCCD15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.m in Sources */,
 				2545FCD215696E09008E53D2 /* DecodedBitStreamParserTestCase.m in Sources */,
+				2545FCD6156995D2008E53D2 /* EAN8WriterTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

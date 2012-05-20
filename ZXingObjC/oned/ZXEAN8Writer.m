@@ -23,6 +23,9 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:EAN8codeWidth];
+  for (int i = 0; i < EAN8codeWidth; i++) {
+    [result addObject:[NSNumber numberWithInt:0]];
+  }
   int pos = 0;
 
   pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
