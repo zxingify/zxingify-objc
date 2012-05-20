@@ -2,14 +2,6 @@
 #import "ZXGenericGF.h"
 #import "ZXReedSolomonEncoder.h"
 
-@interface AbstractReedSolomonTestCase ()
-
-- (void)assertArraysEqual:(int*)expected expectedOffset:(int)expectedOffset
-                   actual:(int*)actual actualOffset:(int)actualOffset length:(int)length;
-
-
-@end
-
 @implementation AbstractReedSolomonTestCase
 
 - (void)corrupt:(int*)received receivedLen:(int)receivedLen howMany:(int)howMany {

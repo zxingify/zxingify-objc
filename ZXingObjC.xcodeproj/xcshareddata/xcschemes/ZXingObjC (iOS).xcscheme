@@ -221,6 +221,9 @@
                <Test
                   Identifier = "WifiParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "ReedSolomonDecoderQRCodeTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
