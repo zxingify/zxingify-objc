@@ -233,6 +233,9 @@
                <Test
                   Identifier = "EAN8WriterTestCase">
                </Test>
+               <Test
+                  Identifier = "EAN13WriterTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
