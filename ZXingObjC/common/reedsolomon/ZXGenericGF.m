@@ -75,8 +75,10 @@ int const INITIALIZATION_THRESHOLD = 0;
     [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
   }
 
-  self.zero = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:0], nil]] autorelease];
-  self.one = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:[NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil]] autorelease];
+  self.zero = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0] autorelease];
+
+  int oneInt = 1;
+  self.one = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1] autorelease];
   self.initialized = YES;
 }
 
@@ -159,11 +161,14 @@ int const INITIALIZATION_THRESHOLD = 0;
   if (coefficient == 0) {
     return zero;
   }
-  NSMutableArray * coefficients = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:coefficient]];
-  for (int i = 1; i < degree + 1; i++) {
-    [coefficients addObject:[NSNumber numberWithInt:0]];
+
+  int coefficientsLen = degree + 1;
+  int coefficients[coefficientsLen];
+  coefficients[0] = coefficient;
+  for (int i = 1; i < coefficientsLen; i++) {
+    coefficients[i] = 0;
   }
-  return [[[ZXGenericGFPoly alloc] initWithField:self coefficients:coefficients] autorelease];
+  return [[[ZXGenericGFPoly alloc] initWithField:self coefficients:coefficients coefficientsLen:coefficientsLen] autorelease];
 }
 
 

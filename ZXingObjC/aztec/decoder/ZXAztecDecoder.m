@@ -251,16 +251,15 @@ static NSString* DIGIT_TABLE[] = {
     offset = NB_BITS[[ddata nbLayers]] - numCodewords * codewordSize;
     numECCodewords = NB_DATABLOCK[[ddata nbLayers]] - numDataCodewords;
   }
-  
-  NSMutableArray * dataWords = [NSMutableArray array];
-  for (int i = 0; i < numCodewords; i++) {
-    [dataWords addObject:[NSNumber numberWithInt:0]];
-    int flag = 1;
 
-    for (int j = 1; j <= codewordSize; j++) {
+  int dataWordsLen = self.numCodewords;
+  int dataWords[dataWordsLen];
+  for (int i = 0; i < dataWordsLen; i++) {
+    dataWords[i] = 0;
+    int flag = 1;
+    for (int j = 1; j <= self.codewordSize; j++) {
       if ([[rawbits objectAtIndex:codewordSize * i + codewordSize - j + offset] boolValue]) {
-        [dataWords replaceObjectAtIndex:i withObject:
-         [NSNumber numberWithInt:[[dataWords objectAtIndex:i] intValue] + flag]];
+        dataWords[i] += flag;
       }
       flag <<= 1;
     }
@@ -268,7 +267,7 @@ static NSString* DIGIT_TABLE[] = {
 
   @try {
     ZXReedSolomonDecoder * rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:gf] autorelease];
-    [rsDecoder decode:dataWords twoS:numECCodewords];
+    [rsDecoder decode:dataWords receivedLen:dataWordsLen twoS:numECCodewords];
   } @catch (ZXReedSolomonException * rse) {
     @throw [ZXFormatException formatInstance];
   }
@@ -287,7 +286,7 @@ static NSString* DIGIT_TABLE[] = {
     int flag = 1 << (self.codewordSize - 1);
 
     for (int j = 0; j < self.codewordSize; j++) {
-      BOOL color = ([[dataWords objectAtIndex:i] intValue] & flag) == flag;
+      BOOL color = (dataWords[i] & flag) == flag;
 
       if (seriesCount == self.codewordSize - 1) {
         if (color == seriesColor) {

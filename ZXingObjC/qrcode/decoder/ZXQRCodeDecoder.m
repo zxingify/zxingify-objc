@@ -104,22 +104,21 @@
  */
 - (void)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
   int numCodewords = [codewordBytes count];
-  NSMutableArray * codewordsInts = [NSMutableArray arrayWithCapacity:numCodewords];
+  int codewordsInts[numCodewords];
 
   for (int i = 0; i < numCodewords; i++) {
-    [codewordsInts addObject:[NSNumber numberWithInt:[[codewordBytes objectAtIndex:i] charValue] & 0xFF]];
+    codewordsInts[i] = [[codewordBytes objectAtIndex:i] charValue] & 0xFF;
   }
 
   int numECCodewords = [codewordBytes count] - numDataCodewords;
-
   @try {
-    [rsDecoder decode:codewordsInts twoS:numECCodewords];
+    [rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords];
   } @catch (ZXReedSolomonException * rse) {
     @throw [ZXChecksumException checksumInstance];
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
-    [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:[[codewordsInts objectAtIndex:i] charValue]]];
+    [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:codewordsInts[i]]];
   }
 }
 

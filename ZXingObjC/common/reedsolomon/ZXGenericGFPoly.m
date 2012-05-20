@@ -3,7 +3,8 @@
 
 @interface ZXGenericGFPoly ()
 
-@property (nonatomic, retain) NSArray* coefficients;
+@property (nonatomic, assign) int* coefficients;
+@property (nonatomic, assign) int coefficientsLen;
 @property (nonatomic, retain) ZXGenericGF * field;
 
 @end
@@ -12,27 +13,33 @@
 @implementation ZXGenericGFPoly
 
 @synthesize coefficients;
+@synthesize coefficientsLen;
 @synthesize field;
 
-- (id)initWithField:(ZXGenericGF *)aField coefficients:(NSArray *)aCoefficients {
+- (id)initWithField:(ZXGenericGF *)aField coefficients:(int *)aCoefficients coefficientsLen:(int)aCoefficientsLen {
   if (self = [super init]) {
-    if (aCoefficients == nil || [aCoefficients count] == 0) {
-      [NSException raise:NSInvalidArgumentException format:@"Coefficients must be provided."];
-    }
     self.field = aField;
-    int coefficientsLength = [aCoefficients count];
-    if (coefficientsLength > 1 && [[aCoefficients objectAtIndex:0] intValue] == 0) {
+    if (aCoefficientsLen > 1 && aCoefficients[0] == 0) {
       int firstNonZero = 1;
-      while (firstNonZero < coefficientsLength && [[aCoefficients objectAtIndex:firstNonZero] intValue] == 0) {
+      while (firstNonZero < aCoefficientsLen && aCoefficients[firstNonZero] == 0) {
         firstNonZero++;
       }
-      if (firstNonZero == coefficientsLength) {
-        self.coefficients = [field zero].coefficients;
+      if (firstNonZero == aCoefficientsLen) {
+        ZXGenericGFPoly* zero = [field zero];
+        self.coefficients = (int*)malloc(zero.coefficientsLen * sizeof(int));
+        memcpy(self.coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
+        self.coefficientsLen = zero.coefficientsLen;
       } else {
-        self.coefficients = [aCoefficients subarrayWithRange:NSMakeRange(firstNonZero, [aCoefficients count] - firstNonZero)];
+        self.coefficientsLen = (aCoefficientsLen - firstNonZero);
+        self.coefficients = (int*)malloc(self.coefficientsLen * sizeof(int));
+        for (int i = 0; i < self.coefficientsLen; i++) {
+          self.coefficients[i] = aCoefficients[firstNonZero + i];
+        }
       }
     } else {
-      self.coefficients = aCoefficients;
+      self.coefficients = (int*)malloc(aCoefficientsLen * sizeof(int));
+      memcpy(self.coefficients, aCoefficients, aCoefficientsLen * sizeof(int));
+      self.coefficientsLen = aCoefficientsLen;
     }
   }
 
@@ -40,40 +47,43 @@
 }
 
 - (void)dealloc {
+  if (self.coefficients != NULL) {
+    free(self.coefficients);
+    self.coefficients = NULL;
+  }
   [field release];
-  [coefficients release];
 
   [super dealloc];
 }
 
 
 - (int)degree {
-  return [self.coefficients count] - 1;
+  return self.coefficientsLen - 1;
 }
 
 - (BOOL)zero {
-  return [[self.coefficients objectAtIndex:0] intValue] == 0;
+  return self.coefficients[0] == 0;
 }
 
 - (int)coefficient:(int)degree {
-  return [[self.coefficients objectAtIndex:[self.coefficients count] - 1 - degree] intValue];
+  return self.coefficients[self.coefficientsLen - 1 - degree];
 }
 
 - (int)evaluateAt:(int)a {
   if (a == 0) {
     return [self coefficient:0];
   }
-  int size = self.coefficients.count;
+  int size = self.coefficientsLen;
   if (a == 1) {
     int result = 0;
     for (int i = 0; i < size; i++) {
-      result = [ZXGenericGF addOrSubtract:result b:[[self.coefficients objectAtIndex:i] intValue]];
+      result = [ZXGenericGF addOrSubtract:result b:self.coefficients[i]];
     }
     return result;
   }
-  int result = [[self.coefficients objectAtIndex:0] intValue];
+  int result = self.coefficients[0];
   for (int i = 1; i < size; i++) {
-    result = [ZXGenericGF addOrSubtract:[self.field multiply:a b:result] b:[[self.coefficients objectAtIndex:i] intValue]];
+    result = [ZXGenericGF addOrSubtract:[self.field multiply:a b:result] b:self.coefficients[i]];
   }
   return result;
 }
@@ -89,22 +99,28 @@
     return self;
   }
 
-  NSArray * smallerCoefficients = self.coefficients;
-  NSArray * largerCoefficients = other.coefficients;
-  if ([smallerCoefficients count] > [largerCoefficients count]) {
-    NSArray * temp = smallerCoefficients;
+  int* smallerCoefficients = self.coefficients;
+  int smallerCoefficientsLen = self.coefficientsLen;
+  int* largerCoefficients = other.coefficients;
+  int largerCoefficientsLen = other.coefficientsLen;
+  if (smallerCoefficientsLen > largerCoefficientsLen) {
+    int *temp = smallerCoefficients;
+    int tempLen = smallerCoefficientsLen;
     smallerCoefficients = largerCoefficients;
+    smallerCoefficientsLen = largerCoefficientsLen;
     largerCoefficients = temp;
+    largerCoefficientsLen = tempLen;
   }
-  int lengthDiff = [largerCoefficients count] - [smallerCoefficients count];
-  NSMutableArray * sumDiff = [[[largerCoefficients subarrayWithRange:NSMakeRange(0, lengthDiff)] mutableCopy] autorelease];
-
-  for (int i = lengthDiff; i < [largerCoefficients count]; i++) {
-    [sumDiff addObject:[NSNumber numberWithInt:[ZXGenericGF addOrSubtract:[[smallerCoefficients objectAtIndex:i - lengthDiff] intValue]
-                                                                      b:[[largerCoefficients objectAtIndex:i] intValue]]]];
+  int sumDiff[largerCoefficientsLen];
+  int lengthDiff = largerCoefficientsLen - smallerCoefficientsLen;
+  for (int i = 0; i < lengthDiff; i++) {
+    sumDiff[i] = largerCoefficients[i];
+  }
+  for (int i = lengthDiff; i < largerCoefficientsLen; i++) {
+    sumDiff[i] = [ZXGenericGF addOrSubtract:smallerCoefficients[i - lengthDiff] b:largerCoefficients[i]];
   }
 
-  return [[[ZXGenericGFPoly alloc] initWithField:self.field coefficients:sumDiff] autorelease];
+  return [[[ZXGenericGFPoly alloc] initWithField:self.field coefficients:sumDiff coefficientsLen:largerCoefficientsLen] autorelease];
 }
 
 - (ZXGenericGFPoly *) multiply:(ZXGenericGFPoly *)other {
@@ -114,23 +130,24 @@
   if (self.zero || other.zero) {
     return self.field.zero;
   }
-  NSArray * aCoefficients = self.coefficients;
-  int aLength = [aCoefficients count];
-  NSArray * bCoefficients = other.coefficients;
-  int bLength = [bCoefficients count];
-  NSMutableArray * product = [NSMutableArray arrayWithCapacity:aLength + bLength - 1];
-  for (int i = 0; i < aLength + bLength - 1; i++) {
-    [product addObject:[NSNumber numberWithInt:0]];
+  int* aCoefficients = self.coefficients;
+  int aLength = self.coefficientsLen;
+  int* bCoefficients = other.coefficients;
+  int bLength = other.coefficientsLen;
+  int productLen = aLength + bLength - 1;
+  int product[productLen];
+  for (int i = 0; i < productLen; i++) {
+    product[i] = 0;
   }
+
   for (int i = 0; i < aLength; i++) {
-    int aCoeff = [[aCoefficients objectAtIndex:i] intValue];
+    int aCoeff = aCoefficients[i];
     for (int j = 0; j < bLength; j++) {
-      [product replaceObjectAtIndex:i + j
-                         withObject:[NSNumber numberWithInt:[ZXGenericGF addOrSubtract:[[product objectAtIndex:i + j] intValue]
-                                                                                     b:[self.field multiply:aCoeff b:[[bCoefficients objectAtIndex:j] intValue]]]]];
+      product[i + j] = [ZXGenericGF addOrSubtract:product[i + j]
+                                                b:[field multiply:aCoeff b:bCoefficients[j]]];
     }
   }
-  return [[[ZXGenericGFPoly alloc] initWithField:field coefficients:product] autorelease];
+  return [[[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:productLen] autorelease];
 }
 
 - (ZXGenericGFPoly *)multiplyScalar:(int)scalar {
@@ -140,12 +157,12 @@
   if (scalar == 1) {
     return self;
   }
-  int size = self.coefficients.count;
-  NSMutableArray * product = [NSMutableArray arrayWithCapacity:size];
+  int size = self.coefficientsLen;
+  int product[size];
   for (int i = 0; i < size; i++) {
-    [product addObject:[NSNumber numberWithInt:[self.field multiply:[[self.coefficients objectAtIndex:i] intValue] b:scalar]]];
+    product[i] = [self.field multiply:self.coefficients[i] b:scalar];
   }
-  return [[[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product] autorelease];
+  return [[[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size] autorelease];
 }
 
 - (ZXGenericGFPoly *)multiplyByMonomial:(int)degree coefficient:(int)coefficient {
@@ -153,19 +170,19 @@
     [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
   if (coefficient == 0) {
-    return field.zero;
+    return self.field.zero;
   }
-  int size = self.coefficients.count;
-  NSMutableArray * product = [NSMutableArray arrayWithCapacity:size + degree];
+  int size = self.coefficientsLen;
+  int product[size + degree];
   for (int i = 0; i < size + degree; i++) {
     if (i < size) {
-      [product addObject:[NSNumber numberWithInt:[self.field multiply:[[self.coefficients objectAtIndex:i] intValue] b:coefficient]]];
+      product[i] = [self.field multiply:self.coefficients[i] b:coefficient];
     } else {
-      [product addObject:[NSNumber numberWithInt:0]];
+      product[i] = 0;
     }
   }
 
-  return [[[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product] autorelease];
+  return [[[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size + degree] autorelease];
 }
 
 - (NSArray *)divide:(ZXGenericGFPoly *)other {

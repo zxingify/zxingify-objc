@@ -352,19 +352,20 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 }
 
 + (unsigned char*)generateECBytes:(unsigned char[])dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
-  NSMutableArray * toEncode = [NSMutableArray arrayWithCapacity:numDataBytes + numEcBytesInBlock];
+  int toEncodeLen = numDataBytes + numEcBytesInBlock;
+  int toEncode[toEncodeLen];
   for (int i = 0; i < numDataBytes; i++) {
-    [toEncode addObject:[NSNumber numberWithInt:dataBytes[i] & 0xFF]];
+    toEncode[i] = dataBytes[i] & 0xFF;
   }
-  for (int i = 0; i < numEcBytesInBlock; i++) {
-    [toEncode addObject:[NSNumber numberWithInt:0]];
+  for (int i = numDataBytes; i < toEncodeLen; i++) {
+    toEncode[i] = 0;
   }
 
-  [[[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease] encode:toEncode ecBytes:numEcBytesInBlock];
+  [[[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease] encode:toEncode toEncodeLen:toEncodeLen ecBytes:numEcBytesInBlock];
 
   unsigned char *ecBytes = (unsigned char*)malloc(numEcBytesInBlock * sizeof(unsigned char));
   for (int i = 0; i < numEcBytesInBlock; i++) {
-    ecBytes[i] = (char)[[toEncode objectAtIndex:numDataBytes + i] charValue];
+    ecBytes[i] = (unsigned char)toEncode[numDataBytes + i];
   }
 
   return ecBytes;

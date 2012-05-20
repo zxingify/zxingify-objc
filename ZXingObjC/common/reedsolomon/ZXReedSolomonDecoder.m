@@ -38,43 +38,38 @@
  * codewords. Really, this means it uses Reed-Solomon to detect and correct errors, in-place,
  * in the input.
  */
-- (void)decode:(NSMutableArray *)received twoS:(int)twoS {
-  ZXGenericGFPoly * poly = [[[ZXGenericGFPoly alloc] initWithField:field coefficients:received] autorelease];
-  NSMutableArray * syndromeCoefficients = [NSMutableArray arrayWithCapacity:twoS];
-  for (int i = 0; i < twoS; i++) {
-    [syndromeCoefficients addObject:[NSNumber numberWithInt:0]];
-  }
+- (void)decode:(int *)received receivedLen:(int)receivedLen twoS:(int)twoS {
+  ZXGenericGFPoly * poly = [[[ZXGenericGFPoly alloc] initWithField:field coefficients:received coefficientsLen:receivedLen] autorelease];
 
+  int syndromeCoefficientsLen = twoS;
+  int syndromeCoefficients[syndromeCoefficientsLen];
   BOOL dataMatrix = [self.field isEqual:[ZXGenericGF DataMatrixField256]];
   BOOL noError = YES;
 
   for (int i = 0; i < twoS; i++) {
     int eval = [poly evaluateAt:[self.field exp:dataMatrix ? i + 1 : i]];
-    [syndromeCoefficients replaceObjectAtIndex:[syndromeCoefficients count] - 1 - i withObject:[NSNumber numberWithInt:eval]];
+    syndromeCoefficients[syndromeCoefficientsLen - 1 - i] = eval;
     if (eval != 0) {
       noError = NO;
     }
   }
-
   if (noError) {
     return;
   }
-  ZXGenericGFPoly * syndrome = [[[ZXGenericGFPoly alloc] initWithField:field coefficients:syndromeCoefficients] autorelease];
+  ZXGenericGFPoly * syndrome = [[[ZXGenericGFPoly alloc] initWithField:field coefficients:syndromeCoefficients coefficientsLen:syndromeCoefficientsLen] autorelease];
   NSArray * sigmaOmega = [self runEuclideanAlgorithm:[field buildMonomial:twoS coefficient:1] b:syndrome R:twoS];
   ZXGenericGFPoly * sigma = [sigmaOmega objectAtIndex:0];
   ZXGenericGFPoly * omega = [sigmaOmega objectAtIndex:1];
   NSArray * errorLocations = [self findErrorLocations:sigma];
   NSArray * errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations dataMatrix:dataMatrix];
-
   for (int i = 0; i < [errorLocations count]; i++) {
-    int position = [received count] - 1 - [self.field log:[[errorLocations objectAtIndex:i] intValue]];
+    int position = receivedLen - 1 - [self.field log:[[errorLocations objectAtIndex:i] intValue]];
     if (position < 0) {
       @throw [[[ZXReedSolomonException alloc] initWithName:@"ZXReedSolomonException"
                                                     reason:@"Bad error location"
                                                   userInfo:nil] autorelease];
     }
-    [received replaceObjectAtIndex:position
-                        withObject:[NSNumber numberWithInt:[ZXGenericGF addOrSubtract:[[received objectAtIndex:position] intValue] b:[[errorMagnitudes objectAtIndex:i] intValue]]]];
+    received[position] = [ZXGenericGF addOrSubtract:received[position] b:[[errorMagnitudes objectAtIndex:i] intValue]];
   }
 }
 

@@ -257,18 +257,16 @@
   }
 
   int numECCodewords = numCodewords - numDataCodewords;
-  NSMutableArray *parameterWords = [NSMutableArray array];
-  for (int i = 0; i < numCodewords; i++) {
-    [parameterWords addObject:[NSNumber numberWithInt:0]];
-  }
+  int parameterWordsLen = numCodewords;
+  int parameterWords[parameterWordsLen];
 
   int codewordSize = 4;
-  for (int i = 0; i < numCodewords; i++) {
+  for (int i = 0; i < parameterWordsLen; i++) {
+    parameterWords[i] = 0;
     int flag = 1;
     for (int j = 1; j <= codewordSize; j++) {
       if ([[parameterData objectAtIndex:codewordSize * i + codewordSize - j] boolValue]) {
-        [parameterWords replaceObjectAtIndex:i withObject:
-         [NSNumber numberWithInt:[[parameterWords objectAtIndex:i] intValue] + flag]];
+        parameterWords[i] += flag;
       }
       flag <<= 1;
     }
@@ -276,7 +274,7 @@
 
   @try {
     ZXReedSolomonDecoder *rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF AztecDataParam]] autorelease];
-    [rsDecoder decode:parameterWords twoS:numECCodewords];
+    [rsDecoder decode:parameterWords receivedLen:parameterWordsLen twoS:numECCodewords];
   } @catch (ZXReedSolomonException * rse) {
     @throw [ZXNotFoundException notFoundInstance];
   }
@@ -285,8 +283,7 @@
     int flag = 1;
     for (int j = 1; j <= codewordSize; j++) {
       [parameterData replaceObjectAtIndex:i * codewordSize + codewordSize - j
-                               withObject:[NSNumber numberWithBool:
-                                           ([[parameterWords objectAtIndex:i] intValue] & flag) == flag]];
+                               withObject:[NSNumber numberWithBool:(parameterWords[i] & flag) == flag]];
       flag <<= 1;
     }
   }
