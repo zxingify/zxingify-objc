@@ -251,6 +251,12 @@
                <Test
                   Identifier = "RSSExpandedImage2binaryTestCase">
                </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2resultTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2stringTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

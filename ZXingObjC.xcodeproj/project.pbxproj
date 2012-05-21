@@ -1057,6 +1057,10 @@
 		25EED3681569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */; };
 		25EED36B1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */; };
 		25EED36C1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */; };
+		25EED36F1569F3B7003E10D6 /* RSSExpandedImage2stringTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED36E1569F3B6003E10D6 /* RSSExpandedImage2stringTestCase.m */; };
+		25EED3701569F3B7003E10D6 /* RSSExpandedImage2stringTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED36E1569F3B6003E10D6 /* RSSExpandedImage2stringTestCase.m */; };
+		25EED3731569F591003E10D6 /* RSSExpandedInternalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3721569F591003E10D6 /* RSSExpandedInternalTestCase.m */; };
+		25EED3741569F591003E10D6 /* RSSExpandedInternalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3721569F591003E10D6 /* RSSExpandedInternalTestCase.m */; };
 		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
@@ -1598,6 +1602,10 @@
 		25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedImage2binaryTestCase.m; path = oned/rss/expanded/RSSExpandedImage2binaryTestCase.m; sourceTree = "<group>"; };
 		25EED3691569F13C003E10D6 /* RSSExpandedImage2resultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedImage2resultTestCase.h; path = oned/rss/expanded/RSSExpandedImage2resultTestCase.h; sourceTree = "<group>"; };
 		25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedImage2resultTestCase.m; path = oned/rss/expanded/RSSExpandedImage2resultTestCase.m; sourceTree = "<group>"; };
+		25EED36D1569F3B6003E10D6 /* RSSExpandedImage2stringTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedImage2stringTestCase.h; path = oned/rss/expanded/RSSExpandedImage2stringTestCase.h; sourceTree = "<group>"; };
+		25EED36E1569F3B6003E10D6 /* RSSExpandedImage2stringTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedImage2stringTestCase.m; path = oned/rss/expanded/RSSExpandedImage2stringTestCase.m; sourceTree = "<group>"; };
+		25EED3711569F590003E10D6 /* RSSExpandedInternalTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedInternalTestCase.h; path = oned/rss/expanded/RSSExpandedInternalTestCase.h; sourceTree = "<group>"; };
+		25EED3721569F591003E10D6 /* RSSExpandedInternalTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedInternalTestCase.m; path = oned/rss/expanded/RSSExpandedInternalTestCase.m; sourceTree = "<group>"; };
 		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
 		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2550,6 +2558,10 @@
 				25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */,
 				25EED3691569F13C003E10D6 /* RSSExpandedImage2resultTestCase.h */,
 				25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */,
+				25EED36D1569F3B6003E10D6 /* RSSExpandedImage2stringTestCase.h */,
+				25EED36E1569F3B6003E10D6 /* RSSExpandedImage2stringTestCase.m */,
+				25EED3711569F590003E10D6 /* RSSExpandedInternalTestCase.h */,
+				25EED3721569F591003E10D6 /* RSSExpandedInternalTestCase.m */,
 			);
 			name = expanded;
 			sourceTree = "<group>";
@@ -3343,6 +3355,8 @@
 				25EED3601569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */,
 				25EED3681569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */,
 				25EED36C1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */,
+				25EED3701569F3B7003E10D6 /* RSSExpandedImage2stringTestCase.m in Sources */,
+				25EED3741569F591003E10D6 /* RSSExpandedInternalTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3775,6 +3789,8 @@
 				25EED35F1569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */,
 				25EED3671569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */,
 				25EED36B1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */,
+				25EED36F1569F3B7003E10D6 /* RSSExpandedImage2stringTestCase.m in Sources */,
+				25EED3731569F591003E10D6 /* RSSExpandedInternalTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
