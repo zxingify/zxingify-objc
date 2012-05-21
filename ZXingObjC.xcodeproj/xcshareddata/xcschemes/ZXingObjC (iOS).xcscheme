@@ -248,6 +248,9 @@
                <Test
                   Identifier = "ExpandedInformationDecoderTest">
                </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2binaryTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

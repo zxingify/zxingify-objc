@@ -1055,6 +1055,8 @@
 		25EED3601569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35E1569E028003E10D6 /* ExpandedInformationDecoderTest.m */; };
 		25EED3671569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */; };
 		25EED3681569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */; };
+		25EED36B1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */; };
+		25EED36C1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */; };
 		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
@@ -1594,6 +1596,8 @@
 		25EED35E1569E028003E10D6 /* ExpandedInformationDecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExpandedInformationDecoderTest.m; path = oned/rss/expanded/ExpandedInformationDecoderTest.m; sourceTree = "<group>"; };
 		25EED3651569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedImage2binaryTestCase.h; path = oned/rss/expanded/RSSExpandedImage2binaryTestCase.h; sourceTree = "<group>"; };
 		25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedImage2binaryTestCase.m; path = oned/rss/expanded/RSSExpandedImage2binaryTestCase.m; sourceTree = "<group>"; };
+		25EED3691569F13C003E10D6 /* RSSExpandedImage2resultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedImage2resultTestCase.h; path = oned/rss/expanded/RSSExpandedImage2resultTestCase.h; sourceTree = "<group>"; };
+		25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedImage2resultTestCase.m; path = oned/rss/expanded/RSSExpandedImage2resultTestCase.m; sourceTree = "<group>"; };
 		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
 		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2544,6 +2548,8 @@
 				02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */,
 				25EED3651569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.h */,
 				25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */,
+				25EED3691569F13C003E10D6 /* RSSExpandedImage2resultTestCase.h */,
+				25EED36A1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m */,
 			);
 			name = expanded;
 			sourceTree = "<group>";
@@ -3336,6 +3342,7 @@
 				25EED35C1569BE6C003E10D6 /* BitArrayBuilderTest.m in Sources */,
 				25EED3601569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */,
 				25EED3681569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */,
+				25EED36C1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3767,6 +3774,7 @@
 				25EED35B1569BE6C003E10D6 /* BitArrayBuilderTest.m in Sources */,
 				25EED35F1569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */,
 				25EED3671569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */,
+				25EED36B1569F13C003E10D6 /* RSSExpandedImage2resultTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
