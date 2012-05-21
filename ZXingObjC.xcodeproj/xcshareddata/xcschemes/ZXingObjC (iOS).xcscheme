@@ -51,7 +51,13 @@
                   Identifier = "AddressBookParsedResultTestCase">
                </Test>
                <Test
+                  Identifier = "AztecBlackBox1TestCase">
+               </Test>
+               <Test
                   Identifier = "AztecBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "BinaryUtilTest">
                </Test>
                <Test
                   Identifier = "BitArrayTestCase">
@@ -93,7 +99,13 @@
                   Identifier = "DataMatrixBlackBox2TestCase">
                </Test>
                <Test
+                  Identifier = "DecodedBitStreamParserTestCase">
+               </Test>
+               <Test
                   Identifier = "EAN8BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN8WriterTestCase">
                </Test>
                <Test
                   Identifier = "EAN13BlackBox1TestCase">
@@ -109,6 +121,12 @@
                </Test>
                <Test
                   Identifier = "EAN13BlackBox5BlurryTestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13WriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "EANManufacturerOrgSupportTest">
                </Test>
                <Test
                   Identifier = "EmailAddressParsedResultTestCase">
@@ -171,6 +189,12 @@
                   Identifier = "ReedSolomonDecoderDataMatrixTestCase">
                </Test>
                <Test
+                  Identifier = "ReedSolomonDecoderQRCodeTestCase">
+               </Test>
+               <Test
+                  Identifier = "ReedSolomonEncoderQRCodeTestCase">
+               </Test>
+               <Test
                   Identifier = "RSS14BlackBox1TestCase">
                </Test>
                <Test
@@ -217,27 +241,6 @@
                </Test>
                <Test
                   Identifier = "WifiParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "ReedSolomonDecoderQRCodeTestCase">
-               </Test>
-               <Test
-                  Identifier = "ReedSolomonEncoderQRCodeTestCase">
-               </Test>
-               <Test
-                  Identifier = "DecodedBitStreamParserTestCase">
-               </Test>
-               <Test
-                  Identifier = "EAN8WriterTestCase">
-               </Test>
-               <Test
-                  Identifier = "EAN13WriterTestCase">
-               </Test>
-               <Test
-                  Identifier = "EANManufacturerOrgSupportTest">
-               </Test>
-               <Test
-                  Identifier = "AztecBlackBox1TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>
