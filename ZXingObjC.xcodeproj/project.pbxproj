@@ -13,6 +13,8 @@
 		02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
 		022AE86C156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE86D156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
+		022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
+		022AE872156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
 		0237901E15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */; };
 		0237901F15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */; };
 		0250D79E1545EE5900752941 /* ZXAztecDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8115129BD0009E6549 /* ZXAztecDetectorResult.m */; };
@@ -1097,6 +1099,8 @@
 		02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox4TestCase.m; sourceTree = "<group>"; };
 		022AE86A156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3X0X_1X_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.h; sourceTree = "<group>"; };
 		022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3X0X_1X_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.m; sourceTree = "<group>"; };
+		022AE86F156AF07600DC9519 /* AnyAIDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyAIDecoderTest.h; path = oned/rss/expanded/decoders/AnyAIDecoderTest.h; sourceTree = "<group>"; };
+		022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyAIDecoderTest.m; path = oned/rss/expanded/decoders/AnyAIDecoderTest.m; sourceTree = "<group>"; };
 		0237901C15655FE6008E42BC /* AddressBookParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressBookParsedResultTestCase.h; path = client/result/AddressBookParsedResultTestCase.h; sourceTree = "<group>"; };
 		0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddressBookParsedResultTestCase.m; path = client/result/AddressBookParsedResultTestCase.m; sourceTree = "<group>"; };
 		0250D9001545FC8B00752941 /* ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
@@ -2594,6 +2598,8 @@
 				25EED37B1569FA89003E10D6 /* AI01_3103_DecoderTest.m */,
 				25EED37E1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.h */,
 				25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */,
+				022AE86F156AF07600DC9519 /* AnyAIDecoderTest.h */,
+				022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */,
 			);
 			name = decoders;
 			sourceTree = "<group>";
@@ -3393,6 +3399,7 @@
 				25EED37D1569FA89003E10D6 /* AI01_3103_DecoderTest.m in Sources */,
 				25EED3811569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */,
 				022AE86D156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */,
+				022AE872156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3831,6 +3838,7 @@
 				25EED37C1569FA89003E10D6 /* AI01_3103_DecoderTest.m in Sources */,
 				25EED3801569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */,
 				022AE86C156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */,
+				022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

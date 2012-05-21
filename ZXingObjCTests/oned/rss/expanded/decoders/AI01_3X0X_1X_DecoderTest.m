@@ -47,7 +47,7 @@ static NSString* header_320x_17 = @"..XXXXXX";
   NSString* data = [NSString stringWithFormat:@"%@%@%@%@", header_320x_13, compressedGtin_900123456798908,
                     compressed20bitWeight_1750, compressedDate_March_12th_2010];
   NSString* expected = @"(01)90012345678908(3200)001750(13)100312";
-  
+
   [self assertCorrectBinaryString:data expectedNumber:expected];
 }
 

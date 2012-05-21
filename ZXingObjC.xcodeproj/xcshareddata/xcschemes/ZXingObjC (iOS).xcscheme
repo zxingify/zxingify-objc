@@ -269,6 +269,9 @@
                <Test
                   Identifier = "AI01_3202_3203_DecoderTest">
                </Test>
+               <Test
+                  Identifier = "AI01_3X0X_1X_DecoderTest">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
