@@ -1065,6 +1065,8 @@
 		25EED3791569F936003E10D6 /* AbstractDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3771569F936003E10D6 /* AbstractDecoderTest.m */; };
 		25EED37C1569FA89003E10D6 /* AI01_3103_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED37B1569FA89003E10D6 /* AI01_3103_DecoderTest.m */; };
 		25EED37D1569FA89003E10D6 /* AI01_3103_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED37B1569FA89003E10D6 /* AI01_3103_DecoderTest.m */; };
+		25EED3801569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */; };
+		25EED3811569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */; };
 		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
@@ -1614,6 +1616,8 @@
 		25EED3771569F936003E10D6 /* AbstractDecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AbstractDecoderTest.m; path = oned/rss/expanded/decoders/AbstractDecoderTest.m; sourceTree = "<group>"; };
 		25EED37A1569FA89003E10D6 /* AI01_3103_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3103_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3103_DecoderTest.h; sourceTree = "<group>"; };
 		25EED37B1569FA89003E10D6 /* AI01_3103_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3103_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3103_DecoderTest.m; sourceTree = "<group>"; };
+		25EED37E1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3202_3203_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3202_3203_DecoderTest.h; sourceTree = "<group>"; };
+		25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3202_3203_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3202_3203_DecoderTest.m; sourceTree = "<group>"; };
 		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
 		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2582,6 +2586,8 @@
 				25EED3771569F936003E10D6 /* AbstractDecoderTest.m */,
 				25EED37A1569FA89003E10D6 /* AI01_3103_DecoderTest.h */,
 				25EED37B1569FA89003E10D6 /* AI01_3103_DecoderTest.m */,
+				25EED37E1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.h */,
+				25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */,
 			);
 			name = decoders;
 			sourceTree = "<group>";
@@ -3379,6 +3385,7 @@
 				25EED3741569F591003E10D6 /* RSSExpandedInternalTestCase.m in Sources */,
 				25EED3791569F936003E10D6 /* AbstractDecoderTest.m in Sources */,
 				25EED37D1569FA89003E10D6 /* AI01_3103_DecoderTest.m in Sources */,
+				25EED3811569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3815,6 +3822,7 @@
 				25EED3731569F591003E10D6 /* RSSExpandedInternalTestCase.m in Sources */,
 				25EED3781569F936003E10D6 /* AbstractDecoderTest.m in Sources */,
 				25EED37C1569FA89003E10D6 /* AI01_3103_DecoderTest.m in Sources */,
+				25EED3801569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
