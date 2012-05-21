@@ -1051,6 +1051,10 @@
 		258FE04115609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
 		25EED35B1569BE6C003E10D6 /* BitArrayBuilderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35A1569BE6C003E10D6 /* BitArrayBuilderTest.m */; };
 		25EED35C1569BE6C003E10D6 /* BitArrayBuilderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35A1569BE6C003E10D6 /* BitArrayBuilderTest.m */; };
+		25EED35F1569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35E1569E028003E10D6 /* ExpandedInformationDecoderTest.m */; };
+		25EED3601569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35E1569E028003E10D6 /* ExpandedInformationDecoderTest.m */; };
+		25EED3671569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */; };
+		25EED3681569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */; };
 		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
@@ -1586,6 +1590,10 @@
 		258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox1TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.m; sourceTree = "<group>"; };
 		25EED3591569BE6C003E10D6 /* BitArrayBuilderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BitArrayBuilderTest.h; path = oned/rss/expanded/BitArrayBuilderTest.h; sourceTree = "<group>"; };
 		25EED35A1569BE6C003E10D6 /* BitArrayBuilderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BitArrayBuilderTest.m; path = oned/rss/expanded/BitArrayBuilderTest.m; sourceTree = "<group>"; };
+		25EED35D1569E028003E10D6 /* ExpandedInformationDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExpandedInformationDecoderTest.h; path = oned/rss/expanded/ExpandedInformationDecoderTest.h; sourceTree = "<group>"; };
+		25EED35E1569E028003E10D6 /* ExpandedInformationDecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExpandedInformationDecoderTest.m; path = oned/rss/expanded/ExpandedInformationDecoderTest.m; sourceTree = "<group>"; };
+		25EED3651569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedImage2binaryTestCase.h; path = oned/rss/expanded/RSSExpandedImage2binaryTestCase.h; sourceTree = "<group>"; };
+		25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedImage2binaryTestCase.m; path = oned/rss/expanded/RSSExpandedImage2binaryTestCase.m; sourceTree = "<group>"; };
 		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
 		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2526,12 +2534,16 @@
 				2545FCE515699AE0008E53D2 /* BinaryUtilTest.m */,
 				25EED3591569BE6C003E10D6 /* BitArrayBuilderTest.h */,
 				25EED35A1569BE6C003E10D6 /* BitArrayBuilderTest.m */,
+				25EED35D1569E028003E10D6 /* ExpandedInformationDecoderTest.h */,
+				25EED35E1569E028003E10D6 /* ExpandedInformationDecoderTest.m */,
 				258FE03E15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.h */,
 				258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */,
 				02A0D94815617E06008F07B6 /* RSSExpandedBlackBox2TestCase.h */,
 				02A0D94915617E06008F07B6 /* RSSExpandedBlackBox2TestCase.m */,
 				02A0D94D15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.h */,
 				02A0D94E15618A17008F07B6 /* RSSExpandedBlackBox3TestCase.m */,
+				25EED3651569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.h */,
+				25EED3661569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m */,
 			);
 			name = expanded;
 			sourceTree = "<group>";
@@ -3322,6 +3334,8 @@
 				2545FCE315699974008E53D2 /* BinaryUtil.m in Sources */,
 				2545FCE715699AE0008E53D2 /* BinaryUtilTest.m in Sources */,
 				25EED35C1569BE6C003E10D6 /* BitArrayBuilderTest.m in Sources */,
+				25EED3601569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */,
+				25EED3681569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3751,6 +3765,8 @@
 				2545FCE215699974008E53D2 /* BinaryUtil.m in Sources */,
 				2545FCE615699AE0008E53D2 /* BinaryUtilTest.m in Sources */,
 				25EED35B1569BE6C003E10D6 /* BitArrayBuilderTest.m in Sources */,
+				25EED35F1569E028003E10D6 /* ExpandedInformationDecoderTest.m in Sources */,
+				25EED3671569EBB8003E10D6 /* RSSExpandedImage2binaryTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -242,6 +242,12 @@
                <Test
                   Identifier = "WifiParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "BitArrayBuilderTest">
+               </Test>
+               <Test
+                  Identifier = "ExpandedInformationDecoderTest">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
