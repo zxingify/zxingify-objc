@@ -320,6 +320,9 @@
                <Test
                   Identifier = "EncoderTestCase">
                </Test>
+               <Test
+                  Identifier = "MaskUtilTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

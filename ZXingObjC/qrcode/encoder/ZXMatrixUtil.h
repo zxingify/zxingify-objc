@@ -3,6 +3,7 @@
 @interface ZXMatrixUtil : NSObject
 
 + (void)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix;
++ (void)clearMatrix:(ZXByteMatrix *)matrix;
 + (void)embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix;
 + (void)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix;
 + (void)maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix;

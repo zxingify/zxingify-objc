@@ -25,6 +25,8 @@
 		0219801E156C198800BBE088 /* EncoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0219801C156C198800BBE088 /* EncoderTestCase.m */; };
 		02198021156C2B7300BBE088 /* MaskUtilTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198020156C2B7200BBE088 /* MaskUtilTestCase.m */; };
 		02198022156C2B7300BBE088 /* MaskUtilTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198020156C2B7200BBE088 /* MaskUtilTestCase.m */; };
+		02198025156C316E00BBE088 /* MatrixUtilTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198024156C316E00BBE088 /* MatrixUtilTestCase.m */; };
+		02198026156C316E00BBE088 /* MatrixUtilTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198024156C316E00BBE088 /* MatrixUtilTestCase.m */; };
 		022AE86C156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE86D156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
@@ -1141,6 +1143,8 @@
 		0219801C156C198800BBE088 /* EncoderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncoderTestCase.m; path = encoder/EncoderTestCase.m; sourceTree = "<group>"; };
 		0219801F156C2B7200BBE088 /* MaskUtilTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MaskUtilTestCase.h; path = encoder/MaskUtilTestCase.h; sourceTree = "<group>"; };
 		02198020156C2B7200BBE088 /* MaskUtilTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MaskUtilTestCase.m; path = encoder/MaskUtilTestCase.m; sourceTree = "<group>"; };
+		02198023156C316E00BBE088 /* MatrixUtilTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MatrixUtilTestCase.h; path = encoder/MatrixUtilTestCase.h; sourceTree = "<group>"; };
+		02198024156C316E00BBE088 /* MatrixUtilTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MatrixUtilTestCase.m; path = encoder/MatrixUtilTestCase.m; sourceTree = "<group>"; };
 		022AE86A156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3X0X_1X_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.h; sourceTree = "<group>"; };
 		022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3X0X_1X_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.m; sourceTree = "<group>"; };
 		022AE86F156AF07600DC9519 /* AnyAIDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyAIDecoderTest.h; path = oned/rss/expanded/decoders/AnyAIDecoderTest.h; sourceTree = "<group>"; };
@@ -1762,6 +1766,8 @@
 				0219801C156C198800BBE088 /* EncoderTestCase.m */,
 				0219801F156C2B7200BBE088 /* MaskUtilTestCase.h */,
 				02198020156C2B7200BBE088 /* MaskUtilTestCase.m */,
+				02198023156C316E00BBE088 /* MatrixUtilTestCase.h */,
+				02198024156C316E00BBE088 /* MatrixUtilTestCase.m */,
 			);
 			name = encoder;
 			sourceTree = "<group>";
@@ -3529,6 +3535,7 @@
 				0219801A156C0CE600BBE088 /* BitVectorTestCase.m in Sources */,
 				0219801E156C198800BBE088 /* EncoderTestCase.m in Sources */,
 				02198022156C2B7300BBE088 /* MaskUtilTestCase.m in Sources */,
+				02198026156C316E00BBE088 /* MatrixUtilTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3983,6 +3990,7 @@
 				02198019156C0CE600BBE088 /* BitVectorTestCase.m in Sources */,
 				0219801D156C198800BBE088 /* EncoderTestCase.m in Sources */,
 				02198021156C2B7300BBE088 /* MaskUtilTestCase.m in Sources */,
+				02198025156C316E00BBE088 /* MatrixUtilTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

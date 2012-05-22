@@ -104,7 +104,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 @interface ZXMatrixUtil ()
 
-+ (void)clearMatrix:(ZXByteMatrix *)matrix;
 + (BOOL)isEmpty:(int)value;
 + (BOOL)isValidValue:(int)value;
 + (void)embedTimingPatterns:(ZXByteMatrix *)matrix;
