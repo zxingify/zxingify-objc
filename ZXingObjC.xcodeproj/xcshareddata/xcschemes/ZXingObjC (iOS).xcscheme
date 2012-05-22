@@ -317,6 +317,9 @@
                <Test
                   Identifier = "BitVectorTestCase">
                </Test>
+               <Test
+                  Identifier = "EncoderTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
