@@ -302,6 +302,9 @@
                <Test
                   Identifier = "QRCodeDecodedBitStreamParserTestCase">
                </Test>
+               <Test
+                  Identifier = "ErrorCorrectionLevelTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
