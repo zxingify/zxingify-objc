@@ -1,6 +1,6 @@
 #import "AbstractDecoderTest.h"
-#import "BinaryUtil.h"
 #import "ZXAbstractExpandedDecoder.h"
+#import "ZXBinaryUtil.h"
 #import "ZXBitArray.h"
 
 const NSString* numeric_10                     = @"..X..XX";
@@ -35,7 +35,7 @@ const NSString* compressedDate_End             = @"X..X.XX.........";
 @implementation AbstractDecoderTest
 
 - (void)assertCorrectBinaryString:(NSString*)binaryString expectedNumber:(NSString*)expectedNumber {
-  ZXBitArray* binary = [BinaryUtil buildBitArrayFromStringWithoutSpaces:binaryString];
+  ZXBitArray* binary = [ZXBinaryUtil buildBitArrayFromStringWithoutSpaces:binaryString];
   ZXAbstractExpandedDecoder* decoder = [ZXAbstractExpandedDecoder createDecoder:binary];
   NSString* result = decoder.parseInformation;
   STAssertEqualObjects(result, expectedNumber, @"Expected %@ to equal %@", result, expectedNumber);
