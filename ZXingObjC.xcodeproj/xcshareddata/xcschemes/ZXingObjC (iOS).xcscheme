@@ -42,6 +42,9 @@
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
                <Test
+                  Identifier = "AbstractDecoderTest">
+               </Test>
+               <Test
                   Identifier = "AbstractNegativeBlackBoxTestCase">
                </Test>
                <Test
@@ -51,6 +54,18 @@
                   Identifier = "AddressBookParsedResultTestCase">
                </Test>
                <Test
+                  Identifier = "AI01_3X0X_1X_DecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AI01_3103_DecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AI01_3202_3203_DecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AnyAIDecoderTest">
+               </Test>
+               <Test
                   Identifier = "AztecBlackBox1TestCase">
                </Test>
                <Test
@@ -58,6 +73,9 @@
                </Test>
                <Test
                   Identifier = "BinaryUtilTest">
+               </Test>
+               <Test
+                  Identifier = "BitArrayBuilderTest">
                </Test>
                <Test
                   Identifier = "BitArrayTestCase">
@@ -132,6 +150,9 @@
                   Identifier = "EmailAddressParsedResultTestCase">
                </Test>
                <Test
+                  Identifier = "ExpandedInformationDecoderTest">
+               </Test>
+               <Test
                   Identifier = "ExpandedProductParsedResultTestCase">
                </Test>
                <Test
@@ -139,6 +160,9 @@
                </Test>
                <Test
                   Identifier = "FalsePositivesBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "FieldParserTest">
                </Test>
                <Test
                   Identifier = "GeoParsedResultTestCase">
@@ -210,6 +234,18 @@
                   Identifier = "RSSExpandedBlackBox3TestCase">
                </Test>
                <Test
+                  Identifier = "RSSExpandedImage2binaryTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2resultTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2stringTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedInternalTestCase">
+               </Test>
+               <Test
                   Identifier = "SMSMMSParsedResultTestCase">
                </Test>
                <Test
@@ -241,39 +277,6 @@
                </Test>
                <Test
                   Identifier = "WifiParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "BitArrayBuilderTest">
-               </Test>
-               <Test
-                  Identifier = "ExpandedInformationDecoderTest">
-               </Test>
-               <Test
-                  Identifier = "RSSExpandedImage2binaryTestCase">
-               </Test>
-               <Test
-                  Identifier = "RSSExpandedImage2resultTestCase">
-               </Test>
-               <Test
-                  Identifier = "RSSExpandedImage2stringTestCase">
-               </Test>
-               <Test
-                  Identifier = "AbstractDecoderTest">
-               </Test>
-               <Test
-                  Identifier = "RSSExpandedInternalTestCase">
-               </Test>
-               <Test
-                  Identifier = "AI01_3103_DecoderTest">
-               </Test>
-               <Test
-                  Identifier = "AI01_3202_3203_DecoderTest">
-               </Test>
-               <Test
-                  Identifier = "AI01_3X0X_1X_DecoderTest">
-               </Test>
-               <Test
-                  Identifier = "AnyAIDecoderTest">
                </Test>
             </SkippedTests>
          </TestableReference>

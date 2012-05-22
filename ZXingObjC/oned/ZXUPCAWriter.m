@@ -10,8 +10,6 @@
 
 @implementation ZXUPCAWriter
 
-static ZXEAN13Writer* subWriter = nil;
-
 - (ZXEAN13Writer *)subWriter {
   static ZXEAN13Writer* subWriter = nil;
   if (!subWriter) {
@@ -31,7 +29,7 @@ static ZXEAN13Writer* subWriter = nil;
                                    reason:[NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]
                                  userInfo:nil];
   }
-  return [subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints];
+  return [self.subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints];
 }
 
 /**
@@ -47,7 +45,7 @@ static ZXEAN13Writer* subWriter = nil;
       sum += ([contents characterAtIndex:i] - '0') * (i % 2 == 0 ? 3 : 1);
     }
 
-    contents = [contents stringByAppendingFormat:@"%", (1000 - sum) % 10];
+    contents = [contents stringByAppendingFormat:@"%d", (1000 - sum) % 10];
   } else if (length != 12) {
      @throw [NSException exceptionWithName:NSInvalidArgumentException
                                     reason:[NSString stringWithFormat:@"Requested contents should be 11 or 12 digits long, but got %d", [contents length]]
