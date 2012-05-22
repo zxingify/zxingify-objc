@@ -1,6 +1,7 @@
 @interface BitSourceBuilder : NSObject
 
-- (void)writeValue:(int)value numBits:(int)numBits;
+- (void)write:(int)value numBits:(int)numBits;
 - (unsigned char*)toByteArray;
+- (int)byteArrayLength;
 
 @end

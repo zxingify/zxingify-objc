@@ -28,7 +28,7 @@
   return self;
 }
 
-- (void)writeValue:(int)value numBits:(int)numBits {
+- (void)write:(int)value numBits:(int)numBits {
   if (numBits <= self.bitsLeftInNextByte) {
     self.nextByte <<= numBits;
     self.nextByte |= value;
@@ -43,16 +43,20 @@
     int numRestOfBits = numBits - bitsToWriteNow;
     int mask = 0xFF >> (8 - bitsToWriteNow);
     int valueToWriteNow = (int)(((unsigned int)value) >> numRestOfBits) & mask;
-    [self writeValue:valueToWriteNow numBits:bitsToWriteNow];
-    [self writeValue:value numBits:numRestOfBits];
+    [self write:valueToWriteNow numBits:bitsToWriteNow];
+    [self write:value numBits:numRestOfBits];
   }
 }
 
 - (unsigned char*)toByteArray {
   if (self.bitsLeftInNextByte < 8) {
-    [self writeValue:0 numBits:self.bitsLeftInNextByte];
+    [self write:0 numBits:self.bitsLeftInNextByte];
   }
   return (unsigned char*)[self.output bytes];
+}
+
+- (int)byteArrayLength {
+  return [self.output length];
 }
 
 @end

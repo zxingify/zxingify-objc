@@ -39,6 +39,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "DecodedBitStreamParserTestCase">
+               </Test>
+               <Test
                   Identifier = "AbstractBlackBoxTestCase">
                </Test>
                <Test
@@ -111,13 +114,16 @@
                   Identifier = "Code128BlackBox3TestCase">
                </Test>
                <Test
+                  Identifier = "DataMaskTestCase">
+               </Test>
+               <Test
                   Identifier = "DataMatrixBlackBox1TestCase">
                </Test>
                <Test
                   Identifier = "DataMatrixBlackBox2TestCase">
                </Test>
                <Test
-                  Identifier = "DecodedBitStreamParserTestCase">
+                  Identifier = "DataMatrixDecodedBitStreamParserTestCase">
                </Test>
                <Test
                   Identifier = "EAN8BlackBox1TestCase">
@@ -270,19 +276,10 @@
                   Identifier = "UPCABlackBox6BlurryTestCase">
                </Test>
                <Test
-                  Identifier = "URIParsedResultTestCase">
-               </Test>
-               <Test
-                  Identifier = "WifiParsedResultTestCase">
-               </Test>
-               <Test
                   Identifier = "UPCAWriterTestCase">
                </Test>
                <Test
                   Identifier = "UPCEANExtensionBlackBox1TestCase">
-               </Test>
-               <Test
-                  Identifier = "EAN13BlackBox4TestCase">
                </Test>
                <Test
                   Identifier = "UPCEBlackBox1TestCase">
@@ -292,6 +289,15 @@
                </Test>
                <Test
                   Identifier = "UPCEBlackBox3ReflectiveTestCase">
+               </Test>
+               <Test
+                  Identifier = "URIParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "WifiParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox4TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

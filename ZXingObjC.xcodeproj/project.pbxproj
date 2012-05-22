@@ -17,6 +17,8 @@
 		022AE872156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
 		022AE875156AF26C00DC9519 /* FieldParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE874156AF26C00DC9519 /* FieldParserTest.m */; };
 		022AE876156AF26C00DC9519 /* FieldParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE874156AF26C00DC9519 /* FieldParserTest.m */; };
+		022AE90B156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE90A156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m */; };
+		022AE90C156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE90A156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m */; };
 		0237901E15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */; };
 		0237901F15655FE6008E42BC /* AddressBookParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */; };
 		0250D79E1545EE5900752941 /* ZXAztecDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCD8115129BD0009E6549 /* ZXAztecDetectorResult.m */; };
@@ -1117,6 +1119,8 @@
 		022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyAIDecoderTest.m; path = oned/rss/expanded/decoders/AnyAIDecoderTest.m; sourceTree = "<group>"; };
 		022AE873156AF26C00DC9519 /* FieldParserTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FieldParserTest.h; path = oned/rss/expanded/decoders/FieldParserTest.h; sourceTree = "<group>"; };
 		022AE874156AF26C00DC9519 /* FieldParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FieldParserTest.m; path = oned/rss/expanded/decoders/FieldParserTest.m; sourceTree = "<group>"; };
+		022AE909156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRCodeDecodedBitStreamParserTestCase.h; path = decoder/QRCodeDecodedBitStreamParserTestCase.h; sourceTree = "<group>"; };
+		022AE90A156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QRCodeDecodedBitStreamParserTestCase.m; path = decoder/QRCodeDecodedBitStreamParserTestCase.m; sourceTree = "<group>"; };
 		0237901C15655FE6008E42BC /* AddressBookParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressBookParsedResultTestCase.h; path = client/result/AddressBookParsedResultTestCase.h; sourceTree = "<group>"; };
 		0237901D15655FE6008E42BC /* AddressBookParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddressBookParsedResultTestCase.m; path = client/result/AddressBookParsedResultTestCase.m; sourceTree = "<group>"; };
 		0250D9001545FC8B00752941 /* ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
@@ -1568,7 +1572,7 @@
 		2545FCC815696A5B008E53D2 /* ReedSolomonDecoderQRCodeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReedSolomonDecoderQRCodeTestCase.m; sourceTree = "<group>"; };
 		2545FCCB15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonEncoderQRCodeTestCase.h; sourceTree = "<group>"; };
 		2545FCCC15696B7E008E53D2 /* ReedSolomonEncoderQRCodeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReedSolomonEncoderQRCodeTestCase.m; sourceTree = "<group>"; };
-		2545FCD015696E09008E53D2 /* DataMatrixDecodedBitStreamParserTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; name = DataMatrixDecodedBitStreamParserTestCase.h; path = datamatrix/decoder/DataMatrixDecodedBitStreamParserTestCase.h; sourceTree = "<group>"; };
+		2545FCD015696E09008E53D2 /* DataMatrixDecodedBitStreamParserTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataMatrixDecodedBitStreamParserTestCase.h; path = datamatrix/decoder/DataMatrixDecodedBitStreamParserTestCase.h; sourceTree = "<group>"; };
 		2545FCD115696E09008E53D2 /* DataMatrixDecodedBitStreamParserTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataMatrixDecodedBitStreamParserTestCase.m; path = datamatrix/decoder/DataMatrixDecodedBitStreamParserTestCase.m; sourceTree = "<group>"; };
 		2545FCD4156995D1008E53D2 /* EAN8WriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8WriterTestCase.h; path = oned/EAN8WriterTestCase.h; sourceTree = "<group>"; };
 		2545FCD5156995D1008E53D2 /* EAN8WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAN8WriterTestCase.m; path = oned/EAN8WriterTestCase.m; sourceTree = "<group>"; };
@@ -2650,6 +2654,8 @@
 			children = (
 				25EED39B156B35D9003E10D6 /* DataMaskTestCase.h */,
 				25EED39C156B35D9003E10D6 /* DataMaskTestCase.m */,
+				022AE909156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.h */,
+				022AE90A156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m */,
 			);
 			name = decoder;
 			sourceTree = "<group>";
@@ -3457,6 +3463,7 @@
 				25EED395156B351C003E10D6 /* UPCEBlackBox2TestCase.m in Sources */,
 				25EED399156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 				25EED39E156B35D9003E10D6 /* DataMaskTestCase.m in Sources */,
+				022AE90C156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3903,6 +3910,7 @@
 				25EED394156B351C003E10D6 /* UPCEBlackBox2TestCase.m in Sources */,
 				25EED398156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 				25EED39D156B35D9003E10D6 /* DataMaskTestCase.m in Sources */,
+				022AE90B156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
