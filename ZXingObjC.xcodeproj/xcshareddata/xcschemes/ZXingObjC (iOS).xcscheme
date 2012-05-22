@@ -308,6 +308,9 @@
                <Test
                   Identifier = "FormatInformationTestCase">
                </Test>
+               <Test
+                  Identifier = "ModeTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
