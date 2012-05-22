@@ -21,6 +21,8 @@
 		02198014156C0A1900BBE088 /* VersionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198012156C0A1900BBE088 /* VersionTestCase.m */; };
 		02198019156C0CE600BBE088 /* BitVectorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198018156C0CE600BBE088 /* BitVectorTestCase.m */; };
 		0219801A156C0CE600BBE088 /* BitVectorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198018156C0CE600BBE088 /* BitVectorTestCase.m */; };
+		0219801D156C198800BBE088 /* EncoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0219801C156C198800BBE088 /* EncoderTestCase.m */; };
+		0219801E156C198800BBE088 /* EncoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0219801C156C198800BBE088 /* EncoderTestCase.m */; };
 		022AE86C156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE86D156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
@@ -1133,6 +1135,8 @@
 		02198012156C0A1900BBE088 /* VersionTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VersionTestCase.m; path = decoder/VersionTestCase.m; sourceTree = "<group>"; };
 		02198017156C0CE600BBE088 /* BitVectorTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BitVectorTestCase.h; path = encoder/BitVectorTestCase.h; sourceTree = "<group>"; };
 		02198018156C0CE600BBE088 /* BitVectorTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BitVectorTestCase.m; path = encoder/BitVectorTestCase.m; sourceTree = "<group>"; };
+		0219801B156C198800BBE088 /* EncoderTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncoderTestCase.h; path = encoder/EncoderTestCase.h; sourceTree = "<group>"; };
+		0219801C156C198800BBE088 /* EncoderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncoderTestCase.m; path = encoder/EncoderTestCase.m; sourceTree = "<group>"; };
 		022AE86A156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3X0X_1X_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.h; sourceTree = "<group>"; };
 		022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3X0X_1X_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.m; sourceTree = "<group>"; };
 		022AE86F156AF07600DC9519 /* AnyAIDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyAIDecoderTest.h; path = oned/rss/expanded/decoders/AnyAIDecoderTest.h; sourceTree = "<group>"; };
@@ -1750,6 +1754,8 @@
 			children = (
 				02198017156C0CE600BBE088 /* BitVectorTestCase.h */,
 				02198018156C0CE600BBE088 /* BitVectorTestCase.m */,
+				0219801B156C198800BBE088 /* EncoderTestCase.h */,
+				0219801C156C198800BBE088 /* EncoderTestCase.m */,
 			);
 			name = encoder;
 			sourceTree = "<group>";
@@ -3515,6 +3521,7 @@
 				02198010156C08A300BBE088 /* ModeTestCase.m in Sources */,
 				02198014156C0A1900BBE088 /* VersionTestCase.m in Sources */,
 				0219801A156C0CE600BBE088 /* BitVectorTestCase.m in Sources */,
+				0219801E156C198800BBE088 /* EncoderTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3967,6 +3974,7 @@
 				0219800F156C08A300BBE088 /* ModeTestCase.m in Sources */,
 				02198013156C0A1900BBE088 /* VersionTestCase.m in Sources */,
 				02198019156C0CE600BBE088 /* BitVectorTestCase.m in Sources */,
+				0219801D156C198800BBE088 /* EncoderTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

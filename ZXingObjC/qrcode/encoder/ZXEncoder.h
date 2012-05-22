@@ -1,5 +1,7 @@
 @class ZXBitArray, ZXEncodeHints, ZXErrorCorrectionLevel, ZXMode, ZXQRCode;
 
+extern const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING;
+
 @interface ZXEncoder : NSObject
 
 + (void)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel qrCode:(ZXQRCode *)qrCode;

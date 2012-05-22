@@ -314,6 +314,9 @@
                <Test
                   Identifier = "VersionTestCase">
                </Test>
+               <Test
+                  Identifier = "BitVectorTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

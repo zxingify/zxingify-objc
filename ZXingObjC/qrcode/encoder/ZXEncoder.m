@@ -441,7 +441,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   while (i < length) {
     int code1 = [self alphanumericCode:[content characterAtIndex:i]];
     if (code1 == -1) {
-      @throw [[[ZXWriterException alloc] init] autorelease];
+      @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Writer Exception" userInfo:nil];
     }
     if (i + 1 < length) {
       int code2 = [self alphanumericCode:[content characterAtIndex:i + 1]];
