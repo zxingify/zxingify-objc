@@ -305,6 +305,9 @@
                <Test
                   Identifier = "ErrorCorrectionLevelTestCase">
                </Test>
+               <Test
+                  Identifier = "FormatInformationTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
