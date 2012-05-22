@@ -299,6 +299,9 @@
                <Test
                   Identifier = "EAN13BlackBox4TestCase">
                </Test>
+               <Test
+                  Identifier = "QRCodeDecodedBitStreamParserTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

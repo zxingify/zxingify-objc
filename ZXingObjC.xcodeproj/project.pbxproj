@@ -11,6 +11,8 @@
 		02070C59155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */; };
 		02070C5D155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
 		02070C5E155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */; };
+		02198006156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198005156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m */; };
+		02198007156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198005156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m */; };
 		022AE86C156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE86D156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
@@ -1113,6 +1115,8 @@
 		02070C57155C678C00E3BBFE /* QRCodeBlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox3TestCase.m; sourceTree = "<group>"; };
 		02070C5B155C681A00E3BBFE /* QRCodeBlackBox4TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeBlackBox4TestCase.h; sourceTree = "<group>"; };
 		02070C5C155C681A00E3BBFE /* QRCodeBlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox4TestCase.m; sourceTree = "<group>"; };
+		02198004156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ErrorCorrectionLevelTestCase.h; path = decoder/ErrorCorrectionLevelTestCase.h; sourceTree = "<group>"; };
+		02198005156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ErrorCorrectionLevelTestCase.m; path = decoder/ErrorCorrectionLevelTestCase.m; sourceTree = "<group>"; };
 		022AE86A156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3X0X_1X_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.h; sourceTree = "<group>"; };
 		022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3X0X_1X_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.m; sourceTree = "<group>"; };
 		022AE86F156AF07600DC9519 /* AnyAIDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyAIDecoderTest.h; path = oned/rss/expanded/decoders/AnyAIDecoderTest.h; sourceTree = "<group>"; };
@@ -2654,6 +2658,8 @@
 			children = (
 				25EED39B156B35D9003E10D6 /* DataMaskTestCase.h */,
 				25EED39C156B35D9003E10D6 /* DataMaskTestCase.m */,
+				02198004156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.h */,
+				02198005156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m */,
 				022AE909156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.h */,
 				022AE90A156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m */,
 			);
@@ -3464,6 +3470,7 @@
 				25EED399156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 				25EED39E156B35D9003E10D6 /* DataMaskTestCase.m in Sources */,
 				022AE90C156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m in Sources */,
+				02198007156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3911,6 +3918,7 @@
 				25EED398156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 				25EED39D156B35D9003E10D6 /* DataMaskTestCase.m in Sources */,
 				022AE90B156BEED400DC9519 /* QRCodeDecodedBitStreamParserTestCase.m in Sources */,
+				02198006156BFC0A00BBE088 /* ErrorCorrectionLevelTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
