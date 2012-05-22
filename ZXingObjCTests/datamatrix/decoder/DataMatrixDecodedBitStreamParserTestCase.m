@@ -1,8 +1,8 @@
-#import "DecodedBitStreamParserTestCase.h"
+#import "DataMatrixDecodedBitStreamParserTestCase.h"
 #import "ZXDataMatrixDecodedBitStreamParser.h"
 #import "ZXDecoderResult.h"
 
-@implementation DecodedBitStreamParserTestCase
+@implementation DataMatrixDecodedBitStreamParserTestCase
 
 - (void)testAsciiStandardDecode {
   // ASCII characters 0-127 are encoded as the value + 1

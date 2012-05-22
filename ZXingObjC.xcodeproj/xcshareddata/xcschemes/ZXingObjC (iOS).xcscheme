@@ -290,6 +290,9 @@
                <Test
                   Identifier = "UPCEBlackBox2TestCase">
                </Test>
+               <Test
+                  Identifier = "UPCEBlackBox3ReflectiveTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
