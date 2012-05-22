@@ -278,6 +278,9 @@
                <Test
                   Identifier = "WifiParsedResultTestCase">
                </Test>
+               <Test
+                  Identifier = "UPCAWriterTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

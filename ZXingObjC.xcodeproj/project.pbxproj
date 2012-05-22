@@ -1075,6 +1075,8 @@
 		25EED3811569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */; };
 		25EED387156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */; };
 		25EED388156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */; };
+		25EED38C156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */; };
+		25EED38D156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */; };
 		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
@@ -1634,6 +1636,8 @@
 		25EED37F1569FB8D003E10D6 /* AI01_3202_3203_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3202_3203_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3202_3203_DecoderTest.m; sourceTree = "<group>"; };
 		25EED385156B300C003E10D6 /* UPCAWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCAWriterTestCase.h; path = oned/UPCAWriterTestCase.h; sourceTree = "<group>"; };
 		25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCAWriterTestCase.m; path = oned/UPCAWriterTestCase.m; sourceTree = "<group>"; };
+		25EED38A156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEANExtensionBlackBox1TestCase.h; path = oned/UPCEANExtensionBlackBox1TestCase.h; sourceTree = "<group>"; };
+		25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCEANExtensionBlackBox1TestCase.m; path = oned/UPCEANExtensionBlackBox1TestCase.m; sourceTree = "<group>"; };
 		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
 		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2516,6 +2520,8 @@
 				026820B31562FA40008F42C2 /* UPCABlackBox6BlurryTestCase.m */,
 				25EED385156B300C003E10D6 /* UPCAWriterTestCase.h */,
 				25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */,
+				25EED38A156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.h */,
+				25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -3414,6 +3420,7 @@
 				022AE872156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */,
 				022AE876156AF26C00DC9519 /* FieldParserTest.m in Sources */,
 				25EED388156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */,
+				25EED38D156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3855,6 +3862,7 @@
 				022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */,
 				022AE875156AF26C00DC9519 /* FieldParserTest.m in Sources */,
 				25EED387156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */,
+				25EED38C156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
