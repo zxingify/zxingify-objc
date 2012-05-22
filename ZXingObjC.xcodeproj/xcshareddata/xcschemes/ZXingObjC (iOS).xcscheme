@@ -135,9 +135,6 @@
                   Identifier = "EAN13BlackBox3TestCase">
                </Test>
                <Test
-                  Identifier = "EAN13BlackBox4TestCase">
-               </Test>
-               <Test
                   Identifier = "EAN13BlackBox5BlurryTestCase">
                </Test>
                <Test
@@ -280,6 +277,18 @@
                </Test>
                <Test
                   Identifier = "UPCAWriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEANExtensionBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEBlackBox2TestCase">
                </Test>
             </SkippedTests>
          </TestableReference>

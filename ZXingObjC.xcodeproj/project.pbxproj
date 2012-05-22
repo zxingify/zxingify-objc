@@ -1077,6 +1077,12 @@
 		25EED388156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */; };
 		25EED38C156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */; };
 		25EED38D156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */; };
+		25EED390156B34AC003E10D6 /* UPCEBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED38F156B34AA003E10D6 /* UPCEBlackBox1TestCase.m */; };
+		25EED391156B34AC003E10D6 /* UPCEBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED38F156B34AA003E10D6 /* UPCEBlackBox1TestCase.m */; };
+		25EED394156B351C003E10D6 /* UPCEBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED393156B3518003E10D6 /* UPCEBlackBox2TestCase.m */; };
+		25EED395156B351C003E10D6 /* UPCEBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED393156B3518003E10D6 /* UPCEBlackBox2TestCase.m */; };
+		25EED398156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED397156B355F003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m */; };
+		25EED399156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED397156B355F003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m */; };
 		25FCC9D11568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 		25FCC9D21568A3E500FF0E7A /* PerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */; };
 /* End PBXBuildFile section */
@@ -1638,6 +1644,12 @@
 		25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCAWriterTestCase.m; path = oned/UPCAWriterTestCase.m; sourceTree = "<group>"; };
 		25EED38A156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEANExtensionBlackBox1TestCase.h; path = oned/UPCEANExtensionBlackBox1TestCase.h; sourceTree = "<group>"; };
 		25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCEANExtensionBlackBox1TestCase.m; path = oned/UPCEANExtensionBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25EED38E156B34A8003E10D6 /* UPCEBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEBlackBox1TestCase.h; path = oned/UPCEBlackBox1TestCase.h; sourceTree = "<group>"; };
+		25EED38F156B34AA003E10D6 /* UPCEBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCEBlackBox1TestCase.m; path = oned/UPCEBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25EED392156B3516003E10D6 /* UPCEBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEBlackBox2TestCase.h; path = oned/UPCEBlackBox2TestCase.h; sourceTree = "<group>"; };
+		25EED393156B3518003E10D6 /* UPCEBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCEBlackBox2TestCase.m; path = oned/UPCEBlackBox2TestCase.m; sourceTree = "<group>"; };
+		25EED396156B355C003E10D6 /* UPCEBlackBox3ReflectiveTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEBlackBox3ReflectiveTestCase.h; path = oned/UPCEBlackBox3ReflectiveTestCase.h; sourceTree = "<group>"; };
+		25EED397156B355F003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPCEBlackBox3ReflectiveTestCase.m; path = oned/UPCEBlackBox3ReflectiveTestCase.m; sourceTree = "<group>"; };
 		25FCC9CF1568A3E500FF0E7A /* PerspectiveTransformTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransformTestCase.h; sourceTree = "<group>"; };
 		25FCC9D01568A3E500FF0E7A /* PerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2522,6 +2534,12 @@
 				25EED386156B300C003E10D6 /* UPCAWriterTestCase.m */,
 				25EED38A156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.h */,
 				25EED38B156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m */,
+				25EED38E156B34A8003E10D6 /* UPCEBlackBox1TestCase.h */,
+				25EED38F156B34AA003E10D6 /* UPCEBlackBox1TestCase.m */,
+				25EED392156B3516003E10D6 /* UPCEBlackBox2TestCase.h */,
+				25EED393156B3518003E10D6 /* UPCEBlackBox2TestCase.m */,
+				25EED396156B355C003E10D6 /* UPCEBlackBox3ReflectiveTestCase.h */,
+				25EED397156B355F003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m */,
 			);
 			name = oned;
 			sourceTree = "<group>";
@@ -3421,6 +3439,9 @@
 				022AE876156AF26C00DC9519 /* FieldParserTest.m in Sources */,
 				25EED388156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */,
 				25EED38D156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */,
+				25EED391156B34AC003E10D6 /* UPCEBlackBox1TestCase.m in Sources */,
+				25EED395156B351C003E10D6 /* UPCEBlackBox2TestCase.m in Sources */,
+				25EED399156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3863,6 +3884,9 @@
 				022AE875156AF26C00DC9519 /* FieldParserTest.m in Sources */,
 				25EED387156B300C003E10D6 /* UPCAWriterTestCase.m in Sources */,
 				25EED38C156B32E0003E10D6 /* UPCEANExtensionBlackBox1TestCase.m in Sources */,
+				25EED390156B34AC003E10D6 /* UPCEBlackBox1TestCase.m in Sources */,
+				25EED394156B351C003E10D6 /* UPCEBlackBox2TestCase.m in Sources */,
+				25EED398156B3561003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
