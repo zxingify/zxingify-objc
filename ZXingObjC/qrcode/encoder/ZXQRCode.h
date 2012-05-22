@@ -15,7 +15,7 @@ extern int const NUM_MASK_PATTERNS;
 @property (nonatomic, assign) int numRSBlocks;
 @property (nonatomic, retain) ZXByteMatrix * matrix;
 
-- (int)at:(int)x y:(int)y;
+- (int)atX:(int)x y:(int)y;
 - (BOOL)isValid;
 + (BOOL)isValidMaskPattern:(int)maskPattern;
 

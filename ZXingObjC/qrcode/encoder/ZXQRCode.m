@@ -43,7 +43,7 @@ int const NUM_MASK_PATTERNS = 8;
   [super dealloc];
 }
 
-- (int)at:(int)x y:(int)y {
+- (int)atX:(int)x y:(int)y {
   int value = [self.matrix getX:x y:y];
   if (!(value == 0 || value == 1)) {
     [NSException raise:NSInternalInconsistencyException format:@"Bad value"];
@@ -67,7 +67,7 @@ int const NUM_MASK_PATTERNS = 8;
   [result appendFormat:@"\n numECBytes: %d", self.numECBytes];
   [result appendFormat:@"\n numRSBlocks: %d", self.numRSBlocks];
   if (self.matrix == nil) {
-    [result appendString:@"\n matrix: null\n"];
+    [result appendString:@"\n matrix: (null)\n"];
   } else {
     [result appendFormat:@"\n matrix:\n%@", [self.matrix description]];
   }
