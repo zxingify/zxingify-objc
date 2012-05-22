@@ -19,6 +19,8 @@
 		02198010156C08A300BBE088 /* ModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0219800E156C08A300BBE088 /* ModeTestCase.m */; };
 		02198013156C0A1900BBE088 /* VersionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198012156C0A1900BBE088 /* VersionTestCase.m */; };
 		02198014156C0A1900BBE088 /* VersionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198012156C0A1900BBE088 /* VersionTestCase.m */; };
+		02198019156C0CE600BBE088 /* BitVectorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198018156C0CE600BBE088 /* BitVectorTestCase.m */; };
+		0219801A156C0CE600BBE088 /* BitVectorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02198018156C0CE600BBE088 /* BitVectorTestCase.m */; };
 		022AE86C156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE86D156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */; };
 		022AE871156AF07600DC9519 /* AnyAIDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 022AE870156AF07600DC9519 /* AnyAIDecoderTest.m */; };
@@ -1129,6 +1131,8 @@
 		0219800E156C08A300BBE088 /* ModeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModeTestCase.m; path = decoder/ModeTestCase.m; sourceTree = "<group>"; };
 		02198011156C0A1900BBE088 /* VersionTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VersionTestCase.h; path = decoder/VersionTestCase.h; sourceTree = "<group>"; };
 		02198012156C0A1900BBE088 /* VersionTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VersionTestCase.m; path = decoder/VersionTestCase.m; sourceTree = "<group>"; };
+		02198017156C0CE600BBE088 /* BitVectorTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BitVectorTestCase.h; path = encoder/BitVectorTestCase.h; sourceTree = "<group>"; };
+		02198018156C0CE600BBE088 /* BitVectorTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BitVectorTestCase.m; path = encoder/BitVectorTestCase.m; sourceTree = "<group>"; };
 		022AE86A156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AI01_3X0X_1X_DecoderTest.h; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.h; sourceTree = "<group>"; };
 		022AE86B156AEDF300DC9519 /* AI01_3X0X_1X_DecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AI01_3X0X_1X_DecoderTest.m; path = oned/rss/expanded/decoders/AI01_3X0X_1X_DecoderTest.m; sourceTree = "<group>"; };
 		022AE86F156AF07600DC9519 /* AnyAIDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyAIDecoderTest.h; path = oned/rss/expanded/decoders/AnyAIDecoderTest.h; sourceTree = "<group>"; };
@@ -1734,6 +1738,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02198015156C0CBB00BBE088 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = detector;
+			sourceTree = "<group>";
+		};
+		02198016156C0CC700BBE088 /* encoder */ = {
+			isa = PBXGroup;
+			children = (
+				02198017156C0CE600BBE088 /* BitVectorTestCase.h */,
+				02198018156C0CE600BBE088 /* BitVectorTestCase.m */,
+			);
+			name = encoder;
+			sourceTree = "<group>";
+		};
 		0237901915655FC3008E42BC /* client */ = {
 			isa = PBXGroup;
 			children = (
@@ -2462,6 +2482,8 @@
 			isa = PBXGroup;
 			children = (
 				25EED39A156B35C1003E10D6 /* decoder */,
+				02198015156C0CBB00BBE088 /* detector */,
+				02198016156C0CC700BBE088 /* encoder */,
 				02FB06E815475B6F0067923D /* QRCodeBlackBox1TestCase.h */,
 				02FB06E915475B6F0067923D /* QRCodeBlackBox1TestCase.m */,
 				029A9BC11551C90B00CCADE7 /* QRCodeBlackBox2TestCase.h */,
@@ -3492,6 +3514,7 @@
 				0219800C156C059300BBE088 /* FormatInformationTestCase.m in Sources */,
 				02198010156C08A300BBE088 /* ModeTestCase.m in Sources */,
 				02198014156C0A1900BBE088 /* VersionTestCase.m in Sources */,
+				0219801A156C0CE600BBE088 /* BitVectorTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3943,6 +3966,7 @@
 				0219800B156C059300BBE088 /* FormatInformationTestCase.m in Sources */,
 				0219800F156C08A300BBE088 /* ModeTestCase.m in Sources */,
 				02198013156C0A1900BBE088 /* VersionTestCase.m in Sources */,
+				02198019156C0CE600BBE088 /* BitVectorTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

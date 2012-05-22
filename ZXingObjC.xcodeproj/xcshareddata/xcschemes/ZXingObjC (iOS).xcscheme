@@ -311,6 +311,9 @@
                <Test
                   Identifier = "ModeTestCase">
                </Test>
+               <Test
+                  Identifier = "VersionTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
