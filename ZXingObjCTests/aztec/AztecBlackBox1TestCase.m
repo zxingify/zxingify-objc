@@ -1,6 +1,5 @@
 #import "AztecBlackBox1TestCase.h"
 #import "ZXAztecReader.h"
-#import "ZXBarcodeFormat.h"
 
 @implementation AztecBlackBox1TestCase
 

@@ -1,5 +1,4 @@
 #import "UPCABlackBox6BlurryTestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation UPCABlackBox6BlurryTestCase

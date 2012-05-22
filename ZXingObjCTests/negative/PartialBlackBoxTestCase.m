@@ -1,5 +1,4 @@
 #import "PartialBlackBoxTestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 /**

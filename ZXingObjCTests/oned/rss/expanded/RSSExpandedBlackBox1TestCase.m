@@ -1,5 +1,4 @@
 #import "RSSExpandedBlackBox1TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation RSSExpandedBlackBox1TestCase

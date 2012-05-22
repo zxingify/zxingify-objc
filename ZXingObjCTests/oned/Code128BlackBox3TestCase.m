@@ -1,5 +1,4 @@
 #import "Code128BlackBox3TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation Code128BlackBox3TestCase

@@ -1,5 +1,4 @@
 #import "PDF417BlackBox1TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation PDF417BlackBox1TestCase

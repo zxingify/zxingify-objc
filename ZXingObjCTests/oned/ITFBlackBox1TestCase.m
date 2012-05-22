@@ -1,5 +1,4 @@
 #import "ITFBlackBox1TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation ITFBlackBox1TestCase

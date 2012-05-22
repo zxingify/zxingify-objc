@@ -1,5 +1,4 @@
 #import "DataMatrixBlackBox2TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation DataMatrixBlackBox2TestCase

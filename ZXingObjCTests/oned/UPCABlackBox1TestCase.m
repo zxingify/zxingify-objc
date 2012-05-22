@@ -1,5 +1,4 @@
 #import "UPCABlackBox1TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation UPCABlackBox1TestCase

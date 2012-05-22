@@ -1,5 +1,4 @@
 #import "EAN13BlackBox1TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation EAN13BlackBox1TestCase

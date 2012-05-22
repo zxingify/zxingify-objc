@@ -1,5 +1,4 @@
 #import "FalsePositives2BlackBoxTestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation FalsePositives2BlackBoxTestCase

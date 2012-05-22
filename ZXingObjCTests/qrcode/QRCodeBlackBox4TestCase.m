@@ -1,5 +1,4 @@
 #import "QRCodeBlackBox4TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXMultiFormatReader.h"
 
 @implementation QRCodeBlackBox4TestCase

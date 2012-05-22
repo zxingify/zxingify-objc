@@ -1,5 +1,4 @@
 #import "Code39ExtendedBlackBox2TestCase.h"
-#import "ZXBarcodeFormat.h"
 #import "ZXCode39Reader.h"
 
 @implementation Code39ExtendedBlackBox2TestCase
