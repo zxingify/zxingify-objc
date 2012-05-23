@@ -1,6 +1,6 @@
 #import "ZXBitArray.h"
 #import "ZXCodaBarReader.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
@@ -40,8 +40,12 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 @implementation ZXCodaBarReader
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   NSMutableArray * start = [self findAsteriskPattern:row];
+  if (!start) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = [row size];
@@ -60,11 +64,15 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
       counters[i] = 0;
     }
 
-    [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
+    if (![ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen]) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
 
     unichar decodedChar = [self toNarrowWidePattern:counters];
     if (decodedChar == '!') {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
     [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
@@ -84,14 +92,17 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
   if (nextStart != end && (whiteSpaceAfterEnd / 2 < lastPatternSize)) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   if ([result length] < 2) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   unichar startchar = [result characterAtIndex:0];
   if (![self arrayContains:(unsigned char*)STARTEND_ENCODING length:8 key:startchar]) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   for (int k = 1; k < [result length]; k++) {
@@ -107,7 +118,8 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
     [result deleteCharactersInRange:NSMakeRange(0, 1)];
   } else {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
@@ -169,7 +181,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 - (BOOL) arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key {

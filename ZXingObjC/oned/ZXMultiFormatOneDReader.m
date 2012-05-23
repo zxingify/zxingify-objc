@@ -3,6 +3,7 @@
 #import "ZXCode39Reader.h"
 #import "ZXCode93Reader.h"
 #import "ZXDecodeHints.h"
+#import "ZXErrors.h"
 #import "ZXITFReader.h"
 #import "ZXMultiFormatOneDReader.h"
 #import "ZXMultiFormatUPCEANReader.h"
@@ -80,15 +81,16 @@
   [super dealloc];
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   for (ZXOneDReader * reader in self.readers) {
-    @try {
-      return [reader decodeRow:rowNumber row:row hints:hints];
-    } @catch (ZXReaderException * re) {
+    ZXResult* result = [reader decodeRow:rowNumber row:row hints:hints error:error];
+    if (result) {
+      return result;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
 - (void)reset {

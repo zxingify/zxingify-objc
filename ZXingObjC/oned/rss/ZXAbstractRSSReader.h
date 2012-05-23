@@ -1,4 +1,3 @@
-#import "ZXNotFoundException.h"
 #import "ZXOneDReader.h"
 
 typedef enum {

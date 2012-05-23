@@ -1,5 +1,5 @@
 #import "ZXBitArray.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 #import "ZXUPCEANExtensionSupport.h"
@@ -22,11 +22,17 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
 @implementation ZXUPCEANExtensionSupport
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset {
-  NSArray * extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN patternLen:sizeof(EXTENSION_START_PATTERN)/sizeof(int)];
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError **)error {
+  NSArray * extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN patternLen:sizeof(EXTENSION_START_PATTERN)/sizeof(int) error:error];
+  if (!extensionStartRange) {
+    return nil;
+  }
 
   NSMutableString * result = [NSMutableString string];
-  int end = [self decodeMiddle:row startRange:extensionStartRange result:result];
+  int end = [self decodeMiddle:row startRange:extensionStartRange result:result error:error];
+  if (end == -1) {
+    return nil;
+  }
 
   NSMutableDictionary * extensionData = [self parseExtensionString:result];
 
@@ -43,7 +49,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return extensionResult;
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result error:(NSError **)error {
   const int countersLen = 4;
   int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
@@ -52,7 +58,10 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   int lgPatternFound = 0;
 
   for (int x = 0; x < 5 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
+    if (bestMatch == -1) {
+      return -1;
+    }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
     for (int i = 0; i < countersLen; i++) {
       rowOffset += counters[i];
@@ -71,12 +80,17 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   }
 
   if (result.length != 5) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return -1;
   }
 
   int checkDigit = [self determineCheckDigit:lgPatternFound];
-  if ([self extensionChecksum:result] != checkDigit) {
-    @throw [ZXNotFoundException notFoundInstance];
+  if (checkDigit == -1) {
+    if (error) *error = NotFoundErrorInstance();
+    return -1;
+  } else if ([self extensionChecksum:result] != checkDigit) {
+    if (error) *error = NotFoundErrorInstance();
+    return -1;
   }
 
   return rowOffset;
@@ -102,9 +116,8 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
       return d;
     }
   }
-  @throw [ZXNotFoundException notFoundInstance];
+  return -1;
 }
-
 
 - (NSMutableDictionary *)parseExtensionString:(NSString *)raw {
   ZXResultMetadataType type;

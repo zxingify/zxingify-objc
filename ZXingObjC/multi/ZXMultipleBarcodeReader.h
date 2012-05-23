@@ -1,5 +1,4 @@
 #import "ZXBinaryBitmap.h"
-#import "ZXNotFoundException.h"
 #import "ZXResult.h"
 
 /**
@@ -10,7 +9,7 @@
 
 @protocol ZXMultipleBarcodeReader <NSObject>
 
-- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image;
-- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints;
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image error:(NSError**)error;
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError**)error;
 
 @end

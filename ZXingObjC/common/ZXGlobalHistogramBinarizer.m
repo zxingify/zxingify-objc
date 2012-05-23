@@ -1,8 +1,8 @@
 #import "ZXGlobalHistogramBinarizer.h"
 #import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
+#import "ZXErrors.h"
 #import "ZXLuminanceSource.h"
-#import "ZXNotFoundException.h"
 
 int const LUMINANCE_BITS = 5;
 int const LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
@@ -45,7 +45,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   [super dealloc];
 }
 
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row {
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error {
   ZXLuminanceSource * source = self.luminanceSource;
   int width = source.width;
   if (row == nil || row.size < width) {
@@ -63,6 +63,10 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
                             withObject:[NSNumber numberWithInt:[[localBuckets objectAtIndex:pixel >> LUMINANCE_SHIFT] intValue] + 1]];
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
+  if (blackPoint == -1) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   int left = localLuminances[0] & 0xff;
   int center = localLuminances[1] & 0xff;
@@ -79,7 +83,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   return row;
 }
 
-- (ZXBitMatrix *)blackMatrix {
+- (ZXBitMatrix *)blackMatrixWithError:(NSError**)error {
   ZXLuminanceSource * source = self.luminanceSource;
   int width = source.width;
   int height = source.height;
@@ -98,6 +102,10 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     }
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
+  if (blackPoint == -1) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   unsigned char * localLuminances = source.matrix;
   for (int y = 0; y < height; y++) {
@@ -172,7 +180,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   }
 
   if (secondPeak - firstPeak <= numBuckets >> 4) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
 
   int bestValley = secondPeak - 1;

@@ -31,6 +31,6 @@ extern const NSString* compressedDate_End;
 
 @interface AbstractDecoderTest : SenTestCase
 
-- (void)assertCorrectBinaryString:(NSString*)binaryString expectedNumber:(NSString*)expectedNumber;
+- (BOOL)assertCorrectBinaryString:(NSString*)binaryString expectedNumber:(NSString*)expectedNumber error:(NSError**)error;
 
 @end

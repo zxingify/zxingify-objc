@@ -1,6 +1,6 @@
+#import "ZXErrors.h"
 #import "ZXGenericMultipleBarcodeReader.h"
 #import "ZXReader.h"
-#import "ZXReaderException.h"
 #import "ZXResultPoint.h"
 
 int const MIN_DIMENSION_TO_RECUR = 100;
@@ -9,7 +9,8 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 
 @property (nonatomic, assign) id<ZXReader> delegate;
 
-- (void)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset;
+- (BOOL)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
+                 xOffset:(int)xOffset yOffset:(int)yOffset error:(NSError **)error;
 - (ZXResult *)translateResultPoints:(ZXResult *)result xOffset:(int)xOffset yOffset:(int)yOffset;
 
 @end
@@ -26,27 +27,28 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   return self;
 }
 
-- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image {
-  return [self decodeMultiple:image hints:nil];
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image error:(NSError **)error {
+  return [self decodeMultiple:image hints:nil error:error];
 }
 
-- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   NSMutableArray * results = [NSMutableArray array];
-  [self doDecodeMultiple:image hints:hints results:results xOffset:0 yOffset:0];
-  if ([results count] == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+  if (![self doDecodeMultiple:image hints:hints results:results xOffset:0 yOffset:0 error:error]) {
+    return nil;
+  } else if (results.count == 0) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   return results;
 }
 
-- (void)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results xOffset:(int)xOffset yOffset:(int)yOffset {
-  ZXResult * result;
-  @try {
-    result = [delegate decode:image hints:hints];
+- (BOOL)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
+                 xOffset:(int)xOffset yOffset:(int)yOffset error:(NSError **)error {
+  ZXResult * result = [self.delegate decode:image hints:hints error:error];
+  if (!result) {
+    return NO;
   }
-  @catch (ZXReaderException * re) {
-    return;
-  }
+
   BOOL alreadyFound = NO;
   for (ZXResult * existingResult in results) {
     if ([[existingResult text] isEqualToString:[result text]]) {
@@ -55,12 +57,12 @@ int const MIN_DIMENSION_TO_RECUR = 100;
     }
   }
   if (alreadyFound) {
-    return;
+    return YES;
   }
   [results addObject:[self translateResultPoints:result xOffset:xOffset yOffset:yOffset]];
   NSMutableArray * resultPoints = [result resultPoints];
   if (resultPoints == nil || [resultPoints count] == 0) {
-    return;
+    return YES;
   }
   int width = [image width];
   int height = [image height];
@@ -86,17 +88,19 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   }
 
   if (minX > MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:0 top:0 width:(int)minX height:height] hints:hints results:results xOffset:xOffset yOffset:yOffset];
+    return [self doDecodeMultiple:[image crop:0 top:0 width:(int)minX height:height] hints:hints results:results xOffset:xOffset yOffset:yOffset error:error];
   }
   if (minY > MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:0 top:0 width:width height:(int)minY] hints:hints results:results xOffset:xOffset yOffset:yOffset];
+    return [self doDecodeMultiple:[image crop:0 top:0 width:width height:(int)minY] hints:hints results:results xOffset:xOffset yOffset:yOffset error:error];
   }
   if (maxX < width - MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:(int)maxX top:0 width:width - (int)maxX height:height] hints:hints results:results xOffset:xOffset + (int)maxX yOffset:yOffset];
+    return [self doDecodeMultiple:[image crop:(int)maxX top:0 width:width - (int)maxX height:height] hints:hints results:results xOffset:xOffset + (int)maxX yOffset:yOffset error:error];
   }
   if (maxY < height - MIN_DIMENSION_TO_RECUR) {
-    [self doDecodeMultiple:[image crop:0 top:(int)maxY width:width height:height - (int)maxY] hints:hints results:results xOffset:xOffset yOffset:yOffset + (int)maxY];
+    return [self doDecodeMultiple:[image crop:0 top:(int)maxY width:width height:height - (int)maxY] hints:hints results:results xOffset:xOffset yOffset:yOffset + (int)maxY error:error];
   }
+
+  return YES;
 }
 
 - (ZXResult *)translateResultPoints:(ZXResult *)result xOffset:(int)xOffset yOffset:(int)yOffset {

@@ -1,9 +1,8 @@
 #import "ZXDecodeHints.h"
 #import "ZXEAN8Reader.h"
 #import "ZXEAN13Reader.h"
+#import "ZXErrors.h"
 #import "ZXMultiFormatUPCEANReader.h"
-#import "ZXNotFoundException.h"
-#import "ZXReaderException.h"
 #import "ZXReader.h"
 #import "ZXResult.h"
 #import "ZXUPCAReader.h"
@@ -55,15 +54,17 @@
   [super dealloc];
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
-  NSArray * startGuardPattern = [ZXUPCEANReader findStartGuardPattern:row];
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  NSArray * startGuardPattern = [ZXUPCEANReader findStartGuardPattern:row error:error];
+  if (!startGuardPattern) {
+    return nil;
+  }
   for (ZXUPCEANReader * reader in self.readers) {
-    ZXResult * result;
-    @try {
-      result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints];
-    } @catch (ZXReaderException * re) {
+    ZXResult * result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints error:nil];
+    if (!result) {
       continue;
     }
+
     // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
     // followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
     // UPC-A as a 12-digit string and EAN-13 as a 13-digit string starting with "0".
@@ -88,7 +89,8 @@
     return result;
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
 - (void)reset {

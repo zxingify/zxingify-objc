@@ -1,5 +1,4 @@
 #import "ZXDataMatrixVersion.h"
-#import "ZXFormatException.h"
 
 @interface ZXDataMatrixECBlocks ()
 
@@ -125,7 +124,7 @@
   }
 
   if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
-    @throw [ZXFormatException formatInstance];
+    return nil;
   }
 
   for (ZXDataMatrixVersion *version in VERSIONS) {
@@ -134,7 +133,7 @@
     }
   }
 
-  @throw [ZXFormatException formatInstance];
+  return nil;
 }
 
 - (NSString *)description {

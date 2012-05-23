@@ -15,11 +15,11 @@
 
 @implementation ZXCode128Writer
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatCode128) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_128"];
   }
-  return [super encode:contents format:format width:width height:height hints:hints];
+  return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
 - (NSArray *)encode:(NSString *)contents {

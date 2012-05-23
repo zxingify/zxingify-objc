@@ -11,11 +11,8 @@
 @implementation ZXQRCodeVersionTestCase
 
 - (void)testVersionForNumber {
-  @try {
-    [ZXQRCodeVersion versionForNumber:0];
-    STFail(@"Should have thrown an exception");
-  } @catch (NSException *ex) {
-    // good
+  if ([ZXQRCodeVersion versionForNumber:0]) {
+    STFail(@"Should have failed");
   }
   for (int i = 1; i <= 40; i++) {
     [self checkVersion:[ZXQRCodeVersion versionForNumber:i] number:i dimension:4*i + 17];

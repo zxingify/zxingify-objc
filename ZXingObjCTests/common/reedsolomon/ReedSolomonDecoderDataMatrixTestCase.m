@@ -1,13 +1,12 @@
 #import "ReedSolomonDecoderDataMatrixTestCase.h"
 #import "ZXGenericGF.h"
 #import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonException.h"
 
 @interface ReedSolomonDecoderDataMatrixTestCase ()
 
 @property (nonatomic, retain) ZXReedSolomonDecoder* dmRSDecoder;
 
-- (void)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen;
+- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen;
 
 @end
 
@@ -68,19 +67,19 @@ const int DM_CODE_CORRECTABLE = DM_CODE_ECC_BYTES / 2;
     received[i] = DM_CODE_TEST_WITH_EC[i];
   }
   [self corrupt:received receivedLen:receivedLen howMany:DM_CODE_CORRECTABLE + 1];
-  @try {
-    [self checkQRRSDecode:received receivedLen:receivedLen];
+  if ([self checkQRRSDecode:received receivedLen:receivedLen]) {
     STFail(@"Should not have decoded");
-  } @catch (ZXReedSolomonException* rse) {
-    // good
   }
 }
 
-- (void)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen {
-  [self.dmRSDecoder decode:received receivedLen:receivedLen twoS:DM_CODE_ECC_BYTES];
+- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen {
+  if (![self.dmRSDecoder decode:received receivedLen:receivedLen twoS:DM_CODE_ECC_BYTES error:nil]) {
+    return NO;
+  }
   for (int i = 0; i < DM_CODE_TEST_LEN; i++) {
     STAssertEquals(DM_CODE_TEST[i], received[i], @"Expected %d to equal %d", DM_CODE_TEST[i], received[i]);
   }
+  return YES;
 }
 
 @end

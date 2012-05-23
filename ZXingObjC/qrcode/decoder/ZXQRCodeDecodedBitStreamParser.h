@@ -9,6 +9,7 @@
 
 @interface ZXQRCodeDecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints;
++ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
+                    ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints error:(NSError**)error;
 
 @end

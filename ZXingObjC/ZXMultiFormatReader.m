@@ -2,19 +2,18 @@
 #import "ZXBinaryBitmap.h"
 #import "ZXDataMatrixReader.h"
 #import "ZXDecodeHints.h"
+#import "ZXErrors.h"
 #import "ZXMultiFormatOneDReader.h"
 #import "ZXMultiFormatReader.h"
-#import "ZXNotFoundException.h"
 #import "ZXPDF417Reader.h"
 #import "ZXQRCodeReader.h"
-#import "ZXReaderException.h"
 #import "ZXResult.h"
 
 @interface ZXMultiFormatReader ()
 
 @property (nonatomic, retain) NSMutableArray * readers;
 
-- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image;
+- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error;
 
 @end
 
@@ -28,18 +27,18 @@
  * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
  * Use setHints() followed by decodeWithState() for continuous scan applications.
  */
-- (ZXResult *)decode:(ZXBinaryBitmap *)image {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
   self.hints = nil;
-  return [self decodeInternal:image];
+  return [self decodeInternal:image error:error];
 }
 
 
 /**
  * Decode an image using the hints provided. Does not honor existing state.
  */
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)_hints {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)_hints error:(NSError **)error {
   self.hints = _hints;
-  return [self decodeInternal:image];
+  return [self decodeInternal:image error:error];
 }
 
 
@@ -47,11 +46,11 @@
  * Decode an image using the state set up by calling setHints() previously. Continuous scan
  * clients will get a <b>large</b> speed increase by using this instead of decode().
  */
-- (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image {
+- (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image error:(NSError **)error {
   if (self.readers == nil) {
     self.hints = nil;
   }
-  return [self decodeInternal:image];
+  return [self decodeInternal:image error:error];
 }
 
 
@@ -116,16 +115,16 @@
   }
 }
 
-- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image {
+- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error {
   for (id<ZXReader> reader in self.readers) {
-    @try {
-      return [reader decode:image hints:self.hints];
-    }
-    @catch (ZXReaderException * re) {
+    ZXResult* result = [reader decode:image hints:self.hints error:nil];
+    if (result) {
+      return result;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
 - (void)dealloc {

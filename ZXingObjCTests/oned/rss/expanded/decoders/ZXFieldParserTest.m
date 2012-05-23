@@ -6,7 +6,7 @@
 - (void)checkFields:(NSString*)expected {
   NSString* field = [[expected stringByReplacingOccurrencesOfString:@"(" withString:@""]
                      stringByReplacingOccurrencesOfString:@")" withString:@""];
-  NSString* actual = [ZXFieldParser parseFieldsInGeneralPurpose:field];
+  NSString* actual = [ZXFieldParser parseFieldsInGeneralPurpose:field error:nil];
   STAssertEqualObjects(actual, expected, @"Expected %@ to equal %@", actual, expected);
 }
 

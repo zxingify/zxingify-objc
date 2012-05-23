@@ -40,7 +40,7 @@
       original[j] = toEncode[j];
     }
     [encoder encode:toEncode toEncodeLen:size ecBytes:ecBytes];
-    [decoder decode:toEncode receivedLen:size twoS:ecBytes];
+    [decoder decode:toEncode receivedLen:size twoS:ecBytes error:nil];
 
     [self assertArraysEqual:original expectedOffset:0 actual:toEncode actualOffset:0 length:dataBytes];
   }

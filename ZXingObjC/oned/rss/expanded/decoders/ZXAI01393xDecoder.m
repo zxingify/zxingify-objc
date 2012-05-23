@@ -1,8 +1,8 @@
 #import "ZXAI01393xDecoder.h"
 #import "ZXBitArray.h"
 #import "ZXDecodedInformation.h"
+#import "ZXErrors.h"
 #import "ZXGeneralAppIdDecoder.h"
-#import "ZXNotFoundException.h"
 
 @implementation ZXAI01393xDecoder
 
@@ -10,9 +10,10 @@ int const AI01393xDecoderHeaderSize = 5 + 1 + 2;
 int const AI01393xDecoderLastDigitSize = 2;
 int const AI01393xDecoderFirstThreeDigitsSize = 10;
 
-- (NSString *)parseInformation {
+- (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size < AI01393xDecoderHeaderSize + gtinSize) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   NSMutableString * buf = [NSMutableString string];

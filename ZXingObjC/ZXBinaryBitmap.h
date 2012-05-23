@@ -13,8 +13,8 @@
 @property(nonatomic, readonly) BOOL rotateSupported;
 
 - (id)initWithBinarizer:(ZXBinarizer *)binarizer;
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row;
-- (ZXBitMatrix *)blackMatrix;
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
+- (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;
 - (ZXBinaryBitmap *)crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXBinaryBitmap *)rotateCounterClockwise;
 

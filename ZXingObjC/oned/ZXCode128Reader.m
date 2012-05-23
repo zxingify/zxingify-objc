@@ -1,8 +1,6 @@
 #import "ZXBitArray.h"
-#import "ZXChecksumException.h"
 #import "ZXCode128Reader.h"
-#import "ZXFormatException.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXOneDReader.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
@@ -207,11 +205,13 @@ int const CODE_STOP = 106;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 - (int)decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset {
-  [ZXOneDReader recordPattern:row start:rowOffset counters:counters countersSize:countersCount];
+  if (![ZXOneDReader recordPattern:row start:rowOffset counters:counters countersSize:countersCount]) {
+    return -1;
+  }
   int bestVariance = MAX_AVG_VARIANCE;
   int bestMatch = -1;
 
@@ -227,12 +227,17 @@ int const CODE_STOP = 106;
   if (bestMatch >= 0) {
     return bestMatch;
   } else {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError**)error {
   NSArray * startPatternInfo = [self findStartPattern:row];
+  if (!startPatternInfo) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
+
   int startCode = [[startPatternInfo objectAtIndex:2] intValue];
   int codeSet;
 
@@ -247,7 +252,8 @@ int const CODE_STOP = 106;
     codeSet = CODE_CODE_C;
     break;
   default:
-    @throw [ZXFormatException formatInstance];
+    if (error) *error = FormatErrorInstance();
+    return nil;
   }
 
   BOOL done = NO;
@@ -272,6 +278,10 @@ int const CODE_STOP = 106;
     lastCode = code;
 
     code = [self decodeCode:row counters:counters countersCount:countersLen rowOffset:nextStart];
+    if (code == -1) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
 
     if (code != CODE_STOP) {
       lastCharacterWasPrintable = YES;
@@ -291,7 +301,8 @@ int const CODE_STOP = 106;
     case CODE_START_A:
     case CODE_START_B:
     case CODE_START_C:
-      @throw [ZXFormatException formatInstance];
+      if (error) *error = FormatErrorInstance();
+      return nil;
     }
 
     switch (codeSet) {
@@ -400,11 +411,13 @@ int const CODE_STOP = 106;
     end = width;
   }
   if (![row isRange:nextStart end:end value:NO]) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   checksumTotal -= multiplier * lastCode;
   if (checksumTotal % 103 != lastCode) {
-    @throw [ZXChecksumException checksumInstance];
+    if (error) *error = ChecksumErrorInstance();
+    return nil;
   }
   int resultLength = [result length];
   if (resultLength > 0 && lastCharacterWasPrintable) {
@@ -416,7 +429,8 @@ int const CODE_STOP = 106;
   }
   NSString * resultString = [result description];
   if ([resultString length] == 0) {
-    @throw [ZXFormatException formatInstance];
+    if (error) *error = FormatErrorInstance();
+    return nil;
   }
   float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;

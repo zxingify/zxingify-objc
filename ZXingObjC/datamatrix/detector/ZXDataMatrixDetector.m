@@ -1,7 +1,7 @@
 #import "ZXDataMatrixDetector.h"
 #import "ZXDetectorResult.h"
+#import "ZXErrors.h"
 #import "ZXGridSampler.h"
-#import "ZXNotFoundException.h"
 #import "ZXResultPoint.h"
 #import "ZXWhiteRectangleDetector.h"
 
@@ -65,7 +65,14 @@
 - (void)increment:(NSMutableDictionary *)table key:(ZXResultPoint *)key;
 - (BOOL)isValid:(ZXResultPoint *)p;
 - (int)round:(float)d;
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image topLeft:(ZXResultPoint *)topLeft bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topRight:(ZXResultPoint *)topRight dimensionX:(int)dimensionX dimensionY:(int)dimensionY;
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
+                    topLeft:(ZXResultPoint *)topLeft
+                 bottomLeft:(ZXResultPoint *)bottomLeft
+                bottomRight:(ZXResultPoint *)bottomRight
+                   topRight:(ZXResultPoint *)topRight
+                 dimensionX:(int)dimensionX
+                 dimensionY:(int)dimensionY
+                      error:(NSError**)error;
 - (ResultPointsAndTransitions *)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to;
 
 @end
@@ -75,10 +82,14 @@
 @synthesize image;
 @synthesize rectangleDetector;
 
-- (id)initWithImage:(ZXBitMatrix *)anImage {
+- (id)initWithImage:(ZXBitMatrix *)anImage error:(NSError **)error {
   if (self = [super init]) {
     self.image = anImage;
-    self.rectangleDetector = [[ZXWhiteRectangleDetector alloc] initWithImage:anImage];
+    self.rectangleDetector = [[[ZXWhiteRectangleDetector alloc] initWithImage:anImage error:error] autorelease];
+    if (!self.rectangleDetector) {
+      [self release];
+      return nil;
+    }
   }
 
   return self;
@@ -95,8 +106,11 @@
 /**
  * Detects a Data Matrix Code in an image.
  */
-- (ZXDetectorResult *)detect {
-  NSArray * cornerPoints = [self.rectangleDetector detect];
+- (ZXDetectorResult *)detectWithError:(NSError **)error {
+  NSArray * cornerPoints = [self.rectangleDetector detectWithError:error];
+  if (!cornerPoints) {
+    return nil;
+  }
   ZXResultPoint * pointA = [cornerPoints objectAtIndex:0];
   ZXResultPoint * pointB = [cornerPoints objectAtIndex:1];
   ZXResultPoint * pointC = [cornerPoints objectAtIndex:2];
@@ -135,7 +149,8 @@
   }
 
   if (maybeTopLeft == nil || bottomLeft == nil || maybeBottomRight == nil) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   NSMutableArray * corners = [NSMutableArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
@@ -189,7 +204,10 @@
       dimensionRight++;
     }
 
-    bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionTop dimensionY:dimensionRight];
+    bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionTop dimensionY:dimensionRight error:error];
+    if (!bits) {
+      return nil;
+    }
   } else {
     int dimension = MIN(dimensionRight, dimensionTop);
     correctedTopRight = [self correctTopRight:bottomLeft bottomRight:bottomRight topLeft:topLeft topRight:topRight dimension:dimension];
@@ -203,7 +221,10 @@
       dimensionCorrected++;
     }
 
-    bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionCorrected dimensionY:dimensionCorrected];
+    bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionCorrected dimensionY:dimensionCorrected error:error];
+    if (!bits) {
+      return nil;
+    }
   }
   return [[[ZXDetectorResult alloc] initWithBits:bits
                                           points:[NSArray arrayWithObjects:topLeft, bottomLeft, bottomRight, correctedTopRight, nil]] autorelease];
@@ -309,7 +330,14 @@
   [table setObject:value == nil ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:[value intValue] + 1] forKey:key];
 }
 
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage topLeft:(ZXResultPoint *)topLeft bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topRight:(ZXResultPoint *)topRight dimensionX:(int)dimensionX dimensionY:(int)dimensionY {
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage
+                    topLeft:(ZXResultPoint *)topLeft
+                 bottomLeft:(ZXResultPoint *)bottomLeft
+                bottomRight:(ZXResultPoint *)bottomRight
+                   topRight:(ZXResultPoint *)topRight
+                 dimensionX:(int)dimensionX
+                 dimensionY:(int)dimensionY
+                      error:(NSError **)error {
   ZXGridSampler * sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:anImage
                   dimensionX:dimensionX dimensionY:dimensionY
@@ -320,7 +348,8 @@
                      p1FromX:[topLeft x] p1FromY:[topLeft y]
                      p2FromX:[topRight x] p2FromY:[topRight y]
                      p3FromX:[bottomRight x] p3FromY:[bottomRight y]
-                     p4FromX:[bottomLeft x] p4FromY:[bottomLeft y]];
+                     p4FromX:[bottomLeft x] p4FromY:[bottomLeft y]
+                       error:error];
 }
 
 

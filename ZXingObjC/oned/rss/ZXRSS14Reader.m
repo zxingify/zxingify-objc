@@ -1,6 +1,7 @@
 #import "ZXBitArray.h"
 #import "ZXBarcodeFormat.h"
 #import "ZXDecodeHints.h"
+#import "ZXErrors.h"
 #import "ZXPair.h"
 #import "ZXResult.h"
 #import "ZXResultPointCallback.h"
@@ -21,7 +22,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 @property (nonatomic, retain) NSMutableArray * possibleRightPairs;
 
 - (void)addOrTally:(NSMutableArray *)possiblePairs pair:(ZXPair *)pair;
-- (void)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules;
+- (BOOL)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules;
 - (BOOL)checkChecksum:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair;
 - (ZXResult *)constructResult:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair;
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar;
@@ -52,7 +53,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   [super dealloc];
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXPair * leftPair = [self decodePair:row right:NO rowNumber:rowNumber hints:hints];
   [self addOrTally:self.possibleLeftPairs pair:leftPair];
   [row reverse];
@@ -72,7 +73,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
 - (void)addOrTally:(NSMutableArray *)possiblePairs pair:(ZXPair *)pair {
@@ -146,27 +148,30 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (ZXPair *)decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(ZXDecodeHints *)hints {
-
-  @try {
-    NSArray * startEnd = [self findFinderPattern:row rowOffset:0 rightFinderPattern:right];
-    ZXRSSFinderPattern * pattern = [self parseFoundFinderPattern:row rowNumber:rowNumber right:right startEnd:startEnd];
-    
-    id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
-    if (resultPointCallback != nil) {
-      float center = ([[startEnd objectAtIndex:0] intValue] + [[startEnd objectAtIndex:1] intValue]) / 2.0f;
-      if (right) {
-        center = [row size] - 1 - center;
-      }
-      [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:center y:rowNumber] autorelease]];
-    }
-    ZXDataCharacter * outside = [self decodeDataCharacter:row pattern:pattern outsideChar:YES];
-    ZXDataCharacter * inside = [self decodeDataCharacter:row pattern:pattern outsideChar:NO];
-    return [[[ZXPair alloc] initWithValue:1597 * outside.value + inside.value
-                          checksumPortion:outside.checksumPortion + 4 * inside.checksumPortion
-                            finderPattern:pattern] autorelease];
-  } @catch (ZXNotFoundException * re) {
+  NSArray * startEnd = [self findFinderPattern:row rowOffset:0 rightFinderPattern:right];
+  if (!startEnd) {
     return nil;
   }
+  ZXRSSFinderPattern * pattern = [self parseFoundFinderPattern:row rowNumber:rowNumber right:right startEnd:startEnd];
+  if (!pattern) {
+    return nil;
+  }
+  id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
+  if (resultPointCallback != nil) {
+    float center = ([[startEnd objectAtIndex:0] intValue] + [[startEnd objectAtIndex:1] intValue]) / 2.0f;
+    if (right) {
+      center = [row size] - 1 - center;
+    }
+    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:center y:rowNumber] autorelease]];
+  }
+  ZXDataCharacter * outside = [self decodeDataCharacter:row pattern:pattern outsideChar:YES];
+  ZXDataCharacter * inside = [self decodeDataCharacter:row pattern:pattern outsideChar:NO];
+  if (!outside || !inside) {
+    return nil;
+  }
+  return [[[ZXPair alloc] initWithValue:1597 * outside.value + inside.value
+                        checksumPortion:outside.checksumPortion + 4 * inside.checksumPortion
+                          finderPattern:pattern] autorelease];
 }
 
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar {
@@ -182,9 +187,13 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   counters[7] = 0;
 
   if (outsideChar) {
-    [ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters countersSize:countersLen];
+    if (![ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters countersSize:countersLen]) {
+      return nil;
+    }
   } else {
-    [ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters countersSize:countersLen];
+    if (![ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters countersSize:countersLen]) {
+      return nil;
+    }
 
     for (int i = 0, j = countersLen - 1; i < j; i++, j--) {
       int temp = counters[i];
@@ -214,7 +223,9 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     }
   }
 
-  [self adjustOddEvenCounts:outsideChar numModules:numModules];
+  if (![self adjustOddEvenCounts:outsideChar numModules:numModules]) {
+    return nil;
+  }
 
   int oddSum = 0;
   int oddChecksumPortion = 0;
@@ -234,7 +245,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
   if (outsideChar) {
     if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4) {
-      @throw [ZXNotFoundException notFoundInstance];
+      return nil;
     }
     int group = (12 - oddSum) / 2;
     int oddWidest = OUTSIDE_ODD_WIDEST[group];
@@ -246,7 +257,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     return [[[ZXDataCharacter alloc] initWithValue:vOdd * tEven + vEven + gSum checksumPortion:checksumPortion] autorelease];
   } else {
     if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
-      @throw [ZXNotFoundException notFoundInstance];
+      return nil;
     }
     int group = (10 - evenSum) / 2;
     int oddWidest = INSIDE_ODD_WIDEST[group];
@@ -302,7 +313,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 - (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber right:(BOOL)right startEnd:(NSArray *)startEnd {
@@ -323,6 +334,9 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   }
   counters[0] = firstCounter;
   int value = [ZXAbstractRSSReader parseFinderValue:counters countersSize:countersLen finderPatternType:RSS_PATTERNS_RSS14_PATTERNS];
+  if (value == -1) {
+    return nil;
+  }
   int start = firstElementStart;
   int end = [[startEnd objectAtIndex:1] intValue];
   if (right) {
@@ -336,7 +350,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
                                           rowNumber:rowNumber] autorelease];
 }
 
-- (void)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules {
+- (BOOL)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules {
   int oddSum = [ZXAbstractRSSReader count:self.oddCounts arrayLen:self.oddCountsLen];
   int evenSum = [ZXAbstractRSSReader count:self.evenCounts arrayLen:self.evenCountsLen];
   int mismatch = oddSum + evenSum - numModules;
@@ -375,31 +389,31 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   if (mismatch == 1) {
     if (oddParityBad) {
       if (evenParityBad) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return NO;
       }
       decrementOdd = YES;
     } else {
       if (!evenParityBad) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return NO;
       }
       decrementEven = YES;
     }
   } else if (mismatch == -1) {
     if (oddParityBad) {
       if (evenParityBad) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return NO;
       }
       incrementOdd = YES;
     } else {
       if (!evenParityBad) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return NO;
       }
       incrementEven = YES;
     }
   } else if (mismatch == 0) {
     if (oddParityBad) {
       if (!evenParityBad) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return NO;
       }
       if (oddSum < evenSum) {
         incrementOdd = YES;
@@ -410,15 +424,15 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
       }
     } else {
       if (evenParityBad) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return NO;
       }
     }
   } else {
-    @throw [ZXNotFoundException notFoundInstance];
+    return NO;
   }
   if (incrementOdd) {
     if (decrementOdd) {
-      @throw [ZXNotFoundException notFoundInstance];
+      return NO;
     }
     [ZXAbstractRSSReader increment:self.oddCounts arrayLen:self.oddCountsLen errors:self.oddRoundingErrors];
   }
@@ -427,13 +441,14 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   }
   if (incrementEven) {
     if (decrementEven) {
-      @throw [ZXNotFoundException notFoundInstance];
+      return NO;
     }
     [ZXAbstractRSSReader increment:self.evenCounts arrayLen:self.evenCountsLen errors:self.oddRoundingErrors];
   }
   if (decrementEven) {
     [ZXAbstractRSSReader decrement:self.evenCounts arrayLen:self.evenCountsLen errors:self.evenRoundingErrors];
   }
+  return YES;
 }
 
 @end

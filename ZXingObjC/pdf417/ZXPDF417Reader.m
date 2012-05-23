@@ -4,7 +4,7 @@
 #import "ZXDecodeHints.h"
 #import "ZXDecoderResult.h"
 #import "ZXDetectorResult.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXPDF417Decoder.h"
 #import "ZXPDF417Detector.h"
 #import "ZXPDF417Reader.h"
@@ -42,20 +42,37 @@
 /**
  * Locates and decodes a PDF417 code in an image.
  */
-- (ZXResult *)decode:(ZXBinaryBitmap *)image {
-  return [self decode:image hints:nil];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
+  return [self decode:image hints:nil error:error];
 }
 
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXDecoderResult * decoderResult;
   NSArray * points;
   if (hints != nil && hints.pureBarcode) {
-    ZXBitMatrix * bits = [self extractPureBits:image.blackMatrix];
-    decoderResult = [decoder decodeMatrix:bits];
+    ZXBitMatrix * matrix = [image blackMatrixWithError:error];
+    if (!matrix) {
+      return nil;
+    }
+    ZXBitMatrix * bits = [self extractPureBits:matrix];
+    if (!bits) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
+    decoderResult = [decoder decodeMatrix:bits error:error];
+    if (!decoderResult) {
+      return nil;
+    }
     points = [NSArray array];
   } else {
-    ZXDetectorResult * detectorResult = [[[[ZXPDF417Detector alloc] initWithImage:image] autorelease] detect];
-    decoderResult = [decoder decodeMatrix:detectorResult.bits];
+    ZXDetectorResult * detectorResult = [[[[ZXPDF417Detector alloc] initWithImage:image] autorelease] detectWithError:error];
+    if (!detectorResult) {
+      return nil;
+    }
+    decoderResult = [decoder decodeMatrix:detectorResult.bits error:error];
+    if (!decoderResult) {
+      return nil;
+    }
     points = detectorResult.points;
   }
   return [[[ZXResult alloc] initWithText:decoderResult.text
@@ -80,20 +97,29 @@
   NSArray * leftTopBlack = image.topLeftOnBit;
   NSArray * rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
 
   int moduleSize = [self moduleSize:leftTopBlack image:image];
+  if (moduleSize == -1) {
+    return nil;
+  }
 
   int top = [[leftTopBlack objectAtIndex:1] intValue];
   int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
   int left = [self findPatternStart:[[leftTopBlack objectAtIndex:0] intValue] y:top image:image];
+  if (left == -1) {
+    return nil;
+  }
   int right = [self findPatternEnd:[[leftTopBlack objectAtIndex:0] intValue] y:top image:image];
+  if (right == -1) {
+    return nil;
+  }
 
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
   if (matrixWidth == 0 || matrixHeight == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
 
   int nudge = moduleSize >> 1;
@@ -121,12 +147,12 @@
     x++;
   }
   if (x == width) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
 
   int moduleSize = (int)((unsigned int)(x - [[leftTopBlack objectAtIndex:0] intValue]) >> 3);
   if (moduleSize == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
 
   return moduleSize;
@@ -147,7 +173,7 @@
     black = newBlack;
   }
   if (start == width - 1) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
   return start;
 }
@@ -171,7 +197,7 @@
   }
 
   if (end == x) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
   return end;
 }

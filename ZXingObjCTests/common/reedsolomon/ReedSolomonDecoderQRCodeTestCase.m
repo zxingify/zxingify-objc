@@ -1,13 +1,12 @@
+#import "ZXReedSolomonDecoder.h"
 #import "ReedSolomonDecoderQRCodeTestCase.h"
 #import "ZXGenericGF.h"
-#import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonException.h"
 
 @interface ReedSolomonDecoderQRCodeTestCase ()
 
 @property (nonatomic, retain) ZXReedSolomonDecoder* qrRSDecoder;
 
-- (void)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen;
+- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen;
 
 @end
 
@@ -74,19 +73,19 @@ const int QR_CODE_CORRECTABLE = QR_CODE_ECC_BYTES / 2;
     received[i] = QR_CODE_TEST_WITH_EC[i];
   }
   [self corrupt:received receivedLen:receivedLen howMany:QR_CODE_CORRECTABLE + 1];
-  @try {
-    [self checkQRRSDecode:received receivedLen:receivedLen];
+  if ([self checkQRRSDecode:received receivedLen:receivedLen]) {
     STFail(@"Should not have decoded");
-  } @catch (ZXReedSolomonException* rse) {
-    // good
   }
 }
 
-- (void)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen {
-  [self.qrRSDecoder decode:received receivedLen:receivedLen twoS:QR_CODE_ECC_BYTES];
+- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen {
+  if (![self.qrRSDecoder decode:received receivedLen:receivedLen twoS:QR_CODE_ECC_BYTES error:nil]) {
+    return NO;
+  }
   for (int i = 0; i < QR_CODE_TEST_LEN; i++) {
     STAssertEquals(QR_CODE_TEST[i], received[i], @"Expected %d to equal %d", QR_CODE_TEST[i], received[i]);
   }
+  return YES;
 }
 
 @end

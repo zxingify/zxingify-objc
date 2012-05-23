@@ -7,16 +7,23 @@
 
 @implementation ZXQRCodeMultiReader
 
-- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image {
-  return [self decodeMultiple:image hints:nil];
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image error:(NSError **)error {
+  return [self decodeMultiple:image hints:nil error:error];
 }
 
-- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+  if (!matrix) {
+    return nil;
+  }
   NSMutableArray * results = [NSMutableArray array];
-  NSArray * detectorResult = [[[[ZXMultiDetector alloc] initWithImage:[image blackMatrix]] autorelease] detectMulti:hints];
+  NSArray * detectorResult = [[[[ZXMultiDetector alloc] initWithImage:matrix] autorelease] detectMulti:hints error:error];
+  if (!detectorResult) {
+    return nil;
+  }
   for (int i = 0; i < [detectorResult count]; i++) {
-    @try {
-      ZXDecoderResult * decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits]];
+    ZXDecoderResult * decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits] error:nil];
+    if (decoderResult) {
       NSArray * points = [[detectorResult objectAtIndex:i] points];
       ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
                                                  rawBytes:decoderResult.rawBytes
@@ -30,8 +37,6 @@
         [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[decoderResult.ecLevel description]];
       }
       [results addObject:result];
-    }
-    @catch (ZXReaderException * re) {
     }
   }
 

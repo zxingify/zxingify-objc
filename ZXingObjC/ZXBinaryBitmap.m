@@ -52,8 +52,8 @@
  * cached data. Callers should assume this method is expensive and call it as seldom as possible.
  * This method is intended for decoding 1D barcodes and may choose to apply sharpening.
  */
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row {
-  return [self.binarizer blackRow:y row:row];
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error {
+  return [self.binarizer blackRow:y row:row error:error];
 }
 
 
@@ -63,9 +63,9 @@
  * may not apply sharpening. Therefore, a row from this matrix may not be identical to one
  * fetched using blackRow(), so don't mix and match between them.
  */
-- (ZXBitMatrix *)blackMatrix {
+- (ZXBitMatrix *)blackMatrixWithError:(NSError **)error {
   if (self.matrix == nil) {
-    self.matrix = [[self.binarizer blackMatrix] retain];
+    self.matrix = [[self.binarizer blackMatrixWithError:error] retain];
   }
   return matrix;
 }

@@ -44,7 +44,7 @@
  * and passed in with each call for performance. However it is legal to keep more than one row
  * at a time if needed.
  */
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row {
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -57,7 +57,7 @@
  * may not apply sharpening. Therefore, a row from this matrix may not be identical to one
  * fetched using blackRow(), so don't mix and match between them.
  */
-- (ZXBitMatrix *)blackMatrix {
+- (ZXBitMatrix *)blackMatrixWithError:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -76,7 +76,10 @@
 }
 
 - (CGImageRef)createImage {
-  ZXBitMatrix *matrix = [self blackMatrix];
+  ZXBitMatrix *matrix = [self blackMatrixWithError:nil];
+  if (!matrix) {
+    return nil;
+  }
   ZXLuminanceSource *source = [self luminanceSource];
 
   int width = source.width;

@@ -4,7 +4,7 @@
 
 @property (nonatomic, retain, readonly) ZXDataMatrixVersion* version;
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix;
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError**)error;
 - (NSArray *)readCodewords;
 - (BOOL)readModule:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns;
 - (int)readUtah:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns;

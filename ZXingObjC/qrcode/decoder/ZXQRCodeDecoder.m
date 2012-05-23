@@ -1,7 +1,7 @@
 #import "ZXBitMatrix.h"
-#import "ZXChecksumException.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrorCorrectionLevel.h"
+#import "ZXErrors.h"
 #import "ZXFormatInformation.h"
 #import "ZXGenericGF.h"
 #import "ZXQRCodeBitMatrixParser.h"
@@ -10,13 +10,12 @@
 #import "ZXQRCodeDecoder.h"
 #import "ZXQRCodeVersion.h"
 #import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonException.h"
 
 @interface ZXQRCodeDecoder ()
 
 @property (nonatomic, retain) ZXReedSolomonDecoder * rsDecoder;
 
-- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords;
+- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError**)error;
 
 @end
 
@@ -38,8 +37,8 @@
   [super dealloc];
 }
 
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length {
-  return [self decode:image length:length hints:nil];
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError**)error {
+  return [self decode:image length:length hints:nil error:error];
 }
 
 
@@ -47,7 +46,7 @@
  * Convenience method that can decode a QR Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints {
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints error:(NSError**)error {
   int dimension = length;
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
@@ -58,23 +57,36 @@
     }
   }
 
-  return [self decodeMatrix:bits hints:hints];
+  return [self decodeMatrix:bits hints:hints error:error];
 }
 
-- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits {
-  return [self decodeMatrix:bits hints:nil];
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
+  return [self decodeMatrix:bits hints:nil error:error];
 }
 
 
 /**
  * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints {
-  ZXQRCodeBitMatrixParser * parser = [[[ZXQRCodeBitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
-  ZXQRCodeVersion * version = [parser readVersion];
-  ZXErrorCorrectionLevel * ecLevel = [[parser readFormatInformation] errorCorrectionLevel];
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXQRCodeBitMatrixParser * parser = [[[ZXQRCodeBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
+  if (!parser) {
+    return nil;
+  }
+  ZXQRCodeVersion * version = [parser readVersionWithError:error];
+  if (!version) {
+    return nil;
+  }
+  ZXFormatInformation* formatInfo = [parser readFormatInformationWithError:error];
+  if (!formatInfo) {
+    return nil;
+  }
+  ZXErrorCorrectionLevel * ecLevel = formatInfo.errorCorrectionLevel;
 
-  NSArray * codewords = [parser readCodewords];
+  NSArray * codewords = [parser readCodewordsWithError:error];
+  if (!codewords) {
+    return nil;
+  }
   NSArray * dataBlocks = [ZXQRCodeDataBlock dataBlocks:codewords version:version ecLevel:ecLevel];
 
   int totalBytes = 0;
@@ -88,13 +100,15 @@
   for (ZXQRCodeDataBlock *dataBlock in dataBlocks) {
     NSMutableArray * codewordBytes = [dataBlock codewords];
     int numDataCodewords = [dataBlock numDataCodewords];
-    [self correctErrors:codewordBytes numDataCodewords:numDataCodewords];
+    if (![self correctErrors:codewordBytes numDataCodewords:numDataCodewords error:error]) {
+      return nil;
+    }
     for (int i = 0; i < numDataCodewords; i++) {
       resultBytes[resultOffset++] = [[codewordBytes objectAtIndex:i] charValue];
     }
   }
 
-  return [ZXQRCodeDecodedBitStreamParser decode:resultBytes length:totalBytes version:version ecLevel:ecLevel hints:hints];
+  return [ZXQRCodeDecodedBitStreamParser decode:resultBytes length:totalBytes version:version ecLevel:ecLevel hints:hints error:error];
 }
 
 
@@ -102,7 +116,7 @@
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
  * correct the errors in-place using Reed-Solomon error correction.
  */
-- (void)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
+- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError**)error {
   int numCodewords = [codewordBytes count];
   int codewordsInts[numCodewords];
 
@@ -111,15 +125,21 @@
   }
 
   int numECCodewords = [codewordBytes count] - numDataCodewords;
-  @try {
-    [rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords];
-  } @catch (ZXReedSolomonException * rse) {
-    @throw [ZXChecksumException checksumInstance];
+  NSError* decodeError = nil;
+  if (![rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
+    if (decodeError.code == ZXReedSolomonError) {
+      if (error) *error = ChecksumErrorInstance();
+      return NO;
+    } else {
+      if (error) *error = decodeError;
+      return NO;
+    }
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
     [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:codewordsInts[i]]];
   }
+  return YES;
 }
 
 @end

@@ -1,23 +1,22 @@
+#import "ZXErrors.h"
 #import "ZXMultiDetector.h"
 #import "ZXMultiFinderPatternFinder.h"
-#import "ZXNotFoundException.h"
 
 @implementation ZXMultiDetector
 
-- (NSArray *)detectMulti:(ZXDecodeHints *)hints {
+- (NSArray *)detectMulti:(ZXDecodeHints *)hints error:(NSError**)error {
   ZXMultiFinderPatternFinder * finder = [[[ZXMultiFinderPatternFinder alloc] initWithImage:self.image] autorelease];
-  NSArray * info = [finder findMulti:hints];
-
+  NSArray * info = [finder findMulti:hints error:error];
   if (info == nil || [info count] == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   NSMutableArray * result = [NSMutableArray array];
   for (int i = 0; i < [info count]; i++) {
-    @try {
-      [result addObject:[self processFinderPatternInfo:[info objectAtIndex:i]]];
-    }
-    @catch (ZXReaderException * e) {
+    ZXDetectorResult* patternInfo = [self processFinderPatternInfo:[info objectAtIndex:i] error:nil];
+    if (patternInfo) {
+      [result addObject:patternInfo];
     }
   }
 

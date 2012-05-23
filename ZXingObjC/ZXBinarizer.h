@@ -14,8 +14,8 @@
 @property (nonatomic, retain, readonly) ZXLuminanceSource* luminanceSource;
 
 - (id)initWithSource:(ZXLuminanceSource *)source;
-- (ZXBitMatrix *)blackMatrix;
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row;
+- (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source;
 - (CGImageRef)createImage;
 

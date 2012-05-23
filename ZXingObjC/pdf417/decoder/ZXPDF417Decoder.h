@@ -7,7 +7,7 @@
 
 @interface ZXPDF417Decoder : NSObject
 
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length;
-- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits;
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError**)error;
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError**)error;
 
 @end

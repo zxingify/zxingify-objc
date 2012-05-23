@@ -5,7 +5,7 @@ int const AI01_HEADER_SIZE = 1 + 1 + 2;
 
 @implementation ZXAI01AndOtherAIs
 
-- (NSString *)parseInformation {
+- (NSString *)parseInformationWithError:(NSError **)error {
   NSMutableString * buff = [NSMutableString string];
 
   [buff appendString:@"(01)"];
@@ -15,7 +15,7 @@ int const AI01_HEADER_SIZE = 1 + 1 + 2;
 
   [self encodeCompressedGtinWithoutAI:buff currentPos:AI01_HEADER_SIZE + 4 initialBufferPosition:initialGtinPosition];
 
-  return [self.generalDecoder decodeAllCodes:buff initialPosition:AI01_HEADER_SIZE + 44];
+  return [self.generalDecoder decodeAllCodes:buff initialPosition:AI01_HEADER_SIZE + 44 error:error];
 }
 
 @end

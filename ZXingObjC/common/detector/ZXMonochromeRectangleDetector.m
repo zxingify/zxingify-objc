@@ -1,6 +1,6 @@
 #import "ZXBitMatrix.h"
+#import "ZXErrors.h"
 #import "ZXMonochromeRectangleDetector.h"
-#import "ZXNotFoundException.h"
 #import "ZXResultPoint.h"
 
 int const MONOCHROME_MAX_MODULES = 32;
@@ -43,7 +43,7 @@ int const MONOCHROME_MAX_MODULES = 32;
  * the topmost point and the last, the bottommost. The second point will be leftmost and the
  * third, the rightmost
  */
-- (NSArray *)detect {
+- (NSArray *)detectWithError:(NSError**)error {
   int height = [self.image height];
   int width = [self.image width];
   int halfHeight = height >> 1;
@@ -57,19 +57,39 @@ int const MONOCHROME_MAX_MODULES = 32;
   int right = width;
   ZXResultPoint * pointA = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
                                               centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 1];
+  if (!pointA) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   top = (int)[pointA y] - 1;
   ZXResultPoint * pointB = [self findCornerFromCenter:halfWidth deltaX:-deltaX left:left right:right
                                               centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight >> 1];
+  if (!pointB) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   left = (int)[pointB x] - 1;
   ZXResultPoint * pointC = [self findCornerFromCenter:halfWidth deltaX:deltaX left:left right:right
                                               centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight >> 1];
+  if (!pointC) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   right = (int)[pointC x] + 1;
   ZXResultPoint * pointD = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
                                               centerY:halfHeight deltaY:deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 1];
+  if (!pointD) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   bottom = (int)[pointD y] + 1;
 
   pointA = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
                               centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 2];
+  if (!pointA) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   return [NSArray arrayWithObjects:pointA, pointB, pointC, pointD, nil];
 }
@@ -103,7 +123,7 @@ int const MONOCHROME_MAX_MODULES = 32;
     }
     if (range == nil) {
       if (lastRange == nil) {
-        @throw [ZXNotFoundException notFoundInstance];
+        return nil;
       }
       if (deltaX == 0) {
         int lastY = y - deltaY;
@@ -130,7 +150,7 @@ int const MONOCHROME_MAX_MODULES = 32;
     lastRange = range;
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 

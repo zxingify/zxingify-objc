@@ -1,5 +1,5 @@
 #import "ZXBitMatrix.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 #import "ZXPDF417BitMatrixParser.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
 #import "ZXPDF417Decoder.h"
@@ -10,7 +10,7 @@ int const MAX_EC_CODEWORDS = 512;
 @interface ZXPDF417Decoder ()
 
 - (int)correctErrors:(NSArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords;
-- (void)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords;
+- (BOOL)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords;
 
 @end
 
@@ -20,7 +20,7 @@ int const MAX_EC_CODEWORDS = 512;
  * Convenience method that can decode a PDF417 Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length {
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error {
   int dimension = length;
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
@@ -30,7 +30,7 @@ int const MAX_EC_CODEWORDS = 512;
       }
     }
   }
-  return [self decodeMatrix:bits];
+  return [self decodeMatrix:bits error:error];
 }
 
 
@@ -38,43 +38,48 @@ int const MAX_EC_CODEWORDS = 512;
  * Decodes a PDF417 Code represented as a ZXBitMatrix.
  * A 1 or "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits {
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
   ZXPDF417BitMatrixParser * parser = [[[ZXPDF417BitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
   NSMutableArray * codewords = [[[parser readCodewords] mutableCopy] autorelease];
   if (codewords == nil || [codewords count] == 0) {
-    @throw [ZXFormatException formatInstance];
+    if (error) *error = FormatErrorInstance();
+    return nil;
   }
 
   int ecLevel = parser.ecLevel;
   int numECCodewords = 1 << (ecLevel + 1);
   NSArray * erasures = parser.erasures;
 
-  [self correctErrors:codewords erasures:erasures numECCodewords:numECCodewords];
-  [self verifyCodewordCount:codewords numECCodewords:numECCodewords];
+  if ([self correctErrors:codewords erasures:erasures numECCodewords:numECCodewords] == -1 ||
+      ![self verifyCodewordCount:codewords numECCodewords:numECCodewords]) {
+    if (error) *error = FormatErrorInstance();
+    return nil;
+  }
 
-  return [ZXPDF417DecodedBitStreamParser decode:codewords];
+  return [ZXPDF417DecodedBitStreamParser decode:codewords error:error];
 }
 
 
 /**
  * Verify that all is OK with the codeword array.
  */
-- (void)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords {
+- (BOOL)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords {
   if ([codewords count] < 4) {
-    @throw [ZXFormatException formatInstance];
+    return NO;
   }
 
   int numberOfCodewords = [[codewords objectAtIndex:0] intValue];
   if (numberOfCodewords > [codewords count]) {
-    @throw [ZXFormatException formatInstance];
+    return NO;
   }
   if (numberOfCodewords == 0) {
     if (numECCodewords < [codewords count]) {
       [codewords replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[codewords count] - numECCodewords]];
     } else {
-      @throw [ZXFormatException formatInstance];
+      return NO;
     }
   }
+  return YES;
 }
 
 
@@ -84,7 +89,7 @@ int const MAX_EC_CODEWORDS = 512;
  */
 - (int)correctErrors:(NSArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords {
   if ((erasures != nil && [erasures count] > numECCodewords / 2 + MAX_ERRORS) || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
-    @throw [ZXFormatException formatInstance];
+    return -1;
   }
 
   int result = 0;
@@ -94,7 +99,7 @@ int const MAX_EC_CODEWORDS = 512;
       numErasures -= result;
     }
     if (numErasures > MAX_ERRORS) {
-      @throw [ZXFormatException formatInstance];
+      return -1;
     }
   }
   return result;

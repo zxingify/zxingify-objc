@@ -1,7 +1,7 @@
 #import "ZXAI013x0x1xDecoder.h"
 #import "ZXBitArray.h"
+#import "ZXErrors.h"
 #import "ZXGeneralAppIdDecoder.h"
-#import "ZXNotFoundException.h"
 
 int const AI013x0x1xHeaderSize = 7 + 1;
 int const AI013x0x1xWeightSize = 20;
@@ -37,9 +37,10 @@ int const AI013x0x1xDateSize = 16;
   [super dealloc];
 }
 
-- (NSString *)parseInformation {
+- (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size != AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize + AI013x0x1xDateSize) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   NSMutableString * buf = [NSMutableString string];
   [self encodeCompressedGtin:buf currentPos:AI013x0x1xHeaderSize];

@@ -1,6 +1,6 @@
 #import "ZXBitMatrix.h"
 #import "ZXDataMask.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 #import "ZXFormatInformation.h"
 #import "ZXQRCodeBitMatrixParser.h"
 #import "ZXQRCodeVersion.h"
@@ -21,12 +21,14 @@
 @synthesize parsedFormatInfo;
 @synthesize parsedVersion;
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix {
+- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix error:(NSError **)error {
+  int dimension = aBitMatrix.height;
+  if (dimension < 21 || (dimension & 0x03) != 1) {
+    if (error) *error = FormatErrorInstance();
+    return nil;
+  }
+
   if (self = [super init]) {
-    int dimension = aBitMatrix.height;
-    if (dimension < 21 || (dimension & 0x03) != 1) {
-      @throw [ZXFormatException formatInstance];
-    }
     self.bitMatrix = aBitMatrix;
     self.parsedFormatInfo = nil;
     self.parsedVersion = nil;
@@ -45,7 +47,7 @@
 /**
  * Reads format information from one of its two locations within the QR Code.
  */
-- (ZXFormatInformation *)readFormatInformation {
+- (ZXFormatInformation *)readFormatInformationWithError:(NSError **)error {
   if (self.parsedFormatInfo != nil) {
     return self.parsedFormatInfo;
   }
@@ -71,7 +73,6 @@
     formatInfoBits2 = [self copyBit:8 j:j versionBits:formatInfoBits2];
   }
 
-
   for (int i = dimension - 8; i < dimension; i++) {
     formatInfoBits2 = [self copyBit:i j:8 versionBits:formatInfoBits2];
   }
@@ -80,14 +81,15 @@
   if (self.parsedFormatInfo != nil) {
     return self.parsedFormatInfo;
   }
-  @throw [ZXFormatException formatInstance];
+  if (error) *error = FormatErrorInstance();
+  return nil;
 }
 
 
 /**
  * Reads version information from one of its two locations within the QR Code.
  */
-- (ZXQRCodeVersion *)readVersion {
+- (ZXQRCodeVersion *)readVersionWithError:(NSError **)error {
   if (self.parsedVersion != nil) {
     return self.parsedVersion;
   }
@@ -123,7 +125,8 @@
   if (self.parsedVersion != nil && self.parsedVersion.dimensionForVersion == dimension) {
     return self.parsedVersion;
   }
-  @throw [ZXFormatException formatInstance];
+  if (error) *error = FormatErrorInstance();
+  return nil;
 }
 
 - (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits {
@@ -136,9 +139,17 @@
  * correct order in order to reconstitute the codewords bytes contained within the
  * QR Code.
  */
-- (NSArray *)readCodewords {
-  ZXFormatInformation * formatInfo = [self readFormatInformation];
-  ZXQRCodeVersion * version = [self readVersion];
+- (NSArray *)readCodewordsWithError:(NSError **)error {
+  ZXFormatInformation * formatInfo = [self readFormatInformationWithError:error];
+  if (!formatInfo) {
+    return nil;
+  }
+
+  ZXQRCodeVersion * version = [self readVersionWithError:error];
+  if (!version) {
+    return nil;
+  }
+
   ZXDataMask * dataMask = [ZXDataMask forReference:(int)[formatInfo dataMask]];
   int dimension = self.bitMatrix.height;
   [dataMask unmaskBitMatrix:bitMatrix dimension:dimension];
@@ -178,7 +189,8 @@
   }
 
   if (resultOffset != [version totalCodewords]) {
-    @throw [ZXFormatException formatInstance];
+    if (error) *error = FormatErrorInstance();
+    return nil;
   }
   return result;
 }

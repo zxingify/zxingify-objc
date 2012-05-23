@@ -1,5 +1,4 @@
 #import "ZXBitMatrix.h"
-#import "ZXFormatException.h"
 #import "ZXPDF417BitMatrixParser.h"
 
 int const MAX_ROW_DIFFERENCE = 6;
@@ -657,6 +656,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 
 - (int)codeword:(long)symbol;
 - (int)findCodewordIndex:(long)symbol;
+- (int)processRow:(int*)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next;
 
 @end
 
@@ -772,6 +772,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       return nil;
     }
     next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
+    if (next == -1) {
+      return nil;
+    }
     rowNumber++;
     self.rows = rowNumber;
   }
@@ -792,7 +795,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   long symbol = 0;
   for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
     if (i + MODULES_IN_SYMBOL > rowCountersLen) {
-      @throw [ZXFormatException formatInstance];
+      return -1;
     }
     for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
       if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= (int)((unsigned int)rowHeight >> 1)) {

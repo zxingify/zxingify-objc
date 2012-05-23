@@ -12,6 +12,6 @@
 
 @property (nonatomic, retain) ZXDecodeHints * hints;
 
-- (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image;
+- (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image error:(NSError **)error;
 
 @end

@@ -2,15 +2,15 @@
 
 @interface ZXMatrixUtil : NSObject
 
-+ (void)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix;
++ (BOOL)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
 + (void)clearMatrix:(ZXByteMatrix *)matrix;
-+ (void)embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix;
-+ (void)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix;
-+ (void)maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix;
-+ (void)embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix;
++ (BOOL)embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
++ (BOOL)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
++ (BOOL)maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
++ (BOOL)embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
 + (int)findMSBSet:(int)value;
 + (int)calculateBCHCode:(int)value poly:(int)poly;
-+ (void)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits;
-+ (void)makeVersionInfoBits:(int)version bits:(ZXBitArray *)bits;
++ (BOOL)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits error:(NSError**)error;
++ (BOOL)makeVersionInfoBits:(int)version bits:(ZXBitArray *)bits error:(NSError**)error;
 
 @end

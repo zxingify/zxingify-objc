@@ -1,7 +1,7 @@
 #import "ZXBitMatrix.h"
 #import "ZXDataMatrixBitMatrixParser.h"
 #import "ZXDataMatrixVersion.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 
 @interface ZXDataMatrixBitMatrixParser ()
 
@@ -19,13 +19,19 @@
 @synthesize readMappingMatrix;
 @synthesize version;
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix {
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError**)error {
+  int dimension = bitMatrix.height;
+  if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
+    if (error) *error = FormatErrorInstance();
+    return nil;
+  }
   if (self = [super init]) {
-    int dimension = bitMatrix.height;
-    if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-      @throw [ZXFormatException formatInstance];
-    }
     self.version = [self readVersion:bitMatrix];
+    if (!self.version) {
+      [self release];
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
     self.mappingBitMatrix = [self extractDataRegion:bitMatrix];
     self.readMappingMatrix = [[[ZXBitMatrix alloc] initWithWidth:mappingBitMatrix.width
                                                           height:mappingBitMatrix.height] autorelease];
@@ -34,7 +40,7 @@
   return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [mappingBitMatrix release];
   [readMappingMatrix release];
   [version release];
@@ -120,7 +126,7 @@
   } while ((row < numRows) || (column < numColumns));
   
   if ([result count] != version.totalCodewords) {
-    @throw [ZXFormatException formatInstance];
+    return nil;
   }
   return result;
 }
@@ -362,7 +368,7 @@
   int symbolSizeColumns = version.symbolSizeColumns;
   
   if (bitMatrix.height != symbolSizeRows) {
-    [NSException raise:NSInvalidArgumentException format:@"Dimension of bitMarix must match the version size"];
+    [NSException raise:NSInvalidArgumentException format:@"Dimension of bitMatrix must match the version size"];
   }
   
   int dataRegionSizeRows = version.dataRegionSizeRows;

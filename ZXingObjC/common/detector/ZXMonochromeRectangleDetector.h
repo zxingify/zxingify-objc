@@ -9,6 +9,6 @@
 @interface ZXMonochromeRectangleDetector : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image;
-- (NSArray *)detect;
+- (NSArray *)detectWithError:(NSError**)error;
 
 @end

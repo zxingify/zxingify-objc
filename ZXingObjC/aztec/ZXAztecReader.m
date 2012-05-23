@@ -14,12 +14,19 @@
 /**
  * Locates and decodes a Data Matrix code in an image.
  */
-- (ZXResult *) decode:(ZXBinaryBitmap *)image {
-  return [self decode:image hints:nil];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
+  return [self decode:image hints:nil error:error];
 }
 
-- (ZXResult *) decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
-  ZXAztecDetectorResult * detectorResult = [[[[ZXAztecDetector alloc] initWithImage:[image blackMatrix]] autorelease] detect];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+  if (!matrix) {
+    return nil;
+  }
+  ZXAztecDetectorResult * detectorResult = [[[[ZXAztecDetector alloc] initWithImage:matrix] autorelease] detectWithError:error];
+  if (!detectorResult) {
+    return nil;
+  }
   NSArray *points = [detectorResult points];
   if (hints != nil && [detectorResult points] != nil) {
     id <ZXResultPointCallback> rpcb = hints.resultPointCallback;
@@ -30,7 +37,10 @@
     }
   }
 
-  ZXDecoderResult *decoderResult = [[[[ZXAztecDecoder alloc] init] autorelease] decode:detectorResult];
+  ZXDecoderResult *decoderResult = [[[[ZXAztecDecoder alloc] init] autorelease] decode:detectorResult error:error];
+  if (!decoderResult) {
+    return nil;
+  }
   ZXResult * result = [[[ZXResult alloc] initWithText:[decoderResult text]
                                              rawBytes:[decoderResult rawBytes]
                                                length:[decoderResult length]

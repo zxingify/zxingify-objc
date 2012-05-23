@@ -6,7 +6,7 @@
 @property (nonatomic, retain, readonly) ZXBitArray * information;
 
 - (id)initWithInformation:(ZXBitArray *)information;
-- (NSString *)parseInformation;
+- (NSString *)parseInformationWithError:(NSError**)error;
 + (ZXAbstractExpandedDecoder *)createDecoder:(ZXBitArray *)information;
 
 @end

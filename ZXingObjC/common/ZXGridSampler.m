@@ -1,7 +1,7 @@
 #import "ZXBitMatrix.h"
 #import "ZXDefaultGridSampler.h"
+#import "ZXErrors.h"
 #import "ZXGridSampler.h"
-#import "ZXNotFoundException.h"
 #import "ZXPerspectiveTransform.h"
 
 static ZXGridSampler * gridSampler = nil;
@@ -43,7 +43,8 @@ static ZXGridSampler * gridSampler = nil;
                     p1FromX:(float)p1FromX p1FromY:(float)p1FromY
                     p2FromX:(float)p2FromX p2FromY:(float)p2FromY
                     p3FromX:(float)p3FromX p3FromY:(float)p3FromY
-                    p4FromX:(float)p4FromX p4FromY:(float)p4FromY {
+                    p4FromX:(float)p4FromX p4FromY:(float)p4FromY
+                      error:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -52,7 +53,8 @@ static ZXGridSampler * gridSampler = nil;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                  dimensionX:(int)dimensionX
                  dimensionY:(int)dimensionY
-                  transform:(ZXPerspectiveTransform *)transform {
+                  transform:(ZXPerspectiveTransform *)transform
+                      error:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -70,7 +72,7 @@ static ZXGridSampler * gridSampler = nil;
  * For efficiency, the method will check points from either end of the line until one is found
  * to be within the image. Because the set of points are assumed to be linear, this is valid.
  */
-+ (void)checkAndNudgePoints:(ZXBitMatrix *)image points:(float *)points pointsLen:(int)pointsLen {
++ (BOOL)checkAndNudgePoints:(ZXBitMatrix *)image points:(float *)points pointsLen:(int)pointsLen error:(NSError **)error {
   int width = image.width;
   int height = image.height;
 
@@ -79,7 +81,8 @@ static ZXGridSampler * gridSampler = nil;
     int x = (int) points[offset];
     int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return NO;
     }
     nudged = NO;
     if (x == -1) {
@@ -103,7 +106,8 @@ static ZXGridSampler * gridSampler = nil;
     int x = (int) points[offset];
     int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return NO;
     }
     nudged = NO;
     if (x == -1) {
@@ -121,6 +125,7 @@ static ZXGridSampler * gridSampler = nil;
       nudged = YES;
     }
   }
+  return YES;
 }
 
 @end

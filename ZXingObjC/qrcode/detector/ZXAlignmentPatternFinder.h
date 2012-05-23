@@ -17,6 +17,6 @@
 @interface ZXAlignmentPatternFinder : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(id <ZXResultPointCallback>)resultPointCallback;
-- (ZXAlignmentPattern *)find;
+- (ZXAlignmentPattern *)findWithError:(NSError**)error;
 
 @end

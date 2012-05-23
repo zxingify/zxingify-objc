@@ -1,7 +1,7 @@
 #import "ZXAlignmentPattern.h"
 #import "ZXAlignmentPatternFinder.h"
 #import "ZXBitMatrix.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXResultPointCallback.h"
 
 @interface ZXAlignmentPatternFinder ()
@@ -73,7 +73,7 @@
  * This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
  * it's pretty performance-critical and so is written to be fast foremost.
  */
-- (ZXAlignmentPattern *)find {
+- (ZXAlignmentPattern *)findWithError:(NSError **)error {
   int maxJ = self.startX + self.width;
   int middleI = self.startY + (self.height >> 1);
   int stateCount[3];
@@ -131,7 +131,8 @@
   if ([self.possibleCenters count] > 0) {
     return [self.possibleCenters objectAtIndex:0];
   }
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
 

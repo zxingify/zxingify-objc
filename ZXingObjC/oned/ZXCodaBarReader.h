@@ -8,6 +8,4 @@
 
 @interface ZXCodaBarReader : ZXOneDReader
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints;
-
 @end

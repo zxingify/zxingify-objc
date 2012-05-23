@@ -8,7 +8,7 @@
 @interface ZXPDF417Detector : NSObject
 
 - (id)initWithImage:(ZXBinaryBitmap *)image;
-- (ZXDetectorResult *)detect;
-- (ZXDetectorResult *)detect:(ZXDecodeHints *)hints;
+- (ZXDetectorResult *)detectWithError:(NSError**)error;
+- (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError**)error;
 
 @end

@@ -10,11 +10,11 @@
 
 @implementation ZXMultiFormatWriter
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
-  return [self encode:contents format:format width:width height:height hints:nil];
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
+  return [self encode:contents format:format width:width height:height hints:nil error:error];
 }
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   id<ZXWriter> writer;
   if (format == kBarcodeFormatEan8) {
     writer = [[[ZXEAN8Writer alloc] init] autorelease];
@@ -34,7 +34,7 @@
     [NSException raise:NSInvalidArgumentException 
                 format:@"No encoder available for format"];
   }
-  return [writer encode:contents format:format width:width height:height hints:hints];
+  return [writer encode:contents format:format width:width height:height hints:hints error:error];
 }
 
 @end

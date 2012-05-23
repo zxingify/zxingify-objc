@@ -1,6 +1,5 @@
 #import "ZXBitMatrix.h"
 #import "ZXErrorCorrectionLevel.h"
-#import "ZXFormatException.h"
 #import "ZXFormatInformation.h"
 #import "ZXQRCodeVersion.h"
 
@@ -173,14 +172,10 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
  */
 + (ZXQRCodeVersion *)provisionalVersionForDimension:(int)dimension {
   if (dimension % 4 != 1) {
-    @throw [ZXFormatException formatInstance];
+    return nil;
   }
 
-  @try {
-    return [self versionForNumber:(dimension - 17) >> 2];
-  } @catch (NSException * iae) {
-    @throw [ZXFormatException formatInstance];
-  }
+  return [self versionForNumber:(dimension - 17) >> 2];
 }
 
 + (ZXQRCodeVersion *)versionForNumber:(int)versionNumber {
@@ -191,8 +186,7 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
   }
 
   if (versionNumber < 1 || versionNumber > 40) {
-    [NSException raise:NSInvalidArgumentException 
-                format:@"Invalid version number"];
+    return nil;
   }
   return [VERSIONS objectAtIndex:versionNumber - 1];
 }

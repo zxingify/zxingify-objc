@@ -1,5 +1,5 @@
+#import "ZXErrors.h"
 #import "ZXFieldParser.h"
-#import "ZXNotFoundException.h"
 
 static NSObject* VARIABLE_LENGTH = nil;
 static NSArray* TWO_DIGIT_DATA_LENGTH = nil;
@@ -171,12 +171,13 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   }
 }
 
-+ (NSString *)parseFieldsInGeneralPurpose:(NSString *)rawInformation {
++ (NSString *)parseFieldsInGeneralPurpose:(NSString *)rawInformation error:(NSError **)error {
   if ([rawInformation length] == 0) {
     return @"";
   }
   if ([rawInformation length] < 2) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   NSString * firstTwoDigits = [rawInformation substringWithRange:NSMakeRange(0, 2)];
 
@@ -187,14 +188,20 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                      variableFieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                         rawInformation:rawInformation];
       }
-      return [self processFixedAI:2
-                        fieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
-                   rawInformation:rawInformation];
+      NSString* result = [self processFixedAI:2
+                                    fieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                               rawInformation:rawInformation];
+      if (!result) {
+        if (error) *error = NotFoundErrorInstance();
+        return nil;
+      }
+      return result;
     }
   }
 
   if ([rawInformation length] < 3) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   NSString * firstThreeDigits = [rawInformation substringWithRange:NSMakeRange(0, 3)];
 
@@ -205,9 +212,14 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                      variableFieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                         rawInformation:rawInformation];
       }
-      return [self processFixedAI:3
-                        fieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
-                   rawInformation:rawInformation];
+      NSString* result = [self processFixedAI:3
+                                    fieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                               rawInformation:rawInformation];
+      if (!result) {
+        if (error) *error = NotFoundErrorInstance();
+        return nil;
+      }
+      return result;
     }
   }
 
@@ -218,40 +230,57 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                      variableFieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                         rawInformation:rawInformation];
       }
-      return [self processFixedAI:4
-                        fieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
-                   rawInformation:rawInformation];
+      NSString* result = [self processFixedAI:4
+                                    fieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                               rawInformation:rawInformation];
+      if (!result) {
+        if (error) *error = NotFoundErrorInstance();
+        return nil;
+      }
+      return result;
     }
   }
 
   if ([rawInformation length] < 4) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   NSString * firstFourDigits = [rawInformation substringWithRange:NSMakeRange(0, 4)];
 
   for (int i = 0; i < [FOUR_DIGIT_DATA_LENGTH count]; ++i) {
     if ([[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstFourDigits]) {
       if ([[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] isEqual:VARIABLE_LENGTH]) {
-        return [self processVariableAI:4
-                     variableFieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
-                        rawInformation:rawInformation];
+        NSString* result = [self processVariableAI:4
+                                 variableFieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
+                                    rawInformation:rawInformation];
+        if (!result) {
+          if (error) *error = NotFoundErrorInstance();
+          return nil;
+        }
+        return result;
       }
-      return [self processFixedAI:4
-                        fieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
-                   rawInformation:rawInformation];
+      NSString* result = [self processFixedAI:4
+                                    fieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                               rawInformation:rawInformation];
+      if (!result) {
+        if (error) *error = NotFoundErrorInstance();
+        return nil;
+      }
+      return result;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
 + (NSString *)processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation {
   if ([rawInformation length] < aiSize) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
   NSString * ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   if ([rawInformation length] < aiSize + fieldSize) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
   NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, fieldSize)];
   NSString * remaining;
@@ -261,11 +290,14 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     remaining = [rawInformation substringFromIndex:aiSize + fieldSize];
   }
 
-  NSString *result = [NSString stringWithFormat:@"(%@)%@%@", ai, field, [self parseFieldsInGeneralPurpose:remaining]];
+  NSString *result = [self parseFieldsInGeneralPurpose:remaining error:nil];
+  if (result) {
+    result =[NSString stringWithFormat:@"(%@)%@%@", ai, field, result];
+  }
   return result;
 }
 
-+ (NSString *) processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation {
++ (NSString *)processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation {
   NSString * ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   int maxSize;
   if ([rawInformation length] < aiSize + variableFieldSize) {
@@ -280,7 +312,10 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   } else {
     remaining = [rawInformation substringFromIndex:maxSize];
   }
-  NSString *result = [NSString stringWithFormat:@"(%@)%@%@", ai, field, [self parseFieldsInGeneralPurpose:remaining]];
+  NSString *result = [self parseFieldsInGeneralPurpose:remaining error:nil];
+  if (result) {
+    result = [NSString stringWithFormat:@"(%@)%@%@", ai, field, result];
+  }
   return result;
 }
 

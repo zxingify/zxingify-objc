@@ -13,7 +13,7 @@
 
 @interface ZXGlobalHistogramBinarizer : ZXBinarizer
 
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row;
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source;
 
 @end

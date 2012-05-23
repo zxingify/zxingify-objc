@@ -2,9 +2,9 @@
 
 @interface ZXQRCodeBitMatrixParser : NSObject
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix;
-- (ZXFormatInformation *)readFormatInformation;
-- (ZXQRCodeVersion *)readVersion;
-- (NSArray *)readCodewords;
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError**)error;
+- (ZXFormatInformation *)readFormatInformationWithError:(NSError**)error;
+- (ZXQRCodeVersion *)readVersionWithError:(NSError**)error;
+- (NSArray *)readCodewordsWithError:(NSError**)error;
 
 @end

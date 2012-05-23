@@ -6,15 +6,15 @@
 #import "ZXDecodeHints.h"
 #import "ZXDecoderResult.h"
 #import "ZXDetectorResult.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXResult.h"
 
 @interface ZXDataMatrixReader ()
 
 @property (nonatomic, retain) ZXDataMatrixDecoder * decoder;
 
-- (ZXBitMatrix *) extractPureBits:(ZXBitMatrix *)image;
-- (int) moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
+- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
+- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
 
 @end
 
@@ -40,20 +40,45 @@
 /**
  * Locates and decodes a Data Matrix code in an image.
  */
-- (ZXResult *)decode:(ZXBinaryBitmap *)image {
-  return [self decode:image hints:nil];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
+  return [self decode:image hints:nil error:error];
 }
 
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXDecoderResult * decoderResult;
   NSArray * points;
   if (hints != nil && hints.pureBarcode) {
-    ZXBitMatrix * bits = [self extractPureBits:image.blackMatrix];
-    decoderResult = [decoder decodeMatrix:bits];
+    ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+    if (!matrix) {
+      return nil;
+    }
+    ZXBitMatrix * bits = [self extractPureBits:matrix];
+    if (!bits) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
+    decoderResult = [decoder decodeMatrix:bits error:error];
+    if (!decoderResult) {
+      return nil;
+    }
     points = [NSArray array];
   } else {
-    ZXDetectorResult * detectorResult = [[[[ZXDataMatrixDetector alloc] initWithImage:image.blackMatrix] autorelease] detect];
-    decoderResult = [decoder decodeMatrix:detectorResult.bits];
+    ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+    if (!matrix) {
+      return nil;
+    }
+    ZXDataMatrixDetector* detector = [[[ZXDataMatrixDetector alloc] initWithImage:matrix error:error] autorelease];
+    if (!detector) {
+      return nil;
+    }
+    ZXDetectorResult * detectorResult = [detector detectWithError:error];
+    if (!detectorResult) {
+      return nil;
+    }
+    decoderResult = [decoder decodeMatrix:detectorResult.bits error:error];
+    if (!decoderResult) {
+      return nil;
+    }
     points = detectorResult.points;
   }
   ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
@@ -85,10 +110,13 @@
   NSArray * leftTopBlack = image.topLeftOnBit;
   NSArray * rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
 
   int moduleSize = [self moduleSize:leftTopBlack image:image];
+  if (moduleSize == -1) {
+    return nil;
+  }
 
   int top = [[leftTopBlack objectAtIndex:1] intValue];
   int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
@@ -98,7 +126,7 @@
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
   if (matrixWidth == 0 || matrixHeight == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
 
   int nudge = moduleSize >> 1;
@@ -126,12 +154,12 @@
     x++;
   }
   if (x == width) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
 
   int moduleSize = x - [[leftTopBlack objectAtIndex:0] intValue];
   if (moduleSize == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
   return moduleSize;
 }

@@ -1,8 +1,8 @@
 #import "ZXBitMatrix.h"
 #import "ZXDecodeHints.h"
+#import "ZXErrors.h"
 #import "ZXFinderPatternInfo.h"
 #import "ZXMultiFinderPatternFinder.h"
-#import "ZXNotFoundException.h"
 #import "ZXQRCodeFinderPattern.h"
 
 // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
@@ -32,6 +32,8 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
 
 NSInteger moduleSizeCompare(id center1, id center2, void *context);
 
+- (NSArray*)selectBestPatternsWithError:(NSError**)error;
+
 @end
 
 
@@ -42,12 +44,13 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
  * those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
  * size differs from the average among those patterns the least
  */
-- (NSArray *)selectBestPatterns {
+- (NSArray *)selectBestPatternsWithError:(NSError **)error {
   NSMutableArray *_possibleCenters = [NSMutableArray arrayWithArray:[self possibleCenters]];
   int size = [_possibleCenters count];
 
   if (size < 3) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   /*
@@ -142,10 +145,11 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
     return results;
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  if (error) *error = NotFoundErrorInstance();
+  return nil;
 }
 
-- (NSArray *)findMulti:(ZXDecodeHints *)hints {
+- (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError**)error {
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = self.image.height;
   int maxJ = self.image.width;
@@ -214,7 +218,10 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
       [self handlePossibleCenter:stateCount i:i j:maxJ];
     }
   }
-  NSArray * patternInfo = [self selectBestPatterns];
+  NSArray * patternInfo = [self selectBestPatternsWithError:error];
+  if (!patternInfo) {
+    return nil;
+  }
   NSMutableArray * result = [NSMutableArray array];
   for (NSMutableArray * pattern in patternInfo) {
     [ZXResultPoint orderBestPatterns:pattern];

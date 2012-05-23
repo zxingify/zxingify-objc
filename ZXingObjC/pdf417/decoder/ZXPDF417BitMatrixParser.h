@@ -11,6 +11,5 @@
 
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix;
 - (NSArray *)readCodewords;
-- (int)processRow:(int*)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next;
 
 @end

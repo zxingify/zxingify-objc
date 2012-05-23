@@ -51,7 +51,7 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   int bigEnough = 256;
   ZXQRCodeWriter* writer = [[[ZXQRCodeWriter alloc] init] autorelease];
   ZXBitMatrix* matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:bigEnough
-                                height:bigEnough hints:nil];
+                                height:bigEnough hints:nil error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertEquals(matrix.width, bigEnough, @"Width should be %d", bigEnough);
   STAssertEquals(matrix.height, bigEnough, @"Height should be %d", bigEnough);
@@ -59,7 +59,7 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   // The QR will not fit in this size, so the matrix should come back bigger
   int tooSmall = 20;
   matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:tooSmall
-                   height:tooSmall hints:nil];
+                   height:tooSmall hints:nil error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertTrue(tooSmall < matrix.width, @"Matrix width should be greater than %d", tooSmall);
   STAssertTrue(tooSmall < matrix.height, @"Matrix height should be greater than %d", tooSmall);
@@ -68,7 +68,7 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   int strangeWidth = 500;
   int strangeHeight = 100;
   matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:strangeWidth
-                   height:strangeHeight hints:nil];
+                   height:strangeHeight hints:nil error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertEquals(matrix.width, strangeWidth, @"Width should be %d", strangeWidth);
   STAssertEquals(matrix.height, strangeHeight, @"Height should be %d", strangeHeight);
@@ -85,7 +85,7 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   ZXEncodeHints* hints = [[[ZXEncodeHints alloc] init] autorelease];
   hints.errorCorrectionLevel = ecLevel;
   ZXBitMatrix* generatedResult = [writer encode:contents format:kBarcodeFormatQRCode width:resolution
-                                         height:resolution hints:hints];
+                                         height:resolution hints:hints error:nil];
 
   STAssertEquals(generatedResult.width, resolution, @"Expected generatedResult width to be %d", resolution);
   STAssertEquals(generatedResult.height, resolution, @"Expected generatedResult height to be %d", resolution);

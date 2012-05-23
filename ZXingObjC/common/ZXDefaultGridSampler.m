@@ -1,6 +1,6 @@
 #import "ZXBitMatrix.h"
 #import "ZXDefaultGridSampler.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXPerspectiveTransform.h"
 
 @implementation ZXDefaultGridSampler
@@ -15,7 +15,8 @@
                     p1FromX:(float)p1FromX p1FromY:(float)p1FromY
                     p2FromX:(float)p2FromX p2FromY:(float)p2FromY
                     p3FromX:(float)p3FromX p3FromY:(float)p3FromY
-                    p4FromX:(float)p4FromX p4FromY:(float)p4FromY {
+                    p4FromX:(float)p4FromX p4FromY:(float)p4FromY
+                      error:(NSError **)error {
   ZXPerspectiveTransform * transform =
     [ZXPerspectiveTransform quadrilateralToQuadrilateral:p1ToX y0:p1ToY
                                                       x1:p2ToX y1:p2ToY
@@ -25,15 +26,17 @@
                                                      x1p:p2FromX y1p:p2FromY
                                                      x2p:p3FromX y2p:p3FromY
                                                      x3p:p4FromX y3p:p4FromY];
-  return [self sampleGrid:image dimensionX:dimensionX dimensionY:dimensionY transform:transform];
+  return [self sampleGrid:image dimensionX:dimensionX dimensionY:dimensionY transform:transform error:error];
 }
 
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                  dimensionX:(int)dimensionX
                  dimensionY:(int)dimensionY
-                  transform:(ZXPerspectiveTransform *)transform {
+                  transform:(ZXPerspectiveTransform *)transform
+                      error:(NSError **)error {
   if (dimensionX <= 0 || dimensionY <= 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
   int pointsLen = dimensionX << 1;
@@ -51,12 +54,15 @@
     }
     [transform transformPoints:pointsf pointsLen:pointsLen];
 
-    [ZXGridSampler checkAndNudgePoints:image points:pointsf pointsLen:pointsLen];
+    if (![ZXGridSampler checkAndNudgePoints:image points:pointsf pointsLen:pointsLen error:error]) {
+      return nil;
+    }
     for (int x = 0; x < max; x += 2) {
       int xx = (int)pointsf[x];
       int yy = (int)pointsf[x + 1];
       if (xx < 0 || yy < 0 || xx >= image.width || yy >= image.height) {
-        @throw [ZXNotFoundException notFoundInstance];
+        if (error) *error = NotFoundErrorInstance();
+        return nil;
       }
 
       if ([image getX:xx y:yy]) {

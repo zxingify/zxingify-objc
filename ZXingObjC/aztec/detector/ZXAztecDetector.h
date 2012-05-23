@@ -8,6 +8,6 @@
 @interface ZXAztecDetector : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image;
-- (ZXAztecDetectorResult *)detect;
+- (ZXAztecDetectorResult *)detectWithError:(NSError**)error;
 
 @end

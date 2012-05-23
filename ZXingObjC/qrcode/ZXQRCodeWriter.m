@@ -16,11 +16,11 @@ int const QUIET_ZONE_SIZE = 4;
 
 @implementation ZXQRCodeWriter
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
-  return [self encode:contents format:format width:width height:height hints:nil];
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
+  return [self encode:contents format:format width:width height:height hints:nil error:error];
 }
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (contents == nil || [contents length] == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Found empty contents"];
   }
@@ -42,7 +42,7 @@ int const QUIET_ZONE_SIZE = 4;
   }
 
   ZXQRCode * code = [[[ZXQRCode alloc] init] autorelease];
-  [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints qrCode:code];
+  [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints qrCode:code error:error];
   return [self renderResult:code width:width height:height];
 }
 

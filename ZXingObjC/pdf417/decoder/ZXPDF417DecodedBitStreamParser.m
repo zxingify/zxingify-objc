@@ -1,5 +1,5 @@
 #import "ZXDecoderResult.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
 
 int const TEXT_COMPACTION_MODE_LATCH = 900;
@@ -69,7 +69,11 @@ NSString* const EXP900[16] =
 
 @implementation ZXPDF417DecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords {
++ (ZXDecoderResult *)decode:(NSArray *)codewords error:(NSError **)error {
+  if (!codewords) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   NSMutableString * result = [NSMutableString stringWithCapacity:100];
   int codeIndex = 1;
   int code = [[codewords objectAtIndex:codeIndex++] intValue];
@@ -98,7 +102,8 @@ NSString* const EXP900[16] =
     if (codeIndex < [codewords count]) {
       code = [[codewords objectAtIndex:codeIndex++] intValue];
     } else {
-      @throw [ZXFormatException formatInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
   }
   return [[[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil] autorelease];

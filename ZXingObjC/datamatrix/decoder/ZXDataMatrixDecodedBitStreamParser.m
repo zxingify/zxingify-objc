@@ -1,7 +1,7 @@
 #import "ZXBitSource.h"
 #import "ZXDataMatrixDecodedBitStreamParser.h"
 #import "ZXDecoderResult.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 
 /**
  * See ISO 16022:2006, Annex C Table C.1
@@ -43,12 +43,12 @@ const int BASE256_ENCODE = 6;
 
 @interface ZXDataMatrixDecodedBitStreamParser ()
 
-+ (void)decodeAnsiX12Segment:(ZXBitSource *)bits result:(NSMutableString *)result;
++ (BOOL)decodeAnsiX12Segment:(ZXBitSource *)bits result:(NSMutableString *)result;
 + (int)decodeAsciiSegment:(ZXBitSource *)bits result:(NSMutableString *)result resultTrailer:(NSMutableString *)resultTrailer;
-+ (void)decodeBase256Segment:(ZXBitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments;
-+ (void)decodeC40Segment:(ZXBitSource *)bits result:(NSMutableString *)result;
++ (BOOL)decodeBase256Segment:(ZXBitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments;
++ (BOOL)decodeC40Segment:(ZXBitSource *)bits result:(NSMutableString *)result;
 + (void)decodeEdifactSegment:(ZXBitSource *)bits result:(NSMutableString *)result;
-+ (void)decodeTextSegment:(ZXBitSource *)bits result:(NSMutableString *)result;
++ (BOOL)decodeTextSegment:(ZXBitSource *)bits result:(NSMutableString *)result;
 + (void)parseTwoBytes:(int)firstByte secondByte:(int)secondByte result:(int[])result;
 + (char)unrandomize255State:(int)randomizedBase256Codeword base256CodewordPosition:(int)base256CodewordPosition;
 
@@ -56,7 +56,7 @@ const int BASE256_ENCODE = 6;
 
 @implementation ZXDataMatrixDecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length {
++ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length error:(NSError**)error {
   ZXBitSource * bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
   NSMutableString * result = [NSMutableString stringWithCapacity:100];
   NSMutableString * resultTrailer = [NSMutableString string];
@@ -65,25 +65,42 @@ const int BASE256_ENCODE = 6;
   do {
     if (mode == ASCII_ENCODE) {
       mode = [self decodeAsciiSegment:bits result:result resultTrailer:resultTrailer];
+      if (mode == -1) {
+        if (error) *error = FormatErrorInstance();
+        return nil;
+      }
     } else {
       switch (mode) {
       case C40_ENCODE:
-        [self decodeC40Segment:bits result:result];
+        if (![self decodeC40Segment:bits result:result]) {
+          if (error) *error = FormatErrorInstance();
+          return nil;
+        }
         break;
       case TEXT_ENCODE:
-        [self decodeTextSegment:bits result:result];
+        if (![self decodeTextSegment:bits result:result]) {
+          if (error) *error = FormatErrorInstance();
+          return nil;
+        }
         break;
       case ANSIX12_ENCODE:
-        [self decodeAnsiX12Segment:bits result:result];
+        if (![self decodeAnsiX12Segment:bits result:result]) {
+          if (error) *error = FormatErrorInstance();
+          return nil;
+        }
         break;
       case EDIFACT_ENCODE:
         [self decodeEdifactSegment:bits result:result];
         break;
       case BASE256_ENCODE:
-        [self decodeBase256Segment:bits result:result byteSegments:byteSegments];
+        if (![self decodeBase256Segment:bits result:result byteSegments:byteSegments]) {
+          if (error) *error = FormatErrorInstance();
+          return nil;
+        }
         break;
       default:
-        @throw [ZXFormatException formatInstance];
+        if (error) *error = FormatErrorInstance();
+        return nil;
       }
       mode = ASCII_ENCODE;
     }
@@ -107,7 +124,7 @@ const int BASE256_ENCODE = 6;
   do {
     int oneByte = [bits readBits:8];
     if (oneByte == 0) {
-      @throw [ZXFormatException formatInstance];
+      return -1;
     } else if (oneByte <= 128) {
       oneByte = upperShift ? oneByte + 128 : oneByte;
       upperShift = NO;
@@ -149,7 +166,7 @@ const int BASE256_ENCODE = 6;
       if (oneByte == 254 && bits.available == 0) {
         // Ignore
       } else {
-        @throw [ZXFormatException formatInstance];
+        return -1;
       }
     }
   } while (bits.available > 0);
@@ -160,17 +177,17 @@ const int BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
  */
-+ (void)decodeC40Segment:(ZXBitSource *)bits result:(NSMutableString *)result {
++ (BOOL)decodeC40Segment:(ZXBitSource *)bits result:(NSMutableString *)result {
   BOOL upperShift = NO;
 
   int cValues[3];
   do {
     if ([bits available] == 8) {
-      return;
+      return YES;
     }
     int firstByte = [bits readBits:8];
     if (firstByte == 254) {
-      return;
+      return YES;
     }
 
     [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
@@ -191,7 +208,7 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         }
         break;
       case 1:
@@ -213,11 +230,11 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         } else if (cValue == 30) {
           upperShift = YES;
         } else {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         }
         shift = 0;
         break;
@@ -231,17 +248,19 @@ const int BASE256_ENCODE = 6;
         shift = 0;
         break;
       default:
-        @throw [ZXFormatException formatInstance];
+        return NO;
       }
     }
   } while (bits.available > 0);
+
+  return YES;
 }
 
 
 /**
  * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
  */
-+ (void)decodeTextSegment:(ZXBitSource *)bits result:(NSMutableString *)result {
++ (BOOL)decodeTextSegment:(ZXBitSource *)bits result:(NSMutableString *)result {
   BOOL upperShift = NO;
 
   int cValues[3];
@@ -252,11 +271,11 @@ const int BASE256_ENCODE = 6;
   int shift = 0;
   do {
     if (bits.available == 8) {
-      return;
+      return YES;
     }
     int firstByte = [bits readBits:8];
     if (firstByte == 254) {
-      return;
+      return YES;
     }
 
     [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
@@ -276,7 +295,7 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", textChar];
           }
         } else {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         }
         break;
       case 1:
@@ -298,11 +317,11 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         } else if (cValue == 30) {
           upperShift = YES;
         } else {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         }
         shift = 0;
         break;
@@ -317,21 +336,22 @@ const int BASE256_ENCODE = 6;
           }
           shift = 0;
         } else {
-          @throw [ZXFormatException formatInstance];
+          return NO;
         }
         break;
       default:
-        @throw [ZXFormatException formatInstance];
+        return NO;
       }
     }
   } while (bits.available > 0);
+  return YES;
 }
 
 
 /**
  * See ISO 16022:2006, 5.2.7
  */
-+ (void)decodeAnsiX12Segment:(ZXBitSource *)bits result:(NSMutableString *)result {
++ (BOOL)decodeAnsiX12Segment:(ZXBitSource *)bits result:(NSMutableString *)result {
   int cValues[3];
   for (int i = 0; i < 3; i++) {
     cValues[i] = 0;
@@ -339,11 +359,11 @@ const int BASE256_ENCODE = 6;
 
   do {
     if (bits.available == 8) {
-      return;
+      return YES;
     }
     int firstByte = [bits readBits:8];
     if (firstByte == 254) {
-      return;
+      return YES;
     }
     [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
 
@@ -362,10 +382,11 @@ const int BASE256_ENCODE = 6;
       } else if (cValue < 40) {
         [result appendFormat:@"%C", (unichar)(cValue + 51)];
       } else {
-        @throw [ZXFormatException formatInstance];
+        return NO;
       }
     }
   } while (bits.available > 0);
+  return YES;
 }
 
 + (void)parseTwoBytes:(int)firstByte secondByte:(int)secondByte result:(int[])result {
@@ -409,7 +430,7 @@ const int BASE256_ENCODE = 6;
 /**
  * See ISO 16022:2006, 5.2.9 and Annex B, B.2
  */
-+ (void)decodeBase256Segment:(ZXBitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments {
++ (BOOL)decodeBase256Segment:(ZXBitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments {
   int codewordPosition = 2;
   int d1 = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
   int count;
@@ -422,14 +443,14 @@ const int BASE256_ENCODE = 6;
   }
 
   if (count < 0) {
-    @throw [ZXFormatException formatInstance];
+    return NO;
   }
 
   NSMutableArray * bytesArray = [NSMutableArray arrayWithCapacity:count];
   unsigned char bytes[count];
   for (int i = 0; i < count; i++) {
     if ([bits available] < 8) {
-      @throw [ZXFormatException formatInstance];
+      return NO;
     }
     char byte = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
     bytes[i] = byte;
@@ -438,6 +459,7 @@ const int BASE256_ENCODE = 6;
   [byteSegments addObject:bytesArray];
 
   [result appendString:[[[NSString alloc] initWithBytes:bytes length:count encoding:NSISOLatin1StringEncoding] autorelease]];
+  return YES;
 }
 
 

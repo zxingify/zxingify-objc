@@ -5,7 +5,6 @@
 #import "ZXHybridBinarizer.h"
 #import "ZXLuminanceSource.h"
 #import "ZXMultiFormatReader.h"
-#import "ZXReaderException.h"
 #import "ZXResult.h"
 
 @interface NegativeTestResult : NSObject
@@ -114,20 +113,18 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   ZXImage * rotatedImage = [self rotateImage:image degrees:rotationInDegrees];
   ZXLuminanceSource * source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
   ZXBinaryBitmap * bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
-  ZXResult * result = nil;
-  @try {
-    result = [self.barcodeReader decode:bitmap];
+  NSError* error = nil;
+  ZXResult * result = [self.barcodeReader decode:bitmap error:&error];
+  if (result) {
     NSLog(@"Found false positive: '%@' with format '%d' (rotation: %f)", result.text, result.barcodeFormat, rotationInDegrees);
     return NO;
-  } @catch (ZXReaderException * re) {
   }
 
   // Try "try harder" getMode
-  @try {
-    result = [self.barcodeReader decode:bitmap hints:TRY_HARDER_HINT];
+  result = [self.barcodeReader decode:bitmap hints:TRY_HARDER_HINT error:&error];
+  if (result) {
     NSLog(@"Try harder found false positive: '%@' with format '%d' (rotation: %f)", result.text, result.barcodeFormat, rotationInDegrees);
     return NO;
-  } @catch (ZXReaderException * re) {
   }
   return YES;
 }

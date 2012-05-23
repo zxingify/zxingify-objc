@@ -6,6 +6,6 @@
 
 @interface ZXPDF417DecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords;
++ (ZXDecoderResult *)decode:(NSArray *)codewords error:(NSError**)error;
 
 @end

@@ -21,6 +21,6 @@
 @interface ZXReedSolomonDecoder : NSObject
 
 - (id)initWithField:(ZXGenericGF *)field;
-- (void)decode:(int *)received receivedLen:(int)receivedLen twoS:(int)twoS;
+- (BOOL)decode:(int *)received receivedLen:(int)receivedLen twoS:(int)twoS error:(NSError **)error;
 
 @end

@@ -1,10 +1,10 @@
 #import "ZXBitArray.h"
 #import "ZXByteMatrix.h"
+#import "ZXErrors.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXMaskUtil.h"
 #import "ZXMatrixUtil.h"
 #import "ZXQRCode.h"
-#import "ZXWriterException.h"
 
 int const POSITION_DETECTION_PATTERN[7][7] = {
   {1, 1, 1, 1, 1, 1, 1},
@@ -106,44 +106,62 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 + (BOOL)isEmpty:(int)value;
 + (BOOL)isValidValue:(int)value;
-+ (void)embedTimingPatterns:(ZXByteMatrix *)matrix;
-+ (void)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix;
-+ (void)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void)embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix;
-+ (void)maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix;
++ (BOOL)embedTimingPatterns:(ZXByteMatrix *)matrix;
++ (BOOL)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix;
++ (BOOL)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (BOOL)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (BOOL)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (BOOL)embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
++ (BOOL)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix;
++ (BOOL)maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix;
 
 @end
 
 @implementation ZXMatrixUtil
 
 // Set all cells to -1.  -1 means that the cell is empty (not set yet).
-+ (void) clearMatrix:(ZXByteMatrix *)matrix {
++ (void)clearMatrix:(ZXByteMatrix *)matrix {
   [matrix clear:(char) -1];
 }
 
 // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
 // success, store the result in "matrix" and return true.
-+ (void)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
++ (BOOL)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   [self clearMatrix:matrix];
-  [self embedBasicPatterns:version matrix:matrix];
-  [self embedTypeInfo:ecLevel maskPattern:maskPattern matrix:matrix];
-  [self maybeEmbedVersionInfo:version matrix:matrix];
-  [self embedDataBits:dataBits maskPattern:maskPattern matrix:matrix];
+  if (![self embedBasicPatterns:version matrix:matrix error:error] ||
+      ![self embedTypeInfo:ecLevel maskPattern:maskPattern matrix:matrix error:error] ||
+      ![self maybeEmbedVersionInfo:version matrix:matrix error:error] ||
+      ![self embedDataBits:dataBits maskPattern:maskPattern matrix:matrix error:error]) {
+    return NO;
+  }
+  return YES;
 }
 
-+ (void)embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
-  [self embedPositionDetectionPatternsAndSeparators:matrix];
-  [self embedDarkDotAtLeftBottomCorner:matrix];
-  [self maybeEmbedPositionAdjustmentPatterns:version matrix:matrix];
-  [self embedTimingPatterns:matrix];
++ (BOOL)embedBasicPatterns:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error {
+  if (![self embedPositionDetectionPatternsAndSeparators:matrix]) {
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil] autorelease];
+    return NO;
+  }
+  if (![self embedDarkDotAtLeftBottomCorner:matrix]) {
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil] autorelease];
+    return NO;
+  }
+  if (![self maybeEmbedPositionAdjustmentPatterns:version matrix:matrix]) {
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil] autorelease];
+    return NO;
+  }
+  if (![self embedTimingPatterns:matrix]) {
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil] autorelease];
+    return NO;
+  }
+  return YES;
 }
 
-+ (void)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
++ (BOOL)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   ZXBitArray * typeInfoBits = [[[ZXBitArray alloc] init] autorelease];
-  [self makeTypeInfoBits:ecLevel maskPattern:maskPattern bits:typeInfoBits];
+  if (![self makeTypeInfoBits:ecLevel maskPattern:maskPattern bits:typeInfoBits error:error]) {
+    return NO;
+  }
 
   for (int i = 0; i < [typeInfoBits size]; ++i) {
     BOOL bit = [typeInfoBits get:[typeInfoBits size] - 1 - i];
@@ -160,14 +178,17 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
       [matrix setX:x2 y:y2 boolValue:bit];
     }
   }
+  return YES;
 }
 
-+ (void)maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix {
++ (BOOL)maybeEmbedVersionInfo:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error {
   if (version < 7) {
-    return;
+    return YES;
   }
   ZXBitArray * versionInfoBits = [[[ZXBitArray alloc] init] autorelease];
-  [self makeVersionInfoBits:version bits:versionInfoBits];
+  if (![self makeVersionInfoBits:version bits:versionInfoBits error:error]) {
+    return NO;
+  }
   int bitIndex = 6 * 3 - 1;
 
   for (int i = 0; i < 6; ++i) {
@@ -178,9 +199,10 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
       [matrix setX:[matrix height] - 11 + j y:i boolValue:bit];
     }
   }
+  return YES;
 }
 
-+ (void)embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix {
++ (BOOL)embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   int bitIndex = 0;
   int direction = -1;
   int x = [matrix width] - 1;
@@ -221,10 +243,13 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   }
 
   if (bitIndex != [dataBits size]) {
-    @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                             reason:[NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]
-                                           userInfo:nil] autorelease];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
 + (int)findMSBSet:(int)value {
@@ -247,11 +272,13 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return value;
 }
 
-+ (void)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits {
++ (BOOL)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits error:(NSError **)error {
   if (![ZXQRCode isValidMaskPattern:maskPattern]) {
-    @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                             reason:@"Invalid mask pattern"
-                                           userInfo:nil] autorelease];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Invalid mask pattern"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    return NO;
   }
   int typeInfo = ([ecLevel bits] << 3) | maskPattern;
   [bits appendBits:typeInfo numBits:5];
@@ -261,21 +288,27 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   [maskBits appendBits:TYPE_INFO_MASK_PATTERN numBits:15];
   [bits xor:maskBits];
   if ([bits size] != 15) {
-    @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                             reason:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
-                                           userInfo:nil] autorelease];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
-+ (void)makeVersionInfoBits:(int)version bits:(ZXBitArray *)bits {
++ (BOOL)makeVersionInfoBits:(int)version bits:(ZXBitArray *)bits error:(NSError**)error {
   [bits appendBits:version numBits:6];
   int bchCode = [self calculateBCHCode:version poly:VERSION_INFO_POLY];
   [bits appendBits:bchCode numBits:12];
   if ([bits size] != 18) {
-    @throw [[[ZXWriterException alloc] initWithName:@"ZXWriterException"
-                                             reason:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
-                                           userInfo:nil] autorelease];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
 + (BOOL)isEmpty:(int)value {
@@ -286,92 +319,102 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return value == -1 || value == 0 || value == 1;
 }
 
-+ (void)embedTimingPatterns:(ZXByteMatrix *)matrix {
++ (BOOL)embedTimingPatterns:(ZXByteMatrix *)matrix {
   for (int i = 8; i < [matrix width] - 8; ++i) {
     int bit = (i + 1) % 2;
     if (![self isValidValue:[matrix getX:i y:6]]) {
-      @throw [[[ZXWriterException alloc] init] autorelease];
+      return NO;
     }
     if ([self isEmpty:[matrix getX:i y:6]]) {
       [matrix setX:i y:6 boolValue:bit];
     }
     if (![self isValidValue:[matrix getX:6 y:i]]) {
-      @throw [[[ZXWriterException alloc] init] autorelease];
+      return NO;
     }
     if ([self isEmpty:[matrix getX:6 y:i]]) {
       [matrix setX:6 y:i boolValue:bit];
     }
   }
+  return YES;
 }
 
-+ (void)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix {
++ (BOOL)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix {
   if ([matrix getX:8 y:matrix.height - 8] == 0) {
-    @throw [[[ZXWriterException alloc] init] autorelease];
+    return NO;
   }
   [matrix setX:8 y:matrix.height - 8 intValue:1];
+  return YES;
 }
 
-+ (void)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (BOOL)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int x = 0; x < 8; ++x) {
     if (![self isEmpty:[matrix getX:xStart + x y:yStart]]) {
-      @throw [[[ZXWriterException alloc] init] autorelease];
+      return NO;
     }
     [matrix setX:xStart + x y:yStart intValue:HORIZONTAL_SEPARATION_PATTERN[0][x]];
   }
+  return YES;
 }
 
-+ (void)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (BOOL)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 7; ++y) {
     if (![self isEmpty:[matrix getX:xStart y:yStart + y]]) {
-      @throw [[[ZXWriterException alloc] init] autorelease];
+      return NO;
     }
     [matrix setX:xStart y:yStart + y intValue:VERTICAL_SEPARATION_PATTERN[y][0]];
   }
+  return YES;
 }
 
-+ (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (BOOL)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 5; ++y) {
     for (int x = 0; x < 5; ++x) {
       if (![self isEmpty:[matrix getX:xStart + x y:yStart + y]]) {
-        @throw [[[ZXWriterException alloc] init] autorelease];
+        return NO;
       }
       [matrix setX:xStart + x y:yStart + y intValue:POSITION_ADJUSTMENT_PATTERN[y][x]];
     }
   }
+  return YES;
 }
 
-+ (void) embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
++ (BOOL)embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 7; ++y) {
-
     for (int x = 0; x < 7; ++x) {
       if (![self isEmpty:[matrix getX:xStart + x y:yStart + y]]) {
-        @throw [[[ZXWriterException alloc] init] autorelease];
+        return NO;
       }
       [matrix setX:xStart + x y:yStart + y intValue:POSITION_DETECTION_PATTERN[y][x]];
     }
-
   }
-
+  return YES;
 }
 
-+ (void)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix {
++ (BOOL)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix {
   int pdpWidth = sizeof(POSITION_DETECTION_PATTERN[0]) / sizeof(int);
-  [self embedPositionDetectionPattern:0 yStart:0 matrix:matrix];
-  [self embedPositionDetectionPattern:[matrix width] - pdpWidth yStart:0 matrix:matrix];
-  [self embedPositionDetectionPattern:0 yStart:[matrix width] - pdpWidth matrix:matrix];
+  if (![self embedPositionDetectionPattern:0 yStart:0 matrix:matrix] ||
+      ![self embedPositionDetectionPattern:[matrix width] - pdpWidth yStart:0 matrix:matrix] ||
+      ![self embedPositionDetectionPattern:0 yStart:[matrix width] - pdpWidth matrix:matrix]) {
+    return NO;
+  }
   int hspWidth = sizeof(HORIZONTAL_SEPARATION_PATTERN[0]) / sizeof(int);
-  [self embedHorizontalSeparationPattern:0 yStart:hspWidth - 1 matrix:matrix];
-  [self embedHorizontalSeparationPattern:[matrix width] - hspWidth yStart:hspWidth - 1 matrix:matrix];
-  [self embedHorizontalSeparationPattern:0 yStart:[matrix width] - hspWidth matrix:matrix];
+  if (![self embedHorizontalSeparationPattern:0 yStart:hspWidth - 1 matrix:matrix] ||
+      ![self embedHorizontalSeparationPattern:[matrix width] - hspWidth yStart:hspWidth - 1 matrix:matrix] ||
+      ![self embedHorizontalSeparationPattern:0 yStart:[matrix width] - hspWidth matrix:matrix]) {
+    return NO;
+  }
   int vspSize = sizeof(VERTICAL_SEPARATION_PATTERN) / sizeof(int*);
-  [self embedVerticalSeparationPattern:vspSize yStart:0 matrix:matrix];
-  [self embedVerticalSeparationPattern:[matrix height] - vspSize - 1 yStart:0 matrix:matrix];
-  [self embedVerticalSeparationPattern:vspSize yStart:[matrix height] - vspSize matrix:matrix];
+  if (![self embedVerticalSeparationPattern:vspSize yStart:0 matrix:matrix] ||
+      ![self embedVerticalSeparationPattern:[matrix height] - vspSize - 1 yStart:0 matrix:matrix] ||
+      ![self embedVerticalSeparationPattern:vspSize yStart:[matrix height] - vspSize matrix:matrix]) {
+    return NO;
+  }
+  return YES;
 }
 
-+ (void)maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
++ (BOOL)maybeEmbedPositionAdjustmentPatterns:(int)version matrix:(ZXByteMatrix *)matrix {
   if (version < 2) {
-    return;
+    return YES;
   }
   int index = version - 1;
   int numCoordinates = sizeof(POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index]) / sizeof(int);
@@ -384,10 +427,13 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
         continue;
       }
       if ([self isEmpty:[matrix getX:x y:y]]) {
-        [self embedPositionAdjustmentPattern:x - 2 yStart:y - 2 matrix:matrix];
+        if (![self embedPositionAdjustmentPattern:x - 2 yStart:y - 2 matrix:matrix]) {
+          return NO;
+        }
       }
     }
   }
+  return YES;
 }
 
 @end

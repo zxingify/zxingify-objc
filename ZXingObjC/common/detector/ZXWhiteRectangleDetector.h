@@ -10,8 +10,8 @@
 
 @interface ZXWhiteRectangleDetector : NSObject 
 
-- (id)initWithImage:(ZXBitMatrix *)image;
-- (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y;
-- (NSArray *)detect;
+- (id)initWithImage:(ZXBitMatrix *)image error:(NSError**)error;
+- (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y error:(NSError**)error;
+- (NSArray *)detectWithError:(NSError**)error;
 
 @end

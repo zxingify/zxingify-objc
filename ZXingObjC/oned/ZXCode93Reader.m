@@ -1,8 +1,6 @@
 #import "ZXBitArray.h"
-#import "ZXChecksumException.h"
 #import "ZXCode93Reader.h"
-#import "ZXFormatException.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
@@ -26,8 +24,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
-- (void)checkChecksums:(NSMutableString *)result;
-- (void)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax;
+- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError**)error ;
+- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError**)error ;
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
 - (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
 - (unichar)patternToChar:(int)pattern;
@@ -37,8 +35,12 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @implementation ZXCode93Reader
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   NSArray * start = [self findAsteriskPattern:row];
+  if (!start) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = row.size;
 
@@ -52,12 +54,20 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   unichar decodedChar;
   int lastStart;
   do {
-    [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
+    if (![ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen]) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
     int pattern = [self toPattern:counters countersLen:countersLen];
     if (pattern < 0) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
     decodedChar = [self patternToChar:pattern];
+    if (decodedChar == -1) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
     [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
     for (int i = 0; i < countersLen; i++) {
@@ -71,17 +81,25 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
 
   if (nextStart == end || ![row get:nextStart]) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   if ([result length] < 2) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
-  [self checkChecksums:result];
+  if (![self checkChecksums:result error:error]) {
+    return nil;
+  }
   [result deleteCharactersInRange:NSMakeRange([result length] - 2, 2)];
 
   NSString * resultString = [self decodeExtended:result];
+  if (!resultString) {
+    if (error) *error = FormatErrorInstance();
+    return nil;
+  }
 
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
@@ -134,7 +152,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 - (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen {
@@ -171,7 +189,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return -1;
 }
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {
@@ -187,14 +205,14 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
         if (next >= 'A' && next <= 'Z') {
           decodedChar = (unichar)(next + 32);
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       case 'a':
         if (next >= 'A' && next <= 'Z') {
           decodedChar = (unichar)(next - 64);
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       case 'b':
@@ -203,7 +221,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
         } else if (next >= 'F' && next <= 'W') {
           decodedChar = (unichar)(next - 11);
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       case 'c':
@@ -212,7 +230,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
         } else if (next == 'Z') {
           decodedChar = ':';
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       }
@@ -226,13 +244,15 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   return decoded;
 }
 
-- (void)checkChecksums:(NSMutableString *)result {
+- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError**)error {
   int length = [result length];
-  [self checkOneChecksum:result checkPosition:length - 2 weightMax:20];
-  [self checkOneChecksum:result checkPosition:length - 1 weightMax:15];
+  if (![self checkOneChecksum:result checkPosition:length - 2 weightMax:20 error:error]) {
+    return NO;
+  }
+  return [self checkOneChecksum:result checkPosition:length - 1 weightMax:15 error:error];
 }
 
-- (void)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax {
+- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError**)error {
   int weight = 1;
   int total = 0;
 
@@ -244,8 +264,10 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   }
 
   if ([result characterAtIndex:checkPosition] != CODE93_ALPHABET[total % 47]) {
-    @throw [ZXChecksumException checksumInstance];
+    if (error) *error = ChecksumErrorInstance();
+    return NO;
   }
+  return YES;
 }
 
 @end

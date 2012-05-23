@@ -10,11 +10,8 @@
   STAssertEqualObjects([ZXMode forBits:0x02], [ZXMode alphanumericMode], @"Expected alphanumeric mode");
   STAssertEqualObjects([ZXMode forBits:0x04], [ZXMode byteMode], @"Expected byte mode");
   STAssertEqualObjects([ZXMode forBits:0x08], [ZXMode kanjiMode], @"Expected kanji mode");
-  @try {
-    [ZXMode forBits:0x10];
-    STFail(@"Should have thrown an exception");
-  } @catch (NSException *ex) {
-    // good
+  if ([ZXMode forBits:0x10]) {
+    STFail(@"Should have failed");
   }
 }
 

@@ -53,12 +53,15 @@
   [super dealloc];
 }
 
-- (NSString *)decodeAllCodes:(NSMutableString *)buff initialPosition:(int)initialPosition {
+- (NSString *)decodeAllCodes:(NSMutableString *)buff initialPosition:(int)initialPosition error:(NSError**)error {
   int currentPosition = initialPosition;
   NSString * remaining = nil;
   do {
     ZXDecodedInformation * info = [self decodeGeneralPurposeField:currentPosition remaining:remaining];
-    NSString * parsedFields = [ZXFieldParser parseFieldsInGeneralPurpose:[info theNewString]];
+    NSString * parsedFields = [ZXFieldParser parseFieldsInGeneralPurpose:[info theNewString] error:error];
+    if (!parsedFields) {
+      return nil;
+    }
     [buff appendString:parsedFields];
     if ([info remaining]) {
       remaining = [[NSNumber numberWithInt:[info remainingValue]] stringValue];

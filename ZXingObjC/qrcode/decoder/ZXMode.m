@@ -57,9 +57,7 @@
     case 0xD:
       return [ZXMode hanziMode];
     default:
-      @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                     reason:@"Invalid bits"
-                                   userInfo:nil];
+      return nil;
   }
 }
 

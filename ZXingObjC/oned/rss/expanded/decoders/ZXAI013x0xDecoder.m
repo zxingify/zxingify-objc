@@ -1,15 +1,16 @@
 #import "ZXAI013x0xDecoder.h"
 #import "ZXBitArray.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 
 int const AI013x0xHeaderSize = 4 + 1;
 int const AI013x0xWeightSize = 15;
 
 @implementation ZXAI013x0xDecoder
 
-- (NSString *)parseInformation {
+- (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size != AI013x0xHeaderSize + gtinSize + AI013x0xWeightSize) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   NSMutableString * buf = [NSMutableString string];

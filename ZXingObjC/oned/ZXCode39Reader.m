@@ -1,8 +1,6 @@
 #import "ZXBitArray.h"
-#import "ZXChecksumException.h"
 #import "ZXCode39Reader.h"
-#import "ZXFormatException.h"
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
@@ -74,8 +72,12 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   return self;
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   NSArray * start = [self findAsteriskPattern:row];
+  if (!start) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = [row size];
 
@@ -89,12 +91,20 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   unichar decodedChar;
   int lastStart;
   do {
-    [ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen];
+    if (![ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen]) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
     int pattern = [self toNarrowWidePattern:(int*)counters countersLen:countersLen];
     if (pattern < 0) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
     decodedChar = [self patternToChar:pattern];
+    if (decodedChar == -1) {
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
+    }
     [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
@@ -113,7 +123,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
   if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   if (usingCheckDigit) {
@@ -123,18 +134,24 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       total += [CODE39_ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
     }
     if ([result characterAtIndex:max] != CODE39_ALPHABET[total % 43]) {
-      @throw [ZXChecksumException checksumInstance];
+      if (error) *error = ChecksumErrorInstance();
+      return nil;
     }
     [result deleteCharactersInRange:NSMakeRange(max, 1)];
   }
 
   if ([result length] == 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   NSString * resultString;
   if (self.extendedMode) {
     resultString = [self decodeExtended:result];
+    if (!resultString) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
   } else {
     resultString = [NSString stringWithString:result];
   }
@@ -192,7 +209,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 - (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen {
@@ -241,7 +258,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       return CODE39_ALPHABET[i];
     }
   }
-  @throw [ZXNotFoundException notFoundInstance];
+  return -1;
 }
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {
@@ -259,14 +276,14 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
         if (next >= 'A' && next <= 'Z') {
           decodedChar = (unichar)(next + 32);
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       case '$':
         if (next >= 'A' && next <= 'Z') {
           decodedChar = (unichar)(next - 64);
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       case '%':
@@ -275,7 +292,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
         } else if (next >= 'F' && next <= 'W') {
           decodedChar = (unichar)(next - 11);
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       case '/':
@@ -284,7 +301,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
         } else if (next == 'Z') {
           decodedChar = ':';
         } else {
-          @throw [ZXFormatException formatInstance];
+          return nil;
         }
         break;
       }

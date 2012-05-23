@@ -1,8 +1,8 @@
 #import "ZXBitMatrix.h"
 #import "ZXDecodeHints.h"
+#import "ZXErrors.h"
 #import "ZXFinderPatternFinder.h"
 #import "ZXFinderPatternInfo.h"
-#import "ZXNotFoundException.h"
 #import "ZXOneDReader.h"
 #import "ZXQRCodeFinderPattern.h"
 #import "ZXResultPoint.h"
@@ -60,7 +60,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   [super dealloc];
 }
 
-- (ZXFinderPatternInfo *)find:(ZXDecodeHints *)hints {
+- (ZXFinderPatternInfo *)find:(ZXDecodeHints *)hints error:(NSError**)error {
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = self.image.height;
   int maxJ = self.image.width;
@@ -145,10 +145,13 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   }
 
   NSMutableArray * patternInfo = [self selectBestPatterns];
+  if (!patternInfo) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   [ZXResultPoint orderBestPatterns:patternInfo];
   return [[[ZXFinderPatternInfo alloc] initWithPatternCenters:patternInfo] autorelease];
 }
-
 
 /**
  * Given a count of black/white/black/white/black pixels just seen and an end position,
@@ -157,7 +160,6 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 - (float)centerFromEnd:(int*)stateCount end:(int)end {
   return (float)(end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
 }
-
 
 + (BOOL)foundPatternCross:(int[])stateCount {
   int totalModuleSize = 0;
@@ -187,7 +189,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  * "cross-checks" by scanning down vertically through the center of the possible
  * finder pattern to see if the same proportion is detected.
  */
-- (float) crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
+- (float)crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
   int maxI = self.image.height;
   int stateCount[5] = {0, 0, 0, 0, 0};
 
@@ -439,7 +441,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
 - (NSMutableArray *)selectBestPatterns {
   int startSize = [self.possibleCenters count];
   if (startSize < 3) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return nil;
   }
 
   if (startSize > 3) {

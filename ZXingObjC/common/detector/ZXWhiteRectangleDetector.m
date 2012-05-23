@@ -1,4 +1,4 @@
-#import "ZXNotFoundException.h"
+#import "ZXErrors.h"
 #import "ZXWhiteRectangleDetector.h"
 
 @interface ZXWhiteRectangleDetector ()
@@ -31,7 +31,7 @@ int const CORR = 1;
 @synthesize downInit;
 @synthesize upInit;
 
-- (id)initWithImage:(ZXBitMatrix *)anImage {
+- (id)initWithImage:(ZXBitMatrix *)anImage error:(NSError **)error {
   if (self = [super init]) {
     self.image = anImage;
     self.height = anImage.height;
@@ -41,14 +41,16 @@ int const CORR = 1;
     self.upInit = (self.height - INIT_SIZE) >> 1;
     self.downInit = (self.height + INIT_SIZE) >> 1;
     if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
-      @throw [ZXNotFoundException notFoundInstance];
+      [self release];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
   }
 
   return self;
 }
 
-- (id)initWithImage:(ZXBitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y {
+- (id)initWithImage:(ZXBitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error {
   if (self = [super init]) {
     self.image = anImage;
     self.height = anImage.height;
@@ -59,7 +61,9 @@ int const CORR = 1;
     self.upInit = y - halfsize;
     self.downInit = y + halfsize;
     if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
-      @throw [ZXNotFoundException notFoundInstance];
+      [self release];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
   }
 
@@ -83,7 +87,7 @@ int const CORR = 1;
  * point and the last, the bottommost. The second point will be
  * leftmost and the third, the rightmost
  */
-- (NSArray *)detect {
+- (NSArray *)detectWithError:(NSError **)error {
   int left = self.leftInit;
   int right = self.rightInit;
   int up = self.upInit;
@@ -180,7 +184,8 @@ int const CORR = 1;
     }
 
     if (z == nil) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
 
     ZXResultPoint * t = nil;
@@ -192,7 +197,8 @@ int const CORR = 1;
     }
 
     if (t == nil) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
 
     ZXResultPoint * x = nil;
@@ -204,7 +210,8 @@ int const CORR = 1;
     }
 
     if (x == nil) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
 
     ZXResultPoint * y = nil;
@@ -216,11 +223,13 @@ int const CORR = 1;
     }
 
     if (y == nil) {
-      @throw [ZXNotFoundException notFoundInstance];
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     }
     return [self centerEdges:y z:z x:x t:t];
   } else {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 }
 

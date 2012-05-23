@@ -11,11 +11,11 @@
 
 @implementation ZXUPCEANWriter
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
-  return [self encode:contents format:format width:width height:height hints:nil];
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
+  return [self encode:contents format:format width:width height:height hints:nil error:error];
 }
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (contents == nil || [contents length] == 0) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Found empty contents"

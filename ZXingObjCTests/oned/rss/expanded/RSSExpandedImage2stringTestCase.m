@@ -210,9 +210,9 @@
   ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
-  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil];
+  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
-  ZXResult* result = [rssExpandedReader decodeRow:rowNumber row:row hints:nil];
+  ZXResult* result = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:nil];
 
   STAssertEquals(result.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected barcode format to be kBarcodeFormatRSSExpanded");
   STAssertEqualObjects(result.text, expected, @"Expected %@ to equal %@", result.text, expected);

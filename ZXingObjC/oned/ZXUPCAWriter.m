@@ -19,17 +19,17 @@
   return subWriter;
 }
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height {
-  return [self encode:contents format:format width:width height:height hints:nil];
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
+  return [self encode:contents format:format width:width height:height hints:nil error:error];
 }
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatUPCA) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:[NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]
                                  userInfo:nil];
   }
-  return [self.subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints];
+  return [self.subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints error:error];
 }
 
 /**

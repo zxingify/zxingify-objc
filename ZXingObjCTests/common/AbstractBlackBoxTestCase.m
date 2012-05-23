@@ -3,7 +3,6 @@
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXDecodeHints.h"
 #import "ZXHybridBinarizer.h"
-#import "ZXReaderException.h"
 #import "ZXResult.h"
 
 @interface TestResult : NSObject
@@ -194,18 +193,19 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   ZXResult * result = nil;
   NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %f)", (tryHarder ? @"try harder, " : @""), rotation];
 
-  @try {
-    ZXDecodeHints * hints = [self hints];
-    if (tryHarder) {
-      if (hints == nil) {
-        hints = TRY_HARDER_HINT;
-      } else {
-        hints.tryHarder = YES;
-      }
+  ZXDecodeHints * hints = [self hints];
+  if (tryHarder) {
+    if (hints == nil) {
+      hints = TRY_HARDER_HINT;
+    } else {
+      hints.tryHarder = YES;
     }
-    result = [self.barcodeReader decode:source hints:hints];
-  } @catch (ZXReaderException * re) {
-    NSLog(@"%@%@", re, suffix);
+  }
+
+  NSError* error = nil;
+  result = [self.barcodeReader decode:source hints:hints error:&error];
+  if (!result) {
+    NSLog(@"%@%@", [error localizedDescription], suffix);
     return NO;
   }
 

@@ -57,7 +57,7 @@
        " 1 1 1 1 1 1 1 0                          \n";
     ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
     [ZXMatrixUtil clearMatrix:matrix];
-    [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix];
+    [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
     STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
   }
   {
@@ -91,7 +91,7 @@
        " 1 1 1 1 1 1 1 0                                  \n";
     ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:25 height:25] autorelease];
     [ZXMatrixUtil clearMatrix:matrix];
-    [ZXMatrixUtil embedBasicPatterns:2 matrix:matrix];
+    [ZXMatrixUtil embedBasicPatterns:2 matrix:matrix error:nil];
     STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
   }
 }
@@ -122,7 +122,7 @@
      "                 1                        \n";
   ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedTypeInfo:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 matrix:matrix];
+  [ZXMatrixUtil embedTypeInfo:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 matrix:matrix error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
@@ -154,7 +154,7 @@
   // since 45x45 matrix is too big to depict.
   ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil maybeEmbedVersionInfo:7 matrix:matrix];
+  [ZXMatrixUtil maybeEmbedVersionInfo:7 matrix:matrix error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
@@ -185,8 +185,8 @@
   ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
   ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix];
-  [ZXMatrixUtil embedDataBits:bits maskPattern:-1 matrix:matrix];
+  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
+  [ZXMatrixUtil embedDataBits:bits maskPattern:-1 matrix:matrix error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
@@ -227,7 +227,8 @@
                     ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]
                     version:1  // Version 1
                 maskPattern:3  // Mask pattern 3
-                     matrix:matrix];
+                     matrix:matrix
+                      error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
@@ -263,7 +264,7 @@
 - (void)testMakeVersionInfoBits {
   // From Appendix D in JISX0510:2004 (p 68)
   ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
-  [ZXMatrixUtil makeVersionInfoBits:7 bits:bits];
+  [ZXMatrixUtil makeVersionInfoBits:7 bits:bits error:nil];
   NSString* expected = @" ...XXXXX ..X..X.X ..";
   STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
@@ -273,7 +274,7 @@
 - (void)testMakeTypeInfoInfoBits {
   // From Appendix C in JISX0510:2004 (p 65)
   ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
-  [ZXMatrixUtil makeTypeInfoBits:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 bits:bits];
+  [ZXMatrixUtil makeTypeInfoBits:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 bits:bits error:nil];
   NSString* expected = @" X......X X..XXX.";
   STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }

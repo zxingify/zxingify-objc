@@ -1,8 +1,7 @@
 #import "ZXBitArray.h"
 #import "ZXDecodeHints.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 #import "ZXITFReader.h"
-#import "ZXNotFoundException.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
@@ -45,10 +44,10 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 @property (nonatomic, assign) int narrowLineWidth;
 
 - (int)decodeDigit:(int[])counters countersSize:(int)countersSize;
-- (void)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString;
+- (BOOL)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString;
 - (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen;
 - (int)skipWhiteSpace:(ZXBitArray *)row;
-- (void)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern;
+- (BOOL)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern;
 
 @end
 
@@ -69,12 +68,19 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   return self;
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   NSArray * startRange = [self decodeStart:row];
   NSArray * endRange = [self decodeEnd:row];
+  if (!startRange || !endRange) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   NSMutableString * resultString = [NSMutableString stringWithCapacity:20];
-  [self decodeMiddle:row payloadStart:[[startRange objectAtIndex:1] intValue] payloadEnd:[[endRange objectAtIndex:0] intValue] resultString:resultString];
+  if (![self decodeMiddle:row payloadStart:[[startRange objectAtIndex:1] intValue] payloadEnd:[[endRange objectAtIndex:0] intValue] resultString:resultString]) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   NSArray * allowedLengths = nil;
   if (hints != nil) {
@@ -97,7 +103,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     }
   }
   if (!lengthOK) {
-    @throw [ZXFormatException formatInstance];
+    if (error) *error = FormatErrorInstance();
+    return nil;
   }
 
   return [[[ZXResult alloc] initWithText:resultString
@@ -110,7 +117,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 }
 
 
-- (void)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
+- (BOOL)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
   const int counterDigitPairLen = 10;
   int counterDigitPair[counterDigitPairLen] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -121,7 +128,9 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   int counterWhite[counterWhiteLen] = {0, 0, 0, 0, 0};
 
   while (payloadStart < payloadEnd) {
-    [ZXOneDReader recordPattern:row start:payloadStart counters:counterDigitPair countersSize:counterDigitPairLen];
+    if (![ZXOneDReader recordPattern:row start:payloadStart counters:counterDigitPair countersSize:counterDigitPairLen]) {
+      return NO;
+    }
 
     for (int k = 0; k < 5; k++) {
       int twoK = k << 1;
@@ -130,14 +139,21 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     }
 
     int bestMatch = [self decodeDigit:counterBlack countersSize:counterBlackLen];
+    if (bestMatch == -1) {
+      return NO;
+    }
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
     bestMatch = [self decodeDigit:counterWhite countersSize:counterWhiteLen];
+    if (bestMatch == -1) {
+      return NO;
+    }
     [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
 
     for (int i = 0; i < counterDigitPairLen; i++) {
       payloadStart += counterDigitPair[i];
     }
   }
+  return YES;
 }
 
 
@@ -146,11 +162,19 @@ const int PATTERNS[PATTERNS_LEN][5] = {
  */
 - (NSArray *)decodeStart:(ZXBitArray *)row {
   int endStart = [self skipWhiteSpace:row];
+  if (endStart == -1) {
+    return nil;
+  }
   NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
+  if (!startPattern) {
+    return nil;
+  }
 
   self.narrowLineWidth = ([[startPattern objectAtIndex:1] intValue] - [[startPattern objectAtIndex:0] intValue]) >> 2;
 
-  [self validateQuietZone:row startPattern:[[startPattern objectAtIndex:0] intValue]];
+  if (![self validateQuietZone:row startPattern:[[startPattern objectAtIndex:0] intValue]]) {
+    return nil;
+  }
 
   return startPattern;
 }
@@ -167,7 +191,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
  * 
  * ref: http://www.barcode-1.net/i25code.html
  */
-- (void)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern {
+- (BOOL)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern {
   int quietCount = self.narrowLineWidth * 10;
 
   for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
@@ -177,8 +201,9 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     quietCount--;
   }
   if (quietCount != 0) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return NO;
   }
+  return YES;
 }
 
 
@@ -197,7 +222,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   }
 
   if (endStart == width) {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
   return endStart;
 }
@@ -209,17 +234,22 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 - (NSArray *)decodeEnd:(ZXBitArray *)row {
   [row reverse];
 
-  @try {
-    int endStart = [self skipWhiteSpace:row];
-    NSMutableArray * endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int*)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy] autorelease];
-    [self validateQuietZone:row startPattern:[[endPattern objectAtIndex:0] intValue]];
-    int temp = [[endPattern objectAtIndex:0] intValue];
-    [endPattern replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[row size] - [[endPattern objectAtIndex:1] intValue]]];
-    [endPattern replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:[row size] - temp]];
-    return endPattern;
-  } @finally {
+  int endStart = [self skipWhiteSpace:row];
+  if (endStart == -1) {
     [row reverse];
+    return nil;
   }
+  NSMutableArray * endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int*)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy] autorelease];
+  if (!endPattern) {
+    [row reverse];
+    return nil;
+  }
+  [self validateQuietZone:row startPattern:[[endPattern objectAtIndex:0] intValue]];
+  int temp = [[endPattern objectAtIndex:0] intValue];
+  [endPattern replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[row size] - [[endPattern objectAtIndex:1] intValue]]];
+  [endPattern replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:[row size] - temp]];
+  [row reverse];
+  return endPattern;
 }
 
 - (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen {
@@ -257,7 +287,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     }
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return nil;
 }
 
 
@@ -283,7 +313,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   if (bestMatch >= 0) {
     return bestMatch;
   } else {
-    @throw [ZXNotFoundException notFoundInstance];
+    return -1;
   }
 }
 

@@ -1,5 +1,5 @@
 #import "ZXEAN13Reader.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 #import "ZXResult.h"
 #import "ZXUPCAReader.h"
 
@@ -7,7 +7,7 @@
 
 @property (nonatomic, retain) ZXUPCEANReader * ean13Reader;
 
-- (ZXResult *) maybeReturnResult:(ZXResult *)result;
+- (ZXResult *)maybeReturnResult:(ZXResult *)result;
 
 @end
 
@@ -29,28 +29,68 @@
   [super dealloc];
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(ZXDecodeHints *)hints {
-  return [self maybeReturnResult:[self.ean13Reader decodeRow:rowNumber row:row startGuardRange:startGuardRange hints:hints]];
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXResult* result = [self.ean13Reader decodeRow:rowNumber row:row startGuardRange:startGuardRange hints:hints error:error];
+  if (result) {
+    result = [self maybeReturnResult:result];
+    if (!result) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
+    return result;
+  } else {
+    return nil;
+  }
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints {
-  return [self maybeReturnResult:[self.ean13Reader decodeRow:rowNumber row:row hints:hints]];
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXResult* result = [self.ean13Reader decodeRow:rowNumber row:row hints:hints error:error];
+  if (result) {
+    result = [self maybeReturnResult:result];
+    if (!result) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
+    return result;
+  } else {
+    return nil;
+  }
 }
 
-- (ZXResult *)decode:(ZXBinaryBitmap *)image {
-  return [self maybeReturnResult:[self.ean13Reader decode:image]];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
+  ZXResult* result = [self.ean13Reader decode:image error:error];
+  if (result) {
+    result = [self maybeReturnResult:result];
+    if (!result) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
+    return result;
+  } else {
+    return nil;
+  }
 }
 
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints {
-  return [self maybeReturnResult:[self.ean13Reader decode:image hints:hints]];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXResult* result = [self.ean13Reader decode:image hints:hints error:error];
+  if (result) {
+    result = [self maybeReturnResult:result];
+    if (!result) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
+    return result;
+  } else {
+    return nil;
+  }
 }
 
 - (ZXBarcodeFormat)barcodeFormat {
   return kBarcodeFormatUPCA;
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result {
-  return [self.ean13Reader decodeMiddle:row startRange:startRange result:result];
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result error:(NSError **)error {
+  return [self.ean13Reader decodeMiddle:row startRange:startRange result:result error:error];
 }
 
 - (ZXResult *)maybeReturnResult:(ZXResult *)result {
@@ -62,7 +102,7 @@
                               resultPoints:result.resultPoints
                                     format:kBarcodeFormatUPCA] autorelease];
   } else {
-    @throw [ZXFormatException formatInstance];
+    return nil;
   }
 }
 

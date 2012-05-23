@@ -6,11 +6,11 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
 @implementation ZXEAN8Writer
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints {
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatEan8) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode EAN_8"];
   }
-  return [super encode:contents format:format width:width height:height hints:hints];
+  return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
 

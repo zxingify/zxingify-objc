@@ -5,6 +5,7 @@
 #import "ZXECI.h"
 #import "ZXEncoder.h"
 #import "ZXEncodeHints.h"
+#import "ZXErrors.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXGenericGF.h"
 #import "ZXMaskUtil.h"
@@ -13,7 +14,6 @@
 #import "ZXQRCodeVersion.h"
 #import "ZXQRCode.h"
 #import "ZXReedSolomonEncoder.h"
-#import "ZXWriterException.h"
 
 // The original table is defined in the table 5 of JISX0510:2004 (p.19).
 const int ALPHANUMERIC_TABLE[96] = {
@@ -30,8 +30,8 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 @interface ZXEncoder ()
 
 + (void)appendECI:(ZXECI *)eci bits:(ZXBitArray *)bits;
-+ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version matrix:(ZXByteMatrix *)matrix;
-+ (void)initQRCode:(int)numInputBytes ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode;
++ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
++ (BOOL)initQRCode:(int)numInputBytes ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError**)error;
 + (BOOL)isOnlyDoubleByteKanji:(NSString *)content;
 
 @end
@@ -59,11 +59,11 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
  * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
  * with which clients can specify the encoding mode. For now, we don't need the functionality.
  */
-+ (void)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel qrCode:(ZXQRCode *)qrCode {
-  [self encode:content ecLevel:ecLevel hints:nil qrCode:qrCode];
++ (BOOL)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel qrCode:(ZXQRCode *)qrCode error:(NSError**)error {
+  return [self encode:content ecLevel:ecLevel hints:nil qrCode:qrCode error:error];
 }
 
-+ (void)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints qrCode:(ZXQRCode *)qrCode {
++ (BOOL)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints qrCode:(ZXQRCode *)qrCode error:(NSError**)error {
   NSStringEncoding encoding = hints == nil ? 0 : hints.encoding;
   if (encoding == 0) {
     encoding = DEFAULT_BYTE_MODE_ENCODING;
@@ -74,10 +74,14 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
   // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
   ZXBitArray * dataBits = [[[ZXBitArray alloc] init] autorelease];
-  [self appendBytes:content mode:mode bits:dataBits encoding:encoding];
+  if (![self appendBytes:content mode:mode bits:dataBits encoding:encoding error:error]) {
+    return NO;
+  }
   // Step 3: Initialize QR code that can contain "dataBits".
   int numInputBytes = [dataBits sizeInBytes];
-  [self initQRCode:numInputBytes ecLevel:ecLevel mode:mode qrCode:qrCode];
+  if (![self initQRCode:numInputBytes ecLevel:ecLevel mode:mode qrCode:qrCode error:error]) {
+    return NO;
+  }
 
   // Step 4: Build another bit vector that contains header and data.
   ZXBitArray * headerAndDataBits = [[[ZXBitArray alloc] init] autorelease];
@@ -93,27 +97,45 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   [self appendModeInfo:mode bits:headerAndDataBits];
 
   int numLetters = [mode isEqual:[ZXMode byteMode]] ? [dataBits sizeInBytes] : [content length];
-  [self appendLengthInfo:numLetters version:[qrCode version] mode:mode bits:headerAndDataBits];
+  if (![self appendLengthInfo:numLetters version:[qrCode version] mode:mode bits:headerAndDataBits error:error]) {
+    return NO;
+  }
   [headerAndDataBits appendBitArray:dataBits];
 
   // Step 5: Terminate the bits properly.
-  [self terminateBits:[qrCode numDataBytes] bits:headerAndDataBits];
+  if (![self terminateBits:[qrCode numDataBytes] bits:headerAndDataBits error:error]) {
+    return NO;
+  }
 
   // Step 6: Interleave data bits with error correction code.
   ZXBitArray * finalBits = [[[ZXBitArray alloc] init] autorelease];
-  [self interleaveWithECBytes:headerAndDataBits numTotalBytes:[qrCode numTotalBytes] numDataBytes:[qrCode numDataBytes] numRSBlocks:[qrCode numRSBlocks] result:finalBits];
+  if (![self interleaveWithECBytes:headerAndDataBits numTotalBytes:[qrCode numTotalBytes] numDataBytes:[qrCode numDataBytes]
+                       numRSBlocks:[qrCode numRSBlocks] result:finalBits error:error]) {
+    return NO;
+  }
 
   // Step 7: Choose the mask pattern and set to "qrCode".
   ZXByteMatrix * matrix = [[[ZXByteMatrix alloc] initWithWidth:[qrCode matrixWidth] height:[qrCode matrixWidth]] autorelease];
-  [qrCode setMaskPattern:[self chooseMaskPattern:finalBits ecLevel:[qrCode ecLevel] version:[qrCode version] matrix:matrix]];
+  int maskPattern = [self chooseMaskPattern:finalBits ecLevel:[qrCode ecLevel] version:[qrCode version] matrix:matrix error:error];
+  if (maskPattern == -1) {
+    return NO;
+  }
+  [qrCode setMaskPattern:maskPattern];
 
   // Step 8.  Build the matrix and set it to "qrCode".
-  [ZXMatrixUtil buildMatrix:finalBits ecLevel:[qrCode ecLevel] version:[qrCode version] maskPattern:[qrCode maskPattern] matrix:matrix];
+  if (![ZXMatrixUtil buildMatrix:finalBits ecLevel:[qrCode ecLevel] version:[qrCode version] maskPattern:[qrCode maskPattern] matrix:matrix error:error]) {
+    return NO;
+  }
   [qrCode setMatrix:matrix];
   // Step 9.  Make sure we have a valid QR Code.
   if (![qrCode isValid]) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:[NSString stringWithFormat:@"Invalid QR code: %@", [qrCode description]] userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid QR code: %@", qrCode]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
 
@@ -177,12 +199,14 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return YES;
 }
 
-+ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version matrix:(ZXByteMatrix *)matrix {
++ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   int minPenalty = NSIntegerMax;
   int bestMaskPattern = -1;
 
   for (int maskPattern = 0; maskPattern < NUM_MASK_PATTERNS; maskPattern++) {
-    [ZXMatrixUtil buildMatrix:bits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix];
+    if (![ZXMatrixUtil buildMatrix:bits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix error:error]) {
+      return -1;
+    }
     int penalty = [self calculateMaskPenalty:matrix];
     if (penalty < minPenalty) {
       minPenalty = penalty;
@@ -197,7 +221,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
  * Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success,
  * modify "qrCode".
  */
-+ (void)initQRCode:(int)numInputBytes ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode {
++ (BOOL)initQRCode:(int)numInputBytes ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError **)error {
   qrCode.ecLevel = ecLevel;
   qrCode.mode = mode;
 
@@ -215,21 +239,29 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
       qrCode.numRSBlocks = numRSBlocks;
       qrCode.numECBytes = numEcBytes;
       qrCode.matrixWidth = version.dimensionForVersion;
-      return;
+      return YES;
     }
   }
 
-  @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Cannot find proper rs block info (input data too big?)" userInfo:nil];
+  NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Cannot find proper rs block info (input data too big?)"
+                                                       forKey:NSLocalizedDescriptionKey];
+
+  if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+  return NO;
 }
 
 
 /**
  * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
  */
-+ (void)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits {
++ (BOOL)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits error:(NSError **)error {
   int capacity = numDataBytes << 3;
   if ([bits size] > capacity) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:[NSString stringWithFormat:@"data bits cannot fit in the QR Code %d > %d", [bits size], capacity] userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"data bits cannot fit in the QR Code %d > %d", [bits size], capacity]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
   for (int i = 0; i < 4 && [bits size] < capacity; ++i) {
     [bits appendBit:NO];
@@ -245,8 +277,13 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     [bits appendBits:(i & 0x01) == 0 ? 0xEC : 0x11 numBits:8];
   }
   if ([bits size] != capacity) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Bits size does not equal capacity" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Bits size does not equal capacity"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
 
@@ -255,9 +292,13 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
  * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
  * JISX0510:2004 (p.30)
  */
-+ (void)numDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock {
++ (BOOL)numDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock error:(NSError **)error {
   if (blockID >= numRSBlocks) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Block ID too large" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Block ID too large"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
   int numRsBlocksInGroup2 = numTotalBytes % numRSBlocks;
   int numRsBlocksInGroup1 = numRSBlocks - numRsBlocksInGroup2;
@@ -268,13 +309,25 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   int numEcBytesInGroup1 = numTotalBytesInGroup1 - numDataBytesInGroup1;
   int numEcBytesInGroup2 = numTotalBytesInGroup2 - numDataBytesInGroup2;
   if (numEcBytesInGroup1 != numEcBytesInGroup2) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"EC bytes mismatch" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"EC bytes mismatch"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
   if (numRSBlocks != numRsBlocksInGroup1 + numRsBlocksInGroup2) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"RS blocks mismatch" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"RS blocks mismatch"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
   if (numTotalBytes != ((numDataBytesInGroup1 + numEcBytesInGroup1) * numRsBlocksInGroup1) + ((numDataBytesInGroup2 + numEcBytesInGroup2) * numRsBlocksInGroup2)) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Total bytes mismatch" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Total bytes mismatch"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
   if (blockID < numRsBlocksInGroup1) {
     numDataBytesInBlock[0] = numDataBytesInGroup1;
@@ -283,6 +336,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     numDataBytesInBlock[0] = numDataBytesInGroup2;
     numECBytesInBlock[0] = numEcBytesInGroup2;
   }
+  return YES;
 }
 
 
@@ -290,9 +344,13 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
  * Interleave "bits" with corresponding error correction bytes. On success, store the result in
  * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
  */
-+ (void)interleaveWithECBytes:(ZXBitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks result:(ZXBitArray *)result {
++ (BOOL)interleaveWithECBytes:(ZXBitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks result:(ZXBitArray *)result error:(NSError **)error {
   if ([bits sizeInBytes] != numDataBytes) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Number of bits and data bytes does not match" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Number of bits and data bytes does not match"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
 
   // Step 1.  Divide data bytes into blocks and generate error correction bytes for them. We'll
@@ -306,8 +364,11 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   for (int i = 0; i < numRSBlocks; ++i) {
     int numDataBytesInBlock[1];
     int numEcBytesInBlock[1];
-    [self numDataBytesAndNumECBytesForBlockID:numTotalBytes numDataBytes:numDataBytes numRSBlocks:numRSBlocks
-                                         blockID:i numDataBytesInBlock:numDataBytesInBlock numECBytesInBlock:numEcBytesInBlock];
+    if (![self numDataBytesAndNumECBytesForBlockID:numTotalBytes numDataBytes:numDataBytes numRSBlocks:numRSBlocks
+                                         blockID:i numDataBytesInBlock:numDataBytesInBlock
+                                 numECBytesInBlock:numEcBytesInBlock error:error]) {
+      return NO;
+    }
 
     int size = numDataBytesInBlock[0];
     unsigned char dataBytes[size];
@@ -321,7 +382,11 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     free(ecBytes);
   }
   if (numDataBytes != dataBytesOffset) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Data bytes does not match offset" userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Data bytes does not match offset"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
 
   for (int i = 0; i < maxNumDataBytes; ++i) {
@@ -345,10 +410,13 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
   
   if (numTotalBytes != [result sizeInBytes]) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException"
-                                       reason:[NSString stringWithFormat:@"Interleaving error: %d and %d differ.", numTotalBytes, [result sizeInBytes]]
-                                     userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Interleaving error: %d and %d differ.", numTotalBytes, [result sizeInBytes]]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
 + (unsigned char*)generateECBytes:(unsigned char[])dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
@@ -383,34 +451,44 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 /**
  * Append length info. On success, store the result in "bits".
  */
-+ (void)appendLengthInfo:(int)numLetters version:(int)version mode:(ZXMode *)mode bits:(ZXBitArray *)bits {
++ (BOOL)appendLengthInfo:(int)numLetters version:(int)version mode:(ZXMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error {
   int numBits = [mode characterCountBits:[ZXQRCodeVersion versionForNumber:version]];
   if (numLetters > ((1 << numBits) - 1)) {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException"
-                                       reason:[NSString stringWithFormat:@"%d is bigger than %d", numLetters, ((1 << numBits) - 1)]
-                                     userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d is bigger than %d", numLetters, ((1 << numBits) - 1)]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
   [bits appendBits:numLetters numBits:numBits];
+  return YES;
 }
 
 
 /**
  * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
  */
-+ (void)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding {
++ (BOOL)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error {
   if ([mode isEqual:[ZXMode numericMode]]) {
     [self appendNumericBytes:content bits:bits];
   } else if ([mode isEqual:[ZXMode alphanumericMode]]) {
-    [self appendAlphanumericBytes:content bits:bits];
+    if (![self appendAlphanumericBytes:content bits:bits error:error]) {
+      return NO;
+    }
   } else if ([mode isEqual:[ZXMode byteMode]]) {
     [self append8BitBytes:content bits:bits encoding:encoding];
   } else if ([mode isEqual:[ZXMode kanjiMode]]) {
-    [self appendKanjiBytes:content bits:bits];
+    if (![self appendKanjiBytes:content bits:bits error:error]) {
+      return NO;
+    }
   } else {
-    @throw [ZXWriterException exceptionWithName:@"ZXWriterException"
-                                         reason:[NSString stringWithFormat:@"Invalid mode: %@", mode]
-                                       userInfo:nil];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid mode: %@", mode]
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
+  return YES;
 }
 
 + (void)appendNumericBytes:(NSString *)content bits:(ZXBitArray *)bits {
@@ -434,19 +512,21 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
 }
 
-+ (void)appendAlphanumericBytes:(NSString *)content bits:(ZXBitArray *)bits {
++ (BOOL)appendAlphanumericBytes:(NSString *)content bits:(ZXBitArray *)bits error:(NSError **)error {
   int length = [content length];
   int i = 0;
 
   while (i < length) {
     int code1 = [self alphanumericCode:[content characterAtIndex:i]];
     if (code1 == -1) {
-      @throw [ZXWriterException exceptionWithName:@"ZXWriterException" reason:@"Writer Exception" userInfo:nil];
+      if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:nil] autorelease];
+      return NO;
     }
     if (i + 1 < length) {
       int code2 = [self alphanumericCode:[content characterAtIndex:i + 1]];
       if (code2 == -1) {
-        @throw [[[ZXWriterException alloc] init] autorelease];
+        if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:nil] autorelease];
+        return NO;
       }
       [bits appendBits:code1 * 45 + code2 numBits:11];
       i += 2;
@@ -455,18 +535,19 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
       i++;
     }
   }
+  return YES;
 }
 
 + (void)append8BitBytes:(NSString *)content bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding {
   NSData *data = [content dataUsingEncoding:encoding];
-  unsigned unsigned char * bytes = (unsigned char*)[data bytes];
+  unsigned char * bytes = (unsigned char*)[data bytes];
 
   for (int i = 0; i < [data length]; ++i) {
     [bits appendBits:bytes[i] numBits:8];
   }
 }
 
-+ (void)appendKanjiBytes:(NSString *)content bits:(ZXBitArray *)bits {
++ (BOOL)appendKanjiBytes:(NSString *)content bits:(ZXBitArray *)bits error:(NSError **)error {
   NSData *data = [content dataUsingEncoding:NSShiftJISStringEncoding];
   unsigned char * bytes = (unsigned char*)[data bytes];
   for (int i = 0; i < [data length]; i += 2) {
@@ -480,13 +561,16 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
       subtracted = code - 0xc140;
     }
     if (subtracted == -1) {
-      @throw [ZXWriterException exceptionWithName:@"ZXWriterException"
-                                         reason:@"Invalid byte sequence"
-                                       userInfo:nil];
+      NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Invalid byte sequence"
+                                                           forKey:NSLocalizedDescriptionKey];
+
+      if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+      return NO;
     }
     int encoded = ((subtracted >> 8) * 0xc0) + (subtracted & 0xff);
     [bits appendBits:encoded numBits:13];
   }
+  return YES;
 }
 
 + (void)appendECI:(ZXECI *)eci bits:(ZXBitArray *)bits {

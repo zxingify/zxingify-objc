@@ -17,7 +17,7 @@
   ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
-  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil];
+  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil error:nil];
   NSMutableArray* previousPairs = [NSMutableArray array];
 
   ZXExpandedPair* pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
@@ -35,12 +35,9 @@
   STAssertEquals(pair3.finderPattern.value, 1, @"Expected finderPattern to equal 1");
   STAssertTrue(pair3.mayBeLast, @"Expected mayBeLast to be true");
 
-  @try {
-    [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
+  if ([rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber]) {
     //   the previous was the last pair
-    STFail(@"NotFoundException expected");
-  } @catch(ZXNotFoundException* nfe) {
-    // ok
+    STFail(@"Error expected");
   }
 }
 
@@ -51,7 +48,7 @@
   ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
-  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil];
+  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil error:nil];
   NSMutableArray* previousPairs = [NSMutableArray array];
 
   ZXExpandedPair* pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
@@ -71,7 +68,7 @@
   NSString* path = @"Resources/blackbox/rssexpanded-1/3.jpg";
   ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
-  ZXBitArray* row = [binaryMap blackRow:binaryMap.height / 2 row:nil];
+  ZXBitArray* row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
   NSArray* startEnd = [NSArray arrayWithObjects:[NSNumber numberWithInt:145], [NSNumber numberWithInt:243], nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
@@ -88,7 +85,7 @@
   NSString* path = @"Resources/blackbox/rssexpanded-1/3.jpg";
   ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
-  ZXBitArray* row = [binaryMap blackRow:binaryMap.height / 2 row:nil];
+  ZXBitArray* row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
   NSArray* startEnd = [NSArray arrayWithObjects:[NSNumber numberWithInt:145], [NSNumber numberWithInt:243], nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A

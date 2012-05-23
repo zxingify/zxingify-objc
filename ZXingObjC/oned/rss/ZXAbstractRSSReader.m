@@ -163,7 +163,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
       break;
   }
 
-  @throw [ZXNotFoundException notFoundInstance];
+  return -1;
 }
 
 + (int)count:(int*)array arrayLen:(unsigned int)arrayLen {

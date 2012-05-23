@@ -1,20 +1,19 @@
 #import "ZXBitMatrix.h"
-#import "ZXChecksumException.h"
 #import "ZXDataMatrixBitMatrixParser.h"
 #import "ZXDataMatrixDataBlock.h"
 #import "ZXDataMatrixDecodedBitStreamParser.h"
 #import "ZXDataMatrixDecoder.h"
 #import "ZXDataMatrixVersion.h"
 #import "ZXDecoderResult.h"
+#import "ZXErrors.h"
 #import "ZXGenericGF.h"
 #import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonException.h"
 
 @interface ZXDataMatrixDecoder ()
 
 @property (nonatomic, retain) ZXReedSolomonDecoder * rsDecoder;
 
-- (void) correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords;
+- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError**)error;
 
 @end
 
@@ -41,7 +40,7 @@
  * Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *)decode:(BOOL**)image length:(unsigned int)length {
+- (ZXDecoderResult *)decode:(BOOL**)image length:(unsigned int)length error:(NSError **)error {
   int dimension = length;
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
@@ -52,7 +51,7 @@
     }
   }
 
-  return [self decodeMatrix:bits];
+  return [self decodeMatrix:bits error:error];
 }
 
 
@@ -60,8 +59,11 @@
  * Decodes a Data Matrix Code represented as a BitMatrix. A 1 or "true" is taken
  * to mean a black module.
  */
-- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits {
-  ZXDataMatrixBitMatrixParser * parser = [[[ZXDataMatrixBitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
+- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
+  ZXDataMatrixBitMatrixParser * parser = [[[ZXDataMatrixBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
+  if (!parser) {
+    return nil;
+  }
   ZXDataMatrixVersion * version = [parser version];
 
   NSArray * codewords = [parser readCodewords];
@@ -79,13 +81,15 @@
     ZXDataMatrixDataBlock * dataBlock = [dataBlocks objectAtIndex:j];
     NSMutableArray * codewordBytes = dataBlock.codewords;
     int numDataCodewords = [dataBlock numDataCodewords];
-    [self correctErrors:codewordBytes numDataCodewords:numDataCodewords];
+    if (![self correctErrors:codewordBytes numDataCodewords:numDataCodewords error:error]) {
+      return nil;
+    }
     for (int i = 0; i < numDataCodewords; i++) {
       resultBytes[i * dataBlocksCount + j] = [[codewordBytes objectAtIndex:i] charValue];
     }
   }
 
-  return [ZXDataMatrixDecodedBitStreamParser decode:resultBytes length:totalBytes];
+  return [ZXDataMatrixDecodedBitStreamParser decode:resultBytes length:totalBytes error:error];
 }
 
 
@@ -93,22 +97,29 @@
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
  * correct the errors in-place using Reed-Solomon error correction.
  */
-- (void)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords {
+- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError**)error {
   int numCodewords = [codewordBytes count];
   int codewordsInts[numCodewords];
   for (int i = 0; i < numCodewords; i++) {
     codewordsInts[i] = [[codewordBytes objectAtIndex:i] charValue] & 0xFF;
   }
   int numECCodewords = [codewordBytes count] - numDataCodewords;
-  @try {
-    [rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords];
-  } @catch (ZXReedSolomonException * rse) {
-    @throw [ZXChecksumException checksumInstance];
+
+  NSError *decodeError = nil;
+  if (![rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
+    if (decodeError.code == ZXReedSolomonError) {
+      if (error) *error = ChecksumErrorInstance();
+      return NO;
+    } else {
+      if (error) *error = decodeError;
+      return NO;
+    }
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
     [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:codewordsInts[i]]];
   }
+  return YES;
 }
 
 @end

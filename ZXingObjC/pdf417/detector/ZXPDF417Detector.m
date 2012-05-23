@@ -1,8 +1,8 @@
 #import "ZXBinaryBitmap.h"
-#import "ZXNotFoundException.h"
 #import "ZXResultPoint.h"
 #import "ZXBitMatrix.h"
 #import "ZXDetectorResult.h"
+#import "ZXErrors.h"
 #import "ZXGridSampler.h"
 #import "ZXPDF417Detector.h"
 
@@ -40,7 +40,13 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 - (int)round:(float)d;
 - (NSArray *)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen;
 - (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix topLeft:(ZXResultPoint *)topLeft bottomLeft:(ZXResultPoint *)bottomLeft topRight:(ZXResultPoint *)topRight bottomRight:(ZXResultPoint *)bottomRight dimension:(int)dimension;
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
+                    topLeft:(ZXResultPoint *)topLeft
+                 bottomLeft:(ZXResultPoint *)bottomLeft
+                   topRight:(ZXResultPoint *)topRight
+                bottomRight:(ZXResultPoint *)bottomRight
+                  dimension:(int)dimension
+                      error:(NSError**)error;
 
 @end
 
@@ -66,16 +72,19 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 /**
  * Detects a PDF417 Code in an image, simply.
  */
-- (ZXDetectorResult *)detect {
-  return [self detect:nil];
+- (ZXDetectorResult *)detectWithError:(NSError **)error {
+  return [self detect:nil error:error];
 }
 
 
 /**
  * Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.
  */
-- (ZXDetectorResult *)detect:(ZXDecodeHints *)hints {
-  ZXBitMatrix * matrix = self.image.blackMatrix;
+- (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXBitMatrix * matrix = [self.image blackMatrixWithError:error];
+  if (!matrix) {
+    return nil;
+  }
 
   NSMutableArray * vertices = [self findVertices:matrix];
   if (vertices == nil) {
@@ -88,20 +97,32 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
 
   if (vertices == nil) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   float moduleWidth = [self computeModuleWidth:vertices];
   if (moduleWidth < 1.0f) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
   int dimension = [self computeDimension:[vertices objectAtIndex:4] topRight:[vertices objectAtIndex:6] bottomLeft:[vertices objectAtIndex:5] bottomRight:[vertices objectAtIndex:7] moduleWidth:moduleWidth];
   if (dimension < 1) {
-    @throw [ZXNotFoundException notFoundInstance];
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
   }
 
-  ZXBitMatrix * bits = [self sampleGrid:matrix topLeft:[vertices objectAtIndex:4] bottomLeft:[vertices objectAtIndex:5] topRight:[vertices objectAtIndex:6] bottomRight:[vertices objectAtIndex:7] dimension:dimension];
+  ZXBitMatrix * bits = [self sampleGrid:matrix
+                                topLeft:[vertices objectAtIndex:4]
+                             bottomLeft:[vertices objectAtIndex:5]
+                               topRight:[vertices objectAtIndex:6]
+                            bottomRight:[vertices objectAtIndex:7]
+                              dimension:dimension
+                                  error:error];
+  if (!bits) {
+    return nil;
+  }
   return [[[ZXDetectorResult alloc] initWithBits:bits points:[NSArray arrayWithObjects:[vertices objectAtIndex:4], [vertices objectAtIndex:5], [vertices objectAtIndex:6], [vertices objectAtIndex:7], nil]] autorelease];
 }
 
@@ -374,7 +395,13 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
 }
 
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix topLeft:(ZXResultPoint *)topLeft bottomLeft:(ZXResultPoint *)bottomLeft topRight:(ZXResultPoint *)topRight bottomRight:(ZXResultPoint *)bottomRight dimension:(int)dimension {
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
+                    topLeft:(ZXResultPoint *)topLeft
+                 bottomLeft:(ZXResultPoint *)bottomLeft
+                   topRight:(ZXResultPoint *)topRight
+                bottomRight:(ZXResultPoint *)bottomRight
+                  dimension:(int)dimension
+                      error:(NSError **)error {
   ZXGridSampler * sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:matrix
                   dimensionX:dimension
@@ -394,7 +421,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                      p3FromX:[bottomRight x]
                      p3FromY:[bottomRight y]
                      p4FromX:[bottomLeft x]
-                     p4FromY:[bottomLeft y]];
+                     p4FromY:[bottomLeft y]
+                       error:error];
 }
 
 

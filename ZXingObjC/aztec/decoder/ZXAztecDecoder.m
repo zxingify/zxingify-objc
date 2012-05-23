@@ -2,10 +2,9 @@
 #import "ZXAztecDetectorResult.h"
 #import "ZXBitMatrix.h"
 #import "ZXDecoderResult.h"
-#import "ZXFormatException.h"
+#import "ZXErrors.h"
 #import "ZXGenericGF.h"
 #import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonException.h"
 
 enum {
   UPPER = 0,
@@ -67,8 +66,8 @@ static NSString* DIGIT_TABLE[] = {
 @property (nonatomic, assign) int numCodewords;
 
 - (NSString *)character:(int)table code:(int)code;
-- (NSArray *)correctBits:(NSArray *)rawbits;
-- (NSString *)encodedData:(NSArray *)correctedBits;
+- (NSArray *)correctBits:(NSArray *)rawbits error:(NSError**)error;
+- (NSString *)encodedData:(NSArray *)correctedBits error:(NSError**)error;
 - (NSArray *)extractBits:(ZXBitMatrix *)matrix;
 - (int)readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(unsigned int)length;
 - (ZXBitMatrix *)removeDashedLines:(ZXBitMatrix *)matrix;
@@ -83,15 +82,25 @@ static NSString* DIGIT_TABLE[] = {
 @synthesize invertedBitCount;
 @synthesize numCodewords;
 
-- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult {
+- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError**)error {
   self.ddata = detectorResult;
   ZXBitMatrix * matrix = [detectorResult bits];
   if (![ddata compact]) {
     matrix = [self removeDashedLines:[ddata bits]];
   }
   NSArray * rawbits = [self extractBits:matrix];
-  NSArray * correctedBits = [self correctBits:rawbits];
-  NSString * result = [self encodedData:correctedBits];
+  if (!rawbits) {
+    if (error) *error = FormatErrorInstance();
+    return nil;
+  }
+  NSArray * correctedBits = [self correctBits:rawbits error:error];
+  if (!correctedBits) {
+    return nil;
+  }
+  NSString * result = [self encodedData:correctedBits error:error];
+  if (!result) {
+    return nil;
+  }
   return [[[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
@@ -100,10 +109,10 @@ static NSString* DIGIT_TABLE[] = {
  * 
  * Gets the string encoded in the aztec code bits
  */
-- (NSString *)encodedData:(NSArray *)correctedBits {
+- (NSString *)encodedData:(NSArray *)correctedBits error:(NSError**)error {
   int endIndex = self.codewordSize * [self.ddata nbDatablocks] - self.invertedBitCount;
   if (endIndex > [correctedBits count]) {
-    @throw [ZXFormatException formatInstance];
+    if (error) *error = FormatErrorInstance();
   }
   int lastTable = UPPER;
   int table = UPPER;
@@ -224,7 +233,7 @@ static NSString* DIGIT_TABLE[] = {
  * 
  * performs RS error correction on an array of bits
  */
-- (NSArray *)correctBits:(NSArray *)rawbits {
+- (NSArray *)correctBits:(NSArray *)rawbits error:(NSError**)error {
   ZXGenericGF * gf;
   if ([self.ddata nbLayers] <= 2) {
     self.codewordSize = 6;
@@ -265,11 +274,15 @@ static NSString* DIGIT_TABLE[] = {
     }
   }
 
-  @try {
-    ZXReedSolomonDecoder * rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:gf] autorelease];
-    [rsDecoder decode:dataWords receivedLen:dataWordsLen twoS:numECCodewords];
-  } @catch (ZXReedSolomonException * rse) {
-    @throw [ZXFormatException formatInstance];
+  ZXReedSolomonDecoder * rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:gf] autorelease];
+  NSError* decodeError = nil;
+  if (![rsDecoder decode:dataWords receivedLen:dataWordsLen twoS:numECCodewords error:&decodeError]) {
+    if (decodeError.code == ZXReedSolomonError) {
+      if (error) *error = FormatErrorInstance();
+    } else {
+      if (error) *error = decodeError;
+    }
+    return nil;
   }
 
   offset = 0;
@@ -290,7 +303,8 @@ static NSString* DIGIT_TABLE[] = {
 
       if (seriesCount == self.codewordSize - 1) {
         if (color == seriesColor) {
-          @throw [ZXFormatException formatInstance];
+          if (error) *error = FormatErrorInstance();
+          return nil;
         }
         seriesColor = NO;
         seriesCount = 0;
@@ -324,13 +338,13 @@ static NSString* DIGIT_TABLE[] = {
   int capacity;
   if ([self.ddata compact]) {
     if ([self.ddata nbLayers] > (sizeof(NB_BITS_COMPACT) / sizeof(int))) {
-      @throw [ZXFormatException formatInstance];
+      return nil;
     }
     capacity = NB_BITS_COMPACT[[self.ddata nbLayers]];
     self.numCodewords = NB_DATABLOCK_COMPACT[[ddata nbLayers]];
   } else {
     if ([self.ddata nbLayers] > (sizeof(NB_BITS) / sizeof(int))) {
-      @throw [ZXFormatException formatInstance];
+      return nil;
     }
     capacity = NB_BITS[[self.ddata nbLayers]];
     self.numCodewords = NB_DATABLOCK[[self.ddata nbLayers]];
