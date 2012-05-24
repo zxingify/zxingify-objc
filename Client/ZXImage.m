@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXBitMatrix.h"
 #import "ZXImage.h"
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
@@ -65,6 +66,31 @@
     CGImageRelease(cgimage);
   }
   [super dealloc];
+}
+
++ (ZXImage*)imageWithMatrix:(ZXBitMatrix*)matrix {
+  int width = matrix.width;
+  int height = matrix.height;
+  unsigned char *bytes = (unsigned char *)malloc(width * height * 4);
+  for(int y = 0; y < height; y++) {
+    for(int x = 0; x < width; x++) {
+      BOOL bit = [matrix getX:x y:y];
+      unsigned char intensity = bit ? 0 : 255;
+      for(int i = 0; i < 3; i++) {
+        bytes[y * width * 4 + x * 4 + i] = intensity;
+      }
+      bytes[y * width * 4 + x * 4 + 3] = 255;
+    }
+  }
+
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef c = CGBitmapContextCreate(bytes, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast);
+  CFRelease(colorSpace);
+  CGImageRef image = CGBitmapContextCreateImage(c);
+  CFRelease(c);
+  free(bytes);
+
+  return [[[ZXImage alloc] initWithCGImageRef:image] autorelease];
 }
 
 @end

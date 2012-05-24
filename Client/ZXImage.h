@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix;
+
 @interface ZXImage : NSObject
 
 @property (assign, readonly) CGImageRef cgimage;
@@ -22,5 +24,6 @@
 - (ZXImage*)initWithURL:(NSURL const*)url;
 - (size_t)width;
 - (size_t)height;
++ (ZXImage*)imageWithMatrix:(ZXBitMatrix*)matrix;
 
 @end
