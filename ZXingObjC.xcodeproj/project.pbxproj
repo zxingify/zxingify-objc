@@ -874,36 +874,28 @@
 		02D26EF4151288DB007F8DC6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */; };
 		02D26EFA151288DB007F8DC6 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D26EE2151288DB007F8DC6 /* libZXingObjC-iOS.a */; };
 		02D26F00151288DB007F8DC6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02D26EFE151288DB007F8DC6 /* InfoPlist.strings */; };
+		02DBD1D1156E9C8700C6DF66 /* ZXCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1C7156E9C8700C6DF66 /* ZXCapture.h */; };
+		02DBD1D2156E9C8700C6DF66 /* ZXCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1C7156E9C8700C6DF66 /* ZXCapture.h */; };
+		02DBD1D3156E9C8700C6DF66 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1C8156E9C8700C6DF66 /* ZXCapture.m */; };
+		02DBD1D4156E9C8700C6DF66 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1C8156E9C8700C6DF66 /* ZXCapture.m */; };
+		02DBD1D5156E9C8700C6DF66 /* ZXCaptureDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1C9156E9C8700C6DF66 /* ZXCaptureDelegate.h */; };
+		02DBD1D6156E9C8700C6DF66 /* ZXCaptureDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1C9156E9C8700C6DF66 /* ZXCaptureDelegate.h */; };
+		02DBD1D7156E9C8700C6DF66 /* ZXCaptureView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1CA156E9C8700C6DF66 /* ZXCaptureView.h */; };
+		02DBD1D8156E9C8700C6DF66 /* ZXCaptureView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1CA156E9C8700C6DF66 /* ZXCaptureView.h */; };
+		02DBD1D9156E9C8800C6DF66 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1CB156E9C8700C6DF66 /* ZXCaptureView.m */; };
+		02DBD1DA156E9C8800C6DF66 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1CB156E9C8700C6DF66 /* ZXCaptureView.m */; };
+		02DBD1DB156E9C8800C6DF66 /* ZXCGImageLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1CC156E9C8700C6DF66 /* ZXCGImageLuminanceSource.h */; };
+		02DBD1DC156E9C8800C6DF66 /* ZXCGImageLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1CC156E9C8700C6DF66 /* ZXCGImageLuminanceSource.h */; };
+		02DBD1DD156E9C8800C6DF66 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1CD156E9C8700C6DF66 /* ZXCGImageLuminanceSource.m */; };
+		02DBD1DE156E9C8800C6DF66 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1CD156E9C8700C6DF66 /* ZXCGImageLuminanceSource.m */; };
+		02DBD1DF156E9C8800C6DF66 /* ZXImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1CE156E9C8700C6DF66 /* ZXImage.h */; };
+		02DBD1E0156E9C8800C6DF66 /* ZXImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1CE156E9C8700C6DF66 /* ZXImage.h */; };
+		02DBD1E1156E9C8800C6DF66 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1CF156E9C8700C6DF66 /* ZXImage.m */; };
+		02DBD1E2156E9C8800C6DF66 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DBD1CF156E9C8700C6DF66 /* ZXImage.m */; };
+		02DBD1E3156E9C8800C6DF66 /* ZXView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1D0156E9C8700C6DF66 /* ZXView.h */; };
+		02DBD1E4156E9C8800C6DF66 /* ZXView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DBD1D0156E9C8700C6DF66 /* ZXView.h */; };
 		02F8EE4A1545FEB500CC8E70 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F8EE491545FEB500CC8E70 /* UIKit.framework */; };
 		02F8EE4D1545FED600CC8E70 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F8EE4C1545FED600CC8E70 /* Cocoa.framework */; };
-		02F8EEB31546004E00CC8E70 /* ZXCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE871546004E00CC8E70 /* ZXCapture.h */; };
-		02F8EEB41546004E00CC8E70 /* ZXCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE871546004E00CC8E70 /* ZXCapture.h */; };
-		02F8EEB51546004E00CC8E70 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE881546004E00CC8E70 /* ZXCapture.m */; };
-		02F8EEB61546004E00CC8E70 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE881546004E00CC8E70 /* ZXCapture.m */; };
-		02F8EEB71546004E00CC8E70 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE881546004E00CC8E70 /* ZXCapture.m */; };
-		02F8EEB81546004E00CC8E70 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE881546004E00CC8E70 /* ZXCapture.m */; };
-		02F8EEB91546004E00CC8E70 /* ZXCaptureDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE891546004E00CC8E70 /* ZXCaptureDelegate.h */; };
-		02F8EEBA1546004E00CC8E70 /* ZXCaptureDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE891546004E00CC8E70 /* ZXCaptureDelegate.h */; };
-		02F8EEBB1546004E00CC8E70 /* ZXCaptureView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE8A1546004E00CC8E70 /* ZXCaptureView.h */; };
-		02F8EEBC1546004E00CC8E70 /* ZXCaptureView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE8A1546004E00CC8E70 /* ZXCaptureView.h */; };
-		02F8EEBD1546004E00CC8E70 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8B1546004E00CC8E70 /* ZXCaptureView.m */; };
-		02F8EEBE1546004E00CC8E70 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8B1546004E00CC8E70 /* ZXCaptureView.m */; };
-		02F8EEBF1546004E00CC8E70 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8B1546004E00CC8E70 /* ZXCaptureView.m */; };
-		02F8EEC01546004E00CC8E70 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8B1546004E00CC8E70 /* ZXCaptureView.m */; };
-		02F8EEC11546004E00CC8E70 /* ZXCGImageLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE8C1546004E00CC8E70 /* ZXCGImageLuminanceSource.h */; };
-		02F8EEC21546004E00CC8E70 /* ZXCGImageLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE8C1546004E00CC8E70 /* ZXCGImageLuminanceSource.h */; };
-		02F8EEC31546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8D1546004E00CC8E70 /* ZXCGImageLuminanceSource.m */; };
-		02F8EEC41546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8D1546004E00CC8E70 /* ZXCGImageLuminanceSource.m */; };
-		02F8EEC51546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8D1546004E00CC8E70 /* ZXCGImageLuminanceSource.m */; };
-		02F8EEC61546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE8D1546004E00CC8E70 /* ZXCGImageLuminanceSource.m */; };
-		02F8EED91546004E00CC8E70 /* ZXImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE941546004E00CC8E70 /* ZXImage.h */; };
-		02F8EEDA1546004E00CC8E70 /* ZXImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EE941546004E00CC8E70 /* ZXImage.h */; };
-		02F8EEDB1546004E00CC8E70 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE951546004E00CC8E70 /* ZXImage.m */; };
-		02F8EEDC1546004E00CC8E70 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE951546004E00CC8E70 /* ZXImage.m */; };
-		02F8EEDD1546004E00CC8E70 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE951546004E00CC8E70 /* ZXImage.m */; };
-		02F8EEDE1546004E00CC8E70 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F8EE951546004E00CC8E70 /* ZXImage.m */; };
-		02F8EF031546004E00CC8E70 /* ZXView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EEA21546004E00CC8E70 /* ZXView.h */; };
-		02F8EF041546004E00CC8E70 /* ZXView.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F8EEA21546004E00CC8E70 /* ZXView.h */; };
 		02F8EF0E1546008F00CC8E70 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F8EF0D1546008F00CC8E70 /* libiconv.dylib */; };
 		02F8EF101546009900CC8E70 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F8EF0F1546009900CC8E70 /* QTKit.framework */; };
 		02F8EF12154600A000CC8E70 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F8EF11154600A000CC8E70 /* CoreVideo.framework */; };
@@ -1494,18 +1486,18 @@
 		02D26EF3151288DB007F8DC6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		02D26EFD151288DB007F8DC6 /* ZXingObjCTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZXingObjCTests-Info.plist"; sourceTree = "<group>"; };
 		02D26EFF151288DB007F8DC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02DBD1C7156E9C8700C6DF66 /* ZXCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCapture.h; sourceTree = "<group>"; };
+		02DBD1C8156E9C8700C6DF66 /* ZXCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCapture.m; sourceTree = "<group>"; };
+		02DBD1C9156E9C8700C6DF66 /* ZXCaptureDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCaptureDelegate.h; sourceTree = "<group>"; };
+		02DBD1CA156E9C8700C6DF66 /* ZXCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCaptureView.h; sourceTree = "<group>"; };
+		02DBD1CB156E9C8700C6DF66 /* ZXCaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCaptureView.m; sourceTree = "<group>"; };
+		02DBD1CC156E9C8700C6DF66 /* ZXCGImageLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCGImageLuminanceSource.h; sourceTree = "<group>"; };
+		02DBD1CD156E9C8700C6DF66 /* ZXCGImageLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCGImageLuminanceSource.m; sourceTree = "<group>"; };
+		02DBD1CE156E9C8700C6DF66 /* ZXImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXImage.h; sourceTree = "<group>"; };
+		02DBD1CF156E9C8700C6DF66 /* ZXImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXImage.m; sourceTree = "<group>"; };
+		02DBD1D0156E9C8700C6DF66 /* ZXView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXView.h; sourceTree = "<group>"; };
 		02F8EE491545FEB500CC8E70 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		02F8EE4C1545FED600CC8E70 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		02F8EE871546004E00CC8E70 /* ZXCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCapture.h; sourceTree = "<group>"; };
-		02F8EE881546004E00CC8E70 /* ZXCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCapture.m; sourceTree = "<group>"; };
-		02F8EE891546004E00CC8E70 /* ZXCaptureDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCaptureDelegate.h; sourceTree = "<group>"; };
-		02F8EE8A1546004E00CC8E70 /* ZXCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCaptureView.h; sourceTree = "<group>"; };
-		02F8EE8B1546004E00CC8E70 /* ZXCaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCaptureView.m; sourceTree = "<group>"; };
-		02F8EE8C1546004E00CC8E70 /* ZXCGImageLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCGImageLuminanceSource.h; sourceTree = "<group>"; };
-		02F8EE8D1546004E00CC8E70 /* ZXCGImageLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCGImageLuminanceSource.m; sourceTree = "<group>"; };
-		02F8EE941546004E00CC8E70 /* ZXImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXImage.h; sourceTree = "<group>"; };
-		02F8EE951546004E00CC8E70 /* ZXImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXImage.m; sourceTree = "<group>"; };
-		02F8EEA21546004E00CC8E70 /* ZXView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXView.h; sourceTree = "<group>"; };
 		02F8EF0D1546008F00CC8E70 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		02F8EF0F1546009900CC8E70 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/QTKit.framework; sourceTree = DEVELOPER_DIR; };
 		02F8EF11154600A000CC8E70 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
@@ -1820,6 +1812,16 @@
 			isa = PBXGroup;
 			children = (
 				029BCD9215129BD0009E6549 /* result */,
+				02DBD1C7156E9C8700C6DF66 /* ZXCapture.h */,
+				02DBD1C8156E9C8700C6DF66 /* ZXCapture.m */,
+				02DBD1C9156E9C8700C6DF66 /* ZXCaptureDelegate.h */,
+				02DBD1CA156E9C8700C6DF66 /* ZXCaptureView.h */,
+				02DBD1CB156E9C8700C6DF66 /* ZXCaptureView.m */,
+				02DBD1CC156E9C8700C6DF66 /* ZXCGImageLuminanceSource.h */,
+				02DBD1CD156E9C8700C6DF66 /* ZXCGImageLuminanceSource.m */,
+				02DBD1CE156E9C8700C6DF66 /* ZXImage.h */,
+				02DBD1CF156E9C8700C6DF66 /* ZXImage.m */,
+				02DBD1D0156E9C8700C6DF66 /* ZXView.h */,
 			);
 			path = client;
 			sourceTree = "<group>";
@@ -2308,7 +2310,6 @@
 			isa = PBXGroup;
 			children = (
 				02D26EE7151288DB007F8DC6 /* ZXingObjC */,
-				02F8EE811546004E00CC8E70 /* Client */,
 				02D26EE8151288DB007F8DC6 /* Supporting Files */,
 				02D26EFB151288DB007F8DC6 /* ZXingObjCTests */,
 				02D26EE4151288DB007F8DC6 /* Frameworks */,
@@ -2419,23 +2420,6 @@
 				02D26EFE151288DB007F8DC6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		02F8EE811546004E00CC8E70 /* Client */ = {
-			isa = PBXGroup;
-			children = (
-				02F8EE871546004E00CC8E70 /* ZXCapture.h */,
-				02F8EE881546004E00CC8E70 /* ZXCapture.m */,
-				02F8EE891546004E00CC8E70 /* ZXCaptureDelegate.h */,
-				02F8EE8A1546004E00CC8E70 /* ZXCaptureView.h */,
-				02F8EE8B1546004E00CC8E70 /* ZXCaptureView.m */,
-				02F8EE8C1546004E00CC8E70 /* ZXCGImageLuminanceSource.h */,
-				02F8EE8D1546004E00CC8E70 /* ZXCGImageLuminanceSource.m */,
-				02F8EE941546004E00CC8E70 /* ZXImage.h */,
-				02F8EE951546004E00CC8E70 /* ZXImage.m */,
-				02F8EEA21546004E00CC8E70 /* ZXView.h */,
-			);
-			path = Client;
 			sourceTree = "<group>";
 		};
 		02FB06DF15475B480067923D /* common */ = {
@@ -2698,13 +2682,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0250D9031545FC9700752941 /* osx-Prefix.pch in Headers */,
-				02F8EEB41546004E00CC8E70 /* ZXCapture.h in Headers */,
-				02F8EEBA1546004E00CC8E70 /* ZXCaptureDelegate.h in Headers */,
-				02F8EEBC1546004E00CC8E70 /* ZXCaptureView.h in Headers */,
-				02F8EEC21546004E00CC8E70 /* ZXCGImageLuminanceSource.h in Headers */,
-				02F8EEDA1546004E00CC8E70 /* ZXImage.h in Headers */,
-				02F8EF041546004E00CC8E70 /* ZXView.h in Headers */,
 				028C352F156D3A74004BA245 /* ZXErrors.h in Headers */,
+				02DBD1D2156E9C8700C6DF66 /* ZXCapture.h in Headers */,
+				02DBD1D6156E9C8700C6DF66 /* ZXCaptureDelegate.h in Headers */,
+				02DBD1D8156E9C8700C6DF66 /* ZXCaptureView.h in Headers */,
+				02DBD1DC156E9C8800C6DF66 /* ZXCGImageLuminanceSource.h in Headers */,
+				02DBD1E0156E9C8800C6DF66 /* ZXImage.h in Headers */,
+				02DBD1E4156E9C8800C6DF66 /* ZXView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2881,13 +2865,13 @@
 				250830361512B1E6006D79E6 /* ZXQRCodeBitMatrixParser.h in Headers */,
 				250830461512B2D9006D79E6 /* ZXQRCodeVersion.h in Headers */,
 				0250D9021545FC9000752941 /* ios-Prefix.pch in Headers */,
-				02F8EEB31546004E00CC8E70 /* ZXCapture.h in Headers */,
-				02F8EEB91546004E00CC8E70 /* ZXCaptureDelegate.h in Headers */,
-				02F8EEBB1546004E00CC8E70 /* ZXCaptureView.h in Headers */,
-				02F8EEC11546004E00CC8E70 /* ZXCGImageLuminanceSource.h in Headers */,
-				02F8EED91546004E00CC8E70 /* ZXImage.h in Headers */,
-				02F8EF031546004E00CC8E70 /* ZXView.h in Headers */,
 				028C352E156D3A74004BA245 /* ZXErrors.h in Headers */,
+				02DBD1D1156E9C8700C6DF66 /* ZXCapture.h in Headers */,
+				02DBD1D5156E9C8700C6DF66 /* ZXCaptureDelegate.h in Headers */,
+				02DBD1D7156E9C8700C6DF66 /* ZXCaptureView.h in Headers */,
+				02DBD1DB156E9C8800C6DF66 /* ZXCGImageLuminanceSource.h in Headers */,
+				02DBD1DF156E9C8800C6DF66 /* ZXImage.h in Headers */,
+				02DBD1E3156E9C8800C6DF66 /* ZXView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3210,13 +3194,13 @@
 				0250D8411545FAA000752941 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */,
 				0250D8421545FAA000752941 /* ZXDataMatrixDecoder.m in Sources */,
 				0250D8431545FAA000752941 /* ZXDataMatrixVersion.m in Sources */,
-				02F8EEB71546004E00CC8E70 /* ZXCapture.m in Sources */,
-				02F8EEBF1546004E00CC8E70 /* ZXCaptureView.m in Sources */,
-				02F8EEC51546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */,
-				02F8EEDD1546004E00CC8E70 /* ZXImage.m in Sources */,
 				029A9BFB15532B3400CCADE7 /* ZXDecodeHints.m in Sources */,
 				02AAC88A1553384900D4FF0D /* ZXEncodeHints.m in Sources */,
 				027176EB156D3D5F0010C009 /* ZXErrors.m in Sources */,
+				02DBD1D4156E9C8700C6DF66 /* ZXCapture.m in Sources */,
+				02DBD1DA156E9C8800C6DF66 /* ZXCaptureView.m in Sources */,
+				02DBD1DE156E9C8800C6DF66 /* ZXCGImageLuminanceSource.m in Sources */,
+				02DBD1E2156E9C8800C6DF66 /* ZXImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3384,10 +3368,6 @@
 				0250D8E91545FB1E00752941 /* ZXQRCodeWriter.m in Sources */,
 				0250D8EB1545FB1E00752941 /* ZXResult.m in Sources */,
 				0250D8EC1545FB1E00752941 /* ZXResultPoint.m in Sources */,
-				02F8EEB81546004E00CC8E70 /* ZXCapture.m in Sources */,
-				02F8EEC01546004E00CC8E70 /* ZXCaptureView.m in Sources */,
-				02F8EEC61546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */,
-				02F8EEDE1546004E00CC8E70 /* ZXImage.m in Sources */,
 				02FB06E315475B480067923D /* AbstractBlackBoxTestCase.m in Sources */,
 				02FB06EB15475B6F0067923D /* QRCodeBlackBox1TestCase.m in Sources */,
 				029A9BC41551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */,
@@ -3656,13 +3636,13 @@
 				250830271512B1B6006D79E6 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */,
 				029BCFA415129C87009E6549 /* ZXDataMatrixVersion.m in Sources */,
 				029BCFCB15129F28009E6549 /* ZXDataMatrixDecoder.m in Sources */,
-				02F8EEB51546004E00CC8E70 /* ZXCapture.m in Sources */,
-				02F8EEBD1546004E00CC8E70 /* ZXCaptureView.m in Sources */,
-				02F8EEC31546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */,
-				02F8EEDB1546004E00CC8E70 /* ZXImage.m in Sources */,
 				029A9BF915532B3400CCADE7 /* ZXDecodeHints.m in Sources */,
 				02AAC8881553384900D4FF0D /* ZXEncodeHints.m in Sources */,
 				027176EA156D3D5F0010C009 /* ZXErrors.m in Sources */,
+				02DBD1D3156E9C8700C6DF66 /* ZXCapture.m in Sources */,
+				02DBD1D9156E9C8800C6DF66 /* ZXCaptureView.m in Sources */,
+				02DBD1DD156E9C8800C6DF66 /* ZXCGImageLuminanceSource.m in Sources */,
+				02DBD1E1156E9C8800C6DF66 /* ZXImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3830,10 +3810,6 @@
 				250830331512B1D7006D79E6 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
 				250830381512B1E6006D79E6 /* ZXQRCodeBitMatrixParser.m in Sources */,
 				250830481512B2D9006D79E6 /* ZXQRCodeVersion.m in Sources */,
-				02F8EEB61546004E00CC8E70 /* ZXCapture.m in Sources */,
-				02F8EEBE1546004E00CC8E70 /* ZXCaptureView.m in Sources */,
-				02F8EEC41546004E00CC8E70 /* ZXCGImageLuminanceSource.m in Sources */,
-				02F8EEDC1546004E00CC8E70 /* ZXImage.m in Sources */,
 				02FB06E215475B480067923D /* AbstractBlackBoxTestCase.m in Sources */,
 				02FB06EA15475B6F0067923D /* QRCodeBlackBox1TestCase.m in Sources */,
 				029A9BC31551C90B00CCADE7 /* QRCodeBlackBox2TestCase.m in Sources */,
