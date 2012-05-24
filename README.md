@@ -73,6 +73,14 @@ if (result) {
 }
 ```
 
+Examples
+--------
+
+ZXingObjC includes several example applications found in "examples" folder:
+
+* BarcodeScanner - An iOS application that captures video from the camera, scans for barcodes and displays results on screen.
+* QrCodeTest - A basic QR code generator that accepts input, encodes it as a QR code, and displays it on screen.
+
 Getting Started
 ---------------
 
@@ -90,9 +98,9 @@ To add ZXingObjC to your project:
 3. In the "Build Phases" tab, we need to add the following frameworks under "Link Binary With Libraries":
     * ImageIO.framework
     * CoreGraphics.framework
-    * CoreVideo.framework
     * If you added ZXingObjC as a static library, also add libZXingObjC-iOS.a (for iOS apps) or libZXingObjC-osx.a (for Mac apps)
 
 License
 -------
+
 ZXingObjC is available under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html).

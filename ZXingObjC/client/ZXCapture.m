@@ -23,7 +23,6 @@
 #include "ZXHybridBinarizer.h"
 #include "ZXQRCodeReader.h"
 #include "ZXResult.h"
-#include "ZXReaderException.h"
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
 #define ZXCaptureDevice AVCaptureDevice
@@ -454,20 +453,15 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
       ZXBinaryBitmap* bitmap = 
         [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
 
-      @try {
-        ZXQRCodeReader* reader = [[[ZXQRCodeReader alloc] init] autorelease];
-        // NSLog(@"started decode");
-        ZXResult* result = [reader decode:bitmap hints:hints];
+      ZXQRCodeReader* reader = [[[ZXQRCodeReader alloc] init] autorelease];
+      // NSLog(@"started decode");
+      NSError* error;
+      ZXResult* result = [reader decode:bitmap hints:hints error:&error];
+      if (result) {
         // NSLog(@"finished decode");
         [delegate captureResult:self result:result];
-      } @catch (ZXReaderException* rex) {
-        if (![rex.reason isEqualToString:@"Could not find three finder patterns"]) {
-          // NSLog(@"failed to decode, caught ReaderException '%@'", rex.reason);
-        }
-      } @catch (NSException* iex) {
-        // NSLog(@"failed to decode, caught IllegalArgumentException '%@'", iex.reason);
-      } @catch (id ue) {
-        NSLog(@"Caught unknown exception: %@", ue);
+      } else {
+        // NSLog(@"failed to decode: %@", [error localizedDescription]);
       }
     }
     // NSLog(@"finished frame");
