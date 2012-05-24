@@ -18,6 +18,10 @@
 @synthesize resultPointCallback;
 @synthesize tryHarder;
 
++ (ZXDecodeHints*)hints {
+  return [[[self alloc] init] autorelease];
+}
+
 - (id)init {
   if (self = [super init]) {
     self.barcodeFormats = [NSMutableArray array];

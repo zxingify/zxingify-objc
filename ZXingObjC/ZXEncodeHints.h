@@ -6,6 +6,8 @@
 
 @interface ZXEncodeHints : NSObject
 
++ (ZXEncodeHints*)hints;
+
 /**
  * Specifies what character encoding to use where applicable (type String)
  */

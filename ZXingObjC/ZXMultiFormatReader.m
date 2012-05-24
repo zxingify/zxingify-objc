@@ -22,6 +22,10 @@
 @synthesize hints;
 @synthesize readers;
 
++ (ZXMultiFormatReader*)reader {
+  return [[[ZXMultiFormatReader alloc] init] autorelease];
+}
+
 /**
  * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
  * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.

@@ -10,6 +10,10 @@
 
 @implementation ZXMultiFormatWriter
 
++ (ZXMultiFormatWriter*)writer {
+  return [[[ZXMultiFormatWriter alloc] init] autorelease];
+}
+
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
   return [self encode:contents format:format width:width height:height hints:nil error:error];
 }

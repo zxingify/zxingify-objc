@@ -94,7 +94,6 @@
 		022B184F14D1B5FE000503E2 = {
 			isa = PBXGroup;
 			children = (
-				02DBD1BD156E888700C6DF66 /* ImageIO.framework */,
 				022B186414D1B5FE000503E2 /* QrCodeTest */,
 				022B185D14D1B5FE000503E2 /* Frameworks */,
 				022B185B14D1B5FE000503E2 /* Products */,
@@ -116,6 +115,7 @@
 				022B185E14D1B5FE000503E2 /* UIKit.framework */,
 				022B186014D1B5FE000503E2 /* Foundation.framework */,
 				022B186214D1B5FE000503E2 /* CoreGraphics.framework */,
+				02DBD1BD156E888700C6DF66 /* ImageIO.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -7,11 +7,12 @@
 
 @interface ZXBinaryBitmap : NSObject
 
-@property(nonatomic, readonly) int width;
-@property(nonatomic, readonly) int height;
-@property(nonatomic, readonly) BOOL cropSupported;
-@property(nonatomic, readonly) BOOL rotateSupported;
+@property (nonatomic, readonly) int width;
+@property (nonatomic, readonly) int height;
+@property (nonatomic, readonly) BOOL cropSupported;
+@property (nonatomic, readonly) BOOL rotateSupported;
 
++ (ZXBinaryBitmap*)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer;
 - (id)initWithBinarizer:(ZXBinarizer *)binarizer;
 - (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
 - (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;

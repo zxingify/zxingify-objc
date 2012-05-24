@@ -18,6 +18,10 @@
 
 @synthesize luminanceSource;
 
++ (ZXBinarizer*)binarizerWithSource:(ZXLuminanceSource *)source {
+  return [[[self alloc] initWithSource:source] autorelease];
+}
+
 - (id)initWithSource:(ZXLuminanceSource *)source {
   if (self = [super init]) {
     if (source == nil) {

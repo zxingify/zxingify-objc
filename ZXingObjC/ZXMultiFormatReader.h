@@ -12,6 +12,7 @@
 
 @property (nonatomic, retain) ZXDecodeHints * hints;
 
++ (ZXMultiFormatReader*)reader;
 - (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image error:(NSError **)error;
 
 @end

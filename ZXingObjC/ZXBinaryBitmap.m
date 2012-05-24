@@ -15,6 +15,10 @@
 @synthesize binarizer;
 @synthesize matrix;
 
++ (ZXBinaryBitmap*)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer {
+  return [[[self alloc] initWithBinarizer:binarizer] autorelease];
+}
+
 - (id)initWithBinarizer:(ZXBinarizer *)aBinarizer {
   if (self = [super init]) {
     if (aBinarizer == nil) {
