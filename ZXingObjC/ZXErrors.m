@@ -1,7 +1,7 @@
 #import "ZXErrors.h"
 
 NSError* ChecksumErrorInstance() {
-  NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"This barcode does failed its checksum"
+  NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"This barcode failed its checksum"
                                                        forKey:NSLocalizedDescriptionKey];
 
   return [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXChecksumError userInfo:userInfo] autorelease];

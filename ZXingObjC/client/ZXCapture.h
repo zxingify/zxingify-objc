@@ -16,6 +16,9 @@
 
 #import "ZXCaptureDelegate.h"
 
+@protocol ZXReader;
+@class ZXDecodeHints;
+
 #if !TARGET_IPHONE_SIMULATOR
 #if TARGET_OS_EMBEDDED
 #include <AVFoundation/AVFoundation.h>
@@ -73,7 +76,9 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 @property (nonatomic) CGAffineTransform transform;
 @property (nonatomic, readonly) ZXCaptureVideoOutput* output;
 @property (nonatomic, readonly) CALayer* layer;
-
+@property (nonatomic, retain) id<ZXReader> reader;
+@property (nonatomic, retain) ZXDecodeHints* hints;
+@property (nonatomic, assign) CGFloat rotation;
 
 - (id)init;
 - (CALayer*)luminance;
@@ -107,6 +112,9 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 @property (nonatomic) CGAffineTransform transform;
 @property (nonatomic, readonly) void* output;
 @property (nonatomic, readonly) CALayer* layer;
+@property (nonatomic, retain) id<ZXReader> reader;
+@property (nonatomic, retain) ZXDecodeHints* hints;
+@property (nonatomic, assign) CGFloat rotation;
 
 - (id)init;
 - (CALayer*)luminance;

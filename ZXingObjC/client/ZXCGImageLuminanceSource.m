@@ -51,10 +51,10 @@
   int newBytesPerRow = ((width*4+0xf)>>4)<<4;
 
   CVPixelBufferLockBaseAddress(buffer,0); 
-  
+
   unsigned char* baseAddress =
   (unsigned char*)CVPixelBufferGetBaseAddress(buffer); 
-  
+
   int size = newBytesPerRow*height;
   unsigned char* bytes = (unsigned char*)malloc(size);
   if (newBytesPerRow == bytesPerRow) {
@@ -67,7 +67,7 @@
     }
   }
   CVPixelBufferUnlockBaseAddress(buffer, 0);
-  
+
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); 
   CGContextRef newContext = CGBitmapContextCreate(bytes,
                                                   width,
@@ -78,15 +78,14 @@
                                                   kCGBitmapByteOrder32Little|
                                                   kCGImageAlphaNoneSkipFirst);
   CGColorSpaceRelease(colorSpace);
-  
-  CGImageRef result = CGBitmapContextCreateImage(newContext); 
-  
-  CGContextRelease(newContext); 
-  
-  free(bytes);
-  
-  return result;
 
+  CGImageRef result = CGBitmapContextCreateImage(newContext);
+
+  CGContextRelease(newContext);
+
+  free(bytes);
+
+  return result;
 }
 
 - (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)_image 

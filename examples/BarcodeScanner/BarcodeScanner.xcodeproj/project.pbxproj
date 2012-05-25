@@ -10,17 +10,18 @@
 		024D10E0156EAB6F00FE6872 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10DF156EAB6F00FE6872 /* UIKit.framework */; };
 		024D10E2156EAB6F00FE6872 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10E1156EAB6F00FE6872 /* Foundation.framework */; };
 		024D10E4156EAB6F00FE6872 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10E3156EAB6F00FE6872 /* CoreGraphics.framework */; };
-		024D10EA156EAB6F00FE6872 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 024D10E8156EAB6F00FE6872 /* InfoPlist.strings */; };
-		024D10EC156EAB6F00FE6872 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 024D10EB156EAB6F00FE6872 /* main.m */; };
-		024D10F0156EAB6F00FE6872 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 024D10EF156EAB6F00FE6872 /* AppDelegate.m */; };
-		024D10F3156EAB6F00FE6872 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 024D10F2156EAB6F00FE6872 /* ViewController.m */; };
-		024D10F6156EAB6F00FE6872 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 024D10F4156EAB6F00FE6872 /* ViewController.xib */; };
 		024D1110156EAB9A00FE6872 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D1107156EAB8300FE6872 /* libZXingObjC-iOS.a */; };
 		024D1112156EABA000FE6872 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D1111156EABA000FE6872 /* ImageIO.framework */; };
 		024D111D156EAC4700FE6872 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D111C156EAC4700FE6872 /* AVFoundation.framework */; };
 		024D111F156EB11F00FE6872 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D111E156EB11F00FE6872 /* CoreVideo.framework */; };
 		024D1121156EB13500FE6872 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D1120156EB13500FE6872 /* CoreMedia.framework */; };
 		024D1123156EB5FB00FE6872 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D1122156EB5FB00FE6872 /* QuartzCore.framework */; };
+		02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */; };
+		02C6AFD7156FCB330052B145 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C6AFD6156FCB330052B145 /* main.m */; };
+		02C6AFDA156FCB4F0052B145 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C6AFD9156FCB4F0052B145 /* ViewController.m */; };
+		02C6AFDD156FCB660052B145 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C6AFDC156FCB660052B145 /* AppDelegate.m */; };
+		02C6AFE0156FCBA00052B145 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02C6AFDE156FCBA00052B145 /* ViewController.xib */; };
+		02C6AFE3156FCBA80052B145 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02C6AFE1156FCBA80052B145 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,21 +67,22 @@
 		024D10DF156EAB6F00FE6872 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		024D10E1156EAB6F00FE6872 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		024D10E3156EAB6F00FE6872 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		024D10E7156EAB6F00FE6872 /* BarcodeScanner-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BarcodeScanner-Info.plist"; sourceTree = "<group>"; };
-		024D10E9156EAB6F00FE6872 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		024D10EB156EAB6F00FE6872 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		024D10ED156EAB6F00FE6872 /* BarcodeScanner-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BarcodeScanner-Prefix.pch"; sourceTree = "<group>"; };
-		024D10EE156EAB6F00FE6872 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		024D10EF156EAB6F00FE6872 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		024D10F1156EAB6F00FE6872 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		024D10F2156EAB6F00FE6872 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		024D10F5156EAB6F00FE6872 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
 		024D10FC156EAB8200FE6872 /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../ZXingObjC.xcodeproj; sourceTree = "<group>"; };
 		024D1111156EABA000FE6872 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		024D111C156EAC4700FE6872 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		024D111E156EB11F00FE6872 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		024D1120156EB13500FE6872 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		024D1122156EB5FB00FE6872 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		02C6AFD4156FCB110052B145 /* BarcodeScanner-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BarcodeScanner-Info.plist"; sourceTree = SOURCE_ROOT; };
+		02C6AFD6156FCB330052B145 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
+		02C6AFD8156FCB4F0052B145 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = SOURCE_ROOT; };
+		02C6AFD9156FCB4F0052B145 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
+		02C6AFDB156FCB660052B145 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		02C6AFDC156FCB660052B145 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		02C6AFDF156FCBA00052B145 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = SOURCE_ROOT; };
+		02C6AFE2156FCBA80052B145 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */,
 				024D1123156EB5FB00FE6872 /* QuartzCore.framework in Frameworks */,
 				024D1121156EB13500FE6872 /* CoreMedia.framework in Frameworks */,
 				024D111F156EB11F00FE6872 /* CoreVideo.framework in Frameworks */,
@@ -106,7 +109,6 @@
 		024D10D0156EAB6E00FE6872 = {
 			isa = PBXGroup;
 			children = (
-				024D1122156EB5FB00FE6872 /* QuartzCore.framework */,
 				024D10E5156EAB6F00FE6872 /* BarcodeScanner */,
 				024D10DE156EAB6F00FE6872 /* Frameworks */,
 				024D10DC156EAB6F00FE6872 /* Products */,
@@ -132,6 +134,8 @@
 				024D111C156EAC4700FE6872 /* AVFoundation.framework */,
 				024D111E156EB11F00FE6872 /* CoreVideo.framework */,
 				024D1120156EB13500FE6872 /* CoreMedia.framework */,
+				02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */,
+				024D1122156EB5FB00FE6872 /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -139,11 +143,11 @@
 		024D10E5156EAB6F00FE6872 /* BarcodeScanner */ = {
 			isa = PBXGroup;
 			children = (
-				024D10EE156EAB6F00FE6872 /* AppDelegate.h */,
-				024D10EF156EAB6F00FE6872 /* AppDelegate.m */,
-				024D10F1156EAB6F00FE6872 /* ViewController.h */,
-				024D10F2156EAB6F00FE6872 /* ViewController.m */,
-				024D10F4156EAB6F00FE6872 /* ViewController.xib */,
+				02C6AFDB156FCB660052B145 /* AppDelegate.h */,
+				02C6AFDC156FCB660052B145 /* AppDelegate.m */,
+				02C6AFD8156FCB4F0052B145 /* ViewController.h */,
+				02C6AFD9156FCB4F0052B145 /* ViewController.m */,
+				02C6AFDE156FCBA00052B145 /* ViewController.xib */,
 				024D10E6156EAB6F00FE6872 /* Supporting Files */,
 			);
 			path = BarcodeScanner;
@@ -152,9 +156,9 @@
 		024D10E6156EAB6F00FE6872 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				024D10E7156EAB6F00FE6872 /* BarcodeScanner-Info.plist */,
-				024D10E8156EAB6F00FE6872 /* InfoPlist.strings */,
-				024D10EB156EAB6F00FE6872 /* main.m */,
+				02C6AFE1156FCBA80052B145 /* InfoPlist.strings */,
+				02C6AFD4156FCB110052B145 /* BarcodeScanner-Info.plist */,
+				02C6AFD6156FCB330052B145 /* main.m */,
 				024D10ED156EAB6F00FE6872 /* BarcodeScanner-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -260,8 +264,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				024D10EA156EAB6F00FE6872 /* InfoPlist.strings in Resources */,
-				024D10F6156EAB6F00FE6872 /* ViewController.xib in Resources */,
+				02C6AFE0156FCBA00052B145 /* ViewController.xib in Resources */,
+				02C6AFE3156FCBA80052B145 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,9 +276,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				024D10EC156EAB6F00FE6872 /* main.m in Sources */,
-				024D10F0156EAB6F00FE6872 /* AppDelegate.m in Sources */,
-				024D10F3156EAB6F00FE6872 /* ViewController.m in Sources */,
+				02C6AFD7156FCB330052B145 /* main.m in Sources */,
+				02C6AFDA156FCB4F0052B145 /* ViewController.m in Sources */,
+				02C6AFDD156FCB660052B145 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,20 +293,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		024D10E8156EAB6F00FE6872 /* InfoPlist.strings */ = {
+		02C6AFDE156FCBA00052B145 /* ViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				024D10E9156EAB6F00FE6872 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		024D10F4156EAB6F00FE6872 /* ViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				024D10F5156EAB6F00FE6872 /* en */,
+				02C6AFDF156FCBA00052B145 /* en */,
 			);
 			name = ViewController.xib;
+			sourceTree = "<group>";
+		};
+		02C6AFE1156FCBA80052B145 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02C6AFE2156FCBA80052B145 /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -355,9 +359,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BarcodeScanner/BarcodeScanner-Prefix.pch";
+				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				HEADER_SEARCH_PATHS = "../../ZXingObjC/**";
-				INFOPLIST_FILE = "BarcodeScanner/BarcodeScanner-Info.plist";
+				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -367,9 +371,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BarcodeScanner/BarcodeScanner-Prefix.pch";
+				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				HEADER_SEARCH_PATHS = "../../ZXingObjC/**";
-				INFOPLIST_FILE = "BarcodeScanner/BarcodeScanner-Info.plist";
+				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -394,6 +398,7 @@
 				024D10FB156EAB6F00FE6872 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

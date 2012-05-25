@@ -21,7 +21,8 @@
 #include "ZXBinaryBitmap.h"
 #include "ZXDecodeHints.h"
 #include "ZXHybridBinarizer.h"
-#include "ZXQRCodeReader.h"
+#include "ZXMultiFormatReader.h"
+#include "ZXReader.h"
 #include "ZXResult.h"
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
@@ -41,6 +42,59 @@
 @synthesize delegate;
 @synthesize transform;
 @synthesize captureToFilename;
+@synthesize reader;
+@synthesize hints;
+@synthesize rotation;
+
+// Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
+- (CGImageRef)rotateImage:(CGImageRef)original degrees:(float)degrees {
+  if (degrees == 0.0f) {
+    return original;
+  } else {
+    double radians = degrees * M_PI / 180;
+
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+    radians = -1 * radians;
+#endif
+
+    int _width = CGImageGetWidth(original);
+    int _height = CGImageGetHeight(original);
+
+    CGRect imgRect = CGRectMake(0, 0, _width, _height);
+    CGAffineTransform _transform = CGAffineTransformMakeRotation(radians);
+    CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, _transform);
+
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL,
+                                                 rotatedRect.size.width,
+                                                 rotatedRect.size.height,
+                                                 CGImageGetBitsPerComponent(original),
+                                                 0,
+                                                 colorSpace,
+                                                 kCGImageAlphaPremultipliedFirst);
+    CGContextSetAllowsAntialiasing(context, FALSE);
+    CGContextSetInterpolationQuality(context, kCGInterpolationNone);
+    CGColorSpaceRelease(colorSpace);
+
+    CGContextTranslateCTM(context,
+                          +(rotatedRect.size.width/2),
+                          +(rotatedRect.size.height/2));
+    CGContextRotateCTM(context, radians);
+
+    CGContextDrawImage(context, CGRectMake(-imgRect.size.width/2,
+                                           -imgRect.size.height/2,
+                                           imgRect.size.width,
+                                           imgRect.size.height),
+                       original);
+
+    CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
+    CFMakeCollectable(rotatedImage);
+
+    CFRelease(context);
+
+    return rotatedImage;
+  }
+}
 
 - (ZXCapture*)init {
   if ((self = [super init])) {
@@ -54,9 +108,12 @@
     order_in_skip = 0;
     order_out_skip = 0;
     transform = CGAffineTransformIdentity;
+    rotation = 0.0f;
     ZXQT({
         transform.a = -1;
       });
+    self.reader = [ZXMultiFormatReader reader];
+    self.hints = [ZXDecodeHints hints];
   }
   return self;
 }
@@ -357,6 +414,8 @@
   [input release];
   [layer release];
   [session release];
+  [reader release];
+  [hints release];
   [super dealloc];
 }
 
@@ -419,10 +478,16 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   }
 #endif
 
+  CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
+  CGImageRef rotatedImage = [self rotateImage:videoFrameImage degrees:rotation];
+  CGImageRelease(videoFrameImage);
+
   ZXCGImageLuminanceSource* source
     = [[[ZXCGImageLuminanceSource alloc]
-         initWithBuffer:videoFrame]
+        initWithCGImage:rotatedImage]
         autorelease];
+
+  CGImageRelease(rotatedImage);
 
   if (luminance) {
     CGImageRef image = source.image;
@@ -449,22 +514,20 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
     if (delegate) {
 
-      ZXDecodeHints* hints = [[[ZXDecodeHints alloc] init] autorelease];
       ZXBinaryBitmap* bitmap = 
         [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
 
-      ZXQRCodeReader* reader = [[[ZXQRCodeReader alloc] init] autorelease];
-      // NSLog(@"started decode");
+//      NSLog(@"started decode");
       NSError* error;
-      ZXResult* result = [reader decode:bitmap hints:hints error:&error];
+      ZXResult* result = [self.reader decode:bitmap hints:hints error:&error];
       if (result) {
-        // NSLog(@"finished decode");
+//        NSLog(@"finished decode");
         [delegate captureResult:self result:result];
       } else {
-        // NSLog(@"failed to decode: %@", [error localizedDescription]);
+//        NSLog(@"failed to decode: %@", [error localizedDescription]);
       }
     }
-    // NSLog(@"finished frame");
+//    NSLog(@"finished frame");
   }
 
   [pool drain];
@@ -552,6 +615,9 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 @synthesize delegate;
 @synthesize transform;
 @synthesize captureToFilename;
+@synthesize reader;
+@synthesize hints;
+@synthesize rotation;
 
 - (id)init {
   return 0;
