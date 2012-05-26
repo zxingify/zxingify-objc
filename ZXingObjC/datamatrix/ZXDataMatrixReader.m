@@ -125,7 +125,7 @@
 
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
-  if (matrixWidth == 0 || matrixHeight == 0) {
+  if (matrixWidth <= 0 || matrixHeight <= 0) {
     return nil;
   }
 
