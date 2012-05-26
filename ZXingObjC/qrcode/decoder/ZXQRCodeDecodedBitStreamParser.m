@@ -249,7 +249,12 @@ int const GB2312_SUBSET = 1;
 }
 
 + (BOOL)decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count {
+  // Read three digits at a time
   while (count >= 3) {
+    // Each 10 bits encodes three digits
+    if (bits.available < 10) {
+      return NO;
+    }
     int threeDigitsBits = [bits readBits:10];
     if (threeDigitsBits >= 1000) {
       return NO;
@@ -266,6 +271,10 @@ int const GB2312_SUBSET = 1;
   }
 
   if (count == 2) {
+    // Two digits left over to read, encoded in 7 bits
+    if (bits.available < 7) {
+      return NO;
+    }
     int twoDigitsBits = [bits readBits:7];
     if (twoDigitsBits >= 100) {
       return NO;
@@ -274,6 +283,10 @@ int const GB2312_SUBSET = 1;
     unichar next2 = [self toAlphaNumericChar:twoDigitsBits % 10];
     [result appendFormat:@"%C%C", next1, next2];
   } else if (count == 1) {
+    // One digit left over to read
+    if (bits.available < 4) {
+      return NO;
+    }
     int digitBits = [bits readBits:4];
     if (digitBits >= 10) {
       return NO;
