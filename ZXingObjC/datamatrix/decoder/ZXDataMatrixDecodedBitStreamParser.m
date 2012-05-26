@@ -405,22 +405,27 @@ const int BASE256_ENCODE = 6;
  */
 + (void)decodeEdifactSegment:(ZXBitSource *)bits result:(NSMutableString *)result {
   BOOL unlatch = NO;
-
   do {
+    // If there is only two or less bytes left then it will be encoded as ASCII
     if (bits.available <= 16) {
       return;
     }
 
     for (int i = 0; i < 4; i++) {
       int edifactValue = [bits readBits:6];
-      if (edifactValue == 0x1F) {
+
+      // Check for the unlatch character
+      if (edifactValue == 0x1F) {  // 011111
         unlatch = YES;
+        // If we encounter the unlatch code then continue reading because the Codeword triple
+        // is padded with 0's
       }
+
       if (!unlatch) {
-        if ((edifactValue & 32) == 0) {
-          edifactValue |= 64;
+        if ((edifactValue & 0x20) == 0) {  // no 1 in the leading (6th) bit
+          edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
         }
-        [result appendFormat:@"%d", edifactValue];
+        [result appendFormat:@"%c", (char)edifactValue];
       }
     }
   } while (!unlatch && bits.available > 0);
