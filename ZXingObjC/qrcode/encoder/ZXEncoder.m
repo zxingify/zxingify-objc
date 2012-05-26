@@ -31,8 +31,9 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 + (void)appendECI:(ZXECI *)eci bits:(ZXBitArray *)bits;
 + (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
-+ (BOOL)initQRCode:(int)numInputBytes ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError**)error;
++ (BOOL)initQRCode:(int)numInputBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError**)error;
 + (BOOL)isOnlyDoubleByteKanji:(NSString *)content;
++ (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion*)version mode:(ZXMode*)mode;
 
 @end
 
@@ -78,8 +79,8 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     return NO;
   }
   // Step 3: Initialize QR code that can contain "dataBits".
-  int numInputBytes = [dataBits sizeInBytes];
-  if (![self initQRCode:numInputBytes ecLevel:ecLevel mode:mode qrCode:qrCode error:error]) {
+  int numInputBits = dataBits.size;
+  if (![self initQRCode:numInputBits ecLevel:ecLevel mode:mode qrCode:qrCode error:error]) {
     return NO;
   }
 
@@ -218,26 +219,37 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 
 /**
- * Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success,
+ * Initialize "qrCode" according to "numInputBits", "ecLevel", and "mode". On success,
  * modify "qrCode".
  */
-+ (BOOL)initQRCode:(int)numInputBytes ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError **)error {
++ (BOOL)initQRCode:(int)numInputBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError **)error {
   qrCode.ecLevel = ecLevel;
   qrCode.mode = mode;
 
+  // In the following comments, we use numbers of Version 7-H.
   for (int versionNum = 1; versionNum <= 40; versionNum++) {
     ZXQRCodeVersion * version = [ZXQRCodeVersion versionForNumber:versionNum];
+    // numBytes = 196
     int numBytes = version.totalCodewords;
+    // getNumECBytes = 130
     ZXQRCodeECBlocks * ecBlocks = [version ecBlocksForLevel:ecLevel];
     int numEcBytes = ecBlocks.totalECCodewords;
+    // getNumRSBlocks = 5
     int numRSBlocks = ecBlocks.numBlocks;
+    // getNumDataBytes = 196 - 130 = 66
     int numDataBytes = numBytes - numEcBytes;
-    if (numDataBytes >= numInputBytes + 3) {
+    // We want to choose the smallest version which can contain data of "numInputBytes" + some
+    // extra bits for the header (mode info and length info). The header can be three bytes
+    // (precisely 4 + 16 bits) at most.
+    if (numDataBytes >= [self totalInputBytes:numInputBits version:version mode:mode]) {
+      // Yay, we found the proper rs block info!
       qrCode.version = versionNum;
       qrCode.numTotalBytes = numBytes;
       qrCode.numDataBytes = numDataBytes;
       qrCode.numRSBlocks = numRSBlocks;
+      // getNumECBytes = 196 - 66 = 130
       qrCode.numECBytes = numEcBytes;
+      // matrix width = 21 + 6 * 4 = 45
       qrCode.matrixWidth = version.dimensionForVersion;
       return YES;
     }
@@ -250,6 +262,14 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return NO;
 }
 
++ (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion*)version mode:(ZXMode*)mode {
+  int modeInfoBits = 4;
+  int charCountBits = [mode characterCountBits:version];
+  int headerBits = modeInfoBits + charCountBits;
+  int totalBits = numInputBits + headerBits;
+
+  return (totalBits + 7) / 8;
+}
 
 /**
  * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
