@@ -101,7 +101,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     return nil;
   }
 
-  if ([result length] < 2) {
+  if ([result length] < 4) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }

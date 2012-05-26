@@ -468,7 +468,7 @@ int const CODE_STOP = 106;
 
   NSString * resultString = [result description];
 
-  if ([resultString length] == 0) {
+  if ([resultString length] < 2) {
     // Almost surely a false positive
     if (error) *error = FormatErrorInstance();
     return nil;
