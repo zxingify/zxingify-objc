@@ -260,6 +260,8 @@ int const CODE_STOP = 106;
   BOOL isNextShifted = NO;
 
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
+  NSMutableArray *rawCodes = [NSMutableArray arrayWithCapacity:20];
+
   int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
   int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
   const int countersLen = 6;
@@ -275,28 +277,36 @@ int const CODE_STOP = 106;
     BOOL unshift = isNextShifted;
     isNextShifted = NO;
 
+    // Save off last code
     lastCode = code;
 
+    // Decode another code from image
     code = [self decodeCode:row counters:counters countersCount:countersLen rowOffset:nextStart];
     if (code == -1) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
 
+    [rawCodes addObject:[NSNumber numberWithChar:(unsigned char)code]];
+
+    // Remember whether the last code was printable or not (excluding CODE_STOP)
     if (code != CODE_STOP) {
       lastCharacterWasPrintable = YES;
     }
 
+    // Add to checksum computation (if not CODE_STOP of course)
     if (code != CODE_STOP) {
       multiplier++;
       checksumTotal += multiplier * code;
     }
 
+    // Advance to where the next code will to start
     lastStart = nextStart;
     for (int i = 0; i < countersLen; i++) {
       nextStart += counters[i];
     }
 
+    // Take care of illegal start codes
     switch (code) {
     case CODE_START_A:
     case CODE_START_B:
@@ -312,6 +322,8 @@ int const CODE_STOP = 106;
       } else if (code < 96) {
         [result appendFormat:@"%C", (unichar)(code - 64)];
       } else {
+        // Don't let CODE_STOP, which always appears, affect whether whether we think the last
+        // code was printable or not.
         if (code != CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
@@ -395,17 +407,20 @@ int const CODE_STOP = 106;
       }
       break;
     }
+
+    // Unshift back to another code set if we were shifted
     if (unshift) {
       codeSet = codeSet == CODE_CODE_A ? CODE_CODE_B : CODE_CODE_A;
     }
   }
 
+  // Check for ample whitespace following pattern, but, to do this we first need to remember that
+  // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
+  // to read off. Would be slightly better to properly read. Here we just skip it:
   int width = [row size];
-
   while (nextStart < width && [row get:nextStart]) {
     nextStart++;
   }
-
   int end = nextStart + (nextStart - lastStart) / 2;
   if (end > width) {
     end = width;
@@ -414,12 +429,19 @@ int const CODE_STOP = 106;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
+
+  // Pull out from sum the value of the penultimate check code
   checksumTotal -= multiplier * lastCode;
+  // lastCode is the checksum then:
   if (checksumTotal % 103 != lastCode) {
     if (error) *error = ChecksumErrorInstance();
     return nil;
   }
+
+  // Need to pull out the check digits from string
   int resultLength = [result length];
+  // Only bother if the result had at least one character, and if the checksum digit happened to
+  // be a printable character. If it was just interpreted as a control code, nothing to remove.
   if (resultLength > 0 && lastCharacterWasPrintable) {
     if (codeSet == CODE_CODE_C) {
       [result deleteCharactersInRange:NSMakeRange(resultLength - 2, 2)];
@@ -427,16 +449,27 @@ int const CODE_STOP = 106;
       [result deleteCharactersInRange:NSMakeRange(resultLength - 1, 1)];
     }
   }
+
   NSString * resultString = [result description];
+
   if ([resultString length] == 0) {
+    // Almost surely a false positive
     if (error) *error = FormatErrorInstance();
     return nil;
   }
+
   float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
+
+  int rawCodesSize = [rawCodes count];
+  unsigned char rawBytes[rawCodesSize];
+  for (int i = 0; i < rawCodesSize; i++) {
+    rawBytes[i] = [[rawCodes objectAtIndex:i] charValue];
+  }
+
   return [[[ZXResult alloc] initWithText:resultString
-                                rawBytes:nil
-                                  length:0
+                                rawBytes:rawBytes
+                                  length:rawCodesSize
                             resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
                                           [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
                                   format:kBarcodeFormatCode128] autorelease];

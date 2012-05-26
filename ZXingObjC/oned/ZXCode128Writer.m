@@ -1,11 +1,11 @@
 #import "ZXCode128Reader.h"
 #import "ZXCode128Writer.h"
 
-#define CODE_START_B 104
-#define CODE_START_C 105
-#define CODE_CODE_B 100
-#define CODE_CODE_C 99
-#define CODE_STOP 106
+// Dummy characters used to specify control characters in input
+const unichar ESCAPE_FNC_1 = '\u00f1';
+const unichar ESCAPE_FNC_2 = '\u00f2';
+const unichar ESCAPE_FNC_3 = '\u00f3';
+const unichar ESCAPE_FNC_4 = '\u00f4';
 
 @interface ZXCode128Writer ()
 
@@ -24,66 +24,106 @@
 
 - (NSArray *)encode:(NSString *)contents {
   int length = [contents length];
+  // Check length
   if (length < 1 || length > 80) {
     [NSException raise:NSInvalidArgumentException format:@"Contents length should be between 1 and 80 characters, but got %d", length];
   }
-
+  // Check content
   for (int i = 0; i < length; i++) {
     unichar c = [contents characterAtIndex:i];
     if (c < ' ' || c > '~') {
-      [NSException raise:NSInvalidArgumentException format:@"Contents should only contain characters between ' ' and '~'"];
+      switch (c) {
+        case ESCAPE_FNC_1:
+        case ESCAPE_FNC_2:
+        case ESCAPE_FNC_3:
+        case ESCAPE_FNC_4:
+          break;
+        default:
+          [NSException raise:NSInvalidArgumentException format:@"Bad character in input: %C", c];
+      }
     }
   }
 
-  NSMutableArray * patterns = [NSMutableArray array];
+  NSMutableArray * patterns = [NSMutableArray array]; // temporary storage for patterns
   int checkSum = 0;
   int checkWeight = 1;
-  int codeSet = 0;
-  int position = 0;
+  int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)
+  int position = 0; // position in contents
 
   while (position < length) {
+    //Select code to use
     int requiredDigitCount = codeSet == CODE_CODE_C ? 2 : 4;
     int newCodeSet;
-    if (length - position >= requiredDigitCount && [self isDigits:contents start:position length:requiredDigitCount]) {
+    if ([self isDigits:contents start:position length:requiredDigitCount]) {
       newCodeSet = CODE_CODE_C;
     } else {
       newCodeSet = CODE_CODE_B;
     }
 
+    //Get the pattern index
     int patternIndex;
     if (newCodeSet == codeSet) {
+      // Encode the current character
       if (codeSet == CODE_CODE_B) {
         patternIndex = [contents characterAtIndex:position] - ' ';
         position += 1;
-      } else {
-        patternIndex = [[contents substringWithRange:NSMakeRange(position, 2)] intValue];
-        position += 2;
+      } else { // CODE_CODE_C
+        switch ([contents characterAtIndex:position]) {
+          case ESCAPE_FNC_1:
+            patternIndex = CODE_FNC_1;
+            position++;
+            break;
+          case ESCAPE_FNC_2:
+            patternIndex = CODE_FNC_2;
+            position++;
+            break;
+          case ESCAPE_FNC_3:
+            patternIndex = CODE_FNC_3;
+            position++;
+            break;
+          case ESCAPE_FNC_4:
+            patternIndex = CODE_FNC_4_B; // FIXME if this ever outputs Code A
+            position++;
+            break;
+          default:
+            patternIndex = [[contents substringWithRange:NSMakeRange(position, 2)] intValue];
+            position += 2;
+            break;
+        }
       }
     } else {
+      // Should we change the current code?
+      // Do we have a code set?
       if (codeSet == 0) {
+        // No, we don't have a code set
         if (newCodeSet == CODE_CODE_B) {
           patternIndex = CODE_START_B;
         } else {
+          // CODE_CODE_C
           patternIndex = CODE_START_C;
         }
       } else {
+        // Yes, we have a code set
         patternIndex = newCodeSet;
       }
       codeSet = newCodeSet;
     }
 
+    // Get the pattern
     NSMutableArray *pattern = [NSMutableArray array];
     for (int i = 0; i < sizeof(CODE_PATTERNS[patternIndex]) / sizeof(int); i++) {
       [pattern addObject:[NSNumber numberWithInt:CODE_PATTERNS[patternIndex][i]]];
     }
     [patterns addObject:pattern];
 
+    // Compute checksum
     checkSum += patternIndex * checkWeight;
     if (position != 0) {
       checkWeight++;
     }
   }
 
+  // Compute and append checksum
   checkSum %= 103;
   NSMutableArray *pattern = [NSMutableArray array];
   for (int i = 0; i < sizeof(CODE_PATTERNS[checkSum]) / sizeof(int); i++) {
@@ -91,12 +131,14 @@
   }
   [patterns addObject:pattern];
 
+  // Append stop code
   pattern = [NSMutableArray array];
   for (int i = 0; i < sizeof(CODE_PATTERNS[CODE_STOP]) / sizeof(int); i++) {
     [pattern addObject:[NSNumber numberWithInt:CODE_PATTERNS[CODE_STOP][i]]];
   }
   [patterns addObject:pattern];
 
+  // Compute result
   NSMutableArray *result = [NSMutableArray array];
   int pos = 0;
   for (NSArray *patternArray in patterns) {
@@ -114,15 +156,17 @@
 
 - (BOOL)isDigits:(NSString *)value start:(int)start length:(unsigned int)length {
   int end = start + length;
-
-  for (int i = start; i < end; i++) {
+  int last = [value length];
+  for (int i = start; i < end && i < last; i++) {
     unichar c = [value characterAtIndex:i];
     if (c < '0' || c > '9') {
-      return NO;
+      if (c != ESCAPE_FNC_1) {
+        return NO;
+      }
+      end++; // ignore FNC_1
     }
   }
-
-  return YES;
+  return end <= last; // end > last if we've run out of string
 }
 
 @end
