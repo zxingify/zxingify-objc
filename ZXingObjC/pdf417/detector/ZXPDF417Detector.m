@@ -97,13 +97,16 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  * Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.
  */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
+  // Fetch the 1 bit matrix once up front.
   ZXBitMatrix * matrix = [self.image blackMatrixWithError:error];
   if (!matrix) {
     return nil;
   }
 
+  // Try to find the vertices assuming the image is upright.
   NSMutableArray * vertices = [self findVertices:matrix];
   if (vertices == nil) {
+    // Maybe the image is rotated 180 degrees?
     vertices = [self findVertices180:matrix];
     if (vertices != nil) {
       [self correctCodeWordVertices:vertices upsideDown:YES];
@@ -139,7 +142,9 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (!bits) {
     return nil;
   }
-  return [[[ZXDetectorResult alloc] initWithBits:bits points:[NSArray arrayWithObjects:[vertices objectAtIndex:4], [vertices objectAtIndex:5], [vertices objectAtIndex:6], [vertices objectAtIndex:7], nil]] autorelease];
+  return [[[ZXDetectorResult alloc] initWithBits:bits points:[NSArray arrayWithObjects:[vertices objectAtIndex:5],
+                                                              [vertices objectAtIndex:4], [vertices objectAtIndex:6],
+                                                              [vertices objectAtIndex:7], nil]] autorelease];
 }
 
 
