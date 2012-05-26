@@ -29,6 +29,7 @@
 - (void)set:(int)i;
 - (void)flip:(int)i;
 - (void)setBulk:(int)i newBits:(int)newBits;
+- (void)setRange:(int)start end:(int)end;
 - (void)clear;
 - (BOOL)isRange:(int)start end:(int)end value:(BOOL)value;
 - (void)appendBit:(BOOL)bit;

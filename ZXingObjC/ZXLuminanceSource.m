@@ -91,4 +91,30 @@
                                userInfo:nil];
 }
 
+- (NSString*)description {
+  unsigned char* row;
+  NSMutableString* result = [NSMutableString stringWithCapacity:height * (width + 1)];
+  for (int y = 0; y < height; y++) {
+    row = [self row:y row:row];
+    for (int x = 0; x < width; x++) {
+      int luminance = row[x] & 0xFF;
+      unichar c;
+      if (luminance < 0x40) {
+        c = '#';
+      } else if (luminance < 0x80) {
+        c = '+';
+      } else if (luminance < 0xC0) {
+        c = '.';
+      } else {
+        c = ' ';
+      }
+      [result appendFormat:@"%C", c];
+    }
+    [result appendString:@"\n"];
+    free(row);
+    row = NULL;
+  }
+  return [NSString stringWithString:result];
+}
+
 @end

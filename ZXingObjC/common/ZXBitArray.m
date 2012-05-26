@@ -114,6 +114,34 @@
   self.bits[i >> 5] = newBits;
 }
 
+/**
+ * Sets a range of bits.
+ */
+- (void)setRange:(int)start end:(int)end {
+  if (end < start) {
+    @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Start greater than end" userInfo:nil];
+  }
+  if (end == start) {
+    return;
+  }
+  end--; // will be easier to treat this as the last actually set bit -- inclusive
+  int firstInt = start >> 5;
+  int lastInt = end >> 5;
+  for (int i = firstInt; i <= lastInt; i++) {
+    int firstBit = i > firstInt ? 0 : start & 0x1F;
+    int lastBit = i < lastInt ? 31 : end & 0x1F;
+    int mask;
+    if (firstBit == 0 && lastBit == 31) {
+      mask = -1;
+    } else {
+      mask = 0;
+      for (int j = firstBit; j <= lastBit; j++) {
+        mask |= 1 << j;
+      }
+    }
+    self.bits[i] |= mask;
+  }
+}
 
 /**
  * Clears all bits (sets to false).
