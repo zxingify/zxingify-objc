@@ -44,6 +44,20 @@
   STAssertEqualObjects(result.displayResult, text, @"Display result doesn't match");
 }
 
+- (void)testGarbage2 {
+  NSString* text = [NSString stringWithFormat:@"DEA%C%CM%C%C\b√•%C¬áHO%CX$%C%C%Cwfc%C!√æ¬ì¬ò%C%C¬æZ{√π√é√ù√ö¬óZ¬ß¬®+y_zb√±k%C¬∏%C¬Ü√ú%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C%C¬£.ux",
+                    (unichar)0x0003, (unichar)0x0019, (unichar)0x0006, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0001,
+                    (unichar)0x0000, (unichar)0x001F, (unichar)0x0007, (unichar)0x0013, (unichar)0x0013, (unichar)0x00117, (unichar)0x000E,
+                    (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000,
+                    (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000,
+                    (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000,
+                    (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000, (unichar)0x0000];
+  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:text rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode] autorelease];
+  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+  STAssertEquals(result.type, kParsedResultTypeText, @"Types don't match");
+  STAssertEqualObjects(result.displayResult, text, @"Display result doesn't match");
+}
+
 - (void)testIsPossiblyMalicious {
   [self doTestIsPossiblyMalicious:@"http://google.com" expected:NO];
   [self doTestIsPossiblyMalicious:@"http://google.com@evil.com" expected:YES];
