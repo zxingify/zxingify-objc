@@ -322,7 +322,7 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {
-          return NO;
+          // ignore
         } else if (cValue == 30) {
           upperShift = YES;
         } else {
