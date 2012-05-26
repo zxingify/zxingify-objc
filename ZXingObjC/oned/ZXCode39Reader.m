@@ -156,7 +156,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     [result deleteCharactersInRange:NSMakeRange(max, 1)];
   }
 
-  if ([result length] == 0) {
+  if ([result length] < 4) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
