@@ -335,7 +335,8 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
       for (int index = 0; index < max; index++) {
         ZXQRCodeFinderPattern * center = [self.possibleCenters objectAtIndex:index];
         if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
-          [center incrementCount];
+          [possibleCenters replaceObjectAtIndex:index
+                                     withObject:[center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize]];
           found = YES;
           break;
         }

@@ -227,11 +227,12 @@
 
     for (int index = 0; index < max; index++) {
       ZXAlignmentPattern * center = (ZXAlignmentPattern *)[self.possibleCenters objectAtIndex:index];
+      // Look for about the same center and module size:
       if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
-        return [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
+        return [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];
       }
     }
-
+    // Hadn't found this before; save it
     ZXResultPoint * point = [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
     [self.possibleCenters addObject:point];
     if (self.resultPointCallback != nil) {
