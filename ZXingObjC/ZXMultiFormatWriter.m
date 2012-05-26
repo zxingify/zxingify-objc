@@ -21,8 +21,9 @@
 #import "ZXEAN13Writer.h"
 #import "ZXITFWriter.h"
 #import "ZXMultiFormatWriter.h"
-#import "ZXUPCAWriter.h"
+#import "ZXPDF417Writer.h"
 #import "ZXQRCodeWriter.h"
+#import "ZXUPCAWriter.h"
 
 @implementation ZXMultiFormatWriter
 
@@ -50,6 +51,8 @@
     writer = [[[ZXCode128Writer alloc] init] autorelease];
   } else if (format == kBarcodeFormatITF) {
     writer = [[[ZXITFWriter alloc] init] autorelease];
+  } else if (format == kBarcodeFormatPDF417) {
+    writer = [[[ZXPDF417Writer alloc] init] autorelease];
   } else {
     [NSException raise:NSInvalidArgumentException 
                 format:@"No encoder available for format"];
