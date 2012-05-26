@@ -35,8 +35,14 @@
     }
 
     self.text = aText;
-    self.rawBytes = aRawBytes;
-    self.length = aLength;
+    if (aRawBytes != NULL && aLength > 0) {
+      self.rawBytes = (unsigned char*)malloc(aLength * sizeof(unsigned char));
+      memcpy(self.rawBytes, aRawBytes, aLength);
+      self.length = aLength;
+    } else {
+      self.rawBytes = NULL;
+      self.length = 0;
+    }
     self.resultPoints = [[aResultPoints mutableCopy] autorelease];
     self.barcodeFormat = aFormat;
     self.resultMetadata = nil;
@@ -47,6 +53,11 @@
 }
 
 - (void)dealloc {
+  if (self.rawBytes != NULL) {
+    free(self.rawBytes);
+    self.rawBytes = NULL;
+  }
+
   [text release];
   [resultPoints release];
   [resultMetadata release];
