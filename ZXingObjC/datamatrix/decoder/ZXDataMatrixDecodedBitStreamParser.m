@@ -125,44 +125,49 @@ const int BASE256_ENCODE = 6;
     int oneByte = [bits readBits:8];
     if (oneByte == 0) {
       return -1;
-    } else if (oneByte <= 128) {
+    } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
       oneByte = upperShift ? oneByte + 128 : oneByte;
       upperShift = NO;
       [result appendFormat:@"%C", (unichar)(oneByte - 1)];
       return ASCII_ENCODE;
-    } else if (oneByte == 129) {
+    } else if (oneByte == 129) {  // Pad
       return PAD_ENCODE;
-    } else if (oneByte <= 229) {
+    } else if (oneByte <= 229) {  // 2-digit data 00-99 (Numeric Value + 130)
       int value = oneByte - 130;
-      if (value < 10) {
+      if (value < 10) { // padd with '0' for single digit values
         [result appendString:@"0"];
       }
       [result appendFormat:@"%d", value];
-    } else if (oneByte == 230) {
+    } else if (oneByte == 230) {  // Latch to C40 encodation
       return C40_ENCODE;
-    } else if (oneByte == 231) {
+    } else if (oneByte == 231) {  // Latch to Base 256 encodation
       return BASE256_ENCODE;
-    } else if (oneByte == 232 || oneByte == 233 || oneByte == 234) {
-      // FNC1, Structured Append, Reader Programming
+    } else if (oneByte == 232) {
+      // FNC1
+      [result appendFormat:@"%C", (unichar)29]; // translate as ASCII 29
+    } else if (oneByte == 233 || oneByte == 234) {
+      // Structured Append, Reader Programming
       // Ignore these symbols for now
-    } else if (oneByte == 235) {
+      //return -1;
+    } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
       upperShift = YES;
-    } else if (oneByte == 236) {
-      [result appendFormat:@"[)>%C%C", 0x001E05, 0x001D];
-      [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", 0x001E, 0x0004] atIndex:0];
-    } else if (oneByte == 237) {
-      [result appendFormat:@"[)>%C%C", 0x001E06, 0x001D];
-      [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", 0x001E, 0x0004] atIndex:0];
-    } else if (oneByte == 238) {
+    } else if (oneByte == 236) {  // 05 Macro
+      [result appendFormat:@"[)>%C%C", (unichar)0x001E05, (unichar)0x001D];
+      [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", (unichar)0x001E, (unichar)0x0004] atIndex:0];
+    } else if (oneByte == 237) {  // 06 Macro
+      [result appendFormat:@"[)>%C%C", (unichar)0x001E06, (unichar)0x001D];
+      [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", (unichar)0x001E, (unichar)0x0004] atIndex:0];
+    } else if (oneByte == 238) {  // Latch to ANSI X12 encodation
       return ANSIX12_ENCODE;
-    } else if (oneByte == 239) {
+    } else if (oneByte == 239) {  // Latch to Text encodation
       return TEXT_ENCODE;
-    } else if (oneByte == 240) {
+    } else if (oneByte == 240) {  // Latch to EDIFACT encodation
       return EDIFACT_ENCODE;
-    } else if (oneByte == 241) {
+    } else if (oneByte == 241) {  // ECI Character
       // TODO(bbrown): I think we need to support ECI
       // Ignore this symbol for now
-    } else if (oneByte >= 242) {
+    } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
+      // ... but work around encoders that end with 254, latch back to ASCII
       if (oneByte == 254 && bits.available == 0) {
         // Ignore
       } else {
@@ -235,7 +240,7 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {  // FNC1
-          // ignore
+          [result appendFormat:@"%C", (unichar)29]; // translate as ASCII 29
         } else if (cValue == 30) {  // Upper Shift
           upperShift = YES;
         } else {
@@ -266,6 +271,9 @@ const int BASE256_ENCODE = 6;
  * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
  */
 + (BOOL)decodeTextSegment:(ZXBitSource *)bits result:(NSMutableString *)result {
+  // Three Text values are encoded in a 16-bit value as
+  // (1600 * C1) + (40 * C2) + C3 + 1
+  // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
   BOOL upperShift = NO;
 
   int cValues[3];
@@ -275,11 +283,12 @@ const int BASE256_ENCODE = 6;
 
   int shift = 0;
   do {
+    // If there is only one byte left then it will be encoded as ASCII
     if (bits.available == 8) {
       return YES;
     }
     int firstByte = [bits readBits:8];
-    if (firstByte == 254) {
+    if (firstByte == 254) {  // Unlatch codeword
       return YES;
     }
 
@@ -313,6 +322,7 @@ const int BASE256_ENCODE = 6;
         shift = 0;
         break;
       case 2:
+          // Shift 2 for Text is the same encoding as C40
         if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(char)) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
@@ -322,8 +332,8 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {
-          // ignore
-        } else if (cValue == 30) {
+          [result appendFormat:@"%C", (unichar)29]; // translate as ASCII 29
+        } else if (cValue == 30) {  // Upper Shift
           upperShift = YES;
         } else {
           return NO;
@@ -357,34 +367,35 @@ const int BASE256_ENCODE = 6;
  * See ISO 16022:2006, 5.2.7
  */
 + (BOOL)decodeAnsiX12Segment:(ZXBitSource *)bits result:(NSMutableString *)result {
-  int cValues[3];
-  for (int i = 0; i < 3; i++) {
-    cValues[i] = 0;
-  }
+  // Three ANSI X12 values are encoded in a 16-bit value as
+  // (1600 * C1) + (40 * C2) + C3 + 1
 
+  int cValues[3] = {0};
   do {
+    // If there is only one byte left then it will be encoded as ASCII
     if (bits.available == 8) {
       return YES;
     }
     int firstByte = [bits readBits:8];
-    if (firstByte == 254) {
+    if (firstByte == 254) {  // Unlatch codeword
       return YES;
     }
+
     [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
 
     for (int i = 0; i < 3; i++) {
       int cValue = cValues[i];
-      if (cValue == 0) {
+      if (cValue == 0) {  // X12 segment terminator <CR>
         [result appendString:@"\r"];
-      } else if (cValue == 1) {
+      } else if (cValue == 1) {  // X12 segment separator *
         [result appendString:@"*"];
-      } else if (cValue == 2) {
+      } else if (cValue == 2) {  // X12 sub-element separator >
         [result appendString:@">"];
-      } else if (cValue == 3) {
+      } else if (cValue == 3) {  // space
         [result appendString:@" "];
-      } else if (cValue < 14) {
+      } else if (cValue < 14) {  // 0 - 9
         [result appendFormat:@"%C", (unichar)(cValue + 44)];
-      } else if (cValue < 40) {
+      } else if (cValue < 40) {  // A - Z
         [result appendFormat:@"%C", (unichar)(cValue + 51)];
       } else {
         return NO;
