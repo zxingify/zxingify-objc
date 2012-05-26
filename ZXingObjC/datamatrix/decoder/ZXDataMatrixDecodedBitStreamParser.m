@@ -235,7 +235,7 @@ const int BASE256_ENCODE = 6;
             [result appendFormat:@"%C", c40char];
           }
         } else if (cValue == 27) {  // FNC1
-          return NO;
+          // ignore
         } else if (cValue == 30) {  // Upper Shift
           upperShift = YES;
         } else {
@@ -441,7 +441,7 @@ const int BASE256_ENCODE = 6;
  * See ISO 16022:2006, 5.2.9 and Annex B, B.2
  */
 + (BOOL)decodeBase256Segment:(ZXBitSource *)bits result:(NSMutableString *)result byteSegments:(NSMutableArray *)byteSegments {
-  int codewordPosition = 2;
+  int codewordPosition = 1 + bits.byteOffset; // position is 1-indexed
   int d1 = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
   int count;
   if (d1 == 0) {
