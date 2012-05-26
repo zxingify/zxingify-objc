@@ -373,7 +373,7 @@ const int MAX_PAIRS = 11;
     start = startEnd[0];
     int firstElementStart = startEnd[1] + 1;
 
-    while ([row get:firstElementStart] && firstElementStart < row.size) {
+    while (firstElementStart < row.size && [row get:firstElementStart]) {
       firstElementStart++;
     }
 
