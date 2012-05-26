@@ -206,14 +206,16 @@
 
 - (float)sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
   float result = [self sizeOfBlackWhiteBlackRun:fromX fromY:fromY toX:toX toY:toY];
+
+  // Now count other way -- don't run off image though of course
   float scale = 1.0f;
   int otherToX = fromX - (toX - fromX);
   if (otherToX < 0) {
     scale = (float)fromX / (float)(fromX - otherToX);
     otherToX = 0;
   } else if (otherToX > self.image.width) {
-    scale = (float)(self.image.width - fromX) / (float)(otherToX - fromX);
-    otherToX = self.image.width;
+    scale = (float)(self.image.width - 1 - fromX) / (float)(otherToX - fromX);
+    otherToX = self.image.width - 1;
   }
   int otherToY = (int)(fromY - (toY - fromY) * scale);
 
@@ -221,15 +223,16 @@
   if (otherToY < 0) {
     scale = (float)fromY / (float)(fromY - otherToY);
     otherToY = 0;
-  }
-   else if (otherToY > self.image.height) {
-    scale = (float)(self.image.height - fromY) / (float)(otherToY - fromY);
-    otherToY = self.image.height;
+  } else if (otherToY >= self.image.height) {
+    scale = (float)(self.image.height - 1 - fromY) / (float)(otherToY - fromY);
+    otherToY = self.image.height - 1;
   }
   otherToX = (int)(fromX + (otherToX - fromX) * scale);
 
   result += [self sizeOfBlackWhiteBlackRun:fromX fromY:fromY toX:otherToX toY:otherToY];
-  return result;
+
+  // Middle pixel is double-counted this way; subtract 1
+  return result - 1.0f;
 }
 
 
@@ -242,6 +245,8 @@
  * may be skewed or rotated.
  */
 - (float)sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
+  // Mild variant of Bresenham's algorithm;
+  // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
   BOOL steep = abs(toY - fromY) > abs(toX - fromX);
   if (steep) {
     int temp = fromX;
@@ -258,29 +263,24 @@
   int xstep = fromX < toX ? 1 : -1;
   int ystep = fromY < toY ? 1 : -1;
 
+  // In black pixels, looking for white, first or second time.
   int state = 0;
-  for (int x = fromX, y = fromY; x != toX; x += xstep) {
+  // Loop up until x == toX, but not beyond
+  int xLimit = toX + xstep;
+  for (int x = fromX, y = fromY; x != xLimit; x += xstep) {
     int realX = steep ? y : x;
     int realY = steep ? x : y;
 
-    if (state == 1) {
-      if ([self.image getX:realX y:realY]) {
-        state++;
+    // Does current pixel mean we have moved white to black or vice versa?
+    if (!((state == 1) ^ ([image getX:realX y:realY]))) {
+      if (state == 2) {
+        int diffX = x - fromX;
+        int diffY = y - fromY;
+        return (float) sqrt((double) (diffX * diffX + diffY * diffY));
       }
-    } else {
-      if (![self.image getX:realX y:realY]) {
-        state++;
-      }
+      state++;
     }
 
-    if (state == 3) {
-      int diffX = x - fromX;
-      int diffY = y - fromY;
-      if (xstep < 0) {
-        diffX++;
-      }
-      return (float)sqrt((double)(diffX * diffX + diffY * diffY));
-    }
     error += dy;
     if (error > 0) {
       if (y == toY) {
@@ -290,10 +290,16 @@
       error -= dx;
     }
   }
-
-  int diffX = toX - fromX;
-  int diffY = toY - fromY;
-  return (float)sqrt((double)(diffX * diffX + diffY * diffY));
+  // Found black-white-black; give the benefit of the doubt that the next pixel outside the image
+  // is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
+  // small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
+  if (state == 2) {
+    int diffX = toX + xstep - fromX;
+    int diffY = toY - fromY;
+    return (float) sqrt((double) (diffX * diffX + diffY * diffY));
+  }
+  // else we didn't find even black-white-black; no estimate is really possible
+  return NAN;
 }
 
 
