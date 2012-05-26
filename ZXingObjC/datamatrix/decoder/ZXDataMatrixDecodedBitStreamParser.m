@@ -178,21 +178,26 @@ const int BASE256_ENCODE = 6;
  * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
  */
 + (BOOL)decodeC40Segment:(ZXBitSource *)bits result:(NSMutableString *)result {
+  // Three C40 values are encoded in a 16-bit value as
+  // (1600 * C1) + (40 * C2) + C3 + 1
+  // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
   BOOL upperShift = NO;
 
-  int cValues[3];
+  int cValues[3] = {0};
+  int shift = 0;
+
   do {
+    // If there is only one byte left then it will be encoded as ASCII
     if ([bits available] == 8) {
       return YES;
     }
     int firstByte = [bits readBits:8];
-    if (firstByte == 254) {
+    if (firstByte == 254) {  // Unlatch codeword
       return YES;
     }
 
     [self parseTwoBytes:firstByte secondByte:[bits readBits:8] result:cValues];
 
-    int shift = 0;
     for (int i = 0; i < 3; i++) {
       int cValue = cValues[i];
       switch (shift) {
@@ -229,9 +234,9 @@ const int BASE256_ENCODE = 6;
           } else {
             [result appendFormat:@"%C", c40char];
           }
-        } else if (cValue == 27) {
+        } else if (cValue == 27) {  // FNC1
           return NO;
-        } else if (cValue == 30) {
+        } else if (cValue == 30) {  // Upper Shift
           upperShift = YES;
         } else {
           return NO;
