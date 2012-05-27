@@ -35,6 +35,9 @@
 @property (nonatomic, readonly) int height;
 @property (nonatomic, readonly) int* bits;
 
++ (ZXBitMatrix*)bitMatrixWithDimension:(int)dimension;
++ (ZXBitMatrix*)bitMatrixWithWidth:(int)width height:(int)height;
+
 - (id)initWithDimension:(int)dimension;
 - (id)initWithWidth:(int)width height:(int)height;
 

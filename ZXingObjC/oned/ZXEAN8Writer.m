@@ -29,36 +29,36 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-
 /**
  * Returns a byte array of horizontal pixels (0 = white, 1 = black)
  */
-- (NSArray *)encode:(NSString *)contents {
+- (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
   if ([contents length] != 8) {
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", [contents length]];
   }
 
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:EAN8codeWidth];
+  if (pLength) *pLength = EAN8codeWidth;
+  unsigned char* result = (unsigned char*)malloc(EAN8codeWidth * sizeof(unsigned char));
   for (int i = 0; i < EAN8codeWidth; i++) {
-    [result addObject:[NSNumber numberWithInt:0]];
+    result[i] = 0;
   }
   int pos = 0;
 
-  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
+  pos += [super appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
 
   for (int i = 0; i <= 3; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:0];
+    pos += [super appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:0];
   }
 
-  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:0];
+  pos += [super appendPattern:result pos:pos pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:0];
 
   for (int i = 4; i <= 7; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:1];
+    pos += [super appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:1];
   }
 
-  pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
+  pos += [super appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
 
   return result;
 }

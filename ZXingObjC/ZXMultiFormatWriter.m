@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitMatrix.h"
+#import "ZXCodaBarWriter.h"
 #import "ZXCode39Writer.h"
 #import "ZXCode128Writer.h"
 #import "ZXEAN8Writer.h"
@@ -52,6 +53,8 @@
   } else if (format == kBarcodeFormatITF) {
     writer = [[[ZXITFWriter alloc] init] autorelease];
   } else if (format == kBarcodeFormatPDF417) {
+    writer = [[[ZXPDF417Writer alloc] init] autorelease];
+  } else if (format == kBarcodeFormatCodabar) {
     writer = [[[ZXPDF417Writer alloc] init] autorelease];
   } else {
     [NSException raise:NSInvalidArgumentException 

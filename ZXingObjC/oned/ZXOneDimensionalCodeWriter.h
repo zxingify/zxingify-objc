@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-#import "ZXOneDimensionalCodeWriter.h"
+#import "ZXWriter.h"
 
 /**
- * Encapsulates functionality and implementation that is common to UPC and EAN families
- * of one-dimensional barcodes.
+ * Encapsulates functionality and implementation that is common to one-dimensional barcodes.
  */
+@interface ZXOneDimensionalCodeWriter : NSObject <ZXWriter>
 
-@interface ZXUPCEANWriter : ZXOneDimensionalCodeWriter
+@property (nonatomic, assign) int sidesMargin;
+
+- (id)initWithSidesMargin:(int)sidesMargin;
+- (unsigned char*)encode:(NSString*)contents length:(int*)pLength;
+- (int)appendPattern:(unsigned char*)target pos:(int)pos pattern:(int*)pattern patternLen:(int)patternLen startColor:(int)startColor;
 
 @end

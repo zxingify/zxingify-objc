@@ -16,12 +16,17 @@
 
 #import "ZXOneDReader.h"
 
-/**
- * Decodes Codabar barcodes.
- */
+extern const int CODA_ALPHABET_LEN;
+extern const char CODA_ALPHABET[];
+extern const int CODA_CHARACTER_ENCODINGS[];
 
 @class ZXBitArray, ZXDecodeHints, ZXResult;
 
+/**
+ * Decodes Codabar barcodes.
+ */
 @interface ZXCodaBarReader : ZXOneDReader
+
++ (BOOL)arrayContains:(char *)array length:(unsigned int)length key:(unichar)key;
 
 @end

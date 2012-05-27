@@ -38,7 +38,7 @@ const unichar ESCAPE_FNC_4 = '\u00f4';
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (NSArray *)encode:(NSString *)contents {
+- (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
   int length = [contents length];
   // Check length
   if (length < 1 || length > 80) {
@@ -154,8 +154,17 @@ const unichar ESCAPE_FNC_4 = '\u00f4';
   }
   [patterns addObject:pattern];
 
+  // Compute code width
+  int codeWidth = 0;
+  for (pattern in patterns) {
+    for (int i = 0; i < pattern.count; i++) {
+      codeWidth += [[pattern objectAtIndex:i] intValue];
+    }
+  }
+
   // Compute result
-  NSMutableArray *result = [NSMutableArray array];
+  if (pLength) *pLength = codeWidth;
+  unsigned char* result = (unsigned char*)malloc(codeWidth * sizeof(unsigned char));
   int pos = 0;
   for (NSArray *patternArray in patterns) {
     int patternLen = [patternArray count];
@@ -164,7 +173,7 @@ const unichar ESCAPE_FNC_4 = '\u00f4';
       pattern[i] = [[patternArray objectAtIndex:i] intValue];
     }
 
-    pos += [ZXUPCEANWriter appendPattern:result pos:pos pattern:pattern patternLen:patternLen startColor:1];
+    pos += [super appendPattern:result pos:pos pattern:pattern patternLen:patternLen startColor:1];
   }
 
   return result;

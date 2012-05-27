@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-#import "ZXOneDimensionalCodeWriter.h"
+#import <SenTestingKit/SenTestingKit.h>
 
-/**
- * Encapsulates functionality and implementation that is common to UPC and EAN families
- * of one-dimensional barcodes.
- */
-
-@interface ZXUPCEANWriter : ZXOneDimensionalCodeWriter
+@interface ZXCodaBarWriterTestCase : SenTestCase
 
 @end

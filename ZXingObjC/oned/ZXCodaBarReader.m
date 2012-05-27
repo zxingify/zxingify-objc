@@ -20,7 +20,8 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-char CODA_ALPHABET[] = "0123456789-$:/.+ABCDTN";
+const int CODA_ALPHABET_LEN = 22;
+const char CODA_ALPHABET[CODA_ALPHABET_LEN] = "0123456789-$:/.+ABCDTN";
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
@@ -48,7 +49,6 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 @interface ZXCodaBarReader ()
 
-- (BOOL)arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key;
 - (NSMutableArray *)findAsteriskPattern:(ZXBitArray *)row;
 - (unichar)toNarrowWidePattern:(int[])counters;
 
@@ -116,7 +116,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     return nil;
   }
   unichar startchar = [result characterAtIndex:0];
-  if (![self arrayContains:(unsigned char*)STARTEND_ENCODING length:8 key:startchar]) {
+  if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:8 key:startchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -173,7 +173,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     } else {
       if (counterPosition == patternLength - 1) {
         @try {
-          if ([self arrayContains:(unsigned char*)STARTEND_ENCODING length:8 key:[self toNarrowWidePattern:counters]]) {
+          if ([ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:8 key:[self toNarrowWidePattern:counters]]) {
             if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
               return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart],
                       [NSNumber numberWithInt:i], nil];
@@ -200,7 +200,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   return nil;
 }
 
-- (BOOL) arrayContains:(unsigned char *)array length:(unsigned int)length key:(unichar)key {
++ (BOOL)arrayContains:(char *)array length:(unsigned int)length key:(unichar)key {
   if (array != nil) {
     for (int i = 0; i < length; i++) {
       if (array[i] == key) {
@@ -211,7 +211,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   return NO;
 }
 
-- (unichar) toNarrowWidePattern:(int[])counters {
+- (unichar)toNarrowWidePattern:(int[])counters {
   int numCounters = sizeof((int*)counters) / sizeof(int);
   int maxNarrowCounter = 0;
   

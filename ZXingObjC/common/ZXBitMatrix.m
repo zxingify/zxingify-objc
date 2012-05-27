@@ -35,6 +35,14 @@
 @synthesize rowSize;
 @synthesize bitsSize;
 
++ (ZXBitMatrix*)bitMatrixWithDimension:(int)dimension {
+  return [[[self alloc] initWithDimension:dimension] autorelease];
+}
+
++ (ZXBitMatrix*)bitMatrixWithWidth:(int)width height:(int)height {
+  return [[[self alloc] initWithWidth:width height:height] autorelease];
+}
+
 - (id)initWithDimension:(int)dimension {
   return [self initWithWidth:dimension height:dimension];
 }
