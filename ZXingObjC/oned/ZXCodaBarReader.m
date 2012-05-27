@@ -62,10 +62,11 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
+  [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]]; // BAS: settings this to 0 improves the recognition rate somehow?
   int nextStart = [[start objectAtIndex:1] intValue];
   int end = [row size];
 
+  // Read off white space
   while (nextStart < end && ![row get:nextStart]) {
     nextStart++;
   }
@@ -76,7 +77,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   int lastStart;
 
   do {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < countersLen; i++) {
       counters[i] = 0;
     }
 
@@ -99,30 +100,39 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     while (nextStart < end && ![row get:nextStart]) {
       nextStart++;
     }
-  } while (nextStart < end);
+  } while (nextStart < end); // no fixed end pattern so keep on reading while data is available
 
+  // Look for whitespace after pattern:
   int lastPatternSize = 0;
   for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
     lastPatternSize += counters[i];
   }
 
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
+  // If 50% of last pattern size, following last pattern, is not whitespace, fail
+  // (but if it's whitespace to the very end of the image, that's OK)
   if (nextStart != end && (whiteSpaceAfterEnd / 2 < lastPatternSize)) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
+
+  // valid result?
   if ([result length] < 2) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
+
   unichar startchar = [result characterAtIndex:0];
   if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:8 key:startchar]) {
+    // invalid start character
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
+  // find stop character
   for (int k = 1; k < [result length]; k++) {
     if ([result characterAtIndex:k] == startchar) {
+      // found stop character -> discard rest of the string
       if ((k + 1) != [result length]) {
         [result deleteCharactersInRange:NSMakeRange(k + 1, [result length] - k)];
         k = [result length];
@@ -130,13 +140,15 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     }
   }
 
-  if ([result length] > minCharacterLength) {
-    [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
-    [result deleteCharactersInRange:NSMakeRange(0, 1)];
-  } else {
+  // remove stop/start characters character and check if a string longer than 5 characters is contained
+  if ([result length] <= minCharacterLength) {
+    // Almost surely a false positive ( start + stop + at least 1 character)
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
+
+  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
+  [result deleteCharactersInRange:NSMakeRange(0, 1)];
 
   float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;

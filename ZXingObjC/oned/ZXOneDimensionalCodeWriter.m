@@ -19,6 +19,8 @@
 
 @interface ZXOneDimensionalCodeWriter ()
 
+@property (nonatomic, assign) int sidesMargin;
+
 - (ZXBitMatrix*)renderResult:(unsigned char*)code length:(int)length width:(int)width height:(int)height;
 
 @end

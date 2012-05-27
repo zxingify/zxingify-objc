@@ -21,8 +21,6 @@
  */
 @interface ZXOneDimensionalCodeWriter : NSObject <ZXWriter>
 
-@property (nonatomic, assign) int sidesMargin;
-
 - (id)initWithSidesMargin:(int)sidesMargin;
 - (unsigned char*)encode:(NSString*)contents length:(int*)pLength;
 - (int)appendPattern:(unsigned char*)target pos:(int)pos pattern:(int*)pattern patternLen:(int)patternLen startColor:(int)startColor;

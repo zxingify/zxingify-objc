@@ -27,8 +27,6 @@
 }
 
 - (unsigned char*)encode:(NSString *)contents length:(int *)pLength {
-  int resultLength;
-  int position = 0;
 
   // Verify input and calculate decoded length.
   if (![ZXCodaBarReader arrayContains:"ABCD" length:4 key:[[contents uppercaseString] characterAtIndex:0]]) {
@@ -42,13 +40,13 @@
                                  userInfo:nil];
   }
   // The start character and the end character are decoded to 10 length each.
-  resultLength = 20;
+  int resultLength = 20;
   char charsWhichAreTenLengthEachAfterDecoded[4] = {'/', ':', '+', '.'};
-  for (int i = 1; i < contents.length-1; i++) {
+  for (int i = 1; i < contents.length - 1; i++) {
     if (([contents characterAtIndex:i] >= '0' && [contents characterAtIndex:i] <= '9') ||
         [contents characterAtIndex:i] == '-' || [contents characterAtIndex:i] == '$') {
       resultLength += 9;
-    } else if([ZXCodaBarReader arrayContains:charsWhichAreTenLengthEachAfterDecoded length:4 key:[contents characterAtIndex:i]]) {
+    } else if ([ZXCodaBarReader arrayContains:charsWhichAreTenLengthEachAfterDecoded length:4 key:[contents characterAtIndex:i]]) {
       resultLength += 10;
     } else {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
@@ -61,10 +59,10 @@
 
   if (pLength) *pLength = resultLength;
   unsigned char* result = (unsigned char*)malloc(resultLength * sizeof(unsigned char));
+  int position = 0;
   for (int index = 0; index < contents.length; index++) {
     unichar c = [[contents uppercaseString] characterAtIndex:index];
-    int code = 0;
-    if (index == contents.length - 1){
+    if (index == contents.length - 1) {
       // Neither * nor E are in the CodaBarReader.ALPHABET.
       // * is equal to the  c pattern, and e is equal to the d pattern
       if (c == '*') {
@@ -73,6 +71,7 @@
         c = 'D';
       }
     }
+    int code = 0;
     for (int i = 0; i < CODA_ALPHABET_LEN; i++) {
       // Found any, because I checked above.
       if (c == CODA_ALPHABET[i]) {
@@ -80,14 +79,13 @@
         break;
       }
     }
-//    BOOL isBlack = YES;
     unsigned char color = 1;
     int counter = 0;
     int bit = 0;
-    while (bit < 7){ // A character consists of 7 digit.
+    while (bit < 7) { // A character consists of 7 digit.
       result[position] = color;
       position++;
-      if (((code >> (6-bit)) & 1) == 0 || counter == 1){
+      if (((code >> (6 - bit)) & 1) == 0 || counter == 1) {
         color ^= 1; // Flip the color.
         bit++;
         counter = 0;
