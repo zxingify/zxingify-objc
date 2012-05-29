@@ -19,6 +19,12 @@
 #import "ZXVCardResultParser.h"
 #import "ZXVEventResultParser.h"
 
+@interface ZXVEventResultParser ()
+
++ (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
+
+@end
+
 @implementation ZXVEventResultParser
 
 + (ZXCalendarParsedResult *)parse:(ZXResult *)result {
@@ -31,13 +37,13 @@
     return nil;
   }
 
-  NSString * summary = [ZXVCardResultParser matchSingleVCardPrefixedField:@"SUMMARY" rawText:rawText trim:YES];
-  NSString * start = [ZXVCardResultParser matchSingleVCardPrefixedField:@"DTSTART" rawText:rawText trim:YES];
-  NSString * end = [ZXVCardResultParser matchSingleVCardPrefixedField:@"DTEND" rawText:rawText trim:YES];
-  NSString * location = [ZXVCardResultParser matchSingleVCardPrefixedField:@"LOCATION" rawText:rawText trim:YES];
-  NSString * description = [ZXVCardResultParser matchSingleVCardPrefixedField:@"DESCRIPTION" rawText:rawText trim:YES];
+  NSString * summary = [self matchSingleVCardPrefixedField:@"SUMMARY" rawText:rawText trim:YES];
+  NSString * start = [self matchSingleVCardPrefixedField:@"DTSTART" rawText:rawText trim:YES];
+  NSString * end = [self matchSingleVCardPrefixedField:@"DTEND" rawText:rawText trim:YES];
+  NSString * location = [self matchSingleVCardPrefixedField:@"LOCATION" rawText:rawText trim:YES];
+  NSString * description = [self matchSingleVCardPrefixedField:@"DESCRIPTION" rawText:rawText trim:YES];
 
-  NSString * geoString = [ZXVCardResultParser matchSingleVCardPrefixedField:@"GEO" rawText:rawText trim:YES];
+  NSString * geoString = [self matchSingleVCardPrefixedField:@"GEO" rawText:rawText trim:YES];
   double latitude;
   double longitude;
   if (geoString == nil) {
@@ -61,6 +67,11 @@
   } @catch (NSException * iae) {
     return nil;
   }
+}
+
++ (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
+  NSArray * values = [ZXVCardResultParser matchSingleVCardPrefixedField:prefix rawText:rawText trim:trim];
+  return values == nil || values.count == 0 ? nil : [values objectAtIndex:0];
 }
 
 @end

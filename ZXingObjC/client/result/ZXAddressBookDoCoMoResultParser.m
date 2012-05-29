@@ -51,9 +51,13 @@
   return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
                                              pronunciation:pronunciation
                                               phoneNumbers:phoneNumbers
+                                                phoneTypes:nil
                                                     emails:emails
+                                                emailTypes:nil
+                                          instantMessenger:nil
                                                       note:note
                                                  addresses:addresses
+                                              addressTypes:nil
                                                        org:org
                                                   birthday:birthday
                                                      title:nil

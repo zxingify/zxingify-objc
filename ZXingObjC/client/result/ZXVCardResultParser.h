@@ -26,6 +26,6 @@
 @interface ZXVCardResultParser : ZXResultParser
 
 + (ZXAddressBookParsedResult *)parse:(ZXResult *)result;
-+ (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
++ (NSArray *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 
 @end

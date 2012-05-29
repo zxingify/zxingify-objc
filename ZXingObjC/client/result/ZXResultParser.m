@@ -326,4 +326,13 @@
   return matches == nil ? nil : [matches objectAtIndex:0];
 }
 
++ (NSArray*)toStringArray:(NSArray*)strings {
+  int size = strings.count;
+  NSMutableArray* result = [NSMutableArray arrayWithCapacity:size];
+  for (int j = 0; j < size; j++) {
+    [result addObject:[strings objectAtIndex:j]];
+  }
+  return result;
+}
+
 @end

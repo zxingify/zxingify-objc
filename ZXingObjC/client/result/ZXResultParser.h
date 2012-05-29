@@ -38,5 +38,6 @@
 + (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri;
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
++ (NSArray*)toStringArray:(NSArray*)strings;
 
 @end

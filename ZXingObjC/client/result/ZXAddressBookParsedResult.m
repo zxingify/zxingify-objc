@@ -22,9 +22,13 @@
 @property (nonatomic, retain) NSArray * names;
 @property (nonatomic, copy) NSString * pronunciation;
 @property (nonatomic, retain) NSArray * phoneNumbers;
+@property (nonatomic, retain) NSArray * phoneTypes;
 @property (nonatomic, retain) NSArray * emails;
+@property (nonatomic, retain) NSArray * emailTypes;
+@property (nonatomic, copy) NSString * instantMessenger;
 @property (nonatomic, copy) NSString * note;
 @property (nonatomic, retain) NSArray * addresses;
+@property (nonatomic, retain) NSArray * addressTypes;
 @property (nonatomic, copy) NSString * title;
 @property (nonatomic, copy) NSString * org;
 @property (nonatomic, copy) NSString * url;
@@ -37,22 +41,43 @@
 @synthesize names;
 @synthesize pronunciation;
 @synthesize phoneNumbers;
+@synthesize phoneTypes;
 @synthesize emails;
+@synthesize emailTypes;
+@synthesize instantMessenger;
 @synthesize note;
 @synthesize addresses;
+@synthesize addressTypes;
 @synthesize title;
 @synthesize org;
 @synthesize url;
 @synthesize birthday;
 
-- (id)initWithNames:(NSArray *)aNames pronunciation:(NSString *)aPronunciation phoneNumbers:(NSArray *)aPhoneNumbers emails:(NSArray *)aEmails note:(NSString *)aNote addresses:(NSArray *)anAddresses org:(NSString *)anOrg birthday:(NSString *)aBirthday title:(NSString *)aTitle url:(NSString *)aUrl {
+- (id)initWithNames:(NSArray *)aNames
+      pronunciation:(NSString *)aPronunciation
+       phoneNumbers:(NSArray *)aPhoneNumbers
+         phoneTypes:(NSArray *)aPhoneTypes
+             emails:(NSArray *)anEmails
+         emailTypes:(NSArray *)anEmailTypes
+   instantMessenger:(NSString *)anInstantMessenger
+               note:(NSString *)aNote
+          addresses:(NSArray *)anAddresses
+       addressTypes:(NSArray *)anAddressTypes
+                org:(NSString *)anOrg
+           birthday:(NSString *)aBirthday
+              title:(NSString *)aTitle
+                url:(NSString *)aUrl {
   if (self = [super initWithType:kParsedResultTypeAddressBook]) {
     self.names = aNames;
     self.pronunciation = aPronunciation;
     self.phoneNumbers = aPhoneNumbers;
-    self.emails = aEmails;
+    self.phoneTypes = aPhoneTypes;
+    self.emails = anEmails;
+    self.emailTypes = anEmailTypes;
+    self.instantMessenger = anInstantMessenger;
     self.note = aNote;
     self.addresses = anAddresses;
+    self.addressTypes = anAddressTypes;
     self.org = anOrg;
     self.birthday = aBirthday;
     self.title = aTitle;
@@ -66,9 +91,13 @@
   [names release];
   [pronunciation release];
   [phoneNumbers release];
+  [phoneTypes release];
   [emails release];
+  [emailTypes release];
+  [instantMessenger release];
   [note release];
   [addresses release];
+  [addressTypes release];
   [org release];
   [birthday release];
   [title release];
@@ -86,6 +115,7 @@
   [ZXParsedResult maybeAppendArray:self.addresses result:result];
   [ZXParsedResult maybeAppendArray:self.phoneNumbers result:result];
   [ZXParsedResult maybeAppendArray:self.emails result:result];
+  [ZXParsedResult maybeAppend:self.instantMessenger result:result];
   [ZXParsedResult maybeAppend:self.url result:result];
   [ZXParsedResult maybeAppend:self.birthday result:result];
   [ZXParsedResult maybeAppend:self.note result:result];

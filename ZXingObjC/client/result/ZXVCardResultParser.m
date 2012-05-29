@@ -29,48 +29,60 @@
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 + (NSString *)stripContinuationCRLF:(NSString *)value;
 + (int)toHexValue:(unichar)c;
++ (NSString*)toPrimaryValue:(NSArray*)list;
++ (NSArray*)toPrimaryValues:(NSArray*)lists;
++ (NSArray*)toTypes:(NSArray*)lists;
 
 @end
 
 @implementation ZXVCardResultParser
 
 + (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
+  // Although we should insist on the raw text ending with "END:VCARD", there's no reason
+  // to throw out everything else we parsed just because this was omitted. In fact, Eclair
+  // is doing just that, and we can't parse its contacts without this leniency.
   NSString * rawText = [result text];
   if (rawText == nil || ![rawText hasPrefix:@"BEGIN:VCARD"]) {
     return nil;
   }
   NSMutableArray * names = [self matchVCardPrefixedField:@"FN" rawText:rawText trim:YES];
   if (names == nil) {
+    // If no display names found, look for regular name fields and format them
     names = [self matchVCardPrefixedField:@"N" rawText:rawText trim:YES];
     [self formatNames:names];
   }
   NSArray * phoneNumbers = [self matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES];
   NSArray * emails = [self matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES];
-  NSString * note = [self matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO];
+  NSArray * note = [self matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO];
   NSMutableArray * addresses = [self matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES];
   if (addresses != nil) {
     for (int i = 0; i < [addresses count]; i++) {
-      [addresses replaceObjectAtIndex:i withObject:[self formatAddress:[addresses objectAtIndex:i]]];
+      NSMutableArray * list = [addresses objectAtIndex:i];
+      [list replaceObjectAtIndex:0 withObject:[self formatAddress:[list objectAtIndex:0]]];
     }
   }
-  NSString * org = [self matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
-  NSString * birthday = [self matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES];
-  if (![self isLikeVCardDate:birthday]) {
+  NSArray * org = [self matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
+  NSArray * birthday = [self matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES];
+  if (birthday != nil && ![self isLikeVCardDate:[birthday objectAtIndex:0]]) {
     birthday = nil;
   }
-  NSString * title = [self matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
-  NSString * url = [self matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
-
-  return [[[ZXAddressBookParsedResult alloc] initWithNames:names
+  NSArray * title = [self matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
+  NSArray * url = [self matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
+  NSArray * instantMessenger = [self matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES];
+  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self toPrimaryValues:names]
                                              pronunciation:nil
-                                              phoneNumbers:phoneNumbers
-                                                    emails:emails
-                                                      note:note
-                                                 addresses:addresses
-                                                       org:org
-                                                  birthday:birthday
-                                                     title:title
-                                                       url:url] autorelease];
+                                              phoneNumbers:[self toPrimaryValues:phoneNumbers]
+                                                phoneTypes:[self toTypes:phoneNumbers]
+                                                    emails:[self toPrimaryValues:emails]
+                                                emailTypes:[self toTypes:emails]
+                                          instantMessenger:[self toPrimaryValue:instantMessenger]
+                                                      note:[self toPrimaryValue:note]
+                                                 addresses:[self toPrimaryValues:addresses]
+                                              addressTypes:[self toTypes:addresses]
+                                                       org:[self toPrimaryValue:org]
+                                                  birthday:[self toPrimaryValue:birthday]
+                                                     title:[self toPrimaryValue:title]
+                                                       url:[self toPrimaryValue:url]] autorelease];
 }
 
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
@@ -98,17 +110,22 @@
       i++;
     }
 
+    NSMutableArray* metadata = nil;
     BOOL quotedPrintable = NO;
     NSString * quotedPrintableCharset = nil;
     if (i > metadataStart) {
-      int j = metadataStart + 1;
-      while (j <= i) {
-        if ([rawText characterAtIndex:j] == ';' || [rawText characterAtIndex:j] == ':') {
-          NSString * metadata = [rawText substringWithRange:NSMakeRange(metadataStart + 1, j - metadataStart -1)];
-          int equals = [metadata rangeOfString:@"="].location;
+      for (int j = metadataStart + 1; j <= i; j++) {
+        unichar c = [rawText characterAtIndex:j];
+        if (c == ';' || c == ':') {
+          NSString * metadatum = [rawText substringWithRange:NSMakeRange(metadataStart+1, j - metadataStart - 1)];
+          if (metadata == nil) {
+            metadata = [NSMutableArray arrayWithCapacity:1];
+          }
+          [metadata addObject:metadatum];
+          int equals = [metadatum rangeOfString:@"=" options:NSCaseInsensitiveSearch].location;
           if (equals != NSNotFound) {
-            NSString * key = [metadata substringToIndex:equals];
-            NSString * value = [metadata substringFromIndex:equals + 1];
+            NSString * key = [metadatum substringToIndex:equals];
+            NSString * value = [metadatum substringFromIndex:equals + 1];
             if ([@"ENCODING" caseInsensitiveCompare:key] == NSOrderedSame) {
               if ([@"QUOTED-PRINTABLE" caseInsensitiveCompare:value] == NSOrderedSame) {
                 quotedPrintable = YES;
@@ -119,7 +136,6 @@
           }
           metadataStart = j;
         }
-        j++;
       }
     }
 
@@ -155,7 +171,13 @@
       } else {
         element = [self stripContinuationCRLF:element];
       }
-      [matches addObject:element];
+      if (metadata == nil) {
+        NSMutableArray* match = [NSMutableArray arrayWithObject:element];
+        [matches addObject:match];
+      } else {
+        [metadata insertObject:element atIndex:0];
+        [matches addObject:metadata];
+      }
       i++;
     } else {
       i++;
@@ -165,7 +187,7 @@
   if (matches == nil || [matches count] == 0) {
     return nil;
   }
-  return matches;
+  return [[[self toStringArray:matches] mutableCopy] autorelease];
 }
 
 + (NSString *)stripContinuationCRLF:(NSString *)value {
@@ -234,9 +256,11 @@
 + (int)toHexValue:(unichar)c {
   if (c >= '0' && c <= '9') {
     return c - '0';
-  } else if (c >= 'A' && c <= 'F') {
+  }
+  if (c >= 'A' && c <= 'F') {
     return c - 'A' + 10;
-  } else if (c >= 'a' && c <= 'f') {
+  }
+  if (c >= 'a' && c <= 'f') {
     return c - 'a' + 10;
   }
   @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid character." userInfo:nil];
@@ -255,9 +279,49 @@
   }
 }
 
-+ (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
++ (NSArray *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
   NSArray * values = [self matchVCardPrefixedField:prefix rawText:rawText trim:trim];
   return values == nil ? nil : [values objectAtIndex:0];
+}
+
++ (NSString*)toPrimaryValue:(NSArray*)list {
+  return list == nil || list.count == 0 ? nil : [list objectAtIndex:0];
+}
+
++ (NSArray*)toPrimaryValues:(NSArray*)lists {
+  if (lists == nil || lists.count == 0) {
+    return nil;
+  }
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:lists.count];
+  for (NSArray* list in lists) {
+    [result addObject:[list objectAtIndex:0]];
+  }
+  return [self toStringArray:result];
+}
+
++ (NSArray*)toTypes:(NSArray*)lists {
+  if (lists == nil || lists.count == 0) {
+    return nil;
+  }
+  NSMutableArray * result = [NSMutableArray arrayWithCapacity:lists.count];
+  for (NSArray* list in lists) {
+    NSString * type = nil;
+    for (int i = 1; i < list.count; i++) {
+      NSString * metadatum = [list objectAtIndex:i];
+      int equals = [metadatum rangeOfString:@"=" options:NSCaseInsensitiveSearch].location;
+      if (equals == NSNotFound) {
+        // take the whole thing as a usable label
+        type = metadatum;
+        break;
+      }
+      if ([@"TYPE" isEqualToString:[[metadatum substringToIndex:equals] uppercaseString]]) {
+        type = [metadatum substringFromIndex:equals + 1];
+        break;
+      }
+    }
+    [result addObject:type];
+  }
+  return [self toStringArray:result];
 }
 
 + (BOOL)isLikeVCardDate:(NSString *)value {
@@ -296,7 +360,8 @@
 + (void)formatNames:(NSMutableArray *)names {
   if (names != nil) {
     for (int i = 0; i < [names count]; i++) {
-      NSString *name = [names objectAtIndex:i];
+      NSMutableArray * list = [names objectAtIndex:i];
+      NSString * name = [list objectAtIndex:i];
       NSMutableArray * components = [NSMutableArray arrayWithCapacity:5];
       int start = 0;
       int end;
@@ -312,7 +377,7 @@
       [self maybeAppendComponent:components i:2 newName:newName];
       [self maybeAppendComponent:components i:0 newName:newName];
       [self maybeAppendComponent:components i:4 newName:newName];
-      [names replaceObjectAtIndex:i withObject:[newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+      [list replaceObjectAtIndex:0 withObject:[newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
     }
   }
 }
