@@ -18,4 +18,8 @@
 
 @interface ZXPDF417Writer : NSObject <ZXWriter>
 
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
+                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
+         byteCompaction:(BOOL)byteCompaction error:(NSError**)error;
+
 @end

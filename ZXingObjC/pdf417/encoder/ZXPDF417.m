@@ -502,17 +502,17 @@ const int PDF_CODEWORD_TABLE[CODEWORD_TABLE_LEN][CODEWORD_TABLE_SUB_LEN] = {
     0x107a4, 0x107a2, 0x10396, 0x107b6, 0x187d4, 0x187d2,
     0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea}};
 
-static int MIN_COLS = 2;
-static int MAX_COLS = 30;
-static int MAX_ROWS = 30;
-static int MIN_ROWS = 2;
 static float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
-static float HEIGHT = 16.0f; //mm
+static float HEIGHT = 2.0f; //mm
 
 @interface ZXPDF417 ()
 
-@property (nonatomic, retain) ZXBarcodeMatrix* barcodeMatrix;
 @property (nonatomic, assign) int errorCorrectionLevel;
+@property (nonatomic, retain) ZXBarcodeMatrix* barcodeMatrix;
+@property (nonatomic, assign) int minCols;
+@property (nonatomic, assign) int maxCols;
+@property (nonatomic, assign) int minRows;
+@property (nonatomic, assign) int maxRows;
 
 - (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError**)error;
 - (int)calculateNumberOfRowsM:(int)m k:(int)k c:(int)c;
@@ -527,6 +527,28 @@ static float HEIGHT = 16.0f; //mm
 
 @synthesize barcodeMatrix;
 @synthesize errorCorrectionLevel;
+@synthesize compact;
+@synthesize byteCompaction;
+@synthesize minCols;
+@synthesize maxCols;
+@synthesize minRows;
+@synthesize maxRows;
+
+- (id)init {
+  return [self initWithCompact:NO];
+}
+
+- (id)initWithCompact:(BOOL)aCompact {
+  if (self = [super init]) {
+    self.compact = aCompact;
+    self.minCols = 2;
+    self.maxCols = 30;
+    self.maxRows = 30;
+    self.minRows = 2;
+  }
+
+  return self;
+}
 
 - (void)dealloc {
   [barcodeMatrix release];
@@ -640,10 +662,14 @@ static float HEIGHT = 16.0f; //mm
       idx++;
     }
 
-    pattern = PDF_CODEWORD_TABLE[cluster][right];
-    [self encodeCharPattern:pattern len:17 logic:logic.currentRow];
+    if (self.compact) {
+      [self encodeCharPattern:STOP_PATTERN_INT len:1 logic:logic.currentRow];
+    } else {
+      pattern = PDF_CODEWORD_TABLE[cluster][right];
+      [self encodeCharPattern:pattern len:17 logic:logic.currentRow];
 
-    [self encodeCharPattern:STOP_PATTERN_INT len:18 logic:logic.currentRow];
+      [self encodeCharPattern:STOP_PATTERN_INT len:18 logic:logic.currentRow];
+    }
   }
 }
 
@@ -654,7 +680,7 @@ static float HEIGHT = 16.0f; //mm
 
   //1. step: High-level encoding
   int errorCorrectionCodeWords = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:anErrorCorrectionLevel];
-  NSString* highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg error:error];
+  NSString* highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg byteCompaction:self.byteCompaction error:error];
   if (!highLevel) {
     return NO;
   }
@@ -715,15 +741,15 @@ static float HEIGHT = 16.0f; //mm
   BOOL result = NO;
   int errorCorrectionCodeWords = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:errorCorrectionLevel];
 
-  for (int cols = MIN_COLS; cols <= MAX_COLS; cols++) {
+  for (int cols = self.minCols; cols <= self.maxCols; cols++) {
 
     int rows = [self calculateNumberOfRowsM:sourceCodeWords k:errorCorrectionCodeWords c:cols];
 
-    if (rows < MIN_ROWS) {
+    if (rows < self.minRows) {
       break;
     }
 
-    if (rows > MAX_ROWS) {
+    if (rows > self.maxRows) {
       continue;
     }
 
@@ -742,6 +768,16 @@ static float HEIGHT = 16.0f; //mm
   }
 
   return result;
+}
+
+/**
+ * Sets max/min row/col values
+ */
+- (void)setDimensionsWithMaxCols:(int)_maxCols minCols:(int)_minCols maxRows:(int)_maxRows minRows:(int)_minRows {
+  self.maxCols = _maxCols;
+  self.minCols = _minCols;
+  self.maxRows = _maxRows;
+  self.minRows = _minRows;
 }
 
 @end

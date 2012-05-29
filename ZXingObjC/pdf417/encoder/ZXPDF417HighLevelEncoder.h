@@ -24,6 +24,6 @@
  */
 @interface ZXPDF417HighLevelEncoder : NSObject
 
-+ (NSString*)encodeHighLevel:(NSString*)msg error:(NSError**)error;
++ (NSString*)encodeHighLevel:(NSString*)msg byteCompaction:(BOOL)byteCompaction error:(NSError**)error;
 
 @end

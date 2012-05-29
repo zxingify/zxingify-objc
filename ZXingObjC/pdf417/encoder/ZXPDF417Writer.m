@@ -21,6 +21,8 @@
 
 @interface ZXPDF417Writer ()
 
+- (ZXPDF417*)initializeEncoder:(ZXBarcodeFormat)format compact:(BOOL)compact;
+- (ZXBitMatrix*)bitMatrixFromEncoder:(ZXPDF417*)encoder contents:(NSString*)contents width:(int)width height:(int)height error:(NSError**)error;
 - (ZXBitMatrix*)bitMatrixFrombitArray:(unsigned char**)input height:(int)height width:(int)width;
 - (unsigned char**)rotateArray:(unsigned char**)bitarray height:(int)height width:(int)width;
 
@@ -34,27 +36,46 @@
 }
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError**)error {
+  ZXPDF417* encoder = [self initializeEncoder:format compact:NO];
+  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
+}
 
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
+                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
+         byteCompaction:(BOOL)byteCompaction error:(NSError**)error {
+  ZXPDF417* encoder = [self initializeEncoder:format compact:compact];
+
+  // Set options: dimensions and byte compaction
+  [encoder setDimensionsWithMaxCols:maxCols minCols:minCols maxRows:maxRows minRows:minRows];
+  encoder.byteCompaction = byteCompaction;
+
+  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
+}
+
+/**
+ * Initializes the encoder based on the format (whether it's compact or not)
+ */
+- (ZXPDF417*)initializeEncoder:(ZXBarcodeFormat)format compact:(BOOL)compact {
   if (format != kBarcodeFormatPDF417) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode PDF_417, but got %d", format];
   }
 
   ZXPDF417* encoder = [[[ZXPDF417 alloc] init] autorelease];
+  encoder.compact = compact;
+  return encoder;
+}
 
-  //No error correction at the moment
-  int errorCorrectionLevel = 3;
+/**
+ * Takes encoder, accounts for width/height, and retrieves bit matrix
+ */
+- (ZXBitMatrix*)bitMatrixFromEncoder:(ZXPDF417*)encoder contents:(NSString*)contents width:(int)width height:(int)height error:(NSError**)error {
+  int errorCorrectionLevel = 2;
   if (![encoder generateBarcodeLogic:contents errorCorrectionLevel:errorCorrectionLevel error:error]) {
     return nil;
   }
 
-  // Give it data to be encoded
-  //encoderExt.setData(content.getBytes());
-  // Find the Error correction level automatically
-
-  //encoderExt.encode();
-  //encoderExt.createArray();
-  int lineThickness = 3;
-  int aspectRatio = 8;
+  int lineThickness = 2;
+  int aspectRatio = 4;
 
   int scaleHeight;
   int scaleWidth;

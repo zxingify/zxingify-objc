@@ -151,9 +151,10 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
 
 /**
  * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
- * of ISO/IEC 15438:2001(E).
+ * of ISO/IEC 15438:2001(E).  If byte compaction has been selected, then only byte compaction
+ * is used.
  */
-+ (NSString*)encodeHighLevel:(NSString*)msg error:(NSError**)error {
++ (NSString*)encodeHighLevel:(NSString*)msg byteCompaction:(BOOL)byteCompaction error:(NSError**)error {
   unsigned char* bytes = NULL; //Fill later and only if needed
 
   //the codewords 0..928 are encoded as Unicode characters
@@ -163,44 +164,70 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
   int p = 0;
   int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
   int textSubMode = SUBMODE_ALPHA;
-  while (p < len) {
-    int n = [self determineConsecutiveDigitCount:msg startpos:p];
-    if (n >= 13) {
-      [sb appendFormat:@"%c", (char) LATCH_TO_NUMERIC];
-      encodingMode = NUMERIC_COMPACTION;
-      textSubMode = SUBMODE_ALPHA; //Reset after latch
-      [self encodeNumeric:msg startpos:p count:n buffer:sb];
-      p += n;
-    } else {
-      int t = [self determineConsecutiveTextCount:msg startpos:p];
-      if (t >= 5 || n == len) {
-        if (encodingMode != TEXT_COMPACTION) {
-          [sb appendFormat:@"%c", (char) LATCH_TO_TEXT];
-          encodingMode = TEXT_COMPACTION;
-          textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
-        }
-        textSubMode = [self encodeText:msg startpos:p count:t buffer:sb initialSubmode:textSubMode];
-        p += t;
+  if (byteCompaction) {
+    encodingMode = BYTE_COMPACTION;
+    while (p < len) {
+
+      if (bytes == NULL) {
+        bytes = [self bytesForMessage:msg];
+      }
+      int b = [self determineConsecutiveBinaryCount:msg bytes:bytes startpos:p error:error];
+      if (b == -1) {
+        return nil;
+      } else if (b == 0) {
+        b = 1;
+      }
+      if (b == 1 && encodingMode == TEXT_COMPACTION) {
+        //Switch for one byte (instead of latch)
+        [self encodeBinary:bytes startpos:p count:1 startmode:TEXT_COMPACTION buffer:sb];
       } else {
-        if (bytes == NULL) {
-          bytes = [self bytesForMessage:msg];
-        }
-        int b = [self determineConsecutiveBinaryCount:msg bytes:bytes startpos:p error:error];
-        if (b == -1) {
-          return nil;
-        } else if (b == 0) {
-          b = 1;
-        }
-        if (b == 1 && encodingMode == TEXT_COMPACTION) {
-          //Switch for one byte (instead of latch)
-          [self encodeBinary:bytes startpos:p count:1 startmode:TEXT_COMPACTION buffer:sb];
+        //Mode latch performed by encodeBinary
+        [self encodeBinary:bytes startpos:p count:b startmode:encodingMode buffer:sb];
+        encodingMode = BYTE_COMPACTION;
+        textSubMode = SUBMODE_ALPHA; //Reset after latch
+      }
+      p += b;
+    }
+  } else {
+    while (p < len) {
+      int n = [self determineConsecutiveDigitCount:msg startpos:p];
+      if (n >= 13) {
+        [sb appendFormat:@"%c", (char) LATCH_TO_NUMERIC];
+        encodingMode = NUMERIC_COMPACTION;
+        textSubMode = SUBMODE_ALPHA; //Reset after latch
+        [self encodeNumeric:msg startpos:p count:n buffer:sb];
+        p += n;
+      } else {
+        int t = [self determineConsecutiveTextCount:msg startpos:p];
+        if (t >= 5 || n == len) {
+          if (encodingMode != TEXT_COMPACTION) {
+            [sb appendFormat:@"%c", (char) LATCH_TO_TEXT];
+            encodingMode = TEXT_COMPACTION;
+            textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
+          }
+          textSubMode = [self encodeText:msg startpos:p count:t buffer:sb initialSubmode:textSubMode];
+          p += t;
         } else {
-          //Mode latch performed by encodeBinary
-          [self encodeBinary:bytes startpos:p count:b startmode:encodingMode buffer:sb];
-          encodingMode = BYTE_COMPACTION;
-          textSubMode = SUBMODE_ALPHA; //Reset after latch
+          if (bytes == NULL) {
+            bytes = [self bytesForMessage:msg];
+          }
+          int b = [self determineConsecutiveBinaryCount:msg bytes:bytes startpos:p error:error];
+          if (b == -1) {
+            return nil;
+          } else if (b == 0) {
+            b = 1;
+          }
+          if (b == 1 && encodingMode == TEXT_COMPACTION) {
+            //Switch for one byte (instead of latch)
+            [self encodeBinary:bytes startpos:p count:1 startmode:TEXT_COMPACTION buffer:sb];
+          } else {
+            //Mode latch performed by encodeBinary
+            [self encodeBinary:bytes startpos:p count:b startmode:encodingMode buffer:sb];
+            encodingMode = BYTE_COMPACTION;
+            textSubMode = SUBMODE_ALPHA; //Reset after latch
+          }
+          p += b;
         }
-        p += b;
       }
     }
   }
