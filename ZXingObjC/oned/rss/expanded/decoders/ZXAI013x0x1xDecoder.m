@@ -19,9 +19,9 @@
 #import "ZXErrors.h"
 #import "ZXGeneralAppIdDecoder.h"
 
-int const AI013x0x1xHeaderSize = 7 + 1;
-int const AI013x0x1xWeightSize = 20;
-int const AI013x0x1xDateSize = 16;
+int const AI013x0x1x_HEADER_SIZE = 7 + 1;
+int const AI013x0x1x_WEIGHT_SIZE = 20;
+int const AI013x0x1x_DATE_SIZE = 16;
 
 @interface ZXAI013x0x1xDecoder ()
 
@@ -54,19 +54,19 @@ int const AI013x0x1xDateSize = 16;
 }
 
 - (NSString *)parseInformationWithError:(NSError **)error {
-  if (self.information.size != AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize + AI013x0x1xDateSize) {
+  if (self.information.size != AI013x0x1x_HEADER_SIZE + GTIN_SIZE + AI013x0x1x_WEIGHT_SIZE + AI013x0x1x_DATE_SIZE) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   NSMutableString * buf = [NSMutableString string];
-  [self encodeCompressedGtin:buf currentPos:AI013x0x1xHeaderSize];
-  [self encodeCompressedWeight:buf currentPos:AI013x0x1xHeaderSize + gtinSize weightSize:AI013x0x1xWeightSize];
-  [self encodeCompressedDate:buf currentPos:AI013x0x1xHeaderSize + gtinSize + AI013x0x1xWeightSize];
+  [self encodeCompressedGtin:buf currentPos:AI013x0x1x_HEADER_SIZE];
+  [self encodeCompressedWeight:buf currentPos:AI013x0x1x_HEADER_SIZE + GTIN_SIZE weightSize:AI013x0x1x_WEIGHT_SIZE];
+  [self encodeCompressedDate:buf currentPos:AI013x0x1x_HEADER_SIZE + GTIN_SIZE + AI013x0x1x_WEIGHT_SIZE];
   return buf;
 }
 
 - (void)encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos {
-  int numericDate = [self.generalDecoder extractNumericValueFromBitArray:currentPos bits:AI013x0x1xDateSize];
+  int numericDate = [self.generalDecoder extractNumericValueFromBitArray:currentPos bits:AI013x0x1x_DATE_SIZE];
   if (numericDate == 38400) {
     return;
   }

@@ -167,7 +167,10 @@
 + (ZXMode *)eciMode {
   static ZXMode* thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:nil
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
+                                                                      [NSNumber numberWithInt:0],
+                                                                      [NSNumber numberWithInt:0],
+                                                                      [NSNumber numberWithInt:0], nil]
                                                                 bits:0x07
                                                                 name:@"ECI"];
   }
@@ -190,7 +193,10 @@
 + (ZXMode *)fnc1FirstPositionMode {
   static ZXMode* thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:nil
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
+                                                                      [NSNumber numberWithInt:0],
+                                                                      [NSNumber numberWithInt:0],
+                                                                      [NSNumber numberWithInt:0], nil]
                                                                 bits:0x05
                                                                 name:@"FNC1_FIRST_POSITION"];
   }
@@ -200,7 +206,10 @@
 + (ZXMode *)fnc1SecondPositionMode {
   static ZXMode* thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:nil
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
+                                                                      [NSNumber numberWithInt:0],
+                                                                      [NSNumber numberWithInt:0],
+                                                                      [NSNumber numberWithInt:0], nil]
                                                                 bits:0x09
                                                                 name:@"FNC1_SECOND_POSITION"];
   }

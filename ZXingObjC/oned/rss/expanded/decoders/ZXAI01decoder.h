@@ -16,7 +16,7 @@
 
 #import "ZXAbstractExpandedDecoder.h"
 
-extern const int gtinSize;
+extern const int GTIN_SIZE;
 
 @interface ZXAI01decoder : ZXAbstractExpandedDecoder
 

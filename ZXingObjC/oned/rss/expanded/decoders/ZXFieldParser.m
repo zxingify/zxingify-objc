@@ -189,7 +189,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
 
 + (NSString *)parseFieldsInGeneralPurpose:(NSString *)rawInformation error:(NSError **)error {
   if ([rawInformation length] == 0) {
-    return @"";
+    return nil;
   }
   if ([rawInformation length] < 2) {
     if (error) *error = NotFoundErrorInstance();
@@ -294,10 +294,12 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
   if ([rawInformation length] < aiSize) {
     return nil;
   }
+
   NSString * ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   if ([rawInformation length] < aiSize + fieldSize) {
     return nil;
   }
+
   NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, fieldSize)];
   NSString * remaining;
   if (aiSize + fieldSize == rawInformation.length) {
@@ -306,11 +308,9 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     remaining = [rawInformation substringFromIndex:aiSize + fieldSize];
   }
 
-  NSString *result = [self parseFieldsInGeneralPurpose:remaining error:nil];
-  if (result) {
-    result =[NSString stringWithFormat:@"(%@)%@%@", ai, field, result];
-  }
-  return result;
+  NSString * result = [NSString stringWithFormat:@"(%@)%@", ai, field];
+  NSString * parsedAI = [self parseFieldsInGeneralPurpose:remaining error:nil];
+  return parsedAI == nil ? result : [result stringByAppendingString:parsedAI];
 }
 
 + (NSString *)processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation {
@@ -322,17 +322,10 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     maxSize = aiSize + variableFieldSize;
   }
   NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, maxSize - aiSize)];
-  NSString * remaining;
-  if (maxSize == rawInformation.length) {
-    remaining = @"";
-  } else {
-    remaining = [rawInformation substringFromIndex:maxSize];
-  }
-  NSString *result = [self parseFieldsInGeneralPurpose:remaining error:nil];
-  if (result) {
-    result = [NSString stringWithFormat:@"(%@)%@%@", ai, field, result];
-  }
-  return result;
+  NSString * remaining = [rawInformation substringFromIndex:maxSize];
+  NSString * result = [NSString stringWithFormat:@"(%@)%@", ai, field];
+  NSString * parsedAI = [self parseFieldsInGeneralPurpose:remaining error:nil];
+  return parsedAI == nil ? result : [result stringByAppendingString:parsedAI];
 }
 
 @end

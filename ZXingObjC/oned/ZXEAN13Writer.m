@@ -19,7 +19,7 @@
 #import "ZXEAN13Writer.h"
 #import "ZXUPCEANReader.h"
 
-const int EAN13codeWidth = 3 + // start guard
+const int EAN13_CODE_WIDTH = 3 + // start guard
   (7 * 6) + // left bars
   5 + // middle guard
   (7 * 6) + // right bars
@@ -44,9 +44,9 @@ const int EAN13codeWidth = 3 + // start guard
 
   int firstDigit = [[contents substringToIndex:1] intValue];
   int parities = FIRST_DIGIT_ENCODINGS[firstDigit];
-  if (pLength) *pLength = EAN13codeWidth;
-  unsigned char* result = (unsigned char*)malloc(EAN13codeWidth * sizeof(unsigned char));
-  for (int i = 0; i < EAN13codeWidth; i++) {
+  if (pLength) *pLength = EAN13_CODE_WIDTH;
+  unsigned char* result = (unsigned char*)malloc(EAN13_CODE_WIDTH * sizeof(unsigned char));
+  for (int i = 0; i < EAN13_CODE_WIDTH; i++) {
     result[i] = 0;
   }
   int pos = 0;

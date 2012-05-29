@@ -17,6 +17,7 @@
 #import "ZXBitMatrix.h"
 #import "ZXPDF417BitMatrixParser.h"
 
+int const *NO_ERRORS = nil;
 int const MAX_ROW_DIFFERENCE = 6;
 int const MAX_ROWS = 90;
 int const MAX_CW_CAPACITY = 929;
@@ -870,8 +871,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * Translate the symbol into a codeword.
  */
 - (int)codeword:(long)symbol {
-  long sym = symbol;
-  sym &= 0x3ffff;
+  long sym = symbol & 0x3FFFF;
   int i = [self findCodewordIndex:sym];
   if (i == -1) {
     return -1;

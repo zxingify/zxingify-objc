@@ -36,7 +36,10 @@
   // (01)90012345678908(3103)001750
   NSString* path = @"Resources/blackbox/rssexpanded-1/2.jpg";
   ZXExpandedProductParsedResult* expected =
-    [[[ZXExpandedProductParsedResult alloc] initWithProductID:@"90012345678908" sscc:@"-" lotNumber:@"-" productionDate:@"-" packagingDate:@"-" bestBeforeDate:@"-" expirationDate:@"-" weight:@"001750" weightType:KILOGRAM weightIncrement:@"3" price:@"-" priceIncrement:@"-" priceCurrency:@"-" uncommonAIs:[NSMutableDictionary dictionary]] autorelease];
+    [[[ZXExpandedProductParsedResult alloc] initWithProductID:@"90012345678908" sscc:nil lotNumber:nil productionDate:nil
+                                                packagingDate:nil bestBeforeDate:nil expirationDate:nil weight:@"001750"
+                                                   weightType:KILOGRAM weightIncrement:@"3" price:nil priceIncrement:nil
+                                                priceCurrency:nil uncommonAIs:[NSMutableDictionary dictionary]] autorelease];
 
   [self assertCorrectImage2result:path expected:expected];
 }

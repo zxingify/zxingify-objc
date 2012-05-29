@@ -37,26 +37,28 @@
     return nil;
   }
 
-  NSString * productID = @"-";
-  NSString * sscc = @"-";
-  NSString * lotNumber = @"-";
-  NSString * productionDate = @"-";
-  NSString * packagingDate = @"-";
-  NSString * bestBeforeDate = @"-";
-  NSString * expirationDate = @"-";
-  NSString * weight = @"-";
-  NSString * weightType = @"-";
-  NSString * weightIncrement = @"-";
-  NSString * price = @"-";
-  NSString * priceIncrement = @"-";
-  NSString * priceCurrency = @"-";
+  NSString * productID = nil;
+  NSString * sscc = nil;
+  NSString * lotNumber = nil;
+  NSString * productionDate = nil;
+  NSString * packagingDate = nil;
+  NSString * bestBeforeDate = nil;
+  NSString * expirationDate = nil;
+  NSString * weight = nil;
+  NSString * weightType = nil;
+  NSString * weightIncrement = nil;
+  NSString * price = nil;
+  NSString * priceIncrement = nil;
+  NSString * priceCurrency = nil;
   NSMutableDictionary * uncommonAIs = [NSMutableDictionary dictionary];
 
   int i = 0;
 
   while (i < [rawText length]) {
     NSString * ai = [self findAIvalue:i rawText:rawText];
-    if ([@"ERROR" isEqualToString:ai]) {
+    if (ai == nil) {
+      // Error. Code doesn't match with RSS expanded pattern
+      // ExtendedProductParsedResult NOT created. Not match with RSS Expanded pattern
       return nil;
     }
     i += [ai length] + 2;
@@ -120,33 +122,21 @@
   NSMutableString * buf = [NSMutableString string];
   unichar c = [rawText characterAtIndex:i];
   if (c != '(') {
-    return @"ERROR";
+    return nil;
   }
 
   NSString * rawTextAux = [rawText substringFromIndex:i + 1];
 
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar currentChar = [rawTextAux characterAtIndex:index];
-    switch (currentChar) {
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-      [buf appendFormat:@"%C", currentChar];
-      break;
-    case ')':
+    if (currentChar == ')') {
       return [NSString stringWithString:buf];
-    default:
-      return @"ERROR";
+    } else if (currentChar >= '0' && currentChar <= '9') {
+      [buf appendFormat:@"%C", currentChar];
+    } else {
+      return nil;
     }
   }
-
   return [NSString stringWithString:buf];
 }
 
@@ -157,7 +147,7 @@
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar c = [rawTextAux characterAtIndex:index];
     if (c == '(') {
-      if ([@"ERROR" isEqualToString:[self findAIvalue:index rawText:rawTextAux]]) {
+      if ([self findAIvalue:index rawText:rawTextAux] == nil) {
         [buf appendString:@"("];
       } else {
         break;

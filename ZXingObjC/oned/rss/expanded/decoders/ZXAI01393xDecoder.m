@@ -22,25 +22,25 @@
 
 @implementation ZXAI01393xDecoder
 
-int const AI01393xDecoderHeaderSize = 5 + 1 + 2;
-int const AI01393xDecoderLastDigitSize = 2;
-int const AI01393xDecoderFirstThreeDigitsSize = 10;
+int const AI01393xDecoder_HEADER_SIZE = 5 + 1 + 2;
+int const AI01393xDecoder_LAST_DIGIT_SIZE = 2;
+int const AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
 
 - (NSString *)parseInformationWithError:(NSError **)error {
-  if (self.information.size < AI01393xDecoderHeaderSize + gtinSize) {
+  if (self.information.size < AI01393xDecoder_HEADER_SIZE + GTIN_SIZE) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
   NSMutableString * buf = [NSMutableString string];
 
-  [self encodeCompressedGtin:buf currentPos:AI01393xDecoderHeaderSize];
+  [self encodeCompressedGtin:buf currentPos:AI01393xDecoder_HEADER_SIZE];
 
-  int lastAIdigit = [self.generalDecoder extractNumericValueFromBitArray:AI01393xDecoderHeaderSize + gtinSize bits:AI01393xDecoderLastDigitSize];
+  int lastAIdigit = [self.generalDecoder extractNumericValueFromBitArray:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE bits:AI01393xDecoder_LAST_DIGIT_SIZE];
 
   [buf appendFormat:@"(393%d)", lastAIdigit];
 
-  int firstThreeDigits = [self.generalDecoder extractNumericValueFromBitArray:AI01393xDecoderHeaderSize + gtinSize + AI01393xDecoderLastDigitSize bits:AI01393xDecoderFirstThreeDigitsSize];
+  int firstThreeDigits = [self.generalDecoder extractNumericValueFromBitArray:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE + AI01393xDecoder_LAST_DIGIT_SIZE bits:AI01393xDecoder_FIRST_THREE_DIGITS_SIZE];
   if (firstThreeDigits / 100 == 0) {
     [buf appendString:@"0"];
   }
@@ -49,7 +49,7 @@ int const AI01393xDecoderFirstThreeDigitsSize = 10;
   }
   [buf appendFormat:@"%d", firstThreeDigits];
 
-  ZXDecodedInformation * generalInformation = [self.generalDecoder decodeGeneralPurposeField:AI01393xDecoderHeaderSize + gtinSize + AI01393xDecoderLastDigitSize + AI01393xDecoderFirstThreeDigitsSize remaining:nil];
+  ZXDecodedInformation * generalInformation = [self.generalDecoder decodeGeneralPurposeField:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE + AI01393xDecoder_LAST_DIGIT_SIZE + AI01393xDecoder_FIRST_THREE_DIGITS_SIZE remaining:nil];
   [buf appendString:generalInformation.theNewString];
 
   return buf;

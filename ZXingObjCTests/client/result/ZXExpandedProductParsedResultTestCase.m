@@ -25,12 +25,12 @@
 - (void)test_RSSExpanded {
   NSString* text = @"(01)66546(13)001205(3932)4455(3102)6544(123)544654";
   NSString* productID = @"66546";
-  NSString* sscc = @"-";
-  NSString* lotNumber = @"-";
-  NSString* productionDate = @"-";
+  NSString* sscc = nil;
+  NSString* lotNumber = nil;
+  NSString* productionDate = nil;
   NSString* packagingDate = @"001205";
-  NSString* bestBeforeDate = @"-";
-  NSString* expirationDate = @"-";
+  NSString* bestBeforeDate = nil;
+  NSString* expirationDate = nil;
   NSString* weight = @"6544";
   NSString* weightType = @"KG";
   NSString* weightIncrement = @"2";

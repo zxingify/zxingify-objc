@@ -75,10 +75,9 @@
   do {
     ZXDecodedInformation * info = [self decodeGeneralPurposeField:currentPosition remaining:remaining];
     NSString * parsedFields = [ZXFieldParser parseFieldsInGeneralPurpose:[info theNewString] error:error];
-    if (!parsedFields) {
-      return nil;
+    if (parsedFields) {
+      [buff appendString:parsedFields];
     }
-    [buff appendString:parsedFields];
     if ([info remaining]) {
       remaining = [[NSNumber numberWithInt:[info remainingValue]] stringValue];
     } else {

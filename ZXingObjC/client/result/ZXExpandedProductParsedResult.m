@@ -36,6 +36,8 @@ NSString * const POUND = @"LB";
 @property (nonatomic, copy) NSString * priceCurrency;
 @property (nonatomic, retain) NSMutableDictionary * uncommonAIs;
 
+- (BOOL)equalsOrNil:(id)o1 o2:(id)o2;
+
 @end
 
 @implementation ZXExpandedProductParsedResult
@@ -119,36 +121,41 @@ NSString * const POUND = @"LB";
 
   ZXExpandedProductParsedResult * other = (ZXExpandedProductParsedResult *)o;
 
-  return [productID isEqualToString:other.productID] &&
-    [sscc isEqualToString:other.sscc] &&
-    [lotNumber isEqualToString:other.lotNumber] &&
-    [productionDate isEqualToString:other.productionDate] &&
-    [bestBeforeDate isEqualToString:other.bestBeforeDate] &&
-    [expirationDate isEqualToString:other.expirationDate] &&
-    [weight isEqualToString:other.weight] &&
-    [weightType isEqualToString:other.weightType] &&
-    [weightIncrement isEqualToString:other.weightIncrement] &&
-    [price isEqualToString:other.price] &&
-    [priceIncrement isEqualToString:other.priceIncrement] &&
-    [priceCurrency isEqualToString:other.priceCurrency] &&
-    [uncommonAIs isEqual:other.uncommonAIs];
+  return [self equalsOrNil:productID o2:other.productID]
+    && [self equalsOrNil:sscc o2:other.sscc]
+    && [self equalsOrNil:lotNumber o2:other.lotNumber]
+    && [self equalsOrNil:productionDate o2:other.productionDate]
+    && [self equalsOrNil:bestBeforeDate o2:other.bestBeforeDate]
+    && [self equalsOrNil:expirationDate o2:other.expirationDate]
+    && [self equalsOrNil:weight o2:other.weight]
+    && [self equalsOrNil:weightType o2:other.weightType]
+    && [self equalsOrNil:weightIncrement o2:other.weightIncrement]
+    && [self equalsOrNil:price o2:other.price]
+    && [self equalsOrNil:priceIncrement o2:other.priceIncrement]
+    && [self equalsOrNil:priceCurrency o2:other.priceCurrency]
+    && [self equalsOrNil:uncommonAIs o2:other.uncommonAIs];
+}
+
+- (BOOL)equalsOrNil:(id)o1 o2:(id)o2 {
+  return o1 == nil ? o2 == nil : [o1 isEqual:o2];
 }
 
 - (NSUInteger)hash {
-  int hash1 = [productID hash];
-  hash1 = 31 * hash1 + [sscc hash];
-  hash1 = 31 * hash1 + [lotNumber hash];
-  hash1 = 31 * hash1 + [productionDate hash];
-  hash1 = 31 * hash1 + [bestBeforeDate hash];
-  hash1 = 31 * hash1 + [expirationDate hash];
-  hash1 = 31 * hash1 + [weight hash];
-  int hash2 = [weightType hash];
-  hash2 = 31 * hash2 + [weightIncrement hash];
-  hash2 = 31 * hash2 + [price hash];
-  hash2 = 31 * hash2 + [priceIncrement hash];
-  hash2 = 31 * hash2 + [priceCurrency hash];
-  hash2 = 31 * hash2 + [uncommonAIs hash];
-  return hash1 ^ hash2;
+  int hash = 0;
+  hash ^= [productID hash];
+  hash ^= [sscc hash];
+  hash ^= [lotNumber hash];
+  hash ^= [productionDate hash];
+  hash ^= [bestBeforeDate hash];
+  hash ^= [expirationDate hash];
+  hash ^= [weight hash];
+  hash ^= [weightType hash];
+  hash ^= [weightIncrement hash];
+  hash ^= [price hash];
+  hash ^= [priceIncrement hash];
+  hash ^= [priceCurrency hash];
+  hash ^= [uncommonAIs hash];
+  return hash;
 }
 
 @end
