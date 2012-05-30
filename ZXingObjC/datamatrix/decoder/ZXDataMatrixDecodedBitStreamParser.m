@@ -143,7 +143,7 @@ const int BASE256_ENCODE = 6;
       return -1;
     } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
       oneByte = upperShift ? oneByte + 128 : oneByte;
-      upperShift = NO;
+      //upperShift = NO;
       [result appendFormat:@"%C", (unichar)(oneByte - 1)];
       return ASCII_ENCODE;
     } else if (oneByte == 129) {  // Pad
