@@ -134,6 +134,12 @@
   int left = [[leftTopBlack objectAtIndex:0] intValue];
   int right = [[rightBottomBlack objectAtIndex:0] intValue];
 
+  if (bottom - top != right - left) {
+    // Special case, where bottom-right module wasn't black so we found something else in the last row
+    // Assume it's a square, so use height as the width
+    right = left + (bottom - top);
+  }
+
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
   if (matrixWidth <= 0 || matrixHeight <= 0) {
