@@ -822,6 +822,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     if (columnNumber > 0) {
       int cw = [self codeword:symbol];
       if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
+        if (eraseCount >= erasures.count) {
+          return -1;
+        }
         [self.erasures addObject:[NSNumber numberWithInt:next]];
         next++;
         self.eraseCount++;
