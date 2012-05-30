@@ -23,12 +23,10 @@
 + (ZXURIParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   // We specifically handle the odd "URL" scheme here for simplicity
-  if (rawText != nil && [rawText hasPrefix:@"URL:"]) {
+  if ([rawText hasPrefix:@"URL:"]) {
     rawText = [rawText substringFromIndex:4];
   }
-  if (rawText != nil) {
-    rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-  }
+  rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
   if (![self isBasicallyValidURI:rawText]) {
     return nil;
   }

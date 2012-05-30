@@ -44,10 +44,6 @@
 
 - (id)initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
   if (self = [super initWithType:kParsedResultTypeCalendar]) {
-    if (aStart == nil) {
-      [NSException raise:NSInvalidArgumentException 
-                  format:@"Start is required"];
-    }
     [self validateDate:aStart];
     if (anEnd == nil) {
       anEnd = aStart;

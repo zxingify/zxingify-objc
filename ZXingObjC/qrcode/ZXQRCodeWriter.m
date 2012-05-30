@@ -37,7 +37,7 @@ int const QUIET_ZONE_SIZE = 4;
 }
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
-  if (contents == nil || [contents length] == 0) {
+  if ([contents length] == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Found empty contents"];
   }
 
@@ -64,6 +64,9 @@ int const QUIET_ZONE_SIZE = 4;
 
 - (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height {
   ZXByteMatrix * input = code.matrix;
+  if (input == nil) {
+    return nil;
+  }
   int inputWidth = input.width;
   int inputHeight = input.height;
   int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);

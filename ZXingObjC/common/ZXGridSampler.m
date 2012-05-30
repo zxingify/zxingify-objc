@@ -32,9 +32,6 @@ static ZXGridSampler * gridSampler = nil;
  * an implementation that takes advantage of native platform libraries.
  */
 + (void) setGridSampler:(ZXGridSampler *)newGridSampler {
-  if (newGridSampler == nil) {
-    [NSException raise:NSInvalidArgumentException format:@"Grid sampler must be non-null."];
-  }
   gridSampler = newGridSampler;
 }
 

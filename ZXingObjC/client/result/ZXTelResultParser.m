@@ -21,7 +21,7 @@
 
 + (ZXTelParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil || (![rawText hasPrefix:@"tel:"] && ![rawText hasPrefix:@"TEL:"])) {
+  if (![rawText hasPrefix:@"tel:"] && ![rawText hasPrefix:@"TEL:"]) {
     return nil;
   }
   NSString * telURI = [rawText hasPrefix:@"TEL:"] ? [@"tel:" stringByAppendingString:[rawText substringFromIndex:4]] : rawText;

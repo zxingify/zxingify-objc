@@ -34,6 +34,7 @@ const int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
   // Normal case
   ZXFormatInformation *expected =
     [ZXFormatInformation decodeFormatInformation:MASKED_TEST_FORMAT_INFO maskedFormatInfo2:MASKED_TEST_FORMAT_INFO];
+  STAssertNotNil(expected, @"Expected expected to be non-nil");
   STAssertEquals(expected.dataMask, (char) 0x07, @"Expected data mask to equal 0x07");
   STAssertEqualObjects(expected.errorCorrectionLevel, [ZXErrorCorrectionLevel errorCorrectionLevelQ],
                        @"Expected error correction level to be Q");

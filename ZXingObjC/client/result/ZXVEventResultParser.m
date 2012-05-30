@@ -39,6 +39,9 @@
 
   NSString * summary = [self matchSingleVCardPrefixedField:@"SUMMARY" rawText:rawText trim:YES];
   NSString * start = [self matchSingleVCardPrefixedField:@"DTSTART" rawText:rawText trim:YES];
+  if (start == nil) {
+    return nil;
+  }
   NSString * end = [self matchSingleVCardPrefixedField:@"DTEND" rawText:rawText trim:YES];
   NSString * location = [self matchSingleVCardPrefixedField:@"LOCATION" rawText:rawText trim:YES];
   NSString * description = [self matchSingleVCardPrefixedField:@"DESCRIPTION" rawText:rawText trim:YES];

@@ -29,7 +29,7 @@
 
 + (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil || ![rawText hasPrefix:@"BIZCARD:"]) {
+  if (![rawText hasPrefix:@"BIZCARD:"]) {
     return nil;
   }
   NSString * firstName = [self matchSingleDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];

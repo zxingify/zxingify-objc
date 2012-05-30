@@ -175,9 +175,11 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   case '9':
     if ([@"90000" isEqualToString:raw]) {
       return nil;
-    } else if ([@"99991" isEqualToString:raw]) {
+    }
+    if ([@"99991" isEqualToString:raw]) {
       return @"0.00";
-    } else if ([@"99990" isEqualToString:raw]) {
+    }
+    if ([@"99990" isEqualToString:raw]) {
       return @"Used";
     }
     currency = @"";

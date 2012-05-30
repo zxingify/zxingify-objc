@@ -121,6 +121,9 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 
 - (ZXResult *)translateResultPoints:(ZXResult *)result xOffset:(int)xOffset yOffset:(int)yOffset {
   NSArray * oldResultPoints = [result resultPoints];
+  if (oldResultPoints == nil) {
+    return result;
+  }
   NSMutableArray * newResultPoints = [NSMutableArray arrayWithCapacity:[oldResultPoints count]];
   for (ZXResultPoint * oldPoint in oldResultPoints) {
     [newResultPoints addObject:[[[ZXResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset] autorelease]];

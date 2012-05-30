@@ -22,9 +22,6 @@
 
 + (ZXEmailAddressParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil) {
-    return nil;
-  }
   if (!([rawText hasPrefix:@"smtp:"] || [rawText hasPrefix:@"SMTP:"])) {
     return nil;
   }

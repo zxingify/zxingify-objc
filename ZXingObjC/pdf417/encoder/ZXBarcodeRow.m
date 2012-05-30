@@ -71,8 +71,8 @@
 
 - (unsigned char*)scaledRow:(int)scale {
   unsigned char* output = (unsigned char*)malloc(self.rowLength * scale);
-  for (int ii = 0; ii < self.rowLength * scale; ii++) {
-    output[ii] = row[ii / scale];
+  for (int i = 0; i < self.rowLength * scale; i++) {
+    output[i] = row[i / scale];
   }
   return output;
 }

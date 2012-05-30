@@ -41,6 +41,7 @@
 
   ZXResult* result = [[[ZXResult alloc] initWithText:text rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatRSSExpanded] autorelease];
   ZXExpandedProductParsedResult* o = [ZXExpandedProductResultParser parse:result];
+  STAssertNotNil(o, @"Expected result to be non-nil");
   STAssertEqualObjects(o.productID, productID, @"Product IDs don't match");
   STAssertEqualObjects(o.sscc, sscc, @"Sscc doesn't match");
   STAssertEqualObjects(o.lotNumber, lotNumber, @"Lot numbers don't match");

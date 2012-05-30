@@ -44,12 +44,6 @@
 
 - (id)initWithText:(NSString *)aText rawBytes:(unsigned char *)aRawBytes length:(unsigned int)aLength resultPoints:(NSArray *)aResultPoints format:(ZXBarcodeFormat)aFormat timestamp:(long)aTimestamp {
   if (self = [super init]) {
-    if (aText == nil && aRawBytes == nil) {
-      @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                     reason:@"Text and bytes are null"
-                                   userInfo:nil];
-    }
-
     self.text = aText;
     if (aRawBytes != NULL && aLength > 0) {
       self.rawBytes = (unsigned char*)malloc(aLength * sizeof(unsigned char));
@@ -110,11 +104,7 @@
 }
 
 - (NSString *)description {
-  if (self.text == nil) {
-    return [NSString stringWithFormat:@"[%d]", self.length];
-  } else {
-    return self.text;
-  }
+  return self.text;
 }
 
 @end

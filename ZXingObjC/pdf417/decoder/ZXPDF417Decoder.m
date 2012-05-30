@@ -57,7 +57,7 @@ int const MAX_EC_CODEWORDS = 512;
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
   ZXPDF417BitMatrixParser * parser = [[[ZXPDF417BitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
   NSMutableArray * codewords = [[[parser readCodewords] mutableCopy] autorelease];
-  if (codewords == nil || [codewords count] == 0) {
+  if (codewords.count == 0) {
     if (error) *error = FormatErrorInstance();
     return nil;
   }
@@ -104,19 +104,17 @@ int const MAX_EC_CODEWORDS = 512;
  * correct the errors in-place using Reed-Solomon error correction.
  */
 - (int)correctErrors:(NSArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords {
-  if ((erasures != nil && [erasures count] > numECCodewords / 2 + MAX_ERRORS) || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
+  if (erasures.count > numECCodewords / 2 + MAX_ERRORS || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
     return -1;
   }
 
   int result = 0;
-  if (erasures != nil) {
-    int numErasures = erasures.count;
-    if (result > 0) {
-      numErasures -= result;
-    }
-    if (numErasures > MAX_ERRORS) {
-      return -1;
-    }
+  int numErasures = erasures.count;
+  if (result > 0) {
+    numErasures -= result;
+  }
+  if (numErasures > MAX_ERRORS) {
+    return -1;
   }
   return result;
 }

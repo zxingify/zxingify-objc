@@ -62,7 +62,8 @@
 + (ZXAbstractExpandedDecoder *)createDecoder:(ZXBitArray *)information {
   if ([information get:1]) {
     return [[[ZXAI01AndOtherAIs alloc] initWithInformation:information] autorelease];
-  } else if (![information get:2]) {
+  }
+  if (![information get:2]) {
     return [[[ZXAnyAIDecoder alloc] initWithInformation:information] autorelease];
   }
 

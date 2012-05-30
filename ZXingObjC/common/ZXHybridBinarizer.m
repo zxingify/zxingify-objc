@@ -22,7 +22,6 @@ int const MINIMUM_DIMENSION = 40;
 
 @property (nonatomic, retain) ZXBitMatrix * matrix;
 
-- (BOOL)binarizeEntireImageWithError:(NSError**)error;
 - (NSArray *)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
 - (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
 - (void)threshold8x8Block:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
@@ -48,50 +47,39 @@ int const MINIMUM_DIMENSION = 40;
 }
 
 - (ZXBitMatrix *)blackMatrixWithError:(NSError **)error {
-  if (![self binarizeEntireImageWithError:error]) {
-    return nil;
+  // Calculates the final BitMatrix once for all requests. This could be called once from the
+  // constructor instead, but there are some advantages to doing it lazily, such as making
+  // profiling easier, and not doing heavy lifting when callers don't expect it.
+  if (self.matrix != nil) {
+    return self.matrix;
   }
-  return matrix;
+  ZXLuminanceSource * source = [self luminanceSource];
+  if ([source width] >= MINIMUM_DIMENSION && [source height] >= MINIMUM_DIMENSION) {
+    unsigned char * _luminances = source.matrix;
+    int width = source.width;
+    int height = source.height;
+    int subWidth = width >> 3;
+    if ((width & 0x07) != 0) {
+      subWidth++;
+    }
+    int subHeight = height >> 3;
+    if ((height & 0x07) != 0) {
+      subHeight++;
+    }
+    NSArray * blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
+
+    ZXBitMatrix * newMatrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
+    [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
+    self.matrix = newMatrix;
+  } else {
+    // If the image is too small, fall back to the global histogram approach.
+    self.matrix = [super blackMatrixWithError:error];
+  }
+  return self.matrix;
 }
 
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source {
   return [[[ZXHybridBinarizer alloc] initWithSource:source] autorelease];
-}
-
-// Calculates the final BitMatrix once for all requests. This could be called once from the
-// constructor instead, but there are some advantages to doing it lazily, such as making
-// profiling easier, and not doing heavy lifting when callers don't expect it.
-- (BOOL)binarizeEntireImageWithError:(NSError **)error {
-  if (self.matrix == nil) {
-    ZXLuminanceSource * source = [self luminanceSource];
-    if ([source width] >= MINIMUM_DIMENSION && [source height] >= MINIMUM_DIMENSION) {
-      unsigned char * _luminances = source.matrix;
-      int width = source.width;
-      int height = source.height;
-      int subWidth = width >> 3;
-      if ((width & 0x07) != 0) {
-        subWidth++;
-      }
-      int subHeight = height >> 3;
-      if ((height & 0x07) != 0) {
-        subHeight++;
-      }
-      NSArray * blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
-      matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
-      [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:matrix];
-
-      if (_luminances) {
-        free(_luminances);
-        _luminances = NULL;
-      }
-    } else {
-      self.matrix = [super blackMatrixWithError:error];
-      if (!self.matrix) {
-        return NO;
-      }
-    }
-  }
-  return YES;
 }
 
 // For each 8x8 block in the image, calculate the average black point using a 5x5 grid

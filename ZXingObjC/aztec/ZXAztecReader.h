@@ -18,6 +18,9 @@
 
 @class ZXBinaryBitmap, ZXDecodeHints, ZXResult;
 
+/**
+ * This implementation can detect and decode Aztec codes in an image.
+ */
 @interface ZXAztecReader : NSObject <ZXReader>
 
 @end

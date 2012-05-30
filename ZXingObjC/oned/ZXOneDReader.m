@@ -37,6 +37,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   return [self decode:image hints:nil error:error];
 }
 
+// Note that we don't try rotation without the try harder flag, even if rotation was supported.
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError**)error {
   NSError* decodeError = nil;
   ZXResult* result = [self doDecode:image hints:hints error:&decodeError];
@@ -50,22 +51,25 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       if (!result) {
         return nil;
       }
+      // Record that we found it rotated 90 degrees CCW / 270 degrees CW
       NSMutableDictionary * metadata = [result resultMetadata];
       int orientation = 270;
       if (metadata != nil && [metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) {
+        // But if we found it reversed in doDecode(), add in that result here:
         orientation = (orientation + [((NSNumber *)[metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) intValue]) % 360;
       }
       [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:orientation]];
+      // Update result points
       NSMutableArray * points = [result resultPoints];
-      int height = [rotatedImage height];
-
-      for (int i = 0; i < [points count]; i++) {
-        [points replaceObjectAtIndex:i
-                          withObject:[[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint*)[points objectAtIndex:i] y]             
-                                                                     y:[(ZXResultPoint*)[points objectAtIndex:i] x]]
-                                      autorelease]];
+      if (points != nil) {
+        int height = [rotatedImage height];
+        for (int i = 0; i < [points count]; i++) {
+          [points replaceObjectAtIndex:i
+                            withObject:[[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint*)[points objectAtIndex:i] y]
+                                                                       y:[(ZXResultPoint*)[points objectAtIndex:i] x]]
+                                        autorelease]];
+        }
       }
-
       return result;
     }
   }
@@ -133,14 +137,16 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
         if (attempt == 1) {
           [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:180]];
           NSMutableArray * points = [result resultPoints];
-          [points replaceObjectAtIndex:0
-                            withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:0] x]
-                                                                       y:[(ZXResultPoint*)[points objectAtIndex:0] y]]
-                                        autorelease]];
-          [points replaceObjectAtIndex:1
-                            withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:1] x]
-                                                                       y:[(ZXResultPoint*)[points objectAtIndex:1] y]]
-                                        autorelease]];
+          if (points != nil) {
+            [points replaceObjectAtIndex:0
+                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:0] x]
+                                                                         y:[(ZXResultPoint*)[points objectAtIndex:0] y]]
+                                          autorelease]];
+            [points replaceObjectAtIndex:1
+                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:1] x]
+                                                                         y:[(ZXResultPoint*)[points objectAtIndex:1] y]]
+                                          autorelease]];
+          }
         }
         return result;
       }

@@ -267,7 +267,7 @@
 - (void)doTestResultWithContents:(NSString*)contents
                     goldenResult:(NSString*)goldenResult
                             type:(ZXParsedResultType)type {
-  [self doTestResultWithContents:contents goldenResult:goldenResult type:type format:-1];
+  [self doTestResultWithContents:contents goldenResult:goldenResult type:type format:kBarcodeFormatQRCode]; // QR code is arbitrary
 }
 
 - (void)doTestResultWithContents:(NSString*)contents

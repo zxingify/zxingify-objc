@@ -46,11 +46,13 @@
                                                    length:decoderResult.length
                                              resultPoints:points
                                                    format:kBarcodeFormatQRCode] autorelease];
-      if (decoderResult.byteSegments != nil) {
-        [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
+      NSMutableArray* byteSegments = decoderResult.byteSegments;
+      if (byteSegments != nil) {
+        [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];
       }
-      if (decoderResult.ecLevel != nil) {
-        [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[decoderResult.ecLevel description]];
+      NSString* ecLevel = decoderResult.ecLevel;
+      if (ecLevel != nil) {
+        [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
       }
       [results addObject:result];
     }

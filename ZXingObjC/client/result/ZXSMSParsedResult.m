@@ -76,7 +76,7 @@
       [result appendString:@","];
     }
     [result appendString:[numbers objectAtIndex:i]];
-    if ([vias objectAtIndex:i] != nil) {
+    if (vias != nil && [vias objectAtIndex:i] != nil) {
       [result appendString:@";via="];
       [result appendString:[vias objectAtIndex:i]];
     }

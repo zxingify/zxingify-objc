@@ -47,6 +47,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 + (void)appendECI:(ZXECI *)eci bits:(ZXBitArray *)bits;
 + (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(int)version matrix:(ZXByteMatrix *)matrix error:(NSError**)error;
++ (ZXMode *)chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding;
 + (BOOL)initQRCode:(int)numInputBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel mode:(ZXMode *)mode qrCode:(ZXQRCode *)qrCode error:(NSError**)error;
 + (BOOL)isOnlyDoubleByteKanji:(NSString *)content;
 + (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion*)version mode:(ZXMode*)mode;
@@ -194,7 +195,8 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
   if (hasAlphanumeric) {
     return [ZXMode alphanumericMode];
-  } else if (hasNumeric) {
+  }
+  if (hasNumeric) {
     return [ZXMode numericMode];
   }
   return [ZXMode byteMode];

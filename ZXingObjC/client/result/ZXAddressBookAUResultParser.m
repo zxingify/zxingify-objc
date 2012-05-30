@@ -29,8 +29,7 @@
 + (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
 
-  if (rawText == nil ||
-      [rawText rangeOfString:@"MEMORY"].location == NSNotFound ||
+  if ([rawText rangeOfString:@"MEMORY"].location == NSNotFound ||
       [rawText rangeOfString:@"\r\n"].location == NSNotFound) {
     return nil;
   }

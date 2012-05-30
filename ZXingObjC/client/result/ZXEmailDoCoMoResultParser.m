@@ -30,7 +30,7 @@ const unichar ATEXT_SYMBOLS[21] = {'@','.','!','#','$','%','&','\'','*','+','-',
 
 + (ZXEmailAddressParsedResult *) parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil || ![rawText hasPrefix:@"MATMSG:"]) {
+  if (![rawText hasPrefix:@"MATMSG:"]) {
     return nil;
   }
   NSArray * rawTo = [self matchDoCoMoPrefixedField:@"TO:" rawText:rawText trim:YES];

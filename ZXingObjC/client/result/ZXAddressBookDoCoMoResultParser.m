@@ -28,7 +28,7 @@
 
 + (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil || ![rawText hasPrefix:@"MECARD:"]) {
+  if (![rawText hasPrefix:@"MECARD:"]) {
     return nil;
   }
   NSArray * rawName = [self matchDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];

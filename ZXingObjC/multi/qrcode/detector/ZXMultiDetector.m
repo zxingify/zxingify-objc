@@ -23,7 +23,7 @@
 - (NSArray *)detectMulti:(ZXDecodeHints *)hints error:(NSError**)error {
   ZXMultiFinderPatternFinder * finder = [[[ZXMultiFinderPatternFinder alloc] initWithImage:self.image] autorelease];
   NSArray * info = [finder findMulti:hints error:error];
-  if (info == nil || [info count] == 0) {
+  if ([info count] == 0) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }

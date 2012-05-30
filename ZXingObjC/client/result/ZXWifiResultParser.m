@@ -23,14 +23,20 @@
 + (ZXWifiParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
 
-  if (rawText == nil || ![rawText hasPrefix:@"WIFI:"]) {
+  if (![rawText hasPrefix:@"WIFI:"]) {
     return nil;
   }
-
+  // Don't remove leading or trailing whitespace
   BOOL trim = NO;
   NSString * ssid = [self matchSinglePrefixedField:@"S:" rawText:rawText endChar:';' trim:trim];
+  if (ssid == nil || ssid.length == 0) {
+    return nil;
+  }
   NSString * pass = [self matchSinglePrefixedField:@"P:" rawText:rawText endChar:';' trim:trim];
   NSString * type = [self matchSinglePrefixedField:@"T:" rawText:rawText endChar:';' trim:trim];
+  if (type == nil) {
+    type = @"nopass";
+  }
 
   return [[[ZXWifiParsedResult alloc] initWithNetworkEncryption:type ssid:ssid password:pass] autorelease];
 }

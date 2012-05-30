@@ -27,11 +27,8 @@
     return nil;
   }
   NSString * rawText = [result text];
-  if (rawText == nil) {
-    return nil;
-  }
-  int length = [rawText length];
 
+  int length = [rawText length];
   for (int x = 0; x < length; x++) {
     unichar c = [rawText characterAtIndex:x];
     if (c < '0' || c > '9') {

@@ -78,11 +78,6 @@
 }
 
 - (int)characterCountBits:(ZXQRCodeVersion *)version {
-  if (self.characterCountBitsForVersions == nil) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:@"Character count doesn't apply to this mode"
-                                 userInfo:nil];
-  }
   int number = version.versionNumber;
   int offset;
   if (number <= 9) {

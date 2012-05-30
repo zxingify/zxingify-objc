@@ -22,9 +22,6 @@
 
 + (ZXSMSParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil) {
-    return nil;
-  }
   if (!([rawText hasPrefix:@"smsto:"] || [rawText hasPrefix:@"SMSTO:"] || [rawText hasPrefix:@"mmsto:"] || [rawText hasPrefix:@"MMSTO:"])) {
     return nil;
   }

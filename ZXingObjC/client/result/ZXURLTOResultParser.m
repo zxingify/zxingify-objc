@@ -22,7 +22,7 @@
 
 + (ZXURIParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = result.text;
-  if (rawText == nil || (![rawText hasPrefix:@"urlto:"] && ![rawText hasPrefix:@"URLTO:"])) {
+  if (![rawText hasPrefix:@"urlto:"] && ![rawText hasPrefix:@"URLTO:"]) {
     return nil;
   }
   int titleEnd = [rawText rangeOfString:@":" options:NSLiteralSearch range:NSMakeRange(6, [rawText length] - 6)].location;

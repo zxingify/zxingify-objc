@@ -502,6 +502,7 @@ const int PDF_CODEWORD_TABLE[CODEWORD_TABLE_LEN][CODEWORD_TABLE_SUB_LEN] = {
     0x107a4, 0x107a2, 0x10396, 0x107b6, 0x187d4, 0x187d2,
     0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea}};
 
+static float PREFERRED_RATIO = 3.0f;
 static float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
 static float HEIGHT = 2.0f; //mm
 
@@ -687,11 +688,7 @@ static float HEIGHT = 2.0f; //mm
   int sourceCodeWords = highLevel.length;
 
   int dimension[2] = {0};
-  if (![self determineDimensions:dimension sourceCodeWords:sourceCodeWords]) {
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Unable to fit message in columns."
-                                                         forKey:NSLocalizedDescriptionKey];
-
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+  if (![self determineDimensions:dimension sourceCodeWords:sourceCodeWords error:error]) {
     return NO;
   }
 
@@ -735,7 +732,7 @@ static float HEIGHT = 2.0f; //mm
  * Determine optimal nr of columns and rows for the specified number of
  * codewords.
  */
-- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords {
+- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords error:(NSError **)error {
 
   float ratio = 0.0f;
   BOOL result = NO;
@@ -756,8 +753,7 @@ static float HEIGHT = 2.0f; //mm
     float newRatio = ((17 * cols + 69) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
 
     // ignore if previous ratio is closer to preferred ratio
-    float preferredRatio = 3.0f;
-    if (result && fabsf(newRatio - preferredRatio) > fabsf(ratio - preferredRatio)) {
+    if (result && fabsf(newRatio - PREFERRED_RATIO) > fabsf(ratio - PREFERRED_RATIO)) {
       continue;
     }
 
@@ -765,6 +761,14 @@ static float HEIGHT = 2.0f; //mm
     dimension[0] = cols;
     dimension[1] = rows;
     result = YES;
+  }
+
+  if (!result) {
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Unable to fit message in columns"
+                                                         forKey:NSLocalizedDescriptionKey];
+
+    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    return NO;
   }
 
   return result;

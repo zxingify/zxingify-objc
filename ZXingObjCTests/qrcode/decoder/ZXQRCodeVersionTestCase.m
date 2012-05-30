@@ -21,6 +21,7 @@
 @interface ZXQRCodeVersionTestCase ()
 
 - (void)checkVersion:(ZXQRCodeVersion*)version number:(int)number dimension:(int)dimension;
+- (void)doTestVersion:(int)expectedVersion mask:(int)mask;
 
 @end
 
@@ -63,18 +64,18 @@
 
 - (void)testDecodeVersionInformation {
   // Spot check
-  STAssertEquals([ZXQRCodeVersion decodeVersionInformation:0x07C94].versionNumber, 7,
-                 @"Expected version number to be 7");
-  STAssertEquals([ZXQRCodeVersion decodeVersionInformation:0x0C762].versionNumber, 12,
-                 @"Expected version number to be 12");
-  STAssertEquals([ZXQRCodeVersion decodeVersionInformation:0x1145D].versionNumber, 17,
-                 @"Expected version number to be 17");
-  STAssertEquals([ZXQRCodeVersion decodeVersionInformation:0x168C9].versionNumber, 22,
-                 @"Expected version number to be 22");
-  STAssertEquals([ZXQRCodeVersion decodeVersionInformation:0x1B08E].versionNumber, 27,
-                 @"Expected version number to be 27");
-  STAssertEquals([ZXQRCodeVersion decodeVersionInformation:0x209D5].versionNumber, 32,
-                 @"Expected version number to be 32");
+  [self doTestVersion:7 mask:0x07C94];
+  [self doTestVersion:12 mask:0x0C762];
+  [self doTestVersion:17 mask:0x1145D];
+  [self doTestVersion:22 mask:0x168C9];
+  [self doTestVersion:27 mask:0x1B08E];
+  [self doTestVersion:32 mask:0x209D5];
+}
+
+- (void)doTestVersion:(int)expectedVersion mask:(int)mask {
+  ZXQRCodeVersion* version = [ZXQRCodeVersion decodeVersionInformation:mask];
+  STAssertNotNil(version, @"Expected version to be non-nil");
+  STAssertEquals(version.versionNumber, expectedVersion, @"Expected version number to be %d", expectedVersion);
 }
 
 @end

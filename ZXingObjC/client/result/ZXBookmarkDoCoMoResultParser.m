@@ -23,7 +23,7 @@
 
 + (ZXURIParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
-  if (rawText == nil || ![rawText hasPrefix:@"MEBKM:"]) {
+  if (![rawText hasPrefix:@"MEBKM:"]) {
     return nil;
   }
   NSString * title = [self matchSingleDoCoMoPrefixedField:@"TITLE:" rawText:rawText trim:YES];

@@ -177,14 +177,17 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
       } else if (b == 0) {
         b = 1;
       }
-      if (b == 1 && encodingMode == TEXT_COMPACTION) {
+      // I don't see how this ever takes value TEXT_COMPACTION?
+      //if (b == 1 && encodingMode == TEXT_COMPACTION) {
+      if (b == 1) {
         //Switch for one byte (instead of latch)
         [self encodeBinary:bytes startpos:p count:1 startmode:TEXT_COMPACTION buffer:sb];
       } else {
         //Mode latch performed by encodeBinary
         [self encodeBinary:bytes startpos:p count:b startmode:encodingMode buffer:sb];
-        encodingMode = BYTE_COMPACTION;
-        textSubMode = SUBMODE_ALPHA; //Reset after latch
+        // ... so this is redundant?
+        //encodingMode = BYTE_COMPACTION;
+        //textSubMode = SUBMODE_ALPHA; //Reset after latch
       }
       p += b;
     }

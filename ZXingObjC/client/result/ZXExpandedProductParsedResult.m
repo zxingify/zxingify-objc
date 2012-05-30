@@ -158,4 +158,8 @@ NSString * const POUND = @"LB";
   return hash;
 }
 
+- (NSString*)displayResult {
+  return self.productID;
+}
+
 @end

@@ -320,10 +320,12 @@ int const GB2312_SUBSET = 1;
   int firstByte = [bits readBits:8];
   if ((firstByte & 0x80) == 0) {
     return firstByte & 0x7F;
-  } else if ((firstByte & 0xC0) == 0x80) {
+  }
+  if ((firstByte & 0xC0) == 0x80) {
     int secondByte = [bits readBits:8];
     return ((firstByte & 0x3F) << 8) | secondByte;
-  } else if ((firstByte & 0xE0) == 0xC0) {
+  }
+  if ((firstByte & 0xE0) == 0xC0) {
     int secondThirdBytes = [bits readBits:16];
     return ((firstByte & 0x1F) << 16) | secondThirdBytes;
   }

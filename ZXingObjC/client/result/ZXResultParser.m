@@ -59,7 +59,7 @@
 
 @implementation ZXResultParser
 
-+ (ZXParsedResult *) parseResult:(ZXResult *)theResult {
++ (ZXParsedResult *)parseResult:(ZXResult *)theResult {
   ZXParsedResult * result = nil;
   if ((result = [ZXBookmarkDoCoMoResultParser parse:theResult]) != nil) {
     return result;
@@ -122,26 +122,24 @@
 }
 
 + (NSString *)unescapeBackslash:(NSString *)escaped {
-  if (escaped != nil) {
-    int backslash = [escaped rangeOfString:@"\\"].location;
-    if (backslash != NSNotFound) {
-      int max = [escaped length];
-      NSMutableString * unescaped = [NSMutableString stringWithCapacity:max - 1];
-      [unescaped appendString:[escaped substringToIndex:backslash]];
-      BOOL nextIsEscaped = NO;
-      for (int i = backslash; i < max; i++) {
-        unichar c = [escaped characterAtIndex:i];
-        if (nextIsEscaped || c != '\\') {
-          [unescaped appendFormat:@"%C", c];
-          nextIsEscaped = NO;
-        } else {
-          nextIsEscaped = YES;
-        }
-      }
-      return unescaped;
+  int backslash = [escaped rangeOfString:@"\\"].location;
+  if (backslash == NSNotFound) {
+    return escaped;
+  }
+  int max = [escaped length];
+  NSMutableString * unescaped = [NSMutableString stringWithCapacity:max - 1];
+  [unescaped appendString:[escaped substringToIndex:backslash]];
+  BOOL nextIsEscaped = NO;
+  for (int i = backslash; i < max; i++) {
+    unichar c = [escaped characterAtIndex:i];
+    if (nextIsEscaped || c != '\\') {
+      [unescaped appendFormat:@"%C", c];
+      nextIsEscaped = NO;
+    } else {
+      nextIsEscaped = YES;
     }
   }
-  return escaped;
+  return [NSString stringWithString:unescaped];
 }
 
 + (NSString *)urlDecode:(NSString *)escaped {

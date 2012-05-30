@@ -42,7 +42,7 @@
   // to throw out everything else we parsed just because this was omitted. In fact, Eclair
   // is doing just that, and we can't parse its contacts without this leniency.
   NSString * rawText = [result text];
-  if (rawText == nil || ![rawText hasPrefix:@"BEGIN:VCARD"]) {
+  if (![rawText hasPrefix:@"BEGIN:VCARD"]) {
     return nil;
   }
   NSMutableArray * names = [self matchVCardPrefixedField:@"FN" rawText:rawText trim:YES];

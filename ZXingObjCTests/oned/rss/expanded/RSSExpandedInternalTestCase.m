@@ -38,17 +38,23 @@
 
   ZXExpandedPair* pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair1];
-  STAssertEquals(pair1.finderPattern.value, 0, @"Expected finderPattern to equal 0");
+  ZXRSSFinderPattern* finderPattern = pair1.finderPattern;
+  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  STAssertEquals(finderPattern.value, 0, @"Expected finderPattern to equal 0");
   STAssertFalse(pair1.mayBeLast, @"Expected mayBeLast to be false");
 
   ZXExpandedPair* pair2 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair2];
-  STAssertEquals(pair2.finderPattern.value, 1, @"Expected finderPattern to equal 1");
+  finderPattern = pair2.finderPattern;
+  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  STAssertEquals(finderPattern.value, 1, @"Expected finderPattern to equal 1");
   STAssertFalse(pair2.mayBeLast, @"Expected mayBeLast to be false");
 
   ZXExpandedPair* pair3 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair3];
-  STAssertEquals(pair3.finderPattern.value, 1, @"Expected finderPattern to equal 1");
+  finderPattern = pair3.finderPattern;
+  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  STAssertEquals(finderPattern.value, 1, @"Expected finderPattern to equal 1");
   STAssertTrue(pair3.mayBeLast, @"Expected mayBeLast to be true");
 
   if ([rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber]) {
@@ -69,12 +75,16 @@
 
   ZXExpandedPair* pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair1];
-  STAssertEquals(pair1.finderPattern.value, 0, @"Expected finderPattern to equal 0");
+  ZXRSSFinderPattern* finderPattern = pair1.finderPattern;
+  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  STAssertEquals(finderPattern.value, 0, @"Expected finderPattern to equal 0");
   STAssertFalse(pair1.mayBeLast, @"Expected mayBeLast to be false");
 
   ZXExpandedPair* pair2 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair2];
-  STAssertEquals(pair2.finderPattern.value, 0, @"Expected finderPattern to equal 0");
+  finderPattern = pair2.finderPattern;
+  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  STAssertEquals(finderPattern.value, 0, @"Expected finderPattern to equal 0");
   STAssertTrue(pair2.mayBeLast, @"Expected mayBeLast to be true");
 }
 

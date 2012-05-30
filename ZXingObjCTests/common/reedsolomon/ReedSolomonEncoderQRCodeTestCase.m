@@ -40,9 +40,10 @@
   ZXReedSolomonEncoder* encoder = [[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
   ZXReedSolomonDecoder* decoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
   for (int i = 0; i < 100; i++) {
-    int size = arc4random() % 1000;
+    int size = 1 + (arc4random() % 1000);
     int toEncode[size];
     int ecBytes = 1 + (arc4random() % (2 * (1 + size / 8)));
+    ecBytes = MIN(ecBytes, size - 1);
     int dataBytes = size - ecBytes;
     for (int j = 0; j < size; j++) {
       if (j < dataBytes) {

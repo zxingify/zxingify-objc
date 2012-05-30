@@ -25,9 +25,6 @@
     return nil;
   }
   NSString * rawText = [result text];
-  if (rawText == nil) {
-    return nil;
-  }
   int length = [rawText length];
   if (length != 13) {
     return nil;

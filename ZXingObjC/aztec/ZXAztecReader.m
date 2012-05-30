@@ -39,15 +39,17 @@
   if (!matrix) {
     return nil;
   }
+
   ZXAztecDetectorResult * detectorResult = [[[[ZXAztecDetector alloc] initWithImage:matrix] autorelease] detectWithError:error];
   if (!detectorResult) {
     return nil;
   }
   NSArray *points = [detectorResult points];
-  if (hints != nil && [detectorResult points] != nil) {
+
+  if (hints != nil) {
     id <ZXResultPointCallback> rpcb = hints.resultPointCallback;
     if (rpcb != nil) {
-      for (ZXResultPoint *p in [detectorResult points]) {
+      for (ZXResultPoint *p in points) {
         [rpcb foundPossibleResultPoint:p];
       }
     }
@@ -63,12 +65,13 @@
                                          resultPoints:points
                                                format:kBarcodeFormatAztec] autorelease];
 
-  if (decoderResult.byteSegments != nil) {
-    [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
+  NSMutableArray *byteSegments = decoderResult.byteSegments;
+  if (byteSegments != nil) {
+    [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];
   }
-
-  if (decoderResult.ecLevel != nil) {
-    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:decoderResult.ecLevel];
+  NSString *ecLevel = decoderResult.ecLevel;
+  if (ecLevel != nil) {
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
   }
 
   return result;

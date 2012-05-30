@@ -16,6 +16,12 @@
 
 #import "ZXRSSUtils.h"
 
+@interface ZXRSSUtils ()
+
++ (int)combins:(int)n r:(int)r;
+
+@end
+
 @implementation ZXRSSUtils
 
 + (NSArray *)rssWidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {

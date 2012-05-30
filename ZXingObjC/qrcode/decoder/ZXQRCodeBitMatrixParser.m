@@ -125,8 +125,9 @@
 
   }
 
-  self.parsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
-  if (self.parsedVersion != nil && [self.parsedVersion dimensionForVersion] == dimension) {
+  ZXQRCodeVersion *theParsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
+  if (theParsedVersion != nil && theParsedVersion.dimensionForVersion == dimension) {
+    self.parsedVersion = theParsedVersion;
     return self.parsedVersion;
   }
   versionBits = 0;
@@ -137,8 +138,9 @@
     }
   }
 
-  self.parsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
-  if (self.parsedVersion != nil && self.parsedVersion.dimensionForVersion == dimension) {
+  theParsedVersion = [ZXQRCodeVersion decodeVersionInformation:versionBits];
+  if (theParsedVersion != nil && theParsedVersion.dimensionForVersion == dimension) {
+    self.parsedVersion = theParsedVersion;
     return self.parsedVersion;
   }
   if (error) *error = FormatErrorInstance();

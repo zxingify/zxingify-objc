@@ -43,7 +43,7 @@
 
 - (ZXBitMatrix*)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height
                  hints:(ZXEncodeHints *)hints error:(NSError **)error {
-  if (!contents || contents.length == 0) {
+  if (contents.length == 0) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Found empty contents" userInfo:nil];
   }
 

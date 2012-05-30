@@ -42,6 +42,14 @@
   return [[[ZXMultiFormatReader alloc] init] autorelease];
 }
 
+- (id)init {
+  if (self = [super init]) {
+    self.readers = [NSMutableArray array];
+  }
+
+  return self;
+}
+
 /**
  * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
  * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
@@ -67,7 +75,7 @@
  * clients will get a <b>large</b> speed increase by using this instead of decode().
  */
 - (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image error:(NSError **)error {
-  if (self.readers == nil) {
+  if (self.readers.count == 0) {
     self.hints = nil;
   }
   return [self decodeInternal:image error:error];

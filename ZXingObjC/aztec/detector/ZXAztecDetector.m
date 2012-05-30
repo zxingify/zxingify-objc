@@ -585,22 +585,26 @@
   p4 = [[[ZXAztecPoint alloc] initWithX:p4.x + corr y:p4.y + corr] autorelease];
 
   int cInit = [self color:p4 p2:p1];
+
   if (cInit == 0) {
     return NO;
   }
 
   int c = [self color:p1 p2:p2];
-  if (c != cInit || c == 0) {
+
+  if (c != cInit) {
     return NO;
   }
 
   c = [self color:p2 p2:p3];
-  if (c != cInit || c == 0) {
+
+  if (c != cInit) {
     return NO;
   }
 
   c = [self color:p3 p2:p4];
-  return c == cInit && c != 0;
+
+  return c == cInit;
 }
 
 

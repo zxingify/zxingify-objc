@@ -40,10 +40,6 @@
           byteSegments:(NSMutableArray *)theByteSegments
                ecLevel:(NSString *)anEcLevel {
   if (self = [super init]) {
-    if (theRawBytes == nil && theText == nil) {
-      [NSException raise:NSInvalidArgumentException 
-                  format:@"Bytes and text must be non-null."];
-    }
     self.rawBytes = theRawBytes;
     self.length = aLength;
     self.text = theText;

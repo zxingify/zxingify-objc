@@ -179,8 +179,9 @@ const int MAX_PAIRS = 11;
     ZXExpandedPair* currentPair = [self.pairs objectAtIndex:i];
     checksum += currentPair.leftChar.checksumPortion;
     S++;
-    if (currentPair.rightChar != nil) {
-      checksum += currentPair.rightChar.checksumPortion;
+    ZXDataCharacter* currentRightChar = currentPair.rightChar;
+    if (currentRightChar != nil) {
+      checksum += currentRightChar.checksumPortion;
       S++;
     }
   }
