@@ -90,7 +90,6 @@
   self.bits[offset] |= 1 << (x & 0x1f);
 }
 
-
 /**
  * Flips the given bit.
  */
@@ -98,7 +97,6 @@
   int offset = y * self.rowSize + (x >> 5);
   self.bits[offset] ^= 1 << (x & 0x1f);
 }
-
 
 /**
  * Clears all bits (sets to false).
@@ -110,7 +108,6 @@
     self.bits[i] = 0;
   }
 }
-
 
 /**
  * Sets a square region of the bit matrix to true.
@@ -141,7 +138,6 @@
   }
 }
 
-
 /**
  * A fast method to retrieve one row of data from the matrix as a BitArray.
  */
@@ -157,6 +153,60 @@
   return row;
 }
 
+/**
+ * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
+ *
+ * Returns {left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
+ */
+- (NSArray *)enclosingRectangle {
+  int left = self.width;
+  int top = self.height;
+  int right = -1;
+  int bottom = -1;
+
+  for (int y = 0; y < self.height; y++) {
+    for (int x32 = 0; x32 < self.rowSize; x32++) {
+      int theBits = self.bits[y * self.rowSize + x32];
+      if (theBits != 0) {
+        if (y < top) {
+          top = y;
+        }
+        if (y > bottom) {
+          bottom = y;
+        }
+        if (x32 * 32 < left) {
+          int bit = 0;
+          while ((theBits << (31 - bit)) == 0) {
+            bit++;
+          }
+          if ((x32 * 32 + bit) < left) {
+            left = x32 * 32 + bit;
+          }
+        }
+        if (x32 * 32 + 31 > right) {
+          int bit = 31;
+          while ((int)((unsigned int)theBits >> bit) == 0) {
+            bit--;
+          }
+          if ((x32 * 32 + bit) > right) {
+            right = x32 * 32 + bit;
+          }
+        }
+      }
+    }
+  }
+
+  int _width = right - left;
+  int _height = bottom - top;
+
+  if (_width < 0 || _height < 0) {
+    return nil;
+  }
+
+  return [NSArray arrayWithObjects:[NSNumber numberWithInt:left],
+          [NSNumber numberWithInt:top], [NSNumber numberWithInt:_width],
+          [NSNumber numberWithInt:_height], nil];
+}
 
 /**
  * This is useful in detecting a corner of a 'pure' barcode.

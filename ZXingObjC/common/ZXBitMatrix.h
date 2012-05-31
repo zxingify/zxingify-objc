@@ -47,6 +47,7 @@
 - (void)clear;
 - (void)setRegionAtLeft:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXBitArray *)rowAtY:(int)y row:(ZXBitArray *)row;
+- (NSArray *)enclosingRectangle;
 - (NSArray *)topLeftOnBit;
 - (NSArray *)bottomRightOnBit;
 

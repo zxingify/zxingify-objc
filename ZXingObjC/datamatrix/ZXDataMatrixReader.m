@@ -106,7 +106,7 @@
     [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
   }
   if (decoderResult.ecLevel != nil) {
-    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:[decoderResult.ecLevel description]];
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:decoderResult.ecLevel];
   }
   return result;
 }

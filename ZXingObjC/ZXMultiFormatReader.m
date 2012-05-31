@@ -19,6 +19,7 @@
 #import "ZXDataMatrixReader.h"
 #import "ZXDecodeHints.h"
 #import "ZXErrors.h"
+#import "ZXMaxiCodeReader.h"
 #import "ZXMultiFormatOneDReader.h"
 #import "ZXMultiFormatReader.h"
 #import "ZXPDF417Reader.h"
@@ -119,6 +120,9 @@
     if ([hints containsFormat:kBarcodeFormatPDF417]) {
       [self.readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
     }
+    if ([hints containsFormat:kBarcodeFormatMaxiCode]) {
+      [self.readers addObject:[[[ZXMaxiCodeReader alloc] init] autorelease]];
+    }
     if (addZXOneDReader && tryHarder) {
       [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }
@@ -131,6 +135,7 @@
     [self.readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
     [self.readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
     [self.readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
+    [self.readers addObject:[[[ZXMaxiCodeReader alloc] init] autorelease]];
     if (tryHarder) {
       [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
     }

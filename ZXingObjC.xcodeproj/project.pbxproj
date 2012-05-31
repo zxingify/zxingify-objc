@@ -1067,6 +1067,22 @@
 		258FE03B15609D60004B9C9A /* ITFBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */; };
 		258FE04015609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
 		258FE04115609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
+		25E484BB157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */; };
+		25E484BC157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */; };
+		25E484BD157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */; };
+		25E484BE157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */; };
+		25E484C215770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */; };
+		25E484C315770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */; };
+		25E484C415770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */; };
+		25E484C515770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */; };
+		25E484CE15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */; };
+		25E484CF15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */; };
+		25E484D015771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484CD15771A8F00AA97E4 /* ZXMaxiCodeDecoder.m */; };
+		25E484D115771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484CD15771A8F00AA97E4 /* ZXMaxiCodeDecoder.m */; };
+		25E484D415771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484D215771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h */; };
+		25E484D515771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484D215771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h */; };
+		25E484D615771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484D315771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m */; };
+		25E484D715771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484D315771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m */; };
 		25EED35B1569BE6C003E10D6 /* ZXBitArrayBuilderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35A1569BE6C003E10D6 /* ZXBitArrayBuilderTest.m */; };
 		25EED35C1569BE6C003E10D6 /* ZXBitArrayBuilderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35A1569BE6C003E10D6 /* ZXBitArrayBuilderTest.m */; };
 		25EED35F1569E028003E10D6 /* ZXExpandedInformationDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EED35E1569E028003E10D6 /* ZXExpandedInformationDecoderTest.m */; };
@@ -1668,6 +1684,14 @@
 		258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITFBlackBox2TestCase.m; path = oned/ITFBlackBox2TestCase.m; sourceTree = "<group>"; };
 		258FE03E15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox1TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.h; sourceTree = "<group>"; };
 		258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox1TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeReader.h; path = maxicode/ZXMaxiCodeReader.h; sourceTree = "<group>"; };
+		25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeReader.m; path = maxicode/ZXMaxiCodeReader.m; sourceTree = "<group>"; };
+		25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeBitMatrixParser.h; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.h; sourceTree = "<group>"; };
+		25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeBitMatrixParser.m; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.m; sourceTree = "<group>"; };
+		25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeDecoder.h; path = maxicode/decoder/ZXMaxiCodeDecoder.h; sourceTree = "<group>"; };
+		25E484CD15771A8F00AA97E4 /* ZXMaxiCodeDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeDecoder.m; path = maxicode/decoder/ZXMaxiCodeDecoder.m; sourceTree = "<group>"; };
+		25E484D215771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeDecodedBitStreamParser.h; path = maxicode/decoder/ZXMaxiCodeDecodedBitStreamParser.h; sourceTree = "<group>"; };
+		25E484D315771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeDecodedBitStreamParser.m; path = maxicode/decoder/ZXMaxiCodeDecodedBitStreamParser.m; sourceTree = "<group>"; };
 		25EED3591569BE6C003E10D6 /* ZXBitArrayBuilderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXBitArrayBuilderTest.h; path = oned/rss/expanded/ZXBitArrayBuilderTest.h; sourceTree = "<group>"; };
 		25EED35A1569BE6C003E10D6 /* ZXBitArrayBuilderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXBitArrayBuilderTest.m; path = oned/rss/expanded/ZXBitArrayBuilderTest.m; sourceTree = "<group>"; };
 		25EED35D1569E028003E10D6 /* ZXExpandedInformationDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXExpandedInformationDecoderTest.h; path = oned/rss/expanded/ZXExpandedInformationDecoderTest.h; sourceTree = "<group>"; };
@@ -2415,6 +2439,7 @@
 				027176E9156D3D5F0010C009 /* ZXErrors.m */,
 				029BCE2815129BD0009E6549 /* ZXLuminanceSource.h */,
 				029BCE2915129BD0009E6549 /* ZXLuminanceSource.m */,
+				25E484B7157707B800AA97E4 /* maxicode */,
 				029BCE2A15129BD0009E6549 /* multi */,
 				029BCE3815129BD0009E6549 /* ZXMultiFormatReader.h */,
 				029BCE3915129BD0009E6549 /* ZXMultiFormatReader.m */,
@@ -2708,6 +2733,29 @@
 			name = expanded;
 			sourceTree = "<group>";
 		};
+		25E484B7157707B800AA97E4 /* maxicode */ = {
+			isa = PBXGroup;
+			children = (
+				25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */,
+				25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */,
+				25E484BF15770A3500AA97E4 /* decoder */,
+			);
+			name = maxicode;
+			sourceTree = "<group>";
+		};
+		25E484BF15770A3500AA97E4 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */,
+				25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */,
+				25E484D215771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h */,
+				25E484D315771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m */,
+				25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */,
+				25E484CD15771A8F00AA97E4 /* ZXMaxiCodeDecoder.m */,
+			);
+			name = decoder;
+			sourceTree = "<group>";
+		};
 		25EED3751569F91C003E10D6 /* decoders */ = {
 			isa = PBXGroup;
 			children = (
@@ -2763,6 +2811,10 @@
 				02DBD1E4156E9C8800C6DF66 /* ZXView.h in Headers */,
 				25198C381571CC6A000EADAD /* ZXCodaBarWriter.h in Headers */,
 				25198C3F1571CCA7000EADAD /* ZXOneDimensionalCodeWriter.h in Headers */,
+				25E484BC157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */,
+				25E484C315770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
+				25E484CF15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */,
+				25E484D515771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2948,6 +3000,10 @@
 				02DBD1E3156E9C8800C6DF66 /* ZXView.h in Headers */,
 				25198C371571CC6A000EADAD /* ZXCodaBarWriter.h in Headers */,
 				25198C3E1571CCA7000EADAD /* ZXOneDimensionalCodeWriter.h in Headers */,
+				25E484BB157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */,
+				25E484C215770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
+				25E484CE15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */,
+				25E484D415771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3285,6 +3341,10 @@
 				250F055915717174007DE9EB /* ZXPDF417Writer.m in Sources */,
 				25198C3A1571CC6A000EADAD /* ZXCodaBarWriter.m in Sources */,
 				25198C411571CCA7000EADAD /* ZXOneDimensionalCodeWriter.m in Sources */,
+				25E484BE157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */,
+				25E484C515770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
+				25E484D115771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */,
+				25E484D715771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3737,6 +3797,10 @@
 				250F055815717173007DE9EB /* ZXPDF417Writer.m in Sources */,
 				25198C391571CC6A000EADAD /* ZXCodaBarWriter.m in Sources */,
 				25198C401571CCA7000EADAD /* ZXOneDimensionalCodeWriter.m in Sources */,
+				25E484BD157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */,
+				25E484C415770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
+				25E484D015771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */,
+				25E484D615771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

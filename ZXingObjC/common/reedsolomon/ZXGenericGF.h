@@ -37,6 +37,7 @@
 + (ZXGenericGF *)QrCodeField256;
 + (ZXGenericGF *)DataMatrixField256;
 + (ZXGenericGF *)AztecData8;
++ (ZXGenericGF *)MaxiCodeField64;
 
 - (id)initWithPrimitive:(int)primitive size:(int)size;
 - (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int)coefficient;

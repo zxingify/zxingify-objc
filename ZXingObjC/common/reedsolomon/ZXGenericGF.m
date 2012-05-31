@@ -150,6 +150,10 @@ int const INITIALIZATION_THRESHOLD = 0;
   return [self DataMatrixField256];
 }
 
++ (ZXGenericGF *)MaxiCodeField64 {
+  return [self AztecData6];
+}
+
 - (void)checkInit {
   if (!self.initialized) {
     [self initialize];
