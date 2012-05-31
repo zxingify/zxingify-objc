@@ -104,27 +104,27 @@
   return result;
 }
 
-- (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)_image 
-                                      left:(size_t)_left
-                                       top:(size_t)_top
-                                     width:(size_t)_width
-                                    height:(size_t)_height {
+- (id)initWithZXImage:(ZXImage*)_image 
+                 left:(size_t)_left
+                  top:(size_t)_top
+                width:(size_t)_width
+               height:(size_t)_height {
   self = [self initWithCGImage:_image.cgimage left:_left top:_top width:_width height:_height];
 
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)_image {
+- (id)initWithZXImage:(ZXImage*)_image {
   self = [self initWithCGImage:_image.cgimage];
 
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithCGImage:(CGImageRef)_image 
-                                      left:(size_t)_left
-                                       top:(size_t)_top
-                                     width:(size_t)_width
-                                    height:(size_t)_height {
+- (id)initWithCGImage:(CGImageRef)_image 
+                 left:(size_t)_left
+                  top:(size_t)_top
+                width:(size_t)_width
+               height:(size_t)_height {
   if (self = [super init]) {
     [self initializeWithImage:_image left:_left top:_top width:_width height:_height];
   }
@@ -132,17 +132,17 @@
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithCGImage:(CGImageRef)_image {
+- (id)initWithCGImage:(CGImageRef)_image {
   self = [self initWithCGImage:_image left:0 top:0 width:CGImageGetWidth(_image) height:CGImageGetHeight(_image)];
 
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithBuffer:(CVPixelBufferRef)buffer
-                                      left:(size_t)_left
-                                       top:(size_t)_top
-                                     width:(size_t)_width
-                                    height:(size_t)_height {
+- (id)initWithBuffer:(CVPixelBufferRef)buffer
+                left:(size_t)_left
+                 top:(size_t)_top
+               width:(size_t)_width
+              height:(size_t)_height {
   CGImageRef _image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer left:_left top:_top width:_width height:_height];
   
   self = [self initWithCGImage:_image];
@@ -152,7 +152,7 @@
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithBuffer:(CVPixelBufferRef)buffer {
+- (id )initWithBuffer:(CVPixelBufferRef)buffer {
   CGImageRef _image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer];
 
   self = [self initWithCGImage:_image];
