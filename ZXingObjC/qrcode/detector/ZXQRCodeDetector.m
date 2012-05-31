@@ -229,7 +229,7 @@
   if (otherToX < 0) {
     scale = (float)fromX / (float)(fromX - otherToX);
     otherToX = 0;
-  } else if (otherToX > self.image.width) {
+  } else if (otherToX >= self.image.width) {
     scale = (float)(self.image.width - 1 - fromX) / (float)(otherToX - fromX);
     otherToX = self.image.width - 1;
   }
