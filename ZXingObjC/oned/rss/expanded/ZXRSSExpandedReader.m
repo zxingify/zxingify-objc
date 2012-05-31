@@ -169,25 +169,25 @@ const int MAX_PAIRS = 11;
 }
 
 - (BOOL)checkChecksum {
-  ZXExpandedPair * firstPair = (ZXExpandedPair *)[self.pairs objectAtIndex:0];
+  ZXExpandedPair * firstPair = [self.pairs objectAtIndex:0];
   ZXDataCharacter * checkCharacter = firstPair.leftChar;
   ZXDataCharacter * firstCharacter = firstPair.rightChar;
   int checksum = [firstCharacter checksumPortion];
-  int S = 2;
+  int s = 2;
 
   for (int i = 1; i < self.pairs.count; ++i) {
     ZXExpandedPair* currentPair = [self.pairs objectAtIndex:i];
     checksum += currentPair.leftChar.checksumPortion;
-    S++;
+    s++;
     ZXDataCharacter* currentRightChar = currentPair.rightChar;
     if (currentRightChar != nil) {
       checksum += currentRightChar.checksumPortion;
-      S++;
+      s++;
     }
   }
 
   checksum %= 211;
-  int checkCharacterValue = 211 * (S - 4) + checksum;
+  int checkCharacterValue = 211 * (s - 4) + checksum;
   return checkCharacterValue == checkCharacter.value;
 }
 
@@ -295,7 +295,7 @@ const int MAX_PAIRS = 11;
   } else if ([previousPairs count] == 0) {
     rowOffset = 0;
   } else {
-    ZXExpandedPair * lastPair = (ZXExpandedPair *)[previousPairs lastObject];
+    ZXExpandedPair * lastPair = [previousPairs lastObject];
     rowOffset = [[[[lastPair finderPattern] startEnd] objectAtIndex:1] intValue];
   }
   BOOL searchingEvenPair = [previousPairs count] % 2 != 0;

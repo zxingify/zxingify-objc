@@ -92,6 +92,20 @@
                       note:nil];
 }
 
+- (void)testVCardCaseInsensitive {
+  [self doTestWithContents:@"begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD"
+                     title:nil
+                     names:[NSArray arrayWithObject:@"Sean Owen"]
+             pronunciation:nil
+                 addresses:[NSArray arrayWithObject:@"123 Main St"]
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                       url:nil
+                  birthday:nil
+                      note:nil];
+}
+
 - (void)testBizcard {
   [self doTestWithContents:@"BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12125551212;E:srowen@example.org;"
                      title:nil

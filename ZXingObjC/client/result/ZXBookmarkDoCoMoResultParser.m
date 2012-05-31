@@ -21,13 +21,13 @@
 
 @implementation ZXBookmarkDoCoMoResultParser
 
-+ (ZXURIParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (![rawText hasPrefix:@"MEBKM:"]) {
     return nil;
   }
-  NSString * title = [self matchSingleDoCoMoPrefixedField:@"TITLE:" rawText:rawText trim:YES];
-  NSArray * rawUri = [self matchDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
+  NSString * title = [[self class] matchSingleDoCoMoPrefixedField:@"TITLE:" rawText:rawText trim:YES];
+  NSArray * rawUri = [[self class] matchDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
   if (rawUri == nil) {
     return nil;
   }

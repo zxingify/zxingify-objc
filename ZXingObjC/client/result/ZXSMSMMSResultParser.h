@@ -30,10 +30,6 @@
  * and effectively converts them to an "sms:" URI for purposes of forwarding to the platform.
  */
 
-@class ZXResult, ZXSMSParsedResult;
-
 @interface ZXSMSMMSResultParser : ZXResultParser
-
-+ (ZXSMSParsedResult *)parse:(ZXResult *)result;
 
 @end

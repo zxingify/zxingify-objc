@@ -23,38 +23,27 @@
 @implementation ZXExpandedProductParsedResultTestCase
 
 - (void)test_RSSExpanded {
-  NSString* text = @"(01)66546(13)001205(3932)4455(3102)6544(123)544654";
-  NSString* productID = @"66546";
-  NSString* sscc = nil;
-  NSString* lotNumber = nil;
-  NSString* productionDate = nil;
-  NSString* packagingDate = @"001205";
-  NSString* bestBeforeDate = nil;
-  NSString* expirationDate = nil;
-  NSString* weight = @"6544";
-  NSString* weightType = @"KG";
-  NSString* weightIncrement = @"2";
-  NSString* price = @"5";
-  NSString* priceIncrement = @"2";
-  NSString* priceCurrency = @"445";
   NSDictionary* uncommonAIs = [NSDictionary dictionaryWithObject:@"544654" forKey:@"123"];
-
-  ZXResult* result = [[[ZXResult alloc] initWithText:text rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatRSSExpanded] autorelease];
-  ZXExpandedProductParsedResult* o = [ZXExpandedProductResultParser parse:result];
+  ZXResult* result = [[[ZXResult alloc] initWithText:@"(01)66546(13)001205(3932)4455(3102)6544(123)544654"
+                                            rawBytes:NULL
+                                              length:0
+                                        resultPoints:nil
+                                              format:kBarcodeFormatRSSExpanded] autorelease];
+  ZXExpandedProductParsedResult* o = (ZXExpandedProductParsedResult*)[[[[ZXExpandedProductResultParser alloc] init] autorelease] parse:result];
   STAssertNotNil(o, @"Expected result to be non-nil");
-  STAssertEqualObjects(o.productID, productID, @"Product IDs don't match");
-  STAssertEqualObjects(o.sscc, sscc, @"Sscc doesn't match");
-  STAssertEqualObjects(o.lotNumber, lotNumber, @"Lot numbers don't match");
-  STAssertEqualObjects(o.productionDate, productionDate, @"Production dates don't match");
-  STAssertEqualObjects(o.packagingDate, packagingDate, @"Packaging dates don't match");
-  STAssertEqualObjects(o.bestBeforeDate, bestBeforeDate, @"Best before dates don't match");
-  STAssertEqualObjects(o.expirationDate, expirationDate, @"Expiration dates don't match");
-  STAssertEqualObjects(o.weight, weight, @"Weights don't match");
-  STAssertEqualObjects(o.weightType, weightType, @"Weight types don't match");
-  STAssertEqualObjects(o.weightIncrement, weightIncrement, @"Weight increments don't match");
-  STAssertEqualObjects(o.price, price, @"Prices don't match");
-  STAssertEqualObjects(o.priceIncrement, priceIncrement, @"Price increments don't match");
-  STAssertEqualObjects(o.priceCurrency, priceCurrency, @"Price currencies don't match");
+  STAssertEqualObjects(o.productID, @"66546", @"Product IDs don't match");
+  STAssertNil(o.sscc, @"Expected sscc to be nil");
+  STAssertNil(o.lotNumber, @"Expected lot number to be nil");
+  STAssertNil(o.productionDate, @"Expected production dates to be nil");
+  STAssertEqualObjects(o.packagingDate, @"001205", @"Packaging dates don't match");
+  STAssertNil(o.bestBeforeDate, @"Expected best before date to be nil");
+  STAssertNil(o.expirationDate, @"Expected expiration date to be nil");
+  STAssertEqualObjects(o.weight, @"6544", @"Weights don't match");
+  STAssertEqualObjects(o.weightType, @"KG", @"Weight types don't match");
+  STAssertEqualObjects(o.weightIncrement, @"2", @"Weight increments don't match");
+  STAssertEqualObjects(o.price, @"5", @"Prices don't match");
+  STAssertEqualObjects(o.priceIncrement, @"2", @"Price increments don't match");
+  STAssertEqualObjects(o.priceCurrency, @"445", @"Price currencies don't match");
   STAssertEqualObjects(o.uncommonAIs, uncommonAIs, @"Uncommon AIs don't match");
 }
 

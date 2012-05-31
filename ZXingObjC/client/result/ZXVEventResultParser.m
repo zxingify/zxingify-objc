@@ -21,13 +21,13 @@
 
 @interface ZXVEventResultParser ()
 
-+ (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
+- (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 
 @end
 
 @implementation ZXVEventResultParser
 
-+ (ZXCalendarParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = result.text;
   if (rawText == nil) {
     return nil;
@@ -72,7 +72,7 @@
   }
 }
 
-+ (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
+- (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
   NSArray * values = [ZXVCardResultParser matchSingleVCardPrefixedField:prefix rawText:rawText trim:trim];
   return values == nil || values.count == 0 ? nil : [values objectAtIndex:0];
 }

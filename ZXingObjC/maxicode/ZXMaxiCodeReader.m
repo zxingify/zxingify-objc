@@ -88,8 +88,9 @@ const int MATRIX_HEIGHT = 33;
                                          resultPoints:points
                                                format:kBarcodeFormatMaxiCode] autorelease];
 
-  if (decoderResult.ecLevel != nil) {
-    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:decoderResult.ecLevel];
+  NSString* ecLevel = decoderResult.ecLevel;
+  if (ecLevel != nil) {
+    [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
   }
   return result;
 }

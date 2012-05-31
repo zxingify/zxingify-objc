@@ -17,45 +17,49 @@
 #import "ZXGeoParsedResult.h"
 #import "ZXGeoResultParser.h"
 
+static NSRegularExpression* GEO_URL_PATTERN = nil;
+
 @implementation ZXGeoResultParser
 
-+ (ZXGeoParsedResult *)parse:(ZXResult *)result {
++ (void)initialize {
+  GEO_URL_PATTERN = [[NSRegularExpression alloc] initWithPattern:@"geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?"
+                                            options:NSRegularExpressionCaseInsensitive error:nil];
+
+}
+
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (rawText == nil || (![rawText hasPrefix:@"geo:"] && ![rawText hasPrefix:@"GEO:"])) {
     return nil;
   }
-  int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
-  NSString * query;
-  NSString * geoURIWithoutQuery;
-  if (queryStart == NSNotFound) {
-    query = nil;
-    geoURIWithoutQuery = [rawText substringFromIndex:4];
-  } else {
-    query = [rawText substringFromIndex:queryStart + 1];
-    geoURIWithoutQuery = [rawText substringWithRange:NSMakeRange(4, queryStart + 4)];
-  }
-  int latitudeEnd = [geoURIWithoutQuery rangeOfString:@","].location;
-  if (latitudeEnd == NSNotFound) {
+
+  NSArray* matches = [GEO_URL_PATTERN matchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)];
+  if (matches.count == 0) {
     return nil;
   }
-  int longitudeEnd = [geoURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(latitudeEnd + 1, [geoURIWithoutQuery length] - latitudeEnd - 1)].location;
-  double latitude;
-  double longitude;
-  double altitude;
 
-  latitude = [[geoURIWithoutQuery substringToIndex:latitudeEnd] doubleValue];
+  NSTextCheckingResult* match = [matches objectAtIndex:0];
+  NSString* query = nil;
+  if ([match rangeAtIndex:4].location != NSNotFound) {
+    query = [rawText substringWithRange:[match rangeAtIndex:4]];
+  }
+
+  double latitude = [[rawText substringWithRange:[match rangeAtIndex:1]] doubleValue];
   if (latitude > 90.0 || latitude < -90.0) {
     return nil;
   }
-  if (longitudeEnd == NSNotFound) {
-    longitude = [[geoURIWithoutQuery substringFromIndex:latitudeEnd + 1] doubleValue];
+  double longitude = [[rawText substringWithRange:[match rangeAtIndex:2]] doubleValue];
+  if (longitude > 180.0 || longitude < -180.0) {
+    return nil;
+  }
+  double altitude;
+  if ([match rangeAtIndex:3].location == NSNotFound) {
     altitude = 0.0;
   } else {
-    longitude = [[geoURIWithoutQuery substringWithRange:NSMakeRange(latitudeEnd + 1, longitudeEnd - latitudeEnd - 1)] doubleValue];
-    altitude = [[geoURIWithoutQuery substringFromIndex:longitudeEnd + 1] doubleValue];
-  }
-  if (longitude > 180.0 || longitude < -180.0 || altitude < 0) {
-    return nil;
+    altitude = [[rawText substringWithRange:[match rangeAtIndex:3]] doubleValue];
+    if (altitude < 0.0) {
+      return nil;
+    }
   }
 
   return [[[ZXGeoParsedResult alloc] initWithLatitude:latitude longitude:longitude altitude:altitude query:query] autorelease];

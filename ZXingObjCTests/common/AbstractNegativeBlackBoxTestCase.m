@@ -60,15 +60,6 @@
 
 @synthesize testResults;
 
-static ZXDecodeHints* TRY_HARDER_HINT = nil;
-
-+ (void)initialize {
-  if (!TRY_HARDER_HINT) {
-    TRY_HARDER_HINT = [[ZXDecodeHints alloc] init];
-    TRY_HARDER_HINT.tryHarder = YES;
-  }
-}
-
 // Use the multiformat reader to evaluate all decoders in the system.
 - (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix {
   if (self = [super initWithInvocation:anInvocation testBasePathSuffix:testBasePathSuffix barcodeReader:[[[ZXMultiFormatReader alloc] init] autorelease] expectedFormat:0]) {
@@ -137,7 +128,9 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   }
 
   // Try "try harder" getMode
-  result = [self.barcodeReader decode:bitmap hints:TRY_HARDER_HINT error:&error];
+  ZXDecodeHints* hints = [ZXDecodeHints hints];
+  hints.tryHarder = YES;
+  result = [self.barcodeReader decode:bitmap hints:hints error:&error];
   if (result) {
     NSLog(@"Try harder found false positive: '%@' with format '%d' (rotation: %f)", result.text, result.barcodeFormat, rotationInDegrees);
     return NO;

@@ -142,4 +142,12 @@
   return binary;
 }
 
+- (int)width {
+  return self.luminanceSource.width;
+}
+
+- (int)height {
+  return self.luminanceSource.height;
+}
+
 @end

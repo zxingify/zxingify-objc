@@ -19,7 +19,7 @@
 
 @implementation ZXTelResultParser
 
-+ (ZXTelParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (![rawText hasPrefix:@"tel:"] && ![rawText hasPrefix:@"TEL:"]) {
     return nil;

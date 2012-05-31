@@ -16,9 +16,11 @@
 
 #import "ZXCurrentParsingState.h"
 
-int const NUMERIC_STATE = 1;
-int const ALPHA_STATE = 2;
-int const ISO_IEC_646_STATE = 4;
+enum {
+  NUMERIC_STATE,
+  ALPHA_STATE,
+  ISO_IEC_646_STATE
+};
 
 @interface ZXCurrentParsingState ()
 

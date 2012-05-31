@@ -21,10 +21,6 @@
  * (Thanks to Yuzo for translating!)
  */
 
-@class ZXAddressBookParsedResult, ZXResult;
-
 @interface ZXAddressBookAUResultParser : ZXResultParser
-
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result;
 
 @end

@@ -55,7 +55,7 @@
 
 - (ZXGenericGFPoly *)buildGenerator:(int)degree {
   if (degree >= self.cachedGenerators.count) {
-    ZXGenericGFPoly * lastGenerator = (ZXGenericGFPoly *)[self.cachedGenerators objectAtIndex:[cachedGenerators count] - 1];
+    ZXGenericGFPoly * lastGenerator = [self.cachedGenerators objectAtIndex:[cachedGenerators count] - 1];
     for (int d = [self.cachedGenerators count]; d <= degree; d++) {
       int next[2] = { 1, [field exp:d - 1] };
       ZXGenericGFPoly * nextGenerator = [lastGenerator multiply:[[[ZXGenericGFPoly alloc] initWithField:field coefficients:next coefficientsLen:2] autorelease]];

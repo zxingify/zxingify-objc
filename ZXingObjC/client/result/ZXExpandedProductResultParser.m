@@ -20,14 +20,14 @@
 
 @interface ZXExpandedProductResultParser ()
 
-+ (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText;
-+ (NSString *)findValue:(int)i rawText:(NSString *)rawText;
+- (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText;
+- (NSString *)findValue:(int)i rawText:(NSString *)rawText;
 
 @end
 
 @implementation ZXExpandedProductResultParser
 
-+ (ZXExpandedProductParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   ZXBarcodeFormat format = [result barcodeFormat];
   if (kBarcodeFormatRSSExpanded != format) {
     return nil;
@@ -118,7 +118,7 @@
                                                        uncommonAIs:uncommonAIs] autorelease];
 }
 
-+ (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
+- (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
   NSMutableString * buf = [NSMutableString string];
   unichar c = [rawText characterAtIndex:i];
   if (c != '(') {
@@ -140,7 +140,7 @@
   return [NSString stringWithString:buf];
 }
 
-+ (NSString *)findValue:(int)i rawText:(NSString *)rawText {
+- (NSString *)findValue:(int)i rawText:(NSString *)rawText {
   NSMutableString * buf = [NSMutableString string];
   NSString * rawTextAux = [rawText substringFromIndex:i];
 

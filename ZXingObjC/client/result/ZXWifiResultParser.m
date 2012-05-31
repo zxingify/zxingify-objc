@@ -20,7 +20,7 @@
 
 @implementation ZXWifiResultParser
 
-+ (ZXWifiParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
 
   if (![rawText hasPrefix:@"WIFI:"]) {
@@ -28,12 +28,12 @@
   }
   // Don't remove leading or trailing whitespace
   BOOL trim = NO;
-  NSString * ssid = [self matchSinglePrefixedField:@"S:" rawText:rawText endChar:';' trim:trim];
+  NSString * ssid = [[self class] matchSinglePrefixedField:@"S:" rawText:rawText endChar:';' trim:trim];
   if (ssid == nil || ssid.length == 0) {
     return nil;
   }
-  NSString * pass = [self matchSinglePrefixedField:@"P:" rawText:rawText endChar:';' trim:trim];
-  NSString * type = [self matchSinglePrefixedField:@"T:" rawText:rawText endChar:';' trim:trim];
+  NSString * pass = [[self class] matchSinglePrefixedField:@"P:" rawText:rawText endChar:';' trim:trim];
+  NSString * type = [[self class] matchSinglePrefixedField:@"T:" rawText:rawText endChar:';' trim:trim];
   if (type == nil) {
     type = @"nopass";
   }

@@ -37,6 +37,7 @@ static double EPSILON = 0.0000000001;
   [self doTestWithContents:@"geo:80.33,-32.3344,3.35" latitude:80.33 longitude:-32.3344 altitude:3.35 query:nil];
   [self doTestWithContents:@"geo:-20.33,132.3344,0.01" latitude:-20.33 longitude:132.3344 altitude:0.01 query:nil];
   [self doTestWithContents:@"geo:-20.33,132.3344,0.01?q=foobar" latitude:-20.33 longitude:132.3344 altitude:0.01 query:@"q=foobar"];
+  [self doTestWithContents:@"GEO:-20.33,132.3344,0.01?q=foobar" latitude:-20.33 longitude:132.3344 altitude:0.01 query:@"q=foobar"];
 }
 
 - (void)doTestWithContents:(NSString*)contents

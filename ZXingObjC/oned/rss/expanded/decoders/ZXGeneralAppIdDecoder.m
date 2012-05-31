@@ -141,7 +141,7 @@
   int value = 0;
   for (int i = 0; i < bits; ++i) {
     if ([information get:pos + i]) {
-      value |= (1 << (bits - i - 1));
+      value |= 1 << (bits - i - 1);
     }
   }
 
@@ -330,54 +330,77 @@
   }
 
   int eightBitValue = [self extractNumericValueFromBitArray:pos bits:8];
+  unichar c;
   switch (eightBitValue) {
-  case 232:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'!'] autorelease];
-  case 233:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'"'] autorelease];
-  case 234:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'%'] autorelease];
-  case 235:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'&'] autorelease];
-  case 236:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'\''] autorelease];
-  case 237:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'('] autorelease];
-  case 238:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:')'] autorelease];
-  case 239:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'*'] autorelease];
-  case 240:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'+'] autorelease];
-  case 241:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:','] autorelease];
-  case 242:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'-'] autorelease];
-  case 243:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'.'] autorelease];
-  case 244:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'/'] autorelease];
-  case 245:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:':'] autorelease];
-  case 246:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:';'] autorelease];
-  case 247:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'<'] autorelease];
-  case 248:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'='] autorelease];
-  case 249:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'>'] autorelease];
-  case 250:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'?'] autorelease];
-  case 251:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:'_'] autorelease];
-  case 252:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:' '] autorelease];
+    case 232:
+      c = '!';
+      break;
+    case 233:
+      c = '"';
+      break;
+    case 234:
+      c ='%';
+      break;
+    case 235:
+      c = '&';
+      break;
+    case 236:
+      c = '\'';
+      break;
+    case 237:
+      c = '(';
+      break;
+    case 238:
+      c = ')';
+      break;
+    case 239:
+      c = '*';
+      break;
+    case 240:
+      c = '+';
+      break;
+    case 241:
+      c = ',';
+      break;
+    case 242:
+      c = '-';
+      break;
+    case 243:
+      c = '.';
+      break;
+    case 244:
+      c = '/';
+      break;
+    case 245:
+      c = ':';
+      break;
+    case 246:
+      c = ';';
+      break;
+    case 247:
+      c = '<';
+      break;
+    case 248:
+      c = '=';
+      break;
+    case 249:
+      c = '>';
+      break;
+    case 250:
+      c = '?';
+      break;
+    case 251:
+      c = '_';
+      break;
+    case 252:
+      c = ' ';
+      break;
+    default:
+      @throw [NSException exceptionWithName:@"RuntimeException"
+                                     reason:[NSString stringWithFormat:@"Decoding invalid ISO/IEC 646 value: %d", eightBitValue]
+                                   userInfo:nil];
   }
-
-  @throw [NSException exceptionWithName:@"RuntimeException"
-                                 reason:[NSString stringWithFormat:@"Decoding invalid ISO/IEC 646 value: %d", eightBitValue]
-                               userInfo:nil];
+  return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:c] autorelease];
 }
 
 - (BOOL)isStillAlpha:(int)pos {
@@ -414,22 +437,30 @@
     return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:(unichar)(sixBitValue + 33)] autorelease];
   }
 
-  switch (sixBitValue) {
-  case 58:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:'*'] autorelease];
-  case 59:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:','] autorelease];
-  case 60:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:'-'] autorelease];
-  case 61:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:'.'] autorelease];
-  case 62:
-    return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:'/'] autorelease];
+  unichar c;
+  switch (sixBitValue){
+    case 58:
+      c = '*';
+      break;
+    case 59:
+      c = ',';
+      break;
+    case 60:
+      c = '-';
+      break;
+    case 61:
+      c = '.';
+      break;
+    case 62:
+      c = '/';
+      break;
+    default:
+      @throw [NSException exceptionWithName:@"RuntimeException"
+                                     reason:[NSString stringWithFormat:@"Decoding invalid alphanumeric value: %d", sixBitValue]
+                                   userInfo:nil];
   }
 
-  @throw [NSException exceptionWithName:@"RuntimeException"
-                                 reason:[NSString stringWithFormat:@"Decoding invalid alphanumeric value: %d", sixBitValue]
-                               userInfo:nil];
+  return [[[ZXDecodedChar alloc] initWithNewPosition:pos + 6 value:c] autorelease];
 }
 
 - (BOOL)isAlphaTo646ToAlphaLatch:(int)pos {

@@ -16,12 +16,13 @@
 
 #import "ZXURIParsedResult.h"
 
+static NSRegularExpression* USER_IN_HOST = nil;
+
 @interface ZXURIParsedResult ()
 
 @property (nonatomic, copy) NSString * uri;
 @property (nonatomic, copy) NSString * title;
 
-- (BOOL)containsUser;
 - (BOOL)isColonFollowedByPortNumber:(NSString *)uri protocolEnd:(int)protocolEnd;
 - (NSString *)massageURI:(NSString *)uri;
 
@@ -31,6 +32,10 @@
 
 @synthesize uri;
 @synthesize title;
+
++ (void)initialize {
+  USER_IN_HOST = [[NSRegularExpression alloc] initWithPattern:@":/*([^/@]+)@[^/]+" options:0 error:nil];
+}
 
 - (id)initWithUri:(NSString *)aUri title:(NSString *)aTitle {
   if (self = [super initWithType:kParsedResultTypeURI]) {
@@ -58,24 +63,7 @@
  * to connect to yourbank.com at first glance.
  */
 - (BOOL)possiblyMaliciousURI {
-  return [self containsUser];
-}
-
-- (BOOL)containsUser {
-  int hostStart = [uri rangeOfString:@":"].location;
-  hostStart++;
-  int uriLength = [uri length];
-
-  while (hostStart < uriLength && [uri characterAtIndex:hostStart] == '/') {
-    hostStart++;
-  }
-
-  int hostEnd = [uri rangeOfString:@"/" options:0 range:NSMakeRange(hostStart, uriLength - hostStart)].location;
-  if (hostEnd == NSNotFound) {
-    hostEnd = uriLength;
-  }
-  int at = [uri rangeOfString:@"@" options:0 range:NSMakeRange(hostStart, uriLength - hostStart)].location;
-  return at >= hostStart && at < hostEnd;
+  return [USER_IN_HOST numberOfMatchesInString:uri options:0 range:NSMakeRange(0, uri.length)] > 0;
 }
 
 - (NSString *)displayResult {

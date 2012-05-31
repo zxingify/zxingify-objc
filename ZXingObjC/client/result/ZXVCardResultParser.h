@@ -21,11 +21,8 @@
  * implementation but should parse information as commonly encoded in 2D barcodes.
  */
 
-@class ZXAddressBookParsedResult, ZXResult;
-
 @interface ZXVCardResultParser : ZXResultParser
 
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result;
 + (NSArray *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 
 @end

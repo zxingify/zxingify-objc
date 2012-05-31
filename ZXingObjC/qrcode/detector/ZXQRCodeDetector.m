@@ -288,7 +288,9 @@
     int realY = steep ? x : y;
 
     // Does current pixel mean we have moved white to black or vice versa?
-    if (!((state == 1) ^ ([image getX:realX y:realY]))) {
+    // Scanning black in state 0,2 and white in state 1, so if we find the wrong
+    // color, advance to next state or end if we are in state 2 already
+    if ((state == 1) == [image getX:realX y:realY]) {
       if (state == 2) {
         int diffX = x - fromX;
         int diffY = y - fromY;

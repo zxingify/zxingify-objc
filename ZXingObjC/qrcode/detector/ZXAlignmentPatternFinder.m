@@ -242,7 +242,7 @@
     int max = self.possibleCenters.count;
 
     for (int index = 0; index < max; index++) {
-      ZXAlignmentPattern * center = (ZXAlignmentPattern *)[self.possibleCenters objectAtIndex:index];
+      ZXAlignmentPattern * center = [self.possibleCenters objectAtIndex:index];
       // Look for about the same center and module size:
       if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
         return [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];

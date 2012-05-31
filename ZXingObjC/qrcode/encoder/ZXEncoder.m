@@ -428,9 +428,9 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
 
   for (int i = 0; i < maxNumDataBytes; ++i) {
-    for (int j = 0; j < [blocks count]; ++j) {
-      unsigned char * dataBytes = [[blocks objectAtIndex:j] dataBytes];
-      int length = [[blocks objectAtIndex:j] length];
+    for (ZXBlockPair* block in blocks) {
+      unsigned char * dataBytes = block.dataBytes;
+      int length = block.length;
       if (i < length) {
         [result appendBits:dataBytes[i] numBits:8];
       }
@@ -438,9 +438,9 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
 
   for (int i = 0; i < maxNumEcBytes; ++i) {
-    for (int j = 0; j < [blocks count]; ++j) {
-      unsigned char * ecBytes = [[blocks objectAtIndex:j] errorCorrectionBytes];
-      int length = [[blocks objectAtIndex:j] errorCorrectionLength];
+    for (ZXBlockPair* block in blocks) {
+      unsigned char * ecBytes = block.errorCorrectionBytes;
+      int length = block.errorCorrectionLength;
       if (i < length) {
         [result appendBits:ecBytes[i] numBits:8];
       }

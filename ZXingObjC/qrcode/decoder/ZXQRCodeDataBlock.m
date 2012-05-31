@@ -60,8 +60,8 @@
 
   int totalBlocks = 0;
   NSArray * ecBlockArray = ecBlocks.ecBlocks;
-  for (int i = 0; i < ecBlockArray.count; i++) {
-    totalBlocks += [(ZXQRCodeECB*)[ecBlockArray objectAtIndex:i] count];
+  for (ZXQRCodeECB* ecBlock in ecBlockArray) {
+    totalBlocks += ecBlock.count;
   }
 
   NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];

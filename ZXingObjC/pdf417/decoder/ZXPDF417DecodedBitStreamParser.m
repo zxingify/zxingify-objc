@@ -18,6 +18,15 @@
 #import "ZXErrors.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
 
+enum {
+  ALPHA,
+  LOWER,
+  MIXED,
+  PUNCT,
+  ALPHA_SHIFT,
+  PUNCT_SHIFT
+};
+
 int const TEXT_COMPACTION_MODE_LATCH = 900;
 int const BYTE_COMPACTION_MODE_LATCH = 901;
 int const NUMERIC_COMPACTION_MODE_LATCH = 902;
@@ -28,13 +37,6 @@ int const MACRO_PDF417_TERMINATOR = 922;
 int const MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
 int const MAX_NUMERIC_CODEWORDS = 15;
 
-int const PDF417_ALPHA = 0;
-int const LOWER = 1;
-int const MIXED = 2;
-int const PUNCT = 3;
-int const ALPHA_SHIFT = 4;
-int const PUNCT_SHIFT = 5;
-
 int const PL = 25;
 int const LL = 27;
 int const AS = 27;
@@ -43,12 +45,14 @@ int const AL = 28;
 int const PS = 29;
 int const PAL = 29;
 
-char const PUNCT_CHARS[29] = {';', '<', '>', '@', '[', 92, '}', '_', 96, '~', '!',
-  13, 9, ',', ':', 10, '-', '.', '$', '/', 34, '|', '*',
-  '(', ')', '?', '{', '}', 39};
+char const PUNCT_CHARS[29] = {
+  ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
+  '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
+  '(', ')', '?', '{', '}', '\''};
 
-char const MIXED_CHARS[25] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
-  13, 9, ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
+char const MIXED_CHARS[25] = {
+  '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
+  '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
   '=', '^'};
 
 // Table containing values for the exponent of 900.
@@ -193,14 +197,14 @@ NSString* const EXP900[16] =
  * switches are defined in 5.4.2.3.
  */
 + (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
-  int subMode = PDF417_ALPHA;
-  int priorToShiftMode = PDF417_ALPHA;
+  int subMode = ALPHA;
+  int priorToShiftMode = ALPHA;
   int i = 0;
   while (i < length) {
     int subModeCh = textCompactionData[i];
     unichar ch = 0;
     switch (subMode) {
-    case PDF417_ALPHA:
+    case ALPHA:
       if (subModeCh < 26) {
         ch = (unichar)('A' + subModeCh);
       } else {
@@ -248,7 +252,7 @@ NSString* const EXP900[16] =
         } else if (subModeCh == LL) {
           subMode = LOWER;
         } else if (subModeCh == AL) {
-          subMode = PDF417_ALPHA;
+          subMode = ALPHA;
         } else if (subModeCh == PS) {
           priorToShiftMode = subMode;
           subMode = PUNCT_SHIFT;
@@ -262,7 +266,7 @@ NSString* const EXP900[16] =
         ch = PUNCT_CHARS[subModeCh];
       } else {
         if (subModeCh == PAL) {
-          subMode = PDF417_ALPHA;
+          subMode = ALPHA;
         } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
           [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
         }
@@ -285,7 +289,7 @@ NSString* const EXP900[16] =
         ch = PUNCT_CHARS[subModeCh];
       } else {
         if (subModeCh == PAL) {
-          subMode = PDF417_ALPHA;
+          subMode = ALPHA;
         }
       }
       break;
@@ -457,7 +461,6 @@ NSString* const EXP900[16] =
    
    As there are huge numbers involved here we must use fake out the maths using string
    tokens for the numbers.
-   BigDecimal is not supported by J2ME.
  */
 + (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
   NSMutableString * accum = nil;

@@ -22,10 +22,6 @@
  * looking for a definitive reference.
  */
 
-@class ZXAddressBookParsedResult, ZXResult;
-
 @interface ZXBizcardResultParser : ZXAbstractDoCoMoResultParser
-
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result;
 
 @end

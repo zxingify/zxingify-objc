@@ -191,7 +191,7 @@
 - (void)appendBit:(BOOL)bit {
   [self ensureCapacity:self.size + 1];
   if (bit) {
-    self.bits[self.size >> 5] |= (1 << (self.size & 0x1F));
+    self.bits[self.size >> 5] |= 1 << (self.size & 0x1F);
   }
   self.size++;
 }

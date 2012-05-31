@@ -15,39 +15,12 @@
  */
 
 #import "AbstractBlackBoxTestCase.h"
+#import "TestResult.h"
 #import "ZXBinaryBitmap.h"
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXDecodeHints.h"
 #import "ZXHybridBinarizer.h"
 #import "ZXResult.h"
-
-@interface TestResult : NSObject
-
-@property (nonatomic, readonly) int mustPassCount;
-@property (nonatomic, readonly) int tryHarderCount;
-@property (nonatomic, readonly) float rotation;
-
-- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
-
-@end
-
-@implementation TestResult
-
-@synthesize mustPassCount;
-@synthesize tryHarderCount;
-@synthesize rotation;
-
-- (id)initWithMustPassCount:(int)mustPass tryHarderCount:(int)tryHarder rotation:(float)rot {
-  if (self = [super init]) {
-    mustPassCount = mustPass;
-    tryHarderCount = tryHarder;
-    rotation = rot;
-  }
-
-  return self;
-}
-
-@end
 
 @interface AbstractBlackBoxTestCase ()
 
@@ -56,7 +29,6 @@
 @property (nonatomic, copy) NSString * testBase;
 @property (nonatomic, retain) NSMutableArray * testResults;
 
-- (ZXDecodeHints *)hints;
 - (void)runTests;
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure;
 
@@ -68,15 +40,6 @@
 @synthesize expectedFormat;
 @synthesize testBase;
 @synthesize testResults;
-
-static ZXDecodeHints* TRY_HARDER_HINT = nil;
-
-+ (void)initialize {
-  if (!TRY_HARDER_HINT) {
-    TRY_HARDER_HINT = [[ZXDecodeHints alloc] init];
-    TRY_HARDER_HINT.tryHarder = YES;
-  }
-}
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)reader expectedFormat:(ZXBarcodeFormat)format {
   if (self = [super initWithInvocation:anInvocation]) {
@@ -116,10 +79,6 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
   }
 
   return imageFiles;
-}
-
-- (ZXDecodeHints *)hints {
-  return nil;
 }
 
 - (void)runTests {
@@ -206,18 +165,14 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
 }
 
 - (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder {
-  ZXResult * result = nil;
   NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %f)", (tryHarder ? @"try harder, " : @""), rotation];
 
-  ZXDecodeHints * hints = [self hints];
+  ZXDecodeHints * hints = [ZXDecodeHints hints];
   if (tryHarder) {
-    if (hints == nil) {
-      hints = TRY_HARDER_HINT;
-    } else {
-      hints.tryHarder = YES;
-    }
+    hints.tryHarder = YES;
   }
 
+  ZXResult * result = nil;
   NSError* error = nil;
   result = [self.barcodeReader decode:source hints:hints error:&error];
   if (!result) {
@@ -254,47 +209,46 @@ static ZXDecodeHints* TRY_HARDER_HINT = nil;
 - (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees {
   if (degrees == 0.0f) {
     return original;
-  } else {
-    double radians = degrees * M_PI / 180;
+  }
+  double radians = degrees * M_PI / 180;
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
-    radians = -1 * radians;
+  radians = -1 * radians;
 #endif
-    
-    CGRect imgRect = CGRectMake(0, 0, original.width, original.height);
-    CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
-    CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
-    
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(NULL,
-                                                 rotatedRect.size.width,
-                                                 rotatedRect.size.height,
-                                                 CGImageGetBitsPerComponent(original.cgimage),
-                                                 0,
-                                                 colorSpace,
-                                                 kCGImageAlphaPremultipliedFirst);
-    CGContextSetAllowsAntialiasing(context, FALSE);
-    CGContextSetInterpolationQuality(context, kCGInterpolationNone);
-    CGColorSpaceRelease(colorSpace);
+  
+  CGRect imgRect = CGRectMake(0, 0, original.width, original.height);
+  CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
+  CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
+  
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef context = CGBitmapContextCreate(NULL,
+                                               rotatedRect.size.width,
+                                               rotatedRect.size.height,
+                                               CGImageGetBitsPerComponent(original.cgimage),
+                                               0,
+                                               colorSpace,
+                                               kCGImageAlphaPremultipliedFirst);
+  CGContextSetAllowsAntialiasing(context, FALSE);
+  CGContextSetInterpolationQuality(context, kCGInterpolationNone);
+  CGColorSpaceRelease(colorSpace);
 
-    CGContextTranslateCTM(context,
-                          +(rotatedRect.size.width/2),
-                          +(rotatedRect.size.height/2));
-    CGContextRotateCTM(context, radians);
+  CGContextTranslateCTM(context,
+                        +(rotatedRect.size.width/2),
+                        +(rotatedRect.size.height/2));
+  CGContextRotateCTM(context, radians);
 
-    CGContextDrawImage(context, CGRectMake(-imgRect.size.width/2, 
-                                           -imgRect.size.height/2,
-                                           imgRect.size.width, 
-                                           imgRect.size.height),
-                       original.cgimage);
+  CGContextDrawImage(context, CGRectMake(-imgRect.size.width/2, 
+                                         -imgRect.size.height/2,
+                                         imgRect.size.width, 
+                                         imgRect.size.height),
+                     original.cgimage);
 
-    CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
-    CFMakeCollectable(rotatedImage);
+  CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
+  CFMakeCollectable(rotatedImage);
 
-    CFRelease(context);
+  CFRelease(context);
 
-    return [[[ZXImage alloc] initWithCGImageRef:rotatedImage] autorelease];
-  }
+  return [[[ZXImage alloc] initWithCGImageRef:rotatedImage] autorelease];
 }
 
 @end

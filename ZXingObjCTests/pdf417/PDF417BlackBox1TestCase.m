@@ -37,10 +37,4 @@
   [super runTests];
 }
 
-- (ZXDecodeHints *)hints {
-  ZXDecodeHints* hints = [[[ZXDecodeHints alloc] init] autorelease];
-  [hints addPossibleFormat:kBarcodeFormatPDF417];
-  return hints;
-}
-
 @end

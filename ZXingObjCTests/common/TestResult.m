@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-#import "ZXResultParser.h"
+#import "TestResult.h"
 
-/**
- * Superclass for classes encapsulating results in the NDEF format.
- * See http://www.nfc-forum.org/specs/.
- * 
- * This code supports a limited subset of NDEF messages, ones that are plausibly
- * useful in 2D barcode formats. This generally includes 1-record messages, no chunking,
- * "short record" syntax, no ID field.
- */
+@implementation TestResult
 
-@interface ZXAbstractNDEFResultParser : ZXResultParser
+@synthesize mustPassCount;
+@synthesize tryHarderCount;
+@synthesize rotation;
 
-+ (NSString *)bytesToString:(unsigned char *)bytes offset:(int)offset length:(unsigned int)length encoding:(NSStringEncoding)encoding;
+- (id)initWithMustPassCount:(int)mustPass tryHarderCount:(int)tryHarder rotation:(float)rot {
+  if (self = [super init]) {
+    mustPassCount = mustPass;
+    tryHarderCount = tryHarder;
+    rotation = rot;
+  }
+  
+  return self;
+}
 
 @end

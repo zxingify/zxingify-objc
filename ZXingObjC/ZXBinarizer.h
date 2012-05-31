@@ -28,6 +28,8 @@
 @interface ZXBinarizer : NSObject
 
 @property (nonatomic, retain, readonly) ZXLuminanceSource* luminanceSource;
+@property (nonatomic, assign, readonly) int width;
+@property (nonatomic, assign, readonly) int height;
 
 + (ZXBinarizer*)binarizerWithSource:(ZXLuminanceSource *)source;
 - (id)initWithSource:(ZXLuminanceSource *)source;

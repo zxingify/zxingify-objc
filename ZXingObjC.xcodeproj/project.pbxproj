@@ -63,12 +63,6 @@
 		0250D7B21545EE5900752941 /* ZXGeoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDAE15129BD0009E6549 /* ZXGeoResultParser.m */; };
 		0250D7B31545EE5900752941 /* ZXISBNParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB015129BD0009E6549 /* ZXISBNParsedResult.m */; };
 		0250D7B41545EE5900752941 /* ZXISBNResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB215129BD0009E6549 /* ZXISBNResultParser.m */; };
-		0250D7B51545EE5900752941 /* ZXAbstractNDEFResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB515129BD0009E6549 /* ZXAbstractNDEFResultParser.m */; };
-		0250D7B61545EE5900752941 /* ZXNDEFRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB715129BD0009E6549 /* ZXNDEFRecord.m */; };
-		0250D7B71545EE5900752941 /* ZXNDEFSmartPosterParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB915129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m */; };
-		0250D7B81545EE5900752941 /* ZXNDEFSmartPosterResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBB15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m */; };
-		0250D7B91545EE5900752941 /* ZXNDEFTextResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBD15129BD0009E6549 /* ZXNDEFTextResultParser.m */; };
-		0250D7BA1545EE5900752941 /* ZXNDEFURIResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBF15129BD0009E6549 /* ZXNDEFURIResultParser.m */; };
 		0250D7BB1545EE5900752941 /* ZXParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC115129BD0009E6549 /* ZXParsedResult.m */; };
 		0250D7BC1545EE5900752941 /* ZXProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC415129BD0009E6549 /* ZXProductParsedResult.m */; };
 		0250D7BD1545EE5900752941 /* ZXProductResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC615129BD0009E6549 /* ZXProductResultParser.m */; };
@@ -226,12 +220,6 @@
 		0250D85C1545FB1E00752941 /* ZXGeoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDAE15129BD0009E6549 /* ZXGeoResultParser.m */; };
 		0250D85D1545FB1E00752941 /* ZXISBNParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB015129BD0009E6549 /* ZXISBNParsedResult.m */; };
 		0250D85E1545FB1E00752941 /* ZXISBNResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB215129BD0009E6549 /* ZXISBNResultParser.m */; };
-		0250D85F1545FB1E00752941 /* ZXAbstractNDEFResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB515129BD0009E6549 /* ZXAbstractNDEFResultParser.m */; };
-		0250D8601545FB1E00752941 /* ZXNDEFRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB715129BD0009E6549 /* ZXNDEFRecord.m */; };
-		0250D8611545FB1E00752941 /* ZXNDEFSmartPosterParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB915129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m */; };
-		0250D8621545FB1E00752941 /* ZXNDEFSmartPosterResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBB15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m */; };
-		0250D8631545FB1E00752941 /* ZXNDEFTextResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBD15129BD0009E6549 /* ZXNDEFTextResultParser.m */; };
-		0250D8641545FB1E00752941 /* ZXNDEFURIResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBF15129BD0009E6549 /* ZXNDEFURIResultParser.m */; };
 		0250D8651545FB1E00752941 /* ZXParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC115129BD0009E6549 /* ZXParsedResult.m */; };
 		0250D8661545FB1E00752941 /* ZXProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC415129BD0009E6549 /* ZXProductParsedResult.m */; };
 		0250D8671545FB1E00752941 /* ZXProductResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC615129BD0009E6549 /* ZXProductResultParser.m */; };
@@ -419,12 +407,6 @@
 		029BCF0615129BD0009E6549 /* ZXGeoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDAE15129BD0009E6549 /* ZXGeoResultParser.m */; };
 		029BCF0715129BD0009E6549 /* ZXISBNParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB015129BD0009E6549 /* ZXISBNParsedResult.m */; };
 		029BCF0815129BD0009E6549 /* ZXISBNResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB215129BD0009E6549 /* ZXISBNResultParser.m */; };
-		029BCF0915129BD0009E6549 /* ZXAbstractNDEFResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB515129BD0009E6549 /* ZXAbstractNDEFResultParser.m */; };
-		029BCF0A15129BD0009E6549 /* ZXNDEFRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB715129BD0009E6549 /* ZXNDEFRecord.m */; };
-		029BCF0B15129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB915129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m */; };
-		029BCF0C15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBB15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m */; };
-		029BCF0D15129BD0009E6549 /* ZXNDEFTextResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBD15129BD0009E6549 /* ZXNDEFTextResultParser.m */; };
-		029BCF0E15129BD0009E6549 /* ZXNDEFURIResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBF15129BD0009E6549 /* ZXNDEFURIResultParser.m */; };
 		029BCF0F15129BD0009E6549 /* ZXParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC115129BD0009E6549 /* ZXParsedResult.m */; };
 		029BCF1015129BD0009E6549 /* ZXProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC415129BD0009E6549 /* ZXProductParsedResult.m */; };
 		029BCF1115129BD0009E6549 /* ZXProductResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDC615129BD0009E6549 /* ZXProductResultParser.m */; };
@@ -600,17 +582,6 @@
 		029BD00115129F9C009E6549 /* ZXISBNParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB015129BD0009E6549 /* ZXISBNParsedResult.m */; };
 		029BD00215129F9C009E6549 /* ZXISBNResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDB115129BD0009E6549 /* ZXISBNResultParser.h */; };
 		029BD00315129F9C009E6549 /* ZXISBNResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB215129BD0009E6549 /* ZXISBNResultParser.m */; };
-		029BD00415129FBA009E6549 /* ZXAbstractNDEFResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDB415129BD0009E6549 /* ZXAbstractNDEFResultParser.h */; };
-		029BD00515129FBE009E6549 /* ZXAbstractNDEFResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB515129BD0009E6549 /* ZXAbstractNDEFResultParser.m */; };
-		029BD00615129FC5009E6549 /* ZXNDEFRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDB615129BD0009E6549 /* ZXNDEFRecord.h */; };
-		029BD00715129FC5009E6549 /* ZXNDEFSmartPosterResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDBA15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.h */; };
-		029BD00815129FC5009E6549 /* ZXNDEFTextResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDBC15129BD0009E6549 /* ZXNDEFTextResultParser.h */; };
-		029BD00915129FC5009E6549 /* ZXNDEFURIResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDBE15129BD0009E6549 /* ZXNDEFURIResultParser.h */; };
-		029BD00A15129FCC009E6549 /* ZXNDEFRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB715129BD0009E6549 /* ZXNDEFRecord.m */; };
-		029BD00B15129FCC009E6549 /* ZXNDEFSmartPosterParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDB915129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m */; };
-		029BD00C15129FCC009E6549 /* ZXNDEFSmartPosterResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBB15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m */; };
-		029BD00D15129FCC009E6549 /* ZXNDEFTextResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBD15129BD0009E6549 /* ZXNDEFTextResultParser.m */; };
-		029BD00E15129FCC009E6549 /* ZXNDEFURIResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BCDBF15129BD0009E6549 /* ZXNDEFURIResultParser.m */; };
 		029BD0171512A023009E6549 /* ZXParsedResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDC015129BD0009E6549 /* ZXParsedResult.h */; };
 		029BD0181512A023009E6549 /* ZXParsedResultType.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDC215129BD0009E6549 /* ZXParsedResultType.h */; };
 		029BD0191512A023009E6549 /* ZXProductResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 029BCDC515129BD0009E6549 /* ZXProductResultParser.h */; };
@@ -1025,6 +996,12 @@
 		2545FCE715699AE0008E53D2 /* ZXBinaryUtilTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
+		255FA8981578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */; };
+		255FA8991578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */; };
+		255FA89A1578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 255FA8971578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m */; };
+		255FA89B1578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 255FA8971578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m */; };
+		255FA8A215784D6B00B78681 /* TestResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 255FA89D15784D0700B78681 /* TestResult.m */; };
+		255FA8A315784D6D00B78681 /* TestResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 255FA89D15784D0700B78681 /* TestResult.m */; };
 		2561A6F2155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
 		2561A6F3155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */; };
 		2561A6F7155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561A6F6155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.m */; };
@@ -1071,10 +1048,6 @@
 		25E484BC157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */; };
 		25E484BD157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */; };
 		25E484BE157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */; };
-		25E484C215770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */; };
-		25E484C315770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */; };
-		25E484C415770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */; };
-		25E484C515770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */; };
 		25E484CE15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */; };
 		25E484CF15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */; };
 		25E484D015771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484CD15771A8F00AA97E4 /* ZXMaxiCodeDecoder.m */; };
@@ -1239,18 +1212,6 @@
 		029BCDB015129BD0009E6549 /* ZXISBNParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXISBNParsedResult.m; sourceTree = "<group>"; };
 		029BCDB115129BD0009E6549 /* ZXISBNResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXISBNResultParser.h; sourceTree = "<group>"; };
 		029BCDB215129BD0009E6549 /* ZXISBNResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXISBNResultParser.m; sourceTree = "<group>"; };
-		029BCDB415129BD0009E6549 /* ZXAbstractNDEFResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAbstractNDEFResultParser.h; sourceTree = "<group>"; };
-		029BCDB515129BD0009E6549 /* ZXAbstractNDEFResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAbstractNDEFResultParser.m; sourceTree = "<group>"; };
-		029BCDB615129BD0009E6549 /* ZXNDEFRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXNDEFRecord.h; sourceTree = "<group>"; };
-		029BCDB715129BD0009E6549 /* ZXNDEFRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXNDEFRecord.m; sourceTree = "<group>"; };
-		029BCDB815129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZXNDEFSmartPosterParsedResult.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		029BCDB915129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXNDEFSmartPosterParsedResult.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		029BCDBA15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXNDEFSmartPosterResultParser.h; sourceTree = "<group>"; };
-		029BCDBB15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ZXNDEFSmartPosterResultParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		029BCDBC15129BD0009E6549 /* ZXNDEFTextResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXNDEFTextResultParser.h; sourceTree = "<group>"; };
-		029BCDBD15129BD0009E6549 /* ZXNDEFTextResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXNDEFTextResultParser.m; sourceTree = "<group>"; };
-		029BCDBE15129BD0009E6549 /* ZXNDEFURIResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXNDEFURIResultParser.h; sourceTree = "<group>"; };
-		029BCDBF15129BD0009E6549 /* ZXNDEFURIResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXNDEFURIResultParser.m; sourceTree = "<group>"; };
 		029BCDC015129BD0009E6549 /* ZXParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXParsedResult.h; sourceTree = "<group>"; };
 		029BCDC115129BD0009E6549 /* ZXParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXParsedResult.m; sourceTree = "<group>"; };
 		029BCDC215129BD0009E6549 /* ZXParsedResultType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXParsedResultType.h; sourceTree = "<group>"; };
@@ -1642,6 +1603,10 @@
 		2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXBinaryUtilTest.m; path = oned/rss/expanded/ZXBinaryUtilTest.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
+		255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeBitMatrixParser.h; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.h; sourceTree = "<group>"; };
+		255FA8971578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeBitMatrixParser.m; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.m; sourceTree = "<group>"; };
+		255FA89C15784D0700B78681 /* TestResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestResult.h; sourceTree = "<group>"; };
+		255FA89D15784D0700B78681 /* TestResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestResult.m; sourceTree = "<group>"; };
 		2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39BlackBox3TestCase.h; path = oned/Code39BlackBox3TestCase.h; sourceTree = "<group>"; };
 		2561A6F1155F6E4F008C7AE9 /* Code39BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code39BlackBox3TestCase.m; path = oned/Code39BlackBox3TestCase.m; sourceTree = "<group>"; };
 		2561A6F5155F6EB6008C7AE9 /* Code39ExtendedBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code39ExtendedBlackBox2TestCase.h; path = oned/Code39ExtendedBlackBox2TestCase.h; sourceTree = "<group>"; };
@@ -1686,8 +1651,6 @@
 		258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox1TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.m; sourceTree = "<group>"; };
 		25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeReader.h; path = maxicode/ZXMaxiCodeReader.h; sourceTree = "<group>"; };
 		25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeReader.m; path = maxicode/ZXMaxiCodeReader.m; sourceTree = "<group>"; };
-		25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeBitMatrixParser.h; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.h; sourceTree = "<group>"; };
-		25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeBitMatrixParser.m; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.m; sourceTree = "<group>"; };
 		25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeDecoder.h; path = maxicode/decoder/ZXMaxiCodeDecoder.h; sourceTree = "<group>"; };
 		25E484CD15771A8F00AA97E4 /* ZXMaxiCodeDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeDecoder.m; path = maxicode/decoder/ZXMaxiCodeDecoder.m; sourceTree = "<group>"; };
 		25E484D215771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeDecodedBitStreamParser.h; path = maxicode/decoder/ZXMaxiCodeDecodedBitStreamParser.h; sourceTree = "<group>"; };
@@ -1929,7 +1892,6 @@
 				029BCDB015129BD0009E6549 /* ZXISBNParsedResult.m */,
 				029BCDB115129BD0009E6549 /* ZXISBNResultParser.h */,
 				029BCDB215129BD0009E6549 /* ZXISBNResultParser.m */,
-				029BCDB315129BD0009E6549 /* optional */,
 				029BCDC015129BD0009E6549 /* ZXParsedResult.h */,
 				029BCDC115129BD0009E6549 /* ZXParsedResult.m */,
 				029BCDC215129BD0009E6549 /* ZXParsedResultType.h */,
@@ -1969,25 +1931,6 @@
 				029BCDE415129BD0009E6549 /* ZXWifiResultParser.m */,
 			);
 			path = result;
-			sourceTree = "<group>";
-		};
-		029BCDB315129BD0009E6549 /* optional */ = {
-			isa = PBXGroup;
-			children = (
-				029BCDB415129BD0009E6549 /* ZXAbstractNDEFResultParser.h */,
-				029BCDB515129BD0009E6549 /* ZXAbstractNDEFResultParser.m */,
-				029BCDB615129BD0009E6549 /* ZXNDEFRecord.h */,
-				029BCDB715129BD0009E6549 /* ZXNDEFRecord.m */,
-				029BCDB815129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.h */,
-				029BCDB915129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m */,
-				029BCDBA15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.h */,
-				029BCDBB15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m */,
-				029BCDBC15129BD0009E6549 /* ZXNDEFTextResultParser.h */,
-				029BCDBD15129BD0009E6549 /* ZXNDEFTextResultParser.m */,
-				029BCDBE15129BD0009E6549 /* ZXNDEFURIResultParser.h */,
-				029BCDBF15129BD0009E6549 /* ZXNDEFURIResultParser.m */,
-			);
-			path = optional;
 			sourceTree = "<group>";
 		};
 		029BCDE515129BD0009E6549 /* common */ = {
@@ -2503,6 +2446,8 @@
 				02FB06E115475B480067923D /* AbstractBlackBoxTestCase.m */,
 				250101D6155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.h */,
 				250101D7155E1AB900D1D979 /* AbstractNegativeBlackBoxTestCase.m */,
+				255FA89C15784D0700B78681 /* TestResult.h */,
+				255FA89D15784D0700B78681 /* TestResult.m */,
 				2543C17715674200001BC3F0 /* ZXBitArrayTestCase.h */,
 				2543C17815674200001BC3F0 /* ZXBitArrayTestCase.m */,
 				256A88451567ECFA007C38B7 /* ZXBitMatrixTestCase.h */,
@@ -2746,8 +2691,8 @@
 		25E484BF15770A3500AA97E4 /* decoder */ = {
 			isa = PBXGroup;
 			children = (
-				25E484C015770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h */,
-				25E484C115770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m */,
+				255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */,
+				255FA8971578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m */,
 				25E484D215771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h */,
 				25E484D315771FCF00AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m */,
 				25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */,
@@ -2812,9 +2757,9 @@
 				25198C381571CC6A000EADAD /* ZXCodaBarWriter.h in Headers */,
 				25198C3F1571CCA7000EADAD /* ZXOneDimensionalCodeWriter.h in Headers */,
 				25E484BC157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */,
-				25E484C315770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
 				25E484CF15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */,
 				25E484D515771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
+				255FA8991578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2849,11 +2794,6 @@
 				029BCFFE15129F9C009E6549 /* ZXGeoResultParser.h in Headers */,
 				029BD00015129F9C009E6549 /* ZXISBNParsedResult.h in Headers */,
 				029BD00215129F9C009E6549 /* ZXISBNResultParser.h in Headers */,
-				029BD00415129FBA009E6549 /* ZXAbstractNDEFResultParser.h in Headers */,
-				029BD00615129FC5009E6549 /* ZXNDEFRecord.h in Headers */,
-				029BD00715129FC5009E6549 /* ZXNDEFSmartPosterResultParser.h in Headers */,
-				029BD00815129FC5009E6549 /* ZXNDEFTextResultParser.h in Headers */,
-				029BD00915129FC5009E6549 /* ZXNDEFURIResultParser.h in Headers */,
 				029BD0171512A023009E6549 /* ZXParsedResult.h in Headers */,
 				029BD0181512A023009E6549 /* ZXParsedResultType.h in Headers */,
 				029BD0191512A023009E6549 /* ZXProductResultParser.h in Headers */,
@@ -3001,9 +2941,9 @@
 				25198C371571CC6A000EADAD /* ZXCodaBarWriter.h in Headers */,
 				25198C3E1571CCA7000EADAD /* ZXOneDimensionalCodeWriter.h in Headers */,
 				25E484BB157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */,
-				25E484C215770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
 				25E484CE15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */,
 				25E484D415771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
+				255FA8981578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3188,12 +3128,6 @@
 				0250D7B21545EE5900752941 /* ZXGeoResultParser.m in Sources */,
 				0250D7B31545EE5900752941 /* ZXISBNParsedResult.m in Sources */,
 				0250D7B41545EE5900752941 /* ZXISBNResultParser.m in Sources */,
-				0250D7B51545EE5900752941 /* ZXAbstractNDEFResultParser.m in Sources */,
-				0250D7B61545EE5900752941 /* ZXNDEFRecord.m in Sources */,
-				0250D7B71545EE5900752941 /* ZXNDEFSmartPosterParsedResult.m in Sources */,
-				0250D7B81545EE5900752941 /* ZXNDEFSmartPosterResultParser.m in Sources */,
-				0250D7B91545EE5900752941 /* ZXNDEFTextResultParser.m in Sources */,
-				0250D7BA1545EE5900752941 /* ZXNDEFURIResultParser.m in Sources */,
 				0250D7BB1545EE5900752941 /* ZXParsedResult.m in Sources */,
 				0250D7BC1545EE5900752941 /* ZXProductParsedResult.m in Sources */,
 				0250D7BD1545EE5900752941 /* ZXProductResultParser.m in Sources */,
@@ -3342,9 +3276,9 @@
 				25198C3A1571CC6A000EADAD /* ZXCodaBarWriter.m in Sources */,
 				25198C411571CCA7000EADAD /* ZXOneDimensionalCodeWriter.m in Sources */,
 				25E484BE157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */,
-				25E484C515770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
 				25E484D115771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */,
 				25E484D715771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
+				255FA89B1578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3374,12 +3308,6 @@
 				0250D85C1545FB1E00752941 /* ZXGeoResultParser.m in Sources */,
 				0250D85D1545FB1E00752941 /* ZXISBNParsedResult.m in Sources */,
 				0250D85E1545FB1E00752941 /* ZXISBNResultParser.m in Sources */,
-				0250D85F1545FB1E00752941 /* ZXAbstractNDEFResultParser.m in Sources */,
-				0250D8601545FB1E00752941 /* ZXNDEFRecord.m in Sources */,
-				0250D8611545FB1E00752941 /* ZXNDEFSmartPosterParsedResult.m in Sources */,
-				0250D8621545FB1E00752941 /* ZXNDEFSmartPosterResultParser.m in Sources */,
-				0250D8631545FB1E00752941 /* ZXNDEFTextResultParser.m in Sources */,
-				0250D8641545FB1E00752941 /* ZXNDEFURIResultParser.m in Sources */,
 				0250D8651545FB1E00752941 /* ZXParsedResult.m in Sources */,
 				0250D8661545FB1E00752941 /* ZXProductParsedResult.m in Sources */,
 				0250D8671545FB1E00752941 /* ZXProductResultParser.m in Sources */,
@@ -3615,6 +3543,7 @@
 				0219802E156C3CDA00BBE088 /* ZXQRCodeWriterTestCase.m in Sources */,
 				250F052615713A65007DE9EB /* QRCodeBlackBox6TestCase.m in Sources */,
 				25198C451571D32D000EADAD /* ZXCodaBarWriterTestCase.m in Sources */,
+				255FA8A315784D6D00B78681 /* TestResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3644,12 +3573,6 @@
 				029BCFFF15129F9C009E6549 /* ZXGeoResultParser.m in Sources */,
 				029BD00115129F9C009E6549 /* ZXISBNParsedResult.m in Sources */,
 				029BD00315129F9C009E6549 /* ZXISBNResultParser.m in Sources */,
-				029BD00515129FBE009E6549 /* ZXAbstractNDEFResultParser.m in Sources */,
-				029BD00A15129FCC009E6549 /* ZXNDEFRecord.m in Sources */,
-				029BD00B15129FCC009E6549 /* ZXNDEFSmartPosterParsedResult.m in Sources */,
-				029BD00C15129FCC009E6549 /* ZXNDEFSmartPosterResultParser.m in Sources */,
-				029BD00D15129FCC009E6549 /* ZXNDEFTextResultParser.m in Sources */,
-				029BD00E15129FCC009E6549 /* ZXNDEFURIResultParser.m in Sources */,
 				029BD0291512A02D009E6549 /* ZXParsedResult.m in Sources */,
 				029BD02B1512A02D009E6549 /* ZXProductParsedResult.m in Sources */,
 				029BD02C1512A02D009E6549 /* ZXProductResultParser.m in Sources */,
@@ -3798,9 +3721,9 @@
 				25198C391571CC6A000EADAD /* ZXCodaBarWriter.m in Sources */,
 				25198C401571CCA7000EADAD /* ZXOneDimensionalCodeWriter.m in Sources */,
 				25E484BD157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */,
-				25E484C415770A7200AA97E4 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
 				25E484D015771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */,
 				25E484D615771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
+				255FA89A1578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3831,12 +3754,6 @@
 				029BCF0615129BD0009E6549 /* ZXGeoResultParser.m in Sources */,
 				029BCF0715129BD0009E6549 /* ZXISBNParsedResult.m in Sources */,
 				029BCF0815129BD0009E6549 /* ZXISBNResultParser.m in Sources */,
-				029BCF0915129BD0009E6549 /* ZXAbstractNDEFResultParser.m in Sources */,
-				029BCF0A15129BD0009E6549 /* ZXNDEFRecord.m in Sources */,
-				029BCF0B15129BD0009E6549 /* ZXNDEFSmartPosterParsedResult.m in Sources */,
-				029BCF0C15129BD0009E6549 /* ZXNDEFSmartPosterResultParser.m in Sources */,
-				029BCF0D15129BD0009E6549 /* ZXNDEFTextResultParser.m in Sources */,
-				029BCF0E15129BD0009E6549 /* ZXNDEFURIResultParser.m in Sources */,
 				029BCF0F15129BD0009E6549 /* ZXParsedResult.m in Sources */,
 				029BCF1015129BD0009E6549 /* ZXProductParsedResult.m in Sources */,
 				029BCF1115129BD0009E6549 /* ZXProductResultParser.m in Sources */,
@@ -4071,6 +3988,7 @@
 				0219802D156C3CDA00BBE088 /* ZXQRCodeWriterTestCase.m in Sources */,
 				250F052515713A65007DE9EB /* QRCodeBlackBox6TestCase.m in Sources */,
 				25198C441571D32D000EADAD /* ZXCodaBarWriterTestCase.m in Sources */,
+				255FA8A215784D6B00B78681 /* TestResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

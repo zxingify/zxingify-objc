@@ -20,28 +20,28 @@
 
 @interface ZXBizcardResultParser ()
 
-+ (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName;
-+ (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3;
+- (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName;
+- (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3;
 
 @end
 
 @implementation ZXBizcardResultParser
 
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (![rawText hasPrefix:@"BIZCARD:"]) {
     return nil;
   }
-  NSString * firstName = [self matchSingleDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
-  NSString * lastName = [self matchSingleDoCoMoPrefixedField:@"X:" rawText:rawText trim:YES];
+  NSString * firstName = [[self class] matchSingleDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
+  NSString * lastName = [[self class] matchSingleDoCoMoPrefixedField:@"X:" rawText:rawText trim:YES];
   NSString * fullName = [self buildName:firstName lastName:lastName];
-  NSString * title = [self matchSingleDoCoMoPrefixedField:@"T:" rawText:rawText trim:YES];
-  NSString * org = [self matchSingleDoCoMoPrefixedField:@"C:" rawText:rawText trim:YES];
-  NSArray * addresses = [self matchDoCoMoPrefixedField:@"A:" rawText:rawText trim:YES];
-  NSString * phoneNumber1 = [self matchSingleDoCoMoPrefixedField:@"B:" rawText:rawText trim:YES];
-  NSString * phoneNumber2 = [self matchSingleDoCoMoPrefixedField:@"M:" rawText:rawText trim:YES];
-  NSString * phoneNumber3 = [self matchSingleDoCoMoPrefixedField:@"F:" rawText:rawText trim:YES];
-  NSString * email = [self matchSingleDoCoMoPrefixedField:@"E:" rawText:rawText trim:YES];
+  NSString * title = [[self class] matchSingleDoCoMoPrefixedField:@"T:" rawText:rawText trim:YES];
+  NSString * org = [[self class] matchSingleDoCoMoPrefixedField:@"C:" rawText:rawText trim:YES];
+  NSArray * addresses = [[self class] matchDoCoMoPrefixedField:@"A:" rawText:rawText trim:YES];
+  NSString * phoneNumber1 = [[self class] matchSingleDoCoMoPrefixedField:@"B:" rawText:rawText trim:YES];
+  NSString * phoneNumber2 = [[self class] matchSingleDoCoMoPrefixedField:@"M:" rawText:rawText trim:YES];
+  NSString * phoneNumber3 = [[self class] matchSingleDoCoMoPrefixedField:@"F:" rawText:rawText trim:YES];
+  NSString * email = [[self class] matchSingleDoCoMoPrefixedField:@"E:" rawText:rawText trim:YES];
 
   return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:fullName]
                                              pronunciation:nil
@@ -59,7 +59,7 @@
                                                        url:nil] autorelease];
 }
 
-+ (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {
+- (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {
   NSMutableArray * numbers = [NSMutableArray arrayWithCapacity:3];
   if (number1 != nil) {
     [numbers addObject:number1];
@@ -81,7 +81,7 @@
   return result;
 }
 
-+ (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName {
+- (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName {
   if (firstName == nil) {
     return lastName;
   } else {

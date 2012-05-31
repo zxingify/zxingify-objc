@@ -21,7 +21,7 @@
 
 @implementation ZXEmailAddressResultParser
 
-+ (ZXEmailAddressParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   NSString * emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {

@@ -395,10 +395,6 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
   }
 }
 
-// TODO either this needs to reimplement BigInteger's functionality to properly handle very
-// large numeric strings, even in Java ME, or, we give up Java ME and use the version above
-// with BigInteger
-
 + (void)encodeNumeric:(NSString*)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString*)sb {
   int idx = 0;
   NSMutableString* tmp = [NSMutableString stringWithCapacity:count / 3 + 1];

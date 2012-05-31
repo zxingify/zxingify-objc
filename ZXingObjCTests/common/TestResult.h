@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-#import "ZXAbstractNDEFResultParser.h"
+@interface TestResult : NSObject
 
-/**
- * Recognizes an NDEF message that encodes a URI according to the
- * "URI Record Type Definition" specification.
- */
+@property (nonatomic, readonly) int mustPassCount;
+@property (nonatomic, readonly) int tryHarderCount;
+@property (nonatomic, readonly) float rotation;
 
-@class ZXResult, ZXURIParsedResult;
-
-@interface ZXNDEFURIResultParser : ZXAbstractNDEFResultParser
-
-+ (ZXURIParsedResult *)parse:(ZXResult *)result;
-+ (NSString *)decodeURIPayload:(unsigned char *)payload length:(unsigned int)length;
+- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
 
 @end
+

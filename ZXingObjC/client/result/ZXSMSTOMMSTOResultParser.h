@@ -25,10 +25,6 @@
  * for purposes of forwarding to the platform.
  */
 
-@class ZXSMSParsedResult, ZXResult;
-
 @interface ZXSMSTOMMSTOResultParser : ZXResultParser
-
-+ (ZXSMSParsedResult *)parse:(ZXResult *)result;
 
 @end

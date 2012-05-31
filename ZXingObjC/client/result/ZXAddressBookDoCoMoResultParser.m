@@ -20,33 +20,33 @@
 
 @interface ZXAddressBookDoCoMoResultParser ()
 
-+ (NSString *)parseName:(NSString *)name;
+- (NSString *)parseName:(NSString *)name;
 
 @end
 
 @implementation ZXAddressBookDoCoMoResultParser
 
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (![rawText hasPrefix:@"MECARD:"]) {
     return nil;
   }
-  NSArray * rawName = [self matchDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
+  NSArray * rawName = [[self class] matchDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
   if (rawName == nil) {
     return nil;
   }
   NSString * name = [self parseName:[rawName objectAtIndex:0]];
-  NSString * pronunciation = [self matchSingleDoCoMoPrefixedField:@"SOUND:" rawText:rawText trim:YES];
-  NSArray * phoneNumbers = [self matchDoCoMoPrefixedField:@"TEL:" rawText:rawText trim:YES];
-  NSArray * emails = [self matchDoCoMoPrefixedField:@"EMAIL:" rawText:rawText trim:YES];
-  NSString * note = [self matchSingleDoCoMoPrefixedField:@"NOTE:" rawText:rawText trim:NO];
-  NSArray * addresses = [self matchDoCoMoPrefixedField:@"ADR:" rawText:rawText trim:YES];
-  NSString * birthday = [self matchSingleDoCoMoPrefixedField:@"BDAY:" rawText:rawText trim:YES];
-  if (birthday != nil && ![self isStringOfDigits:birthday length:8]) {
+  NSString * pronunciation = [[self class] matchSingleDoCoMoPrefixedField:@"SOUND:" rawText:rawText trim:YES];
+  NSArray * phoneNumbers = [[self class] matchDoCoMoPrefixedField:@"TEL:" rawText:rawText trim:YES];
+  NSArray * emails = [[self class] matchDoCoMoPrefixedField:@"EMAIL:" rawText:rawText trim:YES];
+  NSString * note = [[self class] matchSingleDoCoMoPrefixedField:@"NOTE:" rawText:rawText trim:NO];
+  NSArray * addresses = [[self class] matchDoCoMoPrefixedField:@"ADR:" rawText:rawText trim:YES];
+  NSString * birthday = [[self class] matchSingleDoCoMoPrefixedField:@"BDAY:" rawText:rawText trim:YES];
+  if (birthday != nil && ![[self class] isStringOfDigits:birthday length:8]) {
     birthday = nil;
   }
-  NSString * url = [self matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
-  NSString * org = [self matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
+  NSString * url = [[self class] matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
+  NSString * org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
 
   return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
                                              pronunciation:pronunciation
@@ -64,7 +64,7 @@
                                                        url:url] autorelease];
 }
 
-+ (NSString *)parseName:(NSString *)name {
+- (NSString *)parseName:(NSString *)name {
   int comma = [name rangeOfString:@","].location;
   if (comma != NSNotFound) {
     return [NSString stringWithFormat:@"%@ %@", [name substringFromIndex:comma + 1], [name substringToIndex:comma]];

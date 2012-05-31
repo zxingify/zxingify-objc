@@ -55,12 +55,12 @@
 
 + (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
-    for (int i = 0; i < [value count]; i++) {
-      if ([value objectAtIndex:i] && [[value objectAtIndex:i] length] > 0) {
+    for (NSString* s in value) {
+      if (s != nil && s.length > 0) {
         if ([result length] > 0) {
           [result appendString:@"\n"];
         }
-        [result appendString:[value objectAtIndex:i]];
+        [result appendString:s];
       }
     }
   }

@@ -20,13 +20,13 @@
 
 @interface ZXAddressBookAUResultParser ()
 
-+ (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim;
+- (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim;
 
 @end
 
 @implementation ZXAddressBookAUResultParser
 
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
 
   if ([rawText rangeOfString:@"MEMORY"].location == NSNotFound ||
@@ -34,12 +34,12 @@
     return nil;
   }
 
-  NSString * name = [self matchSinglePrefixedField:@"NAME1:" rawText:rawText endChar:'\r' trim:YES];
-  NSString * pronunciation = [self matchSinglePrefixedField:@"NAME2:" rawText:rawText endChar:'\r' trim:YES];
+  NSString * name = [[self class] matchSinglePrefixedField:@"NAME1:" rawText:rawText endChar:'\r' trim:YES];
+  NSString * pronunciation = [[self class] matchSinglePrefixedField:@"NAME2:" rawText:rawText endChar:'\r' trim:YES];
   NSArray * phoneNumbers = [self matchMultipleValuePrefix:@"TEL" max:3 rawText:rawText trim:YES];
   NSArray * emails = [self matchMultipleValuePrefix:@"MAIL" max:3 rawText:rawText trim:YES];
-  NSString * note = [self matchSinglePrefixedField:@"MEMORY:" rawText:rawText endChar:'\r' trim:NO];
-  NSString * address = [self matchSinglePrefixedField:@"ADD:" rawText:rawText endChar:'\r' trim:YES];
+  NSString * note = [[self class] matchSinglePrefixedField:@"MEMORY:" rawText:rawText endChar:'\r' trim:NO];
+  NSString * address = [[self class] matchSinglePrefixedField:@"ADD:" rawText:rawText endChar:'\r' trim:YES];
   NSArray * addresses = address == nil ? nil : [NSArray arrayWithObjects:address, nil];
 
   return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
@@ -58,11 +58,11 @@
                                                        url:nil] autorelease];
 }
 
-+ (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {
+- (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {
   NSMutableArray * values = nil;
 
   for (int i = 1; i <= max; i++) {
-    NSString * value = [self matchSinglePrefixedField:[NSString stringWithFormat:@"%@%d:", prefix, i]
+    NSString * value = [[self class] matchSinglePrefixedField:[NSString stringWithFormat:@"%@%d:", prefix, i]
                                               rawText:rawText
                                               endChar:'\r'
                                                  trim:trim];

@@ -24,10 +24,6 @@
  * if we can parse them all correctly.
  */
 
-@class ZXResult, ZXWifiParsedResult;
-
 @interface ZXWifiResultParser : ZXResultParser
-
-+ (ZXWifiParsedResult *)parse:(ZXResult *)result;
 
 @end

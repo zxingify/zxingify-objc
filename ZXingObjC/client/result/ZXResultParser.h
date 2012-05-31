@@ -28,16 +28,17 @@
 
 @interface ZXResultParser : NSObject
 
+- (ZXParsedResult *)parse:(ZXResult *)result;
 + (ZXParsedResult *)parseResult:(ZXResult *)theResult;
-+ (void)maybeAppend:(NSString *)value result:(NSMutableString *)result;
-+ (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
-+ (NSArray *)maybeWrap:(NSString *)value;
-+ (NSString *)unescapeBackslash:(NSString *)escaped;
+- (void)maybeAppend:(NSString *)value result:(NSMutableString *)result;
+- (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
+- (NSArray *)maybeWrap:(NSString *)value;
 + (BOOL)isStringOfDigits:(NSString *)value length:(unsigned int)length;
 + (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length;
-+ (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri;
++ (BOOL)isSubstringOfAlphaNumeric:(NSString *)value offset:(int)offset length:(unsigned int)length;
++ (int)parseHexDigit:(unichar)c;
+- (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri;
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
-+ (NSArray*)toStringArray:(NSArray*)strings;
 
 @end

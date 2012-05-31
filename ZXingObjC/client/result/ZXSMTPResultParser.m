@@ -20,7 +20,7 @@
 
 @implementation ZXSMTPResultParser
 
-+ (ZXEmailAddressParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (!([rawText hasPrefix:@"smtp:"] || [rawText hasPrefix:@"SMTP:"])) {
     return nil;
@@ -39,7 +39,10 @@
     }
   }
   NSString * mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
-  return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress subject:subject body:body mailtoURI:mailtoURI] autorelease];
+  return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress
+                                                           subject:subject
+                                                              body:body
+                                                         mailtoURI:mailtoURI] autorelease];
 }
 
 @end

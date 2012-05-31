@@ -22,10 +22,6 @@
  * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00.
  */
 
-@class ZXGeoParsedResult;
-
 @interface ZXGeoResultParser : ZXResultParser
-
-+ (ZXGeoParsedResult *)parse:(ZXResult *)result;
 
 @end

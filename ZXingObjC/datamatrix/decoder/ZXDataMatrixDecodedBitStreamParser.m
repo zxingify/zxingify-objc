@@ -49,13 +49,15 @@ const char TEXT_SHIFT3_SET_CHARS[32] = {
   'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
 };
 
-const int PAD_ENCODE = 0;
-const int ASCII_ENCODE = 1;
-const int C40_ENCODE = 2;
-const int TEXT_ENCODE = 3;
-const int ANSIX12_ENCODE = 4;
-const int EDIFACT_ENCODE = 5;
-const int BASE256_ENCODE = 6;
+enum {
+  PAD_ENCODE = 0, // Not really a mode
+  ASCII_ENCODE,
+  C40_ENCODE,
+  TEXT_ENCODE,
+  ANSIX12_ENCODE,
+  EDIFACT_ENCODE,
+  BASE256_ENCODE
+};
 
 @interface ZXDataMatrixDecodedBitStreamParser ()
 
@@ -142,8 +144,10 @@ const int BASE256_ENCODE = 6;
     if (oneByte == 0) {
       return -1;
     } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
-      oneByte = upperShift ? oneByte + 128 : oneByte;
-      //upperShift = NO;
+      if (upperShift) {
+        oneByte += 128;
+        //upperShift = NO;
+      }
       [result appendFormat:@"%C", (unichar)(oneByte - 1)];
       return ASCII_ENCODE;
     } else if (oneByte == 129) {  // Pad

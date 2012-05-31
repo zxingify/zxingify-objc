@@ -43,7 +43,6 @@
     }
 
     self.binarizer = aBinarizer;
-    self.matrix = nil;
   }
 
   return self;
@@ -58,12 +57,12 @@
 
 
 - (int)width {
-  return [[self.binarizer luminanceSource] width];
+  return self.binarizer.width;
 }
 
 
 - (int)height {
-  return [[self.binarizer luminanceSource] height];
+  return self.binarizer.height;
 }
 
 

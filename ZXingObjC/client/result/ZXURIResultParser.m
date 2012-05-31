@@ -20,14 +20,14 @@
 
 @implementation ZXURIResultParser
 
-+ (ZXURIParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   // We specifically handle the odd "URL" scheme here for simplicity
   if ([rawText hasPrefix:@"URL:"]) {
     rawText = [rawText substringFromIndex:4];
   }
   rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-  if (![self isBasicallyValidURI:rawText]) {
+  if (![[self class] isBasicallyValidURI:rawText]) {
     return nil;
   }
   return [[[ZXURIParsedResult alloc] initWithUri:rawText title:nil] autorelease];
@@ -58,29 +58,21 @@
   }
   // Look for period in a domain but followed by at least a two-char TLD
   // Forget strings that don't have a valid-looking protocol
-  if (period >= (int)[uri length] - 2 || (period < 0 && colon < 0)) {
+  if (period >= (int)[uri length] - 2 || (period <= 0 && colon <= 0)) {
     return NO;
   }
   if (colon >= 0) {
     if (period < 0 || period > colon) {
-      // colon ends the protocol
-      for (int i = 0; i < colon; i++) {
-        unichar c = [uri characterAtIndex:i];
-        if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z')) {
-          return NO;
-        }
+      if (![self isSubstringOfAlphaNumeric:uri offset:0 length:colon]) {
+        return NO;
       }
     } else {
       // colon starts the port; crudely look for at least two numbers
       if (colon >= [uri length] - 2) {
         return NO;
       }
-
-      for (int i = colon + 1; i < colon + 3; i++) {
-        unichar c = [uri characterAtIndex:i];
-        if (c < '0' || c > '9') {
-          return NO;
-        }
+      if (![self isSubstringOfDigits:uri offset:colon + 1 length:2]) {
+        return NO;
       }
     }
   }

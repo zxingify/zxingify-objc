@@ -87,10 +87,7 @@
     if (self.resultMetadata == nil) {
       self.resultMetadata = metadata;
     } else {
-      for (id key in [metadata allKeys]) {
-        id value = [metadata objectForKey:key];
-        [self.resultMetadata setObject:value forKey:key];
-      }
+      [self.resultMetadata addEntriesFromDictionary:metadata];
     }
   }
 }

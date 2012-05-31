@@ -38,27 +38,46 @@
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   id<ZXWriter> writer;
-  if (format == kBarcodeFormatEan8) {
-    writer = [[[ZXEAN8Writer alloc] init] autorelease];
-  } else if (format == kBarcodeFormatEan13) {
-    writer = [[[ZXEAN13Writer alloc] init] autorelease];
-  } else if (format == kBarcodeFormatUPCA) {
-    writer = [[[ZXUPCAWriter alloc] init] autorelease];
-  } else if (format == kBarcodeFormatQRCode) {
-    writer = [[[ZXQRCodeWriter alloc] init] autorelease];
-  } else if (format == kBarcodeFormatCode39) {
-    writer = [[[ZXCode39Writer alloc] init] autorelease];
-  } else if (format == kBarcodeFormatCode128) {
-    writer = [[[ZXCode128Writer alloc] init] autorelease];
-  } else if (format == kBarcodeFormatITF) {
-    writer = [[[ZXITFWriter alloc] init] autorelease];
-  } else if (format == kBarcodeFormatPDF417) {
-    writer = [[[ZXPDF417Writer alloc] init] autorelease];
-  } else if (format == kBarcodeFormatCodabar) {
-    writer = [[[ZXPDF417Writer alloc] init] autorelease];
-  } else {
-    [NSException raise:NSInvalidArgumentException 
-                format:@"No encoder available for format"];
+  switch (format) {
+    case kBarcodeFormatEan8:
+      writer = [[[ZXEAN8Writer alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatEan13:
+      writer = [[[ZXEAN13Writer alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatUPCA:
+      writer = [[[ZXUPCAWriter alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatQRCode:
+      writer = [[[ZXQRCodeWriter alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatCode39:
+      writer = [[[ZXCode39Writer alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatCode128:
+      writer = [[[ZXCode128Writer alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatITF:
+      writer = [[[ZXITFWriter alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatPDF417:
+      writer = [[[ZXPDF417Writer alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatCodabar:
+      writer = [[[ZXCodaBarWriter alloc] init] autorelease];
+      break;
+
+    default:
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"No encoder available for format"];
   }
   return [writer encode:contents format:format width:width height:height hints:hints error:error];
 }

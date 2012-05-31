@@ -20,7 +20,7 @@
 
 @implementation ZXURLTOResultParser
 
-+ (ZXURIParsedResult *)parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = result.text;
   if (![rawText hasPrefix:@"urlto:"] && ![rawText hasPrefix:@"URLTO:"]) {
     return nil;

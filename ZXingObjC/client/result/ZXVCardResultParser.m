@@ -18,57 +18,66 @@
 #import "ZXResult.h"
 #import "ZXVCardResultParser.h"
 
+static NSRegularExpression* BEGIN_VCARD = nil;
+static NSRegularExpression* VCARD_LIKE_DATE = nil;
+static NSRegularExpression* CR_LF_SPACE_TAB = nil;
+static NSString* EQUALS = @"=";
+static NSString* SEMICOLON = @";";
+
 @interface ZXVCardResultParser ()
 
 + (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset;
-+ (NSString *)formatAddress:(NSString *)address;
-+ (void)formatNames:(NSMutableArray *)names;
-+ (BOOL)isLikeVCardDate:(NSString *)value;
+- (NSString *)formatAddress:(NSString *)address;
+- (void)formatNames:(NSMutableArray *)names;
+- (BOOL)isLikeVCardDate:(NSString *)value;
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
-+ (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
+- (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
-+ (NSString *)stripContinuationCRLF:(NSString *)value;
-+ (int)toHexValue:(unichar)c;
-+ (NSString*)toPrimaryValue:(NSArray*)list;
-+ (NSArray*)toPrimaryValues:(NSArray*)lists;
-+ (NSArray*)toTypes:(NSArray*)lists;
+- (NSString*)toPrimaryValue:(NSArray*)list;
+- (NSArray*)toPrimaryValues:(NSArray*)lists;
+- (NSArray*)toTypes:(NSArray*)lists;
 
 @end
 
 @implementation ZXVCardResultParser
 
-+ (ZXAddressBookParsedResult *)parse:(ZXResult *)result {
++ (void)initialize {
+  BEGIN_VCARD = [[NSRegularExpression alloc] initWithPattern:@"BEGIN:VCARD" options:NSRegularExpressionCaseInsensitive error:nil];
+  VCARD_LIKE_DATE = [[NSRegularExpression alloc] initWithPattern:@"\\d{4}-?\\d{2}-?\\d{2}" options:0 error:nil];
+  CR_LF_SPACE_TAB = [[NSRegularExpression alloc] initWithPattern:@"\r\n[ \t]" options:0 error:nil];
+}
+
+- (ZXParsedResult *)parse:(ZXResult *)result {
   // Although we should insist on the raw text ending with "END:VCARD", there's no reason
   // to throw out everything else we parsed just because this was omitted. In fact, Eclair
   // is doing just that, and we can't parse its contacts without this leniency.
   NSString * rawText = [result text];
-  if (![rawText hasPrefix:@"BEGIN:VCARD"]) {
+  if ([BEGIN_VCARD numberOfMatchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)] == 0) {
     return nil;
   }
-  NSMutableArray * names = [self matchVCardPrefixedField:@"FN" rawText:rawText trim:YES];
+  NSMutableArray * names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES];
   if (names == nil) {
     // If no display names found, look for regular name fields and format them
-    names = [self matchVCardPrefixedField:@"N" rawText:rawText trim:YES];
+    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES];
     [self formatNames:names];
   }
-  NSArray * phoneNumbers = [self matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES];
-  NSArray * emails = [self matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES];
-  NSArray * note = [self matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO];
-  NSMutableArray * addresses = [self matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES];
+  NSArray * phoneNumbers = [[self class] matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES];
+  NSArray * emails = [[self class] matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES];
+  NSArray * note = [[self class] matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO];
+  NSMutableArray * addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES];
   if (addresses != nil) {
-    for (int i = 0; i < [addresses count]; i++) {
-      NSMutableArray * list = [addresses objectAtIndex:i];
+    for (NSMutableArray* list in addresses) {
       [list replaceObjectAtIndex:0 withObject:[self formatAddress:[list objectAtIndex:0]]];
     }
   }
-  NSArray * org = [self matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
-  NSArray * birthday = [self matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES];
+  NSArray * org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
+  NSArray * birthday = [[self class] matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES];
   if (birthday != nil && ![self isLikeVCardDate:[birthday objectAtIndex:0]]) {
     birthday = nil;
   }
-  NSArray * title = [self matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
-  NSArray * url = [self matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
-  NSArray * instantMessenger = [self matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES];
+  NSArray * title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
+  NSArray * url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
+  NSArray * instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES];
   return [[[ZXAddressBookParsedResult alloc] initWithNames:[self toPrimaryValues:names]
                                              pronunciation:nil
                                               phoneNumbers:[self toPrimaryValues:phoneNumbers]
@@ -91,76 +100,70 @@
   int max = [rawText length];
 
   while (i < max) {
-    i = [rawText rangeOfString:prefix options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
-    if (i == NSNotFound) {
+    // At start or after newling, match prefix, followed by optional metadata 
+    // (led by ;) ultimately ending in colon
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"(?:^|\n)%@(?:;([^:]*))?:", prefix]
+                                                                             options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray* regexMatches = [regex matchesInString:rawText options:0 range:NSMakeRange(i, rawText.length - i)];
+    if (regexMatches.count == 0) {
       break;
     }
+    NSRange matchRange = [[regexMatches objectAtIndex:0] range];
+    i = matchRange.location + matchRange.length;
 
-    if (i > 0 && [rawText characterAtIndex:i - 1] != '\n') {
-      i++;
-      continue;
+    NSString* metadataString = nil;
+    if ([[regexMatches objectAtIndex:0] rangeAtIndex:1].location != NSNotFound) {
+      metadataString = [rawText substringWithRange:[[regexMatches objectAtIndex:0] rangeAtIndex:1]];
     }
-    i += [prefix length];
-    if ([rawText characterAtIndex:i] != ':' && [rawText characterAtIndex:i] != ';') {
-      continue;
-    }
-
-    int metadataStart = i;
-    while ([rawText characterAtIndex:i] != ':') {
-      i++;
-    }
-
     NSMutableArray* metadata = nil;
     BOOL quotedPrintable = NO;
     NSString * quotedPrintableCharset = nil;
-    if (i > metadataStart) {
-      for (int j = metadataStart + 1; j <= i; j++) {
-        unichar c = [rawText characterAtIndex:j];
-        if (c == ';' || c == ':') {
-          NSString * metadatum = [rawText substringWithRange:NSMakeRange(metadataStart+1, j - metadataStart - 1)];
-          if (metadata == nil) {
-            metadata = [NSMutableArray arrayWithCapacity:1];
+    if (metadataString != nil) {
+      for (NSString* metadatum in [metadataString componentsSeparatedByString:SEMICOLON]) {
+        if (metadata == nil) {
+          metadata = [NSMutableArray array];
+        }
+        [metadata addObject:metadatum];
+        int equals = [metadatum rangeOfString:EQUALS].location;
+        if (equals != NSNotFound) {
+          NSString* key = [metadatum substringToIndex:equals];
+          NSString* value = [metadatum substringFromIndex:equals + 1];
+          if ([@"ENCODING" caseInsensitiveCompare:key] == NSOrderedSame &&
+              [@"QUOTED-PRINTABLE" caseInsensitiveCompare:value] == NSOrderedSame) {
+            quotedPrintable = YES;
+          } else if ([@"CHARSET" caseInsensitiveCompare:key] == NSOrderedSame) {
+            quotedPrintableCharset = value;
           }
-          [metadata addObject:metadatum];
-          int equals = [metadatum rangeOfString:@"=" options:NSCaseInsensitiveSearch].location;
-          if (equals != NSNotFound) {
-            NSString * key = [metadatum substringToIndex:equals];
-            NSString * value = [metadatum substringFromIndex:equals + 1];
-            if ([@"ENCODING" caseInsensitiveCompare:key] == NSOrderedSame) {
-              if ([@"QUOTED-PRINTABLE" caseInsensitiveCompare:value] == NSOrderedSame) {
-                quotedPrintable = YES;
-              }
-            } else if ([@"CHARSET" caseInsensitiveCompare:key] == NSOrderedSame) {
-              quotedPrintableCharset = value;
-            }
-          }
-          metadataStart = j;
         }
       }
     }
 
-    i++;
+    int matchStart = i; // Found the start of a match here
 
-    int matchStart = i;
-
-    while ((i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) != NSNotFound) {
-      if (i < [rawText length] - 1 && ([rawText characterAtIndex:i + 1] == ' ' || [rawText characterAtIndex:i + 1] == '\t')) {
-        i += 2;
-      } else if (quotedPrintable && ([rawText characterAtIndex:i - 1] == '=' || [rawText characterAtIndex:i - 2] == '=')) {
-        i++;
+    while ((i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) != NSNotFound) { // Really, end in \r\n
+      if (i < [rawText length] - 1 &&                   // But if followed by tab or space,
+          ([rawText characterAtIndex:i + 1] == ' ' ||   // this is only a continuation
+           [rawText characterAtIndex:i + 1] == '\t')) {
+        i += 2; // Skip \n and continutation whitespace
+      } else if (quotedPrintable &&                          // If preceded by = in quoted printable
+                 ([rawText characterAtIndex:i - 1] == '=' || // this is a continuation
+                  [rawText characterAtIndex:i - 2] == '=')) {
+        i++; // Skip \n
       } else {
         break;
       }
     }
 
     if (i < 0) {
+      // No terminating end character? uh, done. Set i such that loop terminates and break
       i = max;
     } else if (i > matchStart) {
+      // found a match
       if (matches == nil) {
         matches = [NSMutableArray arrayWithCapacity:1];
       }
-      if ([rawText characterAtIndex:i - 1] == '\r') {
-        i--;
+      if ([rawText characterAtIndex:i-1] == '\r') {
+        i--; // Back up over \r, which really should be there
       }
       NSString * element = [rawText substringWithRange:NSMakeRange(matchStart, i - matchStart)];
       if (trim) {
@@ -169,10 +172,11 @@
       if (quotedPrintable) {
         element = [self decodeQuotedPrintable:element charset:quotedPrintableCharset];
       } else {
-        element = [self stripContinuationCRLF:element];
+        element = [CR_LF_SPACE_TAB stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@""];
       }
       if (metadata == nil) {
         NSMutableArray* match = [NSMutableArray arrayWithObject:element];
+        [match addObject:element];
         [matches addObject:match];
       } else {
         [metadata insertObject:element atIndex:0];
@@ -184,37 +188,7 @@
     }
   }
 
-  if (matches == nil || [matches count] == 0) {
-    return nil;
-  }
-  return [[[self toStringArray:matches] mutableCopy] autorelease];
-}
-
-+ (NSString *)stripContinuationCRLF:(NSString *)value {
-  int length = [value length];
-  NSMutableString * result = [NSMutableString stringWithCapacity:length];
-  BOOL lastWasLF = NO;
-
-  for (int i = 0; i < length; i++) {
-    if (lastWasLF) {
-      lastWasLF = NO;
-      continue;
-    }
-    unichar c = [value characterAtIndex:i];
-    lastWasLF = NO;
-
-    switch (c) {
-    case '\n':
-      lastWasLF = YES;
-      break;
-    case '\r':
-      break;
-    default:
-      [result appendFormat:@"%C", c];
-    }
-  }
-
-  return result;
+  return matches;
 }
 
 + (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
@@ -236,9 +210,12 @@
           // Ignore, it's just a continuation symbol
         } else {
           unichar nextNextChar = [value characterAtIndex:i + 2];
-
-          int encodedByte = 16 * [self toHexValue:nextChar] + [self toHexValue:nextNextChar];
-          [fragmentBuffer appendBytes:&encodedByte length:1];
+          int firstDigit = [self parseHexDigit:nextChar];
+          int secondDigit = [self parseHexDigit:nextNextChar];
+          if (firstDigit >= 0 && secondDigit >= 0) {
+            int encodedByte = (firstDigit << 4) + secondDigit;
+            [fragmentBuffer appendBytes:&encodedByte length:1];
+          } // else ignore it, assume it was incorrectly encoded
           i += 2;
         }
       }
@@ -251,19 +228,6 @@
 
   [self maybeAppendFragment:fragmentBuffer charset:charset result:result];
   return result;
-}
-
-+ (int)toHexValue:(unichar)c {
-  if (c >= '0' && c <= '9') {
-    return c - '0';
-  }
-  if (c >= 'A' && c <= 'F') {
-    return c - 'A' + 10;
-  }
-  if (c >= 'a' && c <= 'f') {
-    return c - 'a' + 10;
-  }
-  @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Invalid character." userInfo:nil];
 }
 
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
@@ -284,11 +248,11 @@
   return values == nil ? nil : [values objectAtIndex:0];
 }
 
-+ (NSString*)toPrimaryValue:(NSArray*)list {
+- (NSString*)toPrimaryValue:(NSArray*)list {
   return list == nil || list.count == 0 ? nil : [list objectAtIndex:0];
 }
 
-+ (NSArray*)toPrimaryValues:(NSArray*)lists {
+- (NSArray*)toPrimaryValues:(NSArray*)lists {
   if (lists == nil || lists.count == 0) {
     return nil;
   }
@@ -296,10 +260,10 @@
   for (NSArray* list in lists) {
     [result addObject:[list objectAtIndex:0]];
   }
-  return [self toStringArray:result];
+  return result;
 }
 
-+ (NSArray*)toTypes:(NSArray*)lists {
+- (NSArray*)toTypes:(NSArray*)lists {
   if (lists == nil || lists.count == 0) {
     return nil;
   }
@@ -321,35 +285,15 @@
     }
     [result addObject:type];
   }
-  return [self toStringArray:result];
+  return result;
 }
 
-+ (BOOL)isLikeVCardDate:(NSString *)value {
-  if (value == nil) {
-    return YES;
-  }
-  if ([self isStringOfDigits:value length:8]) {
-    return YES;
-  }
-  return [value length] == 10 && [value characterAtIndex:4] == '-' && [value characterAtIndex:7] == '-' && [self isSubstringOfDigits:value offset:0 length:4] && [self isSubstringOfDigits:value offset:5 length:2] && [self isSubstringOfDigits:value offset:8 length:2];
+- (BOOL)isLikeVCardDate:(NSString *)value {
+  return value == nil || [VCARD_LIKE_DATE numberOfMatchesInString:value options:0 range:NSMakeRange(0, value.length)] > 0;
 }
 
-+ (NSString *)formatAddress:(NSString *)address {
-  if (address == nil) {
-    return nil;
-  }
-  int length = [address length];
-  NSMutableString * newAddress = [NSMutableString stringWithCapacity:length];
-  for (int j = 0; j < length; j++) {
-    unichar c = [address characterAtIndex:j];
-    if (c == ';') {
-      [newAddress appendString:@" "];
-    } else {
-      [newAddress appendFormat:@"%C", c];
-    }
-  }
-
-  return [newAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+- (NSString *)formatAddress:(NSString *)address {
+  return address == nil ? nil : [[address stringByReplacingOccurrencesOfString:@";" withString:@" "] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 
@@ -357,11 +301,10 @@
  * Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like
  * "Reverend John Q. Public III".
  */
-+ (void)formatNames:(NSMutableArray *)names {
+- (void)formatNames:(NSMutableArray *)names {
   if (names != nil) {
-    for (int i = 0; i < [names count]; i++) {
-      NSMutableArray * list = [names objectAtIndex:i];
-      NSString * name = [list objectAtIndex:i];
+    for (NSMutableArray * list in names) {
+      NSString * name = [list objectAtIndex:0];
       NSMutableArray * components = [NSMutableArray arrayWithCapacity:5];
       int start = 0;
       int end;
@@ -382,7 +325,7 @@
   }
 }
 
-+ (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
+- (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
   if ([components count] > i && [components objectAtIndex:i]) {
     [newName appendFormat:@" %@", [components objectAtIndex:i]];
   }
