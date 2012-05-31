@@ -27,6 +27,7 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
 
 @property (nonatomic, retain) ZXBitMatrix * matrix;
 
+- (int)blackPointFromNeighbors:(NSArray *)blackPoints x:(int)x y:(int)y;
 - (NSArray *)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
 - (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
 - (void)threshold8x8Block:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
@@ -134,11 +135,19 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
                    matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride) {
     for (int x = 0; x < BLOCK_SIZE; x++) {
-      if ((_luminances[offset + x] & 0xFF) < threshold) {
+      // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0
+      if ((_luminances[offset + x] & 0xFF) <= threshold) {
         [_matrix setX:xoffset + x y:yoffset + y];
       }
     }
   }
+}
+
+// Esimates blackPoint from previously calculated neighbor esitmates
+- (int)blackPointFromNeighbors:(NSArray *)blackPoints x:(int)x y:(int)y {
+  return ([[[blackPoints objectAtIndex:y-1] objectAtIndex:x] intValue] +
+          2 * [[[blackPoints objectAtIndex:y] objectAtIndex:x-1] intValue] +
+          [[[blackPoints objectAtIndex:y-1] objectAtIndex:x-1] intValue]) >> 2;
 }
 
 // Calculates a single black point for each 8x8 block of pixels and saves it away.
@@ -148,7 +157,6 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
                             width:(int)width
                            height:(int)height {
   NSMutableArray * blackPoints = [NSMutableArray arrayWithCapacity:subHeight];
-
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
     if ((yoffset + BLOCK_SIZE) >= height) {
@@ -177,11 +185,38 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
         }
       }
 
-      int average;
-      if (max - min > 24) {
-        average = sum >> 6;
-      } else {
-        average = max == 0 ? 1 : min >> 1;
+      // See
+      // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
+
+      // The default estimate is the average of the values in the block
+      int average = sum >> 6;
+
+      if (max - min <= 24) {
+        // If variation wihthin the block is low, assume this is a
+        // block with only light or only dark pixels.
+
+        // The default assumption is that the block is light/background.
+        // Since no estimate for the level of dark pixels
+        // exists locally, use half the min for the block.
+        average = min >> 1;
+
+        if (y > 0 && x > 0) {
+          // Correct the "white/background" assumption for blocks
+          // that have neighbors by comparing the pixels in this
+          // block to the previously calculated blackpoints. This is
+          // based on the fact that dark barcode symbology is always
+          // surrounded by some amount of light background for which
+          // reasonable blackpoint esimates were made. The bp estimated
+          // at the bondaries is used for the interior.
+
+          // The (min < bp) seems pretty arbitrary but works better than
+          // other heurstics that were tried.
+
+          int bp = [self blackPointFromNeighbors:blackPoints x:x y:y];
+          if (min < bp) {
+            average = bp;
+          }
+        }
       }
       [[blackPoints objectAtIndex:y] addObject:[NSNumber numberWithInt:average]];
     }
