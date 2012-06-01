@@ -30,6 +30,7 @@
 @property (nonatomic, retain) NSMutableArray * testResults;
 
 - (void)runTests;
+- (NSString*)pathInBundle:(NSURL*)file;
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure;
 
 @end
@@ -85,6 +86,15 @@
   [self testBlackBoxCountingResults:YES];
 }
 
+- (NSString*)pathInBundle:(NSURL*)file {
+  NSInteger startOfResources = [[file path] rangeOfString:@"Resources"].location;
+  if (startOfResources == NSNotFound) {
+    return [file path];
+  } else {
+    return [[file path] substringFromIndex:startOfResources];
+  }
+}
+
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure {
   if (testResults.count == 0) {
     STFail(@"No test results");
@@ -104,7 +114,7 @@
   }
 
   for (NSURL * testImage in imageFiles) {
-    NSLog(@"Starting %@", [testImage path]);
+    NSLog(@"Starting %@", [self pathInBundle:testImage]);
     
     ZXImage * image = [[ZXImage alloc] initWithURL:testImage];
 

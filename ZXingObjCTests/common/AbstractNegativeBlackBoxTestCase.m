@@ -52,6 +52,7 @@
 
 @property (nonatomic, retain) NSMutableArray * testResults;
 
+- (NSString*)pathInBundle:(NSURL*)file;
 - (BOOL)checkForFalsePositives:(ZXImage*)image rotationInDegrees:(CGFloat)rotationInDegrees;
 
 @end
@@ -79,6 +80,15 @@
   [self.testResults addObject:[[[NegativeTestResult alloc] initWithFalsePositivesAllowed:falsePositivesAllowed rotation:rotation] autorelease]];
 }
 
+- (NSString*)pathInBundle:(NSURL*)file {
+  NSInteger startOfResources = [[file path] rangeOfString:@"Resources"].location;
+  if (startOfResources == NSNotFound) {
+    return [file path];
+  } else {
+    return [[file path] substringFromIndex:startOfResources];
+  }
+}
+
 - (void)runTests {
   if (self.testResults.count == 0) {
     STFail(@"No test results");
@@ -91,7 +101,7 @@
   }
 
   for (NSURL *testImage in imageFiles) {
-    NSLog(@"Starting %@", [testImage path]);
+    NSLog(@"Starting %@", [self pathInBundle:testImage]);
 
     ZXImage * image = [[ZXImage alloc] initWithURL:testImage];
     for (int x = 0; x < self.testResults.count; x++) {
