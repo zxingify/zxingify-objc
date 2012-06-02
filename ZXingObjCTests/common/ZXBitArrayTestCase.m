@@ -28,28 +28,86 @@
   }
 }
 
-- (void)testGetNextSet {
+- (void)testGetNextSet1 {
   ZXBitArray* array = [[[ZXBitArray alloc] initWithSize:32] autorelease];
-  STAssertEquals([array nextSet:0], 32, @"Expected [array nextSet:0] to be 32");
-  STAssertEquals([array nextSet:31], 32, @"Expected [array nextSet:31] to be 32");
-
+  for (int i = 0; i < array.size; i++) {
+    STAssertEquals([array nextSet:i], 32, @"Expected [array nextSet:%d] to equal 32", i);
+  }
   array = [[[ZXBitArray alloc] initWithSize:33] autorelease];
-  STAssertEquals([array nextSet:0], 33, @"Expected [array nextSet:0] to be 33");
-  STAssertEquals([array nextSet:31], 33, @"Expected [array nextSet:31] to be 33");
-  STAssertEquals([array nextSet:32], 33, @"Expected [array nextSet:32] to be 33");
+  for (int i = 0; i < array.size; i++) {
+    STAssertEquals([array nextSet:i], 33, @"Expected [array nextSet:%d] to equal 33", i);
+  }
+}
 
+- (void)testGetNextSet2 {
+  ZXBitArray* array = [[[ZXBitArray alloc] initWithSize:33] autorelease];
   [array set:31];
-  STAssertEquals([array nextSet:0], 31, @"Expected [array nextSet:0] to be 31");
-  STAssertEquals([array nextSet:30], 31, @"Expected [array nextSet:30] to be 31");
-  STAssertEquals([array nextSet:31], 31, @"Expected [array nextSet:31] to be 31");
-  STAssertEquals([array nextSet:32], 33, @"Expected [array nextSet:32] to be 33");
-
+  for (int i = 0; i < array.size; i++) {
+    int expected = i <= 31 ? 31 : 33;
+    STAssertEquals([array nextSet:i], expected, @"Expected [array nextSet:%d] to equal %d", i, expected);
+  }
   array = [[[ZXBitArray alloc] initWithSize:33] autorelease];
   [array set:32];
-  STAssertEquals([array nextSet:0], 32, @"Expected [array nextSet:0] to be 32");
-  STAssertEquals([array nextSet:30], 32, @"Expected [array nextSet:30] to be 32");
-  STAssertEquals([array nextSet:31], 32, @"Expected [array nextSet:31] to be 32");
-  STAssertEquals([array nextSet:32], 32, @"Expected [array nextSet:32] to be 32");
+  for (int i = 0; i < array.size; i++) {
+    STAssertEquals([array nextSet:i], 32, @"Expected [array nextSet:%d] to equal 32", i);
+  }
+}
+
+- (void)testGetNextSet3 {
+  ZXBitArray* array = [[[ZXBitArray alloc] initWithSize:63] autorelease];
+  [array set:31];
+  [array set:32];
+  for (int i = 0; i < array.size; i++) {
+    int expected;
+    if (i <= 31) {
+      expected = 31;
+    } else if (i == 32) {
+      expected = 32;
+    } else {
+      expected = 63;
+    }
+    STAssertEquals([array nextSet:i], expected, @"Expected [array nextSet:%d] to equal %d", i, expected);
+  }
+}
+
+- (void)testGetNextSet4 {
+  ZXBitArray* array = [[[ZXBitArray alloc] initWithSize:63] autorelease];
+  [array set:33];
+  [array set:40];
+  for (int i = 0; i < array.size; i++) {
+    int expected;
+    if (i <= 33) {
+      expected = 33;
+    } else if (i <= 40) {
+      expected = 40;
+    } else {
+      expected = 63;
+    }
+    STAssertEquals([array nextSet:i], expected, @"Expected [array nextSet:%d] to equal %d", i, expected);
+  }
+}
+
+- (void)testGetNextSet5 {
+  for (int i = 0; i < 10; i++) {
+    ZXBitArray* array = [[[ZXBitArray alloc] initWithSize:(arc4random() % 100) + 1] autorelease];
+    int numSet = arc4random() % 20;
+    for (int j = 0; j < numSet; j++) {
+      [array set:arc4random() % array.size];
+    }
+    int numQueries = arc4random() % 20;
+    for (int j = 0; j < numQueries; j++) {
+      int query = arc4random() % array.size;
+      int expected = query;
+      while (expected < array.size && ![array get:expected]) {
+        expected++;
+      }
+      int actual = [array nextSet:query];
+      if (actual != expected) {
+        [array nextSet:query];
+      }
+      STAssertEquals(actual, expected, @"Expected %d to equal %d", actual, expected);
+    }
+  }
 }
 
 - (void)testSetBulk {

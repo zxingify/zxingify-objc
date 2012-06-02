@@ -192,19 +192,14 @@ const int MAX_PAIRS = 11;
 }
 
 - (int)nextSecondBar:(ZXBitArray *)row initialPos:(int)initialPos {
-  int currentPos = initialPos;
-  BOOL current = [row get:currentPos];
-
-  while (currentPos < row.size && [row get:currentPos] == current) {
-    currentPos++;
+  int currentPos;
+  if ([row get:initialPos]) {
+    currentPos = [row nextUnset:initialPos];
+    currentPos = [row nextSet:currentPos];
+  } else {
+    currentPos = [row nextSet:initialPos];
+    currentPos = [row nextUnset:currentPos];
   }
-
-  current = !current;
-
-  while (currentPos < row.size && [row get:currentPos] == current) {
-    currentPos++;
-  }
-
   return currentPos;
 }
 
@@ -355,12 +350,16 @@ const int MAX_PAIRS = 11;
 }
 
 - (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern {
+  // Actually we found elements 2-5.
   int firstCounter;
   int start;
   int end;
-  if (oddPattern) {
-    int firstElementStart = startEnd[0] - 1;
 
+  if (oddPattern) {
+    // If pattern number is odd, we need to locate element 1 *before* the current block.
+
+    int firstElementStart = startEnd[0] - 1;
+    // Locate element 1
     while (firstElementStart >= 0 && ![row get:firstElementStart]) {
       firstElementStart--;
     }
@@ -370,16 +369,17 @@ const int MAX_PAIRS = 11;
     start = firstElementStart;
     end = startEnd[1];
   } else {
-    start = startEnd[0];
-    int firstElementStart = startEnd[1] + 1;
+    // If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block.
 
-    while (firstElementStart < row.size && [row get:firstElementStart]) {
-      firstElementStart++;
-    }
+    start = startEnd[0];
+
+    int firstElementStart = [row nextUnset:startEnd[1] + 1];
 
     end = firstElementStart;
     firstCounter = end - startEnd[1];
   }
+
+  // Make 'counters' hold 1-4
   int countersLen = self.decodeFinderCountersLen;
   int counters[countersLen];
   for (int i = countersLen - 1; i > 0; i--) {

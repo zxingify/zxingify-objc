@@ -426,15 +426,8 @@ int const CODE_STOP = 106;
   // Check for ample whitespace following pattern, but, to do this we first need to remember that
   // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
   // to read off. Would be slightly better to properly read. Here we just skip it:
-  int width = [row size];
-  while (nextStart < width && [row get:nextStart]) {
-    nextStart++;
-  }
-  int end = nextStart + (nextStart - lastStart) / 2;
-  if (end > width) {
-    end = width;
-  }
-  if (![row isRange:nextStart end:end value:NO]) {
+  nextStart = [row nextUnset:nextStart];
+  if (![row isRange:nextStart end:MIN(row.size, nextStart + (nextStart - lastStart) / 2) value:NO]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }

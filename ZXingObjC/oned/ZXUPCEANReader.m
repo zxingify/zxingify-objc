@@ -273,16 +273,9 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
     counters[i] = 0;
   }
   int width = row.size;
-  BOOL isWhite = NO;
 
-  while (rowOffset < width) {
-    isWhite = ![row get:rowOffset];
-    if (whiteFirst == isWhite) {
-      break;
-    }
-    rowOffset++;
-  }
-
+  BOOL isWhite = whiteFirst;
+  rowOffset = whiteFirst ? [row nextUnset:rowOffset] : [row nextSet:rowOffset];
   int counterPosition = 0;
   int patternStart = rowOffset;
 

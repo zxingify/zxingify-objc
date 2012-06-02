@@ -24,6 +24,7 @@
 
 - (void)ensureCapacity:(int)aSize;
 - (int *)makeArray:(int)size;
+- (int)numberOfTrailingZeros:(int)i;
 
 @end
 
@@ -109,19 +110,34 @@
   }
   int bitsOffset = from >> 5;
   int currentBits = self.bits[bitsOffset];
-  int mask = 1 << (from & 0x1F);
-  while ((currentBits & mask) == 0) {
-    if (++from >= self.size) {
-      break;
+  // mask off lesser bits first
+  currentBits &= ~((1 << (from & 0x1F)) - 1);
+  while (currentBits == 0) {
+    if (++bitsOffset == self.bitsLength) {
+      return self.size;
     }
-    if (mask == 0x80000000) {
-      mask = 1;
-      currentBits = self.bits[++bitsOffset];
-    } else {
-      mask <<= 1;
-    }
+    currentBits = self.bits[bitsOffset];
   }
-  return from;
+  int result = (bitsOffset << 5) + [self numberOfTrailingZeros:currentBits];
+  return result > self.size ? self.size : result;
+}
+
+- (int)nextUnset:(int)from {
+  if (from >= self.size) {
+    return self.size;
+  }
+  int bitsOffset = from >> 5;
+  int currentBits = ~self.bits[bitsOffset];
+  // mask off lesser bits first
+  currentBits &= ~((1 << (from & 0x1F)) - 1);
+  while (currentBits == 0) {
+    if (++bitsOffset == self.bitsLength) {
+      return size;
+    }
+    currentBits = ~self.bits[bitsOffset];
+  }
+  int result = (bitsOffset << 5) + [self numberOfTrailingZeros:currentBits];
+  return result > self.size ? self.size : result;
 }
 
 /**
@@ -307,6 +323,18 @@
   }
 
   return [NSString stringWithString:result];
+}
+
+// Ported from OpenJDK Integer.numberOfTrailingZeros implementation
+- (int)numberOfTrailingZeros:(int)i {
+  int y;
+  if (i == 0) return 32;
+  int n = 31;
+  y = i <<16; if (y != 0) { n = n -16; i = y; }
+  y = i << 8; if (y != 0) { n = n - 8; i = y; }
+  y = i << 4; if (y != 0) { n = n - 4; i = y; }
+  y = i << 2; if (y != 0) { n = n - 2; i = y; }
+  return n - (int)(((unsigned int)(i << 1)) >> 31);
 }
 
 @end

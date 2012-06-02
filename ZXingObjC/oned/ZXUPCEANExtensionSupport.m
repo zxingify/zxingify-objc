@@ -88,9 +88,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
     }
     if (x != 4) {
       rowOffset = [row nextSet:rowOffset];
-      while (rowOffset < end && [row get:rowOffset]) {
-        rowOffset++;
-      }
+      rowOffset = [row nextUnset:rowOffset];
     }
   }
 
