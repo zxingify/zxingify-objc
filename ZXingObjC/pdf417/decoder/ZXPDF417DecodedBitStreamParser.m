@@ -64,7 +64,7 @@ static NSArray* EXP900 = nil;
 @interface ZXPDF417DecodedBitStreamParser ()
 
 + (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (NSDecimalNumber *)decodeBase900toBase10:(int*)codewords count:(int)count;
++ (NSString *)decodeBase900toBase10:(int*)codewords count:(int)count;
 + (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
 + (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
@@ -407,8 +407,11 @@ static NSArray* EXP900 = nil;
       }
     }
     if (count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) {
-      NSDecimalNumber * s = [self decodeBase900toBase10:numericCodewords count:count];
-      [result appendString:[s description]];
+      NSString * s = [self decodeBase900toBase10:numericCodewords count:count];
+      if (s == nil) {
+        return NSIntegerMax;
+      }
+      [result appendString:s];
       count = 0;
     }
   }
@@ -454,13 +457,17 @@ static NSArray* EXP900 = nil;
    
    Remove leading 1 =>  Result is 000213298174000
  */
-+ (NSDecimalNumber *)decodeBase900toBase10:(int[])codewords count:(int)count {
++ (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
   NSDecimalNumber* result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
     result = [[result decimalNumberByAdding:[EXP900 objectAtIndex:count - i - 1]] decimalNumberByMultiplyingBy:
               [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:codewords[i]] decimalValue]]];
   }
-  return result;
+  NSString* resultString = [result stringValue];
+  if (![resultString hasPrefix:@"1"]) {
+    return nil;
+  }
+  return [resultString substringFromIndex:1];
 }
 
 @end
