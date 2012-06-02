@@ -76,7 +76,7 @@
  * clients will get a <b>large</b> speed increase by using this instead of decode().
  */
 - (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image error:(NSError **)error {
-  if (self.readers.count == 0) {
+  if (self.readers == nil) {
     self.hints = nil;
   }
   return [self decodeInternal:image error:error];
@@ -143,16 +143,20 @@
 }
 
 - (void)reset {
-  for (id<ZXReader> reader in self.readers) {
-    [reader reset];
+  if (self.readers != nil) {
+    for (id<ZXReader> reader in self.readers) {
+      [reader reset];
+    }
   }
 }
 
 - (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error {
-  for (id<ZXReader> reader in self.readers) {
-    ZXResult* result = [reader decode:image hints:self.hints error:nil];
-    if (result) {
-      return result;
+  if (self.readers != nil) {
+    for (id<ZXReader> reader in self.readers) {
+      ZXResult* result = [reader decode:image hints:self.hints error:nil];
+      if (result) {
+        return result;
+      }
     }
   }
 
