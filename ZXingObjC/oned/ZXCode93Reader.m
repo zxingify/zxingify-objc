@@ -43,7 +43,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 - (BOOL)checkChecksums:(NSMutableString *)result error:(NSError**)error ;
 - (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError**)error ;
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
-- (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b;
 - (unichar)patternToChar:(int)pattern;
 - (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen;
 
@@ -52,13 +52,13 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 @implementation ZXCode93Reader
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSArray * start = [self findAsteriskPattern:row];
-  if (!start) {
+  int start[2] = {0};
+  if (![self findAsteriskPattern:row a:&start[0] b:&start[1]]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   // Read off white space
-  int nextStart = [row nextSet:[[start objectAtIndex:1] intValue]];
+  int nextStart = [row nextSet:start[1]];
   int end = row.size;
 
   NSMutableString * result = [NSMutableString stringWithCapacity:20];
@@ -112,8 +112,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     return nil;
   }
 
-  float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
-  float right = (float)(nextStart + lastStart) / 2.0f;
+  float left = (float) (start[1] + start[0]) / 2.0f;
+  float right = (float) (nextStart + lastStart) / 2.0f;
   return [[[ZXResult alloc] initWithText:resultString
                                 rawBytes:nil
                                   length:0
@@ -123,7 +123,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
                                   format:kBarcodeFormatCode93] autorelease];
 }
 
-- (NSArray *)findAsteriskPattern:(ZXBitArray *)row {
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b {
   int width = row.size;
   int rowOffset = [row nextSet:0];
 
@@ -139,7 +139,9 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     } else {
       if (counterPosition == patternLength - 1) {
         if ([self toPattern:counters countersLen:patternLength] == CODE93_ASTERISK_ENCODING) {
-          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
+          if (a) *a = patternStart;
+          if (b) *b = i;
+          return YES;
         }
         patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {
@@ -156,7 +158,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     }
   }
 
-  return nil;
+  return NO;
 }
 
 - (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen {

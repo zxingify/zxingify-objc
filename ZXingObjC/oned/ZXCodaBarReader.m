@@ -49,7 +49,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 @interface ZXCodaBarReader ()
 
-- (NSMutableArray *)findAsteriskPattern:(ZXBitArray *)row;
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b;
 - (unichar)toNarrowWidePattern:(int[])counters;
 
 @end
@@ -57,14 +57,14 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 @implementation ZXCodaBarReader
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSMutableArray * start = [self findAsteriskPattern:row];
-  if (!start) {
+  int start[2] = {0};
+  if (![self findAsteriskPattern:row a:&start[0] b:&start[1]]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]]; // BAS: settings this to 0 improves the recognition rate somehow?
+  start[1] = 0; // BAS: settings this to 0 improves the recognition rate somehow?
   // Read off white space
-  int nextStart = [row nextSet:[[start objectAtIndex:1] intValue]];
+  int nextStart = [row nextSet:start[1]];
   int end = [row size];
 
   NSMutableString * result = [NSMutableString string];
@@ -145,8 +145,8 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
   [result deleteCharactersInRange:NSMakeRange(0, 1)];
 
-  float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
-  float right = (float)(nextStart + lastStart) / 2.0f;
+  float left = (float) (start[1] + start[0]) / 2.0f;
+  float right = (float) (nextStart + lastStart) / 2.0f;
   return [[[ZXResult alloc] initWithText:result
                                 rawBytes:nil
                                   length:0
@@ -156,7 +156,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
                                   format:kBarcodeFormatCodabar] autorelease];
 }
 
-- (NSMutableArray *)findAsteriskPattern:(ZXBitArray *)row {
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b {
   int width = row.size;
   int rowOffset = [row nextSet:0];
 
@@ -174,8 +174,9 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
         @try {
           if ([ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:8 key:[self toNarrowWidePattern:counters]]) {
             if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
-              return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart],
-                      [NSNumber numberWithInt:i], nil];
+              if (a) *a = patternStart;
+              if (b) *b = i;
+              return YES;
             }
           }
         } @catch (NSException * re) {
@@ -196,7 +197,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     }
   }
 
-  return nil;
+  return NO;
 }
 
 + (BOOL)arrayContains:(char *)array length:(unsigned int)length key:(unichar)key {
