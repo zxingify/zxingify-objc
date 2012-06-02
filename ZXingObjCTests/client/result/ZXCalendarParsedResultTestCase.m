@@ -79,7 +79,7 @@ static double EPSILON = 0.0000000001;
                    summary:nil
                   location:nil
                      start:@"20080504T123456Z"
-                       end:@"20080504T123456Z"];
+                       end:nil];
 }
 
 - (void)testSummary {
@@ -91,7 +91,7 @@ static double EPSILON = 0.0000000001;
                    summary:@"foo"
                   location:nil
                      start:@"20080504T123456Z"
-                       end:@"20080504T123456Z"];
+                       end:nil];
 }
 
 - (void)testLocation {
@@ -103,7 +103,7 @@ static double EPSILON = 0.0000000001;
                    summary:nil
                   location:@"Miami"
                      start:@"20080504T123456Z"
-                       end:@"20080504T123456Z"];
+                       end:nil];
 }
 
 - (void)testDescription {
@@ -115,7 +115,7 @@ static double EPSILON = 0.0000000001;
                    summary:nil
                   location:nil
                      start:@"20080504T123456Z"
-                       end:@"20080504T123456Z"];
+                       end:nil];
   [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
                            @"DTSTART:20080504T123456Z\r\n"
                            @"DESCRIPTION:This is a test\r\n\t with a continuation\r\n"
@@ -124,7 +124,7 @@ static double EPSILON = 0.0000000001;
                    summary:nil
                   location:nil
                      start:@"20080504T123456Z"
-                       end:@"20080504T123456Z"];
+                       end:nil];
 }
 
 - (void)testGeo {
@@ -136,7 +136,7 @@ static double EPSILON = 0.0000000001;
                    summary:nil
                   location:nil
                      start:@"20080504T123456Z"
-                       end:@"20080504T123456Z"
+                       end:nil
                   attendee:nil
                   latitude:-12.345
                  longitude:-45.678];
@@ -163,6 +163,18 @@ static double EPSILON = 0.0000000001;
                   location:@"Location, with, escaped, commas"
                      start:@"20111110T110000"
                        end:@"20111110T120000"];
+}
+
+- (void)testAllDayValueDate {
+  [self doTestWithContents:@"BEGIN:VEVENT\n"
+                           @"DTSTART;VALUE=DATE:20111110\n"
+                           @"DTEND;VALUE=DATE:20111110\n"
+                           @"END:VEVENT"
+               description:nil
+                   summary:nil
+                  location:nil
+                     start:@"20111110"
+                       end:@"20111110"];
 }
 
 - (void)doTestWithContents:(NSString*)contents

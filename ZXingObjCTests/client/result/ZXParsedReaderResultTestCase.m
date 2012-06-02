@@ -207,11 +207,11 @@
                             type:kParsedResultTypeCalendar];
   // Start time only
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504T123456Z\n20080504T123456Z" type:kParsedResultTypeCalendar];
+                    goldenResult:@"foo\n20080504T123456Z" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504T123456\n20080504T123456" type:kParsedResultTypeCalendar];
+                    goldenResult:@"foo\n20080504T123456" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504\n20080504" type:kParsedResultTypeCalendar];
+                    goldenResult:@"foo\n20080504" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT"
                     goldenResult:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT" type:kParsedResultTypeText];
   // Make sure illegal entries without newlines don't crash
