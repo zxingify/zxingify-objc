@@ -68,7 +68,7 @@ enum {
 + (void)decodeEdifactSegment:(ZXBitSource *)bits result:(NSMutableString *)result;
 + (BOOL)decodeTextSegment:(ZXBitSource *)bits result:(NSMutableString *)result;
 + (void)parseTwoBytes:(int)firstByte secondByte:(int)secondByte result:(int[])result;
-+ (char)unrandomize255State:(int)randomizedBase256Codeword base256CodewordPosition:(int)base256CodewordPosition;
++ (int)unrandomize255State:(int)randomizedBase256Codeword base256CodewordPosition:(int)base256CodewordPosition;
 
 @end
 
@@ -493,7 +493,7 @@ enum {
     if ([bits available] < 8) {
       return NO;
     }
-    char byte = [self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
+    unsigned char byte = (unsigned char)[self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
     bytes[i] = byte;
     [bytesArray addObject:[NSNumber numberWithChar:byte]];
   }
@@ -507,10 +507,10 @@ enum {
 /**
  * See ISO 16022:2006, Annex B, B.2
  */
-+ (char)unrandomize255State:(int)randomizedBase256Codeword base256CodewordPosition:(int)base256CodewordPosition {
++ (int)unrandomize255State:(int)randomizedBase256Codeword base256CodewordPosition:(int)base256CodewordPosition {
   int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
   int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
-  return (char)(tempVariable >= 0 ? tempVariable : tempVariable + 256);
+  return tempVariable >= 0 ? tempVariable : tempVariable + 256;
 }
 
 @end
