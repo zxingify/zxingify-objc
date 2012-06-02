@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import "ZXCompaction.h"
+
 @class ZXBarcodeMatrix;
 
 /*
@@ -22,12 +24,12 @@
 @interface ZXPDF417 : NSObject
 
 @property (nonatomic, retain, readonly) ZXBarcodeMatrix* barcodeMatrix;
-@property (nonatomic, assign) BOOL byteCompaction;
 @property (nonatomic, assign) BOOL compact;
+@property (nonatomic, assign) ZXCompaction compaction;
 
 - (id)initWithCompact:(BOOL)compact;
 - (BOOL)generateBarcodeLogic:(NSString*)msg errorCorrectionLevel:(int)errorCorrectionLevel error:(NSError**)error;
-- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords error:(NSError**)error;
+- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError**)error;
 - (void)setDimensionsWithMaxCols:(int)maxCols minCols:(int)minCols maxRows:(int)maxRows minRows:(int)minRows;
 
 @end

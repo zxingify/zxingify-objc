@@ -42,12 +42,12 @@
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
                 minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-         byteCompaction:(BOOL)byteCompaction error:(NSError**)error {
+             compaction:(ZXCompaction)compaction error:(NSError**)error {
   ZXPDF417* encoder = [self initializeEncoder:format compact:compact];
 
   // Set options: dimensions and byte compaction
   [encoder setDimensionsWithMaxCols:maxCols minCols:minCols maxRows:maxRows minRows:minRows];
-  encoder.byteCompaction = byteCompaction;
+  encoder.compaction = compaction;
 
   return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
 }

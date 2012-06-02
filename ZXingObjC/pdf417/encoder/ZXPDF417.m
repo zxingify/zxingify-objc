@@ -508,7 +508,6 @@ static float HEIGHT = 2.0f; //mm
 
 @interface ZXPDF417 ()
 
-@property (nonatomic, assign) int errorCorrectionLevel;
 @property (nonatomic, retain) ZXBarcodeMatrix* barcodeMatrix;
 @property (nonatomic, assign) int minCols;
 @property (nonatomic, assign) int maxCols;
@@ -527,9 +526,8 @@ static float HEIGHT = 2.0f; //mm
 @implementation ZXPDF417
 
 @synthesize barcodeMatrix;
-@synthesize errorCorrectionLevel;
 @synthesize compact;
-@synthesize byteCompaction;
+@synthesize compaction;
 @synthesize minCols;
 @synthesize maxCols;
 @synthesize minRows;
@@ -542,6 +540,7 @@ static float HEIGHT = 2.0f; //mm
 - (id)initWithCompact:(BOOL)aCompact {
   if (self = [super init]) {
     self.compact = aCompact;
+    self.compaction = ZX_COMPACTION_AUTO;
     self.minCols = 2;
     self.maxCols = 30;
     self.maxRows = 30;
@@ -632,9 +631,7 @@ static float HEIGHT = 2.0f; //mm
   [logic addBar:last width:width];
 }
 
-- (void)encodeLowLevel:(NSString*)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)anErrorCorrectionLevel logic:(ZXBarcodeMatrix*)logic {
-  self.errorCorrectionLevel = anErrorCorrectionLevel;
-
+- (void)encodeLowLevel:(NSString*)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)errorCorrectionLevel logic:(ZXBarcodeMatrix*)logic {
   int idx = 0;
   for (int y = 0; y < r; y++) {
     int cluster = y % 3;
@@ -647,11 +644,11 @@ static float HEIGHT = 2.0f; //mm
       left = (30 * (y / 3)) + ((r - 1) / 3);
       right = (30 * (y / 3)) + (c - 1);
     } else if (cluster == 1) {
-      left = (30 * (y / 3)) + (self.errorCorrectionLevel * 3) + ((r - 1) % 3);
+      left = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
       right = (30 * (y / 3)) + ((r - 1) / 3);
     } else {
       left = (30 * (y / 3)) + (c - 1);
-      right = (30 * (y / 3)) + (self.errorCorrectionLevel * 3) + ((r - 1) % 3);
+      right = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
     }
 
     int pattern = PDF_CODEWORD_TABLE[cluster][left];
@@ -681,14 +678,14 @@ static float HEIGHT = 2.0f; //mm
 
   //1. step: High-level encoding
   int errorCorrectionCodeWords = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:anErrorCorrectionLevel];
-  NSString* highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg byteCompaction:self.byteCompaction error:error];
+  NSString* highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg compaction:self.compaction error:error];
   if (!highLevel) {
     return NO;
   }
   int sourceCodeWords = highLevel.length;
 
   int dimension[2] = {0};
-  if (![self determineDimensions:dimension sourceCodeWords:sourceCodeWords error:error]) {
+  if (![self determineDimensions:dimension sourceCodeWords:sourceCodeWords errorCorrectionCodeWords:errorCorrectionCodeWords error:error]) {
     return NO;
   }
 
@@ -698,10 +695,7 @@ static float HEIGHT = 2.0f; //mm
   int pad = [self numberOfPadCodewordsM:sourceCodeWords k:errorCorrectionCodeWords c:cols r:rows];
 
   //2. step: construct data codewords
-  int n = [self numberOfDataCodewordsM:sourceCodeWords errorCorrectionLevel:anErrorCorrectionLevel c:cols error:error];
-  if (n == -1) {
-    return NO;
-  } else if (n > 929) {
+  if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
     NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Encoded message contains to many code words, message to big (%d bytes)", msg.length]
                                                          forKey:NSLocalizedDescriptionKey];
 
@@ -709,6 +703,7 @@ static float HEIGHT = 2.0f; //mm
     return NO;
   }
 
+  int n = sourceCodeWords + pad + 1;
   NSMutableString* sb = [NSMutableString stringWithCapacity:n];
   [sb appendFormat:@"%c", (char)n];
   [sb appendFormat:@"%@", highLevel];
@@ -732,11 +727,9 @@ static float HEIGHT = 2.0f; //mm
  * Determine optimal nr of columns and rows for the specified number of
  * codewords.
  */
-- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords error:(NSError **)error {
-
+- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error{
   float ratio = 0.0f;
   BOOL result = NO;
-  int errorCorrectionCodeWords = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:errorCorrectionLevel];
 
   for (int cols = self.minCols; cols <= self.maxCols; cols++) {
 
@@ -761,6 +754,15 @@ static float HEIGHT = 2.0f; //mm
     dimension[0] = cols;
     dimension[1] = rows;
     result = YES;
+  }
+
+  // Handle case when min values were larger than necessary
+  if (!result) {
+    int rows = [self calculateNumberOfRowsM:sourceCodeWords k:errorCorrectionCodeWords c:minCols];
+    if (rows < minRows) {
+      dimension[0] = minCols;
+      dimension[1] = minRows;
+    }
   }
 
   if (!result) {

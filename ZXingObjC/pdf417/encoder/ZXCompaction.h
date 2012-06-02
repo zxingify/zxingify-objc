@@ -1,11 +1,11 @@
 /*
- * Copyright 2006 Jeremias Maerki in part, and ZXing Authors in part
+ * Copyright 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-/*
- * This file has been modified from its original form in Barcode4J.
- */
-
-#import "ZXCompaction.h"
-
-/**
- * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
- * annex P.
- */
-
-@interface ZXPDF417HighLevelEncoder : NSObject
-
-+ (NSString*)encodeHighLevel:(NSString*)msg compaction:(ZXCompaction)compaction error:(NSError**)error;
-
-@end
+typedef enum {
+  ZX_COMPACTION_AUTO,
+  ZX_COMPACTION_TEXT,
+  ZX_COMPACTION_BYTE,
+  ZX_COMPACTION_NUMERIC
+} ZXCompaction;

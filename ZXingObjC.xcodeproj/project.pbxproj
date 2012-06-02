@@ -1649,6 +1649,7 @@
 		258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITFBlackBox2TestCase.m; path = oned/ITFBlackBox2TestCase.m; sourceTree = "<group>"; };
 		258FE03E15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox1TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.h; sourceTree = "<group>"; };
 		258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox1TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25AFD8151579C44C005BBB14 /* ZXCompaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZXCompaction.h; path = encoder/ZXCompaction.h; sourceTree = "<group>"; };
 		25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeReader.h; path = maxicode/ZXMaxiCodeReader.h; sourceTree = "<group>"; };
 		25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeReader.m; path = maxicode/ZXMaxiCodeReader.m; sourceTree = "<group>"; };
 		25E484CC15771A8E00AA97E4 /* ZXMaxiCodeDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeDecoder.h; path = maxicode/decoder/ZXMaxiCodeDecoder.h; sourceTree = "<group>"; };
@@ -2589,6 +2590,7 @@
 				250F052915715279007DE9EB /* ZXBarcodeMatrix.m */,
 				250F052D15715857007DE9EB /* ZXBarcodeRow.h */,
 				250F052E15715857007DE9EB /* ZXBarcodeRow.m */,
+				25AFD8151579C44C005BBB14 /* ZXCompaction.h */,
 				250F053115715ADF007DE9EB /* ZXPDF417.h */,
 				250F053215715ADF007DE9EB /* ZXPDF417.m */,
 				250F053515716170007DE9EB /* ZXPDF417ErrorCorrection.h */,

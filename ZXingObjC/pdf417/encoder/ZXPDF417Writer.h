@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+#import "ZXCompaction.h"
 #import "ZXWriter.h"
 
 @interface ZXPDF417Writer : NSObject <ZXWriter>
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
                 minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-         byteCompaction:(BOOL)byteCompaction error:(NSError**)error;
+             compaction:(ZXCompaction)compaction error:(NSError**)error;
 
 @end

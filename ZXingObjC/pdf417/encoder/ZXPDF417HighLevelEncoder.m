@@ -154,7 +154,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
  * of ISO/IEC 15438:2001(E).  If byte compaction has been selected, then only byte compaction
  * is used.
  */
-+ (NSString*)encodeHighLevel:(NSString*)msg byteCompaction:(BOOL)byteCompaction error:(NSError**)error {
++ (NSString*)encodeHighLevel:(NSString*)msg compaction:(ZXCompaction)compaction error:(NSError**)error {
   unsigned char* bytes = NULL; //Fill later and only if needed
 
   //the codewords 0..928 are encoded as Unicode characters
@@ -164,33 +164,18 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
   int p = 0;
   int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
   int textSubMode = SUBMODE_ALPHA;
-  if (byteCompaction) {
-    encodingMode = BYTE_COMPACTION;
-    while (p < len) {
 
-      if (bytes == NULL) {
-        bytes = [self bytesForMessage:msg];
-      }
-      int b = [self determineConsecutiveBinaryCount:msg bytes:bytes startpos:p error:error];
-      if (b == -1) {
-        return nil;
-      } else if (b == 0) {
-        b = 1;
-      }
-      // I don't see how this ever takes value TEXT_COMPACTION?
-      //if (b == 1 && encodingMode == TEXT_COMPACTION) {
-      if (b == 1) {
-        //Switch for one byte (instead of latch)
-        [self encodeBinary:bytes startpos:p count:1 startmode:TEXT_COMPACTION buffer:sb];
-      } else {
-        //Mode latch performed by encodeBinary
-        [self encodeBinary:bytes startpos:p count:b startmode:encodingMode buffer:sb];
-        // ... so this is redundant?
-        //encodingMode = BYTE_COMPACTION;
-        //textSubMode = SUBMODE_ALPHA; //Reset after latch
-      }
-      p += b;
-    }
+  // User selected encoding mode
+  if (compaction == ZX_COMPACTION_TEXT) {
+    [self encodeText:msg startpos:p count:len buffer:sb initialSubmode:textSubMode];
+  } else if (compaction == ZX_COMPACTION_BYTE) {
+    encodingMode = BYTE_COMPACTION;
+    bytes = [self bytesForMessage:msg];
+    [self encodeBinary:bytes startpos:p count:msg.length startmode:encodingMode buffer:sb];
+  } else if (compaction == ZX_COMPACTION_NUMERIC) {
+    encodingMode = NUMERIC_COMPACTION;
+    [sb appendFormat:@"%c", (char) LATCH_TO_NUMERIC];
+    [self encodeNumeric:msg startpos:p count:len buffer:sb];
   } else {
     while (p < len) {
       int n = [self determineConsecutiveDigitCount:msg startpos:p];
@@ -361,34 +346,34 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
 + (void)encodeBinary:(unsigned char*)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString*)sb {
   if (count == 1 && startmode == TEXT_COMPACTION) {
     [sb appendFormat:@"%c", (char) SHIFT_TO_BYTE];
-  } else {
-    BOOL sixpack = (count % 6) == 0;
-    if (sixpack) {
-      [sb appendFormat:@"%c", (char) LATCH_TO_BYTE];
-    } else {
-      [sb appendFormat:@"%c", (char) LATCH_TO_BYTE_PADDED];
-    }
   }
 
-  const int charsLen = 5;
-  char chars[charsLen] = {0};
   int idx = startpos;
-  while ((startpos + count - idx) >= 6) {
-    long t = 0;
-    for (int i = 0; i < 6; i++) {
-      t <<= 8;
-      t += bytes[idx + i] & 0xff;
+  // Encode sixpacks
+  if (count >= 6) {
+    [sb appendFormat:@"%c", (char) LATCH_TO_BYTE];
+    const int charsLen = 5;
+    char chars[charsLen] = {0};
+    while ((startpos + count - idx) >= 6) {
+      long t = 0;
+      for (int i = 0; i < 6; i++) {
+        t <<= 8;
+        t += bytes[idx + i] & 0xff;
+      }
+      for (int i = 0; i < 5; i++) {
+        chars[i] = (char) (t % 900);
+        t /= 900;
+      }
+      for (int i = charsLen - 1; i >= 0; i--) {
+        [sb appendFormat:@"%c", chars[i]];
+      }
+      idx += 6;
     }
-    for (int i = 0; i < 5; i++) {
-      chars[i] = (char) (t % 900);
-      t /= 900;
-    }
-    for (int i = charsLen - 1; i >= 0; i--) {
-      [sb appendFormat:@"%c", chars[i]];
-    }
-    idx += 6;
   }
   //Encode rest (remaining n<5 bytes if any)
+  if (idx < startpos + count) {
+    [sb appendFormat:@"%c", (char) LATCH_TO_BYTE_PADDED];
+  }
   for (int i = idx; i < startpos + count; i++) {
     int ch = bytes[i] & 0xff;
     [sb appendFormat:@"%c", ch];
