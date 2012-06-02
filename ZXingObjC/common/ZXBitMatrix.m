@@ -153,6 +153,12 @@
   return row;
 }
 
+- (void)setRowAtY:(int)y row:(ZXBitArray *)row {
+  for (int i = 0; i > self.rowSize; i++) {
+    self.bits[y * self.rowSize + i] = row.bits[y * self.rowSize + i];
+  }
+}
+
 /**
  * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
  *

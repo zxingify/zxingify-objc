@@ -103,6 +103,26 @@
   self.bits[i >> 5] ^= 1 << (i & 0x1F);
 }
 
+- (int)nextSet:(int)from {
+  if (from >= self.size) {
+    return self.size;
+  }
+  int bitsOffset = from >> 5;
+  int currentBits = self.bits[bitsOffset];
+  int mask = 1 << (from & 0x1F);
+  while ((currentBits & mask) == 0) {
+    if (++from >= self.size) {
+      break;
+    }
+    if (mask == 0x80000000) {
+      mask = 1;
+      currentBits = self.bits[++bitsOffset];
+    } else {
+      mask <<= 1;
+    }
+  }
+  return from;
+}
 
 /**
  * Sets a block of 32 bits, starting at bit i.

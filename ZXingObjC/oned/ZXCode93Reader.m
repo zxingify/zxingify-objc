@@ -57,12 +57,9 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  int nextStart = [[start objectAtIndex:1] intValue];
+  // Read off white space
+  int nextStart = [row nextSet:[[start objectAtIndex:1] intValue]];
   int end = row.size;
-
-  while (nextStart < end && ![row get:nextStart]) {
-    nextStart++;
-  }
 
   NSMutableString * result = [NSMutableString stringWithCapacity:20];
   const int countersLen = 6;
@@ -89,10 +86,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     for (int i = 0; i < countersLen; i++) {
       nextStart += counters[i];
     }
-
-    while (nextStart < end && ![row get:nextStart]) {
-      nextStart++;
-    }
+    // Read off white space
+    nextStart = [row nextSet:nextStart];
   } while (decodedChar != '*');
   [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
 
@@ -130,13 +125,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 - (NSArray *)findAsteriskPattern:(ZXBitArray *)row {
   int width = row.size;
-  int rowOffset = 0;
-  while (rowOffset < width) {
-    if ([row get:rowOffset]) {
-      break;
-    }
-    rowOffset++;
-  }
+  int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
   const int patternLength = 6;
@@ -145,8 +134,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   BOOL isWhite = NO;
 
   for (int i = rowOffset; i < width; i++) {
-    BOOL pixel = [row get:i];
-    if (pixel ^ isWhite) {
+    if ([row get:i] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {

@@ -181,8 +181,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   int i = start;
 
   while (i < end) {
-    BOOL pixel = [row get:i];
-    if (pixel ^ isWhite) {
+    if ([row get:i] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       counterPosition++;

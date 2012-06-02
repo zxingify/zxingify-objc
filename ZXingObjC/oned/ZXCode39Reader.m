@@ -96,12 +96,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  int nextStart = NSMaxRange(start);
+  // Read off white space
+  int nextStart = [row nextSet:NSMaxRange(start)];
   int end = [row size];
-
-  while (nextStart < end && ![row get:nextStart]) {
-    nextStart++;
-  }
 
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   unichar decodedChar;
@@ -126,10 +123,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
       nextStart += counters[i];
     }
-
-    while (nextStart < end && ![row get:nextStart]) {
-      nextStart++;
-    }
+    // Read off white space
+    nextStart = [row nextSet:nextStart];
   } while (decodedChar != '*');
   [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
 
@@ -138,7 +133,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     lastPatternSize += counters[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-  if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+  if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -185,26 +180,19 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 
 - (NSRange)findAsteriskPattern:(ZXBitArray *)row counters:(int*)counters countersLen:(int)countersLen {
   int width = row.size;
-  int rowOffset = 0;
-  while (rowOffset < width) {
-    if ([row get:rowOffset]) {
-      break;
-    }
-    rowOffset++;
-  }
+  int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
   int patternStart = rowOffset;
   BOOL isWhite = NO;
 
   for (int i = rowOffset; i < width; i++) {
-    BOOL pixel = [row get:i];
-    if (pixel ^ isWhite) {
+    if ([row get:i] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == countersLen - 1) {
         if ([self toNarrowWidePattern:counters countersLen:countersLen] == CODE39_ASTERISK_ENCODING) {
-          if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
+          if ([row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
             return NSMakeRange(patternStart, i - patternStart);
           }
         }

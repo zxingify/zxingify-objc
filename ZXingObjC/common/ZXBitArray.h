@@ -28,6 +28,7 @@
 - (BOOL)get:(int)i;
 - (void)set:(int)i;
 - (void)flip:(int)i;
+- (int)nextSet:(int)from;
 - (void)setBulk:(int)i newBits:(int)newBits;
 - (void)setRange:(int)start end:(int)end;
 - (void)clear;

@@ -312,8 +312,7 @@ const int MAX_PAIRS = 11;
   int counterPosition = 0;
   int patternStart = rowOffset;
   for (int x = rowOffset; x < width; x++) {
-    BOOL pixel = [row get:x];
-    if (pixel ^ isWhite) {
+    if ([row get:x] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == 3) {

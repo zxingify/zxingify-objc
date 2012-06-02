@@ -87,9 +87,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
       lgPatternFound |= 1 << (4 - x);
     }
     if (x != 4) {
-      while (rowOffset < end && ![row get:rowOffset]) {
-        rowOffset++;
-      }
+      rowOffset = [row nextSet:rowOffset];
       while (rowOffset < end && [row get:rowOffset]) {
         rowOffset++;
       }

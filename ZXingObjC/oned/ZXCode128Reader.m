@@ -172,13 +172,7 @@ int const CODE_STOP = 106;
 
 - (NSArray *)findStartPattern:(ZXBitArray *)row {
   int width = row.size;
-  int rowOffset = 0;
-  while (rowOffset < width) {
-    if ([row get:rowOffset]) {
-      break;
-    }
-    rowOffset++;
-  }
+  int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
   const int patternLength = 6;
@@ -187,8 +181,7 @@ int const CODE_STOP = 106;
   BOOL isWhite = NO;
 
   for (int i = rowOffset; i < width; i++) {
-    BOOL pixel = [row get:i];
-    if (pixel ^ isWhite) {
+    if ([row get:i] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {

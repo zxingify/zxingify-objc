@@ -287,8 +287,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   int patternStart = rowOffset;
 
   for (int x = rowOffset; x < width; x++) {
-    BOOL pixel = [row get:x];
-    if (pixel ^ isWhite) {
+    if ([row get:x] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {

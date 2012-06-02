@@ -228,15 +228,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
  */
 - (int)skipWhiteSpace:(ZXBitArray *)row {
   int width = [row size];
-  int endStart = 0;
-
-  while (endStart < width) {
-    if ([row get:endStart]) {
-      break;
-    }
-    endStart++;
-  }
-
+  int endStart = [row nextSet:0];
   if (endStart == width) {
     return -1;
   }
@@ -280,8 +272,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   int counterPosition = 0;
   int patternStart = rowOffset;
   for (int x = rowOffset; x < width; x++) {
-    BOOL pixel = [row get:x];
-    if (pixel ^ isWhite) {
+    if ([row get:x] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {

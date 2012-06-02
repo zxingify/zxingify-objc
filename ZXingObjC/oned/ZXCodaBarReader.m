@@ -63,13 +63,9 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
     return nil;
   }
   [start replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]]; // BAS: settings this to 0 improves the recognition rate somehow?
-  int nextStart = [[start objectAtIndex:1] intValue];
-  int end = [row size];
-
   // Read off white space
-  while (nextStart < end && ![row get:nextStart]) {
-    nextStart++;
-  }
+  int nextStart = [row nextSet:[[start objectAtIndex:1] intValue]];
+  int end = [row size];
 
   NSMutableString * result = [NSMutableString string];
   const int countersLen = 7;
@@ -97,9 +93,8 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
       nextStart += counters[i];
     }
 
-    while (nextStart < end && ![row get:nextStart]) {
-      nextStart++;
-    }
+    // Read off white space
+    nextStart = [row nextSet:nextStart];
   } while (nextStart < end); // no fixed end pattern so keep on reading while data is available
 
   // Look for whitespace after pattern:
@@ -163,14 +158,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 - (NSMutableArray *)findAsteriskPattern:(ZXBitArray *)row {
   int width = row.size;
-  int rowOffset = 0;
-
-  while (rowOffset < width) {
-    if ([row get:rowOffset]) {
-      break;
-    }
-    rowOffset++;
-  }
+  int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
   const int patternLength = 7;
@@ -179,8 +167,7 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   BOOL isWhite = NO;
 
   for (int i = rowOffset; i < width; i++) {
-    BOOL pixel = [row get:i];
-    if (pixel ^ isWhite) {
+    if ([row get:i] ^ isWhite) {
       counters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
