@@ -21,13 +21,14 @@
 static NSRegularExpression* BEGIN_VCARD = nil;
 static NSRegularExpression* VCARD_LIKE_DATE = nil;
 static NSRegularExpression* CR_LF_SPACE_TAB = nil;
+static NSRegularExpression* NEWLINE_ESCAPE = nil;
+static NSRegularExpression* VCARD_ESCAPES = nil;
 static NSString* EQUALS = @"=";
 static NSString* SEMICOLON = @";";
 
 @interface ZXVCardResultParser ()
 
 + (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset;
-- (NSString *)formatAddress:(NSString *)address;
 - (void)formatNames:(NSMutableArray *)names;
 - (BOOL)isLikeVCardDate:(NSString *)value;
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
@@ -45,6 +46,8 @@ static NSString* SEMICOLON = @";";
   BEGIN_VCARD = [[NSRegularExpression alloc] initWithPattern:@"BEGIN:VCARD" options:NSRegularExpressionCaseInsensitive error:nil];
   VCARD_LIKE_DATE = [[NSRegularExpression alloc] initWithPattern:@"\\d{4}-?\\d{2}-?\\d{2}" options:0 error:nil];
   CR_LF_SPACE_TAB = [[NSRegularExpression alloc] initWithPattern:@"\r\n[ \t]" options:0 error:nil];
+  NEWLINE_ESCAPE = [[NSRegularExpression alloc] initWithPattern:@"\\\\[nN]" options:0 error:nil];
+  VCARD_ESCAPES = [[NSRegularExpression alloc] initWithPattern:@"\\\\([,;\\\\])" options:0 error:nil];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -67,7 +70,7 @@ static NSString* SEMICOLON = @";";
   NSMutableArray * addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES];
   if (addresses != nil) {
     for (NSMutableArray* list in addresses) {
-      [list replaceObjectAtIndex:0 withObject:[self formatAddress:[list objectAtIndex:0]]];
+      [list replaceObjectAtIndex:0 withObject:[list objectAtIndex:0]];
     }
   }
   NSArray * org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
@@ -173,6 +176,8 @@ static NSString* SEMICOLON = @";";
         element = [self decodeQuotedPrintable:element charset:quotedPrintableCharset];
       } else {
         element = [CR_LF_SPACE_TAB stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@""];
+        element = [NEWLINE_ESCAPE stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"\n"];
+        element = [VCARD_ESCAPES stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"$1"];
       }
       if (metadata == nil) {
         NSMutableArray* match = [NSMutableArray arrayWithObject:element];
@@ -291,11 +296,6 @@ static NSString* SEMICOLON = @";";
 - (BOOL)isLikeVCardDate:(NSString *)value {
   return value == nil || [VCARD_LIKE_DATE numberOfMatchesInString:value options:0 range:NSMakeRange(0, value.length)] > 0;
 }
-
-- (NSString *)formatAddress:(NSString *)address {
-  return address == nil ? nil : [[address stringByReplacingOccurrencesOfString:@";" withString:@" "] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-}
-
 
 /**
  * Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like

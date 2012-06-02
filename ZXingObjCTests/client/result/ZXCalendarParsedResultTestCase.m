@@ -142,6 +142,29 @@ static double EPSILON = 0.0000000001;
                  longitude:-45.678];
 }
 
+- (void)testVEventEscapes {
+  [self doTestWithContents:@"BEGIN:VEVENT\n"
+                           @"CREATED:20111109T110351Z\n"
+                           @"LAST-MODIFIED:20111109T170034Z\n"
+                           @"DTSTAMP:20111109T170034Z\n"
+                           @"UID:0f6d14ef-6cb7-4484-9080-61447ccdf9c2\n"
+                           @"SUMMARY:Summary line\n"
+                           @"CATEGORIES:Private\n"
+                           @"DTSTART;TZID=Europe/Vienna:20111110T110000\n"
+                           @"DTEND;TZID=Europe/Vienna:20111110T120000\n"
+                           @"LOCATION:Location\\, with\\, escaped\\, commas\n"
+                           @"DESCRIPTION:Meeting with a friend\\nlook at homepage first\\n\\n\n"
+                           @"  \\n\n"
+                           @"SEQUENCE:1\n"
+                           @"X-MOZ-GENERATION:1\n"
+                           @"END:VEVENT"
+               description:@"Meeting with a friend\nlook at homepage first\n\n\n  \n"
+                   summary:@"Summary line"
+                  location:@"Location, with, escaped, commas"
+                     start:@"20111110T110000"
+                       end:@"20111110T120000"];
+}
+
 - (void)doTestWithContents:(NSString*)contents
                description:(NSString*)description
                    summary:(NSString*)summary

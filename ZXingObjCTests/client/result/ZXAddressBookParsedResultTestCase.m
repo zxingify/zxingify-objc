@@ -106,6 +106,20 @@
                       note:nil];
 }
 
+- (void)testEscapedVCard {
+  [self doTestWithContents:@"BEGIN:VCARD\r\nADR;HOME:123\\;\\\\ Main\\, St\\nHome\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD"
+                     title:nil
+                     names:[NSArray arrayWithObject:@"Sean Owen"]
+             pronunciation:nil
+                 addresses:[NSArray arrayWithObject:@"123;\\ Main, St\nHome"]
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                       url:nil
+                  birthday:nil
+                      note:nil];
+}
+
 - (void)testBizcard {
   [self doTestWithContents:@"BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12125551212;E:srowen@example.org;"
                      title:nil
@@ -137,13 +151,13 @@
 
 - (void)testQuotedPrintable {
   [self doTestWithContents:@"BEGIN:VCARD\r\nADR;HOME;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:;;"
-                           @"=35=38=20=4C=79=6E=62=72=6F=6F=6B=0D=0A=43=\r\n"
+                           @"=38=38=20=4C=79=6E=62=72=6F=6F=6B=0D=0A=43=\r\n"
                            @"=4F=20=36=39=39=\r\n"
-                           @"=32=36;;;\r\nEND:VCARD"
+                           @"=39=39;;;\r\nEND:VCARD"
                      title:nil
                      names:nil
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@"58 Lynbrook\r\nCO 69926"]
+                 addresses:[NSArray arrayWithObject:@";;88 Lynbrook\r\nCO 69999;;;"]
                     emails:nil
               phoneNumbers:nil
                        org:nil
