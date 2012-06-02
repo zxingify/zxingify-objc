@@ -27,8 +27,8 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
 
 @property (nonatomic, retain) ZXBitMatrix * matrix;
 
-- (NSArray *)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
-- (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(NSArray *)blackPoints matrix:(ZXBitMatrix *)matrix;
+- (int**)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
+- (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(int**)blackPoints matrix:(ZXBitMatrix *)matrix;
 - (void)threshold8x8Block:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
 
 @end
@@ -71,11 +71,16 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
     if ((height & BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    NSArray * blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
+    int** blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
 
     ZXBitMatrix * newMatrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
     [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
     self.matrix = newMatrix;
+
+    for (int i = 0; i < subHeight; i++) {
+      free(blackPoints[i]);
+    }
+    free(blackPoints);
   } else {
     // If the image is too small, fall back to the global histogram approach.
     self.matrix = [super blackMatrixWithError:error];
@@ -95,7 +100,7 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
                          subHeight:(int)subHeight
                              width:(int)width
                             height:(int)height
-                       blackPoints:(NSArray *)blackPoints
+                       blackPoints:(int**)blackPoints
                             matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
@@ -113,12 +118,9 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
       top = top < subHeight - 2 ? top : subHeight - 3;
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
-        NSArray * blackRow = [blackPoints objectAtIndex:top + z];
-        sum += [[blackRow objectAtIndex:left - 2] intValue] +
-               [[blackRow objectAtIndex:left - 1] intValue] +
-               [[blackRow objectAtIndex:left] intValue] +
-               [[blackRow objectAtIndex:left + 1] intValue] +
-               [[blackRow objectAtIndex:left + 2] intValue];
+        int * blackRow = blackPoints[top + z];
+        sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] +
+        blackRow[left + 2];
       }
       int average = sum / 25;
       [self threshold8x8Block:_luminances xoffset:xoffset yoffset:yoffset threshold:average stride:width matrix:_matrix];
@@ -145,19 +147,19 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
 // Calculates a single black point for each 8x8 block of pixels and saves it away.
 // See the following thread for a discussion of this algorithm:
 // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
-- (NSArray *)calculateBlackPoints:(unsigned char *)_luminances
+- (int**)calculateBlackPoints:(unsigned char *)_luminances
                          subWidth:(int)subWidth
                         subHeight:(int)subHeight
                             width:(int)width
                            height:(int)height {
-  NSMutableArray * blackPoints = [NSMutableArray arrayWithCapacity:subHeight];
+  int** blackPoints = (int**)malloc(subHeight * sizeof(int*));
   for (int y = 0; y < subHeight; y++) {
+    blackPoints[y] = (int*)malloc(subWidth * sizeof(int));
+
     int yoffset = y << BLOCK_SIZE_POWER;
     if ((yoffset + BLOCK_SIZE) >= height) {
       yoffset = height - BLOCK_SIZE;
     }
-
-    [blackPoints addObject:[NSMutableArray arrayWithCapacity:subWidth]];
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << BLOCK_SIZE_POWER;
       if ((xoffset + BLOCK_SIZE) >= width) {
@@ -168,7 +170,7 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
       int max = 0;
       for (int yy = 0, offset = yoffset * width + xoffset; yy < BLOCK_SIZE; yy++, offset += width) {
         for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-          int pixel = _luminances[offset + xx] & 0xff;
+          int pixel = _luminances[offset + xx] & 0xFF;
           sum += pixel;
           if (pixel < min) {
             min = pixel;
@@ -198,18 +200,16 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
           // the boundaries is used for the interior.
 
           // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-          int averageNeighborBlackPoint = ([[[blackPoints objectAtIndex:y-1] objectAtIndex:x] intValue] +
-                                           2 * [[[blackPoints objectAtIndex:y] objectAtIndex:x-1] intValue] +
-                                           [[[blackPoints objectAtIndex:y-1] objectAtIndex:x-1] intValue]) >> 2;
+          int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
+                                           blackPoints[y - 1][x - 1]) >> 2;
           if (min < averageNeighborBlackPoint) {
             average = averageNeighborBlackPoint;
           }
         }
       }
-      [[blackPoints objectAtIndex:y] addObject:[NSNumber numberWithInt:average]];
+      blackPoints[y][x] = average;
     }
   }
-
   return blackPoints;
 }
 
