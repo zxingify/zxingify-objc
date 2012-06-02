@@ -86,6 +86,64 @@
   [self testBlackBoxCountingResults:YES];
 }
 
++ (NSString*)barcodeFormatAsString:(ZXBarcodeFormat)format {
+  switch (format) {
+    case kBarcodeFormatAztec:
+      return @"Aztec";
+      break;
+    case kBarcodeFormatCodabar:
+      return @"CODABAR";
+      break;
+    case kBarcodeFormatCode39:
+      return @"Code 39";
+      break;
+    case kBarcodeFormatCode93:
+      return @"Code 93";
+      break;
+    case kBarcodeFormatCode128:
+      return @"Code 128";
+      break;
+    case kBarcodeFormatDataMatrix:
+      return @"Data Matrix";
+      break;
+    case kBarcodeFormatEan8:
+      return @"EAN-8";
+      break;
+    case kBarcodeFormatEan13:
+      return @"EAN-13";
+      break;
+    case kBarcodeFormatITF:
+      return @"ITF";
+      break;
+    case kBarcodeFormatMaxiCode:
+      return @"MaxiCode";
+      break;
+    case kBarcodeFormatPDF417:
+      return @"PDF417";
+      break;
+    case kBarcodeFormatQRCode:
+      return @"QR Code";
+      break;
+    case kBarcodeFormatRSS14:
+      return @"RSS 14";
+      break;
+    case kBarcodeFormatRSSExpanded:
+      return @"RSS EXPANDED";
+      break;
+    case kBarcodeFormatUPCA:
+      return @"UPC-A";
+      break;
+    case kBarcodeFormatUPCE:
+      return @"UPC-E";
+      break;
+    case kBarcodeFormatUPCEANExtension:
+      return @"UPC/EAN extension";
+      break;
+  }
+
+  return nil;
+}
+
 - (NSString*)pathInBundle:(NSURL*)file {
   NSInteger startOfResources = [[file path] rangeOfString:@"Resources"].location;
   if (startOfResources == NSNotFound) {
@@ -191,7 +249,8 @@
   }
 
   if (self.expectedFormat != result.barcodeFormat) {
-    NSLog(@"Format mismatch: expected '%d' but got '%d'%@", expectedFormat, result.barcodeFormat, suffix);
+    NSLog(@"Format mismatch: expected '%@' but got '%@'%@", [[self class] barcodeFormatAsString:expectedFormat],
+          [[self class] barcodeFormatAsString:result.barcodeFormat], suffix);
     return NO;
   }
 

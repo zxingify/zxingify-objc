@@ -133,7 +133,8 @@
   NSError* error = nil;
   ZXResult * result = [self.barcodeReader decode:bitmap error:&error];
   if (result) {
-    NSLog(@"Found false positive: '%@' with format '%d' (rotation: %f)", result.text, result.barcodeFormat, rotationInDegrees);
+    NSLog(@"Found false positive: '%@' with format '%@' (rotation: %f)", result.text,
+          [AbstractBlackBoxTestCase barcodeFormatAsString:result.barcodeFormat], rotationInDegrees);
     return NO;
   }
 
@@ -142,7 +143,8 @@
   hints.tryHarder = YES;
   result = [self.barcodeReader decode:bitmap hints:hints error:&error];
   if (result) {
-    NSLog(@"Try harder found false positive: '%@' with format '%d' (rotation: %f)", result.text, result.barcodeFormat, rotationInDegrees);
+    NSLog(@"Try harder found false positive: '%@' with format '%@' (rotation: %f)", result.text,
+          [AbstractBlackBoxTestCase barcodeFormatAsString:result.barcodeFormat], rotationInDegrees);
     return NO;
   }
   return YES;
