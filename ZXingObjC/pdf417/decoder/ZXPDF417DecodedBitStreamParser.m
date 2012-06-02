@@ -55,39 +55,34 @@ char const MIXED_CHARS[25] = {
   '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
   '=', '^'};
 
-// Table containing values for the exponent of 900.
-// This is used in the numeric compaction decode algorithm.
-NSString* const EXP900[16] =
-  {   @"000000000000000000000000000000000000000000001",
-      @"000000000000000000000000000000000000000000900",
-      @"000000000000000000000000000000000000000810000",
-      @"000000000000000000000000000000000000729000000",
-      @"000000000000000000000000000000000656100000000",
-      @"000000000000000000000000000000590490000000000",
-      @"000000000000000000000000000531441000000000000",
-      @"000000000000000000000000478296900000000000000",
-      @"000000000000000000000430467210000000000000000",
-      @"000000000000000000387420489000000000000000000",
-      @"000000000000000348678440100000000000000000000",
-      @"000000000000313810596090000000000000000000000",
-      @"000000000282429536481000000000000000000000000",
-      @"000000254186582832900000000000000000000000000",
-      @"000228767924549610000000000000000000000000000",
-      @"205891132094649000000000000000000000000000000"};
+/**
+ * Table containing values for the exponent of 900.
+ * This is used in the numeric compaction decode algorithm.
+ */
+static NSArray* EXP900 = nil;
 
 @interface ZXPDF417DecodedBitStreamParser ()
 
-+ (NSMutableString *)add:(NSString *)value1 value2:(NSString *)value2;
 + (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (NSString *)decodeBase900toBase10:(int*)codewords count:(int)count;
++ (NSDecimalNumber *)decodeBase900toBase10:(int*)codewords count:(int)count;
 + (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
-+ (NSMutableString *)multiply:(NSString *)value1 value2:(int)value2;
 + (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 
 @end
 
 @implementation ZXPDF417DecodedBitStreamParser
+
++ (void)initialize {
+  NSMutableArray* exponents = [NSMutableArray arrayWithCapacity:16];
+  [exponents addObject:[NSDecimalNumber one]];
+  NSDecimalNumber* nineHundred = [NSDecimalNumber decimalNumberWithString:@"900"];
+  [exponents addObject:nineHundred];
+  for (int i = 2; i < 16; i++) {
+    [exponents addObject:[[exponents objectAtIndex:i - 1] decimalNumberByMultiplyingBy:nineHundred]];
+  }
+  EXP900 = [[NSArray alloc] initWithArray:exponents];
+}
 
 + (ZXDecoderResult *)decode:(NSArray *)codewords error:(NSError **)error {
   if (!codewords) {
@@ -412,8 +407,8 @@ NSString* const EXP900[16] =
       }
     }
     if (count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) {
-      NSString * s = [self decodeBase900toBase10:numericCodewords count:count];
-      [result appendString:s];
+      NSDecimalNumber * s = [self decodeBase900toBase10:numericCodewords count:count];
+      [result appendString:[s description]];
       count = 0;
     }
   }
@@ -458,96 +453,13 @@ NSString* const EXP900[16] =
    632 x 900 power of 2 + 282 x 900 power of 1 + 200 x 900 power of 0 = 1000213298174000
    
    Remove leading 1 =>  Result is 000213298174000
-   
-   As there are huge numbers involved here we must use fake out the maths using string
-   tokens for the numbers.
  */
-+ (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
-  NSMutableString * accum = nil;
++ (NSDecimalNumber *)decodeBase900toBase10:(int[])codewords count:(int)count {
+  NSDecimalNumber* result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
-    NSMutableString * value = [self multiply:EXP900[count - i - 1] value2:codewords[i]];
-    if (accum == nil) {
-      accum = value;
-    } else {
-      accum = [self add:accum value2:value];
-    }
+    result = [[result decimalNumberByAdding:[EXP900 objectAtIndex:count - i - 1]] decimalNumberByMultiplyingBy:
+              [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:codewords[i]] decimalValue]]];
   }
-
-  NSString * result = nil;
-
-  for (int i = 0; i < [accum length]; i++) {
-    if ([accum characterAtIndex:i] == '1') {
-      result = [accum substringFromIndex:i + 1];
-      break;
-    }
-  }
-  if (result == nil) {
-    result = accum;
-  }
-  return result;
-}
-
-
-/**
- * Multiplies two String numbers
- */
-+ (NSMutableString *)multiply:(NSString *)value1 value2:(int)value2 {
-  NSMutableString * result = [NSMutableString stringWithCapacity:[value1 length]];
-  for (int i = 0; i < [value1 length]; i++) {
-    [result appendString:@"0"];
-  }
-  int hundreds = value2 / 100;
-  int tens = (value2 / 10) % 10;
-  int ones = value2 % 10;
-
-  for (int j = 0; j < ones; j++) {
-    result = [self add:result value2:value1];
-  }
-
-  for (int j = 0; j < tens; j++) {
-    result = [self add:result value2:[[NSString stringWithFormat:@"0%@", value1] substringFromIndex:1]];
-  }
-
-  for (int j = 0; j < hundreds; j++) {
-    result = [self add:result value2:[[NSString stringWithFormat:@"00%@", value1] substringFromIndex:2]];
-  }
-  return result;
-}
-
-
-/**
- * Add two numbers which are represented as strings.
- */
-+ (NSMutableString *)add:(NSString *)value1 value2:(NSString *)value2 {
-  NSMutableString * temp1 = [NSMutableString stringWithCapacity:5];
-  NSMutableString * temp2 = [NSMutableString stringWithCapacity:5];
-  NSMutableString * result = [NSMutableString stringWithCapacity:[value1 length]];
-  for (int i = 0; i < [value1 length]; i++) {
-    [result appendString:@"0"];
-  }
-  int carry = 0;
-  for (int i = [value1 length] - 3; i > -1; i -= 3) {
-    [temp1 deleteCharactersInRange:NSMakeRange(0, [temp1 length])];
-    [temp1 appendString:[value1 substringWithRange:NSMakeRange(i, 1)]];
-    [temp1 appendString:[value1 substringWithRange:NSMakeRange(i + 1, 1)]];
-    [temp1 appendString:[value1 substringWithRange:NSMakeRange(i + 2, 1)]];
-
-    [temp2 deleteCharactersInRange:NSMakeRange(0, [temp2 length])];
-    [temp2 appendString:[value2 substringWithRange:NSMakeRange(i, 1)]];
-    [temp2 appendString:[value2 substringWithRange:NSMakeRange(i + 1, 1)]];
-    [temp2 appendString:[value2 substringWithRange:NSMakeRange(i + 2, 1)]];
-
-    int intValue1 = [temp1 intValue];
-    int intValue2 = [temp2 intValue];
-
-    int sumval = (intValue1 + intValue2 + carry) % 1000;
-    carry = (intValue1 + intValue2 + carry) / 1000;
-
-    [result replaceCharactersInRange:NSMakeRange(i + 2, 1) withString:[NSString stringWithFormat:@"%C", (unichar)((sumval % 10) + '0')]];
-    [result replaceCharactersInRange:NSMakeRange(i + 1, 1) withString:[NSString stringWithFormat:@"%C", (unichar)(((sumval / 10) % 10) + '0')]];
-    [result replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%C", (unichar)((sumval / 100) + '0')]];
-  }
-
   return result;
 }
 
