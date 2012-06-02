@@ -68,11 +68,11 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   [super dealloc];
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result error:(NSError **)error {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
   const int countersLen = 4;
   int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
-  int rowOffset = [[startRange objectAtIndex:1] intValue];
+  int rowOffset = NSMaxRange(startRange);
   int lgPatternFound = 0;
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
@@ -98,7 +98,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   return rowOffset;
 }
 
-- (NSArray *)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error {
+- (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error {
   return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int*)MIDDLE_END_PATTERN patternLen:MIDDLE_END_PATTERN_LEN error:error];
 }
 

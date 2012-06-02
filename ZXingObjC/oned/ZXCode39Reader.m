@@ -44,7 +44,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 @property (nonatomic, assign) BOOL usingCheckDigit;
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
-- (NSArray *)findAsteriskPattern:(ZXBitArray *)row;
+- (NSRange)findAsteriskPattern:(ZXBitArray *)row counters:(int*)counters countersLen:(int)countersLen;
 - (unichar)patternToChar:(int)pattern;
 - (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen;
 
@@ -89,12 +89,14 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSArray * start = [self findAsteriskPattern:row];
-  if (!start) {
+  const int countersLen = 9;
+  int counters[countersLen] = {0};
+  NSRange start = [self findAsteriskPattern:row counters:counters countersLen:countersLen];
+  if (start.location == NSNotFound) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  int nextStart = [[start objectAtIndex:1] intValue];
+  int nextStart = NSMaxRange(start);
   int end = [row size];
 
   while (nextStart < end && ![row get:nextStart]) {
@@ -102,8 +104,6 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  const int countersLen = 9;
-  int counters[countersLen];
   unichar decodedChar;
   int lastStart;
   do {
@@ -172,9 +172,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     resultString = [NSString stringWithString:result];
   }
 
-  float left = (float)([[start objectAtIndex:1] intValue] + [[start objectAtIndex:0] intValue]) / 2.0f;
+  float left = (float)(NSMaxRange(start) + start.location) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
-  
+
   return [[[ZXResult alloc] initWithText:resultString
                                 rawBytes:nil
                                   length:0
@@ -183,7 +183,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
                                   format:kBarcodeFormatCode39] autorelease];
 }
 
-- (NSArray *)findAsteriskPattern:(ZXBitArray *)row {
+- (NSRange)findAsteriskPattern:(ZXBitArray *)row counters:(int*)counters countersLen:(int)countersLen {
   int width = row.size;
   int rowOffset = 0;
   while (rowOffset < width) {
@@ -194,8 +194,6 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   int counterPosition = 0;
-  const int patternLength = 9;
-  int counters[patternLength] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   int patternStart = rowOffset;
   BOOL isWhite = NO;
 
@@ -204,18 +202,18 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     if (pixel ^ isWhite) {
       counters[counterPosition]++;
     } else {
-      if (counterPosition == patternLength - 1) {
-        if ([self toNarrowWidePattern:counters countersLen:patternLength] == CODE39_ASTERISK_ENCODING) {
+      if (counterPosition == countersLen - 1) {
+        if ([self toNarrowWidePattern:counters countersLen:countersLen] == CODE39_ASTERISK_ENCODING) {
           if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
-            return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], nil];
+            return NSMakeRange(patternStart, i - patternStart);
           }
         }
         patternStart += counters[0] + counters[1];
-        for (int y = 2; y < patternLength; y++) {
+        for (int y = 2; y < countersLen; y++) {
           counters[y - 2] = counters[y];
         }
-        counters[patternLength - 2] = 0;
-        counters[patternLength - 1] = 0;
+        counters[countersLen - 2] = 0;
+        counters[countersLen - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
@@ -225,7 +223,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     }
   }
 
-  return nil;
+  return NSMakeRange(NSNotFound, 0);
 }
 
 - (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen {

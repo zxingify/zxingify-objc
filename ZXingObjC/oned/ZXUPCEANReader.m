@@ -119,73 +119,81 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   [super dealloc];
 }
 
-+ (NSArray *)findStartGuardPattern:(ZXBitArray *)row error:(NSError **)error {
++ (NSRange)findStartGuardPattern:(ZXBitArray *)row error:(NSError **)error {
   BOOL foundStart = NO;
-  NSArray * startRange = nil;
+  NSRange startRange = NSMakeRange(NSNotFound, 0);
   int nextStart = 0;
+  int counters[START_END_PATTERN_LEN];
 
   while (!foundStart) {
-    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:(int*)START_END_PATTERN patternLen:sizeof(START_END_PATTERN)/sizeof(int) error:error];
-    if (!startRange) {
-      return nil;
+    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN counters:counters error:error];
+    if (startRange.location == NSNotFound) {
+      return startRange;
     }
-    int start = [[startRange objectAtIndex:0] intValue];
-    nextStart = [[startRange objectAtIndex:1] intValue];
+    int start = startRange.location;
+    nextStart = NSMaxRange(startRange);
+    // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
+    // If this check would run off the left edge of the image, do not accept this barcode,
+    // as it is very likely to be a false positive.
     int quietStart = start - (nextStart - start);
     if (quietStart >= 0) {
       foundStart = [row isRange:quietStart end:start value:NO];
     }
   }
-
   return startRange;
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSArray* startGuardRange = [ZXUPCEANReader findStartGuardPattern:row error:error];
-  if (!startGuardRange) {
-    return nil;
-  }
-  return [self decodeRow:rowNumber row:row startGuardRange:startGuardRange hints:hints error:error];
+  return [self decodeRow:rowNumber row:row startGuardRange:[[self class] findStartGuardPattern:row error:error] hints:hints error:error];
 }
-
 
 /**
  * Like decodeRow:row:hints:, but allows caller to inform method about where the UPC/EAN start pattern is
  * found. This allows this to be computed once and reused across many implementations.
  */
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSArray *)startGuardRange hints:(ZXDecodeHints *)hints error:(NSError**)error {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSRange)startGuardRange hints:(ZXDecodeHints *)hints error:(NSError**)error {
   id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
+
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:([[startGuardRange objectAtIndex:0] intValue] + [[startGuardRange objectAtIndex:1] intValue]) / 2.0f y:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:(startGuardRange.location + NSMaxRange(startGuardRange)) / 2.0f y:rowNumber] autorelease]];
   }
+
   NSMutableString * result = [NSMutableString string];
   int endStart = [self decodeMiddle:row startRange:startGuardRange result:result error:error];
   if (endStart == -1) {
     return nil;
   }
+
   if (resultPointCallback != nil) {
     [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:endStart y:rowNumber] autorelease]];
   }
-  NSArray * endRange = [self decodeEnd:row endStart:endStart error:error];
-  if (!endRange) {
+
+  NSRange endRange = [self decodeEnd:row endStart:endStart error:error];
+  if (endRange.location == NSNotFound) {
     return nil;
   }
+
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:([[endRange objectAtIndex:0] intValue] + [[endRange objectAtIndex:1] intValue]) / 2.0f y:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:(endRange.location + NSMaxRange(endRange)) / 2.0f y:rowNumber] autorelease]];
   }
-  int end = [[endRange objectAtIndex:1] intValue];
-  int quietEnd = end + (end - [[endRange objectAtIndex:0] intValue]);
+
+  // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
+  // spec might want more whitespace, but in practice this is the maximum we can count on.
+  int end = NSMaxRange(endRange);
+  int quietEnd = end + (end - endRange.location);
   if (quietEnd >= [row size] || ![row isRange:end end:quietEnd value:NO]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
+
   NSString * resultString = [result description];
   if (![self checkChecksum:resultString error:error]) {
     if (error) *error = ChecksumErrorInstance();
     return nil;
   }
-  float left = (float)([[startGuardRange objectAtIndex:1] intValue] + [[startGuardRange objectAtIndex:0] intValue]) / 2.0f;
-  float right = (float)([[endRange objectAtIndex:1] intValue] + [[endRange objectAtIndex:0] intValue]) / 2.0f;
+
+  float left = (float)(NSMaxRange(startGuardRange) + startGuardRange.location) / 2.0f;
+  float right = (float)(NSMaxRange(endRange) + endRange.location) / 2.0f;
   ZXBarcodeFormat format = [self barcodeFormat];
   ZXResult * decodeResult = [[[ZXResult alloc] initWithText:resultString
                                                    rawBytes:NULL
@@ -193,7 +201,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
                                                resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
                                                      format:format] autorelease];
 
-  ZXResult * extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:[[endRange objectAtIndex:1] intValue] error:error];
+  ZXResult * extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
   if (extensionResult) {
     [decodeResult putAllMetadata:[extensionResult resultMetadata]];
     [decodeResult addResultPoints:[extensionResult resultPoints]];
@@ -250,13 +258,17 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   return sum % 10 == 0;
 }
 
-- (NSArray *)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError**)error {
-  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:(int*)START_END_PATTERN patternLen:sizeof(START_END_PATTERN)/sizeof(int) error:error];
+- (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError**)error {
+  return [[self class] findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN error:error];
 }
 
-+ (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int*)pattern patternLen:(int)patternLen error:(NSError**)error {
++ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int*)pattern patternLen:(int)patternLen error:(NSError**)error {
+  int counters[patternLen];
+  return [self findGuardPattern:row rowOffset:rowOffset whiteFirst:whiteFirst pattern:pattern patternLen:patternLen counters:counters error:error];
+}
+
++ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int*)pattern patternLen:(int)patternLen counters:(int*)counters error:(NSError**)error {
   int patternLength = patternLen;
-  int counters[patternLength];
   for (int i = 0; i < patternLength; i++) {
     counters[i] = 0;
   }
@@ -281,7 +293,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
     } else {
       if (counterPosition == patternLength - 1) {
         if ([self patternMatchVariance:counters countersSize:patternLength pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
-          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
+          return NSMakeRange(patternStart, x - patternStart);
         }
         patternStart += counters[0] + counters[1];
 
@@ -301,7 +313,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   }
 
   if (error) *error = NotFoundErrorInstance();
-  return nil;
+  return NSMakeRange(NSNotFound, 0);
 }
 
 
@@ -373,7 +385,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
  * Subclasses override this to decode the portion of a barcode between the start
  * and end guard patterns.
  */
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result error:(NSError **)error {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

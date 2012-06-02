@@ -83,7 +83,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   [super dealloc];
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)resultString error:(NSError**)error {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
   int *counters = self.decodeMiddleCounters;
   counters[0] = 0;
   counters[1] = 0;
@@ -91,7 +91,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   counters[3] = 0;
   const int countersLen = 4;
   int end = row.size;
-  int rowOffset = [[startRange objectAtIndex:1] intValue];
+  int rowOffset = NSMaxRange(startRange);
 
   int lgPatternFound = 0;
 
@@ -100,7 +100,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
     if (bestMatch == -1) {
       return -1;
     }
-    [resultString appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
+    [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
     for (int i = 0; i < countersLen; i++) {
       rowOffset += counters[i];
     }
@@ -109,23 +109,23 @@ int FIRST_DIGIT_ENCODINGS[10] = {
     }
   }
 
-  if (![self determineFirstDigit:resultString lgPatternFound:lgPatternFound]) {
+  if (![self determineFirstDigit:result lgPatternFound:lgPatternFound]) {
     if (error) *error = NotFoundErrorInstance();
     return -1;
   }
 
-  NSArray * middleRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
-  if (!middleRange) {
+  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
+  if (middleRange.location == NSNotFound) {
     return -1;
   }
-  rowOffset = [[middleRange objectAtIndex:1] intValue];
+  rowOffset = NSMaxRange(middleRange);
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
-    [resultString appendFormat:@"%C", (unichar)('0' + bestMatch)];
+    [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
     for (int i = 0; i < countersLen; i++) {
       rowOffset += counters[i];
     }

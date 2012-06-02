@@ -21,7 +21,8 @@
 #import "ZXUPCEANExtensionSupport.h"
 #import "ZXUPCEANReader.h"
 
-const int EXTENSION_START_PATTERN[3] = {1,1,2};
+const int EXTENSION_START_PATTERN_LEN = 3;
+const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
 const int CHECK_DIGIT_ENCODINGS[10] = {
   0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05
 };
@@ -39,8 +40,8 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 @implementation ZXUPCEANExtensionSupport
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError **)error {
-  NSArray * extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN patternLen:sizeof(EXTENSION_START_PATTERN)/sizeof(int) error:error];
-  if (!extensionStartRange) {
+  NSRange extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int*)EXTENSION_START_PATTERN patternLen:EXTENSION_START_PATTERN_LEN error:error];
+  if (extensionStartRange.location == NSNotFound) {
     return nil;
   }
 
@@ -56,7 +57,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
                                                       rawBytes:NULL
                                                         length:0
                                                   resultPoints:[NSArray arrayWithObjects:
-                                                                [[[ZXResultPoint alloc] initWithX:([[extensionStartRange objectAtIndex:0] intValue] + [[extensionStartRange objectAtIndex:1] intValue]) / 2.0f y:(float)rowNumber] autorelease],
+                                                                [[[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:(float)rowNumber] autorelease],
                                                                 [[[ZXResultPoint alloc] initWithX:(float)end y:(float)rowNumber] autorelease], nil]
                                                         format:kBarcodeFormatUPCEANExtension] autorelease];
   if (extensionData != nil) {
@@ -65,11 +66,11 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return extensionResult;
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSArray *)startRange result:(NSMutableString *)result error:(NSError **)error {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError**)error {
   const int countersLen = 4;
   int counters[countersLen] = {0, 0, 0, 0};
   int end = [row size];
-  int rowOffset = [[startRange objectAtIndex:1] intValue];
+  int rowOffset = NSMaxRange(startRange);
 
   int lgPatternFound = 0;
 

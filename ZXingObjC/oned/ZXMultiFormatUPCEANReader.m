@@ -71,12 +71,12 @@
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSArray * startGuardPattern = [ZXUPCEANReader findStartGuardPattern:row error:error];
-  if (!startGuardPattern) {
+  NSRange startGuardPattern = [ZXUPCEANReader findStartGuardPattern:row error:error];
+  if (startGuardPattern.location == NSNotFound) {
     return nil;
   }
   for (ZXUPCEANReader * reader in self.readers) {
-    ZXResult * result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints error:nil];
+    ZXResult * result = [reader decodeRow:rowNumber row:row  startGuardRange:startGuardPattern hints:hints error:error];
     if (!result) {
       continue;
     }
