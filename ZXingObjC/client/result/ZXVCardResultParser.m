@@ -107,6 +107,9 @@ static NSString* SEMICOLON = @";";
     // (led by ;) ultimately ending in colon
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"(?:^|\n)%@(?:;([^:]*))?:", prefix]
                                                                              options:NSRegularExpressionCaseInsensitive error:nil];
+    if (i > 0) {
+      i--; // Find from i-1 not i since looking at the preceding character
+    }
     NSArray* regexMatches = [regex matchesInString:rawText options:0 range:NSMakeRange(i, rawText.length - i)];
     if (regexMatches.count == 0) {
       break;
