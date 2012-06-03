@@ -18,7 +18,26 @@
 #import "ZXResult.h"
 #import "ZXURIParsedResult.h"
 
+static NSString* PATTERN_END =
+  @"(:\\d{1,5})?" // maybe port
+  @"(/|\\?|$)"; // query, path or nothing
+
+static NSRegularExpression* URL_WITH_PROTOCOL_PATTERN = nil;
+static NSRegularExpression* URL_WITHOUT_PROTOCOL_PATTERN = nil;
+
 @implementation ZXURIResultParser
+
++ (void)initialize {
+  URL_WITH_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:
+                               [@"^[a-zA-Z0-9]{2,}://" // protocol
+                                @"[a-zA-Z0-9\\-]{2,}(\\.[a-zA-Z0-9\\-]{2,})*" // host name elements
+                                stringByAppendingString:PATTERN_END]
+                                                                   options:0 error:nil];
+  URL_WITHOUT_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:
+                                  [@"^[a-zA-Z0-9\\-]{2,}(\\.[a-zA-Z0-9\\-]{2,})+" // host name elements
+                                   stringByAppendingString:PATTERN_END]
+                                                                      options:0 error:nil];
+}
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
@@ -27,56 +46,15 @@
     rawText = [rawText substringFromIndex:4];
   }
   rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-  if (![[self class] isBasicallyValidURI:rawText]) {
-    return nil;
-  }
-  return [[[ZXURIParsedResult alloc] initWithUri:rawText title:nil] autorelease];
+  return [[self class] isBasicallyValidURI:rawText] ? [[[ZXURIParsedResult alloc] initWithUri:rawText title:nil] autorelease] : nil;
 }
 
 
-/**
- * Determines whether a string is not obviously not a URI. This implements crude checks; this class does not
- * intend to strictly check URIs as its only function is to represent what is in a barcode, but, it does
- * need to know when a string is obviously not a URI.
- */
 + (BOOL)isBasicallyValidURI:(NSString *)uri {
-  if (uri == nil) {
-    return NO;
+  if ([URL_WITH_PROTOCOL_PATTERN numberOfMatchesInString:uri options:NSRegularExpressionAnchorsMatchLines range:NSMakeRange(0, uri.length)] > 0) { // match at start only
+    return YES;
   }
-  int period = -1;
-  int colon = -1;
-  int length = [uri length];
-  for (int i = length - 1; i >= 0; i--) {
-    char c = [uri characterAtIndex:i];
-    if (c <= ' ') { // covers space, newline, and more
-      return NO;
-    } else if (c == '.') {
-      period = i;
-    } else if (c == ':') {
-      colon = i;
-    }
-  }
-  // Look for period in a domain but followed by at least a two-char TLD
-  // Forget strings that don't have a valid-looking protocol
-  if (period >= (int)[uri length] - 2 || (period <= 0 && colon <= 0)) {
-    return NO;
-  }
-  if (colon >= 0) {
-    if (period < 0 || period > colon) {
-      if (![self isSubstringOfAlphaNumeric:uri offset:0 length:colon]) {
-        return NO;
-      }
-    } else {
-      // colon starts the port; crudely look for at least two numbers
-      if (colon >= [uri length] - 2) {
-        return NO;
-      }
-      if (![self isSubstringOfDigits:uri offset:colon + 1 length:2]) {
-        return NO;
-      }
-    }
-  }
-  return YES;
+  return [URL_WITHOUT_PROTOCOL_PATTERN numberOfMatchesInString:uri options:NSRegularExpressionAnchorsMatchLines range:NSMakeRange(0, uri.length)] > 0;
 }
 
 @end

@@ -52,6 +52,7 @@
   [self doTestNotUri:@"google.c"];
   [self doTestNotUri:@".com"];
   [self doTestNotUri:@":80/"];
+  [self doTestNotUri:@"ABC,20.3,AB,AD"];
 }
 
 - (void)testURLTO {

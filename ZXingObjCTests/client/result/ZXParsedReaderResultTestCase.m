@@ -216,10 +216,9 @@
                     goldenResult:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT" type:kParsedResultTypeText];
   // Make sure illegal entries without newlines don't crash
   [self doTestResultWithContents:@"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
-                    goldenResult:@"begin:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
-                            type:kParsedResultTypeURI];
-  // See above note on why this is URI
-  [self doTestResultWithContents:@"BEGIN:VEVENT" goldenResult:@"begin:VEVENT" type:kParsedResultTypeURI];
+                    goldenResult:@"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
+                            type:kParsedResultTypeText];
+  [self doTestResultWithContents:@"BEGIN:VEVENT" goldenResult:@"BEGIN:VEVENT" type:kParsedResultTypeText];
 }
 
 - (void)testSMS {
