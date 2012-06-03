@@ -442,6 +442,12 @@ int const CODE_STOP = 106;
 
   // Need to pull out the check digits from string
   int resultLength = [result length];
+  if (resultLength == 0) {
+    // false positive
+    if (error) *error = ChecksumErrorInstance();
+    return nil;
+  }
+
   // Only bother if the result had at least one character, and if the checksum digit happened to
   // be a printable character. If it was just interpreted as a control code, nothing to remove.
   if (resultLength > 0 && lastCharacterWasPrintable) {
