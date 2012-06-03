@@ -53,6 +53,17 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
   [self addCharacterSet:17 encoding:(NSStringEncoding) 0x8000020F];
   [self addCharacterSet:18 encoding:(NSStringEncoding) 0x80000210];
   [self addCharacterSet:20 encoding:NSShiftJISStringEncoding];
+  [self addCharacterSet:21 encoding:NSWindowsCP1250StringEncoding];
+  [self addCharacterSet:22 encoding:NSWindowsCP1251StringEncoding];
+  [self addCharacterSet:23 encoding:NSWindowsCP1252StringEncoding];
+  [self addCharacterSet:24 encoding:(NSStringEncoding) 0x80000505];
+  [self addCharacterSet:25 encoding:NSUTF16BigEndianStringEncoding];
+  [self addCharacterSet:26 encoding:NSUTF8StringEncoding];
+  [self addCharacterSet:27 encoding:NSASCIIStringEncoding];
+  [self addCharacterSet:28 encoding:(NSStringEncoding) 0x80000A03];
+  [self addCharacterSet:29 encoding:(NSStringEncoding) 0x80000632];
+  [self addCharacterSet:30 encoding:(NSStringEncoding) 0x80000940];
+  [self addCharacterSet:170 encoding:NSASCIIStringEncoding];
 }
 
 - (id)initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
