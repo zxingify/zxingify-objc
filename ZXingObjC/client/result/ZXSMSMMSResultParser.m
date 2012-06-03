@@ -61,10 +61,10 @@
   }
   [self addNumberVia:numbers vias:vias numberPart:[smsURIWithoutQuery substringFromIndex:lastComma + 1]];
 
-  return [[[ZXSMSParsedResult alloc] initWithNumbers:numbers
-                                                vias:vias
-                                             subject:subject
-                                                body:body] autorelease];
+  return [ZXSMSParsedResult smsParsedResultWithNumbers:numbers
+                                                  vias:vias
+                                               subject:subject
+                                                  body:body];
 }
 
 - (void)addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart {

@@ -25,6 +25,8 @@
 
 - (id)initWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body;
 - (id)initWithNumbers:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body;
++ (id)smsParsedResultWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body;
++ (id)smsParsedResultWithNumbers:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body;
 - (NSString *)sMSURI;
 
 @end

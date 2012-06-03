@@ -96,11 +96,11 @@
     BOOL ean13MayBeUPCA = kBarcodeFormatEan13 == result.barcodeFormat && [result.text characterAtIndex:0] == '0';
     BOOL canReturnUPCA = hints == nil || [hints numberOfPossibleFormats] == 0 || [hints containsFormat:kBarcodeFormatUPCA];
     if (ean13MayBeUPCA && canReturnUPCA) {
-      return [[[ZXResult alloc] initWithText:[[result text] substringFromIndex:1]
-                                    rawBytes:nil
-                                      length:0
-                                resultPoints:result.resultPoints
-                                      format:kBarcodeFormatUPCA] autorelease];
+      return [ZXResult resultWithText:[result.text substringFromIndex:1]
+                             rawBytes:nil
+                               length:0
+                         resultPoints:result.resultPoints
+                               format:kBarcodeFormatUPCA];
     }
     return result;
   }

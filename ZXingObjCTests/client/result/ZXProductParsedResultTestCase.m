@@ -38,7 +38,7 @@
 - (void)doTestWithContents:(NSString*)contents
                 normalized:(NSString*)normalized
                     format:(ZXBarcodeFormat)format {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeProduct, @"Types don't match");
   ZXProductParsedResult* productResult = (ZXProductParsedResult*)result;

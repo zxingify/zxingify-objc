@@ -114,13 +114,13 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
   float left = (float) (start[1] + start[0]) / 2.0f;
   float right = (float) (nextStart + lastStart) / 2.0f;
-  return [[[ZXResult alloc] initWithText:resultString
-                                rawBytes:nil
-                                  length:0
-                            resultPoints:[NSArray arrayWithObjects:
-                                          [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                  format:kBarcodeFormatCode93] autorelease];
+  return [ZXResult resultWithText:resultString
+                         rawBytes:nil
+                           length:0
+                     resultPoints:[NSArray arrayWithObjects:
+                                   [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                   [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                           format:kBarcodeFormatCode93];
 }
 
 - (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b {

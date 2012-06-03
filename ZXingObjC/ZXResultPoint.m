@@ -39,6 +39,10 @@
   return self;
 }
 
++ (id)resultPointWithX:(float)x y:(float)y {
+  return [[[self alloc] initWithX:x y:y] autorelease];
+}
+
 - (id)copyWithZone:(NSZone *)zone {
   return [[ZXResultPoint allocWithZone:zone] initWithX:x y:y];
 }

@@ -123,13 +123,13 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     return nil;
   }
 
-  return [[[ZXResult alloc] initWithText:resultString
-                                rawBytes:nil
-                                  length:0
-                            resultPoints:[NSArray arrayWithObjects:
-                                          [[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
-                                          [[[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
-                                  format:kBarcodeFormatITF] autorelease];
+  return [ZXResult resultWithText:resultString
+                         rawBytes:nil
+                           length:0
+                     resultPoints:[NSArray arrayWithObjects:
+                                   [[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
+                                   [[[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
+                           format:kBarcodeFormatITF];
 }
 
 

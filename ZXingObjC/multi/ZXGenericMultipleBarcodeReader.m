@@ -129,7 +129,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
     [newResultPoints addObject:[[[ZXResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset] autorelease]];
   }
 
-  return [[[ZXResult alloc] initWithText:[result text] rawBytes:[result rawBytes] length:[result length] resultPoints:newResultPoints format:[result barcodeFormat]] autorelease];
+  return [ZXResult resultWithText:result.text rawBytes:result.rawBytes length:result.length resultPoints:newResultPoints format:result.barcodeFormat];
 }
 
 @end

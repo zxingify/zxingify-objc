@@ -62,7 +62,7 @@ static NSRegularExpression* GEO_URL_PATTERN = nil;
     }
   }
 
-  return [[[ZXGeoParsedResult alloc] initWithLatitude:latitude longitude:longitude altitude:altitude query:query] autorelease];
+  return [ZXGeoParsedResult geoParsedResultWithLatitude:latitude longitude:longitude altitude:altitude query:query];
 }
 
 @end

@@ -177,11 +177,7 @@
                        url:(NSString*)url
                   birthday:(NSString*)birthday
                       note:(NSString*)note {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents
-                                                rawBytes:NULL
-                                                  length:0
-                                            resultPoints:nil
-                                                  format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(kParsedResultTypeAddressBook, result.type, @"Result type mismatch");
   ZXAddressBookParsedResult* addressResult = (ZXAddressBookParsedResult*)result;

@@ -31,8 +31,8 @@
 @property (nonatomic, assign, readonly) int width;
 @property (nonatomic, assign, readonly) int height;
 
-+ (ZXBinarizer*)binarizerWithSource:(ZXLuminanceSource *)source;
 - (id)initWithSource:(ZXLuminanceSource *)source;
++ (id)binarizerWithSource:(ZXLuminanceSource *)source;
 - (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;
 - (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source;

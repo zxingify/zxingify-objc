@@ -21,7 +21,7 @@
 @synthesize encoding;
 @synthesize errorCorrectionLevel;
 
-+ (ZXEncodeHints*)hints {
++ (id)hints {
   return [[[self alloc] init] autorelease];
 }
 

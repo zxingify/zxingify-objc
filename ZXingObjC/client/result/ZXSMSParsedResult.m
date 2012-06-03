@@ -57,7 +57,15 @@
   return self;
 }
 
-- (void) dealloc {
++ (id)smsParsedResultWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body {
+  return [[[self alloc] initWithNumber:number via:via subject:subject body:body] autorelease];
+}
+
++ (id)smsParsedResultWithNumbers:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body {
+  return [[[self alloc] initWithNumbers:numbers vias:vias subject:subject body:body] autorelease];
+}
+
+- (void)dealloc {
   [numbers release];
   [vias release];
   [subject release];

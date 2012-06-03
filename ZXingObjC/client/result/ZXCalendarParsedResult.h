@@ -27,13 +27,9 @@
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
 
-- (id)initWithSummary:(NSString *)summary
-                start:(NSString *)start
-                  end:(NSString *)end
-             location:(NSString *)location
-             attendee:(NSString *)attendee
-          description:(NSString *)description
-             latitude:(double)latitude
-            longitude:(double)longitude;
+- (id)initWithSummary:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location
+             attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
++ (id)calendarParsedResultWithSummary:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location
+                             attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
 
 @end

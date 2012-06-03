@@ -203,11 +203,7 @@ static double EPSILON = 0.0000000001;
                   attendee:(NSString*)attendee
                   latitude:(double)latitude
                  longitude:(double)longitude {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents
-                                                rawBytes:NULL
-                                                  length:0
-                                            resultPoints:nil
-                                                  format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeCalendar, @"Types do not match");
   ZXCalendarParsedResult* calResult = (ZXCalendarParsedResult*)result;

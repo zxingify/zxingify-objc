@@ -35,7 +35,7 @@
   if (![ZXURIResultParser isBasicallyValidURI:uri]) {
     return nil;
   }
-  return [[[ZXURIParsedResult alloc] initWithUri:uri title:title] autorelease];
+  return [ZXURIParsedResult uriParsedResultWithUri:uri title:title];
 }
 
 @end

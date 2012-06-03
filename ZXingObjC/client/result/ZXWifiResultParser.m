@@ -38,7 +38,7 @@
     type = @"nopass";
   }
 
-  return [[[ZXWifiParsedResult alloc] initWithNetworkEncryption:type ssid:ssid password:pass] autorelease];
+  return [ZXWifiParsedResult wifiParsedResultWithNetworkEncryption:type ssid:ssid password:pass];
 }
 
 @end

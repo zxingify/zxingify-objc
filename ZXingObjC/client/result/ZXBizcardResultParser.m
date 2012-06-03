@@ -43,20 +43,20 @@
   NSString * phoneNumber3 = [[self class] matchSingleDoCoMoPrefixedField:@"F:" rawText:rawText trim:YES];
   NSString * email = [[self class] matchSingleDoCoMoPrefixedField:@"E:" rawText:rawText trim:YES];
 
-  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:fullName]
-                                             pronunciation:nil
-                                              phoneNumbers:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3]
-                                                phoneTypes:nil
-                                                    emails:[self maybeWrap:email]
-                                                emailTypes:nil
-                                          instantMessenger:nil
-                                                      note:nil
-                                                 addresses:addresses
-                                              addressTypes:nil
-                                                       org:org
-                                                  birthday:nil
-                                                     title:title
-                                                       url:nil] autorelease];
+  return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:fullName]
+                                                       pronunciation:nil
+                                                        phoneNumbers:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3]
+                                                          phoneTypes:nil
+                                                              emails:[self maybeWrap:email]
+                                                          emailTypes:nil
+                                                    instantMessenger:nil
+                                                                note:nil
+                                                           addresses:addresses
+                                                        addressTypes:nil
+                                                                 org:org
+                                                            birthday:nil
+                                                               title:title
+                                                                 url:nil];
 }
 
 - (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {

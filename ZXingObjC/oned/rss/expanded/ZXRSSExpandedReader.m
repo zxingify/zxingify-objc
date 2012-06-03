@@ -161,11 +161,11 @@ const int MAX_PAIRS = 11;
   NSArray * firstPoints = [[((ZXExpandedPair *)[_pairs objectAtIndex:0]) finderPattern] resultPoints];
   NSArray * lastPoints = [[((ZXExpandedPair *)[_pairs lastObject]) finderPattern] resultPoints];
 
-  return [[[ZXResult alloc] initWithText:resultingString
-                                rawBytes:NULL
-                                  length:0
-                            resultPoints:[NSArray arrayWithObjects:[firstPoints objectAtIndex:0], [firstPoints objectAtIndex:1], [lastPoints objectAtIndex:0], [lastPoints objectAtIndex:1], nil]
-                                  format:kBarcodeFormatRSSExpanded] autorelease];
+  return [ZXResult resultWithText:resultingString
+                         rawBytes:NULL
+                           length:0
+                     resultPoints:[NSArray arrayWithObjects:[firstPoints objectAtIndex:0], [firstPoints objectAtIndex:1], [lastPoints objectAtIndex:0], [lastPoints objectAtIndex:1], nil]
+                           format:kBarcodeFormatRSSExpanded];
 }
 
 - (BOOL)checkChecksum {

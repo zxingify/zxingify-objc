@@ -40,6 +40,10 @@
   return self;
 }
 
++ (id)telParsedResultWithNumber:(NSString *)number telURI:(NSString *)telURI title:(NSString *)title {
+  return [[[self alloc] initWithNumber:number telURI:telURI title:title] autorelease];
+}
+
 - (void)dealloc {
   [number release];
   [telURI release];

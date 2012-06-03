@@ -42,7 +42,7 @@
   } else {
     normalizedProductID = rawText;
   }
-  return [[[ZXProductParsedResult alloc] initWithProductID:rawText normalizedProductID:normalizedProductID] autorelease];
+  return [ZXProductParsedResult productParsedResultWithProductID:rawText normalizedProductID:normalizedProductID];
 }
 
 @end

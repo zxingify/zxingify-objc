@@ -53,20 +53,11 @@
 @synthesize url;
 @synthesize birthday;
 
-- (id)initWithNames:(NSArray *)aNames
-      pronunciation:(NSString *)aPronunciation
-       phoneNumbers:(NSArray *)aPhoneNumbers
-         phoneTypes:(NSArray *)aPhoneTypes
-             emails:(NSArray *)anEmails
-         emailTypes:(NSArray *)anEmailTypes
-   instantMessenger:(NSString *)anInstantMessenger
-               note:(NSString *)aNote
-          addresses:(NSArray *)anAddresses
-       addressTypes:(NSArray *)anAddressTypes
-                org:(NSString *)anOrg
-           birthday:(NSString *)aBirthday
-              title:(NSString *)aTitle
-                url:(NSString *)aUrl {
+- (id)initWithNames:(NSArray *)aNames pronunciation:(NSString *)aPronunciation phoneNumbers:(NSArray *)aPhoneNumbers
+         phoneTypes:(NSArray *)aPhoneTypes emails:(NSArray *)anEmails emailTypes:(NSArray *)anEmailTypes
+   instantMessenger:(NSString *)anInstantMessenger note:(NSString *)aNote addresses:(NSArray *)anAddresses
+       addressTypes:(NSArray *)anAddressTypes org:(NSString *)anOrg birthday:(NSString *)aBirthday
+              title:(NSString *)aTitle url:(NSString *)aUrl {
   if (self = [super initWithType:kParsedResultTypeAddressBook]) {
     self.names = aNames;
     self.pronunciation = aPronunciation;
@@ -85,6 +76,17 @@
   }
 
   return self;
+}
+
++ (id)addressBookParsedResultWithNames:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers
+                            phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
+                      instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
+                          addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
+                                 title:(NSString *)title url:(NSString *)url {
+  return [[[self alloc] initWithNames:names pronunciation:pronunciation phoneNumbers:phoneNumbers
+                           phoneTypes:phoneTypes emails:emails emailTypes:emailTypes
+                     instantMessenger:instantMessenger note:note addresses:addresses
+                         addressTypes:addressTypes org:org birthday:birthday title:title url:url] autorelease];
 }
 
 - (void)dealloc {

@@ -24,11 +24,11 @@
 
 - (void)test_RSSExpanded {
   NSDictionary* uncommonAIs = [NSDictionary dictionaryWithObject:@"544654" forKey:@"123"];
-  ZXResult* result = [[[ZXResult alloc] initWithText:@"(01)66546(13)001205(3932)4455(3102)6544(123)544654"
-                                            rawBytes:NULL
-                                              length:0
-                                        resultPoints:nil
-                                              format:kBarcodeFormatRSSExpanded] autorelease];
+  ZXResult* result = [ZXResult resultWithText:@"(01)66546(13)001205(3932)4455(3102)6544(123)544654"
+                                     rawBytes:NULL
+                                       length:0
+                                 resultPoints:nil
+                                       format:kBarcodeFormatRSSExpanded];
   ZXExpandedProductParsedResult* o = (ZXExpandedProductParsedResult*)[[[[ZXExpandedProductResultParser alloc] init] autorelease] parse:result];
   STAssertNotNil(o, @"Expected result to be non-nil");
   STAssertEqualObjects(o.productID, @"66546", @"Product IDs don't match");

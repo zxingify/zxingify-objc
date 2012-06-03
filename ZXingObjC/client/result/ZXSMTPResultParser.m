@@ -39,10 +39,10 @@
     }
   }
   NSString * mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
-  return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress
-                                                           subject:subject
-                                                              body:body
-                                                         mailtoURI:mailtoURI] autorelease];
+  return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
+                                                                      subject:subject
+                                                                         body:body
+                                                                    mailtoURI:mailtoURI];
 }
 
 @end

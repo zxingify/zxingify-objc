@@ -31,10 +31,6 @@
 @synthesize binarizer;
 @synthesize matrix;
 
-+ (ZXBinaryBitmap*)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer {
-  return [[[self alloc] initWithBinarizer:binarizer] autorelease];
-}
-
 - (id)initWithBinarizer:(ZXBinarizer *)aBinarizer {
   if (self = [super init]) {
     if (aBinarizer == nil) {
@@ -48,6 +44,10 @@
   return self;
 }
 
++ (id)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer {
+  return [[[self alloc] initWithBinarizer:binarizer] autorelease];
+}
+
 - (void)dealloc {
   [binarizer release];
   [matrix release];
@@ -55,11 +55,9 @@
   [super dealloc];
 }
 
-
 - (int)width {
   return self.binarizer.width;
 }
-
 
 - (int)height {
   return self.binarizer.height;

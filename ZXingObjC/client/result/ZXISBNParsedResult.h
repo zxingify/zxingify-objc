@@ -21,5 +21,6 @@
 @property (nonatomic, copy, readonly) NSString * isbn;
 
 - (id)initWithIsbn:(NSString *)isbn;
++ (id)isbnParsedResultWithIsbn:(NSString *)isbn;
 
 @end

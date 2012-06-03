@@ -41,6 +41,10 @@
   return self;
 }
 
++ (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password {
+  return [[[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password] autorelease];
+}
+
 - (void)dealloc {
   [ssid release];
   [networkEncryption release];

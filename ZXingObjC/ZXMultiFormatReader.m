@@ -39,16 +39,16 @@
 @synthesize hints;
 @synthesize readers;
 
-+ (ZXMultiFormatReader*)reader {
-  return [[[ZXMultiFormatReader alloc] init] autorelease];
-}
-
 - (id)init {
   if (self = [super init]) {
     self.readers = [NSMutableArray array];
   }
 
   return self;
+}
+
++ (id)reader {
+  return [[[ZXMultiFormatReader alloc] init] autorelease];
 }
 
 /**

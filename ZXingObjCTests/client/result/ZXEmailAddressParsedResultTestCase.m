@@ -53,11 +53,7 @@
                      email:(NSString*)email
                    subject:(NSString*)subject
                       body:(NSString*)body {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents
-                                                rawBytes:NULL
-                                                  length:0
-                                            resultPoints:nil
-                                                  format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeEmailAddress, @"Types do not match");
   ZXEmailAddressParsedResult* emailResult = (ZXEmailAddressParsedResult*)result;

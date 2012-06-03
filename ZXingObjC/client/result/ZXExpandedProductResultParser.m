@@ -102,20 +102,20 @@
     }
   }
 
-  return [[[ZXExpandedProductParsedResult alloc] initWithProductID:productID
-                                                              sscc:sscc
-                                                         lotNumber:lotNumber
-                                                    productionDate:productionDate
-                                                     packagingDate:packagingDate
-                                                    bestBeforeDate:bestBeforeDate
-                                                    expirationDate:expirationDate
-                                                            weight:weight
-                                                        weightType:weightType
-                                                   weightIncrement:weightIncrement
-                                                             price:price
-                                                    priceIncrement:priceIncrement
-                                                     priceCurrency:priceCurrency
-                                                       uncommonAIs:uncommonAIs] autorelease];
+  return [ZXExpandedProductParsedResult expandedProductParsedResultWithProductID:productID
+                                                                            sscc:sscc
+                                                                       lotNumber:lotNumber
+                                                                  productionDate:productionDate
+                                                                   packagingDate:packagingDate
+                                                                  bestBeforeDate:bestBeforeDate
+                                                                  expirationDate:expirationDate
+                                                                          weight:weight
+                                                                      weightType:weightType
+                                                                 weightIncrement:weightIncrement
+                                                                           price:price
+                                                                  priceIncrement:priceIncrement
+                                                                   priceCurrency:priceCurrency
+                                                                     uncommonAIs:uncommonAIs];
 }
 
 - (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {

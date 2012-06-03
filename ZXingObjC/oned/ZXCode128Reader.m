@@ -467,12 +467,12 @@ int const CODE_STOP = 106;
     rawBytes[i] = [[rawCodes objectAtIndex:i] charValue];
   }
 
-  return [[[ZXResult alloc] initWithText:result
-                                rawBytes:rawBytes
-                                  length:rawCodesSize
-                            resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                  format:kBarcodeFormatCode128] autorelease];
+  return [ZXResult resultWithText:result
+                         rawBytes:rawBytes
+                           length:rawCodesSize
+                     resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                   [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                           format:kBarcodeFormatCode128];
 }
 
 @end

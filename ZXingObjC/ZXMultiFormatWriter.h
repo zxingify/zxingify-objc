@@ -23,6 +23,6 @@
 
 @interface ZXMultiFormatWriter : NSObject <ZXWriter>
 
-+ (ZXMultiFormatWriter*)writer;
++ (id)writer;
 
 @end

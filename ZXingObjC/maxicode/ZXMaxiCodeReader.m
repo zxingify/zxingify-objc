@@ -82,11 +82,11 @@ const int MATRIX_HEIGHT = 33;
   }
 
   NSArray* points = [NSArray array];
-  ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
-                                             rawBytes:decoderResult.rawBytes
-                                               length:decoderResult.length
-                                         resultPoints:points
-                                               format:kBarcodeFormatMaxiCode] autorelease];
+  ZXResult * result = [ZXResult resultWithText:decoderResult.text
+                                      rawBytes:decoderResult.rawBytes
+                                        length:decoderResult.length
+                                  resultPoints:points
+                                        format:kBarcodeFormatMaxiCode];
 
   NSString* ecLevel = decoderResult.ecLevel;
   if (ecLevel != nil) {

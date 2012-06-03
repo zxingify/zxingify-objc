@@ -42,20 +42,20 @@
   NSString * address = [[self class] matchSinglePrefixedField:@"ADD:" rawText:rawText endChar:'\r' trim:YES];
   NSArray * addresses = address == nil ? nil : [NSArray arrayWithObjects:address, nil];
 
-  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
-                                             pronunciation:pronunciation
-                                              phoneNumbers:phoneNumbers
-                                                phoneTypes:nil
-                                                    emails:emails
-                                                emailTypes:nil
-                                          instantMessenger:nil
-                                                      note:note
-                                                 addresses:addresses
-                                              addressTypes:nil
-                                                       org:nil
-                                                  birthday:nil
-                                                     title:nil
-                                                       url:nil] autorelease];
+  return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
+                                                       pronunciation:pronunciation
+                                                        phoneNumbers:phoneNumbers
+                                                          phoneTypes:nil
+                                                              emails:emails
+                                                          emailTypes:nil
+                                                    instantMessenger:nil
+                                                                note:note
+                                                           addresses:addresses
+                                                        addressTypes:nil
+                                                                 org:nil
+                                                            birthday:nil
+                                                               title:nil
+                                                                 url:nil];
 }
 
 - (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {

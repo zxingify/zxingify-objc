@@ -27,7 +27,7 @@
   NSString * telURI = [rawText hasPrefix:@"TEL:"] ? [@"tel:" stringByAppendingString:[rawText substringFromIndex:4]] : rawText;
   int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
   NSString * number = queryStart == NSNotFound ? [rawText substringFromIndex:4] : [rawText substringWithRange:NSMakeRange(4, [rawText length] - queryStart)];
-  return [[[ZXTelParsedResult alloc] initWithNumber:number telURI:telURI title:nil] autorelease];
+  return [ZXTelParsedResult telParsedResultWithNumber:number telURI:telURI title:nil];
 }
 
 @end

@@ -24,5 +24,6 @@
 @property (nonatomic, copy, readonly) NSString * mailtoURI;
 
 - (id)initWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI;
++ (id)emailAddressParsedResultWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI;
 
 @end

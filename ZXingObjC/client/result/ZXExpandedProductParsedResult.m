@@ -58,23 +58,16 @@ NSString * const POUND = @"LB";
 @synthesize uncommonAIs;
 
 - (id)init {
-  return [self initWithProductID:@"" sscc:@"" lotNumber:@"" productionDate:@"" packagingDate:@"" bestBeforeDate:@"" expirationDate:@"" weight:@"" weightType:@"" weightIncrement:@"" price:@"" priceIncrement:@"" priceCurrency:@"" uncommonAIs:[NSMutableDictionary dictionary]];
+  return [self initWithProductID:@"" sscc:@"" lotNumber:@"" productionDate:@"" packagingDate:@"" bestBeforeDate:@""
+                  expirationDate:@"" weight:@"" weightType:@"" weightIncrement:@"" price:@"" priceIncrement:@""
+                   priceCurrency:@"" uncommonAIs:[NSMutableDictionary dictionary]];
 }
 
-- (id)initWithProductID:(NSString *)aProductID
-                   sscc:(NSString *)anSscc
-              lotNumber:(NSString *)aLotNumber
-         productionDate:(NSString *)aProductionDate
-          packagingDate:(NSString *)aPackagingDate
-         bestBeforeDate:(NSString *)aBestBeforeDate
-         expirationDate:(NSString *)anExpirationDate
-                 weight:(NSString *)aWeight
-             weightType:(NSString *)aWeightType
-        weightIncrement:(NSString *)aWeightIncrement
-                  price:(NSString *)aPrice
-         priceIncrement:(NSString *)aPriceIncrement
-          priceCurrency:(NSString *)aPriceCurrency
-            uncommonAIs:(NSMutableDictionary *)theUncommonAIs {
+- (id)initWithProductID:(NSString *)aProductID sscc:(NSString *)anSscc lotNumber:(NSString *)aLotNumber
+         productionDate:(NSString *)aProductionDate packagingDate:(NSString *)aPackagingDate bestBeforeDate:(NSString *)aBestBeforeDate
+         expirationDate:(NSString *)anExpirationDate weight:(NSString *)aWeight weightType:(NSString *)aWeightType
+        weightIncrement:(NSString *)aWeightIncrement price:(NSString *)aPrice priceIncrement:(NSString *)aPriceIncrement
+          priceCurrency:(NSString *)aPriceCurrency uncommonAIs:(NSMutableDictionary *)theUncommonAIs {
   if (self = [super initWithType:kParsedResultTypeProduct]) {
     self.productID = aProductID;
     self.sscc = anSscc;
@@ -93,6 +86,17 @@ NSString * const POUND = @"LB";
   }
 
   return self;
+}
+
++ (id)expandedProductParsedResultWithProductID:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber
+                                productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate
+                                expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType
+                               weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement
+                                 priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs {
+  return [[[self alloc] initWithProductID:productID sscc:sscc lotNumber:lotNumber productionDate:productionDate
+                            packagingDate:packagingDate bestBeforeDate:bestBeforeDate expirationDate:expirationDate
+                                   weight:weight weightType:weightType weightIncrement:weightIncrement price:price
+                           priceIncrement:priceIncrement priceCurrency:priceCurrency uncommonAIs:uncommonAIs] autorelease];
 }
 
 - (void)dealloc {

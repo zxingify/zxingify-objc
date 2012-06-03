@@ -25,7 +25,7 @@
  */
 @interface ZXDecodeHints : NSObject <NSCopying>
 
-+ (ZXDecodeHints*)hints;
++ (id)hints;
 
 /**
  * Assume Code 39 codes employ a check digit. Maps to {@link Boolean}.

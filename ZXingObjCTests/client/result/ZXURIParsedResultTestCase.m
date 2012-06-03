@@ -85,8 +85,7 @@
 }
 
 - (void)doTestWithContents:(NSString*)contents uri:(NSString*)uri title:(NSString*)title {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents rawBytes:NULL length:0 resultPoints:nil
-                                                  format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeURI, @"Types don't match");
   ZXURIParsedResult* uriResult = (ZXURIParsedResult*)result;
@@ -95,14 +94,14 @@
 }
 
 - (void)doTestNotUri:(NSString*)text {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:text rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:text rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeText, @"Types don't match");
   STAssertEqualObjects(result.displayResult, text, @"Display result doesn't match");
 }
 
 - (void)doTestIsPossiblyMalicious:(NSString*)uri expected:(BOOL)expected {
-  ZXURIParsedResult* result = [[[ZXURIParsedResult alloc] initWithUri:uri title:nil] autorelease];
+  ZXURIParsedResult* result = [ZXURIParsedResult uriParsedResultWithUri:uri title:nil];
   STAssertEquals([result possiblyMaliciousURI], expected,
                  expected ? @"Expected to be possibly malicious URI but wasn't" : @"Not expected to be possibly malicious URI but was");
 }

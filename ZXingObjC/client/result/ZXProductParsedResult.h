@@ -23,5 +23,7 @@
 
 - (id)initWithProductID:(NSString *)productID;
 - (id)initWithProductID:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID;
++ (id)productParsedResultWithProductID:(NSString *)productID;
++ (id)productParsedResultWithProductID:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID;
 
 @end

@@ -23,5 +23,6 @@
 @property (nonatomic, copy, readonly) NSString * password;
 
 - (id)initWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password;
++ (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password;
 
 @end

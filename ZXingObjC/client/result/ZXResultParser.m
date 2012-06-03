@@ -104,7 +104,7 @@ static NSString* EQUALS = @"=";
       return result;
     }
   }
-  return [[[ZXTextParsedResult alloc] initWithText:[theResult text] language:nil] autorelease];
+  return [ZXTextParsedResult textParsedResultWithText:[theResult text] language:nil];
 }
 
 - (void)maybeAppend:(NSString *)value result:(NSMutableString *)result {

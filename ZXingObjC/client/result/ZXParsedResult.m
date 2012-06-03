@@ -34,6 +34,10 @@
   return self;
 }
 
++ (id)parsedResultWithType:(ZXParsedResultType)type {
+  return [[[self alloc] initWithType:type] autorelease];
+}
+
 - (NSString *)displayResult {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]

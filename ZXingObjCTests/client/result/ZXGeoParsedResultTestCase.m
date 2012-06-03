@@ -45,7 +45,7 @@ static double EPSILON = 0.0000000001;
                  longitude:(double)longitude
                   altitude:(double)altitude
                      query:(NSString*)query {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeGeo, @"Types don't match");
   ZXGeoParsedResult* geoResult = (ZXGeoParsedResult*)result;

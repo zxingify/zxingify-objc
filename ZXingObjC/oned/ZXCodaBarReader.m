@@ -147,13 +147,13 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
 
   float left = (float) (start[1] + start[0]) / 2.0f;
   float right = (float) (nextStart + lastStart) / 2.0f;
-  return [[[ZXResult alloc] initWithText:result
-                                rawBytes:nil
-                                  length:0
-                            resultPoints:[NSArray arrayWithObjects:
-                                          [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                          [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                  format:kBarcodeFormatCodabar] autorelease];
+  return [ZXResult resultWithText:result
+                         rawBytes:nil
+                           length:0
+                     resultPoints:[NSArray arrayWithObjects:
+                                   [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
+                                   [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                           format:kBarcodeFormatCodabar];
 }
 
 - (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b {

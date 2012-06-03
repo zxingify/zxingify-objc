@@ -140,11 +140,11 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   [buffer appendFormat:@"%d", checkDigit];
   NSArray * leftPoints = [[leftPair finderPattern] resultPoints];
   NSArray * rightPoints = [[rightPair finderPattern] resultPoints];
-  return [[[ZXResult alloc] initWithText:buffer
-                                rawBytes:NULL
-                                  length:0
-                            resultPoints:[NSArray arrayWithObjects:[leftPoints objectAtIndex:0], [leftPoints objectAtIndex:1], [rightPoints objectAtIndex:0], [rightPoints objectAtIndex:1], nil]
-                                  format:kBarcodeFormatRSS14] autorelease];
+  return [ZXResult resultWithText:buffer
+                         rawBytes:NULL
+                           length:0
+                     resultPoints:[NSArray arrayWithObjects:[leftPoints objectAtIndex:0], [leftPoints objectAtIndex:1], [rightPoints objectAtIndex:0], [rightPoints objectAtIndex:1], nil]
+                           format:kBarcodeFormatRSS14];
 }
 
 - (BOOL)checkChecksum:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair {

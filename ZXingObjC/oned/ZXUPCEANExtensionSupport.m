@@ -53,13 +53,13 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
   NSMutableDictionary * extensionData = [self parseExtensionString:result];
 
-  ZXResult * extensionResult = [[[ZXResult alloc] initWithText:result
-                                                      rawBytes:NULL
-                                                        length:0
-                                                  resultPoints:[NSArray arrayWithObjects:
-                                                                [[[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:(float)rowNumber] autorelease],
-                                                                [[[ZXResultPoint alloc] initWithX:(float)end y:(float)rowNumber] autorelease], nil]
-                                                        format:kBarcodeFormatUPCEANExtension] autorelease];
+  ZXResult * extensionResult = [ZXResult resultWithText:result
+                                               rawBytes:NULL
+                                                 length:0
+                                           resultPoints:[NSArray arrayWithObjects:
+                                                         [[[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:(float)rowNumber] autorelease],
+                                                         [[[ZXResultPoint alloc] initWithX:(float)end y:(float)rowNumber] autorelease], nil]
+                                                 format:kBarcodeFormatUPCEANExtension];
   if (extensionData != nil) {
     [extensionResult putAllMetadata:extensionData];
   }

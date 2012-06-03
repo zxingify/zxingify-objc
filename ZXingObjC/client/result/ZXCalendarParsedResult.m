@@ -42,7 +42,8 @@
 @synthesize latitude;
 @synthesize longitude;
 
-- (id)initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
+- (id)initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation
+             attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
   if (self = [super initWithType:kParsedResultTypeCalendar]) {
     [self validateDate:aStart];
     self.summary = aSummary;
@@ -62,7 +63,13 @@
   return self;
 }
 
-- (void) dealloc {
++ (id)calendarParsedResultWithSummary:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location
+                             attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude {
+  return [[[self alloc] initWithSummary:summary start:start end:end location:location attendee:attendee
+                            description:description latitude:latitude longitude:longitude] autorelease];
+}
+
+- (void)dealloc {
   [summary release];
   [start release];
   [end release];
@@ -90,7 +97,7 @@
  * 
  * @param date The string to validate
  */
-- (void) validateDate:(NSString *)date {
+- (void)validateDate:(NSString *)date {
   if (date != nil) {
     int length = [date length];
     if (length != 8 && length != 15 && length != 16) {

@@ -59,11 +59,7 @@
   if (!decoderResult) {
     return nil;
   }
-  ZXResult * result = [[[ZXResult alloc] initWithText:[decoderResult text]
-                                             rawBytes:[decoderResult rawBytes]
-                                               length:[decoderResult length]
-                                         resultPoints:points
-                                               format:kBarcodeFormatAztec] autorelease];
+  ZXResult * result = [ZXResult resultWithText:decoderResult.text rawBytes:decoderResult.rawBytes length:decoderResult.length resultPoints:points format:kBarcodeFormatAztec];
 
   NSMutableArray *byteSegments = decoderResult.byteSegments;
   if (byteSegments != nil) {

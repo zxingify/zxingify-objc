@@ -28,7 +28,7 @@
 
 @implementation ZXMultiFormatWriter
 
-+ (ZXMultiFormatWriter*)writer {
++ (id)writer {
   return [[[ZXMultiFormatWriter alloc] init] autorelease];
 }
 

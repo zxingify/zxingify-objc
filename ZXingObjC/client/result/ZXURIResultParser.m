@@ -46,7 +46,7 @@ static NSRegularExpression* URL_WITHOUT_PROTOCOL_PATTERN = nil;
     rawText = [rawText substringFromIndex:4];
   }
   rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-  return [[self class] isBasicallyValidURI:rawText] ? [[[ZXURIParsedResult alloc] initWithUri:rawText title:nil] autorelease] : nil;
+  return [[self class] isBasicallyValidURI:rawText] ? [ZXURIParsedResult uriParsedResultWithUri:rawText title:nil] : nil;
 }
 
 

@@ -28,8 +28,8 @@
 @property (nonatomic, readonly) BOOL cropSupported;
 @property (nonatomic, readonly) BOOL rotateSupported;
 
-+ (ZXBinaryBitmap*)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer;
 - (id)initWithBinarizer:(ZXBinarizer *)binarizer;
++ (id)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer;
 - (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
 - (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;
 - (ZXBinaryBitmap *)crop:(int)left top:(int)top width:(int)width height:(int)height;

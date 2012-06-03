@@ -48,20 +48,20 @@
   NSString * url = [[self class] matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
   NSString * org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
 
-  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self maybeWrap:name]
-                                             pronunciation:pronunciation
-                                              phoneNumbers:phoneNumbers
-                                                phoneTypes:nil
-                                                    emails:emails
-                                                emailTypes:nil
-                                          instantMessenger:nil
-                                                      note:note
-                                                 addresses:addresses
-                                              addressTypes:nil
-                                                       org:org
-                                                  birthday:birthday
-                                                     title:nil
-                                                       url:url] autorelease];
+  return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
+                                                       pronunciation:pronunciation
+                                                        phoneNumbers:phoneNumbers
+                                                          phoneTypes:nil
+                                                              emails:emails
+                                                          emailTypes:nil
+                                                    instantMessenger:nil
+                                                                note:note
+                                                           addresses:addresses
+                                                        addressTypes:nil
+                                                                 org:org
+                                                            birthday:birthday
+                                                               title:nil
+                                                                 url:url];
 }
 
 - (NSString *)parseName:(NSString *)name {

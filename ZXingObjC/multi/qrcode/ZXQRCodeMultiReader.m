@@ -41,11 +41,11 @@
     ZXDecoderResult * decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits] error:nil];
     if (decoderResult) {
       NSArray * points = [[detectorResult objectAtIndex:i] points];
-      ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
-                                                 rawBytes:decoderResult.rawBytes
-                                                   length:decoderResult.length
-                                             resultPoints:points
-                                                   format:kBarcodeFormatQRCode] autorelease];
+      ZXResult * result = [ZXResult resultWithText:decoderResult.text
+                                          rawBytes:decoderResult.rawBytes
+                                            length:decoderResult.length
+                                      resultPoints:points
+                                            format:kBarcodeFormatQRCode];
       NSMutableArray* byteSegments = decoderResult.byteSegments;
       if (byteSegments != nil) {
         [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];

@@ -25,6 +25,7 @@
 @property (nonatomic, assign, readonly) float y;
 
 - (id)initWithX:(float)x y:(float)y;
++ (id)resultPointWithX:(float)x y:(float)y;
 + (void)orderBestPatterns:(NSMutableArray *)patterns;
 + (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2;
 

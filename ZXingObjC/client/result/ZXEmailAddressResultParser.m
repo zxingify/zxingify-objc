@@ -40,19 +40,19 @@
       subject = [nameValues objectForKey:@"subject"];
       body = [nameValues objectForKey:@"body"];
     }
-    return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress
-                                                             subject:subject
-                                                                body:body
-                                                           mailtoURI:rawText] autorelease];
+    return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
+                                                                        subject:subject
+                                                                           body:body
+                                                                      mailtoURI:rawText];
   } else {
     if (![ZXEmailDoCoMoResultParser isBasicallyValidEmailAddress:rawText]) {
       return nil;
     }
     emailAddress = rawText;
-    return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:emailAddress
-                                                             subject:nil
-                                                                body:nil
-                                                           mailtoURI:[@"mailto:" stringByAppendingString:emailAddress]] autorelease];
+    return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
+                                                                        subject:nil
+                                                                           body:nil
+                                                                      mailtoURI:[@"mailto:" stringByAppendingString:emailAddress]];
   }
 }
 

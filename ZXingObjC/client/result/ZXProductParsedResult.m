@@ -41,7 +41,15 @@
   return self;
 }
 
-- (void) dealloc {
++ (id)productParsedResultWithProductID:(NSString *)productID {
+  return [[[self alloc] initWithProductID:productID] autorelease];
+}
+
++ (id)productParsedResultWithProductID:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID {
+  return [[[self alloc] initWithProductID:productID normalizedProductID:normalizedProductID] autorelease];
+}
+
+- (void)dealloc {
   [productID release];
   [normalizedProductID release];
 

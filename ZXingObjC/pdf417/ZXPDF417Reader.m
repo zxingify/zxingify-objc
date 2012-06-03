@@ -91,11 +91,11 @@
     }
     points = detectorResult.points;
   }
-  return [[[ZXResult alloc] initWithText:decoderResult.text
-                                rawBytes:decoderResult.rawBytes
-                                  length:decoderResult.length
-                            resultPoints:points
-                                  format:kBarcodeFormatPDF417] autorelease];
+  return [ZXResult resultWithText:decoderResult.text
+                         rawBytes:decoderResult.rawBytes
+                           length:decoderResult.length
+                     resultPoints:points
+                           format:kBarcodeFormatPDF417];
 }
 
 - (void)reset {

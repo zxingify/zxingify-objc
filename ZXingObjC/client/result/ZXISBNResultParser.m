@@ -32,7 +32,7 @@
   if (![rawText hasPrefix:@"978"] && ![rawText hasPrefix:@"979"]) {
     return nil;
   }
-  return [[[ZXISBNParsedResult alloc] initWithIsbn:rawText] autorelease];
+  return [ZXISBNParsedResult isbnParsedResultWithIsbn:rawText];
 }
 
 @end

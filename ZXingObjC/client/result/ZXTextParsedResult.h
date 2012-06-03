@@ -27,5 +27,6 @@
 @property (nonatomic, copy, readonly) NSString * language;
 
 - (id)initWithText:(NSString *)text language:(NSString *)language;
++ (id)textParsedResultWithText:(NSString *)text language:(NSString *)language;
 
 @end

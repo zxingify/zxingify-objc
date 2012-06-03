@@ -81,20 +81,20 @@ static NSString* SEMICOLON = @";";
   NSArray * title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
   NSArray * url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
   NSArray * instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES];
-  return [[[ZXAddressBookParsedResult alloc] initWithNames:[self toPrimaryValues:names]
-                                             pronunciation:nil
-                                              phoneNumbers:[self toPrimaryValues:phoneNumbers]
-                                                phoneTypes:[self toTypes:phoneNumbers]
-                                                    emails:[self toPrimaryValues:emails]
-                                                emailTypes:[self toTypes:emails]
-                                          instantMessenger:[self toPrimaryValue:instantMessenger]
-                                                      note:[self toPrimaryValue:note]
-                                                 addresses:[self toPrimaryValues:addresses]
-                                              addressTypes:[self toTypes:addresses]
-                                                       org:[self toPrimaryValue:org]
-                                                  birthday:[self toPrimaryValue:birthday]
-                                                     title:[self toPrimaryValue:title]
-                                                       url:[self toPrimaryValue:url]] autorelease];
+  return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self toPrimaryValues:names]
+                                                       pronunciation:nil
+                                                        phoneNumbers:[self toPrimaryValues:phoneNumbers]
+                                                          phoneTypes:[self toTypes:phoneNumbers]
+                                                              emails:[self toPrimaryValues:emails]
+                                                          emailTypes:[self toTypes:emails]
+                                                    instantMessenger:[self toPrimaryValue:instantMessenger]
+                                                                note:[self toPrimaryValue:note]
+                                                           addresses:[self toPrimaryValues:addresses]
+                                                        addressTypes:[self toTypes:addresses]
+                                                                 org:[self toPrimaryValue:org]
+                                                            birthday:[self toPrimaryValue:birthday]
+                                                               title:[self toPrimaryValue:title]
+                                                                 url:[self toPrimaryValue:url]];
 }
 
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {

@@ -22,6 +22,7 @@
 @property (nonatomic, copy, readonly) NSString * title;
 
 - (id)initWithUri:(NSString *)uri title:(NSString *)title;
++ (id)uriParsedResultWithUri:(NSString *)uri title:(NSString *)title;
 - (BOOL)possiblyMaliciousURI;
 
 @end

@@ -112,11 +112,11 @@
 - (ZXResult *)maybeReturnResult:(ZXResult *)result {
   NSString * text = result.text;
   if ([text characterAtIndex:0] == '0') {
-    return [[[ZXResult alloc] initWithText:[text substringFromIndex:1]
-                                  rawBytes:NULL
-                                    length:0
-                              resultPoints:result.resultPoints
-                                    format:kBarcodeFormatUPCA] autorelease];
+    return [ZXResult resultWithText:[text substringFromIndex:1]
+                           rawBytes:NULL
+                             length:0
+                       resultPoints:result.resultPoints
+                             format:kBarcodeFormatUPCA];
   } else {
     return nil;
   }

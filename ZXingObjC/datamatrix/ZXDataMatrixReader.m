@@ -97,11 +97,11 @@
     }
     points = detectorResult.points;
   }
-  ZXResult * result = [[[ZXResult alloc] initWithText:decoderResult.text
-                                             rawBytes:decoderResult.rawBytes
-                                               length:decoderResult.length
-                                         resultPoints:points
-                                               format:kBarcodeFormatDataMatrix] autorelease];
+  ZXResult * result = [ZXResult resultWithText:decoderResult.text
+                                      rawBytes:decoderResult.rawBytes
+                                        length:decoderResult.length
+                                  resultPoints:points
+                                        format:kBarcodeFormatDataMatrix];
   if (decoderResult.byteSegments != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:decoderResult.byteSegments];
   }

@@ -195,11 +195,11 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   float left = (float)(NSMaxRange(startGuardRange) + startGuardRange.location) / 2.0f;
   float right = (float)(NSMaxRange(endRange) + endRange.location) / 2.0f;
   ZXBarcodeFormat format = [self barcodeFormat];
-  ZXResult * decodeResult = [[[ZXResult alloc] initWithText:resultString
-                                                   rawBytes:NULL
-                                                     length:0
-                                               resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                                     format:format] autorelease];
+  ZXResult * decodeResult = [ZXResult resultWithText:resultString
+                                            rawBytes:NULL
+                                              length:0
+                                        resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                              format:format];
 
   ZXResult * extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
   if (extensionResult) {

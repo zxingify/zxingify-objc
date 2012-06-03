@@ -33,19 +33,15 @@
 @property (nonatomic, readonly, copy) NSString * url;
 @property (nonatomic, readonly, copy) NSString * birthday;
 
-- (id)initWithNames:(NSArray *)names
-      pronunciation:(NSString *)pronunciation
-       phoneNumbers:(NSArray *)phoneNumbers
-         phoneTypes:(NSArray *)phoneTypes
-             emails:(NSArray *)emails
-         emailTypes:(NSArray *)emailTypes
-   instantMessenger:(NSString *)instantMessenger
-               note:(NSString *)note
-          addresses:(NSArray *)addresses
-       addressTypes:(NSArray *)addressTypes
-                org:(NSString *)org
-           birthday:(NSString *)birthday
-              title:(NSString *)title
-                url:(NSString *)url;
+- (id)initWithNames:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers
+         phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
+   instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
+       addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday title:(NSString *)title url:(NSString *)url;
+
++ (id)addressBookParsedResultWithNames:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers
+                            phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
+                      instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
+                          addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
+                                 title:(NSString *)title url:(NSString *)url;
 
 @end

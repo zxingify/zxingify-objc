@@ -31,7 +31,7 @@
   }
   NSString * title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, titleEnd - 6)];
   NSString * uri = [rawText substringFromIndex:titleEnd + 1];
-  return [[[ZXURIParsedResult alloc] initWithUri:uri title:title] autorelease];
+  return [ZXURIParsedResult uriParsedResultWithUri:uri title:title];
 }
 
 @end

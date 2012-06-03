@@ -273,7 +273,7 @@
                     goldenResult:(NSString*)goldenResult
                             type:(ZXParsedResultType)type
                           format:(ZXBarcodeFormat)format {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertNotNil(result, @"Result is nil");
   STAssertEquals(result.type, type, @"Types don't match");

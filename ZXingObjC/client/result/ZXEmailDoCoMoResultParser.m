@@ -27,7 +27,7 @@ static NSRegularExpression* ATEXT_ALPHANUMERIC = nil;
                                                             options:0 error:nil];
 }
 
-- (ZXParsedResult *) parse:(ZXResult *)result {
+- (ZXParsedResult *)parse:(ZXResult *)result {
   NSString * rawText = [result text];
   if (![rawText hasPrefix:@"MATMSG:"]) {
     return nil;
@@ -43,10 +43,10 @@ static NSRegularExpression* ATEXT_ALPHANUMERIC = nil;
   NSString * subject = [[self class] matchSingleDoCoMoPrefixedField:@"SUB:" rawText:rawText trim:NO];
   NSString * body = [[self class] matchSingleDoCoMoPrefixedField:@"BODY:" rawText:rawText trim:NO];
 
-  return [[[ZXEmailAddressParsedResult alloc] initWithEmailAddress:to
-                                                           subject:subject
-                                                              body:body
-                                                         mailtoURI:[@"mailto:" stringByAppendingString:to]] autorelease];
+  return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:to
+                                                                      subject:subject
+                                                                         body:body
+                                                                    mailtoURI:[@"mailto:" stringByAppendingString:to]];
 }
 
 

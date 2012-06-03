@@ -32,7 +32,7 @@
     body = [number substringFromIndex:bodyStart + 1];
     number = [number substringToIndex:bodyStart];
   }
-  return [[[ZXSMSParsedResult alloc] initWithNumber:number via:nil subject:nil body:body] autorelease];
+  return [ZXSMSParsedResult smsParsedResultWithNumber:number via:nil subject:nil body:body];
 }
 
 @end

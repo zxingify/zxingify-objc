@@ -36,19 +36,15 @@ extern NSString * const POUND;
 @property (nonatomic, copy, readonly) NSString * priceCurrency;
 @property (nonatomic, retain, readonly) NSMutableDictionary * uncommonAIs;
 
-- (id)initWithProductID:(NSString *)productID
-                   sscc:(NSString *)sscc
-              lotNumber:(NSString *)lotNumber
-        productionDate:(NSString *)productionDate
-          packagingDate:(NSString *)packagingDate
-        bestBeforeDate:(NSString *)bestBeforeDate
-        expirationDate:(NSString *)expirationDate
-                weight:(NSString *)weight
-            weightType:(NSString *)weightType
-        weightIncrement:(NSString *)weightIncrement
-                  price:(NSString *)price
-        priceIncrement:(NSString *)priceIncrement
-          priceCurrency:(NSString *)priceCurrency
-            uncommonAIs:(NSMutableDictionary *)uncommonAIs;
+- (id)initWithProductID:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber
+         productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate
+        expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType
+        weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement
+          priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs;
++ (id)expandedProductParsedResultWithProductID:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber
+                                productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate
+                                expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType
+                               weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement
+                                 priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs;
 
 @end

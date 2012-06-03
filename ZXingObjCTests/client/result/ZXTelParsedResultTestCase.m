@@ -32,8 +32,7 @@
 }
 
 - (void)doTestWithContents:(NSString*)contents number:(NSString*)number title:(NSString*)title {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents rawBytes:NULL length:0 resultPoints:nil
-                                                  format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeTel, @"Types don't match");
   ZXTelParsedResult* telResult = (ZXTelParsedResult*)result;

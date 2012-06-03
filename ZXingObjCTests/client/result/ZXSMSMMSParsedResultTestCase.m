@@ -65,8 +65,7 @@
                    subject:(NSString*)subject
                       body:(NSString*)body
                       vias:(NSArray*)vias {
-  ZXResult* fakeResult = [[[ZXResult alloc] initWithText:contents rawBytes:NULL length:0 resultPoints:nil
-                                                  format:kBarcodeFormatQRCode] autorelease];
+  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeSMS, @"Types don't match");
   ZXSMSParsedResult* smsResult = (ZXSMSParsedResult*)result;

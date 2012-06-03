@@ -62,6 +62,14 @@
   return self;
 }
 
++ (id)resultWithText:(NSString *)text rawBytes:(unsigned char *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
+  return [[[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format] autorelease];
+}
+
++ (id)resultWithText:(NSString *)text rawBytes:(unsigned char *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
+  return [[[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format timestamp:timestamp] autorelease];
+}
+
 - (void)dealloc {
   if (self.rawBytes != NULL) {
     free(self.rawBytes);

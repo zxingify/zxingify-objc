@@ -59,14 +59,14 @@
   }
 
   @try {
-    return [[[ZXCalendarParsedResult alloc] initWithSummary:summary
-                                                      start:start
-                                                        end:end
-                                                   location:location
-                                                   attendee:nil
-                                                description:description
-                                                   latitude:latitude
-                                                  longitude:longitude] autorelease];
+    return [ZXCalendarParsedResult calendarParsedResultWithSummary:summary
+                                                             start:start
+                                                               end:end
+                                                          location:location
+                                                          attendee:nil
+                                                       description:description
+                                                          latitude:latitude
+                                                         longitude:longitude];
   } @catch (NSException * iae) {
     return nil;
   }
