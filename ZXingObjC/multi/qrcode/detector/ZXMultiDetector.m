@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
+#import "ZXDecodeHints.h"
 #import "ZXErrors.h"
 #import "ZXMultiDetector.h"
 #import "ZXMultiFinderPatternFinder.h"
+#import "ZXResultPointCallback.h"
 
 @implementation ZXMultiDetector
 
 - (NSArray *)detectMulti:(ZXDecodeHints *)hints error:(NSError**)error {
-  ZXMultiFinderPatternFinder * finder = [[[ZXMultiFinderPatternFinder alloc] initWithImage:self.image] autorelease];
+  id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
+  ZXMultiFinderPatternFinder * finder = [[[ZXMultiFinderPatternFinder alloc] initWithImage:self.image resultPointCallback:resultPointCallback] autorelease];
   NSArray * info = [finder findMulti:hints error:error];
   if ([info count] == 0) {
     if (error) *error = NotFoundErrorInstance();
