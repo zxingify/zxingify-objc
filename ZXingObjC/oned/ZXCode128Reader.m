@@ -461,7 +461,7 @@ int const CODE_STOP = 106;
     rawBytes[i] = [[rawCodes objectAtIndex:i] charValue];
   }
 
-  return [[[ZXResult alloc] initWithText:[NSString stringWithString:result]
+  return [[[ZXResult alloc] initWithText:result
                                 rawBytes:rawBytes
                                   length:rawCodesSize
                             resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],

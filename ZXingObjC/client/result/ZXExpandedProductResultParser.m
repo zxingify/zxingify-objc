@@ -130,14 +130,14 @@
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar currentChar = [rawTextAux characterAtIndex:index];
     if (currentChar == ')') {
-      return [NSString stringWithString:buf];
+      return buf;
     } else if (currentChar >= '0' && currentChar <= '9') {
       [buf appendFormat:@"%C", currentChar];
     } else {
       return nil;
     }
   }
-  return [NSString stringWithString:buf];
+  return buf;
 }
 
 - (NSString *)findValue:(int)i rawText:(NSString *)rawText {
@@ -157,7 +157,7 @@
     }
   }
 
-  return [NSString stringWithString:buf];
+  return buf;
 }
 
 @end

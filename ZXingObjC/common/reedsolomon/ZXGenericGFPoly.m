@@ -262,7 +262,7 @@
     }
   }
 
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

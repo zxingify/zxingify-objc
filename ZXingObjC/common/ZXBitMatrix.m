@@ -296,7 +296,7 @@
     }
     [result appendString:@"\n"];
   }
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

@@ -186,7 +186,7 @@ const int EC_COEFFICIENTS[9][512] = {
     }
     [sb appendFormat:@"%C", e[j]];
   }
-  return [NSString stringWithString:sb];
+  return sb;
 }
 
 @end

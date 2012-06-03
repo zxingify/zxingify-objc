@@ -70,7 +70,7 @@ static NSRegularExpression* USER_IN_HOST = nil;
   NSMutableString* result = [NSMutableString stringWithCapacity:30];
   [ZXParsedResult maybeAppend:title result:result];
   [ZXParsedResult maybeAppend:uri result:result];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 /**

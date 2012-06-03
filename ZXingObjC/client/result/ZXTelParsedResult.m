@@ -52,7 +52,7 @@
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   [ZXParsedResult maybeAppend:number result:result];
   [ZXParsedResult maybeAppend:title result:result];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

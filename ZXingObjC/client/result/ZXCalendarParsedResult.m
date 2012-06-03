@@ -80,7 +80,7 @@
   [ZXParsedResult maybeAppend:self.location result:result];
   [ZXParsedResult maybeAppend:self.attendee result:result];
   [ZXParsedResult maybeAppend:self.description result:result];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 

@@ -226,7 +226,7 @@ const unichar SETS[1][383] = {
   while (sb.length > 0 && [sb characterAtIndex:sb.length - 1] == PAD) {
     [sb deleteCharactersInRange:NSMakeRange(sb.length - 1, 1)];
   }
-  return [NSString stringWithString:sb];
+  return sb;
 }
 
 @end

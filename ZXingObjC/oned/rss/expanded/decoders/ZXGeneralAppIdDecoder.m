@@ -90,7 +90,7 @@
     currentPosition = [info theNewPosition];
   } while (YES);
 
-  return [NSString stringWithString:buff];
+  return buff;
 }
 
 - (BOOL)isStillNumeric:(int)pos {

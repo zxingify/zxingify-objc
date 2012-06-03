@@ -59,7 +59,7 @@
   if (self.query != nil) {
     [result appendFormat:@"?%@", query];
   }
-  return [NSString stringWithString:result];
+  return result;
 }
 
 - (NSString *)displayResult {
@@ -72,7 +72,7 @@
   if (self.query != nil) {
     [result appendFormat:@" (%@)", self.query];
   }
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

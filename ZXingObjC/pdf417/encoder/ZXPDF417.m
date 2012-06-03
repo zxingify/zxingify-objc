@@ -710,7 +710,7 @@ static float HEIGHT = 2.0f; //mm
   for (int i = 0; i < pad; i++) {
     [sb appendFormat:@"%c", (char) 900]; //PAD characters
   }
-  NSString* dataCodewords = [NSString stringWithString:sb];
+  NSString* dataCodewords = sb;
 
   //3. step: Error correction
   NSString* ec = [ZXPDF417ErrorCorrection generateErrorCorrection:dataCodewords errorCorrectionLevel:anErrorCorrectionLevel];

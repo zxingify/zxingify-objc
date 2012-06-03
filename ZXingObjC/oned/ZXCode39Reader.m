@@ -164,7 +164,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       return nil;
     }
   } else {
-    resultString = [NSString stringWithString:result];
+    resultString = result;
   }
 
   float left = (float) (start[1] + start[0]) / 2.0f;

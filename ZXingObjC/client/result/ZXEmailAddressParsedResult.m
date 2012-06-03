@@ -58,7 +58,7 @@
   [ZXParsedResult maybeAppend:emailAddress result:result];
   [ZXParsedResult maybeAppend:subject result:result];
   [ZXParsedResult maybeAppend:body result:result];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

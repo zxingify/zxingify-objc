@@ -114,7 +114,7 @@
     free(row);
     row = NULL;
   }
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

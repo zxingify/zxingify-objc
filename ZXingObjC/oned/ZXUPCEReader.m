@@ -158,7 +158,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
       break;
   }
   [result appendFormat:@"%C", [upce characterAtIndex:7]];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

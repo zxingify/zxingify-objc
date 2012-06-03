@@ -143,7 +143,7 @@ static NSString* EQUALS = @"=";
       nextIsEscaped = YES;
     }
   }
-  return [NSString stringWithString:unescaped];
+  return unescaped;
 }
 
 + (int)parseHexDigit:(unichar)c {

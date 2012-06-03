@@ -220,7 +220,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
     }
   }
 
-  return [NSString stringWithString:sb];
+  return sb;
 }
 
 /**

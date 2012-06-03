@@ -322,7 +322,7 @@
     [result appendString:[self get:i] ? @"X" : @"."];
   }
 
-  return [NSString stringWithString:result];
+  return result;
 }
 
 // Ported from OpenJDK Integer.numberOfTrailingZeros implementation

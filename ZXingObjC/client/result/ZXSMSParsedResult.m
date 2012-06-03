@@ -98,7 +98,7 @@
       [result appendString:subject];
     }
   }
-  return [NSString stringWithString:result];
+  return result;
 }
 
 - (NSString *)displayResult {
@@ -106,7 +106,7 @@
   [ZXParsedResult maybeAppendArray:numbers result:result];
   [ZXParsedResult maybeAppend:subject result:result];
   [ZXParsedResult maybeAppend:body result:result];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end

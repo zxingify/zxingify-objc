@@ -119,7 +119,7 @@
   [ZXParsedResult maybeAppend:self.url result:result];
   [ZXParsedResult maybeAppend:self.birthday result:result];
   [ZXParsedResult maybeAppend:self.note result:result];
-  return [NSString stringWithString:result];
+  return result;
 }
 
 @end
