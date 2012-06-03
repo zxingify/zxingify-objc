@@ -452,14 +452,6 @@ int const CODE_STOP = 106;
     }
   }
 
-  NSString * resultString = [result description];
-
-  if ([resultString length] < 2) {
-    // Almost surely a false positive
-    if (error) *error = FormatErrorInstance();
-    return nil;
-  }
-
   float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
 
@@ -469,7 +461,7 @@ int const CODE_STOP = 106;
     rawBytes[i] = [[rawCodes objectAtIndex:i] charValue];
   }
 
-  return [[[ZXResult alloc] initWithText:resultString
+  return [[[ZXResult alloc] initWithText:[NSString stringWithString:result]
                                 rawBytes:rawBytes
                                   length:rawCodesSize
                             resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
