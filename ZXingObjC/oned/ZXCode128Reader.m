@@ -444,7 +444,7 @@ int const CODE_STOP = 106;
   int resultLength = [result length];
   if (resultLength == 0) {
     // false positive
-    if (error) *error = ChecksumErrorInstance();
+    if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
