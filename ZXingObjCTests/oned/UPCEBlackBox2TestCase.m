@@ -26,8 +26,8 @@
                     expectedFormat:kBarcodeFormatUPCE];
 
   if (self) {
-    [self addTest:30 tryHarderCount:35 rotation:0.0f];
-    [self addTest:31 tryHarderCount:35 rotation:180.0f];
+    [self addTest:31 tryHarderCount:35 maxMisreads:0 maxTryHarderMisreads:1 rotation:0.0f];
+    [self addTest:31 tryHarderCount:35 maxMisreads:1 maxTryHarderMisreads:1 rotation:180.0f];
   }
 
   return self;

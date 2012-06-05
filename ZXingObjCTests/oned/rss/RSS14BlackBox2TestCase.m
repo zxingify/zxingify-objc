@@ -26,8 +26,8 @@
                     expectedFormat:kBarcodeFormatRSS14];
 
   if (self) {
-    [self addTest:3 tryHarderCount:8 rotation:0.0f];
-    [self addTest:2 tryHarderCount:8 rotation:180.0f];
+    [self addTest:3 tryHarderCount:8 maxMisreads:1 maxTryHarderMisreads:1 rotation:0.0f];
+    [self addTest:2 tryHarderCount:8 maxMisreads:0 maxTryHarderMisreads:1 rotation:180.0f];
   }
 
   return self;

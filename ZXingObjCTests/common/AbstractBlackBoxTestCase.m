@@ -61,11 +61,15 @@
   [super dealloc];
 }
 
+- (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation {
+  [self addTest:mustPassCount tryHarderCount:tryHarderCount maxMisreads:0 maxTryHarderMisreads:0 rotation:rotation];
+}
+
 /**
  * Adds a new test for the current directory of images.
  */
-- (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation {
-  [self.testResults addObject:[[[TestResult alloc] initWithMustPassCount:mustPassCount tryHarderCount:tryHarderCount rotation:rotation] autorelease]];
+- (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount maxMisreads:(int)maxMisreads maxTryHarderMisreads:(int)maxTryHarderMisreads rotation:(float)rotation {
+  [self.testResults addObject:[[[TestResult alloc] initWithMustPassCount:mustPassCount tryHarderCount:tryHarderCount maxMisreads:maxMisreads maxTryHarderMisreads:maxTryHarderMisreads rotation:rotation] autorelease]];
 }
 
 - (NSArray *)imageFiles {
@@ -161,14 +165,25 @@
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSArray * imageFiles = [self imageFiles];
   int testCount = [self.testResults count];
+
   int passedCounts[testCount];
   for (int i = 0; i < testCount; i++) {
     passedCounts[i] = 0;
   }
 
+  int misreadCounts[testCount];
+  for (int i = 0; i < testCount; i++) {
+    misreadCounts[i] = 0;
+  }
+
   int tryHarderCounts[testCount];
   for (int i = 0; i < testCount; i++) {
     tryHarderCounts[i] = 0;
+  }
+
+  int tryHarderMisreadCounts[testCount];
+  for (int i = 0; i < testCount; i++) {
+    tryHarderMisreadCounts[i] = 0;
   }
 
   for (NSURL * testImage in imageFiles) {
@@ -192,71 +207,102 @@
       ZXImage * rotatedImage = [self rotateImage:image degrees:rotation];
       ZXLuminanceSource * source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
       ZXBinaryBitmap * bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
-      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:NO]) {
+      BOOL misread;
+      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:NO misread:&misread]) {
         passedCounts[x]++;
+      } else if(misread) {
+        misreadCounts[x]++;
       }
-      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:YES]) {
+
+      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:YES misread:&misread]) {
         tryHarderCounts[x]++;
+      } else if(misread) {
+        tryHarderMisreadCounts[x]++;
       }
     }
 
     [image release];
   }
 
+  // Print the results of all tests first
   int totalFound = 0;
   int totalMustPass = 0;
+  int totalMisread = 0;
+  int totalMaxMisread = 0;
 
   for (int x = 0; x < testCount; x++) {
-    NSLog(@"Rotation %f degrees:", [[self.testResults objectAtIndex:x] rotation]);
-    NSLog(@"\t%d of %d images passed (%d required)", passedCounts[x], [imageFiles count], [[self.testResults objectAtIndex:x] mustPassCount]);
-    NSLog(@"\t%d of %d images passed with try harder (%d required)", tryHarderCounts[x], [imageFiles count], [[self.testResults objectAtIndex:x] tryHarderCount]);
-    totalFound += passedCounts[x];
-    totalFound += tryHarderCounts[x];
-    totalMustPass += [[self.testResults objectAtIndex:x] mustPassCount];
-    totalMustPass += [[self.testResults objectAtIndex:x] tryHarderCount];
+    TestResult* testResult = [self.testResults objectAtIndex:x];
+    NSLog(@"Rotation %d degrees:", (int) testResult.rotation);
+    NSLog(@"  %d of %d images passed (%d required)",
+          passedCounts[x], imageFiles.count, testResult.mustPassCount);
+    int failed = imageFiles.count - passedCounts[x];
+    NSLog(@"    %d failed due to misreads, %d not detected",
+          misreadCounts[x], failed - misreadCounts[x]);
+    NSLog(@"  %d of %d images passed with try harder (%d required)",
+          tryHarderCounts[x], imageFiles.count, testResult.tryHarderCount);
+    failed = imageFiles.count - tryHarderCounts[x];
+    NSLog(@"    %d failed due to misreads, %d not detected",
+          tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]);
+    totalFound += passedCounts[x] + tryHarderCounts[x];
+    totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
+    totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
+    totalMaxMisread += testResult.maxMisreads + testResult.maxTryHarderMisreads;
   }
 
-  int totalTests = [imageFiles count] * testCount * 2;
-  NSLog(@"TOTALS:\n  Decoded %d images out of %d (%d%%, %d required)", totalFound, totalTests, (totalFound * 100 / totalTests), totalMustPass);
+  int totalTests = imageFiles.count * testCount * 2;
+  NSLog(@"TOTALS:\nDecoded %d images out of %d (%d%%, %d required)",
+        totalFound, totalTests, totalFound * 100 / totalTests, totalMustPass);
   if (totalFound > totalMustPass) {
-    NSLog(@"  *** Test too lax by %d images", totalFound - totalMustPass);
+    NSLog(@"  +++ Test too lax by %d images", totalFound - totalMustPass);
   } else if (totalFound < totalMustPass) {
-    NSLog(@"  *** Test failed by %d images", totalMustPass - totalFound);
+    NSLog(@"  --- Test failed by %d images", totalMustPass - totalFound);
   }
 
+  if (totalMisread < totalMaxMisread) {
+    NSLog(@"  +++ Test expects too many misreads by %d images", totalMaxMisread - totalMisread);
+  } else if (totalMisread > totalMaxMisread) {
+    NSLog(@"  --- Test had too many misreads by %d images", totalMisread - totalMaxMisread);
+  }
+
+  // Then run through again and assert if any failed
   if (assertOnFailure) {
     for (int x = 0; x < testCount; x++) {
-      STAssertTrue(passedCounts[x] >= [[self.testResults objectAtIndex:x] mustPassCount], @"Rotation %f degrees: Too many images failed", [[self.testResults objectAtIndex:x] rotation]);
-      STAssertTrue(tryHarderCounts[x] >= [[self.testResults objectAtIndex:x] tryHarderCount], @"Try harder, Rotation %f degrees: Too many images failed", [[self.testResults objectAtIndex:x] rotation]);
+      TestResult* testResult = [self.testResults objectAtIndex:x];
+      NSString* label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images failed", testResult.rotation];
+      STAssertTrue(passedCounts[x] >= testResult.mustPassCount, label);
+      STAssertTrue(tryHarderCounts[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
+      label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images misread", testResult.rotation];
+      STAssertTrue(misreadCounts[x] <= testResult.maxMisreads, label);
+      STAssertTrue(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads, @"Try harder, %@", label);
     }
   }
 }
 
-- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder {
-  NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %f)", (tryHarder ? @"try harder, " : @""), rotation];
+- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL*)misread {
+  NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
+  *misread = NO;
 
   ZXDecodeHints * hints = [ZXDecodeHints hints];
   if (tryHarder) {
     hints.tryHarder = YES;
   }
 
-  ZXResult * result = nil;
-  NSError* error = nil;
-  result = [self.barcodeReader decode:source hints:hints error:&error];
+  ZXResult * result = [self.barcodeReader decode:source hints:hints error:nil];
   if (!result) {
-    NSLog(@"%@%@", [error localizedDescription], suffix);
     return NO;
   }
 
   if (self.expectedFormat != result.barcodeFormat) {
-    NSLog(@"Format mismatch: expected '%@' but got '%@'%@", [[self class] barcodeFormatAsString:expectedFormat],
-          [[self class] barcodeFormatAsString:result.barcodeFormat], suffix);
+    NSLog(@"Format mismatch: expected '%@' but got '%@'%@",
+          [[self class] barcodeFormatAsString:expectedFormat], [[self class] barcodeFormatAsString:result.barcodeFormat], suffix);
+    *misread = YES;
     return NO;
   }
 
   NSString * resultText = result.text;
   if (![expectedText isEqualToString:resultText]) {
-    NSLog(@"Mismatch: expected '%@' but got '%@'%@", expectedText, resultText, suffix);
+    NSLog(@"Content mismatch: expected '%@' but got '%@'%@", expectedText, resultText, suffix);
+    *misread = YES;
     return NO;
   }
 
@@ -267,6 +313,7 @@
     id actualValue = [resultMetadata objectForKey:keyObj];
     if (![expectedValue isEqual:actualValue]) {
       NSLog(@"Metadata mismatch: for key '%d' expected '%@' but got '%@'", key, expectedValue, actualValue);
+      *misread = YES;
       return NO;
     }
   }

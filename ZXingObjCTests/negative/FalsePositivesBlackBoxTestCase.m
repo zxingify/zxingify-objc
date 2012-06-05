@@ -23,10 +23,10 @@
   self = [super initWithInvocation:anInvocation testBasePathSuffix:@"Resources/blackbox/falsepositives"];
 
   if (self) {
-    [self addTest:1 rotation:0.0f];
-    [self addTest:0 rotation:90.0f];
-    [self addTest:0 rotation:180.0f];
-    [self addTest:1 rotation:270.0f];
+    [self addTest:2 rotation:0.0f];
+    [self addTest:2 rotation:90.0f];
+    [self addTest:2 rotation:180.0f];
+    [self addTest:2 rotation:270.0f];
   }
 
   return self;

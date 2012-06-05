@@ -26,8 +26,8 @@
                     expectedFormat:kBarcodeFormatEan13];
 
   if (self) {
-    [self addTest:11 tryHarderCount:16 rotation:0.0f];
-    [self addTest:10 tryHarderCount:16 rotation:180.0f];
+    [self addTest:12 tryHarderCount:17 maxMisreads:0 maxTryHarderMisreads:1 rotation:0.0f];
+    [self addTest:11 tryHarderCount:17 maxMisreads:0 maxTryHarderMisreads:1 rotation:180.0f];
   }
 
   return self;

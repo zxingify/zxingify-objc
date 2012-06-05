@@ -18,9 +18,12 @@
 
 @property (nonatomic, readonly) int mustPassCount;
 @property (nonatomic, readonly) int tryHarderCount;
+@property (nonatomic, readonly) int maxMisreads;
+@property (nonatomic, readonly) int maxTryHarderMisreads;
 @property (nonatomic, readonly) float rotation;
 
-- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
+- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount maxMisreads:(int)maxMisreads
+       maxTryHarderMisreads:(int)maxTryHarderMisreads rotation:(float)rotation;
 
 @end
 

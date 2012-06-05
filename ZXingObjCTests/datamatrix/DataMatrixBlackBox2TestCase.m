@@ -26,10 +26,10 @@
                     expectedFormat:kBarcodeFormatDataMatrix];
 
   if (self) {
-    [self addTest:8 tryHarderCount:8 rotation:0.0f];
-    [self addTest:14 tryHarderCount:14 rotation:90.0f];
-    [self addTest:14 tryHarderCount:14 rotation:180.0f];
-    [self addTest:12 tryHarderCount:12 rotation:270.0f];
+    [self addTest:8 tryHarderCount:8 maxMisreads:0 maxTryHarderMisreads:1 rotation:0.0f];
+    [self addTest:14 tryHarderCount:14 maxMisreads:0 maxTryHarderMisreads:1 rotation:90.0f];
+    [self addTest:14 tryHarderCount:14 maxMisreads:0 maxTryHarderMisreads:1 rotation:180.0f];
+    [self addTest:12 tryHarderCount:12 maxMisreads:0 maxTryHarderMisreads:1 rotation:270.0f];
   }
 
   return self;
