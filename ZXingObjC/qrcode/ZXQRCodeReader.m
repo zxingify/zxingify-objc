@@ -31,7 +31,7 @@
 @property (nonatomic, retain) ZXQRCodeDecoder * decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
-- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
+- (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
 
 @end
 
@@ -124,7 +124,7 @@
     return nil;
   }
 
-  int moduleSize = [self moduleSize:leftTopBlack image:image];
+  float moduleSize = [self moduleSize:leftTopBlack image:image];
   if (moduleSize == -1) {
     return nil;
   }
@@ -140,8 +140,8 @@
     right = left + (bottom - top);
   }
 
-  int matrixWidth = (right - left + 1) / moduleSize;
-  int matrixHeight = (bottom - top + 1) / moduleSize;
+  int matrixWidth = round((right - left + 1) / moduleSize);
+  int matrixHeight = round((bottom - top + 1) / moduleSize);
   if (matrixWidth <= 0 || matrixHeight <= 0) {
     return nil;
   }
@@ -149,15 +149,15 @@
     return nil;
   }
 
-  int nudge = moduleSize >> 1;
+  int nudge = round(moduleSize / 2.0f);
   top += nudge;
   left += nudge;
 
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
   for (int y = 0; y < matrixHeight; y++) {
-    int iOffset = top + y * moduleSize;
+    int iOffset = top + (int) (y * moduleSize);
     for (int x = 0; x < matrixWidth; x++) {
-      if ([image getX:left + x * moduleSize y:iOffset]) {
+      if ([image getX:left + (int) (x * moduleSize) y:iOffset]) {
         [bits setX:x y:y];
       }
     }
@@ -165,12 +165,19 @@
   return bits;
 }
 
-- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
+- (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
   int height = image.height;
   int width = image.width;
   int x = [[leftTopBlack objectAtIndex:0] intValue];
   int y = [[leftTopBlack objectAtIndex:1] intValue];
-  while (x < width && y < height && [image getX:x y:y]) {
+  BOOL inBlack = YES;
+  int transitions = 0;
+  while (x < width && y < height) {
+    if (inBlack != [image getX:x y:y]) {
+      if (++transitions == 5) {
+        break;
+      }
+    }
     x++;
     y++;
   }
@@ -178,11 +185,7 @@
     return -1;
   }
 
-  int moduleSize = x - [[leftTopBlack objectAtIndex:0] intValue];
-  if (moduleSize == 0) {
-    return -1;
-  }
-  return moduleSize;
+  return (x - [[leftTopBlack objectAtIndex:0] intValue]) / 7.0f;
 }
 
 @end
