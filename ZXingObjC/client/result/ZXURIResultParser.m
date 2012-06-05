@@ -30,11 +30,11 @@ static NSRegularExpression* URL_WITHOUT_PROTOCOL_PATTERN = nil;
 + (void)initialize {
   URL_WITH_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:
                                [@"^[a-zA-Z0-9]{2,}://" // protocol
-                                @"[a-zA-Z0-9\\-]{2,}(\\.[a-zA-Z0-9\\-]{2,})*" // host name elements
+                                @"[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)*" // host name elements
                                 stringByAppendingString:PATTERN_END]
                                                                    options:0 error:nil];
   URL_WITHOUT_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:
-                                  [@"^[a-zA-Z0-9\\-]{2,}(\\.[a-zA-Z0-9\\-]{2,})+" // host name elements
+                                  [@"([a-zA-Z0-9\\-]+\\.)+[a-zA-Z0-9\\-]{2,}" // host name elements
                                    stringByAppendingString:PATTERN_END]
                                                                       options:0 error:nil];
 }
