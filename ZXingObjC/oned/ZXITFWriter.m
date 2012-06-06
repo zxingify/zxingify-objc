@@ -29,6 +29,9 @@
 
 - (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
   int length = [contents length];
+  if (length % 2 != 0) {
+    [NSException raise:NSInvalidArgumentException format:@"The length of the input should be even"];
+  }
   if (length > 80) {
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
