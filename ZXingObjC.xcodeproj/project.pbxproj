@@ -996,6 +996,8 @@
 		2545FCE715699AE0008E53D2 /* ZXBinaryUtilTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */; };
 		254C5222157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */; };
 		254C5223157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */; };
+		254C522B157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254C522A157EF3BF00586DED /* CodabarBlackBox1TestCase.m */; };
+		254C522C157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254C522A157EF3BF00586DED /* CodabarBlackBox1TestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		255FA8981578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */; };
@@ -1605,6 +1607,8 @@
 		2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXBinaryUtilTest.m; path = oned/rss/expanded/ZXBinaryUtilTest.m; sourceTree = "<group>"; };
 		254C5220157EE8A400586DED /* ZXStringUtilsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXStringUtilsTestCase.h; sourceTree = "<group>"; };
 		254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXStringUtilsTestCase.m; sourceTree = "<group>"; };
+		254C5229157EF3BE00586DED /* CodabarBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CodabarBlackBox1TestCase.h; path = oned/CodabarBlackBox1TestCase.h; sourceTree = "<group>"; };
+		254C522A157EF3BF00586DED /* CodabarBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CodabarBlackBox1TestCase.m; path = oned/CodabarBlackBox1TestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeBitMatrixParser.h; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.h; sourceTree = "<group>"; };
@@ -2524,6 +2528,8 @@
 		250101F5155F1DDB00D1D979 /* oned */ = {
 			isa = PBXGroup;
 			children = (
+				254C5229157EF3BE00586DED /* CodabarBlackBox1TestCase.h */,
+				254C522A157EF3BF00586DED /* CodabarBlackBox1TestCase.m */,
 				250101F6155F1DED00D1D979 /* Code39BlackBox1TestCase.h */,
 				250101F7155F1DED00D1D979 /* Code39BlackBox1TestCase.m */,
 				2561A6F0155F6E4F008C7AE9 /* Code39BlackBox3TestCase.h */,
@@ -3553,6 +3559,7 @@
 				25198C451571D32D000EADAD /* ZXCodaBarWriterTestCase.m in Sources */,
 				255FA8A315784D6D00B78681 /* TestResult.m in Sources */,
 				254C5223157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */,
+				254C522C157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3999,6 +4006,7 @@
 				25198C441571D32D000EADAD /* ZXCodaBarWriterTestCase.m in Sources */,
 				255FA8A215784D6B00B78681 /* TestResult.m in Sources */,
 				254C5222157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */,
+				254C522B157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -80,6 +80,7 @@
     if ([self.readers count] == 0) {
       [self.readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
       [self.readers addObject:[[[ZXCode39Reader alloc] init] autorelease]];
+      [self.readers addObject:[[[ZXCodaBarReader alloc] init] autorelease]];
       [self.readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
       [self.readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
       [self.readers addObject:[[[ZXITFReader alloc] init] autorelease]];

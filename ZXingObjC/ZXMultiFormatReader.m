@@ -99,6 +99,7 @@
       [hints containsFormat:kBarcodeFormatUPCE] ||
       [hints containsFormat:kBarcodeFormatEan13] ||
       [hints containsFormat:kBarcodeFormatEan8] ||
+      [hints containsFormat:kBarcodeFormatCodabar] ||
       [hints containsFormat:kBarcodeFormatCode39] ||
       [hints containsFormat:kBarcodeFormatCode93] ||
       [hints containsFormat:kBarcodeFormatCode128] ||

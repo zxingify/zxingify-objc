@@ -20,134 +20,179 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
+// These values are critical for determining how permissive the decoding
+// will be. All stripe sizes must be within the window these define, as
+// compared to the average stripe size.
+static int MAX_ACCEPTABLE;
+static int PADDING;
+
 const int CODA_ALPHABET_LEN = 22;
 const char CODA_ALPHABET[CODA_ALPHABET_LEN] = "0123456789-$:/.+ABCDTN";
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
- * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow. NOTE
- * : c is equal to the  * pattern NOTE : d is equal to the e pattern
+ * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow.
  */
-const int CODA_CHARACTER_ENCODINGS[22] = {
+const int CODA_CHARACTER_ENCODINGS_LEN = 20;
+const int CODA_CHARACTER_ENCODINGS[CODA_CHARACTER_ENCODINGS_LEN] = {
   0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
   0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
-  0x01A, 0x029 //TN
 };
 
 // minimal number of characters that should be present (inclusing start and stop characters)
-// this check has been added to reduce the number of false positive on other formats
-// until the cause for this behaviour has been determined
-// under normal circumstances this should be set to 3
-const int minCharacterLength = 6;
+// under normal circumstances this should be set to 3, but can be set higher
+// as a last-ditch attempt to reduce false positives.
+const int MIN_CHARACTER_LENGTH = 3;
 
-// multiple start/end patterns
 // official start and end patterns
-const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
+const int STARTEND_ENCODING_LEN = 4;
+const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
+
+// some codabar generator allow the codabar string to be closed by every
+// character. This will cause lots of false positives!
 
 // some industries use a checksum standard but this is not part of the original codabar standard
 // for more information see : http://www.mecsw.com/specs/codabar.html
 
 @interface ZXCodaBarReader ()
 
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b;
-- (unichar)toNarrowWidePattern:(int[])counters;
+@property (nonatomic, retain) NSMutableString* decodeRowResult;
+@property (nonatomic, assign) int* counters;
+@property (nonatomic, assign) int countersLen;
+@property (nonatomic, assign) int counterLength;
+
+- (BOOL)validatePattern:(int)start;
+- (BOOL)setCountersWithRow:(ZXBitArray*)row;
+- (void)counterAppend:(int)e;
+- (int)findStartPattern;
+- (int)toNarrowWidePattern:(int)position;
 
 @end
 
 @implementation ZXCodaBarReader
 
+@synthesize decodeRowResult;
+@synthesize counters;
+@synthesize countersLen;
+@synthesize counterLength;
+
++ (void)initialize {
+  MAX_ACCEPTABLE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 2.0f);
+  PADDING = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 1.5f);
+}
+
+- (id)init {
+  if (self = [super init]) {
+    self.decodeRowResult = [NSMutableString stringWithCapacity:20];
+    self.countersLen = 80;
+    self.counters = (int*)malloc(self.countersLen * sizeof(int));
+    for (int i = 0; i < self.countersLen; i++) {
+      self.counters[i] = 0;
+    }
+
+    self.counterLength = 0;
+  }
+
+  return self;
+}
+
+- (void)dealloc {
+  if (self.counters != NULL) {
+    free(self.counters);
+    self.counters = NULL;
+  }
+
+  [super dealloc];
+}
+
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  int start[2] = {0};
-  if (![self findAsteriskPattern:row a:&start[0] b:&start[1]]) {
+  if (![self setCountersWithRow:row]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  start[1] = 0; // BAS: settings this to 0 improves the recognition rate somehow?
-  // Read off white space
-  int nextStart = [row nextSet:start[1]];
-  int end = [row size];
 
-  NSMutableString * result = [NSMutableString string];
-  const int countersLen = 7;
-  int counters[countersLen];
-  int lastStart;
+  int startOffset = [self findStartPattern];
+  if (startOffset == -1) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
+  int nextStart = startOffset;
+
+  self.decodeRowResult = [NSMutableString string];
   do {
-    for (int i = 0; i < countersLen; i++) {
-      counters[i] = 0;
-    }
-
-    if (![ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen]) {
+    int charOffset = [self toNarrowWidePattern:nextStart];
+    if (charOffset == -1) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
-
-    unichar decodedChar = [self toNarrowWidePattern:counters];
-    if (decodedChar == '!') {
-      if (error) *error = NotFoundErrorInstance();
-      return nil;
+    // Hack: We store the position in the alphabet table into a
+    // NSMutableString, so that we can access the decoded patterns in
+    // validatePattern. We'll translate to the actual characters later.
+    [self.decodeRowResult appendFormat:@"%C", (unichar)charOffset];
+    nextStart += 8;
+    // Stop as soon as we see the end character.
+    if (decodeRowResult.length > 1 &&
+        [ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+      break;
     }
-    [result appendFormat:@"%C", decodedChar];
-    lastStart = nextStart;
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
-      nextStart += counters[i];
-    }
-
-    // Read off white space
-    nextStart = [row nextSet:nextStart];
-  } while (nextStart < end); // no fixed end pattern so keep on reading while data is available
+  } while (nextStart < self.counterLength); // no fixed end pattern so keep on reading while data is available
 
   // Look for whitespace after pattern:
+  int trailingWhitespace = self.counters[nextStart - 1];
   int lastPatternSize = 0;
-  for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
-    lastPatternSize += counters[i];
+  for (int i = -8; i < -1; i++) {
+    lastPatternSize += self.counters[nextStart + i];
   }
 
-  int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-  // If 50% of last pattern size, following last pattern, is not whitespace, fail
-  // (but if it's whitespace to the very end of the image, that's OK)
-  if (nextStart != end && (whiteSpaceAfterEnd / 2 < lastPatternSize)) {
+  // We need to see whitespace equal to 50% of the last pattern size,
+  // otherwise this is probably a false positive. The exception is if we are
+  // at the end of the row. (I.e. the barcode barely fits.)
+  if (nextStart < self.counterLength && trailingWhitespace < lastPatternSize / 2) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  // valid result?
-  if ([result length] < 2) {
+  if (![self validatePattern:startOffset]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  unichar startchar = [result characterAtIndex:0];
-  if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:8 key:startchar]) {
-    // invalid start character
+  // Translate character table offsets to actual characters.
+  for (int i = 0; i < self.decodeRowResult.length; i++) {
+    [self.decodeRowResult replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%c", CODA_ALPHABET[[decodeRowResult characterAtIndex:i]]]];
+  }
+  // Ensure a valid start and end character
+  unichar startchar = [self.decodeRowResult characterAtIndex:0];
+  if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:startchar]) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
+  unichar endchar = [self.decodeRowResult characterAtIndex:self.decodeRowResult.length - 1];
+  if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:endchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  // find stop character
-  for (int k = 1; k < [result length]; k++) {
-    if ([result characterAtIndex:k] == startchar) {
-      // found stop character -> discard rest of the string
-      if ((k + 1) != [result length]) {
-        [result deleteCharactersInRange:NSMakeRange(k + 1, [result length] - k)];
-        k = [result length];
-      }
-    }
-  }
-
-  // remove stop/start characters character and check if a string longer than 5 characters is contained
-  if ([result length] <= minCharacterLength) {
-    // Almost surely a false positive ( start + stop + at least 1 character)
+  // remove stop/start characters character and check if a long enough string is contained
+  if (decodeRowResult.length <= MIN_CHARACTER_LENGTH) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
-  [result deleteCharactersInRange:NSMakeRange(0, 1)];
+  [self.decodeRowResult deleteCharactersInRange:NSMakeRange(decodeRowResult.length - 1, 1)];
+  [self.decodeRowResult deleteCharactersInRange:NSMakeRange(0, 1)];
 
-  float left = (float) (start[1] + start[0]) / 2.0f;
-  float right = (float) (nextStart + lastStart) / 2.0f;
-  return [ZXResult resultWithText:result
+  int runningCount = 0;
+  for (int i = 0; i < startOffset; i++) {
+    runningCount += counters[i];
+  }
+  float left = (float) runningCount;
+  for (int i = startOffset; i < nextStart - 1; i++) {
+    runningCount += counters[i];
+  }
+  float right = (float) runningCount;
+  return [ZXResult resultWithText:self.decodeRowResult
                          rawBytes:nil
                            length:0
                      resultPoints:[NSArray arrayWithObjects:
@@ -156,48 +201,130 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
                            format:kBarcodeFormatCodabar];
 }
 
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b {
-  int width = row.size;
-  int rowOffset = [row nextSet:0];
+- (BOOL)validatePattern:(int)start {
+  // First, sum up the total size of our four categories of stripe sizes;
+  int sizes[4] = {0, 0, 0, 0};
+  int counts[4] = {0, 0, 0, 0};
+  int end = self.decodeRowResult.length - 1;
 
-  int counterPosition = 0;
-  const int patternLength = 7;
-  int counters[patternLength] = {0, 0, 0, 0, 0, 0, 0};
-  int patternStart = rowOffset;
-  BOOL isWhite = NO;
+  // We break out of this loop in the middle, in order to handle
+  // inter-character spaces properly.
+  int pos = start;
+  for (int i = 0; true; i++) {
+    int pattern = CODA_CHARACTER_ENCODINGS[[decodeRowResult characterAtIndex:i]];
+    for (int j = 6; j >= 0; j--) {
+      // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
+      // long stripes, while 0 and 1 are for short stripes.
+      int category = (j & 1) + (pattern & 1) * 2;
+      sizes[category] += self.counters[pos + j];
+      counts[category]++;
+      pattern >>= 1;
+    }
+    if (i >= end) {
+      break;
+    }
+    // We ignore the inter-character space - it could be of any size.
+    pos += 8;
+  }
 
-  for (int i = rowOffset; i < width; i++) {
-    if ([row get:i] ^ isWhite) {
-      counters[counterPosition]++;
-    } else {
-      if (counterPosition == patternLength - 1) {
-        @try {
-          if ([ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:8 key:[self toNarrowWidePattern:counters]]) {
-            if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
-              if (a) *a = patternStart;
-              if (b) *b = i;
-              return YES;
-            }
-          }
-        } @catch (NSException * re) {
-        }
-        
-        patternStart += counters[0] + counters[1];
-        for (int y = 2; y < patternLength; y++) {
-          counters[y - 2] = counters[y];
-        }
-        counters[patternLength - 2] = 0;
-        counters[patternLength - 1] = 0;
-        counterPosition--;
-      } else {
-        counterPosition++;
+  // Calculate our allowable size thresholds using fixed-point math.
+  int maxes[4] = {0};
+  int mins[4] = {0};
+  // Define the threshold of acceptability to be the midpoint between the
+  // average small stripe and the average large stripe. No stripe lengths
+  // should be on the "wrong" side of that line.
+  for (int i = 0; i < 2; i++) {
+    mins[i] = 0;  // Accept arbitrarily small "short" stripes.
+    mins[i + 2] = ((sizes[i] << INTEGER_MATH_SHIFT) / counts[i] +
+                   (sizes[i + 2] << INTEGER_MATH_SHIFT) / counts[i + 2]) >> 1;
+    maxes[i] = mins[i + 2];
+    maxes[i + 2] = (sizes[i + 2] * MAX_ACCEPTABLE + PADDING) / counts[i + 2];
+  }
+
+  // Now verify that all of the stripes are within the thresholds.
+  pos = start;
+  for (int i = 0; true; i++) {
+    int pattern = CODA_CHARACTER_ENCODINGS[[decodeRowResult characterAtIndex:i]];
+    for (int j = 6; j >= 0; j--) {
+      // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
+      // long stripes, while 0 and 1 are for short stripes.
+      int category = (j & 1) + (pattern & 1) * 2;
+      int size = counters[pos + j] << INTEGER_MATH_SHIFT;
+      if (size < mins[category] || size > maxes[category]) {
+        return NO;
       }
-      counters[counterPosition] = 1;
-      isWhite ^= YES;
+      pattern >>= 1;
+    }
+    if (i >= end) {
+      break;
+    }
+    pos += 8;
+  }
+
+  return YES;
+}
+
+/**
+ * Records the size of all runs of white and black pixels, starting with white.
+ * This is just like recordPattern, except it records all the counters, and
+ * uses our builtin "counters" member for storage.
+ */
+- (BOOL)setCountersWithRow:(ZXBitArray *)row {
+  self.counterLength = 0;
+  // Start from the first white bit.
+  int i = [row nextUnset:0];
+  int end = row.size;
+  if (i >= end) {
+    return NO;
+  }
+  BOOL isWhite = YES;
+  int count = 0;
+  for (; i < end; i++) {
+    if ([row get:i] ^ isWhite) { // that is, exactly one is true
+      count++;
+    } else {
+      [self counterAppend:count];
+      count = 1;
+      isWhite = !isWhite;
+    }
+  }
+  [self counterAppend:count];
+  return YES;
+}
+
+- (void)counterAppend:(int)e {
+  self.counters[self.counterLength] = e;
+  self.counterLength++;
+  if (self.counterLength >= self.countersLen) {
+    int* temp = (int*)malloc(2 * self.counterLength * sizeof(int));
+    memcpy(temp, self.counters, self.countersLen * sizeof(int));
+    self.counters = temp;
+
+    for (int i = self.countersLen; i < 2 * self.counterLength; i++) {
+      self.counters[i] = 0;
+    }
+
+    self.countersLen = 2 * self.counterLength;
+  }
+}
+
+- (int)findStartPattern {
+  for (int i = 1; i < self.counterLength; i += 2) {
+    int charOffset = [self toNarrowWidePattern:i];
+    if (charOffset != -1 && [[self class] arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+      // Look for whitespace before start pattern, >= 50% of width of start pattern
+      // We make an exception if the whitespace is the first element.
+      int patternSize = 0;
+      for (int j = i; j < i + 7; j++) {
+        patternSize += self.counters[j];
+      }
+      if (i == 1 || self.counters[i-1] >= patternSize / 2) {
+        return i;
+      }
     }
   }
 
-  return NO;
+  return -1;
 }
 
 + (BOOL)arrayContains:(char *)array length:(unsigned int)length key:(unichar)key {
@@ -211,43 +338,45 @@ const char STARTEND_ENCODING[8] = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   return NO;
 }
 
-- (unichar)toNarrowWidePattern:(int[])counters {
-  int numCounters = sizeof((int*)counters) / sizeof(int);
-  int maxNarrowCounter = 0;
-  
-  int minCounter = NSIntegerMax;
-  for (int i = 0; i < numCounters; i++) {
-    if (counters[i] < minCounter) {
-      minCounter = counters[i];
+// Assumes that counters[position] is a bar.
+- (int)toNarrowWidePattern:(int)position {
+  int end = position + 7;
+  if (end >= self.counterLength) {
+    return -1;
+  }
+  // First element is for bars, second is for spaces.
+  int maxes[2] = {0, 0};
+  int mins[2] = {NSIntegerMax, NSIntegerMax};
+  int thresholds[2] = {0, 0};
+
+  for (int i = 0; i < 2; i++) {
+    for (int j = position + i; j < end; j += 2) {
+      if (self.counters[j] < mins[i]) {
+        mins[i] = self.counters[j];
+      }
+      if (self.counters[j] > maxes[i]) {
+        maxes[i] = self.counters[j];
+      }
     }
-    if (counters[i] > maxNarrowCounter) {
-      maxNarrowCounter = counters[i];
+    thresholds[i] = (mins[i] + maxes[i]) / 2;
+  }
+
+  int bitmask = 1 << 7;
+  int pattern = 0;
+  for (int i = 0; i < 7; i++) {
+    int barOrSpace = i & 1;
+    bitmask >>= 1;
+    if (self.counters[position + i] > thresholds[barOrSpace]) {
+      pattern |= bitmask;
     }
   }
 
-  do {
-    int wideCounters = 0;
-    int pattern = 0;
-
-    for (int i = 0; i < numCounters; i++) {
-      if (counters[i] > maxNarrowCounter) {
-        pattern |= 1 << (numCounters - 1 - i);
-        wideCounters++;
-      }
+  for (int i = 0; i < CODA_CHARACTER_ENCODINGS_LEN; i++) {
+    if (CODA_CHARACTER_ENCODINGS[i] == pattern) {
+      return i;
     }
-
-    if ((wideCounters == 2) || (wideCounters == 3)) {
-      for (int i = 0; i < sizeof(CODA_CHARACTER_ENCODINGS) / sizeof(int); i++) {
-        if (CODA_CHARACTER_ENCODINGS[i] == pattern) {
-          return CODA_ALPHABET[i];
-        }
-      }
-
-    }
-    maxNarrowCounter--;
-  } while (maxNarrowCounter > minCounter);
-
-  return '!';
+  }
+  return -1;
 }
 
 @end
