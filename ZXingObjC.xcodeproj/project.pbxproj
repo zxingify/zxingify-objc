@@ -994,6 +994,8 @@
 		2545FCE315699974008E53D2 /* ZXBinaryUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE115699974008E53D2 /* ZXBinaryUtil.m */; };
 		2545FCE615699AE0008E53D2 /* ZXBinaryUtilTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */; };
 		2545FCE715699AE0008E53D2 /* ZXBinaryUtilTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */; };
+		254C5222157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */; };
+		254C5223157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */; };
 		25585C2B1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		25585C2C1564A14800DDFFDB /* PDF417BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */; };
 		255FA8981578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */; };
@@ -1601,6 +1603,8 @@
 		2545FCE115699974008E53D2 /* ZXBinaryUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXBinaryUtil.m; path = oned/rss/expanded/ZXBinaryUtil.m; sourceTree = "<group>"; };
 		2545FCE415699AE0008E53D2 /* ZXBinaryUtilTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXBinaryUtilTest.h; path = oned/rss/expanded/ZXBinaryUtilTest.h; sourceTree = "<group>"; };
 		2545FCE515699AE0008E53D2 /* ZXBinaryUtilTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXBinaryUtilTest.m; path = oned/rss/expanded/ZXBinaryUtilTest.m; sourceTree = "<group>"; };
+		254C5220157EE8A400586DED /* ZXStringUtilsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXStringUtilsTestCase.h; sourceTree = "<group>"; };
+		254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXStringUtilsTestCase.m; sourceTree = "<group>"; };
 		25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PDF417BlackBox1TestCase.h; path = pdf417/PDF417BlackBox1TestCase.h; sourceTree = "<group>"; };
 		25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PDF417BlackBox1TestCase.m; path = pdf417/PDF417BlackBox1TestCase.m; sourceTree = "<group>"; };
 		255FA8961578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeBitMatrixParser.h; path = maxicode/decoder/ZXMaxiCodeBitMatrixParser.h; sourceTree = "<group>"; };
@@ -2459,6 +2463,8 @@
 				256A884F1567FFAE007C38B7 /* ZXBitSourceTestCase.m */,
 				25FCC9CF1568A3E500FF0E7A /* ZXPerspectiveTransformTestCase.h */,
 				25FCC9D01568A3E500FF0E7A /* ZXPerspectiveTransformTestCase.m */,
+				254C5220157EE8A400586DED /* ZXStringUtilsTestCase.h */,
+				254C5221157EE8A400586DED /* ZXStringUtilsTestCase.m */,
 				2545FCBE1569556E008E53D2 /* reedsolomon */,
 			);
 			path = common;
@@ -3546,6 +3552,7 @@
 				250F052615713A65007DE9EB /* QRCodeBlackBox6TestCase.m in Sources */,
 				25198C451571D32D000EADAD /* ZXCodaBarWriterTestCase.m in Sources */,
 				255FA8A315784D6D00B78681 /* TestResult.m in Sources */,
+				254C5223157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3991,6 +3998,7 @@
 				250F052515713A65007DE9EB /* QRCodeBlackBox6TestCase.m in Sources */,
 				25198C441571D32D000EADAD /* ZXCodaBarWriterTestCase.m in Sources */,
 				255FA8A215784D6B00B78681 /* TestResult.m in Sources */,
+				254C5222157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
