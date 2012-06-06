@@ -166,6 +166,53 @@
                       note:nil];
 }
 
+- (void)testVCardEscape {
+  [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\nbar\r\nEND:VCARD"
+                     title:nil
+                     names:nil
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                       url:nil
+                  birthday:nil
+                      note:@"foo\nbar"];
+  [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\;bar\r\nEND:VCARD"
+                     title:nil
+                     names:nil
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                       url:nil
+                  birthday:nil
+                      note:@"foo;bar"];
+  [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\\\bar\r\nEND:VCARD"
+                     title:nil
+                     names:nil
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                       url:nil
+                  birthday:nil
+                      note:@"foo\\bar"];
+  [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\,bar\r\nEND:VCARD"
+                     title:nil
+                     names:nil
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                       url:nil
+                  birthday:nil
+                      note:@"foo,bar"];
+}
+
 - (void)doTestWithContents:(NSString*)contents
                      title:(NSString*)title
                      names:(NSArray*)names
