@@ -30,20 +30,16 @@
 /**
  * Start/end guard pattern.
  */
-const int START_END_PATTERN_LEN = 3;
 const int START_END_PATTERN[START_END_PATTERN_LEN] = {1, 1, 1};
 
 /**
  * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
  */
-const int MIDDLE_PATTERN_LEN = 5;
 const int MIDDLE_PATTERN[MIDDLE_PATTERN_LEN] = {1, 1, 1, 1, 1};
 
 /**
  * "Odd", or "L" patterns used to encode UPC/EAN digits.
  */
-const int L_PATTERNS_LEN = 10;
-const int L_PATTERNS_SUB_LEN = 4;
 const int L_PATTERNS[L_PATTERNS_LEN][L_PATTERNS_SUB_LEN] = {
   {3, 2, 1, 1}, // 0
   {2, 2, 2, 1}, // 1
@@ -60,8 +56,8 @@ const int L_PATTERNS[L_PATTERNS_LEN][L_PATTERNS_SUB_LEN] = {
 /**
  * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
  */
-const int L_AND_G_PATTERNS_LEN = 20;
-const int L_AND_G_PATTERNS_SUB_LEN = 4;
+#define L_AND_G_PATTERNS_LEN 20
+#define L_AND_G_PATTERNS_SUB_LEN 4
 const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   {3, 2, 1, 1}, // 0
   {2, 2, 2, 1}, // 1

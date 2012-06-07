@@ -22,7 +22,7 @@
  * The pattern that marks the middle, and end, of a UPC-E pattern.
  * There is no "second half" to a UPC-E barcode.
  */
-const int MIDDLE_END_PATTERN_LEN = 6;
+#define MIDDLE_END_PATTERN_LEN 6
 const int MIDDLE_END_PATTERN[MIDDLE_END_PATTERN_LEN] = {1, 1, 1, 1, 1, 1};
 
 /**

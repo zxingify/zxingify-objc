@@ -21,8 +21,8 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-static const int CODE_PATTERNS_LENGTH = 107;
-static const int countersLength = 7;
+#define CODE_PATTERNS_LENGTH 107
+#define countersLength 7
 
 const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
   {2, 1, 2, 2, 2, 2}, // 0

@@ -27,11 +27,12 @@ typedef enum {
 	UPC_EAN_PATTERNS_L_AND_G_PATTERNS
 } UPC_EAN_PATTERNS;
 
-extern const int START_END_PATTERN_LEN;
+#define START_END_PATTERN_LEN 3
 extern const int START_END_PATTERN[];
-extern const int MIDDLE_PATTERN_LEN;
+#define MIDDLE_PATTERN_LEN 5
 extern const int MIDDLE_PATTERN[];
-extern const int L_PATTERNS_SUB_LEN;
+#define L_PATTERNS_LEN 10
+#define L_PATTERNS_SUB_LEN 4
 extern const int L_PATTERNS[][4];
 extern const int L_AND_G_PATTERNS[][4];
 

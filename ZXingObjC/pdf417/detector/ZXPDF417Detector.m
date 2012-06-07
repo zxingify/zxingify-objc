@@ -173,7 +173,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
   BOOL found = NO;
 
-  int counters[START_PATTERN_REVERSE_LEN] = {0};
+  int counters[START_PATTERN_REVERSE_LEN];
   memset(counters, 0, START_PATTERN_REVERSE_LEN * sizeof(int));
 
   // Top Left

@@ -33,8 +33,8 @@ const int STOP_PATTERN_INT = 0x3fa29;
 /**
  * The codeword table from the Annex A of ISO/IEC 15438:2001(E).
  */
-const int CODEWORD_TABLE_LEN = 3;
-const int CODEWORD_TABLE_SUB_LEN = 929;
+#define CODEWORD_TABLE_LEN 3
+#define CODEWORD_TABLE_SUB_LEN 929
 const int PDF_CODEWORD_TABLE[CODEWORD_TABLE_LEN][CODEWORD_TABLE_SUB_LEN] = {
   {0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e,
     0x1a8c0, 0x1d470, 0x1a860, 0x15040, 0x1a830, 0x15020,

@@ -125,37 +125,38 @@ const unichar SETS[1][383] = {
   return val;
 }
 
+#define COUNTRY_ARRAY_LEN 10
 + (int)country:(unsigned char *)bytes length:(unsigned int)length {
-  const int arrayLen = 10;
-  unsigned char array[arrayLen] = {53, 54, 43, 44, 45, 46, 47, 48, 37, 38};
+  unsigned char array[COUNTRY_ARRAY_LEN] = {53, 54, 43, 44, 45, 46, 47, 48, 37, 38};
 
-  return [self integer:bytes length:length x:array xLength:arrayLen];
+  return [self integer:bytes length:length x:array xLength:COUNTRY_ARRAY_LEN];
 }
 
+#define SERVICE_ARRAY_LEN 10
 + (int)serviceClass:(unsigned char *)bytes length:(unsigned int)length {
-  const int arrayLen = 10;
-  unsigned char array[arrayLen] = {55, 56, 57, 58, 59, 60, 49, 50, 51, 52};
+  unsigned char array[SERVICE_ARRAY_LEN] = {55, 56, 57, 58, 59, 60, 49, 50, 51, 52};
 
-  return [self integer:bytes length:length x:array xLength:arrayLen];
+  return [self integer:bytes length:length x:array xLength:SERVICE_ARRAY_LEN];
 }
 
+#define POST_CODE2_LENGTH_LEN 10
 + (int)postCode2Length:(unsigned char *)bytes length:(unsigned int)length {
-  const int arrayLen = 6;
-  unsigned char array[arrayLen] = {39, 40, 41, 42, 31, 32};
+  unsigned char array[POST_CODE2_LENGTH_LEN] = {39, 40, 41, 42, 31, 32};
 
-  return [self integer:bytes length:length x:array xLength:arrayLen];
+  return [self integer:bytes length:length x:array xLength:POST_CODE2_LENGTH_LEN];
 }
 
+#define POST_CODE2_LEN 30
 + (int)postCode2:(unsigned char *)bytes length:(unsigned int)length {
-  const int arrayLen = 30;
-  unsigned char array[arrayLen] = {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
+  unsigned char array[POST_CODE2_LEN] = {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
     20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2};
 
-  return [self integer:bytes length:length x:array xLength:arrayLen];
+  return [self integer:bytes length:length x:array xLength:POST_CODE2_LEN];
 }
 
+#define POST_CODE3_LEN 6
 + (NSString*)postCode3:(unsigned char *)bytes length:(unsigned int)length {
-  unsigned char array[6][6] = {
+  unsigned char array[POST_CODE3_LEN][POST_CODE3_LEN] = {
     {39, 40, 41, 42, 31, 32},
     {33, 34, 35, 36, 25, 26},
     {27, 28, 29, 30, 19, 20},
@@ -165,12 +166,12 @@ const unichar SETS[1][383] = {
   };
 
   return [NSString stringWithFormat:@"%C%C%C%C%C%C",
-          SETS[0][[self integer:bytes length:length x:array[0] xLength:6]],
-          SETS[0][[self integer:bytes length:length x:array[1] xLength:6]],
-          SETS[0][[self integer:bytes length:length x:array[2] xLength:6]],
-          SETS[0][[self integer:bytes length:length x:array[3] xLength:6]],
-          SETS[0][[self integer:bytes length:length x:array[4] xLength:6]],
-          SETS[0][[self integer:bytes length:length x:array[5] xLength:6]]];
+          SETS[0][[self integer:bytes length:length x:array[0] xLength:POST_CODE3_LEN]],
+          SETS[0][[self integer:bytes length:length x:array[1] xLength:POST_CODE3_LEN]],
+          SETS[0][[self integer:bytes length:length x:array[2] xLength:POST_CODE3_LEN]],
+          SETS[0][[self integer:bytes length:length x:array[3] xLength:POST_CODE3_LEN]],
+          SETS[0][[self integer:bytes length:length x:array[4] xLength:POST_CODE3_LEN]],
+          SETS[0][[self integer:bytes length:length x:array[5] xLength:POST_CODE3_LEN]]];
 }
 
 + (NSString*)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len {
