@@ -135,7 +135,8 @@
     }
   }
 
-  CGImageRef binary = CGBitmapContextCreateImage(context); 
+  CGImageRef binary = CGBitmapContextCreateImage(context);
+  [NSMakeCollectable(binary) autorelease];
 
   CGContextRelease(context);
 

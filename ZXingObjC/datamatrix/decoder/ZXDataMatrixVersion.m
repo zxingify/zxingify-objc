@@ -77,6 +77,8 @@
 
 @end
 
+static NSArray* VERSIONS = nil;
+
 @interface ZXDataMatrixVersion ()
 
 @property (nonatomic, retain) ZXDataMatrixECBlocks * ecBlocks;
@@ -86,8 +88,6 @@
 @property (nonatomic, assign) int symbolSizeRows;
 @property (nonatomic, assign) int totalCodewords;
 @property (nonatomic, assign) int versionNumber;
-
-+ (NSArray *)buildVersions;
 
 @end
 
@@ -133,12 +133,6 @@
  * Deduces version information from Data Matrix dimensions.
  */
 + (ZXDataMatrixVersion *)versionForDimensions:(int)numRows numColumns:(int)numColumns {
-  static NSArray* VERSIONS = nil;
-
-  if (!VERSIONS) {
-    VERSIONS = [self buildVersions];
-  }
-
   if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
     return nil;
   }
@@ -160,8 +154,8 @@
 /**
  * See ISO 16022:2006 5.5.1 Table 7
  */
-+ (NSArray *)buildVersions {
-  return [[NSArray alloc] initWithObjects:
++ (void)initialize {
+  VERSIONS = [[NSArray alloc] initWithObjects:
            [[[ZXDataMatrixVersion alloc] initWithVersionNumber:1
                                                 symbolSizeRows:10
                                              symbolSizeColumns:10

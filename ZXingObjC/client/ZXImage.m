@@ -43,7 +43,7 @@
 
 - (ZXImage*)initWithCGImageRef:(CGImageRef)image {
   if (self = [super init]) {
-    cgimage = image;
+    cgimage = CGImageRetain(image);
   }
 
   return self;
@@ -103,6 +103,7 @@
   CGContextRef c = CGBitmapContextCreate(bytes, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast);
   CFRelease(colorSpace);
   CGImageRef image = CGBitmapContextCreateImage(c);
+  [NSMakeCollectable(image) autorelease];
   CFRelease(c);
   free(bytes);
 

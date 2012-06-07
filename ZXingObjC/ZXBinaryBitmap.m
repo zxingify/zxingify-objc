@@ -82,9 +82,9 @@
  */
 - (ZXBitMatrix *)blackMatrixWithError:(NSError **)error {
   if (self.matrix == nil) {
-    self.matrix = [[self.binarizer blackMatrixWithError:error] retain];
+    self.matrix = [self.binarizer blackMatrixWithError:error];
   }
-  return matrix;
+  return self.matrix;
 }
 
 

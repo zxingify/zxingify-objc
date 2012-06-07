@@ -127,14 +127,14 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
   0x2542E, 0x26A64, 0x27541, 0x28C69
 };
 
+static NSArray *VERSIONS = nil;
+
 @interface ZXQRCodeVersion ()
 
 @property (nonatomic, assign) int versionNumber;
 @property (nonatomic, retain) NSArray * alignmentPatternCenters;
 @property (nonatomic, retain) NSArray * ecBlocks;
 @property (nonatomic, assign) int totalCodewords;
-
-+ (NSArray *) buildVersions;
 
 @end
 
@@ -195,12 +195,6 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
 }
 
 + (ZXQRCodeVersion *)versionForNumber:(int)versionNumber {
-  static NSArray *VERSIONS = nil;
-
-  if (!VERSIONS) {
-    VERSIONS = [self buildVersions];
-  }
-
   if (versionNumber < 1 || versionNumber > 40) {
     return nil;
   }
@@ -269,8 +263,8 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
 /**
  * See ISO 18004:2006 6.5.1 Table 9
  */
-+ (NSArray *)buildVersions {
-  return [[NSArray alloc] initWithObjects:
++ (void)initialize {
+  VERSIONS = [[NSArray alloc] initWithObjects:
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:1
                                      alignmentPatternCenters:[NSArray array]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:7 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:19]]
