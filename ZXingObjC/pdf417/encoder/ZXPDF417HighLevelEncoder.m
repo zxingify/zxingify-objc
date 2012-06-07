@@ -94,10 +94,10 @@ const unsigned char TEXT_PUNCTUATION_RAW[TEXT_PUNCTUATION_RAW_LEN] = {
   10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0};
 
 const int MIXED_TABLE_LEN = 128;
-unichar MIXED_TABLE[MIXED_TABLE_LEN] = {0};
+unichar MIXED_TABLE[MIXED_TABLE_LEN];
 
 const int PUNCTUATION_LEN = 128;
-unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
+unichar PUNCTUATION[PUNCTUATION_LEN];
 
 @interface ZXPDF417HighLevelEncoder ()
 
@@ -353,7 +353,8 @@ unichar PUNCTUATION[PUNCTUATION_LEN] = {0};
   if (count >= 6) {
     [sb appendFormat:@"%c", (char) LATCH_TO_BYTE];
     const int charsLen = 5;
-    char chars[charsLen] = {0};
+    char chars[charsLen];
+    memset(chars, 0, charsLen * sizeof(char));
     while ((startpos + count - idx) >= 6) {
       long t = 0;
       for (int i = 0; i < 6; i++) {

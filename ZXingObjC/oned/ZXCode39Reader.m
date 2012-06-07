@@ -90,7 +90,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   const int countersLen = 9;
-  int counters[countersLen] = {0};
+  int counters[countersLen];
+  memset(counters, 0, countersLen * sizeof(int));
+
   int start[2] = {0};
   if (![self findAsteriskPattern:row a:&start[0] b:&start[1] counters:counters countersLen:countersLen]) {
     if (error) *error = NotFoundErrorInstance();

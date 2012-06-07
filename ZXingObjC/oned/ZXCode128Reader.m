@@ -175,8 +175,11 @@ int const CODE_STOP = 106;
   int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
+
   const int patternLength = 6;
-  int counters[patternLength] = {0, 0, 0, 0, 0, 0};
+  int counters[patternLength];
+  memset(counters, 0, patternLength * sizeof(int));
+
   int patternStart = rowOffset;
   BOOL isWhite = NO;
 
@@ -273,8 +276,10 @@ int const CODE_STOP = 106;
 
   int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
   int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
+
   const int countersLen = 6;
-  int counters[countersLen] = {0,0,0,0,0,0};
+  int counters[countersLen];
+  memset(counters, 0, countersLen * sizeof(int));
 
   int lastCode = 0;
   int code = 0;

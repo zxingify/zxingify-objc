@@ -68,7 +68,9 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError**)error {
   const int countersLen = 4;
-  int counters[countersLen] = {0, 0, 0, 0};
+  int counters[countersLen];
+  memset(counters, 0, countersLen * sizeof(int));
+
   int end = [row size];
   int rowOffset = NSMaxRange(startRange);
 

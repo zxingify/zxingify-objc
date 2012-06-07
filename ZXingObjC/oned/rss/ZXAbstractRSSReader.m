@@ -88,36 +88,27 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   if (self = [super init]) {
     self.decodeFinderCountersLen = 4;
     self.decodeFinderCounters = (int*)malloc(self.decodeFinderCountersLen * sizeof(int));
-    for (int i = 0; i < self.decodeFinderCountersLen; i++) {
-      self.decodeFinderCounters[i] = 0;
-    }
+    memset(self.decodeFinderCounters, 0, self.decodeFinderCountersLen * sizeof(int));
 
     self.dataCharacterCountersLen = 8;
     self.dataCharacterCounters = (int*)malloc(self.dataCharacterCountersLen * sizeof(int));
-    for (int i = 0; i < self.dataCharacterCountersLen; i++) {
-      self.dataCharacterCounters[i] = 0;
-    }
+    memset(self.dataCharacterCounters, 0, self.dataCharacterCountersLen * sizeof(int));
 
     self.oddRoundingErrorsLen = 4;
     self.oddRoundingErrors = (float*)malloc(self.oddRoundingErrorsLen * sizeof(float));
-    for (int i = 0; i < self.oddRoundingErrorsLen; i++) {
-      self.oddRoundingErrors[i] = 0.0f;
-    }
+    memset(self.oddRoundingErrors, 0, self.oddRoundingErrorsLen * sizeof(float));
 
     self.evenRoundingErrorsLen = 4;
     self.evenRoundingErrors = (float*)malloc(self.evenRoundingErrorsLen * sizeof(float));
-    for (int i = 0; i < self.evenRoundingErrorsLen; i++) {
-      self.evenRoundingErrors[i] = 0.0f;
-    }
+    memset(self.evenRoundingErrors, 0, self.evenRoundingErrorsLen * sizeof(float));
 
     self.oddCountsLen = self.dataCharacterCountersLen / 2;
+    self.oddCounts = (int*)malloc(self.oddCountsLen * sizeof(int));
+    memset(self.oddCounts, 0, self.oddCountsLen * sizeof(int));
+
     self.evenCountsLen = self.dataCharacterCountersLen / 2;
-    self.oddCounts = (int*)malloc(self.dataCharacterCountersLen / 2 * sizeof(int));
-    self.evenCounts = (int*)malloc(self.dataCharacterCountersLen / 2 * sizeof(int));
-    for (int i = 0; i < self.dataCharacterCountersLen / 2; i++) {
-      self.oddCounts[i] = 0;
-      self.evenCounts[i] = 0;
-    }
+    self.evenCounts = (int*)malloc(self.evenCountsLen * sizeof(int));
+    memset(self.evenCounts, 0, self.evenCountsLen * sizeof(int));
   }
 
   return self;

@@ -38,9 +38,7 @@
   if (self = [super init]) {
     self.rowLength = width;
     self.row = (unsigned char*)malloc(self.rowLength * sizeof(unsigned char));
-    for (int i = 0; i < self.rowLength; i++) {
-      self.row[i] = 0;
-    }
+    memset(self.row, 0, self.rowLength * sizeof(unsigned char));
     self.currentLocation = 0;
   }
   return self;

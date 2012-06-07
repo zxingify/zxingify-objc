@@ -57,9 +57,7 @@
   ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
   int pointsLen = dimensionX << 1;
   float pointsf[pointsLen];
-  for (int i = 0; i < pointsLen; i++) {
-    pointsf[i] = 0;
-  }
+  memset(pointsf, 0, pointsLen * sizeof(float));
 
   for (int y = 0; y < dimensionY; y++) {
     int max = dimensionX << 1;

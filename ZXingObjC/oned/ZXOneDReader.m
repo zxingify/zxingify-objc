@@ -168,9 +168,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 + (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
   int numCounters = countersSize;
 
-  for (int i = 0; i < numCounters; i++) {
-    counters[i] = 0;
-  }
+  memset(counters, 0, numCounters * sizeof(int));
 
   int end = row.size;
   if (start >= end) {

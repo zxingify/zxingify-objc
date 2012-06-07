@@ -80,7 +80,8 @@ const int BITNR[33][30] = {
 
 - (NSArray *)readCodewords {
   const int resultLength = 144;
-  unsigned char result[resultLength] = {0};
+  unsigned char result[resultLength];
+  memset(result, 0, resultLength * sizeof(unsigned char));
 
   int height = self.bitMatrix.height;
   int width = self.bitMatrix.width;

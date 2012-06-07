@@ -103,10 +103,7 @@
  */
 - (void)clear {
   int max = self.bitsSize;
-
-  for (int i = 0; i < max; i++) {
-    self.bits[i] = 0;
-  }
+  memset(self.bits, 0, max * sizeof(int));
 }
 
 /**

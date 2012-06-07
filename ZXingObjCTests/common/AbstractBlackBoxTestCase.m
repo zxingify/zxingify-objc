@@ -167,24 +167,16 @@
   int testCount = [self.testResults count];
 
   int passedCounts[testCount];
-  for (int i = 0; i < testCount; i++) {
-    passedCounts[i] = 0;
-  }
+  memset(passedCounts, 0, testCount * sizeof(int));
 
   int misreadCounts[testCount];
-  for (int i = 0; i < testCount; i++) {
-    misreadCounts[i] = 0;
-  }
+  memset(misreadCounts, 0, testCount * sizeof(int));
 
   int tryHarderCounts[testCount];
-  for (int i = 0; i < testCount; i++) {
-    tryHarderCounts[i] = 0;
-  }
+  memset(tryHarderCounts, 0, testCount * sizeof(int));
 
   int tryHarderMisreadCounts[testCount];
-  for (int i = 0; i < testCount; i++) {
-    tryHarderMisreadCounts[i] = 0;
-  }
+  memset(tryHarderMisreadCounts, 0, testCount * sizeof(int));
 
   for (NSURL * testImage in imageFiles) {
     NSLog(@"Starting %@", [self pathInBundle:testImage]);

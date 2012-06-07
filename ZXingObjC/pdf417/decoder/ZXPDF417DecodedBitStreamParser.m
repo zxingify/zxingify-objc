@@ -383,9 +383,7 @@ static NSArray* EXP900 = nil;
   BOOL end = NO;
 
   int numericCodewords[MAX_NUMERIC_CODEWORDS];
-  for (int i = 0; i < MAX_NUMERIC_CODEWORDS; i++) {
-    numericCodewords[i] = 0;
-  }
+  memset(numericCodewords, 0, MAX_NUMERIC_CODEWORDS * sizeof(int));
 
   while (codeIndex < [[codewords objectAtIndex:0] intValue] && !end) {
     int code = [[codewords objectAtIndex:codeIndex++] intValue];

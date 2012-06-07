@@ -269,9 +269,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 
 + (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int*)pattern patternLen:(int)patternLen counters:(int*)counters error:(NSError**)error {
   int patternLength = patternLen;
-  for (int i = 0; i < patternLength; i++) {
-    counters[i] = 0;
-  }
+  memset(counters, 0, patternLength * sizeof(int));
   int width = row.size;
 
   BOOL isWhite = whiteFirst;

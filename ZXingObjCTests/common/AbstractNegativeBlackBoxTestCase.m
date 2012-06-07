@@ -95,10 +95,9 @@
   }
 
   NSArray * imageFiles = [self imageFiles];
+
   int falsePositives[self.testResults.count];
-  for (int i = 0; i < self.testResults.count; i++) {
-    falsePositives[i] = 0;
-  }
+  memset(falsePositives, 0, self.testResults.count * sizeof(int));
 
   for (NSURL *testImage in imageFiles) {
     NSLog(@"Starting %@", [self pathInBundle:testImage]);

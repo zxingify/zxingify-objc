@@ -336,7 +336,8 @@
       237, 85, 224, 96, 74, 219, 61,
     };
     STAssertEquals(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
-    unsigned char outArray[expectedLen] = {0};
+    unsigned char outArray[expectedLen];
+    memset(outArray, 0, expectedLen * sizeof(unsigned char));
     [out toBytes:0 array:outArray offset:0 numBytes:expectedLen];
     for (int x = 0; x < expectedLen; x++) {
       STAssertEquals(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);
@@ -378,7 +379,8 @@
       187, 49, 156, 214,
     };
     STAssertEquals(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
-    unsigned char outArray[expectedLen] = {0};
+    unsigned char outArray[expectedLen];
+    memset(outArray, 0, expectedLen * sizeof(unsigned char));
     [out toBytes:0 array:outArray offset:0 numBytes:expectedLen];
     for (int x = 0; x < expectedLen; x++) {
       STAssertEquals(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);

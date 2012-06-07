@@ -183,11 +183,8 @@
  * Clears all bits (sets to false).
  */
 - (void)clear {
-  for (int i = 0; i < self.bitsLength; i++) {
-    self.bits[i] = 0;
-  }
+  memset(self.bits, 0, self.bitsLength * sizeof(int));
 }
-
 
 /**
  * Efficient method to check if a range of bits is set, or not set.
@@ -231,7 +228,6 @@
   }
   self.size++;
 }
-
 
 /**
  * Appends the least-significant bits, from value, in order from most-significant to
@@ -306,9 +302,7 @@
 - (int *)makeArray:(int)aSize {
   int arraySize = (aSize + 31) >> 5;
   int *newArray = (int*)malloc(arraySize * sizeof(int));
-  for (int i = 0; i < arraySize; i++) {
-    newArray[i] = 0;
-  }
+  memset(newArray, 0, arraySize * sizeof(int));
   return newArray;
 }
 

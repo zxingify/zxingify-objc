@@ -152,9 +152,7 @@
   int bLength = other.coefficientsLen;
   int productLen = aLength + bLength - 1;
   int product[productLen];
-  for (int i = 0; i < productLen; i++) {
-    product[i] = 0;
-  }
+  memset(product, 0, productLen * sizeof(int));
 
   for (int i = 0; i < aLength; i++) {
     int aCoeff = aCoefficients[i];

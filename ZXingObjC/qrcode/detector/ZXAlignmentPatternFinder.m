@@ -63,9 +63,7 @@
     self.height = aHeight;
     self.moduleSize = aModuleSize;
     self.crossCheckStateCount = (int*)malloc(3 * sizeof(int));
-    for (int i = 0; i < 3; i++) {
-      self.crossCheckStateCount[i] = 0;
-    }
+    memset(self.crossCheckStateCount, 0, 3 * sizeof(int));
     self.resultPointCallback = aResultPointCallback;
   }
 

@@ -728,9 +728,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   float moduleWidth = 1.0f;
 
   int rowCounters[width];
-  for (int i = 0; i < width; i++) {
-    rowCounters[i] = 0;
-  }
+  memset(rowCounters, 0, width * sizeof(int));
   
   NSMutableArray *codewords = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
   for (int i = 0; i < MAX_CW_CAPACITY; i++) {

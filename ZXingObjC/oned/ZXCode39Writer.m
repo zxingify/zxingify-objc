@@ -42,7 +42,9 @@
   }
 
   const int widthsLengh = 9;
-  int widths[widthsLengh] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+  int widths[widthsLengh];
+  memset(widths, 0, widthsLengh * sizeof(int));
+
   int codeWidth = 24 + 1 + length;
   for (int i = 0; i < length; i++) {
     int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
@@ -58,7 +60,9 @@
   int pos = [super appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:1];
 
   const int narrowWhiteLen = 1;
-  int narrowWhite[narrowWhiteLen] = {0};
+  int narrowWhite[narrowWhiteLen];
+  memset(narrowWhite, 0, narrowWhiteLen * sizeof(int));
+
   pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
 
   for (int i = length - 1; i >= 0; i--) {

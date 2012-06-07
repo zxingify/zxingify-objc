@@ -120,9 +120,7 @@ const int ODD = 2;
   // First read into an array of ints
   int codewordsIntsLen = codewords / divisor;
   int *codewordsInts = (int*)malloc(codewordsIntsLen * sizeof(int));
-  for (int i = 0; i < codewordsIntsLen; i++) {
-    codewordsInts[i] = 0;
-  }
+  memset(codewordsInts, 0, codewordsIntsLen * sizeof(int));
   for (int i = 0; i < codewords; i++) {
     if ((mode == ALL) || (i % 2 == (mode - 1))) {
       codewordsInts[i / divisor] = [[codewordBytes objectAtIndex:i + start] charValue] & 0xFF;

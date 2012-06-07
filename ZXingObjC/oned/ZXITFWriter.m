@@ -46,7 +46,8 @@
     int one = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     int two = [[contents substringWithRange:NSMakeRange(i + 1, 1)] intValue];
     const int encodingLen = 18;
-    int encoding[encodingLen] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int encoding[encodingLen];
+    memset(encoding, 0, encodingLen * sizeof(int));
     for (int j = 0; j < 5; j++) {
       encoding[(j << 1)] = PATTERNS[one][j];
       encoding[(j << 1) + 1] = PATTERNS[two][j];

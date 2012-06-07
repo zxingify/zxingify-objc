@@ -161,9 +161,7 @@ const int EC_COEFFICIENTS[9][512] = {
 + (NSString*)generateErrorCorrection:(NSString*)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel {
   int k = [self errorCorrectionCodewordCount:errorCorrectionLevel];
   unichar e[k];
-  for (int i = 0; i < k; i++) {
-    e[i] = 0;
-  }
+  memset(e, 0, k * sizeof(unichar));
 
   int sld = dataCodewords.length;
   for (int i = 0; i < sld; i++) {

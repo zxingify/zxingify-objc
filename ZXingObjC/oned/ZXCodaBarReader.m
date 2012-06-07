@@ -86,10 +86,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
     self.decodeRowResult = [NSMutableString stringWithCapacity:20];
     self.countersLen = 80;
     self.counters = (int*)malloc(self.countersLen * sizeof(int));
-    for (int i = 0; i < self.countersLen; i++) {
-      self.counters[i] = 0;
-    }
-
+    memset(self.counters, 0, self.countersLen * sizeof(int));
     self.counterLength = 0;
   }
 
@@ -299,11 +296,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
     int* temp = (int*)malloc(2 * self.counterLength * sizeof(int));
     memcpy(temp, self.counters, self.countersLen * sizeof(int));
     self.counters = temp;
-
-    for (int i = self.countersLen; i < 2 * self.counterLength; i++) {
-      self.counters[i] = 0;
-    }
-
+    memset(self.counters, 0, 2 * self.counterLength * sizeof(int));
     self.countersLen = 2 * self.counterLength;
   }
 }

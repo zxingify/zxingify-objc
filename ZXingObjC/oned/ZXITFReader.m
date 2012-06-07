@@ -135,13 +135,16 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 - (BOOL)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString {
   const int counterDigitPairLen = 10;
-  int counterDigitPair[counterDigitPairLen] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  int counterDigitPair[counterDigitPairLen];
+  memset(counterDigitPair, 0, counterDigitPairLen * sizeof(int));
 
   const int counterBlackLen = 5;
-  int counterBlack[counterBlackLen] = {0, 0, 0, 0, 0};
+  int counterBlack[counterBlackLen];
+  memset(counterBlack, 0, counterBlackLen * sizeof(int));
 
   const int counterWhiteLen = 5;
-  int counterWhite[counterWhiteLen] = {0, 0, 0, 0, 0};
+  int counterWhite[counterWhiteLen];
+  memset(counterWhite, 0, counterWhiteLen * sizeof(int));
 
   while (payloadStart < payloadEnd) {
     if (![ZXOneDReader recordPattern:row start:payloadStart counters:counterDigitPair countersSize:counterDigitPairLen]) {
@@ -263,9 +266,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 - (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen {
   int patternLength = patternLen;
   int counters[patternLength];
-  for (int i=0; i<patternLength; i++) {
-    counters[i] = 0;
-  }
+  memset(counters, 0, patternLength * sizeof(int));
   int width = row.size;
   BOOL isWhite = NO;
 

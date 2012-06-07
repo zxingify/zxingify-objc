@@ -129,8 +129,11 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
+
   const int patternLength = 6;
-  int counters[patternLength] = {0, 0, 0, 0, 0, 0};
+  int counters[patternLength];
+  memset(counters, 0, patternLength * sizeof(int));
+
   int patternStart = rowOffset;
   BOOL isWhite = NO;
 

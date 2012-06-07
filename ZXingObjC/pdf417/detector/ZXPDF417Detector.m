@@ -174,7 +174,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   BOOL found = NO;
 
   int counters[START_PATTERN_REVERSE_LEN] = {0};
-  
+  memset(counters, 0, START_PATTERN_REVERSE_LEN * sizeof(int));
+
   // Top Left
   for (int i = 0; i < height; i++) {
     NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
@@ -199,7 +200,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     }
   }
 
-  int counters2[STOP_PATTERN_REVERSE_LEN] = {0};
+  int counters2[STOP_PATTERN_REVERSE_LEN];
+  memset(counters2, 0, STOP_PATTERN_REVERSE_LEN * sizeof(int));
 
   // Top right
   if (found) { // Found the Bottom Left vertex
@@ -260,7 +262,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
   BOOL found = NO;
 
-  int counters[PDF417_START_PATTERN_LEN] = {0};
+  int counters[PDF417_START_PATTERN_LEN];
+  memset(counters, 0, PDF417_START_PATTERN_LEN * sizeof(int));
 
   // Top Left
   for (int i = height - 1; i > 0; i--) {
@@ -286,7 +289,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     }
   }
 
-  int counters2[STOP_PATTERN_LEN] = {0};
+  int counters2[STOP_PATTERN_LEN];
+  memset(counters2, 0, STOP_PATTERN_LEN * sizeof(int));
 
   // Top Right
   if (found) { // Found the Bottom Left vertex
@@ -452,9 +456,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 
 - (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int*)counters {
   int patternLength = patternLen;
-  for (int i = 0; i < patternLength; i++) {
-    counters[i] = 0;
-  }
+  memset(counters, 0, patternLength * sizeof(int));
   BOOL isWhite = whiteFirst;
 
   int counterPosition = 0;

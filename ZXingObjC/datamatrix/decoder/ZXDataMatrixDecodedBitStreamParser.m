@@ -296,10 +296,7 @@ enum {
   // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
   BOOL upperShift = NO;
 
-  int cValues[3];
-  for (int i = 0; i < 3; i++) {
-    cValues[i] = 0;
-  }
+  int cValues[3] = {0};
 
   int shift = 0;
   do {
