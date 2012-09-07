@@ -112,7 +112,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   for (int numSys = 0; numSys <= 1; numSys++) {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-        [resultString insertString:[NSString stringWithFormat:@"%C", (unichar)'0' + numSys] atIndex:0];
+        [resultString insertString:[NSString stringWithFormat:@"%C", (unichar)('0' + numSys)] atIndex:0];
         [resultString appendFormat:@"%C", (unichar)('0' + d)];
         return YES;
       }

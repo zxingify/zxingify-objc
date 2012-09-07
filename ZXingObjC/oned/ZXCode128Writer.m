@@ -39,7 +39,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
 }
 
 - (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
-  int length = [contents length];
+  int length = (int)[contents length];
   // Check length
   if (length < 1 || length > 80) {
     [NSException raise:NSInvalidArgumentException format:@"Contents length should be between 1 and 80 characters, but got %d", length];
@@ -167,7 +167,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
   unsigned char* result = (unsigned char*)malloc(codeWidth * sizeof(unsigned char));
   int pos = 0;
   for (NSArray *patternArray in patterns) {
-    int patternLen = [patternArray count];
+    int patternLen = (int)[patternArray count];
     int pattern[patternLen];
     for(int i = 0; i < patternLen; i++) {
       pattern[i] = [[patternArray objectAtIndex:i] intValue];
@@ -181,7 +181,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
 
 - (BOOL)isDigits:(NSString *)value start:(int)start length:(unsigned int)length {
   int end = start + length;
-  int last = [value length];
+  int last = (int)[value length];
   for (int i = start; i < end && i < last; i++) {
     unichar c = [value characterAtIndex:i];
     if (c < '0' || c > '9') {

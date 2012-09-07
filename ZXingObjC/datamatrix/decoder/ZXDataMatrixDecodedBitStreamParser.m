@@ -246,7 +246,7 @@ enum {
           [result appendFormat:@"%C", (unichar)(cValue + 128)];
           upperShift = NO;
         } else {
-          [result appendFormat:@"%C", cValue];
+          [result appendFormat:@"%C", (unichar)cValue];
         }
         shift = 0;
         break;
@@ -334,7 +334,7 @@ enum {
           [result appendFormat:@"%C", (unichar)(cValue + 128)];
           upperShift = NO;
         } else {
-          [result appendFormat:@"%C", cValue];
+          [result appendFormat:@"%C", (unichar)cValue];
         }
         shift = 0;
         break;

@@ -525,7 +525,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     //Sun returns a ASCII 63 (?) for a character that cannot be mapped. Let's hope all
     //other VMs do the same
     if (bytes[idx] == 63 && ch != '?') {
-      NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Non-encodable character detected: %c (Unicode: %C)", ch, (int)ch]
+      NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Non-encodable character detected: %c (Unicode: %C)", ch, (unichar)ch]
                                                            forKey:NSLocalizedDescriptionKey];
 
       if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
