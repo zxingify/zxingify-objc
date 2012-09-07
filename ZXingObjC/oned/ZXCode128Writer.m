@@ -18,10 +18,10 @@
 #import "ZXCode128Writer.h"
 
 // Dummy characters used to specify control characters in input
-const unichar ESCAPE_FNC_1 = '\u00f1';
-const unichar ESCAPE_FNC_2 = '\u00f2';
-const unichar ESCAPE_FNC_3 = '\u00f3';
-const unichar ESCAPE_FNC_4 = '\u00f4';
+const unichar ESCAPE_FNC_1 = L'\u00f1';
+const unichar ESCAPE_FNC_2 = L'\u00f2';
+const unichar ESCAPE_FNC_3 = L'\u00f3';
+const unichar ESCAPE_FNC_4 = L'\u00f4';
 
 @interface ZXCode128Writer ()
 
