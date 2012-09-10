@@ -131,7 +131,7 @@ const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
   {2, 1, 1, 4, 1, 2},
   {2, 1, 1, 2, 1, 4},
   {2, 1, 1, 2, 3, 2}, // 105
-  {2, 3, 3, 1, 1, 1}
+  {2, 3, 3, 1, 1, 1, 2}
 };
 
 static int MAX_AVG_VARIANCE = -1;
