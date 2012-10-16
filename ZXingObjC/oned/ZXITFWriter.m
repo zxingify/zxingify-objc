@@ -40,8 +40,8 @@
   if (pLength) *pLength = resultLen;
   unsigned char* result = (unsigned char*)malloc(resultLen * sizeof(unsigned char));
   const int startLen = 4;
-  int start[startLen];
-  memset(start, 1, startLen * sizeof(int));
+  int start[startLen] = {1, 1, 1, 1};
+
   int pos = [super appendPattern:result pos:0 pattern:start patternLen:startLen startColor:1];
   for (int i = 0; i < length; i += 2) {
     int one = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
@@ -57,8 +57,7 @@
   }
 
   const int endLen = 3;
-  int end[endLen];
-  end[0] = 3; end[1] = 1; end[1] = 1;
+  int end[endLen] = {3, 1, 1};
   pos += [super appendPattern:result pos:pos pattern:end patternLen:endLen startColor:1];
 
   return result;
