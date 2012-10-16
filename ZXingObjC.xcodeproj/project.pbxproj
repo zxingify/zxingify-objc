@@ -1094,6 +1094,8 @@
 		25FCC9D21568A3E500FF0E7A /* ZXPerspectiveTransformTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FCC9D01568A3E500FF0E7A /* ZXPerspectiveTransformTestCase.m */; };
 		4C975B89162D9B8100658260 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C975B85162D9B5700658260 /* ZXITFWriterTestCase.m */; };
 		4C975B8A162D9B8200658260 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C975B85162D9B5700658260 /* ZXITFWriterTestCase.m */; };
+		4C975B92162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C975B91162DBD8100658260 /* ZXCode39WriterTestCase.m */; };
+		4C975B93162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C975B91162DBD8100658260 /* ZXCode39WriterTestCase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1700,6 +1702,8 @@
 		25FCC9D01568A3E500FF0E7A /* ZXPerspectiveTransformTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPerspectiveTransformTestCase.m; sourceTree = "<group>"; };
 		4C975B84162D9B5400658260 /* ZXITFWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXITFWriterTestCase.h; path = oned/ZXITFWriterTestCase.h; sourceTree = "<group>"; };
 		4C975B85162D9B5700658260 /* ZXITFWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXITFWriterTestCase.m; path = oned/ZXITFWriterTestCase.m; sourceTree = "<group>"; };
+		4C975B90162DBD8000658260 /* ZXCode39WriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXCode39WriterTestCase.h; path = oned/ZXCode39WriterTestCase.h; sourceTree = "<group>"; };
+		4C975B91162DBD8100658260 /* ZXCode39WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXCode39WriterTestCase.m; path = oned/ZXCode39WriterTestCase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2587,6 +2591,8 @@
 				25EED397156B355F003E10D6 /* UPCEBlackBox3ReflectiveTestCase.m */,
 				25198C421571D32D000EADAD /* ZXCodaBarWriterTestCase.h */,
 				25198C431571D32D000EADAD /* ZXCodaBarWriterTestCase.m */,
+				4C975B90162DBD8000658260 /* ZXCode39WriterTestCase.h */,
+				4C975B91162DBD8100658260 /* ZXCode39WriterTestCase.m */,
 				2545FCD4156995D1008E53D2 /* ZXEAN8WriterTestCase.h */,
 				2545FCD5156995D1008E53D2 /* ZXEAN8WriterTestCase.m */,
 				2545FCD81569979D008E53D2 /* ZXEAN13WriterTestCase.h */,
@@ -3567,6 +3573,7 @@
 				254C5223157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */,
 				254C522C157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */,
 				4C975B8A162D9B8200658260 /* ZXITFWriterTestCase.m in Sources */,
+				4C975B93162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4015,6 +4022,7 @@
 				254C5222157EE8A400586DED /* ZXStringUtilsTestCase.m in Sources */,
 				254C522B157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */,
 				4C975B89162D9B8100658260 /* ZXITFWriterTestCase.m in Sources */,
+				4C975B92162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
