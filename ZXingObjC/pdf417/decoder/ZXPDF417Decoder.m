@@ -20,7 +20,7 @@
 #import "ZXPDF417DecodedBitStreamParser.h"
 #import "ZXPDF417Decoder.h"
 
-int const MAX_ERRORS = 3;
+int const ZX_PDF_MAX_ERRORS = 3;
 int const MAX_EC_CODEWORDS = 512;
 
 @interface ZXPDF417Decoder ()
@@ -104,7 +104,7 @@ int const MAX_EC_CODEWORDS = 512;
  * correct the errors in-place using Reed-Solomon error correction.
  */
 - (int)correctErrors:(NSArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords {
-  if (erasures.count > numECCodewords / 2 + MAX_ERRORS || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
+  if (erasures.count > numECCodewords / 2 + ZX_PDF_MAX_ERRORS || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
     return -1;
   }
 
@@ -113,7 +113,7 @@ int const MAX_EC_CODEWORDS = 512;
   if (result > 0) {
     numErasures -= result;
   }
-  if (numErasures > MAX_ERRORS) {
+  if (numErasures > ZX_PDF_MAX_ERRORS) {
     return -1;
   }
   return result;
