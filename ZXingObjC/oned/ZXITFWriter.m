@@ -17,6 +17,9 @@
 #import "ZXITFReader.h"
 #import "ZXITFWriter.h"
 
+#define ZX_ITF_STARTLEN 4
+#define ZX_ITF_ENDLEN 3
+
 @implementation ZXITFWriter
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
@@ -39,8 +42,8 @@
   int resultLen = 9 + 9 * length;
   if (pLength) *pLength = resultLen;
   unsigned char* result = (unsigned char*)malloc(resultLen * sizeof(unsigned char));
-  const int startLen = 4;
-  int start[startLen] = {1, 1, 1, 1};
+  const int startLen = ZX_ITF_STARTLEN;
+  int start[ZX_ITF_STARTLEN] = {1, 1, 1, 1};
 
   int pos = [super appendPattern:result pos:0 pattern:start patternLen:startLen startColor:1];
   for (int i = 0; i < length; i += 2) {
@@ -56,8 +59,8 @@
     pos += [super appendPattern:result pos:pos pattern:encoding patternLen:encodingLen startColor:1];
   }
 
-  const int endLen = 3;
-  int end[endLen] = {3, 1, 1};
+  const int endLen = ZX_ITF_ENDLEN;
+  int end[ZX_ITF_ENDLEN] = {3, 1, 1};
   pos += [super appendPattern:result pos:pos pattern:end patternLen:endLen startColor:1];
 
   return result;
