@@ -18,6 +18,8 @@
 #import "ZXCode39Reader.h"
 #import "ZXCode39Writer.h"
 
+#define ZX_CODE39_WHITELEN 1
+
 @interface ZXCode39Writer ()
 
 - (void)toIntArray:(int)a toReturn:(int[])toReturn;
@@ -59,10 +61,9 @@
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
   int pos = [super appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:1];
 
-  const int narrowWhiteLen = 1;
-  int narrowWhite[narrowWhiteLen];
-  memset(narrowWhite, 0, narrowWhiteLen * sizeof(int));
-
+  const int narrowWhiteLen = ZX_CODE39_WHITELEN;
+  int narrowWhite[ZX_CODE39_WHITELEN] = {1};
+ 
   pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
 
   for (int i = length - 1; i >= 0; i--) {
