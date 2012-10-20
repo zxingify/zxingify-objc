@@ -77,6 +77,8 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
     [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
     self.matrix = newMatrix;
 
+    free(_luminances);
+
     for (int i = 0; i < subHeight; i++) {
       free(blackPoints[i]);
     }
