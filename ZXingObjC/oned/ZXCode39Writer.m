@@ -60,8 +60,7 @@
   int pos = [super appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:1];
 
   const int narrowWhiteLen = 1;
-  int narrowWhite[narrowWhiteLen];
-  memset(narrowWhite, 0, narrowWhiteLen * sizeof(int));
+  int narrowWhite[narrowWhiteLen] = {1};
 
   pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
 
