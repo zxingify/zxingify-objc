@@ -235,8 +235,6 @@
   
   CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), image);
 
-  CGImageRetain(image);
-
   data = (uint32_t *) malloc(self.width * self.height * sizeof(uint32_t));
   memcpy(data, CGBitmapContextGetData(context), self.width * self.height * sizeof(uint32_t));
   CGContextRelease(context);

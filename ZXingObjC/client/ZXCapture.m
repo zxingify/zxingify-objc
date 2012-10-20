@@ -471,7 +471,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   (void)sampleBuffer;
 
   NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-  
+
   (void)captureOutput;
   (void)connection;
 
@@ -496,7 +496,6 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
   CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
   CGImageRef rotatedImage = [self rotateImage:videoFrameImage degrees:rotation];
-  CGImageRelease(videoFrameImage);
 
   ZXCGImageLuminanceSource* source
     = [[[ZXCGImageLuminanceSource alloc]
@@ -515,35 +514,27 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   }
 
   if (binary || delegate) {
-
-    // compiler issue?
     ZXHybridBinarizer* binarizer = [ZXHybridBinarizer alloc];
     [[binarizer initWithSource:source] autorelease];
 
     if (binary) {
       CGImageRef image = binarizer.createImage;
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-          binary.contents = (id)image;
-          CGImageRelease(image);
-        });
+        binary.contents = (id)image;
+        CGImageRelease(image);
+      });
     }
 
     if (delegate) {
-
-      ZXBinaryBitmap* bitmap = 
+      ZXBinaryBitmap* bitmap =
         [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
 
-//      NSLog(@"started decode");
       NSError* error;
       ZXResult* result = [self.reader decode:bitmap hints:hints error:&error];
       if (result) {
-//        NSLog(@"finished decode");
         [delegate captureResult:self result:result];
-      } else {
-//        NSLog(@"failed to decode: %@", [error localizedDescription]);
       }
     }
-//    NSLog(@"finished frame");
   }
 
   [pool drain];
