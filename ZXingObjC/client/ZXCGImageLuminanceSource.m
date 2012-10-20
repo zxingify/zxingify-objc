@@ -156,8 +156,6 @@
 
   self = [self initWithCGImage:_image];
 
-  CGImageRelease(image);
-
   return self;
 }
 
