@@ -304,43 +304,56 @@ static NSArray* EXP900 = nil;
  */
 + (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   if (mode == BYTE_COMPACTION_MODE_LATCH) {
+    // Total number of Byte Compaction characters to be encoded
+    // is not a multiple of 6
     int count = 0;
     long long value = 0;
     char decodedData[6] = {0, 0, 0, 0, 0, 0};
     int byteCompactedCodewords[6] = {0, 0, 0, 0, 0, 0};
     BOOL end = NO;
+    int nextCode = [[codewords objectAtIndex:codeIndex++] intValue];
     while ((codeIndex < [[codewords objectAtIndex:0] intValue]) && !end) {
-      int code = [[codewords objectAtIndex:codeIndex++] intValue];
-      if (code < TEXT_COMPACTION_MODE_LATCH) {
-        byteCompactedCodewords[count] = code;
-        count++;
-        value = 900 * value + code;
+      byteCompactedCodewords[count++] = nextCode;
+      // Base 900
+      value = 900 * value + nextCode;
+      nextCode = [[codewords objectAtIndex:codeIndex++] intValue];
+      // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
+      if (nextCode == TEXT_COMPACTION_MODE_LATCH ||
+          nextCode == BYTE_COMPACTION_MODE_LATCH ||
+          nextCode == NUMERIC_COMPACTION_MODE_LATCH ||
+          nextCode == BYTE_COMPACTION_MODE_LATCH_6 ||
+          nextCode == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+          nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+          nextCode == MACRO_PDF417_TERMINATOR) {
+        end = YES;
       } else {
-        if (code == TEXT_COMPACTION_MODE_LATCH ||
-            code == BYTE_COMPACTION_MODE_LATCH ||
-            code == NUMERIC_COMPACTION_MODE_LATCH ||
-            code == BYTE_COMPACTION_MODE_LATCH_6 ||
-            code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-            code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-            code == MACRO_PDF417_TERMINATOR) {
-          codeIndex--;
-          end = YES;
+        if ((count % 5 == 0) && (count > 0)) {
+          // Decode every 5 codewords
+          // Convert to Base 256
+          for (int j = 0; j < 6; ++j) {
+            decodedData[5 - j] = (char) (value % 256);
+            value >>= 8;
+          }
+          [result appendString:[NSString stringWithCString:decodedData encoding:NSASCIIStringEncoding]];
+          count = 0;
         }
-      }
-      if ((count % 5 == 0) && (count > 0)) {
-        for (int j = 0; j < 6; ++j) {
-          decodedData[5 - j] = (char) (value % 256);
-          value >>= 8;
-        }
-        [result appendString:[NSString stringWithCString:decodedData encoding:NSASCIIStringEncoding]];
-        count = 0;
       }
     }
 
-    for (int i = (count / 5) * 5; i < count; i++) {
+    // if the end of all codewords is reached the last codeword needs to be added
+    if (codeIndex == [[codewords objectAtIndex:0] intValue] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
+      byteCompactedCodewords[count++] = nextCode;
+    }
+
+    // If Byte Compaction mode is invoked with codeword 901,
+    // the last group of codewords is interpreted directly
+    // as one byte per codeword, without compaction.
+    for (int i = 0; i < count; i++) {
       [result appendFormat:@"%C", (unichar)byteCompactedCodewords[i]];
     }
   } else if (mode == BYTE_COMPACTION_MODE_LATCH_6) {
+    // Total number of Byte Compaction characters to be encoded
+    // is an integer multiple of 6
     int count = 0;
     long value = 0;
     BOOL end = NO;
@@ -348,6 +361,7 @@ static NSArray* EXP900 = nil;
       int code = [[codewords objectAtIndex:codeIndex++] intValue];
       if (code < TEXT_COMPACTION_MODE_LATCH) {
         count++;
+        // Base 900
         value = 900 * value + code;
       } else {
         if (code == TEXT_COMPACTION_MODE_LATCH ||
@@ -362,6 +376,8 @@ static NSArray* EXP900 = nil;
         }
       }
       if ((count % 5 == 0) && (count > 0)) {
+        // Decode every 5 codewords
+        // Convert to Base 256
         NSMutableString *decodedData = [NSMutableString stringWithCapacity:6];
         for (int j = 0; j < 6; ++j) {
           [decodedData replaceCharactersInRange:NSMakeRange(5-j, 1) withString:[NSString stringWithFormat:@"%C", (unichar)(value & 0xFF)]];
