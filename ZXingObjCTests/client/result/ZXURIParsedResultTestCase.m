@@ -85,6 +85,12 @@
   [self doTestIsPossiblyMalicious:@"http://google.com/@@" expected:NO];
 }
 
+- (void)testExotic {
+  [self doTestWithContents:@"bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y"
+                       uri:@"bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y"
+                     title:nil];
+}
+
 - (void)doTestWithContents:(NSString*)contents uri:(NSString*)uri title:(NSString*)title {
   ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
