@@ -26,10 +26,10 @@
                     expectedFormat:kBarcodeFormatAztec];
 
   if (self) {
-    [self addTest:7 tryHarderCount:7 rotation:0.0f];
-    [self addTest:7 tryHarderCount:7 rotation:90.0f];
-    [self addTest:7 tryHarderCount:7 rotation:180.0f];
-    [self addTest:7 tryHarderCount:7 rotation:270.0f];
+    [self addTest:9 tryHarderCount:9 rotation:0.0f];
+    [self addTest:9 tryHarderCount:9 rotation:90.0f];
+    [self addTest:9 tryHarderCount:9 rotation:180.0f];
+    [self addTest:9 tryHarderCount:9 rotation:270.0f];
   }
 
   return self;

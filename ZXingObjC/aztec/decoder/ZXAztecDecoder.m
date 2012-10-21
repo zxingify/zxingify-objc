@@ -137,6 +137,7 @@ static NSString* DIGIT_TABLE[] = {
   BOOL end = NO;
   BOOL shift = NO;
   BOOL switchShift = NO;
+  BOOL binaryShift = NO;
 
   while (!end) {
     if (shift) {
@@ -144,42 +145,76 @@ static NSString* DIGIT_TABLE[] = {
     } else {
       lastTable = table;
     }
+
     int code;
-
-    switch (table) {
-    case BINARY:
-      if (endIndex - startIndex < 8) {
-        end = YES;
+    if (binaryShift) {
+      if (endIndex - startIndex < 5) {
         break;
       }
-      code = [self readCode:correctedBits startIndex:startIndex length:8];
-      startIndex += 8;
-      unichar uCode = (unichar)code;
-      [result appendString:[NSString stringWithCharacters:&uCode length:1]];
-      break;
 
-    default: {
-      int size = 5;
-      if (table == DIGIT) {
-        size = 4;
-      }
-      if (endIndex - startIndex < size) {
-        end = YES;
-        break;
-      }
-      code = [self readCode:correctedBits startIndex:startIndex length:size];
-      startIndex += size;
-      NSString * str = [self character:table code:code];
-      if ([str hasPrefix:@"CTRL_"]) {
-        table = [self table:[str characterAtIndex:5]];
-        if ([str characterAtIndex:6] == 'S') {
-          shift = YES;
+      int length = [self readCode:correctedBits startIndex:startIndex length:5];
+      startIndex += 5;
+      if (length == 0) {
+        if (endIndex - startIndex < 11) {
+          break;
         }
-      } else {
-        [result appendString:str];
+
+        length = [self readCode:correctedBits startIndex:startIndex length:11] + 31;
+        startIndex += 11;
       }
-      break;
-    }
+      for (int charCount = 0; charCount < length; charCount++) {
+        if (endIndex - startIndex < 8) {
+          end = true;
+          break;
+        }
+
+        code = [self readCode:correctedBits startIndex:startIndex length:8];
+        unichar uCode = (unichar)code;
+        [result appendString:[NSString stringWithCharacters:&uCode length:1]];
+        startIndex += 8;
+      }
+      binaryShift = false;
+    } else {
+      if (table == BINARY) {
+        if (endIndex - startIndex < 8) {
+          end = YES;
+          break;
+        }
+        code = [self readCode:correctedBits startIndex:startIndex length:8];
+        startIndex += 8;
+
+        unichar uCode = (unichar)code;
+        [result appendString:[NSString stringWithCharacters:&uCode length:1]];
+      } else {
+        int size = 5;
+
+        if (table == DIGIT) {
+        size = 4;
+        }
+
+        if (endIndex - startIndex < size) {
+          end = YES;
+          break;
+        }
+
+        code = [self readCode:correctedBits startIndex:startIndex length:size];
+        startIndex += size;
+
+          NSString * str = [self character:table code:code];
+        if ([str hasPrefix:@"CTRL_"]) {
+          // Table changes
+          table = [self table:[str characterAtIndex:5]];
+
+          if ([str characterAtIndex:6] == 'S') {
+            shift = YES;
+            if ([str characterAtIndex:5] == 'B') {
+              binaryShift = YES;
+            }
+          }
+        } else {
+          [result appendString:str];
+        }
+      }
     }
 
     if (switchShift) {
@@ -224,7 +259,6 @@ static NSString* DIGIT_TABLE[] = {
 
 
 /**
- * 
  * Gets the character (or string) corresponding to the passed code in the given table
  */
 - (NSString *)character:(int)table code:(int)code {
@@ -246,8 +280,7 @@ static NSString* DIGIT_TABLE[] = {
 
 
 /**
- * 
- * performs RS error correction on an array of bits
+ * Performs RS error correction on an array of bits
  */
 - (NSArray *)correctBits:(NSArray *)rawbits error:(NSError**)error {
   ZXGenericGF * gf;
@@ -346,7 +379,6 @@ static NSString* DIGIT_TABLE[] = {
 
 
 /**
- * 
  * Gets the array of bits from an Aztec Code matrix
  */
 - (NSArray *)extractBits:(ZXBitMatrix *)matrix {
