@@ -362,6 +362,7 @@
 				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				HEADER_SEARCH_PATHS = "../../ZXingObjC/**";
 				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -374,6 +375,7 @@
 				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				HEADER_SEARCH_PATHS = "../../ZXingObjC/**";
 				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
