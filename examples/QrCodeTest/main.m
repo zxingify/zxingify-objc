@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-//
-//  main.m
-//  QrCodeTest
-//
-//  Created by Costa Walcott on 1/26/12.
-//  Copyright (c) 2012 Draconis Software. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 #import "AppDelegate.h"
