@@ -15,6 +15,7 @@
  */
 
 #import "ZXCharacterSetECI.h"
+#import "ZXErrors.h"
 
 static NSMutableDictionary * VALUE_TO_ECI = nil;
 static NSMutableDictionary * ENCODING_TO_ECI = nil;
@@ -85,9 +86,7 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
     [self initialize];
   }
   if (value < 0 || value >= 900) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Bad ECI value: %d", value]
-                                 userInfo:nil];
+    return nil;
   }
   return [VALUE_TO_ECI objectForKey:[NSNumber numberWithInt:value]];
 }

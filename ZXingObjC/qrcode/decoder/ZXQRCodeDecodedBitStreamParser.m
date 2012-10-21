@@ -231,6 +231,9 @@ int const GB2312_SUBSET = 1;
   int start = result.length;
 
   while (count > 1) {
+    if ([bits available] < 11) {
+      return NO;
+    }
     int nextTwoCharsBits = [bits readBits:11];
     unichar next1 = [self toAlphaNumericChar:nextTwoCharsBits / 45];
     unichar next2 = [self toAlphaNumericChar:nextTwoCharsBits % 45];
@@ -329,9 +332,7 @@ int const GB2312_SUBSET = 1;
     int secondThirdBytes = [bits readBits:16];
     return ((firstByte & 0x1F) << 16) | secondThirdBytes;
   }
-  @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                 reason:[NSString stringWithFormat:@"Bad ECI bits starting with byte: %d", firstByte]
-                               userInfo:nil];
+  return -1;
 }
 
 @end
