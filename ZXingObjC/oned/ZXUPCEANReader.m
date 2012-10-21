@@ -199,6 +199,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 
   ZXResult * extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
   if (extensionResult) {
+    [decodeResult putMetadata:kResultMetadataTypeUPCEANExtension value:extensionResult.text];
     [decodeResult putAllMetadata:[extensionResult resultMetadata]];
     [decodeResult addResultPoints:[extensionResult resultPoints]];
   }

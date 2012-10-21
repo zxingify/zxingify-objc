@@ -76,7 +76,7 @@
     return nil;
   }
   for (ZXUPCEANReader * reader in self.readers) {
-    ZXResult * result = [reader decodeRow:rowNumber row:row  startGuardRange:startGuardPattern hints:hints error:error];
+    ZXResult * result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints error:error];
     if (!result) {
       continue;
     }
@@ -96,11 +96,14 @@
     BOOL ean13MayBeUPCA = kBarcodeFormatEan13 == result.barcodeFormat && [result.text characterAtIndex:0] == '0';
     BOOL canReturnUPCA = hints == nil || [hints numberOfPossibleFormats] == 0 || [hints containsFormat:kBarcodeFormatUPCA];
     if (ean13MayBeUPCA && canReturnUPCA) {
-      return [ZXResult resultWithText:[result.text substringFromIndex:1]
-                             rawBytes:nil
-                               length:0
-                         resultPoints:result.resultPoints
-                               format:kBarcodeFormatUPCA];
+      // Transfer the metdata across
+      ZXResult *resultUPCA = [ZXResult resultWithText:[result.text substringFromIndex:1]
+                                             rawBytes:result.rawBytes
+                                               length:result.length
+                                         resultPoints:result.resultPoints
+                                               format:kBarcodeFormatUPCA];
+      [resultUPCA putAllMetadata:result.resultMetadata];
+      return resultUPCA;
     }
     return result;
   }

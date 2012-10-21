@@ -66,5 +66,10 @@ typedef enum {
    * For some products, the possible country of manufacture as NSString denoting the
    * ISO country code. Some map to multiple possible countries, like "US/CA".
    */
-  kResultMetadataTypePossibleCountry
+  kResultMetadataTypePossibleCountry,
+
+  /**
+   * For some products, the extension text
+   */
+  kResultMetadataTypeUPCEANExtension
 } ZXResultMetadataType;
