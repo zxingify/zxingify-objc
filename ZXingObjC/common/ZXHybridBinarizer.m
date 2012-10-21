@@ -22,6 +22,7 @@ const int BLOCK_SIZE_POWER = 3;
 const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER;
 const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;
 const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
+const int MIN_DYNAMIC_RANGE = 24;
 
 @interface ZXHybridBinarizer ()
 
@@ -174,6 +175,7 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
         for (int xx = 0; xx < BLOCK_SIZE; xx++) {
           int pixel = _luminances[offset + xx] & 0xFF;
           sum += pixel;
+          // still looking for good contrast
           if (pixel < min) {
             min = pixel;
           }
@@ -181,11 +183,20 @@ const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
             max = pixel;
           }
         }
+        // short-circuit min/max tests once dynamic range is met
+        if (max - min > MIN_DYNAMIC_RANGE) {
+          // finish the rest of the rows quickly
+          for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
+            for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+              sum += _luminances[offset + xx] & 0xFF;
+            }
+          }
+        }
       }
 
       // The default estimate is the average of the values in the block.
-      int average = sum >> 6;
-      if (max - min <= 24) {
+      int average = sum >> (BLOCK_SIZE_POWER * 2);
+      if (max - min <= MIN_DYNAMIC_RANGE) {
         // If variation within the block is low, assume this is a block with only light or only
         // dark pixels. In that case we do not want to use the average, as it would divide this
         // low contrast area into black and white pixels, essentially creating data out of noise.
