@@ -218,7 +218,6 @@
   [self doTestResultWithContents:@"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
                     goldenResult:@"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
                             type:kParsedResultTypeText];
-  [self doTestResultWithContents:@"BEGIN:VEVENT" goldenResult:@"BEGIN:VEVENT" type:kParsedResultTypeText];
 }
 
 - (void)testSMS {
