@@ -231,12 +231,8 @@ int const INITIALIZATION_THRESHOLD = 0;
     return 0;
   }
 
-  if (a < 0 || b < 0 || a >= size || b >= size) {
-    a++;
-  }
-
   int logSum = [[self.logTable objectAtIndex:a] intValue] + [[self.logTable objectAtIndex:b] intValue];
-  return [[self.expTable objectAtIndex:(logSum % self.size) + logSum / self.size] intValue];
+  return [[self.expTable objectAtIndex:logSum % (size - 1)] intValue];
 }
 
 @end
