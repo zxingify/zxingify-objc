@@ -1028,6 +1028,12 @@
 		258994F415673BCD00B403C3 /* ZXURIParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F215673BCD00B403C3 /* ZXURIParsedResultTestCase.m */; };
 		258994F815673F1600B403C3 /* ZXWifiParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F715673F1600B403C3 /* ZXWifiParsedResultTestCase.m */; };
 		258994F915673F1600B403C3 /* ZXWifiParsedResultTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258994F715673F1600B403C3 /* ZXWifiParsedResultTestCase.m */; };
+		258C630B1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.h in Headers */ = {isa = PBXBuildFile; fileRef = 258C63091634887E00E5CB01 /* ZXPDF417ECErrorCorrection.h */; };
+		258C630C1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C630A1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.m */; };
+		258C630F16348A4E00E5CB01 /* ZXModulusGF.h in Headers */ = {isa = PBXBuildFile; fileRef = 258C630D16348A4E00E5CB01 /* ZXModulusGF.h */; };
+		258C631016348A4E00E5CB01 /* ZXModulusGF.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C630E16348A4E00E5CB01 /* ZXModulusGF.m */; };
+		258C6313163491A500E5CB01 /* ZXModulusPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 258C6311163491A500E5CB01 /* ZXModulusPoly.h */; };
+		258C6314163491A500E5CB01 /* ZXModulusPoly.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C6312163491A500E5CB01 /* ZXModulusPoly.m */; };
 		258FE01915605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01A15605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01E15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */; };
@@ -1641,6 +1647,12 @@
 		258994F215673BCD00B403C3 /* ZXURIParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXURIParsedResultTestCase.m; path = client/result/ZXURIParsedResultTestCase.m; sourceTree = "<group>"; };
 		258994F615673F1600B403C3 /* ZXWifiParsedResultTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXWifiParsedResultTestCase.h; path = client/result/ZXWifiParsedResultTestCase.h; sourceTree = "<group>"; };
 		258994F715673F1600B403C3 /* ZXWifiParsedResultTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXWifiParsedResultTestCase.m; path = client/result/ZXWifiParsedResultTestCase.m; sourceTree = "<group>"; };
+		258C63091634887E00E5CB01 /* ZXPDF417ECErrorCorrection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXPDF417ECErrorCorrection.h; path = ec/ZXPDF417ECErrorCorrection.h; sourceTree = "<group>"; };
+		258C630A1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXPDF417ECErrorCorrection.m; path = ec/ZXPDF417ECErrorCorrection.m; sourceTree = "<group>"; };
+		258C630D16348A4E00E5CB01 /* ZXModulusGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXModulusGF.h; path = ec/ZXModulusGF.h; sourceTree = "<group>"; };
+		258C630E16348A4E00E5CB01 /* ZXModulusGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXModulusGF.m; path = ec/ZXModulusGF.m; sourceTree = "<group>"; };
+		258C6311163491A500E5CB01 /* ZXModulusPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXModulusPoly.h; path = ec/ZXModulusPoly.h; sourceTree = "<group>"; };
+		258C6312163491A500E5CB01 /* ZXModulusPoly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXModulusPoly.m; path = ec/ZXModulusPoly.m; sourceTree = "<group>"; };
 		258FE01715605EDF004B9C9A /* Code128BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox3TestCase.h; path = oned/Code128BlackBox3TestCase.h; sourceTree = "<group>"; };
 		258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox3TestCase.m; path = oned/Code128BlackBox3TestCase.m; sourceTree = "<group>"; };
 		258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8BlackBox1TestCase.h; path = oned/EAN8BlackBox1TestCase.h; sourceTree = "<group>"; };
@@ -2232,6 +2244,7 @@
 		029BCEA715129BD0009E6549 /* decoder */ = {
 			isa = PBXGroup;
 			children = (
+				258C63071634884D00E5CB01 /* ec */,
 				2508302A1512B1D7006D79E6 /* ZXPDF417BitMatrixParser.h */,
 				2508302B1512B1D7006D79E6 /* ZXPDF417BitMatrixParser.m */,
 				2508302C1512B1D7006D79E6 /* ZXPDF417DecodedBitStreamParser.h */,
@@ -2662,6 +2675,19 @@
 			name = pdf417;
 			sourceTree = "<group>";
 		};
+		258C63071634884D00E5CB01 /* ec */ = {
+			isa = PBXGroup;
+			children = (
+				258C63091634887E00E5CB01 /* ZXPDF417ECErrorCorrection.h */,
+				258C630A1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.m */,
+				258C630D16348A4E00E5CB01 /* ZXModulusGF.h */,
+				258C630E16348A4E00E5CB01 /* ZXModulusGF.m */,
+				258C6311163491A500E5CB01 /* ZXModulusPoly.h */,
+				258C6312163491A500E5CB01 /* ZXModulusPoly.m */,
+			);
+			name = ec;
+			sourceTree = "<group>";
+		};
 		258FE03C15609E8A004B9C9A /* rss */ = {
 			isa = PBXGroup;
 			children = (
@@ -2970,6 +2996,9 @@
 				25E484CE15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */,
 				25E484D415771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
 				255FA8981578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
+				258C630B1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.h in Headers */,
+				258C630F16348A4E00E5CB01 /* ZXModulusGF.h in Headers */,
+				258C6313163491A500E5CB01 /* ZXModulusPoly.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3754,6 +3783,9 @@
 				25E484D015771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */,
 				25E484D615771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
 				255FA89A1578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
+				258C630C1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.m in Sources */,
+				258C631016348A4E00E5CB01 /* ZXModulusGF.m in Sources */,
+				258C6314163491A500E5CB01 /* ZXModulusPoly.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,18 +19,37 @@
 #import "ZXPDF417BitMatrixParser.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
 #import "ZXPDF417Decoder.h"
+#import "ZXPDF417ECErrorCorrection.h"
 
 int const ZX_PDF_MAX_ERRORS = 3;
 int const MAX_EC_CODEWORDS = 512;
 
 @interface ZXPDF417Decoder ()
 
-- (int)correctErrors:(NSArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords;
+@property (nonatomic, retain) ZXPDF417ECErrorCorrection *errorCorrection;
+
+- (BOOL)correctErrors:(NSArray *)codewords numErasures:(int)numErasures numECCodewords:(int)numECCodewords;
 - (BOOL)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords;
 
 @end
 
 @implementation ZXPDF417Decoder
+
+@synthesize errorCorrection;
+
+- (id)init {
+  if (self = [super init]) {
+    self.errorCorrection = [[ZXPDF417ECErrorCorrection alloc] init];
+  }
+
+  return self;
+}
+
+- (void)dealloc {
+  [errorCorrection release];
+
+  [super dealloc];
+}
 
 /**
  * Convenience method that can decode a PDF417 Code represented as a 2D array of booleans.
@@ -66,8 +85,12 @@ int const MAX_EC_CODEWORDS = 512;
   int numECCodewords = 1 << (ecLevel + 1);
   NSArray * erasures = parser.erasures;
 
-  if ([self correctErrors:codewords erasures:erasures numECCodewords:numECCodewords] == -1 ||
-      ![self verifyCodewordCount:codewords numECCodewords:numECCodewords]) {
+  if (![self correctErrors:codewords numErasures:erasures.count numECCodewords:numECCodewords]) {
+    if (error) *error = ChecksumErrorInstance();
+    return nil;
+  }
+
+  if (![self verifyCodewordCount:codewords numECCodewords:numECCodewords]) {
     if (error) *error = FormatErrorInstance();
     return nil;
   }
@@ -101,22 +124,16 @@ int const MAX_EC_CODEWORDS = 512;
 
 /**
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
- * correct the errors in-place using Reed-Solomon error correction.
+ * orrect the errors in-place.
  */
-- (int)correctErrors:(NSArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords {
-  if (erasures.count > numECCodewords / 2 + ZX_PDF_MAX_ERRORS || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
-    return -1;
+- (BOOL)correctErrors:(NSArray *)codewords numErasures:(int)numErasures numECCodewords:(int)numECCodewords {
+  if (numErasures > numECCodewords / 2 + ZX_PDF_MAX_ERRORS ||
+      numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
+    // Too many errors or EC Codewords is corrupted
+    return NO;
   }
 
-  int result = 0;
-  int numErasures = erasures.count;
-  if (result > 0) {
-    numErasures -= result;
-  }
-  if (numErasures > ZX_PDF_MAX_ERRORS) {
-    return -1;
-  }
-  return result;
+  return [self.errorCorrection decode:codewords numECCodewords:numECCodewords];
 }
 
 @end
