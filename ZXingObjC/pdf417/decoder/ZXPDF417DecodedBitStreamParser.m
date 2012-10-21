@@ -192,6 +192,10 @@ static NSArray* EXP900 = nil;
  * switches are defined in 5.4.2.3.
  */
 + (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
+  // Beginning from an initial state of the Alpha sub-mode
+  // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
+  // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
+  // Compaction mode shall always switch to the Text Compaction Alpha sub-mode.
   int subMode = ALPHA;
   int priorToShiftMode = ALPHA;
   int i = 0;
@@ -199,97 +203,139 @@ static NSArray* EXP900 = nil;
     int subModeCh = textCompactionData[i];
     unichar ch = 0;
     switch (subMode) {
-    case ALPHA:
-      if (subModeCh < 26) {
-        ch = (unichar)('A' + subModeCh);
-      } else {
-        if (subModeCh == 26) {
-          ch = ' ';
-        } else if (subModeCh == LL) {
-          subMode = LOWER;
-        } else if (subModeCh == ML) {
-          subMode = MIXED;
-        } else if (subModeCh == PS) {
-          priorToShiftMode = subMode;
-          subMode = PUNCT_SHIFT;
-        } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-          [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-        }
-      }
-      break;
-    case LOWER:
-      if (subModeCh < 26) {
-        ch = (unichar)('a' + subModeCh);
-      } else {
-        if (subModeCh == 26) {
-          ch = ' ';
-        } else if (subModeCh == AS) {
-          priorToShiftMode = subMode;
-          subMode = ALPHA_SHIFT;
-        } else if (subModeCh == ML) {
-          subMode = MIXED;
-        } else if (subModeCh == PS) {
-          priorToShiftMode = subMode;
-          subMode = PUNCT_SHIFT;
-        } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-          [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-        }
-      }
-      break;
-    case MIXED:
-      if (subModeCh < PL) {
-        ch = MIXED_CHARS[subModeCh];
-      } else {
-        if (subModeCh == PL) {
-          subMode = PUNCT;
-        } else if (subModeCh == 26) {
-          ch = ' ';
-        } else if (subModeCh == LL) {
-          subMode = LOWER;
-        } else if (subModeCh == AL) {
-          subMode = ALPHA;
-        } else if (subModeCh == PS) {
-          priorToShiftMode = subMode;
-          subMode = PUNCT_SHIFT;
-        } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-          [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-        }
-      }
-      break;
-    case PUNCT:
-      if (subModeCh < PAL) {
-        ch = PUNCT_CHARS[subModeCh];
-      } else {
-        if (subModeCh == PAL) {
-          subMode = ALPHA;
-        } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-          [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-        }
-      }
-      break;
-    case ALPHA_SHIFT:
-      subMode = priorToShiftMode;
-      if (subModeCh < 26) {
-        ch = (unichar)('A' + subModeCh);
-      } else {
-        if (subModeCh == 26) {
-          ch = ' ';
+      case ALPHA:
+        // Alpha (uppercase alphabetic)
+        if (subModeCh < 26) {
+        // Upper case Alpha Character
+          ch = (unichar)('A' + subModeCh);
         } else {
+          if (subModeCh == 26) {
+            ch = ' ';
+          } else if (subModeCh == LL) {
+            subMode = LOWER;
+          } else if (subModeCh == ML) {
+            subMode = MIXED;
+          } else if (subModeCh == PS) {
+            // Shift to punctuation
+            priorToShiftMode = subMode;
+            subMode = PUNCT_SHIFT;
+          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            // the pdf417 specs say we have to return to the last latched
+            // sub-mode. But I checked different encoder implementations and
+            // all of them return to alpha sub-mode after Shift-to-Byte
+            subMode = ALPHA;
+          }
         }
-      }
-      break;
-    case PUNCT_SHIFT:
-      subMode = priorToShiftMode;
-      if (subModeCh < PAL) {
-        ch = PUNCT_CHARS[subModeCh];
-      } else {
-        if (subModeCh == PAL) {
-          subMode = ALPHA;
+        break;
+
+      case LOWER:
+        // Lower (lowercase alphabetic)
+        if (subModeCh < 26) {
+          ch = (unichar)('a' + subModeCh);
+        } else {
+          if (subModeCh == 26) {
+            ch = ' ';
+          } else if (subModeCh == AS) {
+            // Shift to alpha
+            priorToShiftMode = subMode;
+            subMode = ALPHA_SHIFT;
+          } else if (subModeCh == ML) {
+            subMode = MIXED;
+          } else if (subModeCh == PS) {
+            // Shift to punctuation
+            priorToShiftMode = subMode;
+            subMode = PUNCT_SHIFT;
+          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            // the pdf417 specs say we have to return to the last latched
+            // sub-mode. But I checked different encoder implementations and
+            // all of them return to alpha sub-mode after Shift-to-Byte
+            subMode = ALPHA;
+          }
         }
-      }
-      break;
+        break;
+
+      case MIXED:
+        // Mixed (numeric and some punctuation)
+        if (subModeCh < PL) {
+          ch = MIXED_CHARS[subModeCh];
+        } else {
+          if (subModeCh == PL) {
+            subMode = PUNCT;
+          } else if (subModeCh == 26) {
+            ch = ' ';
+          } else if (subModeCh == LL) {
+            subMode = LOWER;
+          } else if (subModeCh == AL) {
+            subMode = ALPHA;
+          } else if (subModeCh == PS) {
+            // Shift to punctuation
+            priorToShiftMode = subMode;
+            subMode = PUNCT_SHIFT;
+          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            // the pdf417 specs say we have to return to the last latched
+            // sub-mode. But I checked different encoder implementations and
+            // all of them return to alpha sub-mode after Shift-to-Byte
+            subMode = ALPHA;
+          }
+        }
+        break;
+
+      case PUNCT:
+        // Punctuation
+        if (subModeCh < PAL) {
+          ch = PUNCT_CHARS[subModeCh];
+        } else {
+          if (subModeCh == PAL) {
+            subMode = ALPHA;
+          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            // the pdf417 specs say we have to return to the last latched
+            // sub-mode. But I checked different encoder implementations and
+            // all of them return to alpha sub-mode after Shift-to-Byte
+            subMode = ALPHA;
+          }
+        }
+        break;
+
+      case ALPHA_SHIFT:
+        // Restore sub-mode
+        subMode = priorToShiftMode;
+        if (subModeCh < 26) {
+          ch = (unichar)('A' + subModeCh);
+        } else {
+          if (subModeCh == 26) {
+            ch = ' ';
+          } else {
+            // is this even possible?
+          }
+        }
+        break;
+
+      case PUNCT_SHIFT:
+        // Restore sub-mode
+        subMode = priorToShiftMode;
+        if (subModeCh < PAL) {
+          ch = PUNCT_CHARS[subModeCh];
+        } else {
+          if (subModeCh == PAL) {
+            subMode = ALPHA;
+          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            // PS before Shift-to-Byte is used as a padding character,
+            // see 5.4.2.4 of the specification
+            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            // the pdf417 specs say we have to return to the last latched
+            // sub-mode. But I checked different encoder implementations and
+            // all of them return to alpha sub-mode after Shift-to-Byte
+            subMode = ALPHA;
+          }
+        }
+        break;
     }
     if (ch != 0) {
+      // Append decoded character to result
       [result appendFormat:@"%C", ch];
     }
     i++;
@@ -384,6 +430,7 @@ static NSArray* EXP900 = nil;
           value >>= 8;
         }
         [result appendString:decodedData];
+        count = 0;
       }
     }
   }
