@@ -279,7 +279,7 @@ static NSString* EQUALS = @"=";
         }
         NSString * element = [self unescapeBackslash:[rawText substringWithRange:NSMakeRange(start, i - start)]];
         if (trim) {
-          element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+          element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
         [matches addObject:element];
         i++;

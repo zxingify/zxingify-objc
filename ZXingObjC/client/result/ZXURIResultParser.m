@@ -45,7 +45,7 @@ static NSRegularExpression* URL_WITHOUT_PROTOCOL_PATTERN = nil;
   if ([rawText hasPrefix:@"URL:"]) {
     rawText = [rawText substringFromIndex:4];
   }
-  rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+  rawText = [rawText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   return [[self class] isBasicallyValidURI:rawText] ? [ZXURIParsedResult uriParsedResultWithUri:rawText title:nil] : nil;
 }
 

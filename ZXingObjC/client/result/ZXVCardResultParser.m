@@ -25,7 +25,7 @@ static NSRegularExpression* NEWLINE_ESCAPE = nil;
 static NSRegularExpression* VCARD_ESCAPES = nil;
 static NSString* EQUALS = @"=";
 static NSString* SEMICOLON = @";";
-static NSRegularExpression* SEMICOLONS = nil;
+static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 
 @interface ZXVCardResultParser ()
 
@@ -34,7 +34,7 @@ static NSRegularExpression* SEMICOLONS = nil;
 - (BOOL)isLikeVCardDate:(NSString *)value;
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
 - (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
-+ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
++ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider;
 - (NSString*)toPrimaryValue:(NSArray*)list;
 - (NSArray*)toPrimaryValues:(NSArray*)lists;
 - (NSArray*)toTypes:(NSArray*)lists;
@@ -49,7 +49,7 @@ static NSRegularExpression* SEMICOLONS = nil;
   CR_LF_SPACE_TAB = [[NSRegularExpression alloc] initWithPattern:@"\r\n[ \t]" options:0 error:nil];
   NEWLINE_ESCAPE = [[NSRegularExpression alloc] initWithPattern:@"\\\\[nN]" options:0 error:nil];
   VCARD_ESCAPES = [[NSRegularExpression alloc] initWithPattern:@"\\\\([,;\\\\])" options:0 error:nil];
-  SEMICOLONS = [[NSRegularExpression alloc] initWithPattern:@";+" options:0 error:nil];
+  UNESCAPED_SEMICOLONS = [[NSRegularExpression alloc] initWithPattern:@"(?<!\\\\);+" options:0 error:nil];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -60,33 +60,24 @@ static NSRegularExpression* SEMICOLONS = nil;
   if ([BEGIN_VCARD numberOfMatchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)] == 0) {
     return nil;
   }
-  NSMutableArray * names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES];
+  NSMutableArray * names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES parseFieldDivider:NO];
   if (names == nil) {
     // If no display names found, look for regular name fields and format them
-    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES];
+    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:NO];
     [self formatNames:names];
   }
-  NSArray * phoneNumbers = [[self class] matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES];
-  NSArray * emails = [[self class] matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES];
-  NSArray * note = [[self class] matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO];
-  NSMutableArray * addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES];
-  if (addresses != nil) {
-    for (NSMutableArray* list in addresses) {
-      NSString *adr = [list objectAtIndex:0];
-      // Semicolon separators -- just make them a newline
-      adr = [[SEMICOLONS stringByReplacingMatchesInString:adr options:0 range:NSMakeRange(0, adr.length) withTemplate:@"\n"]
-             stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-      [list replaceObjectAtIndex:0 withObject:adr];
-    }
-  }
-  NSArray * org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
-  NSArray * birthday = [[self class] matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES];
+  NSArray * phoneNumbers = [[self class] matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray * emails = [[self class] matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray * note = [[self class] matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO parseFieldDivider:NO];
+  NSMutableArray * addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES parseFieldDivider:YES];
+  NSArray * org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray * birthday = [[self class] matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES parseFieldDivider:NO];
   if (birthday != nil && ![self isLikeVCardDate:[birthday objectAtIndex:0]]) {
     birthday = nil;
   }
-  NSArray * title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES];
-  NSArray * url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES];
-  NSArray * instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES];
+  NSArray * title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray * url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray * instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES parseFieldDivider:NO];
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self toPrimaryValues:names]
                                                        pronunciation:nil
                                                         phoneNumbers:[self toPrimaryValues:phoneNumbers]
@@ -103,7 +94,7 @@ static NSRegularExpression* SEMICOLONS = nil;
                                                                  url:[self toPrimaryValue:url]];
 }
 
-+ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
++ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider {
   NSMutableArray * matches = nil;
   int i = 0;
   int max = [rawText length];
@@ -179,11 +170,19 @@ static NSRegularExpression* SEMICOLONS = nil;
       }
       NSString * element = [rawText substringWithRange:NSMakeRange(matchStart, i - matchStart)];
       if (trim) {
-        element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
       }
       if (quotedPrintable) {
         element = [self decodeQuotedPrintable:element charset:quotedPrintableCharset];
+        if (parseFieldDivider) {
+          element = [[UNESCAPED_SEMICOLONS stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"\n"]
+                     stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
       } else {
+        if (parseFieldDivider) {
+          element = [[UNESCAPED_SEMICOLONS stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"\n"]
+                     stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
         element = [CR_LF_SPACE_TAB stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@""];
         element = [NEWLINE_ESCAPE stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"\n"];
         element = [VCARD_ESCAPES stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"$1"];
@@ -257,8 +256,8 @@ static NSRegularExpression* SEMICOLONS = nil;
   }
 }
 
-+ (NSArray *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
-  NSArray * values = [self matchVCardPrefixedField:prefix rawText:rawText trim:trim];
++ (NSArray *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider {
+  NSArray * values = [self matchVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:parseFieldDivider];
   return values == nil ? nil : [values objectAtIndex:0];
 }
 
@@ -329,7 +328,7 @@ static NSRegularExpression* SEMICOLONS = nil;
       [self maybeAppendComponent:components i:2 newName:newName];
       [self maybeAppendComponent:components i:0 newName:newName];
       [self maybeAppendComponent:components i:4 newName:newName];
-      [list replaceObjectAtIndex:0 withObject:[newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+      [list replaceObjectAtIndex:0 withObject:[newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
     }
   }
 }

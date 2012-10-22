@@ -157,7 +157,7 @@
                      title:nil
                      names:nil
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@";;88 Lynbrook\r\nCO 69999;;;"]
+                 addresses:[NSArray arrayWithObject:@"88 Lynbrook\r\nCO 69999"]
                     emails:nil
               phoneNumbers:nil
                        org:nil
