@@ -132,7 +132,9 @@ static NSArray* EXP900 = nil;
  */
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   int count = [[codewords objectAtIndex:0] intValue] << 1;
+  // 2 character per codeword
   int textCompactionData[count];
+  // Used to hold the byte compaction value if there is a mode shift
   int byteCompactionData[count];
 
   for (int i = 0; i < count; i++) {
@@ -151,8 +153,8 @@ static NSArray* EXP900 = nil;
     } else {
       switch (code) {
       case TEXT_COMPACTION_MODE_LATCH:
-        codeIndex--;
-        end = YES;
+        // reinitialize text compaction mode to alpha sub mode
+        textCompactionData[index++] = TEXT_COMPACTION_MODE_LATCH;
         break;
       case BYTE_COMPACTION_MODE_LATCH:
         codeIndex--;
@@ -221,9 +223,7 @@ static NSArray* EXP900 = nil;
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -252,6 +252,8 @@ static NSArray* EXP900 = nil;
             // sub-mode. But I checked different encoder implementations and
             // all of them return to alpha sub-mode after Shift-to-Byte
             subMode = ALPHA;
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ALPHA;
           }
         }
         break;
@@ -275,9 +277,7 @@ static NSArray* EXP900 = nil;
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -292,9 +292,7 @@ static NSArray* EXP900 = nil;
             subMode = ALPHA;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -308,6 +306,8 @@ static NSArray* EXP900 = nil;
         } else {
           if (subModeCh == 26) {
             ch = ' ';
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ALPHA;
           } else {
             // is this even possible?
           }
@@ -329,6 +329,8 @@ static NSArray* EXP900 = nil;
             // the pdf417 specs say we have to return to the last latched
             // sub-mode. But I checked different encoder implementations and
             // all of them return to alpha sub-mode after Shift-to-Byte
+            subMode = ALPHA;
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }

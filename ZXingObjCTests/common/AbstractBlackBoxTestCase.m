@@ -185,8 +185,16 @@
 
     NSString * testImageFileName = [[[testImage path] componentsSeparatedByString:@"/"] lastObject];
     NSString * fileBaseName = [testImageFileName substringToIndex:[testImageFileName rangeOfString:@"."].location];
-    NSURL * expectedTextFile = [NSURL fileURLWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase]];
-    NSString * expectedText = [NSString stringWithContentsOfURL:expectedTextFile encoding:NSUTF8StringEncoding error:nil];
+    NSString * expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase];
+
+    NSString * expectedText;
+    if (expectedTextFile) {
+      expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSUTF8StringEncoding error:nil];
+    } else {
+      NSString * expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:testBase];
+      STAssertNotNil(expectedTextFile, @"Expected text does not exist");
+      expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSISOLatin1StringEncoding error:nil];
+    }
 
     NSURL * expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:testBase]];
     NSMutableDictionary * expectedMetadata = [NSMutableDictionary dictionary];
