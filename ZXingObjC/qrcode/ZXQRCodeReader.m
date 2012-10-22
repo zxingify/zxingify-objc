@@ -149,7 +149,7 @@
     return nil;
   }
 
-  int nudge = round(moduleSize / 2.0f);
+  int nudge = (int) (moduleSize / 2.0f);
   top += nudge;
   left += nudge;
 
