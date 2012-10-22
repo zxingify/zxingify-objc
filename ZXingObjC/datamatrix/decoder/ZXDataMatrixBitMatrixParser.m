@@ -36,12 +36,12 @@
 @synthesize version;
 
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError**)error {
-  int dimension = bitMatrix.height;
-  if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-    if (error) *error = FormatErrorInstance();
-    return nil;
-  }
   if (self = [super init]) {
+    int dimension = bitMatrix.height;
+    if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
     self.version = [self readVersion:bitMatrix];
     if (!self.version) {
       [self release];
