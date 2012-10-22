@@ -32,7 +32,7 @@
   if (kBarcodeFormatRSSExpanded != format) {
     return nil;
   }
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
   if (rawText == nil) {
     return nil;
   }

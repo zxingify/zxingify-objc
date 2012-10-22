@@ -26,8 +26,7 @@
   if (!(format == kBarcodeFormatUPCA || format == kBarcodeFormatUPCE || format == kBarcodeFormatEan8 || format == kBarcodeFormatEan13)) {
     return nil;
   }
-  NSString * rawText = [result text];
-
+  NSString * rawText = [ZXResultParser massagedText:result];
   int length = [rawText length];
   for (int x = 0; x < length; x++) {
     unichar c = [rawText characterAtIndex:x];

@@ -56,7 +56,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
   // Although we should insist on the raw text ending with "END:VCARD", there's no reason
   // to throw out everything else we parsed just because this was omitted. In fact, Eclair
   // is doing just that, and we can't parse its contacts without this leniency.
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
   if ([BEGIN_VCARD numberOfMatchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)] == 0) {
     return nil;
   }

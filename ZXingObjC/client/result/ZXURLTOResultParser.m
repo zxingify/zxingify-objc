@@ -21,7 +21,7 @@
 @implementation ZXURLTOResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = result.text;
+  NSString * rawText = [ZXResultParser massagedText:result];
   if (![rawText hasPrefix:@"urlto:"] && ![rawText hasPrefix:@"URLTO:"]) {
     return nil;
   }

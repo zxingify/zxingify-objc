@@ -28,6 +28,7 @@
 
 @interface ZXResultParser : NSObject
 
++ (NSString *)massagedText:(ZXResult *)result;
 - (ZXParsedResult *)parse:(ZXResult *)result;
 + (ZXParsedResult *)parseResult:(ZXResult *)theResult;
 - (void)maybeAppend:(NSString *)value result:(NSMutableString *)result;

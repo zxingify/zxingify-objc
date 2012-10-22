@@ -63,6 +63,7 @@ static NSRegularExpression* DIGITS = nil;
 static NSRegularExpression* ALPHANUM = nil;
 static NSString* AMPERSAND = @"&";
 static NSString* EQUALS = @"=";
+static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 @implementation ZXResultParser
 
@@ -89,6 +90,14 @@ static NSString* EQUALS = @"=";
              [[[ZXExpandedProductResultParser alloc] init] autorelease], nil];
   DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
   ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
+}
+
++ (NSString *)massagedText:(ZXResult *)result {
+  NSString *text = result.text;
+  if (text.length > 0 && [text characterAtIndex:0] == BYTE_ORDER_MARK) {
+    text = [text substringFromIndex:1];
+  }
+  return text;
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

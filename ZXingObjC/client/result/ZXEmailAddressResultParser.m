@@ -22,7 +22,7 @@
 @implementation ZXEmailAddressResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
   NSString * emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
     emailAddress = [rawText substringFromIndex:7];

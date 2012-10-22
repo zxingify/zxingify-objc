@@ -21,8 +21,7 @@
 @implementation ZXWifiResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [result text];
-
+  NSString * rawText = [ZXResultParser massagedText:result];
   if (![rawText hasPrefix:@"WIFI:"]) {
     return nil;
   }

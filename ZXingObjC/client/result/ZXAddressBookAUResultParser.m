@@ -27,7 +27,7 @@
 @implementation ZXAddressBookAUResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
 
   if ([rawText rangeOfString:@"MEMORY"].location == NSNotFound ||
       [rawText rangeOfString:@"\r\n"].location == NSNotFound) {

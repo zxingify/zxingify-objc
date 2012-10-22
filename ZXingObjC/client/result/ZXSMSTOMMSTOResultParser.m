@@ -21,7 +21,7 @@
 @implementation ZXSMSTOMMSTOResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
   if (!([rawText hasPrefix:@"smsto:"] || [rawText hasPrefix:@"SMSTO:"] || [rawText hasPrefix:@"mmsto:"] || [rawText hasPrefix:@"MMSTO:"])) {
     return nil;
   }

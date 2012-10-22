@@ -28,7 +28,7 @@ static NSRegularExpression* GEO_URL_PATTERN = nil;
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
   if (rawText == nil || (![rawText hasPrefix:@"geo:"] && ![rawText hasPrefix:@"GEO:"])) {
     return nil;
   }

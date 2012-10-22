@@ -40,7 +40,7 @@ static NSRegularExpression* URL_WITHOUT_PROTOCOL_PATTERN = nil;
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [result text];
+  NSString * rawText = [ZXResultParser massagedText:result];
   // We specifically handle the odd "URL" scheme here for simplicity
   if ([rawText hasPrefix:@"URL:"]) {
     rawText = [rawText substringFromIndex:4];
