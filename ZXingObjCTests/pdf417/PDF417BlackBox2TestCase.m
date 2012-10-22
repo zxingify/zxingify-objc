@@ -29,8 +29,8 @@
                     expectedFormat:kBarcodeFormatPDF417];
 
   if (self) {
-    [self addTest:11 tryHarderCount:11 maxMisreads:0 maxTryHarderMisreads:0 rotation:0.0f];
-    [self addTest:13 tryHarderCount:13 maxMisreads:0 maxTryHarderMisreads:0 rotation:180.0f];
+    [self addTest:12 tryHarderCount:12 maxMisreads:0 maxTryHarderMisreads:0 rotation:0.0f];
+    [self addTest:16 tryHarderCount:16 maxMisreads:0 maxTryHarderMisreads:0 rotation:180.0f];
   }
 
   return self;
