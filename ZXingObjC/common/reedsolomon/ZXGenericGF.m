@@ -17,8 +17,6 @@
 #import "ZXGenericGF.h"
 #import "ZXGenericGFPoly.h"
 
-int const INITIALIZATION_THRESHOLD = 0;
-
 @interface ZXGenericGF ()
 
 @property (nonatomic, retain) ZXGenericGFPoly * zero;
@@ -27,9 +25,6 @@ int const INITIALIZATION_THRESHOLD = 0;
 @property (nonatomic, retain) NSMutableArray * expTable;
 @property (nonatomic, retain) NSMutableArray * logTable;
 @property (nonatomic, assign) int primitive;
-@property (nonatomic, assign) BOOL initialized;
-
-- (void)initialize;
 
 @end
 
@@ -42,7 +37,6 @@ int const INITIALIZATION_THRESHOLD = 0;
 @synthesize expTable;
 @synthesize logTable;
 @synthesize primitive;
-@synthesize initialized;
 
 
 /**
@@ -50,12 +44,32 @@ int const INITIALIZATION_THRESHOLD = 0;
  */
 - (id)initWithPrimitive:(int)aPrimitive size:(int)aSize {
   if (self = [super init]) {
-    self.initialized = NO;
     self.primitive = aPrimitive;
     self.size = aSize;
-    if (self.size <= INITIALIZATION_THRESHOLD) {
-      [self initialize];
+    self.expTable = [NSMutableArray arrayWithCapacity:size];
+    self.logTable = [NSMutableArray arrayWithCapacity:size];
+    int x = 1;
+    for (int i = 0; i < size; i++) {
+      [self.expTable addObject:[NSNumber numberWithInt:x]];
+      x <<= 1;
+      if (x >= self.size) {
+        x ^= self.primitive;
+        x &= self.size - 1;
+      }
     }
+
+    for (int i = 0; i < self.size; i++) {
+      [self.logTable addObject:[NSNumber numberWithInt:0]];
+    }
+
+    for (int i = 0; i < self.size - 1; i++) {
+      [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
+    }
+
+    self.zero = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0] autorelease];
+
+    int oneInt = 1;
+    self.one = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1] autorelease];
   }
 
   return self;
@@ -68,34 +82,6 @@ int const INITIALIZATION_THRESHOLD = 0;
   [one release];
   
   [super dealloc];
-}
-
-- (void)initialize {
-  self.expTable = [NSMutableArray arrayWithCapacity:size];
-  self.logTable = [NSMutableArray arrayWithCapacity:size];
-  int x = 1;
-  for (int i = 0; i < size; i++) {
-    [self.expTable addObject:[NSNumber numberWithInt:x]];
-    x <<= 1;
-    if (x >= self.size) {
-      x ^= self.primitive;
-      x &= self.size - 1;
-    }
-  }
-
-  for (int i = 0; i < self.size; i++) {
-    [self.logTable addObject:[NSNumber numberWithInt:0]];
-  }
-
-  for (int i = 0; i < self.size - 1; i++) {
-    [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
-  }
-
-  self.zero = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0] autorelease];
-
-  int oneInt = 1;
-  self.one = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1] autorelease];
-  self.initialized = YES;
 }
 
 + (ZXGenericGF *)AztecData12 {
@@ -154,27 +140,7 @@ int const INITIALIZATION_THRESHOLD = 0;
   return [self AztecData6];
 }
 
-- (void)checkInit {
-  if (!self.initialized) {
-    [self initialize];
-  }
-}
-
-- (ZXGenericGFPoly *)zero {
-  [self checkInit];
-
-  return zero;
-}
-
-- (ZXGenericGFPoly *)one {
-  [self checkInit];
-
-  return one;
-}
-
 - (ZXGenericGFPoly *) buildMonomial:(int)degree coefficient:(int)coefficient {
-  [self checkInit];
-
   if (degree < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
@@ -191,7 +157,6 @@ int const INITIALIZATION_THRESHOLD = 0;
   return [[[ZXGenericGFPoly alloc] initWithField:self coefficients:coefficients coefficientsLen:coefficientsLen] autorelease];
 }
 
-
 /**
  * Implements both addition and subtraction -- they are the same in GF(size).
  */
@@ -199,34 +164,25 @@ int const INITIALIZATION_THRESHOLD = 0;
   return a ^ b;
 }
 
-
 - (int)exp:(int)a {
-  [self checkInit];
   return [[self.expTable objectAtIndex:a] intValue];
 }
 
 - (int)log:(int)a {
-  [self checkInit];
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
   return [[self.logTable objectAtIndex:a] intValue];
 }
 
-
 - (int)inverse:(int)a {
-  [self checkInit];
-
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
   return [[self.expTable objectAtIndex:self.size - [[self.logTable objectAtIndex:a] intValue] - 1] intValue];
 }
 
-
 - (int)multiply:(int)a b:(int)b {
-  [self checkInit];
-
   if (a == 0 || b == 0) {
     return 0;
   }
