@@ -46,74 +46,76 @@
   STAssertEquals([matrix getX:1 y:1], (char)-1, @"Expected (1, 1) to equal -1");
 }
 
-- (void)testEmbedBasicPatterns {
-  {
-    // Version 1.
-    NSString* expected =
-      @" 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n"
-       " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n"
-       " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n"
-       " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n"
-       " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n"
-       " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n"
-       " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-       " 0 0 0 0 0 0 0 0           0 0 0 0 0 0 0 0\n"
-       "             1                            \n"
-       "             0                            \n"
-       "             1                            \n"
-       "             0                            \n"
-       "             1                            \n"
-       " 0 0 0 0 0 0 0 0 1                        \n"
-       " 1 1 1 1 1 1 1 0                          \n"
-       " 1 0 0 0 0 0 1 0                          \n"
-       " 1 0 1 1 1 0 1 0                          \n"
-       " 1 0 1 1 1 0 1 0                          \n"
-       " 1 0 1 1 1 0 1 0                          \n"
-       " 1 0 0 0 0 0 1 0                          \n"
-       " 1 1 1 1 1 1 1 0                          \n";
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
-    [ZXMatrixUtil clearMatrix:matrix];
-    [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
-    STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
-  }
-  {
-    // Version 2.  Position adjustment pattern should apppear at right
-    // bottom corner.
-    NSString* expected =
-      @" 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n"
-       " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n"
-       " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n"
-       " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n"
-       " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n"
-       " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n"
-       " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
-       " 0 0 0 0 0 0 0 0                   0 0 0 0 0 0 0 0\n"
-       "             1                                    \n"
-       "             0                                    \n"
-       "             1                                    \n"
-       "             0                                    \n"
-       "             1                                    \n"
-       "             0                                    \n"
-       "             1                                    \n"
-       "             0                                    \n"
-       "             1                   1 1 1 1 1        \n"
-       " 0 0 0 0 0 0 0 0 1               1 0 0 0 1        \n"
-       " 1 1 1 1 1 1 1 0                 1 0 1 0 1        \n"
-       " 1 0 0 0 0 0 1 0                 1 0 0 0 1        \n"
-       " 1 0 1 1 1 0 1 0                 1 1 1 1 1        \n"
-       " 1 0 1 1 1 0 1 0                                  \n"
-       " 1 0 1 1 1 0 1 0                                  \n"
-       " 1 0 0 0 0 0 1 0                                  \n"
-       " 1 1 1 1 1 1 1 0                                  \n";
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:25 height:25] autorelease];
-    [ZXMatrixUtil clearMatrix:matrix];
-    [ZXMatrixUtil embedBasicPatterns:2 matrix:matrix error:nil];
-    STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
-  }
+- (void)testEmbedBasicPatterns1 {
+  // Version 1.
+  ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  [ZXMatrixUtil clearMatrix:matrix];
+  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
+  NSString* expected =
+    @" 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n"
+     " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n"
+     " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n"
+     " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n"
+     " 1 0 1 1 1 0 1 0           0 1 0 1 1 1 0 1\n"
+     " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n"
+     " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
+     " 0 0 0 0 0 0 0 0           0 0 0 0 0 0 0 0\n"
+     "             1                            \n"
+     "             0                            \n"
+     "             1                            \n"
+     "             0                            \n"
+     "             1                            \n"
+     " 0 0 0 0 0 0 0 0 1                        \n"
+     " 1 1 1 1 1 1 1 0                          \n"
+     " 1 0 0 0 0 0 1 0                          \n"
+     " 1 0 1 1 1 0 1 0                          \n"
+     " 1 0 1 1 1 0 1 0                          \n"
+     " 1 0 1 1 1 0 1 0                          \n"
+     " 1 0 0 0 0 0 1 0                          \n"
+     " 1 1 1 1 1 1 1 0                          \n";
+  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+}
+
+- (void)testEmbedBasicPatterns2 {
+  // Version 2.  Position adjustment pattern should apppear at right
+  // bottom corner.
+  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:25 height:25] autorelease];
+  [ZXMatrixUtil clearMatrix:matrix];
+  [ZXMatrixUtil embedBasicPatterns:2 matrix:matrix error:nil];
+  NSString* expected =
+    @" 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n"
+     " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n"
+     " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n"
+     " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n"
+     " 1 0 1 1 1 0 1 0                   0 1 0 1 1 1 0 1\n"
+     " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n"
+     " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
+     " 0 0 0 0 0 0 0 0                   0 0 0 0 0 0 0 0\n"
+     "             1                                    \n"
+     "             0                                    \n"
+     "             1                                    \n"
+     "             0                                    \n"
+     "             1                                    \n"
+     "             0                                    \n"
+     "             1                                    \n"
+     "             0                                    \n"
+     "             1                   1 1 1 1 1        \n"
+     " 0 0 0 0 0 0 0 0 1               1 0 0 0 1        \n"
+     " 1 1 1 1 1 1 1 0                 1 0 1 0 1        \n"
+     " 1 0 0 0 0 0 1 0                 1 0 0 0 1        \n"
+     " 1 0 1 1 1 0 1 0                 1 1 1 1 1        \n"
+     " 1 0 1 1 1 0 1 0                                  \n"
+     " 1 0 1 1 1 0 1 0                                  \n"
+     " 1 0 0 0 0 0 1 0                                  \n"
+     " 1 1 1 1 1 1 1 0                                  \n";
+  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedTypeInfo {
   // Type info bits = 100000011001110.
+  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  [ZXMatrixUtil clearMatrix:matrix];
+  [ZXMatrixUtil embedTypeInfo:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 matrix:matrix error:nil];
   NSString* expected =
     @"                 0                        \n"
      "                 1                        \n"
@@ -136,14 +138,16 @@
      "                 0                        \n"
      "                 0                        \n"
      "                 1                        \n";
-  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
-  [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedTypeInfo:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 matrix:matrix error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedVersionInfo {
   // Version info bits = 000111 110010 010100
+  // Actually, version 7 QR Code has 45x45 matrix but we use 21x21 here
+  // since 45x45 matrix is too big to depict.
+  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  [ZXMatrixUtil clearMatrix:matrix];
+  [ZXMatrixUtil maybeEmbedVersionInfo:7 matrix:matrix error:nil];
   NSString* expected =
     @"                     0 0 1                \n"
      "                     0 1 0                \n"
@@ -166,16 +170,16 @@
      "                                          \n"
      "                                          \n"
      "                                          \n";
-  // Actually, version 7 QR Code has 45x45 matrix but we use 21x21 here
-  // since 45x45 matrix is too big to depict.
-  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
-  [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil maybeEmbedVersionInfo:7 matrix:matrix error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedDataBits {
   // Cells other than basic patterns should be filled with zero.
+  ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
+  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  [ZXMatrixUtil clearMatrix:matrix];
+  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
+  [ZXMatrixUtil embedDataBits:bits maskPattern:-1 matrix:matrix error:nil];
   NSString* expected =
     @" 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n"
      " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n"
@@ -198,16 +202,26 @@
      " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
      " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
      " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-  ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
-  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
-  [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
-  [ZXMatrixUtil embedDataBits:bits maskPattern:-1 matrix:matrix error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testBuildMatrix {
   // From http://www.swetake.com/qr/qr7.html
+  const int bytesLen = 26;
+  unsigned char bytes[bytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236,
+    42, 159, 74, 221, 244, 169, 239, 150, 138,
+    70, 237, 85, 224, 96, 74, 219, 61};
+  ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
+  for (int i = 0; i < bytesLen; i++) {
+    [bits appendBits:bytes[i] numBits:8];
+  }
+  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  [ZXMatrixUtil buildMatrix:bits
+                    ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]
+                    version:1  // Version 1
+                maskPattern:3  // Mask pattern 3
+                     matrix:matrix
+                      error:nil];
   NSString* expected =
     @" 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n"
      " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1\n"
@@ -230,21 +244,6 @@
      " 1 0 1 1 1 0 1 0 1 1 1 1 0 0 0 0 1 1 1 0 0\n"
      " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0\n"
      " 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 0 1 0 0 1 0\n";
-  const int bytesLen = 26;
-  unsigned char bytes[bytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236,
-    42, 159, 74, 221, 244, 169, 239, 150, 138,
-    70, 237, 85, 224, 96, 74, 219, 61};
-  ZXBitArray* bits = [[[ZXBitArray alloc] init] autorelease];
-  for (int i = 0; i < bytesLen; i++) {
-    [bits appendBits:bytes[i] numBits:8];
-  }
-  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
-  [ZXMatrixUtil buildMatrix:bits 
-                    ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]
-                    version:1  // Version 1
-                maskPattern:3  // Mask pattern 3
-                     matrix:matrix
-                      error:nil];
   STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 

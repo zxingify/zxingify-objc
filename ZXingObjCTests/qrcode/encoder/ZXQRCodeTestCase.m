@@ -78,79 +78,78 @@
   }
 }
 
-- (void)testToString {
-  {
-    ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
-    NSString* expected =
-      @"<<\n"
-       " mode: (null)\n"
-       " ecLevel: (null)\n"
-       " version: -1\n"
-       " matrixWidth: -1\n"
-       " maskPattern: -1\n"
-       " numTotalBytes: -1\n"
-       " numDataBytes: -1\n"
-       " numECBytes: -1\n"
-       " numRSBlocks: -1\n"
-       " matrix: (null)\n"
-       ">>\n";
-    STAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
-  }
-  {
-    NSString* expected =
-      @"<<\n"
-       " mode: BYTE\n"
-       " ecLevel: H\n"
-       " version: 1\n"
-       " matrixWidth: 21\n"
-       " maskPattern: 3\n"
-       " numTotalBytes: 26\n"
-       " numDataBytes: 9\n"
-       " numECBytes: 17\n"
-       " numRSBlocks: 1\n"
-       " matrix:\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
-       " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
-       ">>\n";
-    ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
-    qrCode.mode = [ZXMode byteMode];
-    qrCode.ecLevel = [ZXErrorCorrectionLevel errorCorrectionLevelH];
-    qrCode.version = 1;
-    qrCode.matrixWidth = 21;
-    qrCode.maskPattern = 3;
-    qrCode.numTotalBytes = 26;
-    qrCode.numDataBytes = 9;
-    qrCode.numECBytes = 17;
-    qrCode.numRSBlocks = 1;
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
-    for (int y = 0; y < 21; ++y) {
-      for (int x = 0; x < 21; ++x) {
-        [matrix setX:x y:y intValue:(y + x) % 2];
-      }
+- (void)testToString1 {
+  ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
+  NSString* expected =
+    @"<<\n"
+     " mode: (null)\n"
+     " ecLevel: (null)\n"
+     " version: -1\n"
+     " matrixWidth: -1\n"
+     " maskPattern: -1\n"
+     " numTotalBytes: -1\n"
+     " numDataBytes: -1\n"
+     " numECBytes: -1\n"
+     " numRSBlocks: -1\n"
+     " matrix: (null)\n"
+     ">>\n";
+  STAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
+}
+
+- (void)testToString2 {
+  ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
+  qrCode.mode = [ZXMode byteMode];
+  qrCode.ecLevel = [ZXErrorCorrectionLevel errorCorrectionLevelH];
+  qrCode.version = 1;
+  qrCode.matrixWidth = 21;
+  qrCode.maskPattern = 3;
+  qrCode.numTotalBytes = 26;
+  qrCode.numDataBytes = 9;
+  qrCode.numECBytes = 17;
+  qrCode.numRSBlocks = 1;
+  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  for (int y = 0; y < 21; ++y) {
+    for (int x = 0; x < 21; ++x) {
+      [matrix setX:x y:y intValue:(y + x) % 2];
     }
-    qrCode.matrix = matrix;
-    STAssertTrue([qrCode isValid], @"QR code should be valid");
-    STAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
   }
+  qrCode.matrix = matrix;
+  STAssertTrue([qrCode isValid], @"QR code should be valid");
+  NSString* expected =
+    @"<<\n"
+     " mode: BYTE\n"
+     " ecLevel: H\n"
+     " version: 1\n"
+     " matrixWidth: 21\n"
+     " maskPattern: 3\n"
+     " numTotalBytes: 26\n"
+     " numDataBytes: 9\n"
+     " numECBytes: 17\n"
+     " numRSBlocks: 1\n"
+     " matrix:\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
+     " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
+     ">>\n";
+  STAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
 }
 
 - (void)testIsValidMaskPattern {
