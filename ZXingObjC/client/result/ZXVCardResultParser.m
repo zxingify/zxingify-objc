@@ -25,6 +25,7 @@ static NSRegularExpression* NEWLINE_ESCAPE = nil;
 static NSRegularExpression* VCARD_ESCAPES = nil;
 static NSString* EQUALS = @"=";
 static NSString* SEMICOLON = @";";
+static NSRegularExpression* SEMICOLONS = nil;
 
 @interface ZXVCardResultParser ()
 
@@ -48,6 +49,7 @@ static NSString* SEMICOLON = @";";
   CR_LF_SPACE_TAB = [[NSRegularExpression alloc] initWithPattern:@"\r\n[ \t]" options:0 error:nil];
   NEWLINE_ESCAPE = [[NSRegularExpression alloc] initWithPattern:@"\\\\[nN]" options:0 error:nil];
   VCARD_ESCAPES = [[NSRegularExpression alloc] initWithPattern:@"\\\\([,;\\\\])" options:0 error:nil];
+  SEMICOLONS = [[NSRegularExpression alloc] initWithPattern:@";+" options:0 error:nil];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -70,7 +72,11 @@ static NSString* SEMICOLON = @";";
   NSMutableArray * addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES];
   if (addresses != nil) {
     for (NSMutableArray* list in addresses) {
-      [list replaceObjectAtIndex:0 withObject:[list objectAtIndex:0]];
+      NSString *adr = [list objectAtIndex:0];
+      // Semicolon separators -- just make them a newline
+      adr = [[SEMICOLONS stringByReplacingMatchesInString:adr options:0 range:NSMakeRange(0, adr.length) withTemplate:@"\n"]
+             stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+      [list replaceObjectAtIndex:0 withObject:adr];
     }
   }
   NSArray * org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES];
