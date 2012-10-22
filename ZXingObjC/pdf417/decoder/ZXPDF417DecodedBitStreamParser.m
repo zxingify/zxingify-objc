@@ -252,10 +252,6 @@ static NSArray* EXP900 = nil;
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
-            subMode = ALPHA;
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -330,10 +326,6 @@ static NSArray* EXP900 = nil;
             // PS before Shift-to-Byte is used as a padding character,
             // see 5.4.2.4 of the specification
             [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
-            subMode = ALPHA;
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
