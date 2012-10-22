@@ -235,4 +235,8 @@ int const INITIALIZATION_THRESHOLD = 0;
   return [[self.expTable objectAtIndex:logSum % (size - 1)] intValue];
 }
 
+- (BOOL)isEqual:(ZXGenericGF*)object {
+  return self.primitive == object->primitive && self.size == object->size;
+}
+
 @end
