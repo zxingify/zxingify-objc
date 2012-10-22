@@ -298,7 +298,7 @@
 
   ZXResultPoint * c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
 
-  corr = [self distance:bottomLeft b:bottomRight] / (float)dimension;
+  corr = [self distance:bottomLeft b:topLeft] / (float)dimension;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
