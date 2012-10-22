@@ -121,6 +121,10 @@ static NSArray* EXP900 = nil;
       return nil;
     }
   }
+  if (!result || result.length == 0) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
   return [[[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
 }
 
