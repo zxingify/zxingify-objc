@@ -246,6 +246,9 @@ int const GB2312_SUBSET = 1;
   }
 
   if (count == 1) {
+    if ([bits available] < 6) {
+      return NO;
+    }
     unichar next1 = [self toAlphaNumericChar:[bits readBits:6]];
     if (next1 == -1) {
       return NO;
