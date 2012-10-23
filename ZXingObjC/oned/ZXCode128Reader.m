@@ -197,10 +197,10 @@ int const CODE_STOP = 106;
             bestMatch = startCode;
           }
         }
-        if (bestMatch >= 0) {
-          if ([row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
-            return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], [NSNumber numberWithInt:bestMatch], nil];
-          }
+        // Look for whitespace before start pattern, >= 50% of width of start pattern
+        if (bestMatch >= 0 &&
+            [row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
+          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], [NSNumber numberWithInt:bestMatch], nil];
         }
         patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {

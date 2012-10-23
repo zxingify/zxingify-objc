@@ -194,12 +194,11 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       counters[counterPosition]++;
     } else {
       if (counterPosition == countersLen - 1) {
-        if ([self toNarrowWidePattern:counters countersLen:countersLen] == CODE39_ASTERISK_ENCODING) {
-          if ([row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
-            if (a) *a = patternStart;
-            if (b) *b = i;
-            return YES;
-          }
+        if ([self toNarrowWidePattern:counters countersLen:countersLen] == CODE39_ASTERISK_ENCODING &&
+            [row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
+          if (a) *a = patternStart;
+          if (b) *b = i;
+          return YES;
         }
         patternStart += counters[0] + counters[1];
         for (int y = 2; y < countersLen; y++) {

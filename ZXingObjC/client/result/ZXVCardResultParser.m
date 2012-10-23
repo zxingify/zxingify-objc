@@ -219,9 +219,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
     case '=':
       if (i < length - 2) {
         unichar nextChar = [value characterAtIndex:i + 1];
-        if (nextChar == '\r' || nextChar == '\n') {
-          // Ignore, it's just a continuation symbol
-        } else {
+        if (nextChar != '\r' && nextChar != '\n') {
           unichar nextNextChar = [value characterAtIndex:i + 2];
           int firstDigit = [self parseHexDigit:nextChar];
           int secondDigit = [self parseHexDigit:nextNextChar];

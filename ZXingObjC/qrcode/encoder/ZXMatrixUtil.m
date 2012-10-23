@@ -242,10 +242,8 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
         } else {
           bit = NO;
         }
-        if (maskPattern != -1) {
-          if ([ZXMaskUtil dataMaskBit:maskPattern x:xx y:y]) {
-            bit = !bit;
-          }
+        if (maskPattern != -1 && [ZXMaskUtil dataMaskBit:maskPattern x:xx y:y]) {
+          bit = !bit;
         }
         [matrix setX:xx y:y boolValue:bit];
       }

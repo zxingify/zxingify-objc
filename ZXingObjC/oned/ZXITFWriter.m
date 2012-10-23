@@ -61,7 +61,7 @@
 
   const int endLen = ZX_ITF_ENDLEN;
   int end[ZX_ITF_ENDLEN] = {3, 1, 1};
-  pos += [super appendPattern:result pos:pos pattern:end patternLen:endLen startColor:1];
+  [super appendPattern:result pos:pos pattern:end patternLen:endLen startColor:1];
 
   return result;
 }

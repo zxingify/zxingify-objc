@@ -308,8 +308,6 @@ static NSArray* EXP900 = nil;
             ch = ' ';
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
-          } else {
-            // is this even possible?
           }
         }
         break;

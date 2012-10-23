@@ -152,11 +152,13 @@
   if (alignmentPattern != nil) {
     bottomRightX = alignmentPattern.x;
     bottomRightY = alignmentPattern.y;
-    sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
+    sourceBottomRightX = dimMinusThree - 3.0f;
+    sourceBottomRightY = sourceBottomRightX;
   } else {
     bottomRightX = (topRight.x - topLeft.x) + bottomLeft.x;
     bottomRightY = (topRight.y - topLeft.y) + bottomLeft.y;
-    sourceBottomRightX = sourceBottomRightY = dimMinusThree;
+    sourceBottomRightX = dimMinusThree;
+    sourceBottomRightY = dimMinusThree;
   }
   return [ZXPerspectiveTransform quadrilateralToQuadrilateral:3.5f y0:3.5f
                                                            x1:dimMinusThree y1:3.5f
