@@ -149,8 +149,8 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
            [rawText characterAtIndex:i + 1] == '\t')) {
         i += 2; // Skip \n and continutation whitespace
       } else if (quotedPrintable &&                          // If preceded by = in quoted printable
-                 ([rawText characterAtIndex:i - 1] == '=' || // this is a continuation
-                  [rawText characterAtIndex:i - 2] == '=')) {
+                 ((i >= 1 && [rawText characterAtIndex:i - 1] == '=') || // this is a continuation
+                  (i >= 2 && [rawText characterAtIndex:i - 2] == '='))) {
         i++; // Skip \n
       } else {
         break;
@@ -165,7 +165,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
       if (matches == nil) {
         matches = [NSMutableArray arrayWithCapacity:1];
       }
-      if ([rawText characterAtIndex:i-1] == '\r') {
+      if (i >= 1 && [rawText characterAtIndex:i-1] == '\r') {
         i--; // Back up over \r, which really should be there
       }
       NSString * element = [rawText substringWithRange:NSMakeRange(matchStart, i - matchStart)];
