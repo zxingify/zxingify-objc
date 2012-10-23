@@ -15,11 +15,14 @@
  */
 
 /**
- * Incomplete implementation of PDF417 error correction. For now, only detects errors.
+ * PDF417 error correction implementation.
+ *
+ * This example <http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example>
+ * is quite useful in understanding the algorithm.
  */
 
 @interface ZXPDF417ECErrorCorrection : NSObject
 
-- (BOOL)decode:(NSArray *)received numECCodewords:(int)numECCodewords;
+- (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords;
 
 @end

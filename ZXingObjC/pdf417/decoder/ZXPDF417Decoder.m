@@ -28,7 +28,7 @@ int const MAX_EC_CODEWORDS = 512;
 
 @property (nonatomic, retain) ZXPDF417ECErrorCorrection *errorCorrection;
 
-- (BOOL)correctErrors:(NSArray *)codewords numErasures:(int)numErasures numECCodewords:(int)numECCodewords;
+- (BOOL)correctErrors:(NSMutableArray *)codewords numErasures:(int)numErasures numECCodewords:(int)numECCodewords;
 - (BOOL)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords;
 
 @end
@@ -126,7 +126,7 @@ int const MAX_EC_CODEWORDS = 512;
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
  * orrect the errors in-place.
  */
-- (BOOL)correctErrors:(NSArray *)codewords numErasures:(int)numErasures numECCodewords:(int)numECCodewords {
+- (BOOL)correctErrors:(NSMutableArray *)codewords numErasures:(int)numErasures numECCodewords:(int)numECCodewords {
   if (numErasures > numECCodewords / 2 + ZX_PDF_MAX_ERRORS ||
       numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
     // Too many errors or EC Codewords is corrupted

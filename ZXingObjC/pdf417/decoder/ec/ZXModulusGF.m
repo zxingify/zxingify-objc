@@ -56,7 +56,8 @@
       [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
     }
     // logTable[0] == 0 but this should never be used
-    self.zero = [[[ZXModulusPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0] autorelease];
+    int zeroInt = 0;
+    self.zero = [[[ZXModulusPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1] autorelease];
 
     int oneInt = 1;
     self.one = [[[ZXModulusPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1] autorelease];
