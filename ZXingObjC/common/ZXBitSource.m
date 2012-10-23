@@ -46,9 +46,9 @@
 
 
 - (int)readBits:(int)numBits {
-  if (numBits < 1 || numBits > 32) {
+  if (numBits < 1 || numBits > 32 || numBits > self.available) {
     [NSException raise:NSInvalidArgumentException 
-                format:@"Number of bits must be between 1 and 32."];
+                format:@"Invalid number of bits: %d", numBits];
   }
   int result = 0;
   if (self.bitOffset > 0) {
