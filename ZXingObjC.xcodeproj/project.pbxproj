@@ -1034,6 +1034,10 @@
 		258C631016348A4E00E5CB01 /* ZXModulusGF.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C630E16348A4E00E5CB01 /* ZXModulusGF.m */; };
 		258C6313163491A500E5CB01 /* ZXModulusPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 258C6311163491A500E5CB01 /* ZXModulusPoly.h */; };
 		258C6314163491A500E5CB01 /* ZXModulusPoly.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C6312163491A500E5CB01 /* ZXModulusPoly.m */; };
+		258C63281637736700E5CB01 /* AbstractErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C63271637736700E5CB01 /* AbstractErrorCorrectionTestCase.m */; };
+		258C63291637736700E5CB01 /* AbstractErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C63271637736700E5CB01 /* AbstractErrorCorrectionTestCase.m */; };
+		258C632C163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C632B163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m */; };
+		258C632D163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258C632B163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m */; };
 		258FE01915605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01A15605EDF004B9C9A /* Code128BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */; };
 		258FE01E15605F61004B9C9A /* EAN8BlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE01D15605F61004B9C9A /* EAN8BlackBox1TestCase.m */; };
@@ -1653,6 +1657,10 @@
 		258C630E16348A4E00E5CB01 /* ZXModulusGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXModulusGF.m; path = ec/ZXModulusGF.m; sourceTree = "<group>"; };
 		258C6311163491A500E5CB01 /* ZXModulusPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXModulusPoly.h; path = ec/ZXModulusPoly.h; sourceTree = "<group>"; };
 		258C6312163491A500E5CB01 /* ZXModulusPoly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXModulusPoly.m; path = ec/ZXModulusPoly.m; sourceTree = "<group>"; };
+		258C63261637736700E5CB01 /* AbstractErrorCorrectionTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AbstractErrorCorrectionTestCase.h; path = pdf417/decoder/ec/AbstractErrorCorrectionTestCase.h; sourceTree = "<group>"; };
+		258C63271637736700E5CB01 /* AbstractErrorCorrectionTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AbstractErrorCorrectionTestCase.m; path = pdf417/decoder/ec/AbstractErrorCorrectionTestCase.m; sourceTree = "<group>"; };
+		258C632A163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXPDF417ECErrorCorrectionTestCase.h; path = pdf417/decoder/ec/ZXPDF417ECErrorCorrectionTestCase.h; sourceTree = "<group>"; };
+		258C632B163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXPDF417ECErrorCorrectionTestCase.m; path = pdf417/decoder/ec/ZXPDF417ECErrorCorrectionTestCase.m; sourceTree = "<group>"; };
 		258FE01715605EDF004B9C9A /* Code128BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Code128BlackBox3TestCase.h; path = oned/Code128BlackBox3TestCase.h; sourceTree = "<group>"; };
 		258FE01815605EDF004B9C9A /* Code128BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox3TestCase.m; path = oned/Code128BlackBox3TestCase.m; sourceTree = "<group>"; };
 		258FE01C15605F61004B9C9A /* EAN8BlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAN8BlackBox1TestCase.h; path = oned/EAN8BlackBox1TestCase.h; sourceTree = "<group>"; };
@@ -2667,6 +2675,7 @@
 		25585C271564A13B00DDFFDB /* pdf417 */ = {
 			isa = PBXGroup;
 			children = (
+				258C63241637733A00E5CB01 /* decoder */,
 				25585C291564A14800DDFFDB /* PDF417BlackBox1TestCase.h */,
 				25585C2A1564A14800DDFFDB /* PDF417BlackBox1TestCase.m */,
 				251741A01564AAA20006A257 /* PDF417BlackBox2TestCase.h */,
@@ -2684,6 +2693,25 @@
 				258C630E16348A4E00E5CB01 /* ZXModulusGF.m */,
 				258C6311163491A500E5CB01 /* ZXModulusPoly.h */,
 				258C6312163491A500E5CB01 /* ZXModulusPoly.m */,
+			);
+			name = ec;
+			sourceTree = "<group>";
+		};
+		258C63241637733A00E5CB01 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				258C63251637734000E5CB01 /* ec */,
+			);
+			name = decoder;
+			sourceTree = "<group>";
+		};
+		258C63251637734000E5CB01 /* ec */ = {
+			isa = PBXGroup;
+			children = (
+				258C63261637736700E5CB01 /* AbstractErrorCorrectionTestCase.h */,
+				258C63271637736700E5CB01 /* AbstractErrorCorrectionTestCase.m */,
+				258C632A163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.h */,
+				258C632B163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m */,
 			);
 			name = ec;
 			sourceTree = "<group>";
@@ -3603,6 +3631,8 @@
 				254C522C157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */,
 				4C975B8A162D9B8200658260 /* ZXITFWriterTestCase.m in Sources */,
 				4C975B93162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */,
+				258C63291637736700E5CB01 /* AbstractErrorCorrectionTestCase.m in Sources */,
+				258C632D163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4055,6 +4085,8 @@
 				254C522B157EF3C000586DED /* CodabarBlackBox1TestCase.m in Sources */,
 				4C975B89162D9B8100658260 /* ZXITFWriterTestCase.m in Sources */,
 				4C975B92162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */,
+				258C63281637736700E5CB01 /* AbstractErrorCorrectionTestCase.m in Sources */,
+				258C632C163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
