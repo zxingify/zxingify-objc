@@ -90,11 +90,21 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   // Step 1: Choose the mode (encoding).
   ZXMode * mode = [self chooseMode:content encoding:encoding];
 
-  // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
   ZXBitArray * dataBits = [[[ZXBitArray alloc] init] autorelease];
+
+  // Step 1.5: Append ECI message if applicable
+  if ([mode isEqual:[ZXMode byteMode]] && DEFAULT_BYTE_MODE_ENCODING != encoding) {
+    ZXCharacterSetECI * eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
+    if (eci != nil) {
+      [self appendECI:eci bits:dataBits];
+    }
+  }
+
+  // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
   if (![self appendBytes:content mode:mode bits:dataBits encoding:encoding error:error]) {
     return NO;
   }
+
   // Step 3: Initialize QR code that can contain "dataBits".
   int numInputBits = dataBits.size;
   if (![self initQRCode:numInputBits ecLevel:ecLevel mode:mode qrCode:qrCode error:error]) {
@@ -103,14 +113,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
   // Step 4: Build another bit vector that contains header and data.
   ZXBitArray * headerAndDataBits = [[[ZXBitArray alloc] init] autorelease];
-
-  // Step 4.5: Append ECI message if applicable
-  if ([mode isEqual:[ZXMode byteMode]] && DEFAULT_BYTE_MODE_ENCODING != encoding) {
-    ZXCharacterSetECI * eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
-    if (eci != nil) {
-      [self appendECI:eci bits:headerAndDataBits];
-    }
-  }
 
   [self appendModeInfo:mode bits:headerAndDataBits];
 
