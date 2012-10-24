@@ -107,17 +107,13 @@
 
   ZXGenericGFPoly * rLast = a;
   ZXGenericGFPoly * r = b;
-  ZXGenericGFPoly * sLast = field.one;
-  ZXGenericGFPoly * s = field.zero;
   ZXGenericGFPoly * tLast = field.zero;
   ZXGenericGFPoly * t = field.one;
 
   while ([r degree] >= R / 2) {
     ZXGenericGFPoly * rLastLast = rLast;
-    ZXGenericGFPoly * sLastLast = sLast;
     ZXGenericGFPoly * tLastLast = tLast;
     rLast = r;
-    sLast = s;
     tLast = t;
 
     if ([rLast zero]) {
@@ -139,7 +135,6 @@
       r = [r addOrSubtract:[rLast multiplyByMonomial:degreeDiff coefficient:scale]];
     }
 
-    s = [[q multiply:sLast] addOrSubtract:sLastLast];
     t = [[q multiply:tLast] addOrSubtract:tLastLast];
   }
 

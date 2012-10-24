@@ -79,7 +79,7 @@
     }
 
     ZXModulusPoly *syndrome = [[[ZXModulusPoly alloc] initWithField:self.field coefficients:S coefficientsLen:numECCodewords] autorelease];
-    [syndrome multiply:knownErrors];
+    //[syndrome multiply:knownErrors];
 
     NSArray *sigmaOmega = [self runEuclideanAlgorithm:[self.field buildMonomial:numECCodewords coefficient:1] b:syndrome R:numECCodewords];
     if (!sigmaOmega) {
@@ -89,7 +89,7 @@
     ZXModulusPoly *sigma = [sigmaOmega objectAtIndex:0];
     ZXModulusPoly *omega = [sigmaOmega objectAtIndex:1];
 
-    sigma = [sigma multiply:knownErrors];
+    //sigma = [sigma multiply:knownErrors];
 
     NSArray *errorLocations = [self findErrorLocations:sigma];
     if (!errorLocations) return NO;
@@ -119,18 +119,14 @@
 
   ZXModulusPoly *rLast = a;
   ZXModulusPoly *r = b;
-  ZXModulusPoly *sLast = self.field.one;
-  ZXModulusPoly *s = self.field.zero;
   ZXModulusPoly *tLast = self.field.zero;
   ZXModulusPoly *t = self.field.one;
 
   // Run Euclidean algorithm until r's degree is less than R/2
   while (r.degree >= R / 2) {
     ZXModulusPoly *rLastLast = rLast;
-    ZXModulusPoly *sLastLast = sLast;
     ZXModulusPoly *tLastLast = tLast;
     rLast = r;
-    sLast = s;
     tLast = t;
 
     // Divide rLastLast by rLast, with quotient in q and remainder in r
@@ -149,7 +145,6 @@
       r = [r subtract:[rLast multiplyByMonomial:degreeDiff coefficient:scale]];
     }
 
-    s = [[[q multiply:sLast] subtract:sLastLast] negative];
     t = [[[q multiply:tLast] subtract:tLastLast] negative];
   }
 
