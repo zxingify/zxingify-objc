@@ -23,6 +23,6 @@
 
 @interface ZXPDF417ECErrorCorrection : NSObject
 
-- (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords;
+- (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords erasures:(NSArray *)erasures;
 
 @end

@@ -46,7 +46,7 @@
   [super dealloc];
 }
 
-- (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords {
+- (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords erasures:(NSArray *)erasures {
   int coefficients[received.count];
   for (int i = 0; i < received.count; i++) {
     coefficients[i] = [[received objectAtIndex:i] intValue];
@@ -68,21 +68,41 @@
   }
 
   if (error) {
+
+    ZXModulusPoly *knownErrors = self.field.one;
+    for (NSNumber *erasure in erasures) {
+      int b = [self.field exp:received.count - 1 - [erasure intValue]];
+      // Add (1 - bx) term:
+      int termCoefficients[2] = { [self.field subtract:0 b:b], 1 };
+      ZXModulusPoly *term = [[[ZXModulusPoly alloc] initWithField:field coefficients:termCoefficients coefficientsLen:2] autorelease];
+      knownErrors = [knownErrors multiply:term];
+    }
+
     ZXModulusPoly *syndrome = [[[ZXModulusPoly alloc] initWithField:self.field coefficients:S coefficientsLen:numECCodewords] autorelease];
-    ZXPDF417ECErrorCorrection * ec = [[[ZXPDF417ECErrorCorrection alloc] init] autorelease];
-    NSArray *sigmaOmega = [ec runEuclideanAlgorithm:[self.field buildMonomial:numECCodewords coefficient:1] b:syndrome R:numECCodewords];
+    [syndrome multiply:knownErrors];
+
+    NSArray *sigmaOmega = [self runEuclideanAlgorithm:[self.field buildMonomial:numECCodewords coefficient:1] b:syndrome R:numECCodewords];
+    if (!sigmaOmega) {
+      return NO;
+    }
+
     ZXModulusPoly *sigma = [sigmaOmega objectAtIndex:0];
     ZXModulusPoly *omega = [sigmaOmega objectAtIndex:1];
-    NSArray *errorLocations = [ec findErrorLocations:sigma];
+
+    sigma = [sigma multiply:knownErrors];
+
+    NSArray *errorLocations = [self findErrorLocations:sigma];
     if (!errorLocations) return NO;
-    NSArray *errorMagnitudes = [ec findErrorMagnitudes:omega errorLocator:sigma errorLocations:errorLocations];
+    NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocator:sigma errorLocations:errorLocations];
+
     for (int i = 0; i < errorLocations.count; i++) {
-      int position = received.count - 1 - [field log:[[errorLocations objectAtIndex:i] intValue]];
+      int position = received.count - 1 - [self.field log:[[errorLocations objectAtIndex:i] intValue]];
       if (position < 0) {
         return NO;
       }
       [received replaceObjectAtIndex:position
-                          withObject:[NSNumber numberWithInt:[field subtract:[[received objectAtIndex:position] intValue] b:[[errorMagnitudes objectAtIndex:i] intValue]]]];
+                          withObject:[NSNumber numberWithInt:[self.field subtract:[[received objectAtIndex:position] intValue]
+                                                                                b:[[errorMagnitudes objectAtIndex:i] intValue]]]];
     }
   }
 
@@ -138,7 +158,7 @@
     return nil;
   }
 
-  int inverse = [field inverse:sigmaTildeAtZero];
+  int inverse = [self.field inverse:sigmaTildeAtZero];
   ZXModulusPoly *sigma = [t multiplyScalar:inverse];
   ZXModulusPoly *omega = [r multiplyScalar:inverse];
   return [NSArray arrayWithObjects:sigma, omega, nil];
@@ -162,6 +182,10 @@
 - (NSArray *)findErrorMagnitudes:(ZXModulusPoly *)errorEvaluator errorLocator:(ZXModulusPoly *)errorLocator errorLocations:(NSArray *)errorLocations {
   int errorLocatorDegree = errorLocator.degree;
   int formalDerivativeCoefficients[errorLocatorDegree];
+  for (int i = 0; i < errorLocatorDegree; i++) {
+    formalDerivativeCoefficients[i] = 0;
+  }
+
   for (int i = 1; i <= errorLocatorDegree; i++) {
     formalDerivativeCoefficients[errorLocatorDegree - i] =
       [self.field multiply:i b:[errorLocator coefficient:i]];

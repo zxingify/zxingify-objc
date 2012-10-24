@@ -22,17 +22,21 @@
 @property (nonatomic, retain) ZXPDF417ECErrorCorrection* ec;
 
 - (BOOL)checkDecode:(NSMutableArray *)received;
+- (BOOL)checkDecode:(NSMutableArray *)received erasures:(NSArray *)erasures;
 
 @end
 
 @implementation ZXPDF417ECErrorCorrectionTestCase
 
 static NSMutableArray *PDF417_TEST = nil;
-
 static NSMutableArray *PDF417_TEST_WITH_EC = nil;
-
 static int ECC_BYTES;
-static int CORRECTABLE;
+// Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:
+// l + 2f <= 2^(s+1) - 3
+const int EC_LEVEL = 1;
+const int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
+const int MAX_ERRORS = ERROR_LIMIT / 2;
+const int MAX_ERASURES = ERROR_LIMIT;
 
 @synthesize ec;
 
@@ -56,7 +60,6 @@ static int CORRECTABLE;
                          [NSNumber numberWithInt:619], nil];
 
   ECC_BYTES = PDF417_TEST_WITH_EC.count - PDF417_TEST.count;
-  CORRECTABLE = ECC_BYTES / 2;
 }
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation {
@@ -88,27 +91,62 @@ static int CORRECTABLE;
 }
 
 - (void)testMaxErrors {
-  for (int i = 0; i < PDF417_TEST.count; i++) {
+  for (int i = 0; i < PDF417_TEST.count; i++) { // # iterations is kind of arbitrary
     NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
-    [self corrupt:received howMany:CORRECTABLE];
+    [self corrupt:received howMany:MAX_ERRORS];
     [self checkDecode:received];
   }
 }
 
 - (void)testTooManyErrors {
   NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
-  [self corrupt:received howMany:CORRECTABLE + 1];
+  [self corrupt:received howMany:MAX_ERRORS + 3]; // +3 since the algo can actually correct 2 more than it should here
 
   STAssertFalse([self checkDecode:received], @"Should not have decoded");
 }
 
+- (void)testMaxErasures {
+  for (int i = 0; i < PDF417_TEST.count; i++) { // # iterations is kind of arbitrary
+    NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
+    NSArray *erasures = [self erase:received howMany:MAX_ERASURES];
+    [self checkDecode:received erasures:erasures];
+  }
+}
+
+- (void)testTooManyErasures {
+  NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
+  NSArray *erasures = [self erase:received howMany:MAX_ERASURES + 1];
+
+  STAssertFalse([self checkDecode:received erasures:erasures], @"Should not have decoded");
+}
+
+- (void)testErasureAndError {
+  // Not sure this is valid according to the spec but it's correctable
+  for (int i = 0; i < PDF417_TEST_WITH_EC.count; i++) {
+    NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
+    [received replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:arc4random() % 256]];
+    for (int j = 0; j < PDF417_TEST_WITH_EC.count; j++) {
+      if (i == j) {
+        continue;
+      }
+      [received replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:0]];
+      NSArray *erasures = [NSArray arrayWithObject:[NSNumber numberWithInt:j]];
+      [self checkDecode:received erasures:erasures];
+    }
+  }
+}
+
 - (BOOL)checkDecode:(NSMutableArray *)received {
-  if (![self.ec decode:received numECCodewords:ECC_BYTES]) {
+  return [self checkDecode:received erasures:[NSArray array]];
+}
+
+- (BOOL)checkDecode:(NSMutableArray *)received erasures:(NSArray *)erasures {
+  if (![self.ec decode:received numECCodewords:ECC_BYTES erasures:erasures]) {
     return NO;
   }
 
   for (int i = 0; i < PDF417_TEST.count; i++) {
-    STAssertEqualObjects([received objectAtIndex:i], [PDF417_TEST objectAtIndex:i], @"Expected %d to equal %d", [received objectAtIndex:i], [PDF417_TEST objectAtIndex:i]);
+    STAssertEquals([[received objectAtIndex:i] intValue], [[PDF417_TEST objectAtIndex:i] intValue], @"Expected %@ to equal %@", [received objectAtIndex:i], [PDF417_TEST objectAtIndex:i]);
   }
   return YES;
 }

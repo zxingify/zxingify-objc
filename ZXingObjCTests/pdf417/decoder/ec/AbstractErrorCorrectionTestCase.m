@@ -37,4 +37,24 @@
   }
 }
 
+- (NSArray *)erase:(NSMutableArray *)received howMany:(int)howMany {
+  BOOL erased[received.count];
+  for (int i = 0; i < received.count; i++) {
+    erased[i] = NO;
+  }
+
+  NSMutableArray *erasures = [NSMutableArray arrayWithCapacity:howMany];
+  for (int j = 0; j < howMany; j++) {
+    int location = arc4random() % received.count;
+    if (erased[location]) {
+      j--;
+    } else {
+      erased[location] = YES;
+      [received replaceObjectAtIndex:location withObject:[NSNumber numberWithInt:0]];
+      [erasures addObject:[NSNumber numberWithInt:location]];
+    }
+  }
+  return erasures;
+}
+
 @end
