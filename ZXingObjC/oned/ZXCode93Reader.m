@@ -208,6 +208,9 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   for (int i = 0; i < length; i++) {
     unichar c = [encoded characterAtIndex:i];
     if (c >= 'a' && c <= 'd') {
+      if (i >= length - 1) {
+        return nil;
+      }
       unichar next = [encoded characterAtIndex:i + 1];
       unichar decodedChar = '\0';
       switch (c) {
