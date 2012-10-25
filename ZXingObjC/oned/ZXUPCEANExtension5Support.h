@@ -16,8 +16,9 @@
 
 @class ZXBitArray, ZXResult;
 
-@interface ZXUPCEANExtensionSupport : NSObject
+@interface ZXUPCEANExtension5Support : NSObject
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError**)error;
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError**)error;
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError**)error;
 
 @end

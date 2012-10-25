@@ -1058,6 +1058,18 @@
 		258FE03B15609D60004B9C9A /* ITFBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */; };
 		258FE04015609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
 		258FE04115609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */; };
+		25A911581638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 25A911561638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h */; };
+		25A911591638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 25A911561638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h */; };
+		25A9115A1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911571638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m */; };
+		25A9115B1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911571638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m */; };
+		25A9115C1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911571638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m */; };
+		25A9115D1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911571638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m */; };
+		25A911611638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 25A9115F1638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h */; };
+		25A911621638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 25A9115F1638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h */; };
+		25A911631638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911601638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m */; };
+		25A911641638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911601638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m */; };
+		25A911651638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911601638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m */; };
+		25A911661638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 25A911601638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m */; };
 		25E484BB157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */; };
 		25E484BC157707E700AA97E4 /* ZXMaxiCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */; };
 		25E484BD157707E700AA97E4 /* ZXMaxiCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */; };
@@ -1681,6 +1693,10 @@
 		258FE03915609D60004B9C9A /* ITFBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITFBlackBox2TestCase.m; path = oned/ITFBlackBox2TestCase.m; sourceTree = "<group>"; };
 		258FE03E15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSSExpandedBlackBox1TestCase.h; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.h; sourceTree = "<group>"; };
 		258FE03F15609E96004B9C9A /* RSSExpandedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSExpandedBlackBox1TestCase.m; path = oned/rss/expanded/RSSExpandedBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25A911561638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANExtension2Support.h; sourceTree = "<group>"; };
+		25A911571638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANExtension2Support.m; sourceTree = "<group>"; };
+		25A9115F1638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANExtension5Support.h; sourceTree = "<group>"; };
+		25A911601638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANExtension5Support.m; sourceTree = "<group>"; };
 		25AFD8151579C44C005BBB14 /* ZXCompaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZXCompaction.h; path = encoder/ZXCompaction.h; sourceTree = "<group>"; };
 		25E484B9157707E700AA97E4 /* ZXMaxiCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXMaxiCodeReader.h; path = maxicode/ZXMaxiCodeReader.h; sourceTree = "<group>"; };
 		25E484BA157707E700AA97E4 /* ZXMaxiCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXMaxiCodeReader.m; path = maxicode/ZXMaxiCodeReader.m; sourceTree = "<group>"; };
@@ -2148,6 +2164,10 @@
 				029BCE9D15129BD0009E6549 /* ZXUPCAWriter.m */,
 				029BCE9E15129BD0009E6549 /* ZXUPCEANExtensionSupport.h */,
 				029BCE9F15129BD0009E6549 /* ZXUPCEANExtensionSupport.m */,
+				25A911561638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h */,
+				25A911571638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m */,
+				25A9115F1638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h */,
+				25A911601638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m */,
 				029BCEA015129BD0009E6549 /* ZXUPCEANReader.h */,
 				029BCEA115129BD0009E6549 /* ZXUPCEANReader.m */,
 				029BCEA215129BD0009E6549 /* ZXUPCEANWriter.h */,
@@ -2840,6 +2860,8 @@
 				25E484CF15771A8F00AA97E4 /* ZXMaxiCodeDecoder.h in Headers */,
 				25E484D515771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
 				255FA8991578322D00B78681 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
+				25A911591638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h in Headers */,
+				25A911621638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3027,6 +3049,8 @@
 				258C630B1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.h in Headers */,
 				258C630F16348A4E00E5CB01 /* ZXModulusGF.h in Headers */,
 				258C6313163491A500E5CB01 /* ZXModulusPoly.h in Headers */,
+				25A911581638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h in Headers */,
+				25A911611638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3362,6 +3386,8 @@
 				25E484D115771A8F00AA97E4 /* ZXMaxiCodeDecoder.m in Sources */,
 				25E484D715771FD000AA97E4 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
 				255FA89B1578322D00B78681 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
+				25A9115C1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
+				25A911651638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3633,6 +3659,8 @@
 				4C975B93162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */,
 				258C63291637736700E5CB01 /* AbstractErrorCorrectionTestCase.m in Sources */,
 				258C632D163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */,
+				25A9115D1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
+				25A911661638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3816,6 +3844,8 @@
 				258C630C1634887E00E5CB01 /* ZXPDF417ECErrorCorrection.m in Sources */,
 				258C631016348A4E00E5CB01 /* ZXModulusGF.m in Sources */,
 				258C6314163491A500E5CB01 /* ZXModulusPoly.m in Sources */,
+				25A9115A1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
+				25A911631638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4087,6 +4117,8 @@
 				4C975B92162DBD8300658260 /* ZXCode39WriterTestCase.m in Sources */,
 				258C63281637736700E5CB01 /* AbstractErrorCorrectionTestCase.m in Sources */,
 				258C632C163773ED00E5CB01 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */,
+				25A9115B1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
+				25A911641638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
