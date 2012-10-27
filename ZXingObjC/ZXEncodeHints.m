@@ -20,6 +20,9 @@
 
 @synthesize encoding;
 @synthesize errorCorrectionLevel;
+@synthesize pdf417Compact;
+@synthesize pdf417Compaction;
+@synthesize pdf417Dimensions;
 
 + (id)hints {
   return [[[self alloc] init] autorelease];
@@ -27,6 +30,7 @@
 
 - (void)dealloc {
   [errorCorrectionLevel release];
+  [pdf417Dimensions release];
 
   [super dealloc];
 }

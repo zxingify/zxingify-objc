@@ -16,12 +16,12 @@
 
 #import "ZXBarcodeMatrix.h"
 #import "ZXBitMatrix.h"
+#import "ZXEncodeHints.h"
 #import "ZXPDF417.h"
 #import "ZXPDF417Writer.h"
 
 @interface ZXPDF417Writer ()
 
-- (ZXPDF417*)initializeEncoder:(ZXBarcodeFormat)format compact:(BOOL)compact;
 - (ZXBitMatrix*)bitMatrixFromEncoder:(ZXPDF417*)encoder contents:(NSString*)contents width:(int)width height:(int)height error:(NSError**)error;
 - (ZXBitMatrix*)bitMatrixFrombitArray:(unsigned char**)input height:(int)height width:(int)width;
 - (unsigned char**)rotateArray:(unsigned char**)bitarray height:(int)height width:(int)width;
@@ -32,37 +32,39 @@
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height
                   hints:(ZXEncodeHints *)hints error:(NSError**)error {
-  return [self encode:contents format:format width:width height:height error:error];
-}
-
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError**)error {
-  ZXPDF417* encoder = [self initializeEncoder:format compact:NO];
-  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
-}
-
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
-                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-             compaction:(ZXCompaction)compaction error:(NSError**)error {
-  ZXPDF417* encoder = [self initializeEncoder:format compact:compact];
-
-  // Set options: dimensions and byte compaction
-  [encoder setDimensionsWithMaxCols:maxCols minCols:minCols maxRows:maxRows minRows:minRows];
-  encoder.compaction = compaction;
-
-  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
-}
-
-/**
- * Initializes the encoder based on the format (whether it's compact or not)
- */
-- (ZXPDF417*)initializeEncoder:(ZXBarcodeFormat)format compact:(BOOL)compact {
   if (format != kBarcodeFormatPDF417) {
     [NSException raise:NSInvalidArgumentException format:@"Can only encode PDF_417, but got %d", format];
   }
 
   ZXPDF417* encoder = [[[ZXPDF417 alloc] init] autorelease];
-  encoder.compact = compact;
-  return encoder;
+
+  if (hints != nil) {
+    encoder.compact = hints.pdf417Compact;
+    encoder.compaction = hints.pdf417Compaction;
+    if (hints.pdf417Dimensions != nil) {
+      ZXDimensions *dimensions = hints.pdf417Dimensions;
+      [encoder setDimensionsWithMaxCols:dimensions.maxCols
+                                minCols:dimensions.minCols
+                                maxRows:dimensions.maxRows
+                                minRows:dimensions.minRows];
+    }
+  }
+
+  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
+}
+
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError**)error {
+  return [self encode:contents format:format width:width height:height hints:nil error:error];
+}
+
+- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
+                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
+             compaction:(ZXCompaction)compaction error:(NSError**)error {
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.pdf417Compact = compact;
+  hints.pdf417Compaction = compaction;
+  hints.pdf417Dimensions = [[[ZXDimensions alloc] initWithMinCols:minCols maxCols:maxCols minRows:minRows maxRows:maxRows] autorelease];
+  return [self encode:contents format:format width:width height:height hints:hints error:error];
 }
 
 /**
@@ -120,10 +122,10 @@
  * This takes an array holding the values of the PDF 417
  */
 - (ZXBitMatrix*)bitMatrixFrombitArray:(unsigned char**)input height:(int)height width:(int)width {
-  //Creates a small whitespace boarder around the barcode
+  // Creates a small whitespace boarder around the barcode
   int whiteSpace = 30;
 
-  //Creates the bitmatrix with extra space for whtespace
+  // Creates the bitmatrix with extra space for whtespace
   ZXBitMatrix* output = [[[ZXBitMatrix alloc] initWithWidth:height + 2 * whiteSpace height:width + 2 * whiteSpace] autorelease];
   [output clear];
   for (int ii = 0; ii < height; ii++) {

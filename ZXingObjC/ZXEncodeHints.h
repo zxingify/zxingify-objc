@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import "ZXCompaction.h"
+#import "ZXDimensions.h"
 #import "ZXErrorCorrectionLevel.h"
 
 /**
@@ -25,13 +27,28 @@
 + (id)hints;
 
 /**
- * Specifies what character encoding to use where applicable (type String)
+ * Specifies what character encoding to use where applicable.
  */
 @property (nonatomic, assign) NSStringEncoding encoding;
 
 /**
- * Specifies what degree of error correction to use, for example in QR Codes (type Integer).
+ * Specifies what degree of error correction to use, for example in QR Codes.
  */
 @property (nonatomic, retain) ZXErrorCorrectionLevel *errorCorrectionLevel;
+
+/**
+ * Specifies whether to use compact mode for PDF417.
+ */
+@property (nonatomic, assign) BOOL pdf417Compact;
+
+/**
+ * Specifies what compaction mode to use for PDF417.
+ */
+@property (nonatomic, assign) ZXCompaction pdf417Compaction;
+
+/**
+ * Specifies the minimum and maximum number of rows and columns for PDF417.
+ */
+@property (nonatomic, retain) ZXDimensions *pdf417Dimensions;
 
 @end

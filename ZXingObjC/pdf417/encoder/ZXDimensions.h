@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-#import "ZXCompaction.h"
-#import "ZXWriter.h"
+/**
+ * Data object to specify the minimum and maximum number of rows and columns for a PDF417 barcode.
+ */
+@interface ZXDimensions : NSObject
 
-@interface ZXPDF417Writer : NSObject <ZXWriter>
+@property (nonatomic, assign) int minCols;
+@property (nonatomic, assign) int maxCols;
+@property (nonatomic, assign) int minRows;
+@property (nonatomic, assign) int maxRows;
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
-                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-             compaction:(ZXCompaction)compaction error:(NSError**)error __attribute__((deprecated));
+- (id)initWithMinCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows;
 
 @end

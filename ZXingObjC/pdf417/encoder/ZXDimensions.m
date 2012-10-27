@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-#import "ZXCompaction.h"
-#import "ZXWriter.h"
+#import "ZXDimensions.h"
 
-@interface ZXPDF417Writer : NSObject <ZXWriter>
+@implementation ZXDimensions
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
-                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-             compaction:(ZXCompaction)compaction error:(NSError**)error __attribute__((deprecated));
+@synthesize minCols;
+@synthesize maxCols;
+@synthesize minRows;
+@synthesize maxRows;
+
+- (id)initWithMinCols:(int)aMinCols maxCols:(int)aMaxCols minRows:(int)aMinRows maxRows:(int)aMaxRows {
+  if (self = [super init]) {
+    self.minCols = aMinCols;
+    self.maxCols = aMaxCols;
+    self.minRows = aMinRows;
+    self.maxRows = aMaxRows;
+  }
+
+  return self;
+}
 
 @end
