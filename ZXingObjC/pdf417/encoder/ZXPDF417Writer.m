@@ -126,13 +126,13 @@
   int whiteSpace = 30;
 
   // Creates the bitmatrix with extra space for whtespace
-  ZXBitMatrix* output = [[[ZXBitMatrix alloc] initWithWidth:height + 2 * whiteSpace height:width + 2 * whiteSpace] autorelease];
+  ZXBitMatrix* output = [[[ZXBitMatrix alloc] initWithWidth:width + 2 * whiteSpace height:height + 2 * whiteSpace] autorelease];
   [output clear];
-  for (int ii = 0; ii < height; ii++) {
-    for (int jj = 0; jj < width; jj++) {
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
       // Zero is white in the bytematrix
-      if (input[ii][jj] == 1) {
-        [output setX:ii + whiteSpace y:jj + whiteSpace];
+      if (input[y][x] == 1) {
+        [output setX:x + whiteSpace y:y + whiteSpace];
       }
     }
   }
