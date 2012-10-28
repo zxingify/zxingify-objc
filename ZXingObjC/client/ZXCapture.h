@@ -28,6 +28,7 @@
 #define ZXQT(x)
 #define ZXCaptureSession AVCaptureSession
 #define ZXCaptureVideoPreviewLayer AVCaptureVideoPreviewLayer
+#define ZXCaptureDevice AVCaptureDevice
 #define ZXCaptureDeviceInput AVCaptureDeviceInput
 #define ZXCaptureVideoOutput AVCaptureVideoDataOutput
 #else
@@ -38,6 +39,7 @@
 #define ZXQT(x) x
 #define ZXCaptureSession QTCaptureSession
 #define ZXCaptureVideoPreviewLayer QTCaptureLayer
+#define ZXCaptureDevice QTCaptureDevice
 #define ZXCaptureDeviceInput QTCaptureDeviceInput
 #define ZXCaptureVideoOutput QTCaptureDecompressedVideoOutput
 #endif
@@ -48,8 +50,9 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
   ZX(
     ZXCaptureSession* session;
     ZXCaptureVideoPreviewLayer* layer;
-    ZXCaptureVideoOutput* output;
+    ZXCaptureDevice* capture_device;
     ZXCaptureDeviceInput* input;
+    ZXCaptureVideoOutput* output
     id<ZXCaptureDelegate> delegate;
     )
     
@@ -67,7 +70,8 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
   BOOL hard_stop;
   int camera;
   BOOL torch;
-  int device;
+  BOOL mirror;
+  int capture_device_index;
   CGAffineTransform transform;
 }
 
@@ -76,6 +80,9 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 @property (nonatomic) CGAffineTransform transform;
 @property (nonatomic, readonly) ZXCaptureVideoOutput* output;
 @property (nonatomic, readonly) CALayer* layer;
+@property (nonatomic, retain) ZXCaptureDevice* captureDevice;
+@property (nonatomic, assign) BOOL mirror;
+@property (nonatomic, readonly) BOOL running;
 @property (nonatomic, retain) id<ZXReader> reader;
 @property (nonatomic, retain) ZXDecodeHints* hints;
 @property (nonatomic, assign) CGFloat rotation;
@@ -135,6 +142,8 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 
 @property (nonatomic) int camera;
 @property (nonatomic) BOOL torch;
+
+@property (nonatomic, assign) BOOL mirror;
 
 @end
 

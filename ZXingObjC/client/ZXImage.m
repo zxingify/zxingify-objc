@@ -18,7 +18,7 @@
 #import "ZXImage.h"
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
-#import <ImageIO/ImageIO.h>
+#import <ImageIO/CGImageSource.h>
 #endif
 
 @implementation ZXImage
