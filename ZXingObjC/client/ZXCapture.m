@@ -37,6 +37,10 @@
 #define ZXMediaTypeVideo QTMediaTypeVideo
 #endif
 
+#if ZXAV(1)+0
+static bool isIPad();
+#endif
+
 @implementation ZXCapture
 
 @synthesize delegate;
@@ -182,6 +186,21 @@
   }
   
   if (input) {
+    ZXAV({
+      NSString* preset = 0;
+      if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
+          [UIScreen mainScreen].scale > 1 &&
+          isIPad() &&
+          [zxd supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
+        // NSLog(@"960");
+        preset = AVCaptureSessionPresetiFrame960x540;
+      }
+      if (!preset) {
+        // NSLog(@"MED");
+        preset = AVCaptureSessionPresetMedium;
+      }
+      session.sessionPreset = preset;
+    });
     [session addInput:input ZXQT(error:nil)];
   }
 }
@@ -189,7 +208,6 @@
 - (ZXCaptureSession*)session {
   if (session == 0) {
     session = [[ZXCaptureSession alloc] init];
-    ZXAV({session.sessionPreset = AVCaptureSessionPresetMedium;});
     [self replaceInput];
   }
   return session;
