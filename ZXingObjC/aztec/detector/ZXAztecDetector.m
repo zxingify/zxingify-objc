@@ -19,6 +19,7 @@
 #import "ZXErrors.h"
 #import "ZXGenericGF.h"
 #import "ZXGridSampler.h"
+#import "ZXMathUtils.h"
 #import "ZXReedSolomonDecoder.h"
 #import "ZXResultPoint.h"
 #import "ZXWhiteRectangleDetector.h"
@@ -71,7 +72,6 @@
 - (ZXAztecPoint *)matrixCenterWithError:(NSError**)error;
 - (NSArray *)matrixCornerPoints:(NSArray *)bullEyeCornerPoints;
 - (void)parameters:(NSMutableArray *)parameterData;
-- (int)round:(float)d;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                     topLeft:(ZXResultPoint *)topLeft
                  bottomLeft:(ZXResultPoint *)bottomLeft
@@ -246,21 +246,21 @@
   int dy = p0.y - p2.y;
   dy += dy > 0 ? 1 : -1;
 
-  int targetcx = [self round:p2.x - ratio * dx];
-  int targetcy = [self round:p2.y - ratio * dy];
+  int targetcx = [ZXMathUtils round:p2.x - ratio * dx];
+  int targetcy = [ZXMathUtils round:p2.y - ratio * dy];
 
-  int targetax = [self round:p0.x + ratio * dx];
-  int targetay = [self round:p0.y + ratio * dy];
+  int targetax = [ZXMathUtils round:p0.x + ratio * dx];
+  int targetay = [ZXMathUtils round:p0.y + ratio * dy];
 
   dx = p1.x - p3.x;
   dx += dx > 0 ? 1 : -1;
   dy = p1.y - p3.y;
   dy += dy > 0 ? 1 : -1;
 
-  int targetdx = [self round:p3.x - ratio * dx];
-  int targetdy = [self round:p3.y - ratio * dy];
-  int targetbx = [self round:p1.x + ratio * dx];
-  int targetby = [self round:p1.y + ratio * dy];
+  int targetdx = [ZXMathUtils round:p3.x - ratio * dx];
+  int targetdy = [ZXMathUtils round:p3.y - ratio * dy];
+  int targetbx = [ZXMathUtils round:p1.x + ratio * dx];
+  int targetby = [ZXMathUtils round:p1.y + ratio * dy];
 
   if (![self isValidX:targetax y:targetay] ||
       ![self isValidX:targetbx y:targetby] ||
@@ -375,18 +375,18 @@
 
   int dx = pina.x - pinc.x;
   int dy = pina.y - pinc.y;
-  int targetcx = [self round:pinc.x - ratio * dx];
-  int targetcy = [self round:pinc.y - ratio * dy];
-  int targetax = [self round:pina.x + ratio * dx];
-  int targetay = [self round:pina.y + ratio * dy];
+  int targetcx = [ZXMathUtils round:pinc.x - ratio * dx];
+  int targetcy = [ZXMathUtils round:pinc.y - ratio * dy];
+  int targetax = [ZXMathUtils round:pina.x + ratio * dx];
+  int targetay = [ZXMathUtils round:pina.y + ratio * dy];
 
   dx = pinb.x - pind.x;
   dy = pinb.y - pind.y;
 
-  int targetdx = [self round:pind.x - ratio * dx];
-  int targetdy = [self round:pind.y - ratio * dy];
-  int targetbx = [self round:pinb.x + ratio * dx];
-  int targetby = [self round:pinb.y + ratio * dy];
+  int targetdx = [ZXMathUtils round:pind.x - ratio * dx];
+  int targetdy = [ZXMathUtils round:pind.y - ratio * dy];
+  int targetbx = [ZXMathUtils round:pinb.x + ratio * dx];
+  int targetby = [ZXMathUtils round:pinb.y + ratio * dy];
 
   if (![self isValidX:targetax y:targetay] ||
       ![self isValidX:targetbx y:targetby] ||
@@ -438,8 +438,8 @@
     pointD = [cornerPoints objectAtIndex:3];
   }
 
-  int cx = [self round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
-  int cy = [self round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
+  int cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
+  int cy = [ZXMathUtils round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
 
   detectorError = nil;
   detector = [[[ZXWhiteRectangleDetector alloc] initWithImage:self.image initSize:15 x:cx y:cy error:&detectorError] autorelease];
@@ -462,8 +462,8 @@
     pointD = [cornerPoints objectAtIndex:3];
   }
 
-  cx = [self round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
-  cy = [self round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
+  cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
+  cy = [ZXMathUtils round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
 
   return [[[ZXAztecPoint alloc] initWithX:cx y:cy] autorelease];
 }
@@ -563,7 +563,7 @@
   float py = p1.y;
 
   for (int i = 0; i < size; i++) {
-    [res addObject:[NSNumber numberWithBool:[self.image getX:[self round:px] y:[self round:py]]]];
+    [res addObject:[NSNumber numberWithBool:[self.image getX:[ZXMathUtils round:px] y:[ZXMathUtils round:py]]]];
     px += dx;
     py += dy;
   }
@@ -626,7 +626,7 @@
   for (int i = 0; i < d; i++) {
     px += dx;
     py += dy;
-    if ([self.image getX:[self round:px] y:[self round:py]] != colorModel) {
+    if ([self.image getX:[ZXMathUtils round:px] y:[ZXMathUtils round:py]] != colorModel) {
       error++;
     }
   }
@@ -678,16 +678,8 @@
 }
 
 
-/**
- * Ends up being a bit faster than round(). This merely rounds its
- * argument to the nearest int, where x.5 rounds up.
- */
-- (int)round:(float)d {
-  return (int)(d + 0.5f);
-}
-
 - (float)distance:(ZXAztecPoint *)a b:(ZXAztecPoint *)b {
-  return (float)sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+  return [ZXMathUtils distance:a.x aY:a.y bX:b.x bY:b.y];
 }
 
 @end

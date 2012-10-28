@@ -18,6 +18,7 @@
 #import "ZXDetectorResult.h"
 #import "ZXErrors.h"
 #import "ZXGridSampler.h"
+#import "ZXMathUtils.h"
 #import "ZXResultPoint.h"
 #import "ZXWhiteRectangleDetector.h"
 
@@ -80,7 +81,6 @@
 - (int)distance:(ZXResultPoint *)a b:(ZXResultPoint *)b;
 - (void)increment:(NSMutableDictionary *)table key:(ZXResultPoint *)key;
 - (BOOL)isValid:(ZXResultPoint *)p;
-- (int)round:(float)d;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                     topLeft:(ZXResultPoint *)topLeft
                  bottomLeft:(ZXResultPoint *)bottomLeft
@@ -324,17 +324,8 @@
   return [p x] >= 0 && [p x] < image.width && [p y] > 0 && [p y] < image.height;
 }
 
-
-/**
- * Ends up being a bit faster than Math.round(). This merely rounds its
- * argument to the nearest int, where x.5 rounds up.
- */
-- (int)round:(float)d {
-  return (int)(d + 0.5f);
-}
-
 - (int)distance:(ZXResultPoint *)a b:(ZXResultPoint *)b {
-  return [self round:(float)sqrt(([a x] - [b x]) * ([a x] - [b x]) + ([a y] - [b y]) * ([a y] - [b y]))];
+  return [ZXMathUtils round:[ZXResultPoint distance:a pattern2:b]];
 }
 
 

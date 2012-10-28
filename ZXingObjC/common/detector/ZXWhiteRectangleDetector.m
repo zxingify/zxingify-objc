@@ -15,6 +15,7 @@
  */
 
 #import "ZXErrors.h"
+#import "ZXMathUtils.h"
 #import "ZXWhiteRectangleDetector.h"
 
 @interface ZXWhiteRectangleDetector ()
@@ -30,7 +31,6 @@
 - (NSArray *)centerEdges:(ZXResultPoint *)y z:(ZXResultPoint *)z x:(ZXResultPoint *)x t:(ZXResultPoint *)t;
 - (BOOL)containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal;
 - (ZXResultPoint *)blackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
-- (int)distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
 
 @end
 
@@ -250,22 +250,14 @@ int const CORR = 1;
 }
 
 
-/**
- * Ends up being a bit faster than round(). This merely rounds its
- * argument to the nearest int, where x.5 rounds up.
- */
-- (int)round:(float)d {
-  return (int)(d + 0.5f);
-}
-
 - (ZXResultPoint *)blackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
-  int dist = [self distanceL2:aX aY:aY bX:bX bY:bY];
+  int dist = [ZXMathUtils round:[ZXMathUtils distance:aX aY:aY bX:bX bY:bY]];
   float xStep = (bX - aX) / dist;
   float yStep = (bY - aY) / dist;
 
   for (int i = 0; i < dist; i++) {
-    int x = [self round:aX + i * xStep];
-    int y = [self round:aY + i * yStep];
+    int x = [ZXMathUtils round:aX + i * xStep];
+    int y = [ZXMathUtils round:aY + i * yStep];
     if ([self.image getX:x y:y]) {
       return [[[ZXResultPoint alloc] initWithX:x y:y] autorelease];
     }
@@ -273,13 +265,6 @@ int const CORR = 1;
 
   return nil;
 }
-
-- (int)distanceL2:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
-  float xDiff = aX - bX;
-  float yDiff = aY - bY;
-  return [self round:(float)sqrt(xDiff * xDiff + yDiff * yDiff)];
-}
-
 
 /**
  * recenters the points of a constant distance towards the center

@@ -20,6 +20,7 @@
 #import "ZXDetectorResult.h"
 #import "ZXErrors.h"
 #import "ZXGridSampler.h"
+#import "ZXMathUtils.h"
 #import "ZXPDF417Detector.h"
 #import "ZXResultPoint.h"
 
@@ -56,7 +57,6 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 - (void)correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown;
 - (float)computeModuleWidth:(NSArray *)vertices;
 - (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
-- (int)round:(float)d;
 - (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int*)counters;
 - (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
@@ -439,8 +439,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  * based on vertices of the codeword area and estimated module size.
  */
 - (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth {
-  int topRowDimension = [self round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleWidth];
-  int bottomRowDimension = [self round:[ZXResultPoint distance:bottomLeft pattern2:bottomRight] / moduleWidth];
+  int topRowDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleWidth];
+  int bottomRowDimension = [ZXMathUtils round:[ZXResultPoint distance:bottomLeft pattern2:bottomRight] / moduleWidth];
   return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
 }
 
@@ -473,16 +473,6 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                      p4FromY:[bottomLeft y]
                        error:error];
 }
-
-
-/**
- * Ends up being a bit faster than Math.round(). This merely rounds its
- * argument to the nearest int, where x.5 rounds up.
- */
-- (int)round:(float)d {
-  return (int)(d + 0.5f);
-}
-
 
 - (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int*)counters {
   int patternLength = patternLen;

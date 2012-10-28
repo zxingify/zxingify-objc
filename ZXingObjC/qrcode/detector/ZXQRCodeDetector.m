@@ -23,6 +23,7 @@
 #import "ZXFinderPatternFinder.h"
 #import "ZXFinderPatternInfo.h"
 #import "ZXGridSampler.h"
+#import "ZXMathUtils.h"
 #import "ZXPerspectiveTransform.h"
 #import "ZXQRCodeDetector.h"
 #import "ZXQRCodeFinderPattern.h"
@@ -36,7 +37,6 @@
 @property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
 
 - (float)calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern;
-+ (int)round:(float)d;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension error:(NSError**)error;
 - (float)sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
 - (float)sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
@@ -181,8 +181,8 @@
  * of the finder patterns and estimated module size. Returns -1 on an error.
  */
 + (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize error:(NSError**)error {
-  int tltrCentersDimension = [ZXQRCodeDetector round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleSize];
-  int tlblCentersDimension = [ZXQRCodeDetector round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleSize];
+  int tltrCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleSize];
+  int tlblCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleSize];
   int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
 
   switch (dimension & 0x03) {
@@ -294,9 +294,7 @@
     // color, advance to next state or end if we are in state 2 already
     if ((state == 1) == [image getX:realX y:realY]) {
       if (state == 2) {
-        int diffX = x - fromX;
-        int diffY = y - fromY;
-        return (float) sqrt((double) (diffX * diffX + diffY * diffY));
+        return [ZXMathUtils distanceInt:x aY:y bX:fromX bY:fromY];
       }
       state++;
     }
@@ -314,9 +312,7 @@
   // is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
   // small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
   if (state == 2) {
-    int diffX = toX + xstep - fromX;
-    int diffY = toY - fromY;
-    return (float) sqrt((double) (diffX * diffX + diffY * diffY));
+    return [ZXMathUtils distanceInt:toX + xstep aY:toY bX:fromX bY:fromY];
   }
   // else we didn't find even black-white-black; no estimate is really possible
   return NAN;
@@ -351,15 +347,6 @@
                                                                                      moduleSize:overallEstModuleSize
                                                                             resultPointCallback:self.resultPointCallback] autorelease];
   return [alignmentFinder findWithError:error];
-}
-
-
-/**
- * Ends up being a bit faster than Math.round(). This merely rounds its argument to the nearest int,
- * where x.5 rounds up.
- */
-+ (int)round:(float)d {
-  return (int)(d + 0.5f);
 }
 
 @end

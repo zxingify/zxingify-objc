@@ -1022,6 +1022,12 @@
 		256702D1163CA56B00818D0C /* ZXDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702CD163CA56B00818D0C /* ZXDimensions.m */; };
 		256702D2163CA56B00818D0C /* ZXDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702CD163CA56B00818D0C /* ZXDimensions.m */; };
 		256702D3163CA56B00818D0C /* ZXDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702CD163CA56B00818D0C /* ZXDimensions.m */; };
+		256702D7163CAB0F00818D0C /* ZXMathUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 256702D5163CAB0F00818D0C /* ZXMathUtils.h */; };
+		256702D8163CAB0F00818D0C /* ZXMathUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 256702D5163CAB0F00818D0C /* ZXMathUtils.h */; };
+		256702D9163CAB0F00818D0C /* ZXMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702D6163CAB0F00818D0C /* ZXMathUtils.m */; };
+		256702DA163CAB0F00818D0C /* ZXMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702D6163CAB0F00818D0C /* ZXMathUtils.m */; };
+		256702DB163CAB0F00818D0C /* ZXMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702D6163CAB0F00818D0C /* ZXMathUtils.m */; };
+		256702DC163CAB0F00818D0C /* ZXMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 256702D6163CAB0F00818D0C /* ZXMathUtils.m */; };
 		256A88471567ECFA007C38B7 /* ZXBitMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 256A88461567ECFA007C38B7 /* ZXBitMatrixTestCase.m */; };
 		256A88481567ECFA007C38B7 /* ZXBitMatrixTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 256A88461567ECFA007C38B7 /* ZXBitMatrixTestCase.m */; };
 		256A884C1567FB12007C38B7 /* ZXBitSourceBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 256A884B1567FB12007C38B7 /* ZXBitSourceBuilder.m */; };
@@ -1659,6 +1665,8 @@
 		2561A702155F75E7008C7AE9 /* Code128BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Code128BlackBox2TestCase.m; path = oned/Code128BlackBox2TestCase.m; sourceTree = "<group>"; };
 		256702CC163CA56B00818D0C /* ZXDimensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXDimensions.h; path = encoder/ZXDimensions.h; sourceTree = "<group>"; };
 		256702CD163CA56B00818D0C /* ZXDimensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXDimensions.m; path = encoder/ZXDimensions.m; sourceTree = "<group>"; };
+		256702D5163CAB0F00818D0C /* ZXMathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMathUtils.h; sourceTree = "<group>"; };
+		256702D6163CAB0F00818D0C /* ZXMathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMathUtils.m; sourceTree = "<group>"; };
 		256A88451567ECFA007C38B7 /* ZXBitMatrixTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBitMatrixTestCase.h; sourceTree = "<group>"; };
 		256A88461567ECFA007C38B7 /* ZXBitMatrixTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBitMatrixTestCase.m; sourceTree = "<group>"; };
 		256A884A1567FB12007C38B7 /* ZXBitSourceBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBitSourceBuilder.h; sourceTree = "<group>"; };
@@ -2032,6 +2040,8 @@
 		029BCDF515129BD0009E6549 /* detector */ = {
 			isa = PBXGroup;
 			children = (
+				256702D5163CAB0F00818D0C /* ZXMathUtils.h */,
+				256702D6163CAB0F00818D0C /* ZXMathUtils.m */,
 				029BCDF615129BD0009E6549 /* ZXMonochromeRectangleDetector.h */,
 				029BCDF715129BD0009E6549 /* ZXMonochromeRectangleDetector.m */,
 				029BCDF815129BD0009E6549 /* ZXWhiteRectangleDetector.h */,
@@ -2873,6 +2883,7 @@
 				25A911591638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h in Headers */,
 				25A911621638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h in Headers */,
 				256702CF163CA56B00818D0C /* ZXDimensions.h in Headers */,
+				256702D8163CAB0F00818D0C /* ZXMathUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3063,6 +3074,7 @@
 				25A911581638E0E0001FF1A0 /* ZXUPCEANExtension2Support.h in Headers */,
 				25A911611638E5A9001FF1A0 /* ZXUPCEANExtension5Support.h in Headers */,
 				256702CE163CA56B00818D0C /* ZXDimensions.h in Headers */,
+				256702D7163CAB0F00818D0C /* ZXMathUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3401,6 +3413,7 @@
 				25A9115C1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
 				25A911651638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 				256702D2163CA56B00818D0C /* ZXDimensions.m in Sources */,
+				256702DB163CAB0F00818D0C /* ZXMathUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3675,6 +3688,7 @@
 				25A9115D1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
 				25A911661638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 				256702D3163CA56B00818D0C /* ZXDimensions.m in Sources */,
+				256702DC163CAB0F00818D0C /* ZXMathUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3861,6 +3875,7 @@
 				25A9115A1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
 				25A911631638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 				256702D0163CA56B00818D0C /* ZXDimensions.m in Sources */,
+				256702D9163CAB0F00818D0C /* ZXMathUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4135,6 +4150,7 @@
 				25A9115B1638E0E0001FF1A0 /* ZXUPCEANExtension2Support.m in Sources */,
 				25A911641638E5A9001FF1A0 /* ZXUPCEANExtension5Support.m in Sources */,
 				256702D1163CA56B00818D0C /* ZXDimensions.m in Sources */,
+				256702DA163CAB0F00818D0C /* ZXMathUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

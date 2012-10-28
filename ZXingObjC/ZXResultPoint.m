@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXMathUtils.h"
 #import "ZXResultPoint.h"
 
 @interface ZXResultPoint ()
@@ -104,9 +105,7 @@
  * Returns distance between two points
  */
 + (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2 {
-  float xDiff = pattern1.x - pattern2.x;
-  float yDiff = pattern1.y - pattern2.y;
-  return sqrtf(xDiff * xDiff + yDiff * yDiff);
+  return [ZXMathUtils distance:pattern1.x aY:pattern1.y bX:pattern2.x bY:pattern2.y];
 }
 
 
