@@ -128,11 +128,11 @@
   // Creates the bitmatrix with extra space for whtespace
   ZXBitMatrix* output = [[[ZXBitMatrix alloc] initWithWidth:width + 2 * whiteSpace height:height + 2 * whiteSpace] autorelease];
   [output clear];
-  for (int y = 0; y < height; y++) {
+  for (int y = 0, yOutput = output.height - whiteSpace; y < height; y++, yOutput--) {
     for (int x = 0; x < width; x++) {
       // Zero is white in the bytematrix
       if (input[y][x] == 1) {
-        [output setX:x + whiteSpace y:y + whiteSpace];
+        [output setX:x + whiteSpace y:yOutput];
       }
     }
   }
