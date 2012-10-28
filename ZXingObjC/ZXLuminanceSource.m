@@ -83,11 +83,22 @@
 
 
 /**
- * Returns a new object with rotated image data. Only callable if isRotateSupported() is true.
+ * Returns a new object with rotated image data by 90 degrees counterclockwise.
+ * Only callable if isRotateSupported() is true.
  */
 - (ZXLuminanceSource *)rotateCounterClockwise {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:@"This luminance source does not support rotation."
+                                 reason:@"This luminance source does not support rotation by 90 degrees."
+                               userInfo:nil];
+}
+
+/**
+ * Returns a new object with rotated image data by 45 degrees counterclockwise.
+ * Only callable if isRotateSupported() is true.
+ */
+- (ZXLuminanceSource *)rotateCounterClockwise45 {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:@"This luminance source does not support rotation by 45 degrees."
                                userInfo:nil];
 }
 

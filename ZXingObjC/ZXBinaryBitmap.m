@@ -108,10 +108,16 @@
 
 
 /**
- * Returns a new object with rotated image data. Only callable if isRotateSupported() is true.
+ * Returns a new object with rotated image data by 90 degrees counterclockwise.
+ * Only callable if isRotateSupported() is true.
  */
 - (ZXBinaryBitmap *)rotateCounterClockwise {
   ZXLuminanceSource * newSource = [[self.binarizer luminanceSource] rotateCounterClockwise];
+  return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
+}
+
+- (ZXBinaryBitmap *)rotateCounterClockwise45 {
+  ZXLuminanceSource * newSource = [[self.binarizer luminanceSource] rotateCounterClockwise45];
   return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
 }
 

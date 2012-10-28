@@ -34,5 +34,6 @@
 - (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;
 - (ZXBinaryBitmap *)crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXBinaryBitmap *)rotateCounterClockwise;
+- (ZXBinaryBitmap *)rotateCounterClockwise45;
 
 @end

@@ -37,5 +37,6 @@
 - (unsigned char *)matrix;
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXLuminanceSource *)rotateCounterClockwise;
+- (ZXLuminanceSource *)rotateCounterClockwise45;
 
 @end
