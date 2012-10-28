@@ -52,7 +52,7 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
     ZXCaptureVideoPreviewLayer* layer;
     ZXCaptureDevice* capture_device;
     ZXCaptureDeviceInput* input;
-    ZXCaptureVideoOutput* output
+    ZXCaptureVideoOutput* output;
     id<ZXCaptureDelegate> delegate;
     )
     

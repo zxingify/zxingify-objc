@@ -228,6 +228,7 @@ static bool isIPad();
   
   if (input) {
     ZXAV({
+      NSString* preset = 0;
       if (!preset &&
           NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
           [UIScreen mainScreen].scale > 1 &&
@@ -276,10 +277,10 @@ static bool isIPad();
     NSMutableDictionary* attributes =
       [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
     key = (NSString*)kCVPixelBufferWidthKey;
-    value = [NSNumber numberWithUnsignedInt:width]; 
+    value = [NSNumber numberWithUnsignedLong:width];
     [attributes setObject:value forKey:key]; 
     key = (NSString*)kCVPixelBufferHeightKey;
-    value = [NSNumber numberWithUnsignedInt:height];
+    value = [NSNumber numberWithUnsignedLong:height];
     [attributes setObject:value forKey:key]; 
     [output ZXQT(setPixelBufferAttributes:)ZXAV(setVideoSettings:)attributes];
 }
@@ -513,7 +514,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
     [self performSelectorOnMainThread:@selector(setOutputAttributes) withObject:nil waitUntilDone:NO];
     reported_width = size.width;
     reported_height = size.height;
-    if ([delegate  respondsTo:@selector(captureSize:width:height:)]) {
+    if ([delegate  respondsToSelector:@selector(captureSize:width:height:)]) {
       [delegate captureSize:self
                       width:[NSNumber numberWithFloat:size.width]
                      height:[NSNumber numberWithFloat:size.height]];
@@ -666,6 +667,28 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 }
 
 @end
+
+// If you try to define this higher, there (seem to be) clashes with something(s) defined
+// in the includes ...
+
+#if ZXAV(1)+0
+#include <sys/types.h>
+#include <sys/sysctl.h>
+// Gross, I know, but ...
+static bool isIPad() {
+  static int is_ipad = -1;
+  if (is_ipad < 0) {
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
+    char* name = (char*)malloc(size);
+    sysctlbyname("hw.machine", name, &size, NULL, 0);
+    NSString *machine = [NSString stringWithCString:name encoding:NSASCIIStringEncoding];
+    free(name);
+    is_ipad = [machine hasPrefix:@"iPad"];
+  }
+  return !!is_ipad;
+}
+#endif
 
 #else
 

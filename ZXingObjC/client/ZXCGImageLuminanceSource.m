@@ -39,9 +39,9 @@
                                        top:(size_t)top
                                      width:(size_t)width
                                     height:(size_t)height {
-  int bytesPerRow = CVPixelBufferGetBytesPerRow(buffer); 
-  int dataWidth = CVPixelBufferGetWidth(buffer); 
-  int dataHeight = CVPixelBufferGetHeight(buffer); 
+  int bytesPerRow = (int)CVPixelBufferGetBytesPerRow(buffer);
+  int dataWidth = (int)CVPixelBufferGetWidth(buffer);
+  int dataHeight = (int)CVPixelBufferGetHeight(buffer);
 
   if (left + width > dataWidth ||
       top + height > dataHeight) {
@@ -94,7 +94,7 @@
                   top:(size_t)_top
                 width:(size_t)_width
                height:(size_t)_height {
-  self = [self initWithCGImage:_image.cgimage left:_left top:_top width:_width height:_height];
+  self = [self initWithCGImage:_image.cgimage left:(int)_left top:(int)_top width:(int)_width height:(int)_height];
 
   return self;
 }
@@ -111,14 +111,14 @@
                 width:(size_t)_width
                height:(size_t)_height {
   if (self = [super init]) {
-    [self initializeWithImage:_image left:_left top:_top width:_width height:_height];
+    [self initializeWithImage:_image left:(int)_left top:(int)_top width:(int)_width height:(int)_height];
   }
 
   return self;
 }
 
 - (id)initWithCGImage:(CGImageRef)_image {
-  self = [self initWithCGImage:_image left:0 top:0 width:CGImageGetWidth(_image) height:CGImageGetHeight(_image)];
+  self = [self initWithCGImage:_image left:0 top:0 width:(int)CGImageGetWidth(_image) height:(int)CGImageGetHeight(_image)];
 
   return self;
 }
@@ -128,7 +128,7 @@
                  top:(size_t)_top
                width:(size_t)_width
               height:(size_t)_height {
-  CGImageRef _image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer left:_left top:_top width:_width height:_height];
+  CGImageRef _image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer left:(int)_left top:(int)_top width:(int)_width height:(int)_height];
 
   self = [self initWithCGImage:_image];
 
@@ -196,8 +196,8 @@
   top = _top;
   self->width = _width;
   self->height = _height;
-  dataWidth = CGImageGetWidth(cgimage);
-  dataHeight = CGImageGetHeight(cgimage);
+  dataWidth = (int)CGImageGetWidth(cgimage);
+  dataHeight = (int)CGImageGetHeight(cgimage);
   
   if (left + self.width > dataWidth ||
       top + self.height > dataHeight ||
