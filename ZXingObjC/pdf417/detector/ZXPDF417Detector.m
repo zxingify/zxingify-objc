@@ -57,6 +57,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 - (void)correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown;
 - (float)computeModuleWidth:(NSArray *)vertices;
 - (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
+- (int)computeYDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
 - (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int*)counters;
 - (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
@@ -64,7 +65,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                  bottomLeft:(ZXResultPoint *)bottomLeft
                    topRight:(ZXResultPoint *)topRight
                 bottomRight:(ZXResultPoint *)bottomRight
-                  dimension:(int)dimension
+                 xdimension:(int)xdimension
+                 ydimension:(int)ydimension
                       error:(NSError**)error;
 
 @end
@@ -141,12 +143,21 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     return nil;
   }
 
+  int ydimension = [self computeYDimension:[vertices objectAtIndex:4]
+                                  topRight:[vertices objectAtIndex:6]
+                                bottomLeft:[vertices objectAtIndex:5]
+                               bottomRight:[vertices objectAtIndex:7]
+                               moduleWidth:moduleWidth];
+  ydimension = ydimension > dimension ? ydimension : dimension;
+
+  // Deskew and sample image.
   ZXBitMatrix * bits = [self sampleGrid:matrix
                                 topLeft:[vertices objectAtIndex:4]
                              bottomLeft:[vertices objectAtIndex:5]
                                topRight:[vertices objectAtIndex:6]
                             bottomRight:[vertices objectAtIndex:7]
-                              dimension:dimension
+                             xdimension:dimension
+                             ydimension:ydimension
                                   error:error];
   if (!bits) {
     return nil;
@@ -444,25 +455,36 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
 }
 
+/**
+ * Computes the y dimension (number of modules in a column) of the PDF417 Code
+ * based on vertices of the codeword area and estimated module size.
+ */
+- (int)computeYDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth {
+  int leftColumnDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleWidth];
+  int rightColumnDimension = [ZXMathUtils round:[ZXResultPoint distance:topRight pattern2:bottomRight] / moduleWidth];
+  return (leftColumnDimension + rightColumnDimension) >> 1;
+}
+
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
                     topLeft:(ZXResultPoint *)topLeft
                  bottomLeft:(ZXResultPoint *)bottomLeft
                    topRight:(ZXResultPoint *)topRight
                 bottomRight:(ZXResultPoint *)bottomRight
-                  dimension:(int)dimension
+                 xdimension:(int)xdimension
+                 ydimension:(int)ydimension
                       error:(NSError **)error {
   ZXGridSampler * sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:matrix
-                  dimensionX:dimension
-                  dimensionY:dimension
+                  dimensionX:xdimension
+                  dimensionY:ydimension
                        p1ToX:0.0f
                        p1ToY:0.0f
-                       p2ToX:dimension
+                       p2ToX:xdimension
                        p2ToY:0.0f
-                       p3ToX:dimension
-                       p3ToY:dimension
+                       p3ToX:xdimension
+                       p3ToY:ydimension
                        p4ToX:0.0f
-                       p4ToY:dimension
+                       p4ToY:ydimension
                      p1FromX:[topLeft x]
                      p1FromY:[topLeft y]
                      p2FromX:[topRight x]
