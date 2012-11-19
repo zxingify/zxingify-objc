@@ -37,4 +37,17 @@
   return self;
 }
 
+- (BOOL)isEqual:(id)object
+{
+  if (![object isKindOfClass:[ZXDataCharacter class]])
+    return false;
+
+  ZXDataCharacter* that = (ZXDataCharacter*)object;
+  return (self.value == that.value) && (self.checksumPortion == that.checksumPortion);
+}
+
+- (NSString *)description {
+  return [NSString stringWithFormat:@"%d(%d)", self.value, self.checksumPortion];
+}
+
 @end

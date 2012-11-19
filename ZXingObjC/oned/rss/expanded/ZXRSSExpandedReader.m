@@ -20,6 +20,7 @@
 #import "ZXDataCharacter.h"
 #import "ZXErrors.h"
 #import "ZXExpandedPair.h"
+#import "ZXExpandedRow.h"
 #import "ZXResult.h"
 #import "ZXRSSExpandedReader.h"
 #import "ZXRSSFinderPattern.h"
@@ -83,9 +84,11 @@ const int MAX_PAIRS = 11;
 @interface ZXRSSExpandedReader () {
   int startEnd[2];
   int currentSequence[LONGEST_SEQUENCE_SIZE];
+  BOOL startFromEven;
 }
 
 @property (nonatomic, retain) NSMutableArray *pairs;
+@property (nonatomic, retain) NSMutableArray *rows;
 
 - (BOOL)adjustOddEvenCounts:(int)numModules;
 - (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;
@@ -97,16 +100,25 @@ const int MAX_PAIRS = 11;
 - (BOOL)isNotA1left:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
 - (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern;
 - (void)reverseCounters:(int *)counters length:(unsigned int)length;
+- (NSMutableArray *)checkRows:(BOOL)reversed;
+- (NSMutableArray *)checkRows:(NSMutableArray *)rows current:(int)currentRow;
+- (void)storeRow:(int)rowNumber wasReversed:(BOOL)reversed;
+- (BOOL)isValidSequence:(NSArray *)pairs;
+- (BOOL)isPartialRow:(NSArray *)pairs of:(NSArray *)rows;
+- (void)removePartialRows:(NSArray *)pairs from:(NSMutableArray *)rows;
 
 @end
 
 @implementation ZXRSSExpandedReader
 
 @synthesize pairs;
+@synthesize rows;
 
 - (id)init {
   if (self = [super init]) {
     self.pairs = [NSMutableArray array];
+    self.rows = [NSMutableArray array];
+    startFromEven = NO;
   }
 
   return self;
@@ -114,39 +126,204 @@ const int MAX_PAIRS = 11;
 
 - (void)dealloc {
   [pairs release];
+  [rows release];
 
   [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  [self reset];
-  if (![self decodeRow2pairs:rowNumber row:row]) {
-    if (error) *error = NotFoundErrorInstance();
-    return nil;
+  [self.pairs removeAllObjects];
+  startFromEven = NO;
+  NSMutableArray* _pairs = [self decodeRow2pairs:rowNumber row:row];
+  if (_pairs) {
+    ZXResult* result = [self constructResult:_pairs error:error];
+    if (result)
+      return result; 
   }
-  return [self constructResult:self.pairs error:error];
+
+  [self.pairs removeAllObjects];
+  startFromEven = YES;
+  _pairs = [self decodeRow2pairs:rowNumber row:row];
+  if (_pairs) {
+    if (error)
+    	*error = nil;
+    ZXResult* result = [self constructResult:_pairs error:error];
+    if (result)
+      return result;
+  }
+
+  if (error)
+		*error = NotFoundErrorInstance();
+  return nil;
 }
 
 - (void)reset {
   [self.pairs removeAllObjects];
+  [self.rows removeAllObjects];
 }
 
 - (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row {
   while (YES) {
     ZXExpandedPair *nextPair = [self retrieveNextPair:row previousPairs:self.pairs rowNumber:rowNumber];
     if (!nextPair) {
-      return nil;
+      if ([self.pairs count] == 0)
+        return nil;
+      break;
     }
     [self.pairs addObject:nextPair];
-    if ([nextPair mayBeLast]) {
-      if ([self checkChecksum]) {
-        return self.pairs;
-      }
-      if (nextPair.mustBeLast) {
-        return nil;
+  }
+
+  // TODO: verify sequence of finder patterns
+  if ([self checkChecksum])
+    return self.pairs;
+
+  BOOL tryStackedDecode = [self.rows count] > 0;
+  [self storeRow:rowNumber wasReversed:NO];
+  if (tryStackedDecode) {
+    NSMutableArray* ps = [self checkRows:NO];
+    if (ps)
+      return ps;
+    ps = [self checkRows:YES];
+    if (ps)
+      return ps;
+  }
+
+  return nil;
+}
+
+- (NSMutableArray *) checkRows:(BOOL)reversed {
+  if ([self.rows count] > 25) {
+    [self.rows removeAllObjects];
+    return nil;
+  }
+
+	[self.pairs removeAllObjects];
+  if (reversed)
+    self.rows = [[[[self.rows reverseObjectEnumerator] allObjects] mutableCopy] autorelease];
+
+  NSMutableArray* ps = [self checkRows:[NSMutableArray array] current:0];
+
+  if (reversed)
+    self.rows = [[[[self.rows reverseObjectEnumerator] allObjects] mutableCopy] autorelease];
+
+  return ps;
+}
+
+- (NSMutableArray *)checkRows:(NSMutableArray *)collectedRows current:(int)currentRow {
+  for (int i = currentRow; i < [self.rows count]; i++) {
+    ZXExpandedRow *row = [self.rows objectAtIndex:i];
+    int size = [collectedRows count];
+    [self.pairs removeAllObjects];
+    for (int j = 0; j < size; j++)
+      [self.pairs addObjectsFromArray:[[collectedRows objectAtIndex:j] pairs]];
+    [self.pairs addObjectsFromArray:row.pairs];
+
+    if (![self isValidSequence:self.pairs])
+      continue;
+
+    if ([self checkChecksum])
+      return self.pairs;
+
+    NSMutableArray *rs = [NSMutableArray array];
+    [rs addObjectsFromArray:collectedRows];
+    [rs addObject:row];
+    NSMutableArray *ps = [self checkRows:rs current:i + 1];
+    if (ps)
+      return ps;
+  }
+  return nil;
+}
+
+- (BOOL)isValidSequence:(NSArray *)pairs {
+  for (int i = 0, sz = 2; i < FINDER_PATTERN_SEQUENCES_LEN; i++, sz++) {
+    if ([self.pairs count] > sz)
+      continue;
+
+    BOOL stop = YES;
+    for (int j = 0; j < [self.pairs count]; j++) {
+      if ([[[self.pairs objectAtIndex:j] finderPattern] value] != FINDER_PATTERN_SEQUENCES[i][j]) {
+        stop = NO;
+        break;
       }
     }
+
+    if (stop)
+      return YES;
   }
+  return NO;
+}
+
+- (void)storeRow:(int)rowNumber wasReversed:(BOOL)wasReversed {
+  int insertPos = 0;
+  BOOL prevIsSame = NO;
+  BOOL nextIsSame = NO;
+  while (insertPos < [self.rows count]) {
+    ZXExpandedRow *erow = [self.rows objectAtIndex:insertPos];
+    if (erow.rowNumber > rowNumber) {
+      nextIsSame = [erow isEquivalent:self.pairs];
+      break;
+    }
+    prevIsSame = [erow isEquivalent:self.pairs];
+    insertPos++;
+  }
+  if (nextIsSame || prevIsSame)
+    return;
+
+  if ([self isPartialRow:self.pairs of:self.rows])
+    return;
+
+  [self.rows insertObject:[[[ZXExpandedRow alloc] initWithPairs:self.pairs rowNumber:rowNumber wasReversed:wasReversed] autorelease] atIndex:insertPos];
+
+  [self removePartialRows:self.pairs from:self.rows];
+}
+
+- (void)removePartialRows:(NSArray *)_pairs from:(NSMutableArray *)_rows {
+  NSMutableArray *toRemove = [NSMutableArray array];
+  for (ZXExpandedRow *r in _rows) {
+    if ([r.pairs count] == [_pairs count])
+      continue;
+    BOOL allFound = YES;
+    for (ZXExpandedPair *p in r.pairs) {
+      BOOL found = NO;
+      for (ZXExpandedPair *pp in _pairs) {
+        if ([p isEqual:pp]) {
+          found = YES;
+          break;
+        }
+      }
+      if (!found) {
+        allFound = NO;
+        break;
+      }
+    }
+    if (allFound)
+      [toRemove addObject:r];
+  }
+
+  for (ZXExpandedRow *r in toRemove)
+    [_rows removeObject:r];
+}
+
+- (BOOL)isPartialRow:(NSArray *)_pairs of:(NSArray *)_rows {
+  for (ZXExpandedRow *r in _rows) {
+		BOOL allFound = YES;
+    for (ZXExpandedPair *p in _pairs) {
+      BOOL found = NO;
+      for (ZXExpandedPair *pp in r.pairs) {
+        if ([p isEqual:pp]) {
+          found = YES;
+          break;
+        }
+      }
+      if (!found) {
+        allFound = NO;
+        break;
+      }
+    }
+    if (allFound)
+      return YES;
+  }
+  return NO;
 }
 
 - (ZXResult *)constructResult:(NSMutableArray *)_pairs error:(NSError **)error {
@@ -172,6 +349,10 @@ const int MAX_PAIRS = 11;
   ZXExpandedPair *firstPair = [self.pairs objectAtIndex:0];
   ZXDataCharacter *checkCharacter = firstPair.leftChar;
   ZXDataCharacter *firstCharacter = firstPair.rightChar;
+
+  if (!firstCharacter)
+    return NO;
+
   int checksum = [firstCharacter checksumPortion];
   int s = 2;
 
@@ -206,6 +387,8 @@ const int MAX_PAIRS = 11;
 // not private for testing
 - (ZXExpandedPair *)retrieveNextPair:(ZXBitArray *)row previousPairs:(NSMutableArray *)previousPairs rowNumber:(int)rowNumber {
   BOOL isOddPattern = [previousPairs count] % 2 == 0;
+  if (startFromEven)
+    isOddPattern = !isOddPattern;
   ZXRSSFinderPattern *pattern;
   BOOL keepFinding = YES;
   int forcedOffset = -1;
@@ -222,7 +405,7 @@ const int MAX_PAIRS = 11;
     }
   } while (keepFinding);
   NSError *error = nil;
-  BOOL mayBeLast = [self checkPairSequence:previousPairs pattern:pattern error:&error];
+  BOOL mayBeLast = YES;
   if (error) {
     return nil;
   }
@@ -294,6 +477,8 @@ const int MAX_PAIRS = 11;
     rowOffset = [[[[lastPair finderPattern] startEnd] objectAtIndex:1] intValue];
   }
   BOOL searchingEvenPair = [previousPairs count] % 2 != 0;
+  if (startFromEven)
+    searchingEvenPair = !searchingEvenPair;
 
   BOOL isWhite = NO;
   while (rowOffset < width) {
@@ -424,12 +609,20 @@ const int MAX_PAIRS = 11;
   int numModules = 17; //left and right data characters have all the same length
   float elementWidth = (float)[ZXAbstractRSSReader count:counters arrayLen:countersLen] / (float)numModules;
 
+  float expectedElementWidth = ([pattern.startEnd[1] floatValue] - [pattern.startEnd[0] floatValue]) / 15.0f;
+  if (fabsf(elementWidth - expectedElementWidth) / expectedElementWidth > 0.3f)
+    return nil;
+
   for (int i = 0; i < countersLen; i++) {
     float value = 1.0f * counters[i] / elementWidth;
     int count = (int)(value + 0.5f);
     if (count < 1) {
+      if (value < 0.3f)
+        return nil;
       count = 1;
     } else if (count > 8) {
+      if (value > 8.7f)
+        return nil;
       count = 8;
     }
     int offset = i >> 1;

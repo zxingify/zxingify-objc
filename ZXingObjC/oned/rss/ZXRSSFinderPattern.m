@@ -50,4 +50,13 @@
   [super dealloc];
 }
 
+- (BOOL)isEqual:(id)object
+{
+  if (![object isKindOfClass:[ZXRSSFinderPattern class]])
+    return false;
+
+  ZXRSSFinderPattern* that = (ZXRSSFinderPattern*)object;
+  return self.value == that.value;
+}
+
 @end
