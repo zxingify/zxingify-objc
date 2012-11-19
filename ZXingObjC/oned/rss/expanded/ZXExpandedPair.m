@@ -58,4 +58,22 @@
   return self.rightChar == nil;
 }
 
++ (BOOL)isEqualOrNil:(id)o1 toObject:(id)o2 {
+  return o1 == nil ? o2 == nil : [o1 isEqual:o2];
+}
+
+- (BOOL)isEqual:(id)object {
+  if (![object isKindOfClass:[ZXExpandedPair class]])
+    return NO;
+  ZXExpandedPair *that = (ZXExpandedPair *)object;
+  return
+  	[ZXExpandedPair isEqualOrNil:self.leftChar toObject:that.leftChar] &&
+  	[ZXExpandedPair isEqualOrNil:self.rightChar toObject:that.rightChar] &&
+  	[ZXExpandedPair isEqualOrNil:self.finderPattern toObject:that.finderPattern];
+}
+
+- (NSString *)description {
+  return [NSString stringWithFormat:@"[ %@, %@ : %d ]", self.leftChar, self.rightChar, self.finderPattern.value];
+}
+
 @end
