@@ -16,11 +16,7 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
-#import <QuartzCore/QuartzCore.h>
 #import "ViewController.h"
-#import "ZXCapture.h"
-#import "ZXDecodeHints.h"
-#import "ZXResult.h"
 
 @interface ViewController ()
 

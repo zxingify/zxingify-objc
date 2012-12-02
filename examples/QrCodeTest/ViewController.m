@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
+#import <ZXingObjC/ZXingObjC.h>
 #import "ViewController.h"
-#import "ZXBarcodeFormat.h"
-#import "ZXBitMatrix.h"
-#import "ZXImage.h"
-#import "ZXMultiFormatWriter.h"
 
 @implementation ViewController
 

@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
-#import "ZXCaptureDelegate.h"
-
 @interface ViewController : UIViewController <ZXCaptureDelegate>
 
 @end

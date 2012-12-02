@@ -88,17 +88,31 @@ To add ZXingObjC to your project:
 
 1. [Download ZXingObjC](https://github.com/TheLevelUp/ZXingObjC/tarball/master) or clone it from git: `git clone git://github.com/TheLevelUp/ZXingObjC.git`.
 
-2. There are two ways to add ZXingObjC to your project, either as a static library dependency, or adding the files directly to the project.
-    * As a static library:
-        1. First drag the ZXingObjC.xcodeproj file into Xcode. Make sure "Copy items" is unchecked and "Reference Type" is "Relative to Project" before clicking "Add".
-        2. Next, you must add the static library itself as a dependency. You can do this by selecting your project in the left sidebar, select your target, and choose the "Build Phases" tab. Under "Target Dependencies", click the plus button, and then choose either ZXingObjC-iOS for an iOS app, or ZXingObjC-osx for a Mac app.
-        3. Now we need to tell XCode where to find the header files for ZXingObjC. While your target is still selected, choose the "Build Settings" tab. Look for "Header Search Paths" under "Search Paths", and add the relative path from your project's directory to the ZXingObjC folder.
-    * To add the files directly, just drag the ZXingObjC folder into Xcode. You may choose to copy the files into your project folder, or reference them from the downloaded location.
+2. Drag the ZXingObjC.xcodeproj file into Xcode. Make sure "Copy items" is unchecked and "Reference Type" is "Relative to Project" before clicking "Add".
 
-3. In the "Build Phases" tab, we need to add the following frameworks under "Link Binary With Libraries":
-    * ImageIO.framework
+3. Selecting your project in the left sidebar, select your target, and choose the "Build Phases" tab. Under "Target Dependencies", click the plus button, and then choose either ZXingObjC-iOS for an iOS app, or ZXingObjC-osx for a Mac app.
+
+4. In the "Link Binary with Libraries" section, click the plus button and choose libZXingObjC-iOS.a for an iOS app, or libZXingObjC-osx.a for a Mac app.
+
+5. Add the following frameworks under "Link Binary With Libraries":
+
+  For an iOS app:
+    * AVFoundation.framework
     * CoreGraphics.framework
-    * If you added ZXingObjC as a static library, also add libZXingObjC-iOS.a (for iOS apps) or libZXingObjC-osx.a (for Mac apps)
+    * CoreVideo.framework
+    * ImageIO.framework
+
+  For a Mac app:
+    * ApplicationServices.framework
+    * CoreVideo.framework
+    * QuartzCore.framework
+    * QTKit.framework
+
+6. Import the ZXingObjC framework header:
+
+```obj-c
+#import <ZXingObjC/ZXingObjC.h>
+```
 
 License
 -------

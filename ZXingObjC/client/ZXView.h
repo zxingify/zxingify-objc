@@ -15,7 +15,9 @@
  */
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#import <UIKit/UIKit.h>
 #define ZXView UIView
 #else
+#import <Cocoa/Cocoa.h>
 #define ZXView NSView
 #endif

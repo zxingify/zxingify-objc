@@ -9,14 +9,17 @@
 /* Begin PBXBuildFile section */
 		022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B185E14D1B5FE000503E2 /* UIKit.framework */; };
 		022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186014D1B5FE000503E2 /* Foundation.framework */; };
-		022B186314D1B5FE000503E2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186214D1B5FE000503E2 /* CoreGraphics.framework */; };
 		022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 022B186714D1B5FE000503E2 /* InfoPlist.strings */; };
 		026851F8151383A200394C7B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 026851F7151383A200394C7B /* ViewController.xib */; };
 		029BCCF715128A90009E6549 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B186A14D1B5FE000503E2 /* main.m */; };
 		029BCCF815128A92009E6549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B187114D1B5FE000503E2 /* ViewController.m */; };
 		029BCCF915128A94009E6549 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B186E14D1B5FE000503E2 /* AppDelegate.m */; };
-		02DBD1BC156E887500C6DF66 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DBD1B3156E876300C6DF66 /* libZXingObjC-iOS.a */; };
-		02DBD1BE156E888700C6DF66 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DBD1BD156E888700C6DF66 /* ImageIO.framework */; };
+		25404797166AFBDF00E13304 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DBD1B3156E876300C6DF66 /* libZXingObjC-iOS.a */; };
+		2540479B166AFC5900E13304 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2540479A166AFC5900E13304 /* Default-568h@2x.png */; };
+		2540479D166AFCD800E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540479C166AFCD800E13304 /* AVFoundation.framework */; };
+		2540479F166AFCDC00E13304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540479E166AFCDC00E13304 /* CoreGraphics.framework */; };
+		254047A4166AFCF600E13304 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254047A2166AFCE400E13304 /* ImageIO.framework */; };
+		254047A5166AFD0200E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254047A0166AFCE100E13304 /* CoreVideo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,8 +55,15 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02DBD1A8156E876200C6DF66 /* ZXingObjC.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02D26EE1151288DB007F8DC6;
+			remoteGlobalIDString = 25403CB2166A96FA00E13304;
 			remoteInfo = "ZXingObjC-iOS";
+		};
+		25404794166AF9D400E13304 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02DBD1A8156E876200C6DF66 /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2540439E166ABA0A00E13304;
+			remoteInfo = "OS X Framework";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -61,7 +71,6 @@
 		022B185A14D1B5FE000503E2 /* QrCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QrCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		022B185E14D1B5FE000503E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		022B186014D1B5FE000503E2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		022B186214D1B5FE000503E2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		022B186614D1B5FE000503E2 /* QrCodeTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QrCodeTest-Info.plist"; sourceTree = SOURCE_ROOT; };
 		022B186814D1B5FE000503E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		022B186A14D1B5FE000503E2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
@@ -72,7 +81,11 @@
 		022B187114D1B5FE000503E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
 		026851F7151383A200394C7B /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = SOURCE_ROOT; };
 		02DBD1A8156E876200C6DF66 /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../ZXingObjC.xcodeproj; sourceTree = "<group>"; };
-		02DBD1BD156E888700C6DF66 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		2540479A166AFC5900E13304 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
+		2540479C166AFCD800E13304 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2540479E166AFCDC00E13304 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		254047A0166AFCE100E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		254047A2166AFCE400E13304 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,11 +93,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02DBD1BE156E888700C6DF66 /* ImageIO.framework in Frameworks */,
-				02DBD1BC156E887500C6DF66 /* libZXingObjC-iOS.a in Frameworks */,
-				022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */,
+				25404797166AFBDF00E13304 /* libZXingObjC-iOS.a in Frameworks */,
+				2540479D166AFCD800E13304 /* AVFoundation.framework in Frameworks */,
+				2540479F166AFCDC00E13304 /* CoreGraphics.framework in Frameworks */,
+				254047A5166AFD0200E13304 /* CoreVideo.framework in Frameworks */,
 				022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */,
-				022B186314D1B5FE000503E2 /* CoreGraphics.framework in Frameworks */,
+				254047A4166AFCF600E13304 /* ImageIO.framework in Frameworks */,
+				022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +109,10 @@
 		022B184F14D1B5FE000503E2 = {
 			isa = PBXGroup;
 			children = (
+				254047A2166AFCE400E13304 /* ImageIO.framework */,
+				254047A0166AFCE100E13304 /* CoreVideo.framework */,
+				2540479E166AFCDC00E13304 /* CoreGraphics.framework */,
+				2540479C166AFCD800E13304 /* AVFoundation.framework */,
 				022B186414D1B5FE000503E2 /* QrCodeTest */,
 				022B185D14D1B5FE000503E2 /* Frameworks */,
 				022B185B14D1B5FE000503E2 /* Products */,
@@ -114,8 +133,6 @@
 				02DBD1A8156E876200C6DF66 /* ZXingObjC.xcodeproj */,
 				022B185E14D1B5FE000503E2 /* UIKit.framework */,
 				022B186014D1B5FE000503E2 /* Foundation.framework */,
-				022B186214D1B5FE000503E2 /* CoreGraphics.framework */,
-				02DBD1BD156E888700C6DF66 /* ImageIO.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -123,6 +140,7 @@
 		022B186414D1B5FE000503E2 /* QrCodeTest */ = {
 			isa = PBXGroup;
 			children = (
+				2540479A166AFC5900E13304 /* Default-568h@2x.png */,
 				022B186D14D1B5FE000503E2 /* AppDelegate.h */,
 				022B186E14D1B5FE000503E2 /* AppDelegate.m */,
 				022B187014D1B5FE000503E2 /* ViewController.h */,
@@ -151,6 +169,7 @@
 				02DBD1B5156E876300C6DF66 /* ZXingObjCTests-iOS.octest */,
 				02DBD1B7156E876300C6DF66 /* libZXingObjC-osx.a */,
 				02DBD1B9156E876300C6DF66 /* ZXingObjCTests-osx.octest */,
+				25404795166AF9D400E13304 /* ZXingObjC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -237,6 +256,13 @@
 			remoteRef = 02DBD1B8156E876300C6DF66 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		25404795166AF9D400E13304 /* ZXingObjC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ZXingObjC.framework;
+			remoteRef = 25404794166AF9D400E13304 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -246,6 +272,7 @@
 			files = (
 				022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */,
 				026851F8151383A200394C7B /* ViewController.xib in Resources */,
+				2540479B166AFC5900E13304 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,10 +359,6 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QrCodeTest-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"../../ZXingObjC/**",
-					"../../Client/**",
-				);
 				INFOPLIST_FILE = "QrCodeTest-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -347,10 +370,6 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QrCodeTest-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"../../ZXingObjC/**",
-					"../../Client/**",
-				);
 				INFOPLIST_FILE = "QrCodeTest-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

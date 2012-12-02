@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <QuartzCore/QuartzCore.h>
+
 @class ZXBitMatrix;
 
 @interface ZXImage : NSObject

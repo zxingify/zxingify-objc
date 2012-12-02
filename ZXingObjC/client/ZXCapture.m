@@ -26,6 +26,7 @@
 #include "ZXResult.h"
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#import <UIKit/UIKit.h>
 #define ZXCaptureOutput AVCaptureOutput
 #define ZXMediaTypeVideo AVMediaTypeVideo
 #define ZXCaptureConnection AVCaptureConnection
@@ -59,8 +60,8 @@ static bool isIPad();
     radians = -1 * radians;
 #endif
 
-    int _width = CGImageGetWidth(original);
-    int _height = CGImageGetHeight(original);
+    size_t _width = CGImageGetWidth(original);
+    size_t _height = CGImageGetHeight(original);
 
     CGRect imgRect = CGRectMake(0, 0, _width, _height);
     CGAffineTransform _transform = CGAffineTransformMakeRotation(radians);

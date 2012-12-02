@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#include <ImageIO/ImageIO.h>
+#else
+#import <QuartzCore/QuartzCore.h>
+#endif
+
 #import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
 #import "ZXLuminanceSource.h"

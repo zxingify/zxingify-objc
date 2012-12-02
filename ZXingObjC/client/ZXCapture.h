@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <QuartzCore/QuartzCore.h>
 #import "ZXCaptureDelegate.h"
 
 @protocol ZXReader;
