@@ -110,6 +110,10 @@
     totalBytes += dataBlock.numDataCodewords;
   }
 
+  if (totalBytes == 0) {
+    return nil;
+  }
+
   unsigned char resultBytes[totalBytes];
   int resultOffset = 0;
 

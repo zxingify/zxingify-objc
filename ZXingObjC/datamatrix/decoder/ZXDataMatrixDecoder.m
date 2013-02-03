@@ -91,6 +91,11 @@
   for (int i = 0; i < dataBlocksCount; i++) {
     totalBytes += [[dataBlocks objectAtIndex:i] numDataCodewords];
   }
+
+  if (totalBytes == 0) {
+    return nil;
+  }
+
   unsigned char resultBytes[totalBytes];
 
   for (int j = 0; j < dataBlocksCount; j++) {
