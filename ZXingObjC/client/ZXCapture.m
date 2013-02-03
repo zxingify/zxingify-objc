@@ -234,6 +234,7 @@ static bool isIPad();
           NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
           [UIScreen mainScreen].scale > 1 &&
           isIPad() &&
+          &AVCaptureSessionPresetiFrame960x540 != nil &&
           [zxd supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
         // NSLog(@"960");
         preset = AVCaptureSessionPresetiFrame960x540;
