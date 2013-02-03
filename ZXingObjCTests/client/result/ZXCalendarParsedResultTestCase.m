@@ -34,7 +34,8 @@
                   location:(NSString*)location
                startString:(NSString*)startString
                  endString:(NSString*)endString
-                  attendee:(NSString*)attendee
+                 organizer:(NSString*)organizer
+                 attendees:(NSArray*)attendees
                   latitude:(double)latitude
                  longitude:(double)longitude;
 
@@ -143,9 +144,43 @@ static NSDateFormatter * DATE_TIME_FORMAT = nil;
                   location:nil
                startString:@"20080504T123456Z"
                  endString:nil
-                  attendee:nil
+                 organizer:nil
+                  attendees:nil
                   latitude:-12.345
                  longitude:-45.678];
+}
+
+- (void)testOrganizer {
+  [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+                           @"DTSTART:20080504T123456Z\r\n"
+                           @"ORGANIZER:mailto:bob@example.org\r\n"
+                           @"END:VEVENT\r\nEND:VCALENDAR"
+               description:nil
+                   summary:nil
+                  location:nil
+               startString:@"20080504T123456Z"
+                 endString:nil
+                 organizer:@"bob@example.org"
+                 attendees:nil
+                  latitude:NAN
+                 longitude:NAN];
+}
+
+- (void)testAttendees {
+  [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+                           @"DTSTART:20080504T123456Z\r\n"
+                           @"ATTENDEE:mailto:bob@example.org\r\n"
+                           @"ATTENDEE:mailto:alice@example.org\r\n"
+                           @"END:VEVENT\r\nEND:VCALENDAR"
+               description:nil
+                   summary:nil
+                  location:nil
+               startString:@"20080504T123456Z"
+                 endString:nil
+                 organizer:nil
+                 attendees:[NSArray arrayWithObjects:@"bob@example.org", @"alice@example.org", nil]
+                  latitude:NAN
+                 longitude:NAN];
 }
 
 - (void)testVEventEscapes {
@@ -195,7 +230,8 @@ static NSDateFormatter * DATE_TIME_FORMAT = nil;
                   location:location
                startString:startString
                  endString:endString
-                  attendee:nil
+                 organizer:nil
+                 attendees:nil
                   latitude:NAN
                  longitude:NAN];
 }
@@ -206,7 +242,8 @@ static NSDateFormatter * DATE_TIME_FORMAT = nil;
                   location:(NSString*)location
                startString:(NSString*)startString
                  endString:(NSString*)endString
-                  attendee:(NSString*)attendee
+                 organizer:(NSString*)organizer
+                 attendees:(NSArray*)attendees
                   latitude:(double)latitude
                  longitude:(double)longitude {
   ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
@@ -218,7 +255,11 @@ static NSDateFormatter * DATE_TIME_FORMAT = nil;
   STAssertEqualObjects(calResult.location, location, @"Locations do not match");
   STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.start], startString, @"Starts do not match");
   STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.end], endString, @"Ends do not match");
-  STAssertEqualObjects(calResult.attendee, attendee, @"Attendees do not match");
+  STAssertEqualObjects(organizer, calResult.organizer, @"Organizers do not match");
+  STAssertTrue((attendees == nil && calResult.attendees == nil) ||
+               [attendees isEqualToArray:calResult.attendees], @"Attendees do not match");
+  [self assertEqualOrNAN:latitude actual:calResult.latitude];
+  [self assertEqualOrNAN:longitude actual:calResult.longitude];
 }
 
 - (void)assertEqualOrNAN:(double)expected actual:(double)actual {

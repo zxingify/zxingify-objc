@@ -24,14 +24,15 @@
 @property (nonatomic, retain, readonly) NSDate * end;
 @property (nonatomic, readonly) BOOL endAllDay;
 @property (nonatomic, retain, readonly) NSString * location;
-@property (nonatomic, retain, readonly) NSString * attendee;
+@property (nonatomic, retain, readonly) NSString * organizer;
+@property (nonatomic, retain, readonly) NSArray * attendees;
 @property (nonatomic, retain, readonly) NSString * description;
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
 
 - (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString location:(NSString *)location
-             attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
+            organizer:(NSString *)organizer attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
 + (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString location:(NSString *)location
-                             attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
+                            organizer:(NSString *)organizer attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
 
 @end

@@ -34,7 +34,6 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 - (BOOL)isLikeVCardDate:(NSString *)value;
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
 - (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
-+ (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider;
 - (NSString*)toPrimaryValue:(NSArray*)list;
 - (NSArray*)toPrimaryValues:(NSArray*)lists;
 - (NSArray*)toTypes:(NSArray*)lists;
