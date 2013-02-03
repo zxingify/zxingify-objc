@@ -19,17 +19,19 @@
 @interface ZXCalendarParsedResult : ZXParsedResult
 
 @property (nonatomic, retain, readonly) NSString * summary;
-@property (nonatomic, retain, readonly) NSString * start;
-@property (nonatomic, retain, readonly) NSString * end;
+@property (nonatomic, retain, readonly) NSDate * start;
+@property (nonatomic, readonly) BOOL startAllDay;
+@property (nonatomic, retain, readonly) NSDate * end;
+@property (nonatomic, readonly) BOOL endAllDay;
 @property (nonatomic, retain, readonly) NSString * location;
 @property (nonatomic, retain, readonly) NSString * attendee;
 @property (nonatomic, retain, readonly) NSString * description;
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
 
-- (id)initWithSummary:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location
+- (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString location:(NSString *)location
              attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
-+ (id)calendarParsedResultWithSummary:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location
++ (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString location:(NSString *)location
                              attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
 
 @end

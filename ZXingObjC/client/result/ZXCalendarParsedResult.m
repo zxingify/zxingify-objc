@@ -19,17 +19,24 @@
 @interface ZXCalendarParsedResult ()
 
 @property(nonatomic, retain) NSString * summary;
-@property(nonatomic, retain) NSString * start;
-@property(nonatomic, retain) NSString * end;
+@property(nonatomic, retain) NSDate * start;
+@property(nonatomic) BOOL startAllDay;
+@property(nonatomic, retain) NSDate * end;
+@property(nonatomic) BOOL endAllDay;
 @property(nonatomic, retain) NSString * location;
 @property(nonatomic, retain) NSString * attendee;
 @property(nonatomic, retain) NSString * description;
 @property(nonatomic) double latitude;
 @property(nonatomic) double longitude;
 
-- (void)validateDate:(NSString *)date;
+- (NSDate *)parseDate:(NSString *)when;
+- (NSString *)format:(BOOL)allDay date:(NSDate *)date;
 
 @end
+
+static NSRegularExpression * DATE_TIME = nil;
+static NSDateFormatter * DATE_FORMAT = nil;
+static NSDateFormatter * DATE_TIME_FORMAT = nil;
 
 @implementation ZXCalendarParsedResult
 
@@ -42,18 +49,26 @@
 @synthesize latitude;
 @synthesize longitude;
 
-- (id)initWithSummary:(NSString *)aSummary start:(NSString *)aStart end:(NSString *)anEnd location:(NSString *)aLocation
++ (void)initialize {
+  DATE_TIME = [[NSRegularExpression alloc] initWithPattern:@"[0-9]{8}(T[0-9]{6}Z?)?"
+                                                   options:0
+                                                     error:nil];
+
+  DATE_FORMAT = [[NSDateFormatter alloc] init];
+  DATE_FORMAT.dateFormat = @"yyyyMMdd";
+
+  DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
+  DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss";
+}
+
+- (id)initWithSummary:(NSString *)aSummary startString:(NSString *)aStartString endString:(NSString *)anEndString location:(NSString *)aLocation
              attendee:(NSString *)anAttendee description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
   if (self = [super initWithType:kParsedResultTypeCalendar]) {
-    [self validateDate:aStart];
     self.summary = aSummary;
-    self.start = aStart;
-    if (anEnd != nil) {
-      [self validateDate:end];
-      self.end = anEnd;
-    } else {
-      self.end = nil;
-    }
+    self.start = [self parseDate:aStartString];
+    self.end = anEndString == nil ? nil : [self parseDate:anEndString];
+    self.startAllDay = aStartString.length == 8;
+    self.endAllDay = anEndString != nil && anEndString.length == 8;
     self.location = aLocation;
     self.attendee = anAttendee;
     self.description = aDescription;
@@ -63,9 +78,9 @@
   return self;
 }
 
-+ (id)calendarParsedResultWithSummary:(NSString *)summary start:(NSString *)start end:(NSString *)end location:(NSString *)location
++ (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString location:(NSString *)location
                              attendee:(NSString *)attendee description:(NSString *)description latitude:(double)latitude longitude:(double)longitude {
-  return [[[self alloc] initWithSummary:summary start:start end:end location:location attendee:attendee
+  return [[[self alloc] initWithSummary:summary startString:startString endString:endString location:location attendee:attendee
                             description:description latitude:latitude longitude:longitude] autorelease];
 }
 
@@ -82,8 +97,8 @@
 - (NSString *)displayResult {
   NSMutableString * result = [NSMutableString stringWithCapacity:100];
   [ZXParsedResult maybeAppend:self.summary result:result];
-  [ZXParsedResult maybeAppend:self.start result:result];
-  [ZXParsedResult maybeAppend:self.end result:result];
+  [ZXParsedResult maybeAppend:[self format:self.startAllDay date:self.start] result:result];
+  [ZXParsedResult maybeAppend:[self format:self.endAllDay date:self.end] result:result];
   [ZXParsedResult maybeAppend:self.location result:result];
   [ZXParsedResult maybeAppend:self.attendee result:result];
   [ZXParsedResult maybeAppend:self.description result:result];
@@ -92,45 +107,35 @@
 
 
 /**
- * RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021) or DATE-TIME
- * (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
- * 
- * @param date The string to validate
+ * Parses a string as a date. RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021)
+ * or DATE-TIME (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
  */
-- (void)validateDate:(NSString *)date {
-  if (date != nil) {
-    int length = [date length];
-    if (length != 8 && length != 15 && length != 16) {
-      [NSException raise:NSInvalidArgumentException 
-                  format:@"Invalid length"];
-    }
-
-    for (int i = 0; i < 8; i++) {
-      if (!isdigit([date characterAtIndex:i])) {
-        [NSException raise:NSInvalidArgumentException 
-                    format:@"Invalid date"];
-      }
-    }
-
-    if (length > 8) {
-      if ([date characterAtIndex:8] != 'T') {
-        [NSException raise:NSInvalidArgumentException 
-                    format:@"Invalid date"];
-      }
-
-      for (int i = 9; i < 15; i++) {
-        if (!isdigit([date characterAtIndex:i])) {
-          [NSException raise:NSInvalidArgumentException 
-                      format:@"Invalid date"];
-        }
-      }
-
-      if (length == 16 && [date characterAtIndex:15] != 'Z') {
-        [NSException raise:NSInvalidArgumentException 
-                    format:@"Invalid date"];
-      }
+- (NSDate *)parseDate:(NSString *)when {
+  NSArray* matches = [DATE_TIME matchesInString:when options:0 range:NSMakeRange(0, when.length)];
+  if (matches.count == 0) {
+    [NSException raise:NSInvalidArgumentException
+                format:@"Invalid date"];
+  }
+  if (when.length == 8) {
+    // Show only year/month/day
+    return [DATE_FORMAT dateFromString:when];
+  } else {
+    // The when string can be local time, or UTC if it ends with a Z
+    if (when.length == 16 && [when characterAtIndex:15] == 'Z') {
+      return [DATE_TIME_FORMAT dateFromString:[when substringToIndex:15]];
+    } else {
+      return [DATE_TIME_FORMAT dateFromString:when];
     }
   }
+}
+
+- (NSString *)format:(BOOL)allDay date:(NSDate *)date {
+  if (date == nil) {
+    return nil;
+  }
+  NSDateFormatter *format = [[NSDateFormatter alloc] init];
+  format.dateFormat = allDay ? @"MMM d, yyyy" : @"MMM d, yyyy hh:mm:ss a";
+  return [format stringFromDate:date];
 }
 
 @end

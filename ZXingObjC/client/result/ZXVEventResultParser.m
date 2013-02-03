@@ -60,8 +60,8 @@
 
   @try {
     return [ZXCalendarParsedResult calendarParsedResultWithSummary:summary
-                                                             start:start
-                                                               end:end
+                                                       startString:start
+                                                         endString:end
                                                           location:location
                                                           attendee:nil
                                                        description:description

@@ -190,29 +190,29 @@
   // UTC times
   [self doTestResultWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n"
                                  @"DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR"
-                    goldenResult:@"foo\n20080504T123456Z\n20080505T234555Z"
+                    goldenResult:@"foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM"
                             type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n"
                                  @"DTEND:20080505T234555Z\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504T123456Z\n20080505T234555Z"
+                    goldenResult:@"foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM"
                             type:kParsedResultTypeCalendar];
   // Local times
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n"
                                  @"DTEND:20080505T234555\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504T123456\n20080505T234555"
+                    goldenResult:@"foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM"
                             type:kParsedResultTypeCalendar];
   // Date only (all day event)
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n"
                                  @"DTEND:20080505\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504\n20080505"
+                    goldenResult:@"foo\nMay 4, 2008\nMay 5, 2008"
                             type:kParsedResultTypeCalendar];
   // Start time only
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504T123456Z" type:kParsedResultTypeCalendar];
+                    goldenResult:@"foo\nMay 4, 2008 12:34:56 PM" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504T123456" type:kParsedResultTypeCalendar];
+                    goldenResult:@"foo\nMay 4, 2008 12:34:56 PM" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT"
-                    goldenResult:@"foo\n20080504" type:kParsedResultTypeCalendar];
+                    goldenResult:@"foo\nMay 4, 2008" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT"
                     goldenResult:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT" type:kParsedResultTypeURI];
   // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR

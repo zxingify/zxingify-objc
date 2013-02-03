@@ -25,15 +25,15 @@
                description:(NSString*)description
                    summary:(NSString*)summary
                   location:(NSString*)location
-                     start:(NSString*)start
-                       end:(NSString*)end;
+               startString:(NSString*)startString
+                 endString:(NSString*)endString;
 
 - (void)doTestWithContents:(NSString*)contents
                description:(NSString*)description
                    summary:(NSString*)summary
                   location:(NSString*)location
-                     start:(NSString*)start
-                       end:(NSString*)end
+               startString:(NSString*)startString
+                 endString:(NSString*)endString
                   attendee:(NSString*)attendee
                   latitude:(double)latitude
                  longitude:(double)longitude;
@@ -46,6 +46,12 @@
 @implementation ZXCalendarParsedResultTestCase
 
 static double EPSILON = 0.0000000001;
+static NSDateFormatter * DATE_TIME_FORMAT = nil;
+
++ (void)initialize {
+  DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
+  DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
+}
 
 - (void)testStartEnd {
   [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
@@ -55,8 +61,8 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:nil
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:@"20080505T234555Z"];
+               startString:@"20080504T123456Z"
+                 endString:@"20080505T234555Z"];
 }
 
 - (void)testNoVCalendar {
@@ -67,8 +73,8 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:nil
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:@"20080505T234555Z"];
+               startString:@"20080504T123456Z"
+                 endString:@"20080505T234555Z"];
 }
 
 - (void)testStart {
@@ -78,8 +84,8 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:nil
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:nil];
+               startString:@"20080504T123456Z"
+                 endString:nil];
 }
 
 - (void)testSummary {
@@ -90,8 +96,8 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:@"foo"
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:nil];
+               startString:@"20080504T123456Z"
+                 endString:nil];
 }
 
 - (void)testLocation {
@@ -102,8 +108,8 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:nil
                   location:@"Miami"
-                     start:@"20080504T123456Z"
-                       end:nil];
+               startString:@"20080504T123456Z"
+                 endString:nil];
 }
 
 - (void)testDescription {
@@ -114,8 +120,8 @@ static double EPSILON = 0.0000000001;
                description:@"This is a test"
                    summary:nil
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:nil];
+               startString:@"20080504T123456Z"
+                 endString:nil];
   [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
                            @"DTSTART:20080504T123456Z\r\n"
                            @"DESCRIPTION:This is a test\r\n\t with a continuation\r\n"
@@ -123,8 +129,8 @@ static double EPSILON = 0.0000000001;
                description:@"This is a test with a continuation"
                    summary:nil
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:nil];
+               startString:@"20080504T123456Z"
+                 endString:nil];
 }
 
 - (void)testGeo {
@@ -135,8 +141,8 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:nil
                   location:nil
-                     start:@"20080504T123456Z"
-                       end:nil
+               startString:@"20080504T123456Z"
+                 endString:nil
                   attendee:nil
                   latitude:-12.345
                  longitude:-45.678];
@@ -161,8 +167,8 @@ static double EPSILON = 0.0000000001;
                description:@"Meeting with a friend\nlook at homepage first\n\n\n  \n"
                    summary:@"Summary line"
                   location:@"Location, with, escaped, commas"
-                     start:@"20111110T110000"
-                       end:@"20111110T120000"];
+               startString:@"20111110T110000Z"
+                 endString:@"20111110T120000Z"];
 }
 
 - (void)testAllDayValueDate {
@@ -173,22 +179,22 @@ static double EPSILON = 0.0000000001;
                description:nil
                    summary:nil
                   location:nil
-                     start:@"20111110"
-                       end:@"20111110"];
+               startString:@"20111110T000000Z"
+                 endString:@"20111110T000000Z"];
 }
 
 - (void)doTestWithContents:(NSString*)contents
                description:(NSString*)description
                    summary:(NSString*)summary
                   location:(NSString*)location
-                     start:(NSString*)start
-                       end:(NSString*)end {
+               startString:(NSString*)startString
+                 endString:(NSString*)endString {
   [self doTestWithContents:contents
                description:description
                    summary:summary
                   location:location
-                     start:start
-                       end:end
+               startString:startString
+                 endString:endString
                   attendee:nil
                   latitude:NAN
                  longitude:NAN];
@@ -198,8 +204,8 @@ static double EPSILON = 0.0000000001;
                description:(NSString*)description
                    summary:(NSString*)summary
                   location:(NSString*)location
-                     start:(NSString*)start
-                       end:(NSString*)end
+               startString:(NSString*)startString
+                 endString:(NSString*)endString
                   attendee:(NSString*)attendee
                   latitude:(double)latitude
                  longitude:(double)longitude {
@@ -210,8 +216,8 @@ static double EPSILON = 0.0000000001;
   STAssertEqualObjects(calResult.description, description, @"Descriptions do not match");
   STAssertEqualObjects(calResult.summary, summary, @"Summaries do not match");
   STAssertEqualObjects(calResult.location, location, @"Locations do not match");
-  STAssertEqualObjects(calResult.start, start, @"Starts do not match");
-  STAssertEqualObjects(calResult.end, end, @"Ends do not match");
+  STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.start], startString, @"Starts do not match");
+  STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.end], endString, @"Ends do not match");
   STAssertEqualObjects(calResult.attendee, attendee, @"Attendees do not match");
 }
 
