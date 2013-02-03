@@ -91,7 +91,7 @@ static NSRegularExpression* USER_IN_HOST = nil;
     // Found a colon, but it looks like it is after the host, so the protocol is still missing
     _uri = [NSString stringWithFormat:@"http://%@", _uri];
   } else {
-    _uri = [[[_uri substringToIndex:protocolEnd] lowercaseString] stringByAppendingString:[_uri substringFromIndex:protocolEnd]];
+    _uri = [[_uri substringToIndex:protocolEnd] stringByAppendingString:[_uri substringFromIndex:protocolEnd]];
   }
   return _uri;
 }

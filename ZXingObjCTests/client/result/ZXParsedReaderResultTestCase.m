@@ -42,7 +42,7 @@
                             type:kParsedResultTypeText];
   [self doTestResultWithContents:@"This: a test with lots of @ nearly-random punctuation! No? OK then."
                     goldenResult:@"This: a test with lots of @ nearly-random punctuation! No? OK then."
-                            type:kParsedResultTypeText];
+                            type:kParsedResultTypeURI]; // Yeah, it's OK that this is thought of as maybe a URI
 }
 
 - (void)testBookmarkType {
@@ -52,7 +52,7 @@
   [self doTestResultWithContents:@"MEBKM:TITLE:Google;URL:google.com;;" goldenResult:@"Google\nhttp://google.com"
                             type:kParsedResultTypeURI];
   [self doTestResultWithContents:@"MEBKM:URL:http://google.com;;" goldenResult:@"http://google.com" type:kParsedResultTypeURI];
-  [self doTestResultWithContents:@"MEBKM:URL:HTTPS://google.com;;" goldenResult:@"https://google.com" type:kParsedResultTypeURI];
+  [self doTestResultWithContents:@"MEBKM:URL:HTTPS://google.com;;" goldenResult:@"HTTPS://google.com" type:kParsedResultTypeURI];
 }
 
 - (void)testURLTOType {
@@ -72,7 +72,8 @@
   [self doTestResultWithContents:@"MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;"
                     goldenResult:@"srowen@example.org\nStuff\nThis is some text" type:kParsedResultTypeEmailAddress];
   [self doTestResultWithContents:@"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;"
-                    goldenResult:@"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;" type:kParsedResultTypeText];
+                    goldenResult:@"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;" type:kParsedResultTypeURI];
+  // Yeah, it's OK that this is thought of as maybe a URI as long as it's not EMAIL_ADDRESS
 }
 
 - (void)testEmailAddressType {
@@ -144,7 +145,7 @@
   [self doTestResultWithContents:@"http://google.com" goldenResult:@"http://google.com" type:kParsedResultTypeURI];
   [self doTestResultWithContents:@"google.com" goldenResult:@"http://google.com" type:kParsedResultTypeURI];
   [self doTestResultWithContents:@"https://google.com" goldenResult:@"https://google.com" type:kParsedResultTypeURI];
-  [self doTestResultWithContents:@"HTTP://google.com" goldenResult:@"http://google.com" type:kParsedResultTypeURI];
+  [self doTestResultWithContents:@"HTTP://google.com" goldenResult:@"HTTP://google.com" type:kParsedResultTypeURI];
   [self doTestResultWithContents:@"http://google.com/foobar" goldenResult:@"http://google.com/foobar" type:kParsedResultTypeURI];
   [self doTestResultWithContents:@"https://google.com:443/foobar" goldenResult:@"https://google.com:443/foobar" type:kParsedResultTypeURI];
   [self doTestResultWithContents:@"google.com:443" goldenResult:@"http://google.com:443" type:kParsedResultTypeURI];
@@ -213,11 +214,12 @@
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT"
                     goldenResult:@"foo\n20080504" type:kParsedResultTypeCalendar];
   [self doTestResultWithContents:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT"
-                    goldenResult:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT" type:kParsedResultTypeText];
+                    goldenResult:@"BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT" type:kParsedResultTypeURI];
+  // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
   // Make sure illegal entries without newlines don't crash
   [self doTestResultWithContents:@"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
                     goldenResult:@"BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT"
-                            type:kParsedResultTypeText];
+                            type:kParsedResultTypeURI];
 }
 
 - (void)testSMS {
