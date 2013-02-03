@@ -99,11 +99,14 @@ To add ZXingObjC to your project:
   For an iOS app:
     * AVFoundation.framework
     * CoreGraphics.framework
+    * CoreMedia.framework
     * CoreVideo.framework
     * ImageIO.framework
+    * QuartzCore.framework
 
   For a Mac app:
     * ApplicationServices.framework
+    * CoreMedia.framework
     * CoreVideo.framework
     * QuartzCore.framework
     * QTKit.framework
