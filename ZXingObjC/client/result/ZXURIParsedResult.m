@@ -90,8 +90,6 @@ static NSRegularExpression* USER_IN_HOST = nil;
   } else if ([self isColonFollowedByPortNumber:_uri protocolEnd:protocolEnd]) {
     // Found a colon, but it looks like it is after the host, so the protocol is still missing
     _uri = [NSString stringWithFormat:@"http://%@", _uri];
-  } else {
-    _uri = [[_uri substringToIndex:protocolEnd] stringByAppendingString:[_uri substringFromIndex:protocolEnd]];
   }
   return _uri;
 }
