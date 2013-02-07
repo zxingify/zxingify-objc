@@ -21,7 +21,7 @@
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
 @property (nonatomic, readonly) double altitude;
-@property (nonatomic, copy, readonly) NSString * query;
+@property (nonatomic, copy, readonly) NSString *query;
 
 - (id)initWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query;
 + (id)geoParsedResultWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query;

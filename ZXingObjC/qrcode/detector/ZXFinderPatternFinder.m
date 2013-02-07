@@ -33,12 +33,12 @@ int const FINDER_PATTERN_MAX_MODULES = 57;
 NSInteger centerCompare(id center1, id center2, void *context);
 NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
-@property (nonatomic, retain) ZXBitMatrix * image;
-@property (nonatomic, retain) NSMutableArray * possibleCenters;
+@property (nonatomic, retain) ZXBitMatrix *image;
+@property (nonatomic, retain) NSMutableArray *possibleCenters;
 @property (nonatomic, assign) BOOL hasSkipped;
 @property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
 
-- (float)centerFromEnd:(int*)stateCount end:(int)end;
+- (float)centerFromEnd:(int *)stateCount end:(int)end;
 - (int)findRowSkip;
 - (BOOL)haveMultiplyConfirmedCenters;
 - (NSMutableArray *)selectBestPatterns;
@@ -76,7 +76,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   [super dealloc];
 }
 
-- (ZXFinderPatternInfo *)find:(ZXDecodeHints *)hints error:(NSError**)error {
+- (ZXFinderPatternInfo *)find:(ZXDecodeHints *)hints error:(NSError **)error {
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = self.image.height;
   int maxJ = self.image.width;
@@ -160,7 +160,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     }
   }
 
-  NSMutableArray * patternInfo = [self selectBestPatterns];
+  NSMutableArray *patternInfo = [self selectBestPatterns];
   if (!patternInfo) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -173,7 +173,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  * Given a count of black/white/black/white/black pixels just seen and an end position,
  * figures the location of the center of this run.
  */
-- (float)centerFromEnd:(int*)stateCount end:(int)end {
+- (float)centerFromEnd:(int *)stateCount end:(int)end {
   return (float)(end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
 }
 
@@ -338,7 +338,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  * Each additional find is more evidence that the location is in fact a finder
  * pattern center
  */
-- (BOOL)handlePossibleCenter:(int*)stateCount i:(int)i j:(int)j {
+- (BOOL)handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
   float centerJ = [self centerFromEnd:stateCount end:j];
   float centerI = [self crossCheckVertical:i centerJ:(int)centerJ maxCount:stateCount[2] originalStateCountTotal:stateCountTotal];
@@ -349,7 +349,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
       BOOL found = NO;
       int max = [self.possibleCenters count];
       for (int index = 0; index < max; index++) {
-        ZXQRCodeFinderPattern * center = [self.possibleCenters objectAtIndex:index];
+        ZXQRCodeFinderPattern *center = [self.possibleCenters objectAtIndex:index];
         if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
           [possibleCenters replaceObjectAtIndex:index
                                      withObject:[center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize]];
@@ -359,7 +359,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
       }
 
       if (!found) {
-        ZXResultPoint * point = [[[ZXQRCodeFinderPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
+        ZXResultPoint *point = [[[ZXQRCodeFinderPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
         [self.possibleCenters addObject:point];
         if (self.resultPointCallback != nil) {
           [self.resultPointCallback foundPossibleResultPoint:point];
@@ -383,9 +383,9 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   if (max <= 1) {
     return 0;
   }
-  ZXQRCodeFinderPattern * firstConfirmedCenter = nil;
+  ZXQRCodeFinderPattern *firstConfirmedCenter = nil;
   for (int i = 0; i < max; i++) {
-    ZXQRCodeFinderPattern * center = [self.possibleCenters objectAtIndex:i];
+    ZXQRCodeFinderPattern *center = [self.possibleCenters objectAtIndex:i];
     if ([center count] >= CENTER_QUORUM) {
       if (firstConfirmedCenter == nil) {
         firstConfirmedCenter = center;
@@ -404,7 +404,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float totalModuleSize = 0.0f;
   int max = [self.possibleCenters count];
   for (int i = 0; i < max; i++) {
-    ZXQRCodeFinderPattern * pattern = [self.possibleCenters objectAtIndex:i];
+    ZXQRCodeFinderPattern *pattern = [self.possibleCenters objectAtIndex:i];
     if ([pattern count] >= CENTER_QUORUM) {
       confirmedCount++;
       totalModuleSize += [pattern estimatedModuleSize];
@@ -417,7 +417,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float average = totalModuleSize / (float)max;
   float totalDeviation = 0.0f;
   for (int i = 0; i < max; i++) {
-    ZXQRCodeFinderPattern * pattern = [self.possibleCenters objectAtIndex:i];
+    ZXQRCodeFinderPattern *pattern = [self.possibleCenters objectAtIndex:i];
     totalDeviation += fabsf([pattern estimatedModuleSize] - average);
   }
   return totalDeviation <= 0.05f * totalModuleSize;
@@ -477,7 +477,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
     float limit = MAX(0.2f * average, stdDev);
 
     for (int i = 0; i < [self.possibleCenters count] && [self.possibleCenters count] > 3; i++) {
-      ZXQRCodeFinderPattern * pattern = [self.possibleCenters objectAtIndex:i];
+      ZXQRCodeFinderPattern *pattern = [self.possibleCenters objectAtIndex:i];
       if (fabsf([pattern estimatedModuleSize] - average) > limit) {
         [self.possibleCenters removeObjectAtIndex:i];
         i--;

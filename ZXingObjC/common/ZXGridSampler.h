@@ -43,12 +43,12 @@
                     p2FromX:(float)p2FromX p2FromY:(float)p2FromY
                     p3FromX:(float)p3FromX p3FromY:(float)p3FromY
                     p4FromX:(float)p4FromX p4FromY:(float)p4FromY
-                      error:(NSError**)error;
+                      error:(NSError **)error;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                  dimensionX:(int)dimensionX
                  dimensionY:(int)dimensionY
                   transform:(ZXPerspectiveTransform *)transform
-                      error:(NSError**)error;
-+ (BOOL)checkAndNudgePoints:(ZXBitMatrix *)image points:(float *)points pointsLen:(int)pointsLen error:(NSError**)error;
+                      error:(NSError **)error;
++ (BOOL)checkAndNudgePoints:(ZXBitMatrix *)image points:(float *)points pointsLen:(int)pointsLen error:(NSError **)error;
 
 @end

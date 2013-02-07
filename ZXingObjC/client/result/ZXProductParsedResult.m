@@ -18,8 +18,8 @@
 
 @interface ZXProductParsedResult ()
 
-@property (nonatomic, copy) NSString * normalizedProductID;
-@property (nonatomic, copy) NSString * productID;
+@property (nonatomic, copy) NSString *normalizedProductID;
+@property (nonatomic, copy) NSString *productID;
 
 @end
 
@@ -56,7 +56,7 @@
   [super dealloc];
 }
 
-- (NSString*)displayResult {
+- (NSString *)displayResult {
   return self.productID;
 }
 

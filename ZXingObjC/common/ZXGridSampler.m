@@ -20,7 +20,7 @@
 #import "ZXGridSampler.h"
 #import "ZXPerspectiveTransform.h"
 
-static ZXGridSampler * gridSampler = nil;
+static ZXGridSampler *gridSampler = nil;
 
 @implementation ZXGridSampler
 

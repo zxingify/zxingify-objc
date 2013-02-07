@@ -21,8 +21,8 @@
 
 @interface ZXBinaryBitmap ()
 
-@property (nonatomic, retain) ZXBinarizer* binarizer;
-@property (nonatomic, retain) ZXBitMatrix* matrix;
+@property (nonatomic, retain) ZXBinarizer *binarizer;
+@property (nonatomic, retain) ZXBitMatrix *matrix;
 
 @end
 
@@ -69,7 +69,7 @@
  * cached data. Callers should assume this method is expensive and call it as seldom as possible.
  * This method is intended for decoding 1D barcodes and may choose to apply sharpening.
  */
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error {
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError **)error {
   return [self.binarizer blackRow:y row:row error:error];
 }
 
@@ -98,7 +98,7 @@
  * original data rather than a copy. Only callable if isCropSupported() is true.
  */
 - (ZXBinaryBitmap *)crop:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
-  ZXLuminanceSource * newSource = [[self.binarizer luminanceSource] crop:left top:top width:aWidth height:aHeight];
+  ZXLuminanceSource *newSource = [[self.binarizer luminanceSource] crop:left top:top width:aWidth height:aHeight];
   return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
 }
 
@@ -112,12 +112,12 @@
  * Only callable if isRotateSupported() is true.
  */
 - (ZXBinaryBitmap *)rotateCounterClockwise {
-  ZXLuminanceSource * newSource = [[self.binarizer luminanceSource] rotateCounterClockwise];
+  ZXLuminanceSource *newSource = [[self.binarizer luminanceSource] rotateCounterClockwise];
   return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
 }
 
 - (ZXBinaryBitmap *)rotateCounterClockwise45 {
-  ZXLuminanceSource * newSource = [[self.binarizer luminanceSource] rotateCounterClockwise45];
+  ZXLuminanceSource *newSource = [[self.binarizer luminanceSource] rotateCounterClockwise45];
   return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
 }
 

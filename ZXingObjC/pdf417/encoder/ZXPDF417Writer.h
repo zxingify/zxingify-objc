@@ -21,6 +21,6 @@
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
                 minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-             compaction:(ZXCompaction)compaction error:(NSError**)error __attribute__((deprecated));
+             compaction:(ZXCompaction)compaction error:(NSError **)error __attribute__((deprecated));
 
 @end

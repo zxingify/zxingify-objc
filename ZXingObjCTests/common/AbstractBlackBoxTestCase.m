@@ -26,11 +26,11 @@
 
 @property (nonatomic, retain) id<ZXReader> barcodeReader;
 @property (nonatomic, assign) ZXBarcodeFormat expectedFormat;
-@property (nonatomic, copy) NSString * testBase;
-@property (nonatomic, retain) NSMutableArray * testResults;
+@property (nonatomic, copy) NSString *testBase;
+@property (nonatomic, retain) NSMutableArray *testResults;
 
 - (void)runTests;
-- (NSString*)pathInBundle:(NSURL*)file;
+- (NSString *)pathInBundle:(NSURL *)file;
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure;
 
 @end
@@ -90,7 +90,7 @@
   [self testBlackBoxCountingResults:YES];
 }
 
-+ (NSString*)barcodeFormatAsString:(ZXBarcodeFormat)format {
++ (NSString *)barcodeFormatAsString:(ZXBarcodeFormat)format {
   switch (format) {
     case kBarcodeFormatAztec:
       return @"Aztec";
@@ -148,7 +148,7 @@
   return nil;
 }
 
-- (NSString*)pathInBundle:(NSURL*)file {
+- (NSString *)pathInBundle:(NSURL *)file {
   NSInteger startOfResources = [[file path] rangeOfString:@"Resources"].location;
   if (startOfResources == NSNotFound) {
     return [file path];
@@ -163,7 +163,7 @@
   }
 
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSArray * imageFiles = [self imageFiles];
+  NSArray *imageFiles = [self imageFiles];
   int testCount = [self.testResults count];
 
   int passedCounts[testCount];
@@ -178,35 +178,35 @@
   int tryHarderMisreadCounts[testCount];
   memset(tryHarderMisreadCounts, 0, testCount * sizeof(int));
 
-  for (NSURL * testImage in imageFiles) {
+  for (NSURL *testImage in imageFiles) {
     NSLog(@"Starting %@", [self pathInBundle:testImage]);
     
-    ZXImage * image = [[ZXImage alloc] initWithURL:testImage];
+    ZXImage *image = [[ZXImage alloc] initWithURL:testImage];
 
-    NSString * testImageFileName = [[[testImage path] componentsSeparatedByString:@"/"] lastObject];
-    NSString * fileBaseName = [testImageFileName substringToIndex:[testImageFileName rangeOfString:@"."].location];
-    NSString * expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase];
+    NSString *testImageFileName = [[[testImage path] componentsSeparatedByString:@"/"] lastObject];
+    NSString *fileBaseName = [testImageFileName substringToIndex:[testImageFileName rangeOfString:@"."].location];
+    NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase];
 
-    NSString * expectedText;
+    NSString *expectedText;
     if (expectedTextFile) {
       expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSUTF8StringEncoding error:nil];
     } else {
-      NSString * expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:testBase];
+      NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:testBase];
       STAssertNotNil(expectedTextFile, @"Expected text does not exist");
       expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSISOLatin1StringEncoding error:nil];
     }
 
-    NSURL * expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:testBase]];
-    NSMutableDictionary * expectedMetadata = [NSMutableDictionary dictionary];
+    NSURL *expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:testBase]];
+    NSMutableDictionary *expectedMetadata = [NSMutableDictionary dictionary];
     if ([fileManager fileExistsAtPath:[expectedMetadataFile path]]) {
       expectedMetadata = [NSMutableDictionary dictionaryWithContentsOfFile:[expectedMetadataFile path]];
     }
 
     for (int x = 0; x < testCount; x++) {
       float rotation = [[self.testResults objectAtIndex:x] rotation];
-      ZXImage * rotatedImage = [self rotateImage:image degrees:rotation];
-      ZXLuminanceSource * source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
-      ZXBinaryBitmap * bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
+      ZXImage *rotatedImage = [self rotateImage:image degrees:rotation];
+      ZXLuminanceSource *source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
+      ZXBinaryBitmap *bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
       BOOL misread;
       if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:NO misread:&misread]) {
         passedCounts[x]++;
@@ -231,7 +231,7 @@
   int totalMaxMisread = 0;
 
   for (int x = 0; x < testCount; x++) {
-    TestResult* testResult = [self.testResults objectAtIndex:x];
+    TestResult *testResult = [self.testResults objectAtIndex:x];
     NSLog(@"Rotation %d degrees:", (int) testResult.rotation);
     NSLog(@"  %d of %d images passed (%d required)",
           passedCounts[x], imageFiles.count, testResult.mustPassCount);
@@ -267,8 +267,8 @@
   // Then run through again and assert if any failed
   if (assertOnFailure) {
     for (int x = 0; x < testCount; x++) {
-      TestResult* testResult = [self.testResults objectAtIndex:x];
-      NSString* label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images failed", testResult.rotation];
+      TestResult *testResult = [self.testResults objectAtIndex:x];
+      NSString *label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images failed", testResult.rotation];
       STAssertTrue(passedCounts[x] >= testResult.mustPassCount, label);
       STAssertTrue(tryHarderCounts[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
       label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images misread", testResult.rotation];
@@ -278,16 +278,16 @@
   }
 }
 
-- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL*)misread {
-  NSString * suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
+- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
+  NSString *suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
   *misread = NO;
 
-  ZXDecodeHints * hints = [ZXDecodeHints hints];
+  ZXDecodeHints *hints = [ZXDecodeHints hints];
   if (tryHarder) {
     hints.tryHarder = YES;
   }
 
-  ZXResult * result = [self.barcodeReader decode:source hints:hints error:nil];
+  ZXResult *result = [self.barcodeReader decode:source hints:hints error:nil];
   if (!result) {
     return NO;
   }
@@ -299,14 +299,14 @@
     return NO;
   }
 
-  NSString * resultText = result.text;
+  NSString *resultText = result.text;
   if (![expectedText isEqualToString:resultText]) {
     NSLog(@"Content mismatch: expected '%@' but got '%@'%@", expectedText, resultText, suffix);
     *misread = YES;
     return NO;
   }
 
-  NSMutableDictionary * resultMetadata = result.resultMetadata;
+  NSMutableDictionary *resultMetadata = result.resultMetadata;
   for (id keyObj in [expectedMetadata allKeys]) {
     ZXResultMetadataType key = [keyObj intValue];
     id expectedValue = [expectedMetadata objectForKey:keyObj];

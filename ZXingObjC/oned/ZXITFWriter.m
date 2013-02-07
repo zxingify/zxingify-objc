@@ -30,7 +30,7 @@
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
+- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
   int length = [contents length];
   if (length % 2 != 0) {
     [NSException raise:NSInvalidArgumentException format:@"The length of the input should be even"];
@@ -41,7 +41,7 @@
 
   int resultLen = 9 + 9 * length;
   if (pLength) *pLength = resultLen;
-  unsigned char* result = (unsigned char*)malloc(resultLen * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(resultLen * sizeof(unsigned char));
   const int startLen = ZX_ITF_STARTLEN;
   int start[ZX_ITF_STARTLEN] = {1, 1, 1, 1};
 

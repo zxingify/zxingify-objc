@@ -50,10 +50,10 @@
 
 @interface AbstractNegativeBlackBoxTestCase ()
 
-@property (nonatomic, retain) NSMutableArray * testResults;
+@property (nonatomic, retain) NSMutableArray *testResults;
 
-- (NSString*)pathInBundle:(NSURL*)file;
-- (BOOL)checkForFalsePositives:(ZXImage*)image rotationInDegrees:(CGFloat)rotationInDegrees;
+- (NSString *)pathInBundle:(NSURL *)file;
+- (BOOL)checkForFalsePositives:(ZXImage *)image rotationInDegrees:(CGFloat)rotationInDegrees;
 
 @end
 
@@ -80,7 +80,7 @@
   [self.testResults addObject:[[[NegativeTestResult alloc] initWithFalsePositivesAllowed:falsePositivesAllowed rotation:rotation] autorelease]];
 }
 
-- (NSString*)pathInBundle:(NSURL*)file {
+- (NSString *)pathInBundle:(NSURL *)file {
   NSInteger startOfResources = [[file path] rangeOfString:@"Resources"].location;
   if (startOfResources == NSNotFound) {
     return [file path];
@@ -94,7 +94,7 @@
     STFail(@"No test results");
   }
 
-  NSArray * imageFiles = [self imageFiles];
+  NSArray *imageFiles = [self imageFiles];
 
   int falsePositives[self.testResults.count];
   memset(falsePositives, 0, self.testResults.count * sizeof(int));
@@ -102,9 +102,9 @@
   for (NSURL *testImage in imageFiles) {
     NSLog(@"Starting %@", [self pathInBundle:testImage]);
 
-    ZXImage * image = [[ZXImage alloc] initWithURL:testImage];
+    ZXImage *image = [[ZXImage alloc] initWithURL:testImage];
     for (int x = 0; x < self.testResults.count; x++) {
-      NegativeTestResult* testResult = [self.testResults objectAtIndex:x];
+      NegativeTestResult *testResult = [self.testResults objectAtIndex:x];
       if (![self checkForFalsePositives:image rotationInDegrees:testResult.rotation]) {
         falsePositives[x]++;
       }
@@ -117,7 +117,7 @@
   int totalAllowed = 0;
 
   for (int x = 0; x < testResults.count; x++) {
-    NegativeTestResult* testResult = [testResults objectAtIndex:x];
+    NegativeTestResult *testResult = [testResults objectAtIndex:x];
     totalFalsePositives += falsePositives[x];
     totalAllowed += testResult.falsePositivesAllowed;
   }
@@ -129,7 +129,7 @@
   }
 
   for (int x = 0; x < self.testResults.count; x++) {
-    NegativeTestResult* testResult = [self.testResults objectAtIndex:x];
+    NegativeTestResult *testResult = [self.testResults objectAtIndex:x];
     NSLog(@"Rotation %d degrees: %d of %d images were false positives (%d allowed)",
           (int) testResult.rotation, falsePositives[x], imageFiles.count,
           testResult.falsePositivesAllowed);
@@ -141,12 +141,12 @@
 /**
  * Make sure ZXing does NOT find a barcode in the image.
  */
-- (BOOL)checkForFalsePositives:(ZXImage*)image rotationInDegrees:(CGFloat)rotationInDegrees {
-  ZXImage * rotatedImage = [self rotateImage:image degrees:rotationInDegrees];
-  ZXLuminanceSource * source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
-  ZXBinaryBitmap * bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
-  NSError* error = nil;
-  ZXResult * result = [self.barcodeReader decode:bitmap error:&error];
+- (BOOL)checkForFalsePositives:(ZXImage *)image rotationInDegrees:(CGFloat)rotationInDegrees {
+  ZXImage *rotatedImage = [self rotateImage:image degrees:rotationInDegrees];
+  ZXLuminanceSource *source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
+  ZXBinaryBitmap *bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
+  NSError *error = nil;
+  ZXResult *result = [self.barcodeReader decode:bitmap error:&error];
   if (result) {
     NSLog(@"Found false positive: '%@' with format '%@' (rotation: %d)",
           result.text, [AbstractBlackBoxTestCase barcodeFormatAsString:result.barcodeFormat], (int) rotationInDegrees);
@@ -154,7 +154,7 @@
   }
 
   // Try "try harder" getMode
-  ZXDecodeHints* hints = [ZXDecodeHints hints];
+  ZXDecodeHints *hints = [ZXDecodeHints hints];
   hints.tryHarder = YES;
   result = [self.barcodeReader decode:bitmap hints:hints error:&error];
   if (result) {

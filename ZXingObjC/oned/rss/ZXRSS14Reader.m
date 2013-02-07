@@ -34,8 +34,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 @interface ZXRSS14Reader ()
 
-@property (nonatomic, retain) NSMutableArray * possibleLeftPairs;
-@property (nonatomic, retain) NSMutableArray * possibleRightPairs;
+@property (nonatomic, retain) NSMutableArray *possibleLeftPairs;
+@property (nonatomic, retain) NSMutableArray *possibleRightPairs;
 
 - (void)addOrTally:(NSMutableArray *)possiblePairs pair:(ZXPair *)pair;
 - (BOOL)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules;
@@ -70,10 +70,10 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXPair * leftPair = [self decodePair:row right:NO rowNumber:rowNumber hints:hints];
+  ZXPair *leftPair = [self decodePair:row right:NO rowNumber:rowNumber hints:hints];
   [self addOrTally:self.possibleLeftPairs pair:leftPair];
   [row reverse];
-  ZXPair * rightPair = [self decodePair:row right:YES rowNumber:rowNumber hints:hints];
+  ZXPair *rightPair = [self decodePair:row right:YES rowNumber:rowNumber hints:hints];
   [self addOrTally:self.possibleRightPairs pair:rightPair];
   [row reverse];
 
@@ -118,8 +118,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 - (ZXResult *)constructResult:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair {
   long long symbolValue = 4537077LL * leftPair.value + rightPair.value;
-  NSString * text = [[NSNumber numberWithLongLong:symbolValue] stringValue];
-  NSMutableString * buffer = [NSMutableString stringWithCapacity:14];
+  NSString *text = [[NSNumber numberWithLongLong:symbolValue] stringValue];
+  NSMutableString *buffer = [NSMutableString stringWithCapacity:14];
 
   for (int i = 13 - [text length]; i > 0; i--) {
     [buffer appendString:@"0"];
@@ -138,8 +138,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     checkDigit = 0;
   }
   [buffer appendFormat:@"%d", checkDigit];
-  NSArray * leftPoints = [[leftPair finderPattern] resultPoints];
-  NSArray * rightPoints = [[rightPair finderPattern] resultPoints];
+  NSArray *leftPoints = [[leftPair finderPattern] resultPoints];
+  NSArray *rightPoints = [[rightPair finderPattern] resultPoints];
   return [ZXResult resultWithText:buffer
                          rawBytes:NULL
                            length:0
@@ -164,11 +164,11 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (ZXPair *)decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(ZXDecodeHints *)hints {
-  NSArray * startEnd = [self findFinderPattern:row rowOffset:0 rightFinderPattern:right];
+  NSArray *startEnd = [self findFinderPattern:row rowOffset:0 rightFinderPattern:right];
   if (!startEnd) {
     return nil;
   }
-  ZXRSSFinderPattern * pattern = [self parseFoundFinderPattern:row rowNumber:rowNumber right:right startEnd:startEnd];
+  ZXRSSFinderPattern *pattern = [self parseFoundFinderPattern:row rowNumber:rowNumber right:right startEnd:startEnd];
   if (!pattern) {
     return nil;
   }
@@ -180,8 +180,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     }
     [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:center y:rowNumber] autorelease]];
   }
-  ZXDataCharacter * outside = [self decodeDataCharacter:row pattern:pattern outsideChar:YES];
-  ZXDataCharacter * inside = [self decodeDataCharacter:row pattern:pattern outsideChar:NO];
+  ZXDataCharacter *outside = [self decodeDataCharacter:row pattern:pattern outsideChar:YES];
+  ZXDataCharacter *inside = [self decodeDataCharacter:row pattern:pattern outsideChar:NO];
   if (!outside || !inside) {
     return nil;
   }
@@ -192,7 +192,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar {
   int countersLen = self.dataCharacterCountersLen;
-  int* counters = self.dataCharacterCounters;
+  int *counters = self.dataCharacterCounters;
   counters[0] = 0;
   counters[1] = 0;
   counters[2] = 0;
@@ -288,7 +288,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 - (NSArray *)findFinderPattern:(ZXBitArray *)row rowOffset:(int)rowOffset rightFinderPattern:(BOOL)rightFinderPattern {
   int countersLen = self.decodeFinderCountersLen;
-  int* counters = self.decodeFinderCounters;
+  int *counters = self.decodeFinderCounters;
   counters[0] = 0;
   counters[1] = 0;
   counters[2] = 0;
@@ -343,7 +343,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   int firstCounter = [[startEnd objectAtIndex:0] intValue] - firstElementStart;
 
   int countersLen = self.decodeFinderCountersLen;
-  int* counters = self.decodeFinderCounters;
+  int *counters = self.decodeFinderCounters;
   for (int i = countersLen - 1; i > 0; i--) {
     counters[i] = counters[i-1];
   }

@@ -21,9 +21,9 @@
 @implementation ZXCode39WriterTestCase
 
 - (void)testEncode {
-  NSString* testStr = @"00010110110100101011010010110101010011011011011010010101010110011010110101001011010101001101101100101010110101101101001000";
+  NSString *testStr = @"00010110110100101011010010110101010011011011011010010101010110011010110101001011010101001101101100101010110101101101001000";
 
-  ZXBitMatrix* result = [[[[ZXCode39Writer alloc] init] autorelease] encode:@"K316738"
+  ZXBitMatrix *result = [[[[ZXCode39Writer alloc] init] autorelease] encode:@"K316738"
                                                                      format:kBarcodeFormatCode39
                                                                       width:testStr.length
                                                                      height:0

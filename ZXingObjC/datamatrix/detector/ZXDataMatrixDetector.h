@@ -23,7 +23,7 @@
 
 @interface ZXDataMatrixDetector : NSObject
 
-- (id)initWithImage:(ZXBitMatrix *)image error:(NSError**)error;
-- (ZXDetectorResult *)detectWithError:(NSError**)error;
+- (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error;
+- (ZXDetectorResult *)detectWithError:(NSError **)error;
 
 @end

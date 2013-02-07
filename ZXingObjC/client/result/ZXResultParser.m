@@ -58,11 +58,11 @@
 
 @end
 
-static NSArray* PARSERS = nil;
-static NSRegularExpression* DIGITS = nil;
-static NSRegularExpression* ALPHANUM = nil;
-static NSString* AMPERSAND = @"&";
-static NSString* EQUALS = @"=";
+static NSArray *PARSERS = nil;
+static NSRegularExpression *DIGITS = nil;
+static NSRegularExpression *ALPHANUM = nil;
+static NSString *AMPERSAND = @"&";
+static NSString *EQUALS = @"=";
 static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 @implementation ZXResultParser
@@ -107,8 +107,8 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 + (ZXParsedResult *)parseResult:(ZXResult *)theResult {
-  for (ZXResultParser* parser in PARSERS) {
-    ZXParsedResult* result = [parser parse:theResult];
+  for (ZXResultParser *parser in PARSERS) {
+    ZXParsedResult *result = [parser parse:theResult];
     if (result != nil) {
       return result;
     }
@@ -124,7 +124,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 - (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
-    for (NSString* s in value) {
+    for (NSString *s in value) {
       [result appendFormat:@"\n%@", s];
     }
   }
@@ -140,7 +140,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     return escaped;
   }
   int max = [escaped length];
-  NSMutableString * unescaped = [NSMutableString stringWithCapacity:max - 1];
+  NSMutableString *unescaped = [NSMutableString stringWithCapacity:max - 1];
   [unescaped appendString:[escaped substringToIndex:backslash]];
   BOOL nextIsEscaped = NO;
   for (int i = backslash; i < max; i++) {
@@ -183,7 +183,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
   }
 
   int max = [escaped length];
-  NSMutableString * unescaped = [NSMutableString stringWithCapacity:max - 2];
+  NSMutableString *unescaped = [NSMutableString stringWithCapacity:max - 2];
   [unescaped appendString:[escaped substringToIndex:first]];
 
   for (int i = first; i < max; i++) {
@@ -246,8 +246,8 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
   if (paramStart == NSNotFound) {
     return nil;
   }
-  NSMutableDictionary * result = [NSMutableDictionary dictionaryWithCapacity:3];
-  for (NSString* keyValue in [[uri substringFromIndex:paramStart + 1] componentsSeparatedByString:AMPERSAND]) {
+  NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:3];
+  for (NSString *keyValue in [[uri substringFromIndex:paramStart + 1] componentsSeparatedByString:AMPERSAND]) {
     [self appendKeyValue:keyValue result:result];
   }
   return result;
@@ -256,15 +256,15 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 - (void)appendKeyValue:(NSString *)keyValue result:(NSMutableDictionary *)result {
   NSRange equalsRange = [keyValue rangeOfString:EQUALS];
   if (equalsRange.location != NSNotFound) {
-    NSString* key = [keyValue substringToIndex:equalsRange.location];
-    NSString* value = [keyValue substringFromIndex:equalsRange.location + 1];
+    NSString *key = [keyValue substringToIndex:equalsRange.location];
+    NSString *value = [keyValue substringFromIndex:equalsRange.location + 1];
     value = [self urlDecode:value];
     [result setObject:value forKey:key];
   }
 }
 
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
-  NSMutableArray * matches = nil;
+  NSMutableArray *matches = nil;
   int i = 0;
   int max = [rawText length];
   while (i < max) {
@@ -286,7 +286,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
         if (matches == nil) {
           matches = [NSMutableArray arrayWithCapacity:3];
         }
-        NSString * element = [self unescapeBackslash:[rawText substringWithRange:NSMakeRange(start, i - start)]];
+        NSString *element = [self unescapeBackslash:[rawText substringWithRange:NSMakeRange(start, i - start)]];
         if (trim) {
           element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
@@ -303,7 +303,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 + (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
-  NSArray * matches = [self matchPrefixedField:prefix rawText:rawText endChar:endChar trim:trim];
+  NSArray *matches = [self matchPrefixedField:prefix rawText:rawText endChar:endChar trim:trim];
   return matches == nil ? nil : [matches objectAtIndex:0];
 }
 

@@ -508,18 +508,18 @@ static float HEIGHT = 2.0f; //mm
 
 @interface ZXPDF417 ()
 
-@property (nonatomic, retain) ZXBarcodeMatrix* barcodeMatrix;
+@property (nonatomic, retain) ZXBarcodeMatrix *barcodeMatrix;
 @property (nonatomic, assign) int minCols;
 @property (nonatomic, assign) int maxCols;
 @property (nonatomic, assign) int minRows;
 @property (nonatomic, assign) int maxRows;
 
-- (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError**)error;
+- (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError **)error;
 - (int)calculateNumberOfRowsM:(int)m k:(int)k c:(int)c;
 - (int)numberOfPadCodewordsM:(int)m k:(int)k c:(int)c r:(int)r;
-- (int)numberOfDataCodewordsM:(int)m errorCorrectionLevel:(int)errorCorrectionLevel c:(int)c error:(NSError**)error;
-- (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow*)logic;
-- (void)encodeLowLevel:(NSString*)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)aErrorCorrectionLevel logic:(ZXBarcodeMatrix*)logic;
+- (int)numberOfDataCodewordsM:(int)m errorCorrectionLevel:(int)errorCorrectionLevel c:(int)c error:(NSError **)error;
+- (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic;
+- (void)encodeLowLevel:(NSString *)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)aErrorCorrectionLevel logic:(ZXBarcodeMatrix *)logic;
 
 @end
 
@@ -559,10 +559,10 @@ static float HEIGHT = 2.0f; //mm
 /**
  * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
  */
-- (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError**)error {
+- (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError **)error {
   int r = [self calculateNumberOfRowsM:m k:k c:c];
   if (r > 90) {
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"The message doesn't fit in the configured symbol size."
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"The message doesn't fit in the configured symbol size."
                               @" The resultant number of rows for this barcode exceeds 90."
                               @" Please increase the number of columns or decrease the error correction"
                               @" level to reduce the number of rows."
@@ -572,7 +572,7 @@ static float HEIGHT = 2.0f; //mm
     return -1;
   }
   if (r < 2) {
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"The message doesn't fit in the configured symbol size."
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"The message doesn't fit in the configured symbol size."
                               @" The resultant number of rows for this barcode exceeds 90."
                               @" Please increase the number of columns or decrease the error correction"
                               @" level to reduce the number of rows."
@@ -603,7 +603,7 @@ static float HEIGHT = 2.0f; //mm
   return n > m + 1 ? n - m - 1 : 0;
 }
 
-- (int)numberOfDataCodewordsM:(int)m errorCorrectionLevel:(int)anErrorCorrectionLevel c:(int)c error:(NSError**)error {
+- (int)numberOfDataCodewordsM:(int)m errorCorrectionLevel:(int)anErrorCorrectionLevel c:(int)c error:(NSError **)error {
   int k = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:anErrorCorrectionLevel];
   int r = [self numberOfRowsM:m k:k c:c error:error];
   if (r == -1) {
@@ -612,7 +612,7 @@ static float HEIGHT = 2.0f; //mm
   return c * r - k;
 }
 
-- (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow*)logic {
+- (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic {
   int map = 1 << len - 1;
   BOOL last = (pattern & map) != 0; //Initialize to inverse of first bit
   int width = 0;
@@ -631,7 +631,7 @@ static float HEIGHT = 2.0f; //mm
   [logic addBar:last width:width];
 }
 
-- (void)encodeLowLevel:(NSString*)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)errorCorrectionLevel logic:(ZXBarcodeMatrix*)logic {
+- (void)encodeLowLevel:(NSString *)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)errorCorrectionLevel logic:(ZXBarcodeMatrix *)logic {
   int idx = 0;
   for (int y = 0; y < r; y++) {
     int cluster = y % 3;
@@ -674,11 +674,11 @@ static float HEIGHT = 2.0f; //mm
 /**
  * Generates the barcode logic.
  */
-- (BOOL)generateBarcodeLogic:(NSString*)msg errorCorrectionLevel:(int)anErrorCorrectionLevel error:(NSError**)error {
+- (BOOL)generateBarcodeLogic:(NSString *)msg errorCorrectionLevel:(int)anErrorCorrectionLevel error:(NSError **)error {
 
   //1. step: High-level encoding
   int errorCorrectionCodeWords = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:anErrorCorrectionLevel];
-  NSString* highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg compaction:self.compaction error:error];
+  NSString *highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg compaction:self.compaction error:error];
   if (!highLevel) {
     return NO;
   }
@@ -696,7 +696,7 @@ static float HEIGHT = 2.0f; //mm
 
   //2. step: construct data codewords
   if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Encoded message contains to many code words, message to big (%d bytes)", msg.length]
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Encoded message contains to many code words, message to big (%d bytes)", msg.length]
                                                          forKey:NSLocalizedDescriptionKey];
 
     if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
@@ -704,17 +704,17 @@ static float HEIGHT = 2.0f; //mm
   }
 
   int n = sourceCodeWords + pad + 1;
-  NSMutableString* sb = [NSMutableString stringWithCapacity:n];
+  NSMutableString *sb = [NSMutableString stringWithCapacity:n];
   [sb appendFormat:@"%c", (char)n];
   [sb appendFormat:@"%@", highLevel];
   for (int i = 0; i < pad; i++) {
     [sb appendFormat:@"%c", (char) 900]; //PAD characters
   }
-  NSString* dataCodewords = sb;
+  NSString *dataCodewords = sb;
 
   //3. step: Error correction
-  NSString* ec = [ZXPDF417ErrorCorrection generateErrorCorrection:dataCodewords errorCorrectionLevel:anErrorCorrectionLevel];
-  NSString* fullCodewords = [dataCodewords stringByAppendingString:ec];
+  NSString *ec = [ZXPDF417ErrorCorrection generateErrorCorrection:dataCodewords errorCorrectionLevel:anErrorCorrectionLevel];
+  NSString *fullCodewords = [dataCodewords stringByAppendingString:ec];
 
   //4. step: low-level encoding
   self.barcodeMatrix = [[[ZXBarcodeMatrix alloc] initWithHeight:rows width:cols] autorelease];
@@ -727,7 +727,7 @@ static float HEIGHT = 2.0f; //mm
  * Determine optimal nr of columns and rows for the specified number of
  * codewords.
  */
-- (BOOL)determineDimensions:(int*)dimension sourceCodeWords:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error{
+- (BOOL)determineDimensions:(int *)dimension sourceCodeWords:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error{
   float ratio = 0.0f;
   BOOL result = NO;
 
@@ -766,7 +766,7 @@ static float HEIGHT = 2.0f; //mm
   }
 
   if (!result) {
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"Unable to fit message in columns"
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Unable to fit message in columns"
                                                          forKey:NSLocalizedDescriptionKey];
 
     if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];

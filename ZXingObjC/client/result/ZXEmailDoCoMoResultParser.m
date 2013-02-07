@@ -18,7 +18,7 @@
 #import "ZXEmailDoCoMoResultParser.h"
 #import "ZXResult.h"
 
-static NSRegularExpression* ATEXT_ALPHANUMERIC = nil;
+static NSRegularExpression *ATEXT_ALPHANUMERIC = nil;
 
 @implementation ZXEmailDoCoMoResultParser
 
@@ -28,20 +28,20 @@ static NSRegularExpression* ATEXT_ALPHANUMERIC = nil;
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (![rawText hasPrefix:@"MATMSG:"]) {
     return nil;
   }
-  NSArray * rawTo = [[self class] matchDoCoMoPrefixedField:@"TO:" rawText:rawText trim:YES];
+  NSArray *rawTo = [[self class] matchDoCoMoPrefixedField:@"TO:" rawText:rawText trim:YES];
   if (rawTo == nil) {
     return nil;
   }
-  NSString * to = [rawTo objectAtIndex:0];
+  NSString *to = [rawTo objectAtIndex:0];
   if (![[self class] isBasicallyValidEmailAddress:to]) {
     return nil;
   }
-  NSString * subject = [[self class] matchSingleDoCoMoPrefixedField:@"SUB:" rawText:rawText trim:NO];
-  NSString * body = [[self class] matchSingleDoCoMoPrefixedField:@"BODY:" rawText:rawText trim:NO];
+  NSString *subject = [[self class] matchSingleDoCoMoPrefixedField:@"SUB:" rawText:rawText trim:NO];
+  NSString *body = [[self class] matchSingleDoCoMoPrefixedField:@"BODY:" rawText:rawText trim:NO];
 
   return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:to
                                                                       subject:subject

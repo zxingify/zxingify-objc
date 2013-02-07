@@ -19,8 +19,8 @@
 
 @interface ZXTextParsedResult ()
 
-@property (nonatomic, copy) NSString * text;
-@property (nonatomic, copy) NSString * language;
+@property (nonatomic, copy) NSString *text;
+@property (nonatomic, copy) NSString *language;
 
 @end
 
@@ -49,7 +49,7 @@
   [super dealloc];
 }
 
-- (NSString*)displayResult {
+- (NSString *)displayResult {
   return self.text;
 }
 

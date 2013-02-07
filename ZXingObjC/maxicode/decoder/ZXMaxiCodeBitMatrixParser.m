@@ -56,7 +56,7 @@ const int BITNR[33][30] = {
 
 @interface ZXMaxiCodeBitMatrixParser ()
 
-@property (nonatomic, retain) ZXBitMatrix* bitMatrix;
+@property (nonatomic, retain) ZXBitMatrix *bitMatrix;
 
 @end
 
@@ -64,7 +64,7 @@ const int BITNR[33][30] = {
 
 @synthesize bitMatrix;
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix error:(NSError**)error {
+- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix error:(NSError **)error {
   if (self = [super init]) {
     self.bitMatrix = aBitMatrix;
   }
@@ -86,7 +86,7 @@ const int BITNR[33][30] = {
   int height = self.bitMatrix.height;
   int width = self.bitMatrix.width;
   for (int y = 0; y < height; y++) {
-    int* bitnrRow = (int*)BITNR[y];
+    int *bitnrRow = (int *)BITNR[y];
     for (int x = 0; x < width; x++) {
       int bit = bitnrRow[x];
       if (bit >= 0 && [bitMatrix getX:x y:y]) {
@@ -95,7 +95,7 @@ const int BITNR[33][30] = {
     }
   }
 
-  NSMutableArray* resultArray = [NSMutableArray arrayWithCapacity:resultLength];
+  NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:resultLength];
   for (int i = 0; i < resultLength; i++) {
     [resultArray addObject:[NSNumber numberWithChar:result[i]]];
   }

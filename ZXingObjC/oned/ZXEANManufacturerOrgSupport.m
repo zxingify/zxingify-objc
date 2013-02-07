@@ -18,8 +18,8 @@
 
 @interface ZXEANManufacturerOrgSupport ()
 
-@property (nonatomic, retain) NSMutableArray * countryIdentifiers;
-@property (nonatomic, retain) NSMutableArray * ranges;
+@property (nonatomic, retain) NSMutableArray *countryIdentifiers;
+@property (nonatomic, retain) NSMutableArray *ranges;
 
 - (void)add:(NSArray *)range identifier:(NSString *)identifier;
 - (void)initIfNeeded;
@@ -54,7 +54,7 @@
   int max = self.ranges.count;
 
   for (int i = 0; i < max; i++) {
-    NSArray * range = (NSArray *)[self.ranges objectAtIndex:i];
+    NSArray *range = (NSArray *)[self.ranges objectAtIndex:i];
     int start = [[range objectAtIndex:0] intValue];
     if (prefix < start) {
       return nil;

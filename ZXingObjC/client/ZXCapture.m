@@ -99,7 +99,7 @@ static bool isIPad();
   }
 }
 
-- (ZXCapture*)init {
+- (ZXCapture *)init {
   if ((self = [super init])) {
     on_screen = running = NO;
     reported_width = 0;
@@ -142,15 +142,15 @@ static bool isIPad();
   order_out_skip = order_in_skip = 1;
 }
 
-- (ZXCaptureDevice*)device {
+- (ZXCaptureDevice *)device {
   if (capture_device) {
     return capture_device;
   }
 
-  ZXCaptureDevice* zxd = nil;
+  ZXCaptureDevice *zxd = nil;
 
 #if ZXAV(1)+0
-  NSArray* devices = 
+  NSArray *devices = 
     [ZXCaptureDevice
         ZXAV(devicesWithMediaType:)
       ZXQT(inputDevicesWithMediaType:) ZXMediaTypeVideo];
@@ -163,7 +163,7 @@ static bool isIPad();
       }
 
       for(unsigned int i=0; i < [devices count]; ++i) {
-        ZXCaptureDevice* dev = [devices objectAtIndex:i];
+        ZXCaptureDevice *dev = [devices objectAtIndex:i];
         if (dev.position == position) {
           capture_device_index = i;
           zxd = dev;
@@ -190,11 +190,11 @@ static bool isIPad();
   return zxd;
 }
 
-- (ZXCaptureDevice*)captureDevice {
+- (ZXCaptureDevice *)captureDevice {
   return capture_device;
 }
 
-- (void)setCaptureDevice:(ZXCaptureDevice*)device {
+- (void)setCaptureDevice:(ZXCaptureDevice *)device {
   if (device == capture_device) {
     return;
   }
@@ -217,7 +217,7 @@ static bool isIPad();
     input = nil;
   }
 
-  ZXCaptureDevice* zxd = [self device];
+  ZXCaptureDevice *zxd = [self device];
   ZXQT([zxd open:nil]);
 
   if (zxd) {
@@ -229,7 +229,7 @@ static bool isIPad();
   
   if (input) {
     ZXAV({
-      NSString* preset = 0;
+      NSString *preset = 0;
       if (!preset &&
           NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
           [UIScreen mainScreen].scale > 1 &&
@@ -249,7 +249,7 @@ static bool isIPad();
   }
 }
 
-- (ZXCaptureSession*)session {
+- (ZXCaptureSession *)session {
   if (session == 0) {
     session = [[ZXCaptureSession alloc] init];
     [self replaceInput];
@@ -274,20 +274,20 @@ static bool isIPad();
 }
 
 - (void)setOutputAttributes {
-    NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey; 
-    NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA]; 
-    NSMutableDictionary* attributes =
+    NSString *key = NSString *kCVPixelBufferPixelFormatTypeKey; 
+    NSNumber *value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
+    NSMutableDictionary *attributes =
       [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
-    key = (NSString*)kCVPixelBufferWidthKey;
+    key = NSString *kCVPixelBufferWidthKey;
     value = [NSNumber numberWithUnsignedLong:width];
     [attributes setObject:value forKey:key]; 
-    key = (NSString*)kCVPixelBufferHeightKey;
+    key = NSString *kCVPixelBufferHeightKey;
     value = [NSNumber numberWithUnsignedLong:height];
     [attributes setObject:value forKey:key]; 
     [output ZXQT(setPixelBufferAttributes:)ZXAV(setVideoSettings:)attributes];
 }
 
-- (ZXCaptureVideoOutput*)output {
+- (ZXCaptureVideoOutput *)output {
   if (!output) {
     output = [[ZXCaptureVideoOutput alloc] init];
     [self setOutputAttributes];
@@ -365,7 +365,7 @@ static bool isIPad();
   }
 }
 
-- (CALayer*)luminance {
+- (CALayer *)luminance {
   return luminance;
 }
 
@@ -379,11 +379,11 @@ static bool isIPad();
   }
 }
 
-- (CALayer*)binary {
+- (CALayer *)binary {
   return binary;
 }
 
-- (CALayer*)layer {
+- (CALayer *)layer {
   if (!layer) {
     layer = [[ZXCaptureVideoPreviewLayer alloc] initWithSession:self.session];
 
@@ -439,7 +439,7 @@ static bool isIPad();
   }
 }
 
-- (id<CAAction>)actionForLayer:(CALayer*)_layer forKey:(NSString*)event {
+- (id<CAAction>)actionForLayer:(CALayer *)_layer forKey:NSString *event {
   (void)_layer;
 
   // NSLog(@"layer event %@", event);
@@ -487,11 +487,11 @@ static bool isIPad();
   [super dealloc];
 }
 
-- (void)captureOutput:(ZXCaptureOutput*)captureOutput
+- (void)captureOutput:(ZXCaptureOutput *)captureOutput
 ZXQT(didOutputVideoFrame:(CVImageBufferRef)videoFrame
-     withSampleBuffer:(QTSampleBuffer*)sampleBuffer)
+     withSampleBuffer:(QTSampleBuffer *)sampleBuffer)
 ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
-       fromConnection:(ZXCaptureConnection*)connection {
+       fromConnection:(ZXCaptureConnection *)connection {
   
   if (!captureToFilename && !luminance && !binary && !delegate) {
     // NSLog(@"skipping capture");
@@ -525,7 +525,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
   (void)sampleBuffer;
 
-  NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
   (void)captureOutput;
   (void)connection;
@@ -538,7 +538,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   if (captureToFilename) {
     CGImageRef image = 
       [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-    NSURL* url = [NSURL fileURLWithPath:captureToFilename];
+    NSURL *url = [NSURL fileURLWithPath:captureToFilename];
     CGImageDestinationRef dest =
       CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
     CGImageDestinationAddImage(dest, image, nil);
@@ -552,7 +552,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
   CGImageRef rotatedImage = [self rotateImage:videoFrameImage degrees:rotation];
 
-  ZXCGImageLuminanceSource* source
+  ZXCGImageLuminanceSource *source
     = [[[ZXCGImageLuminanceSource alloc]
         initWithCGImage:rotatedImage]
         autorelease];
@@ -567,7 +567,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   }
 
   if (binary || delegate) {
-    ZXHybridBinarizer* binarizer = [ZXHybridBinarizer alloc];
+    ZXHybridBinarizer *binarizer = [ZXHybridBinarizer alloc];
     [[binarizer initWithSource:source] autorelease];
 
     if (binary) {
@@ -579,11 +579,11 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
     }
 
     if (delegate) {
-      ZXBinaryBitmap* bitmap =
+      ZXBinaryBitmap *bitmap =
         [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
 
-      NSError* error;
-      ZXResult* result = [self.reader decode:bitmap hints:hints error:&error];
+      NSError *error;
+      ZXResult *result = [self.reader decode:bitmap hints:hints error:&error];
       if (result) {
         [delegate captureResult:self result:result];
       }
@@ -594,7 +594,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 }
 
 - (BOOL)hasFront {
-  NSArray* devices = 
+  NSArray *devices = 
     [ZXCaptureDevice
         ZXAV(devicesWithMediaType:)
       ZXQT(inputDevicesWithMediaType:) ZXMediaTypeVideo];
@@ -602,7 +602,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 }
 
 - (BOOL)hasBack {
-  NSArray* devices = 
+  NSArray *devices = 
     [ZXCaptureDevice
         ZXAV(devicesWithMediaType:)
       ZXQT(inputDevicesWithMediaType:) ZXMediaTypeVideo];
@@ -682,7 +682,7 @@ static bool isIPad() {
   if (is_ipad < 0) {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
-    char* name = (char*)malloc(size);
+    char *name = (char *)malloc(size);
     sysctlbyname("hw.machine", name, &size, NULL, 0);
     NSString *machine = [NSString stringWithCString:name encoding:NSASCIIStringEncoding];
     free(name);
@@ -713,15 +713,15 @@ static bool isIPad() {
 
 - (BOOL)running {return NO;}
 
-- (CALayer*)layer {
+- (CALayer *)layer {
   return 0;
 }
 
-- (CALayer*)luminance {
+- (CALayer *)luminance {
   return 0;
 }
 
-- (CALayer*)binary {
+- (CALayer *)binary {
   return 0;
 }
 
@@ -764,7 +764,7 @@ static bool isIPad() {
 - (void)order_skip {}
 - (void)start {}
 - (void)stop {}
-- (void*)output {return 0;}
+- (void *)output {return 0;}
 
 @end
 

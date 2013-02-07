@@ -38,7 +38,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
+- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
   int length = (int)[contents length];
   // Check length
   if (length < 1 || length > 80) {
@@ -60,7 +60,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
     }
   }
 
-  NSMutableArray * patterns = [NSMutableArray array]; // temporary storage for patterns
+  NSMutableArray *patterns = [NSMutableArray array]; // temporary storage for patterns
   int checkSum = 0;
   int checkWeight = 1;
   int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)
@@ -164,7 +164,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
 
   // Compute result
   if (pLength) *pLength = codeWidth;
-  unsigned char* result = (unsigned char*)malloc(codeWidth * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(codeWidth * sizeof(unsigned char));
   int pos = 0;
   for (NSArray *patternArray in patterns) {
     int patternLen = (int)[patternArray count];

@@ -19,7 +19,7 @@
 
 @interface ZXModulusPoly ()
 
-@property (nonatomic, assign) int* coefficients;
+@property (nonatomic, assign) int *coefficients;
 @property (nonatomic, assign) int coefficientsLen;
 @property (nonatomic, retain) ZXModulusGF *field;
 
@@ -41,18 +41,18 @@
         firstNonZero++;
       }
       if (firstNonZero == aCoefficientsLen) {
-        ZXModulusPoly* zero = self.field.zero;
-        self.coefficients = (int*)malloc(zero.coefficientsLen * sizeof(int));
+        ZXModulusPoly *zero = self.field.zero;
+        self.coefficients = (int *)malloc(zero.coefficientsLen * sizeof(int));
         memcpy(self.coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
       } else {
         self.coefficientsLen = (aCoefficientsLen - firstNonZero);
-        self.coefficients = (int*)malloc(self.coefficientsLen * sizeof(int));
+        self.coefficients = (int *)malloc(self.coefficientsLen * sizeof(int));
         for (int i = 0; i < self.coefficientsLen; i++) {
           self.coefficients[i] = aCoefficients[firstNonZero + i];
         }
       }
     } else {
-      self.coefficients = (int*)malloc(aCoefficientsLen * sizeof(int));
+      self.coefficients = (int *)malloc(aCoefficientsLen * sizeof(int));
       memcpy(self.coefficients, aCoefficients, aCoefficientsLen * sizeof(int));
       self.coefficientsLen = aCoefficientsLen;
     }
@@ -114,9 +114,9 @@
     return self;
   }
 
-  int* smallerCoefficients = self.coefficients;
+  int *smallerCoefficients = self.coefficients;
   int smallerCoefficientsLen = self.coefficientsLen;
-  int* largerCoefficients = other.coefficients;
+  int *largerCoefficients = other.coefficients;
   int largerCoefficientsLen = other.coefficientsLen;
   if (smallerCoefficientsLen > largerCoefficientsLen) {
     int *temp = smallerCoefficients;
@@ -155,9 +155,9 @@
   if (self.zero || other.zero) {
     return self.field.zero;
   }
-  int* aCoefficients = self.coefficients;
+  int *aCoefficients = self.coefficients;
   int aLength = self.coefficientsLen;
-  int* bCoefficients = other.coefficients;
+  int *bCoefficients = other.coefficients;
   int bLength = other.coefficientsLen;
   int productLen = aLength + bLength - 1;
   int product[productLen];
@@ -225,8 +225,8 @@
     [NSException raise:NSInvalidArgumentException format:@"Divide by 0"];
   }
 
-  ZXModulusPoly * quotient = self.field.zero;
-  ZXModulusPoly * remainder = self;
+  ZXModulusPoly *quotient = self.field.zero;
+  ZXModulusPoly *remainder = self;
 
   int denominatorLeadingTerm = [other coefficient:other.degree];
   int inverseDenominatorLeadingTerm = [self.field inverse:denominatorLeadingTerm];
@@ -244,7 +244,7 @@
 }
 
 - (NSString *)description {
-  NSMutableString * result = [NSMutableString stringWithCapacity:8 * [self degree]];
+  NSMutableString *result = [NSMutableString stringWithCapacity:8 * [self degree]];
   for (int degree = [self degree]; degree >= 0; degree--) {
     int coefficient = [self coefficient:degree];
     if (coefficient != 0) {

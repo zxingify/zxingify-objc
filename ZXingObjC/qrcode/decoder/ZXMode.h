@@ -24,7 +24,7 @@
 @interface ZXMode : NSObject
 
 @property (nonatomic, assign, readonly) int bits;
-@property (nonatomic, copy, readonly) NSString * name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 - (id)initWithCharacterCountBitsForVersions:(NSArray *)characterCountBitsForVersions
                                        bits:(int)bits

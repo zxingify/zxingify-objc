@@ -18,7 +18,7 @@
 
 @interface ZXDataMatrixECBlocks ()
 
-@property (nonatomic, retain) NSArray * ecBlocks;
+@property (nonatomic, retain) NSArray *ecBlocks;
 @property (nonatomic, assign) int ecCodewords;
 
 @end
@@ -77,11 +77,11 @@
 
 @end
 
-static NSArray* VERSIONS = nil;
+static NSArray *VERSIONS = nil;
 
 @interface ZXDataMatrixVersion ()
 
-@property (nonatomic, retain) ZXDataMatrixECBlocks * ecBlocks;
+@property (nonatomic, retain) ZXDataMatrixECBlocks *ecBlocks;
 @property (nonatomic, assign) int dataRegionSizeRows;
 @property (nonatomic, assign) int dataRegionSizeColumns;
 @property (nonatomic, assign) int symbolSizeColumns;
@@ -112,7 +112,7 @@ static NSArray* VERSIONS = nil;
 
     int total = 0;
     int ecCodewords = ecBlocks.ecCodewords;
-    NSArray * ecbArray = ecBlocks.ecBlocks;
+    NSArray *ecbArray = ecBlocks.ecBlocks;
     for (ZXDataMatrixECB *ecBlock in ecbArray) {
       total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
     }

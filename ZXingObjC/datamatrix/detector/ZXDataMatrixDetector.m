@@ -28,8 +28,8 @@
 
 @interface ResultPointsAndTransitions : NSObject
 
-@property(nonatomic, retain) ZXResultPoint * from;
-@property(nonatomic, retain) ZXResultPoint * to;
+@property(nonatomic, retain) ZXResultPoint *from;
+@property(nonatomic, retain) ZXResultPoint *to;
 @property(nonatomic, assign) int transitions;
 
 - (id)initWithFrom:(ZXResultPoint *)from to:(ZXResultPoint *)to transitions:(int)transitions;
@@ -73,8 +73,8 @@
 
 @interface ZXDataMatrixDetector ()
 
-@property (nonatomic, retain) ZXBitMatrix * image;
-@property (nonatomic, retain) ZXWhiteRectangleDetector * rectangleDetector;
+@property (nonatomic, retain) ZXBitMatrix *image;
+@property (nonatomic, retain) ZXWhiteRectangleDetector *rectangleDetector;
 
 - (ZXResultPoint *)correctTopRight:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimension:(int)dimension;
 - (ZXResultPoint *)correctTopRightRectangular:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight;
@@ -88,7 +88,7 @@
                    topRight:(ZXResultPoint *)topRight
                  dimensionX:(int)dimensionX
                  dimensionY:(int)dimensionY
-                      error:(NSError**)error;
+                      error:(NSError **)error;
 - (ResultPointsAndTransitions *)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to;
 
 @end
@@ -123,36 +123,36 @@
  * Detects a Data Matrix Code in an image.
  */
 - (ZXDetectorResult *)detectWithError:(NSError **)error {
-  NSArray * cornerPoints = [self.rectangleDetector detectWithError:error];
+  NSArray *cornerPoints = [self.rectangleDetector detectWithError:error];
   if (!cornerPoints) {
     return nil;
   }
-  ZXResultPoint * pointA = [cornerPoints objectAtIndex:0];
-  ZXResultPoint * pointB = [cornerPoints objectAtIndex:1];
-  ZXResultPoint * pointC = [cornerPoints objectAtIndex:2];
-  ZXResultPoint * pointD = [cornerPoints objectAtIndex:3];
+  ZXResultPoint *pointA = [cornerPoints objectAtIndex:0];
+  ZXResultPoint *pointB = [cornerPoints objectAtIndex:1];
+  ZXResultPoint *pointC = [cornerPoints objectAtIndex:2];
+  ZXResultPoint *pointD = [cornerPoints objectAtIndex:3];
 
-  NSMutableArray * transitions = [NSMutableArray arrayWithCapacity:4];
+  NSMutableArray *transitions = [NSMutableArray arrayWithCapacity:4];
   [transitions addObject:[self transitionsBetween:pointA to:pointB]];
   [transitions addObject:[self transitionsBetween:pointA to:pointC]];
   [transitions addObject:[self transitionsBetween:pointB to:pointD]];
   [transitions addObject:[self transitionsBetween:pointC to:pointD]];
   [transitions sortUsingSelector:@selector(compare:)];
 
-  ResultPointsAndTransitions * lSideOne = (ResultPointsAndTransitions *)[transitions objectAtIndex:0];
-  ResultPointsAndTransitions * lSideTwo = (ResultPointsAndTransitions *)[transitions objectAtIndex:1];
+  ResultPointsAndTransitions *lSideOne = (ResultPointsAndTransitions *)[transitions objectAtIndex:0];
+  ResultPointsAndTransitions *lSideTwo = (ResultPointsAndTransitions *)[transitions objectAtIndex:1];
 
-  NSMutableDictionary * pointCount = [NSMutableDictionary dictionary];
+  NSMutableDictionary *pointCount = [NSMutableDictionary dictionary];
   [self increment:pointCount key:[lSideOne from]];
   [self increment:pointCount key:[lSideOne to]];
   [self increment:pointCount key:[lSideTwo from]];
   [self increment:pointCount key:[lSideTwo to]];
 
-  ZXResultPoint * maybeTopLeft = nil;
-  ZXResultPoint * bottomLeft = nil;
-  ZXResultPoint * maybeBottomRight = nil;
-  for (ZXResultPoint * point in [pointCount allKeys]) {
-    NSNumber * value = [pointCount objectForKey:point];
+  ZXResultPoint *maybeTopLeft = nil;
+  ZXResultPoint *bottomLeft = nil;
+  ZXResultPoint *maybeBottomRight = nil;
+  for (ZXResultPoint *point in [pointCount allKeys]) {
+    NSNumber *value = [pointCount objectForKey:point];
     if ([value intValue] == 2) {
       bottomLeft = point;
     } else {
@@ -169,14 +169,14 @@
     return nil;
   }
 
-  NSMutableArray * corners = [NSMutableArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
+  NSMutableArray *corners = [NSMutableArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
   [ZXResultPoint orderBestPatterns:corners];
 
-  ZXResultPoint * bottomRight = [corners objectAtIndex:0];
+  ZXResultPoint *bottomRight = [corners objectAtIndex:0];
   bottomLeft = [corners objectAtIndex:1];
-  ZXResultPoint * topLeft = [corners objectAtIndex:2];
+  ZXResultPoint *topLeft = [corners objectAtIndex:2];
 
-  ZXResultPoint * topRight;
+  ZXResultPoint *topRight;
   if (![pointCount objectForKey:pointA]) {
     topRight = pointA;
   } else if (![pointCount objectForKey:pointB]) {
@@ -200,8 +200,8 @@
   }
   dimensionRight += 2;
 
-  ZXBitMatrix * bits;
-  ZXResultPoint * correctedTopRight;
+  ZXBitMatrix *bits;
+  ZXResultPoint *correctedTopRight;
 
   if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
     correctedTopRight = [self correctTopRightRectangular:bottomLeft bottomRight:bottomRight topLeft:topLeft topRight:topRight dimensionTop:dimensionTop dimensionRight:dimensionRight];
@@ -257,14 +257,14 @@
   float cos = ([topRight x] - [topLeft x]) / norm;
   float sin = ([topRight y] - [topLeft y]) / norm;
 
-  ZXResultPoint * c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
 
   corr = [self distance:bottomLeft b:topLeft] / (float)dimensionRight;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
 
-  ZXResultPoint * c2 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c2 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
 
   if (![self isValid:c1]) {
     if ([self isValid:c2]) {
@@ -296,14 +296,14 @@
   float cos = ([topRight x] - [topLeft x]) / norm;
   float sin = ([topRight y] - [topLeft y]) / norm;
 
-  ZXResultPoint * c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
 
   corr = [self distance:bottomLeft b:topLeft] / (float)dimension;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
 
-  ZXResultPoint * c2 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c2 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
 
   if (![self isValid:c1]) {
     if ([self isValid:c2]) {
@@ -333,7 +333,7 @@
  * Increments the Integer associated with a key by one.
  */
 - (void)increment:(NSMutableDictionary *)table key:(ZXResultPoint *)key {
-  NSNumber * value = [table objectForKey:key];
+  NSNumber *value = [table objectForKey:key];
   [table setObject:value == nil ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:[value intValue] + 1] forKey:key];
 }
 
@@ -345,7 +345,7 @@
                  dimensionX:(int)dimensionX
                  dimensionY:(int)dimensionY
                       error:(NSError **)error {
-  ZXGridSampler * sampler = [ZXGridSampler instance];
+  ZXGridSampler *sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:anImage
                   dimensionX:dimensionX dimensionY:dimensionY
                        p1ToX:0.5f p1ToY:0.5f

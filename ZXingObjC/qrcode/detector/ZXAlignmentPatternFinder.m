@@ -22,14 +22,14 @@
 
 @interface ZXAlignmentPatternFinder ()
 
-@property (nonatomic, retain) ZXBitMatrix * image;
-@property (nonatomic, retain) NSMutableArray * possibleCenters;
+@property (nonatomic, retain) ZXBitMatrix *image;
+@property (nonatomic, retain) NSMutableArray *possibleCenters;
 @property (nonatomic, assign) int startX;
 @property (nonatomic, assign) int startY;
 @property (nonatomic, assign) int width;
 @property (nonatomic, assign) int height;
 @property (nonatomic, assign) float moduleSize;
-@property (nonatomic, assign) int * crossCheckStateCount;
+@property (nonatomic, assign) int *crossCheckStateCount;
 @property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
 
 - (float)centerFromEnd:(int *)stateCount end:(int)end;
@@ -62,7 +62,7 @@
     self.width = aWidth;
     self.height = aHeight;
     self.moduleSize = aModuleSize;
-    self.crossCheckStateCount = (int*)malloc(3 * sizeof(int));
+    self.crossCheckStateCount = (int *)malloc(3 * sizeof(int));
     memset(self.crossCheckStateCount, 0, 3 * sizeof(int));
     self.resultPointCallback = aResultPointCallback;
   }
@@ -112,7 +112,7 @@
         } else {
           if (currentState == 2) {
             if ([self foundPatternCross:stateCount]) {
-              ZXAlignmentPattern * confirmed = [self handlePossibleCenter:stateCount i:i j:j];
+              ZXAlignmentPattern *confirmed = [self handlePossibleCenter:stateCount i:i j:j];
               if (confirmed != nil) {
                 return confirmed;
               }
@@ -135,7 +135,7 @@
     }
 
     if ([self foundPatternCross:stateCount]) {
-      ZXAlignmentPattern * confirmed = [self handlePossibleCenter:stateCount i:i j:maxJ];
+      ZXAlignmentPattern *confirmed = [self handlePossibleCenter:stateCount i:i j:maxJ];
       if (confirmed != nil) {
         return confirmed;
       }
@@ -240,14 +240,14 @@
     int max = self.possibleCenters.count;
 
     for (int index = 0; index < max; index++) {
-      ZXAlignmentPattern * center = [self.possibleCenters objectAtIndex:index];
+      ZXAlignmentPattern *center = [self.possibleCenters objectAtIndex:index];
       // Look for about the same center and module size:
       if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
         return [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];
       }
     }
     // Hadn't found this before; save it
-    ZXResultPoint * point = [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
+    ZXResultPoint *point = [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
     [self.possibleCenters addObject:point];
     if (self.resultPointCallback != nil) {
       [self.resultPointCallback foundPossibleResultPoint:point];

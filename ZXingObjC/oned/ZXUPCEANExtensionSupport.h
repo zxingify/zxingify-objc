@@ -18,6 +18,6 @@
 
 @interface ZXUPCEANExtensionSupport : NSObject
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError**)error;
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError **)error;
 
 @end

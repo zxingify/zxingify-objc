@@ -16,25 +16,25 @@
 
 #import "ZXExpandedProductParsedResult.h"
 
-NSString * const KILOGRAM = @"KG";
-NSString * const POUND = @"LB";
+NSString *const KILOGRAM = @"KG";
+NSString *const POUND = @"LB";
 
 @interface ZXExpandedProductParsedResult ()
 
-@property (nonatomic, copy) NSString * productID;
-@property (nonatomic, copy) NSString * sscc;
-@property (nonatomic, copy) NSString * lotNumber;
-@property (nonatomic, copy) NSString * productionDate;
-@property (nonatomic, copy) NSString * packagingDate;
-@property (nonatomic, copy) NSString * bestBeforeDate;
-@property (nonatomic, copy) NSString * expirationDate;
-@property (nonatomic, copy) NSString * weight;
-@property (nonatomic, copy) NSString * weightType;
-@property (nonatomic, copy) NSString * weightIncrement;
-@property (nonatomic, copy) NSString * price;
-@property (nonatomic, copy) NSString * priceIncrement;
-@property (nonatomic, copy) NSString * priceCurrency;
-@property (nonatomic, retain) NSMutableDictionary * uncommonAIs;
+@property (nonatomic, copy) NSString *productID;
+@property (nonatomic, copy) NSString *sscc;
+@property (nonatomic, copy) NSString *lotNumber;
+@property (nonatomic, copy) NSString *productionDate;
+@property (nonatomic, copy) NSString *packagingDate;
+@property (nonatomic, copy) NSString *bestBeforeDate;
+@property (nonatomic, copy) NSString *expirationDate;
+@property (nonatomic, copy) NSString *weight;
+@property (nonatomic, copy) NSString *weightType;
+@property (nonatomic, copy) NSString *weightIncrement;
+@property (nonatomic, copy) NSString *price;
+@property (nonatomic, copy) NSString *priceIncrement;
+@property (nonatomic, copy) NSString *priceCurrency;
+@property (nonatomic, retain) NSMutableDictionary *uncommonAIs;
 
 - (BOOL)equalsOrNil:(id)o1 o2:(id)o2;
 
@@ -123,7 +123,7 @@ NSString * const POUND = @"LB";
     return NO;
   }
 
-  ZXExpandedProductParsedResult * other = (ZXExpandedProductParsedResult *)o;
+  ZXExpandedProductParsedResult *other = (ZXExpandedProductParsedResult *)o;
 
   return [self equalsOrNil:productID o2:other.productID]
     && [self equalsOrNil:sscc o2:other.sscc]
@@ -162,7 +162,7 @@ NSString * const POUND = @"LB";
   return hash;
 }
 
-- (NSString*)displayResult {
+- (NSString *)displayResult {
   return self.productID;
 }
 

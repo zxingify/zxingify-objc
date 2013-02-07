@@ -50,7 +50,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 
 @interface ZXPDF417Detector ()
 
-@property (nonatomic, retain) ZXBinaryBitmap * image;
+@property (nonatomic, retain) ZXBinaryBitmap *image;
 
 - (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix tryHarder:(BOOL)tryHarder;
 - (NSMutableArray *)findVertices180:(ZXBitMatrix *)matrix tryHarder:(BOOL)tryHarder;
@@ -58,7 +58,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 - (float)computeModuleWidth:(NSArray *)vertices;
 - (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
 - (int)computeYDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
-- (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int*)counters;
+- (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int *)counters;
 - (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
                     topLeft:(ZXResultPoint *)topLeft
@@ -67,7 +67,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                 bottomRight:(ZXResultPoint *)bottomRight
                  xdimension:(int)xdimension
                  ydimension:(int)ydimension
-                      error:(NSError**)error;
+                      error:(NSError **)error;
 
 @end
 
@@ -103,7 +103,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
   // Fetch the 1 bit matrix once up front.
-  ZXBitMatrix * matrix = [self.image blackMatrixWithError:error];
+  ZXBitMatrix *matrix = [self.image blackMatrixWithError:error];
   if (!matrix) {
     return nil;
   }
@@ -111,7 +111,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   BOOL tryHarder = hints != nil && hints.tryHarder;
 
   // Try to find the vertices assuming the image is upright.
-  NSMutableArray * vertices = [self findVertices:matrix tryHarder:tryHarder];
+  NSMutableArray *vertices = [self findVertices:matrix tryHarder:tryHarder];
   if (vertices == nil) {
     // Maybe the image is rotated 180 degrees?
     vertices = [self findVertices180:matrix tryHarder:tryHarder];
@@ -151,14 +151,14 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   ydimension = ydimension > dimension ? ydimension : dimension;
 
   // Deskew and sample image.
-  ZXBitMatrix * bits = [self sampleGrid:matrix
-                                topLeft:[vertices objectAtIndex:4]
-                             bottomLeft:[vertices objectAtIndex:5]
-                               topRight:[vertices objectAtIndex:6]
-                            bottomRight:[vertices objectAtIndex:7]
-                             xdimension:dimension
-                             ydimension:ydimension
-                                  error:error];
+  ZXBitMatrix *bits = [self sampleGrid:matrix
+                               topLeft:[vertices objectAtIndex:4]
+                            bottomLeft:[vertices objectAtIndex:5]
+                              topRight:[vertices objectAtIndex:6]
+                           bottomRight:[vertices objectAtIndex:7]
+                            xdimension:dimension
+                            ydimension:ydimension
+                                 error:error];
   if (!bits) {
     return nil;
   }
@@ -187,7 +187,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   int height = matrix.height;
   int width = matrix.width;
 
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:8];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:8];
   for (int i = 0; i < 8; i++) {
     [result addObject:[NSNull null]];
   }
@@ -200,7 +200,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 
   // Top Left
   for (int i = 0; i < height; i += rowStep) {
-    NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
+    NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
     if (loc.location != NSNotFound) {
       [result replaceObjectAtIndex:0 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
       [result replaceObjectAtIndex:4 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
@@ -212,7 +212,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (found) { // Found the Top Left vertex
     found = NO;
     for (int i = height - 1; i > 0; i -= rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
+      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
       if (loc.location != NSNotFound) {
         [result replaceObjectAtIndex:1 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
         [result replaceObjectAtIndex:5 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
@@ -229,7 +229,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (found) { // Found the Bottom Left vertex
     found = NO;
     for (int i = 0; i < height; i += rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
+      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
       if (loc.location != NSNotFound) {
         [result replaceObjectAtIndex:2 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
         [result replaceObjectAtIndex:6 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
@@ -242,7 +242,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (found) { // Found the Top right vertex
     found = NO;
     for (int i = height - 1; i > 0; i -= rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int*)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
+      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
       if (loc.location != NSNotFound) {
         [result replaceObjectAtIndex:3 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
         [result replaceObjectAtIndex:7 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
@@ -277,7 +277,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   int width = matrix.width;
   int halfWidth = width >> 1;
 
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:8];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:8];
   for (int i = 0; i < 8; i++) {
     [result addObject:[NSNull null]];
   }
@@ -290,7 +290,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 
   // Top Left
   for (int i = height - 1; i > 0; i -= rowStep) {
-    NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
+    NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int *)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
     if (loc.location != NSNotFound) {
       [result replaceObjectAtIndex:0 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
       [result replaceObjectAtIndex:4 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
@@ -302,7 +302,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (found) { // Found the Top Left vertex
     found = NO;
     for (int i = 0; i < height; i += rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int*)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
+      NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int *)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
       if (loc.location != NSNotFound) {
         [result replaceObjectAtIndex:1 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
         [result replaceObjectAtIndex:5 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
@@ -319,7 +319,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (found) { // Found the Bottom Left vertex
     found = NO;
     for (int i = height - 1; i > 0; i -= rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
+      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int *)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
       if (loc.location != NSNotFound) {
         [result replaceObjectAtIndex:2 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
         [result replaceObjectAtIndex:6 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
@@ -332,7 +332,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (found) { // Found the Top Right vertex
     found = NO;
     for (int i = 0; i < height; i += rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int*)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
+      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int *)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
       if (loc.location != NSNotFound) {
         [result replaceObjectAtIndex:3 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
         [result replaceObjectAtIndex:7 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
@@ -352,14 +352,14 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  * quadrilateral if needed.
  */
 - (void)correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown {
-  float v0x = [(ZXResultPoint*)[vertices objectAtIndex:0] x];
-  float v0y = [(ZXResultPoint*)[vertices objectAtIndex:0] y];
-  float v2x = [(ZXResultPoint*)[vertices objectAtIndex:2] x];
-  float v2y = [(ZXResultPoint*)[vertices objectAtIndex:2] y];
-  float v4x = [(ZXResultPoint*)[vertices objectAtIndex:4] x];
-  float v4y = [(ZXResultPoint*)[vertices objectAtIndex:4] y];
-  float v6x = [(ZXResultPoint*)[vertices objectAtIndex:6] x];
-  float v6y = [(ZXResultPoint*)[vertices objectAtIndex:6] y];
+  float v0x = [(ZXResultPoint *)[vertices objectAtIndex:0] x];
+  float v0y = [(ZXResultPoint *)[vertices objectAtIndex:0] y];
+  float v2x = [(ZXResultPoint *)[vertices objectAtIndex:2] x];
+  float v2y = [(ZXResultPoint *)[vertices objectAtIndex:2] y];
+  float v4x = [(ZXResultPoint *)[vertices objectAtIndex:4] x];
+  float v4y = [(ZXResultPoint *)[vertices objectAtIndex:4] y];
+  float v6x = [(ZXResultPoint *)[vertices objectAtIndex:6] x];
+  float v6y = [(ZXResultPoint *)[vertices objectAtIndex:6] y];
 
   float skew = v4y - v6y;
   if (upsideDown) {
@@ -385,14 +385,14 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                                                                    y:v2y - correction * deltay] autorelease]];
   }
   
-  float v1x = [(ZXResultPoint*)[vertices objectAtIndex:1] x];
-  float v1y = [(ZXResultPoint*)[vertices objectAtIndex:1] y];
-  float v3x = [(ZXResultPoint*)[vertices objectAtIndex:3] x];
-  float v3y = [(ZXResultPoint*)[vertices objectAtIndex:3] y];
-  float v5x = [(ZXResultPoint*)[vertices objectAtIndex:5] x];
-  float v5y = [(ZXResultPoint*)[vertices objectAtIndex:5] y];
-  float v7x = [(ZXResultPoint*)[vertices objectAtIndex:7] x];
-  float v7y = [(ZXResultPoint*)[vertices objectAtIndex:7] y];
+  float v1x = [(ZXResultPoint *)[vertices objectAtIndex:1] x];
+  float v1y = [(ZXResultPoint *)[vertices objectAtIndex:1] y];
+  float v3x = [(ZXResultPoint *)[vertices objectAtIndex:3] x];
+  float v3y = [(ZXResultPoint *)[vertices objectAtIndex:3] y];
+  float v5x = [(ZXResultPoint *)[vertices objectAtIndex:5] x];
+  float v5y = [(ZXResultPoint *)[vertices objectAtIndex:5] y];
+  float v7x = [(ZXResultPoint *)[vertices objectAtIndex:7] x];
+  float v7y = [(ZXResultPoint *)[vertices objectAtIndex:7] y];
 
   skew = v7y - v5y;
   if (upsideDown) {
@@ -473,7 +473,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                  xdimension:(int)xdimension
                  ydimension:(int)ydimension
                       error:(NSError **)error {
-  ZXGridSampler * sampler = [ZXGridSampler instance];
+  ZXGridSampler *sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:matrix
                   dimensionX:xdimension
                   dimensionY:ydimension
@@ -496,7 +496,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                        error:error];
 }
 
-- (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int*)counters {
+- (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int *)counters {
   int patternLength = patternLen;
   memset(counters, 0, patternLength * sizeof(int));
   BOOL isWhite = whiteFirst;
@@ -536,7 +536,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  * the total variance from the expected pattern proportions across all
  * pattern elements, to the length of the pattern.
  */
-- (int)patternMatchVariance:(int*)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
+- (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;

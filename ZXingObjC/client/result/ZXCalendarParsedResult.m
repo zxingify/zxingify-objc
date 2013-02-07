@@ -18,15 +18,15 @@
 
 @interface ZXCalendarParsedResult ()
 
-@property(nonatomic, retain) NSString * summary;
-@property(nonatomic, retain) NSDate * start;
+@property(nonatomic, retain) NSString *summary;
+@property(nonatomic, retain) NSDate *start;
 @property(nonatomic) BOOL startAllDay;
-@property(nonatomic, retain) NSDate * end;
+@property(nonatomic, retain) NSDate *end;
 @property(nonatomic) BOOL endAllDay;
-@property(nonatomic, retain) NSString * location;
-@property(nonatomic, retain) NSString * organizer;
-@property(nonatomic, retain) NSArray * attendees;
-@property(nonatomic, retain) NSString * description;
+@property(nonatomic, retain) NSString *location;
+@property(nonatomic, retain) NSString *organizer;
+@property(nonatomic, retain) NSArray *attendees;
+@property(nonatomic, retain) NSString *description;
 @property(nonatomic) double latitude;
 @property(nonatomic) double longitude;
 
@@ -35,9 +35,9 @@
 
 @end
 
-static NSRegularExpression * DATE_TIME = nil;
-static NSDateFormatter * DATE_FORMAT = nil;
-static NSDateFormatter * DATE_TIME_FORMAT = nil;
+static NSRegularExpression *DATE_TIME = nil;
+static NSDateFormatter *DATE_FORMAT = nil;
+static NSDateFormatter *DATE_TIME_FORMAT = nil;
 
 @implementation ZXCalendarParsedResult
 
@@ -99,7 +99,7 @@ return [[[self alloc] initWithSummary:summary startString:startString endString:
 }
 
 - (NSString *)displayResult {
-  NSMutableString * result = [NSMutableString stringWithCapacity:100];
+  NSMutableString *result = [NSMutableString stringWithCapacity:100];
   [ZXParsedResult maybeAppend:self.summary result:result];
   [ZXParsedResult maybeAppend:[self format:self.startAllDay date:self.start] result:result];
   [ZXParsedResult maybeAppend:[self format:self.endAllDay date:self.end] result:result];
@@ -116,7 +116,7 @@ return [[[self alloc] initWithSummary:summary startString:startString endString:
  * or DATE-TIME (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
  */
 - (NSDate *)parseDate:(NSString *)when {
-  NSArray* matches = [DATE_TIME matchesInString:when options:0 range:NSMakeRange(0, when.length)];
+  NSArray *matches = [DATE_TIME matchesInString:when options:0 range:NSMakeRange(0, when.length)];
   if (matches.count == 0) {
     [NSException raise:NSInvalidArgumentException
                 format:@"Invalid date"];

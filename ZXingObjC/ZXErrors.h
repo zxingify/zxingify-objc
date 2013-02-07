@@ -56,6 +56,6 @@ enum {
 };
 
 // Helper methods for error instances
-NSError* ChecksumErrorInstance();
-NSError* FormatErrorInstance();
-NSError* NotFoundErrorInstance();
+NSError *ChecksumErrorInstance();
+NSError *FormatErrorInstance();
+NSError *NotFoundErrorInstance();

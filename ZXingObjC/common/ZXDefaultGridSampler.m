@@ -33,7 +33,7 @@
                     p3FromX:(float)p3FromX p3FromY:(float)p3FromY
                     p4FromX:(float)p4FromX p4FromY:(float)p4FromY
                       error:(NSError **)error {
-  ZXPerspectiveTransform * transform =
+  ZXPerspectiveTransform *transform =
     [ZXPerspectiveTransform quadrilateralToQuadrilateral:p1ToX y0:p1ToY
                                                       x1:p2ToX y1:p2ToY
                                                       x2:p3ToX y2:p3ToY
@@ -54,7 +54,7 @@
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
+  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
   int pointsLen = dimensionX << 1;
   float pointsf[pointsLen];
   memset(pointsf, 0, pointsLen * sizeof(float));

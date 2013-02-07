@@ -85,20 +85,20 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSArray * startRange = [self decodeStart:row];
-  NSArray * endRange = [self decodeEnd:row];
+  NSArray *startRange = [self decodeStart:row];
+  NSArray *endRange = [self decodeEnd:row];
   if (!startRange || !endRange) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  NSMutableString * resultString = [NSMutableString stringWithCapacity:20];
+  NSMutableString *resultString = [NSMutableString stringWithCapacity:20];
   if (![self decodeMiddle:row payloadStart:[[startRange objectAtIndex:1] intValue] payloadEnd:[[endRange objectAtIndex:0] intValue] resultString:resultString]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  NSArray * allowedLengths = nil;
+  NSArray *allowedLengths = nil;
   if (hints != nil) {
     allowedLengths = hints.allowedLengths;
   }
@@ -184,7 +184,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   if (endStart == -1) {
     return nil;
   }
-  NSArray * startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int*)ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
+  NSArray *startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int *)ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
   if (!startPattern) {
     return nil;
   }
@@ -250,7 +250,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  NSMutableArray * endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int*)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy] autorelease];
+  NSMutableArray *endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int *)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy] autorelease];
   if (!endPattern) {
     [row reverse];
     return nil;

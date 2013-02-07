@@ -74,11 +74,11 @@ enum {
 
 @implementation ZXDataMatrixDecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length error:(NSError**)error {
-  ZXBitSource * bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
-  NSMutableString * result = [NSMutableString stringWithCapacity:100];
-  NSMutableString * resultTrailer = [NSMutableString string];
-  NSMutableArray * byteSegments = [NSMutableArray arrayWithCapacity:1];
++ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length error:(NSError **)error {
+  ZXBitSource *bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
+  NSMutableString *result = [NSMutableString stringWithCapacity:100];
+  NSMutableString *resultTrailer = [NSMutableString string];
+  NSMutableArray *byteSegments = [NSMutableArray arrayWithCapacity:1];
   int mode = ASCII_ENCODE;
   do {
     if (mode == ASCII_ENCODE) {
@@ -482,7 +482,7 @@ enum {
     return NO;
   }
 
-  NSMutableArray * bytesArray = [NSMutableArray arrayWithCapacity:count];
+  NSMutableArray *bytesArray = [NSMutableArray arrayWithCapacity:count];
   unsigned char bytes[count];
   for (int i = 0; i < count; i++) {
     if ([bits available] < 8) {

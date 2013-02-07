@@ -18,9 +18,9 @@
 
 @interface ZXTelParsedResult ()
 
-@property (nonatomic, copy) NSString * number;
-@property (nonatomic, copy) NSString * telURI;
-@property (nonatomic, copy) NSString * title;
+@property (nonatomic, copy) NSString *number;
+@property (nonatomic, copy) NSString *telURI;
+@property (nonatomic, copy) NSString *title;
 
 @end
 

@@ -24,7 +24,7 @@
 @property (nonatomic, assign) int ecCodewordsPerBlock;
 @property (nonatomic, assign) int numBlocks;
 @property (nonatomic, assign) int totalECCodewords;
-@property (nonatomic, retain) NSArray * ecBlocks;
+@property (nonatomic, retain) NSArray *ecBlocks;
 
 @end
 
@@ -59,11 +59,11 @@
   [super dealloc];
 }
 
-+ (ZXQRCodeECBlocks*)ecBlocksWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)ecBlocks {
++ (ZXQRCodeECBlocks *)ecBlocksWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)ecBlocks {
   return [[[ZXQRCodeECBlocks alloc] initWithEcCodewordsPerBlock:ecCodewordsPerBlock ecBlocks:ecBlocks] autorelease];
 }
 
-+ (ZXQRCodeECBlocks*)ecBlocksWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2 {
++ (ZXQRCodeECBlocks *)ecBlocksWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2 {
   return [[[ZXQRCodeECBlocks alloc] initWithEcCodewordsPerBlock:ecCodewordsPerBlock ecBlocks1:ecBlocks1 ecBlocks2:ecBlocks2] autorelease];
 }
 
@@ -104,7 +104,7 @@
   return self;
 }
 
-+ (ZXQRCodeECB*)ecbWithCount:(int)count dataCodewords:(int)dataCodewords {
++ (ZXQRCodeECB *)ecbWithCount:(int)count dataCodewords:(int)dataCodewords {
   return [[[ZXQRCodeECB alloc] initWithCount:count dataCodewords:dataCodewords] autorelease];
 }
 
@@ -132,8 +132,8 @@ static NSArray *VERSIONS = nil;
 @interface ZXQRCodeVersion ()
 
 @property (nonatomic, assign) int versionNumber;
-@property (nonatomic, retain) NSArray * alignmentPatternCenters;
-@property (nonatomic, retain) NSArray * ecBlocks;
+@property (nonatomic, retain) NSArray *alignmentPatternCenters;
+@property (nonatomic, retain) NSArray *ecBlocks;
 @property (nonatomic, assign) int totalCodewords;
 
 @end
@@ -229,7 +229,7 @@ static NSArray *VERSIONS = nil;
  */
 - (ZXBitMatrix *)buildFunctionPattern {
   int dimension = [self dimensionForVersion];
-  ZXBitMatrix * bitMatrix = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+  ZXBitMatrix *bitMatrix = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   [bitMatrix setRegionAtLeft:0 top:0 width:9 height:9];
   [bitMatrix setRegionAtLeft:dimension - 8 top:0 width:8 height:9];
   [bitMatrix setRegionAtLeft:0 top:dimension - 8 width:9 height:8];

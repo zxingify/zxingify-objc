@@ -69,27 +69,27 @@ const unichar SETS[1][383] = {
 + (int)serviceClass:(unsigned char *)bytes length:(unsigned int)length;
 + (int)postCode2Length:(unsigned char *)bytes length:(unsigned int)length;
 + (int)postCode2:(unsigned char *)bytes length:(unsigned int)length;
-+ (NSString*)postCode3:(unsigned char *)bytes length:(unsigned int)length;
-+ (NSString*)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len;
++ (NSString *)postCode3:(unsigned char *)bytes length:(unsigned int)length;
++ (NSString *)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len;
 
 @end
 
 @implementation ZXMaxiCodeDecodedBitStreamParser
 
 + (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length mode:(int)mode {
-  NSMutableString* result = [NSMutableString stringWithCapacity:144];
+  NSMutableString *result = [NSMutableString stringWithCapacity:144];
   switch (mode) {
     case 2:
     case 3: {
-      NSString* postcode;
+      NSString *postcode;
       if (mode == 2) {
         int pc = [self postCode2:bytes length:length];
         postcode = [NSString stringWithFormat:@"%9d", pc];
       } else {
         postcode = [self postCode3:bytes length:length];
       }
-      NSString* country = [NSString stringWithFormat:@"%3d", [self country:bytes length:length]];
-      NSString* service = [NSString stringWithFormat:@"%3d", [self serviceClass:bytes length:length]];
+      NSString *country = [NSString stringWithFormat:@"%3d", [self country:bytes length:length]];
+      NSString *service = [NSString stringWithFormat:@"%3d", [self serviceClass:bytes length:length]];
       [result appendString:[self message:bytes length:length start:10 len:84]];
       if ([result hasPrefix:[NSString stringWithFormat:@"[)>%C01%C", RS, GS]]) {
         [result insertString:[NSString stringWithFormat:@"%@%C%@%C%@%C", postcode, GS, country, GS, service, GS] atIndex:9];
@@ -155,7 +155,7 @@ const unichar SETS[1][383] = {
 }
 
 #define POST_CODE3_LEN 6
-+ (NSString*)postCode3:(unsigned char *)bytes length:(unsigned int)length {
++ (NSString *)postCode3:(unsigned char *)bytes length:(unsigned int)length {
   unsigned char array[POST_CODE3_LEN][POST_CODE3_LEN] = {
     {39, 40, 41, 42, 31, 32},
     {33, 34, 35, 36, 25, 26},
@@ -174,8 +174,8 @@ const unichar SETS[1][383] = {
           SETS[0][[self integer:bytes length:length x:array[5] xLength:POST_CODE3_LEN]]];
 }
 
-+ (NSString*)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len {
-  NSMutableString* sb = [NSMutableString string];
++ (NSString *)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len {
+  NSMutableString *sb = [NSMutableString string];
   int shift = -1;
   int set = 0;
   int lastset = 0;

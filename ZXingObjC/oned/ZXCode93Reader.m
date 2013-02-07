@@ -40,12 +40,12 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
-- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError**)error ;
-- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError**)error ;
+- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError **)error ;
+- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError **)error ;
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b;
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b;
 - (unichar)patternToChar:(int)pattern;
-- (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen;
+- (int)toPattern:(int *)counters countersLen:(unsigned int)countersLen;
 
 @end
 
@@ -61,7 +61,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   int nextStart = [row nextSet:start[1]];
   int end = row.size;
 
-  NSMutableString * result = [NSMutableString stringWithCapacity:20];
+  NSMutableString *result = [NSMutableString stringWithCapacity:20];
   const int countersLen = 6;
   int counters[countersLen];
   unichar decodedChar;
@@ -107,7 +107,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   }
   [result deleteCharactersInRange:NSMakeRange([result length] - 2, 2)];
 
-  NSString * resultString = [self decodeExtended:result];
+  NSString *resultString = [self decodeExtended:result];
   if (!resultString) {
     if (error) *error = FormatErrorInstance();
     return nil;
@@ -165,7 +165,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   return NO;
 }
 
-- (int)toPattern:(int*)counters countersLen:(unsigned int)countersLen {
+- (int)toPattern:(int *)counters countersLen:(unsigned int)countersLen {
   int max = countersLen;
   int sum = 0;
   for (int i = 0; i < max; i++) {
@@ -204,7 +204,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {
   int length = [encoded length];
-  NSMutableString * decoded = [NSMutableString stringWithCapacity:length];
+  NSMutableString *decoded = [NSMutableString stringWithCapacity:length];
   for (int i = 0; i < length; i++) {
     unichar c = [encoded characterAtIndex:i];
     if (c >= 'a' && c <= 'd') {
@@ -257,7 +257,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   return decoded;
 }
 
-- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError**)error {
+- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError **)error {
   int length = [result length];
   if (![self checkOneChecksum:result checkPosition:length - 2 weightMax:20 error:error]) {
     return NO;
@@ -265,7 +265,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   return [self checkOneChecksum:result checkPosition:length - 1 weightMax:15 error:error];
 }
 
-- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError**)error {
+- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError **)error {
   int weight = 1;
   int total = 0;
 

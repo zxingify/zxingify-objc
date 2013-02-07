@@ -32,6 +32,6 @@
 
 @interface ZXMultiFinderPatternFinder : ZXFinderPatternFinder
 
-- (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError**)error;
+- (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end

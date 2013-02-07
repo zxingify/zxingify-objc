@@ -48,7 +48,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 }
 
 - (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  NSMutableArray * results = [NSMutableArray array];
+  NSMutableArray *results = [NSMutableArray array];
   if (![self doDecodeMultiple:image hints:hints results:results xOffset:0 yOffset:0 error:error]) {
     return nil;
   } else if (results.count == 0) {
@@ -60,13 +60,13 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 
 - (BOOL)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
                  xOffset:(int)xOffset yOffset:(int)yOffset error:(NSError **)error {
-  ZXResult * result = [self.delegate decode:image hints:hints error:error];
+  ZXResult *result = [self.delegate decode:image hints:hints error:error];
   if (!result) {
     return NO;
   }
 
   BOOL alreadyFound = NO;
-  for (ZXResult * existingResult in results) {
+  for (ZXResult *existingResult in results) {
     if ([[existingResult text] isEqualToString:[result text]]) {
       alreadyFound = YES;
       break;
@@ -76,7 +76,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
     return YES;
   }
   [results addObject:[self translateResultPoints:result xOffset:xOffset yOffset:yOffset]];
-  NSMutableArray * resultPoints = [result resultPoints];
+  NSMutableArray *resultPoints = [result resultPoints];
   if (resultPoints == nil || [resultPoints count] == 0) {
     return YES;
   }
@@ -86,7 +86,7 @@ int const MIN_DIMENSION_TO_RECUR = 100;
   float minY = height;
   float maxX = 0.0f;
   float maxY = 0.0f;
-  for (ZXResultPoint * point in resultPoints) {
+  for (ZXResultPoint *point in resultPoints) {
     float x = [point x];
     float y = [point y];
     if (x < minX) {
@@ -120,12 +120,12 @@ int const MIN_DIMENSION_TO_RECUR = 100;
 }
 
 - (ZXResult *)translateResultPoints:(ZXResult *)result xOffset:(int)xOffset yOffset:(int)yOffset {
-  NSArray * oldResultPoints = [result resultPoints];
+  NSArray *oldResultPoints = [result resultPoints];
   if (oldResultPoints == nil) {
     return result;
   }
-  NSMutableArray * newResultPoints = [NSMutableArray arrayWithCapacity:[oldResultPoints count]];
-  for (ZXResultPoint * oldPoint in oldResultPoints) {
+  NSMutableArray *newResultPoints = [NSMutableArray arrayWithCapacity:[oldResultPoints count]];
+  for (ZXResultPoint *oldPoint in oldResultPoints) {
     [newResultPoints addObject:[[[ZXResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset] autorelease]];
   }
 

@@ -19,7 +19,7 @@
 
 @implementation BitVectorTestCase
 
-- (unsigned long)unsignedInt:(ZXBitArray*)v index:(int)index {
+- (unsigned long)unsignedInt:(ZXBitArray *)v index:(int)index {
   unsigned long result = 0L;
   for (int i = 0, offset = index << 3; i < 32; i++) {
     if ([v get:offset + i]) {
@@ -117,7 +117,7 @@
   [v2 appendBits:0xef numBits:8];
   [v1 appendBitArray:v2];
   // beef = 1011 1110 1110 1111
-  NSString* expected = @" X.XXXXX. XXX.XXXX";
+  NSString *expected = @" X.XXXXX. XXX.XXXX";
   STAssertEqualObjects([v1 description], expected, @"Expected v1 to be %@", expected);
 }
 
@@ -169,7 +169,7 @@
 - (void)testToString {
   ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
   [v appendBits:0xdead numBits:16];  // 1101 1110 1010 1101
-  NSString* expected = @" XX.XXXX. X.X.XX.X";
+  NSString *expected = @" XX.XXXX. X.X.XX.X";
   STAssertEqualObjects([v description], expected, @"Expected v to be %@", expected);
 }
 

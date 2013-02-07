@@ -23,6 +23,6 @@
 @interface ZXReedSolomonEncoder : NSObject
 
 - (id)initWithField:(ZXGenericGF *)field;
-- (void)encode:(int*)toEncode toEncodeLen:(int)toEncodeLen ecBytes:(int)ecBytes;
+- (void)encode:(int *)toEncode toEncodeLen:(int)toEncodeLen ecBytes:(int)ecBytes;
 
 @end

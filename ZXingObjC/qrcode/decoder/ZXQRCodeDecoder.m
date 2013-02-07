@@ -29,9 +29,9 @@
 
 @interface ZXQRCodeDecoder ()
 
-@property (nonatomic, retain) ZXReedSolomonDecoder * rsDecoder;
+@property (nonatomic, retain) ZXReedSolomonDecoder *rsDecoder;
 
-- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError**)error;
+- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error;
 
 @end
 
@@ -53,7 +53,7 @@
   [super dealloc];
 }
 
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError**)error {
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error {
   return [self decode:image length:length hints:nil error:error];
 }
 
@@ -62,9 +62,9 @@
  * Convenience method that can decode a QR Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.
  */
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints error:(NSError**)error {
+- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints error:(NSError **)error {
   int dimension = length;
-  ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if (image[i][j]) {
@@ -85,25 +85,25 @@
  * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
  */
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXQRCodeBitMatrixParser * parser = [[[ZXQRCodeBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
+  ZXQRCodeBitMatrixParser *parser = [[[ZXQRCodeBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
   if (!parser) {
     return nil;
   }
-  ZXQRCodeVersion * version = [parser readVersionWithError:error];
+  ZXQRCodeVersion *version = [parser readVersionWithError:error];
   if (!version) {
     return nil;
   }
-  ZXFormatInformation* formatInfo = [parser readFormatInformationWithError:error];
+  ZXFormatInformation *formatInfo = [parser readFormatInformationWithError:error];
   if (!formatInfo) {
     return nil;
   }
-  ZXErrorCorrectionLevel * ecLevel = formatInfo.errorCorrectionLevel;
+  ZXErrorCorrectionLevel *ecLevel = formatInfo.errorCorrectionLevel;
 
-  NSArray * codewords = [parser readCodewordsWithError:error];
+  NSArray *codewords = [parser readCodewordsWithError:error];
   if (!codewords) {
     return nil;
   }
-  NSArray * dataBlocks = [ZXQRCodeDataBlock dataBlocks:codewords version:version ecLevel:ecLevel];
+  NSArray *dataBlocks = [ZXQRCodeDataBlock dataBlocks:codewords version:version ecLevel:ecLevel];
 
   int totalBytes = 0;
   for (ZXQRCodeDataBlock *dataBlock in dataBlocks) {
@@ -118,7 +118,7 @@
   int resultOffset = 0;
 
   for (ZXQRCodeDataBlock *dataBlock in dataBlocks) {
-    NSMutableArray * codewordBytes = [dataBlock codewords];
+    NSMutableArray *codewordBytes = [dataBlock codewords];
     int numDataCodewords = [dataBlock numDataCodewords];
     if (![self correctErrors:codewordBytes numDataCodewords:numDataCodewords error:error]) {
       return nil;
@@ -136,7 +136,7 @@
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
  * correct the errors in-place using Reed-Solomon error correction.
  */
-- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError**)error {
+- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error {
   int numCodewords = [codewordBytes count];
   int codewordsInts[numCodewords];
 
@@ -145,7 +145,7 @@
   }
 
   int numECCodewords = [codewordBytes count] - numDataCodewords;
-  NSError* decodeError = nil;
+  NSError *decodeError = nil;
   if (![rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
       if (error) *error = ChecksumErrorInstance();

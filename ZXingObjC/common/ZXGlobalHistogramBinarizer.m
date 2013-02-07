@@ -26,9 +26,9 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 @interface ZXGlobalHistogramBinarizer ()
 
-@property (nonatomic, assign) unsigned char * luminances;
+@property (nonatomic, assign) unsigned char *luminances;
 @property (nonatomic, assign) int luminancesCount;
-@property (nonatomic, retain) NSMutableArray * buckets;
+@property (nonatomic, retain) NSMutableArray *buckets;
 
 - (void)initArrays:(int)luminanceSize;
 - (int)estimateBlackPoint:(NSArray *)buckets;
@@ -61,8 +61,8 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   [super dealloc];
 }
 
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error {
-  ZXLuminanceSource * source = self.luminanceSource;
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError **)error {
+  ZXLuminanceSource *source = self.luminanceSource;
   int width = source.width;
   if (row == nil || row.size < width) {
     row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
@@ -71,8 +71,8 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   }
 
   [self initArrays:width];
-  unsigned char * localLuminances = [source row:y row:self.luminances];
-  NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:buckets];
+  unsigned char *localLuminances = [source row:y row:self.luminances];
+  NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:buckets];
   for (int x = 0; x < width; x++) {
     int pixel = localLuminances[x] & 0xff;
     [localBuckets replaceObjectAtIndex:pixel >> LUMINANCE_SHIFT
@@ -99,17 +99,17 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   return row;
 }
 
-- (ZXBitMatrix *)blackMatrixWithError:(NSError**)error {
-  ZXLuminanceSource * source = self.luminanceSource;
+- (ZXBitMatrix *)blackMatrixWithError:(NSError **)error {
+  ZXLuminanceSource *source = self.luminanceSource;
   int width = source.width;
   int height = source.height;
-  ZXBitMatrix * matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
+  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
 
   [self initArrays:width];
-  NSMutableArray * localBuckets = [NSMutableArray arrayWithArray:self.buckets];
+  NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:self.buckets];
   for (int y = 1; y < 5; y++) {
     int row = height * y / 5;
-    unsigned char * localLuminances = [source row:row row:self.luminances];
+    unsigned char *localLuminances = [source row:row row:self.luminances];
     int right = (width << 2) / 5;
     for (int x = width / 5; x < right; x++) {
       int pixel = localLuminances[x] & 0xff;
@@ -123,7 +123,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     return nil;
   }
 
-  unsigned char * localLuminances = source.matrix;
+  unsigned char *localLuminances = source.matrix;
   for (int y = 0; y < height; y++) {
     int offset = y * width;
     for (int x = 0; x < width; x++) {
@@ -146,7 +146,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     if (self.luminances != NULL) {
       free(self.luminances);
     }
-    self.luminances = (unsigned char*)malloc(luminanceSize * sizeof(unsigned char));
+    self.luminances = (unsigned char *)malloc(luminanceSize * sizeof(unsigned char));
     self.luminancesCount = luminanceSize;
   }
 

@@ -20,13 +20,13 @@
 @implementation ZXTelResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (![rawText hasPrefix:@"tel:"] && ![rawText hasPrefix:@"TEL:"]) {
     return nil;
   }
-  NSString * telURI = [rawText hasPrefix:@"TEL:"] ? [@"tel:" stringByAppendingString:[rawText substringFromIndex:4]] : rawText;
+  NSString *telURI = [rawText hasPrefix:@"TEL:"] ? [@"tel:" stringByAppendingString:[rawText substringFromIndex:4]] : rawText;
   int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
-  NSString * number = queryStart == NSNotFound ? [rawText substringFromIndex:4] : [rawText substringWithRange:NSMakeRange(4, [rawText length] - queryStart)];
+  NSString *number = queryStart == NSNotFound ? [rawText substringFromIndex:4] : [rawText substringWithRange:NSMakeRange(4, [rawText length] - queryStart)];
   return [ZXTelParsedResult telParsedResultWithNumber:number telURI:telURI title:nil];
 }
 

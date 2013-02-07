@@ -17,11 +17,11 @@
 #import "ZXErrors.h"
 #import "ZXFieldParser.h"
 
-static NSObject* VARIABLE_LENGTH = nil;
-static NSArray* TWO_DIGIT_DATA_LENGTH = nil;
-static NSArray* THREE_DIGIT_DATA_LENGTH = nil;
-static NSArray* THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = nil;
-static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
+static NSObject *VARIABLE_LENGTH = nil;
+static NSArray *TWO_DIGIT_DATA_LENGTH = nil;
+static NSArray *THREE_DIGIT_DATA_LENGTH = nil;
+static NSArray *THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = nil;
+static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
 
 @interface ZXFieldParser ()
 
@@ -195,7 +195,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSString * firstTwoDigits = [rawInformation substringWithRange:NSMakeRange(0, 2)];
+  NSString *firstTwoDigits = [rawInformation substringWithRange:NSMakeRange(0, 2)];
 
   for (int i = 0; i < [TWO_DIGIT_DATA_LENGTH count]; ++i) {
     if ([[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstTwoDigits]) {
@@ -204,7 +204,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                      variableFieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                         rawInformation:rawInformation];
       }
-      NSString* result = [self processFixedAI:2
+      NSString *result = [self processFixedAI:2
                                     fieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
@@ -219,7 +219,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSString * firstThreeDigits = [rawInformation substringWithRange:NSMakeRange(0, 3)];
+  NSString *firstThreeDigits = [rawInformation substringWithRange:NSMakeRange(0, 3)];
 
   for (int i = 0; i < [THREE_DIGIT_DATA_LENGTH count]; ++i) {
     if ([[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstThreeDigits]) {
@@ -228,7 +228,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                      variableFieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                         rawInformation:rawInformation];
       }
-      NSString* result = [self processFixedAI:3
+      NSString *result = [self processFixedAI:3
                                     fieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
@@ -246,7 +246,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
                      variableFieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                         rawInformation:rawInformation];
       }
-      NSString* result = [self processFixedAI:4
+      NSString *result = [self processFixedAI:4
                                     fieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
@@ -261,12 +261,12 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSString * firstFourDigits = [rawInformation substringWithRange:NSMakeRange(0, 4)];
+  NSString *firstFourDigits = [rawInformation substringWithRange:NSMakeRange(0, 4)];
 
   for (int i = 0; i < [FOUR_DIGIT_DATA_LENGTH count]; ++i) {
     if ([[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstFourDigits]) {
       if ([[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] isEqual:VARIABLE_LENGTH]) {
-        NSString* result = [self processVariableAI:4
+        NSString *result = [self processVariableAI:4
                                  variableFieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
                                     rawInformation:rawInformation];
         if (!result) {
@@ -275,7 +275,7 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
         }
         return result;
       }
-      NSString* result = [self processFixedAI:4
+      NSString *result = [self processFixedAI:4
                                     fieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
@@ -295,36 +295,36 @@ static NSArray* FOUR_DIGIT_DATA_LENGTH = nil;
     return nil;
   }
 
-  NSString * ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
+  NSString *ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   if ([rawInformation length] < aiSize + fieldSize) {
     return nil;
   }
 
-  NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, fieldSize)];
-  NSString * remaining;
+  NSString *field = [rawInformation substringWithRange:NSMakeRange(aiSize, fieldSize)];
+  NSString *remaining;
   if (aiSize + fieldSize == rawInformation.length) {
     remaining = @"";
   } else {
     remaining = [rawInformation substringFromIndex:aiSize + fieldSize];
   }
 
-  NSString * result = [NSString stringWithFormat:@"(%@)%@", ai, field];
-  NSString * parsedAI = [self parseFieldsInGeneralPurpose:remaining error:nil];
+  NSString *result = [NSString stringWithFormat:@"(%@)%@", ai, field];
+  NSString *parsedAI = [self parseFieldsInGeneralPurpose:remaining error:nil];
   return parsedAI == nil ? result : [result stringByAppendingString:parsedAI];
 }
 
 + (NSString *)processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation {
-  NSString * ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
+  NSString *ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   int maxSize;
   if ([rawInformation length] < aiSize + variableFieldSize) {
     maxSize = [rawInformation length];
   } else {
     maxSize = aiSize + variableFieldSize;
   }
-  NSString * field = [rawInformation substringWithRange:NSMakeRange(aiSize, maxSize - aiSize)];
-  NSString * remaining = [rawInformation substringFromIndex:maxSize];
-  NSString * result = [NSString stringWithFormat:@"(%@)%@", ai, field];
-  NSString * parsedAI = [self parseFieldsInGeneralPurpose:remaining error:nil];
+  NSString *field = [rawInformation substringWithRange:NSMakeRange(aiSize, maxSize - aiSize)];
+  NSString *remaining = [rawInformation substringFromIndex:maxSize];
+  NSString *result = [NSString stringWithFormat:@"(%@)%@", ai, field];
+  NSString *parsedAI = [self parseFieldsInGeneralPurpose:remaining error:nil];
   return parsedAI == nil ? result : [result stringByAppendingString:parsedAI];
 }
 

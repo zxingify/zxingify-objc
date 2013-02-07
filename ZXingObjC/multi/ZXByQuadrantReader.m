@@ -47,9 +47,9 @@
   int halfWidth = width / 2;
   int halfHeight = height / 2;
 
-  ZXBinaryBitmap * topLeft = [image crop:0 top:0 width:halfWidth height:halfHeight];
-  NSError* decodeError = nil;
-  ZXResult* result = [self.delegate decode:topLeft hints:hints error:&decodeError];
+  ZXBinaryBitmap *topLeft = [image crop:0 top:0 width:halfWidth height:halfHeight];
+  NSError *decodeError = nil;
+  ZXResult *result = [self.delegate decode:topLeft hints:hints error:&decodeError];
   if (result) {
     return result;
   } else if (decodeError.code != ZXNotFoundError) {
@@ -57,7 +57,7 @@
     return nil;
   }
 
-  ZXBinaryBitmap * topRight = [image crop:halfWidth top:0 width:halfWidth height:halfHeight];
+  ZXBinaryBitmap *topRight = [image crop:halfWidth top:0 width:halfWidth height:halfHeight];
   decodeError = nil;
   result = [self.delegate decode:topRight hints:hints error:&decodeError];
   if (result) {
@@ -67,7 +67,7 @@
     return nil;
   }
 
-  ZXBinaryBitmap * bottomLeft = [image crop:0 top:halfHeight width:halfWidth height:halfHeight];
+  ZXBinaryBitmap *bottomLeft = [image crop:0 top:halfHeight width:halfWidth height:halfHeight];
   decodeError = nil;
   result = [self.delegate decode:bottomLeft hints:hints error:&decodeError];
   if (result) {
@@ -77,7 +77,7 @@
     return nil;
   }
 
-  ZXBinaryBitmap * bottomRight = [image crop:halfWidth top:halfHeight width:halfWidth height:halfHeight];
+  ZXBinaryBitmap *bottomRight = [image crop:halfWidth top:halfHeight width:halfWidth height:halfHeight];
   decodeError = nil;
   result = [self.delegate decode:bottomRight hints:hints error:&decodeError];
   if (result) {
@@ -89,7 +89,7 @@
 
   int quarterWidth = halfWidth / 2;
   int quarterHeight = halfHeight / 2;
-  ZXBinaryBitmap * center = [image crop:quarterWidth top:quarterHeight width:halfWidth height:halfHeight];
+  ZXBinaryBitmap *center = [image crop:quarterWidth top:quarterHeight width:halfWidth height:halfHeight];
   return [self.delegate decode:center hints:hints error:error];
 }
 

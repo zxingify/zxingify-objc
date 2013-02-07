@@ -21,7 +21,7 @@
 @interface ZXCGImageLuminanceSource ()
 
 - (void)initializeWithImage:(CGImageRef)image left:(int)left top:(int)top width:(int)width height:(int)height;
-- (void)fillGrayscale:(unsigned char*)array offset:(int)offset size:(int)size;
+- (void)fillGrayscale:(unsigned char *)array offset:(int)offset size:(int)size;
 
 @end
 
@@ -53,11 +53,11 @@
 
   CVPixelBufferLockBaseAddress(buffer,0); 
 
-  unsigned char* baseAddress =
-  (unsigned char*)CVPixelBufferGetBaseAddress(buffer); 
+  unsigned char *baseAddress =
+  (unsigned char *)CVPixelBufferGetBaseAddress(buffer); 
 
   int size = newBytesPerRow*height;
-  unsigned char* bytes = (unsigned char*)malloc(size);
+  unsigned char *bytes = (unsigned char*)malloc(size);
   if (newBytesPerRow == bytesPerRow) {
     memcpy(bytes, baseAddress+top*bytesPerRow, size);
   } else {
@@ -90,7 +90,7 @@
   return result;
 }
 
-- (id)initWithZXImage:(ZXImage*)_image 
+- (id)initWithZXImage:(ZXImage *)_image 
                  left:(size_t)_left
                   top:(size_t)_top
                 width:(size_t)_width
@@ -100,7 +100,7 @@
   return self;
 }
 
-- (id)initWithZXImage:(ZXImage*)_image {
+- (id)initWithZXImage:(ZXImage *)_image {
   self = [self initWithCGImage:_image.cgimage];
 
   return self;
@@ -165,7 +165,7 @@
   }
 
   if (row == NULL) {
-    row = (unsigned char*)malloc(self.width * sizeof(unsigned char));
+    row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
   }
 
   int offset = (y + top) * dataWidth + left;
@@ -174,10 +174,10 @@
   return row;
 }
 
-- (unsigned char*)matrix {
+- (unsigned char *)matrix {
   int size = self.width * self.height;
 
-  unsigned char* result = (unsigned char*)malloc(size * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(size * sizeof(unsigned char));
 
   if (left == 0 && top == 0 && dataWidth == self.width && dataHeight == self.height) {
     [self fillGrayscale:result offset:0 size:size];
@@ -229,7 +229,7 @@
   dataHeight = self.height;
 }
 
-- (void)fillGrayscale:(unsigned char*)array offset:(int)offset size:(int)size {
+- (void)fillGrayscale:(unsigned char *)array offset:(int)offset size:(int)size {
   static double redRatio = 77.0f/255.0f;
   static double greenRatio = 149.0f/255.0f;
   static double blueRatio = 29.0f/255.0f;
@@ -247,7 +247,7 @@
   return YES;
 }
 
-- (ZXLuminanceSource*)rotateCounterClockwise {
+- (ZXLuminanceSource *)rotateCounterClockwise {
   double radians = 270.0f * M_PI / 180;
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR

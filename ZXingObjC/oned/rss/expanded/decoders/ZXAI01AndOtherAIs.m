@@ -22,7 +22,7 @@ int const AI01_HEADER_SIZE = 1 + 1 + 2;
 @implementation ZXAI01AndOtherAIs
 
 - (NSString *)parseInformationWithError:(NSError **)error {
-  NSMutableString * buff = [NSMutableString string];
+  NSMutableString *buff = [NSMutableString string];
 
   [buff appendString:@"(01)"];
   int initialGtinPosition = [buff length];

@@ -28,7 +28,7 @@
 
 @interface ZXMultiFormatReader ()
 
-@property (nonatomic, retain) NSMutableArray * readers;
+@property (nonatomic, retain) NSMutableArray *readers;
 
 - (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error;
 
@@ -154,7 +154,7 @@
 - (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error {
   if (self.readers != nil) {
     for (id<ZXReader> reader in self.readers) {
-      ZXResult* result = [reader decode:image hints:self.hints error:nil];
+      ZXResult *result = [reader decode:image hints:self.hints error:nil];
       if (result) {
         return result;
       }

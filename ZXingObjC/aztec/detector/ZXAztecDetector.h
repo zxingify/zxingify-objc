@@ -24,6 +24,6 @@
 @interface ZXAztecDetector : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image;
-- (ZXAztecDetectorResult *)detectWithError:(NSError**)error;
+- (ZXAztecDetectorResult *)detectWithError:(NSError **)error;
 
 @end

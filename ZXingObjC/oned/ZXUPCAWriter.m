@@ -27,7 +27,7 @@
 @implementation ZXUPCAWriter
 
 - (ZXEAN13Writer *)subWriter {
-  static ZXEAN13Writer* subWriter = nil;
+  static ZXEAN13Writer *subWriter = nil;
   if (!subWriter) {
     subWriter = [[ZXEAN13Writer alloc] init];
   }

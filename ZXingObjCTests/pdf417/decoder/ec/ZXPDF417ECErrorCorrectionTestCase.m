@@ -19,7 +19,7 @@
 
 @interface ZXPDF417ECErrorCorrectionTestCase ()
 
-@property (nonatomic, retain) ZXPDF417ECErrorCorrection* ec;
+@property (nonatomic, retain) ZXPDF417ECErrorCorrection *ec;
 
 - (BOOL)checkDecode:(NSMutableArray *)received;
 - (BOOL)checkDecode:(NSMutableArray *)received erasures:(NSArray *)erasures;

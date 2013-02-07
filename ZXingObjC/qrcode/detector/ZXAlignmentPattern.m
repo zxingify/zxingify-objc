@@ -51,7 +51,7 @@
  * Combines this object's current estimate of a finder pattern position and module size
  * with a new estimate. It returns a new FinderPattern containing an average of the two.
  */
-- (ZXAlignmentPattern*)combineEstimateI:(float)i j:(float)j newModuleSize:(float)newModuleSize {
+- (ZXAlignmentPattern *)combineEstimateI:(float)i j:(float)j newModuleSize:(float)newModuleSize {
   float combinedX = (self.x + j) / 2.0f;
   float combinedY = (self.y + i) / 2.0f;
   float combinedModuleSize = (self.estimatedModuleSize + newModuleSize) / 2.0f;

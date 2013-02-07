@@ -30,10 +30,10 @@ const int ODD = 2;
 
 @interface ZXMaxiCodeDecoder ()
 
-@property (nonatomic, retain) ZXReedSolomonDecoder * rsDecoder;
+@property (nonatomic, retain) ZXReedSolomonDecoder *rsDecoder;
 
 - (BOOL)correctErrors:(NSMutableArray *)codewordBytes start:(int)start dataCodewords:(int)dataCodewords
-          ecCodewords:(int)ecCodewords mode:(int)mode error:(NSError**)error;
+          ecCodewords:(int)ecCodewords mode:(int)mode error:(NSError **)error;
 
 @end
 
@@ -55,16 +55,16 @@ const int ODD = 2;
   [super dealloc];
 }
 
-- (ZXDecoderResult *)decode:(ZXBitMatrix *)bits error:(NSError**)error {
+- (ZXDecoderResult *)decode:(ZXBitMatrix *)bits error:(NSError **)error {
   return [self decode:bits hints:nil error:error];
 }
 
-- (ZXDecoderResult *)decode:(ZXBitMatrix *)bits hints:(ZXDecodeHints*)hints error:(NSError**)error {
-  ZXMaxiCodeBitMatrixParser * parser = [[[ZXMaxiCodeBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
+- (ZXDecoderResult *)decode:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  ZXMaxiCodeBitMatrixParser *parser = [[[ZXMaxiCodeBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
   if (!parser) {
     return nil;
   }
-  NSMutableArray * codewords = [[[parser readCodewords] mutableCopy] autorelease];
+  NSMutableArray *codewords = [[[parser readCodewords] mutableCopy] autorelease];
 
   if (![self correctErrors:codewords start:0 dataCodewords:10 ecCodewords:10 mode:ALL error:error]) {
     return nil;
@@ -97,7 +97,7 @@ const int ODD = 2;
       return nil;
   }
 
-  unsigned char *datawords = (unsigned char*)malloc(datawordsLen * sizeof(unsigned char));
+  unsigned char *datawords = (unsigned char *)malloc(datawordsLen * sizeof(unsigned char));
   for (int i = 0; i < 10; i++) {
     datawords[i] = [[codewords objectAtIndex:i] charValue];
   }
@@ -105,13 +105,13 @@ const int ODD = 2;
     datawords[i - 10] = [[codewords objectAtIndex:i] charValue];
   }
 
-  ZXDecoderResult* result = [ZXMaxiCodeDecodedBitStreamParser decode:datawords length:datawordsLen mode:mode];
+  ZXDecoderResult *result = [ZXMaxiCodeDecodedBitStreamParser decode:datawords length:datawordsLen mode:mode];
   free(datawords);
   return result;
 }
 
 - (BOOL)correctErrors:(NSMutableArray *)codewordBytes start:(int)start dataCodewords:(int)dataCodewords
-          ecCodewords:(int)ecCodewords mode:(int)mode error:(NSError**)error {
+          ecCodewords:(int)ecCodewords mode:(int)mode error:(NSError **)error {
   int codewords = dataCodewords + ecCodewords;
 
   // in EVEN or ODD mode only half the codewords
@@ -119,7 +119,7 @@ const int ODD = 2;
 
   // First read into an array of ints
   int codewordsIntsLen = codewords / divisor;
-  int *codewordsInts = (int*)malloc(codewordsIntsLen * sizeof(int));
+  int *codewordsInts = (int *)malloc(codewordsIntsLen * sizeof(int));
   memset(codewordsInts, 0, codewordsIntsLen * sizeof(int));
   for (int i = 0; i < codewords; i++) {
     if ((mode == ALL) || (i % 2 == (mode - 1))) {
@@ -127,7 +127,7 @@ const int ODD = 2;
     }
   }
 
-  NSError* decodeError = nil;
+  NSError *decodeError = nil;
   if (![self.rsDecoder decode:codewordsInts receivedLen:codewordsIntsLen twoS:ecCodewords / divisor error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError && error) {
       *error = ChecksumErrorInstance();

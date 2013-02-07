@@ -25,6 +25,6 @@
 
 @interface ZXMultiDetector : ZXQRCodeDetector
 
-- (NSArray *)detectMulti:(ZXDecodeHints *)hints error:(NSError**)error;
+- (NSArray *)detectMulti:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end

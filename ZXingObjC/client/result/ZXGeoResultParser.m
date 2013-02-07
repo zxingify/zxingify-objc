@@ -17,7 +17,7 @@
 #import "ZXGeoParsedResult.h"
 #import "ZXGeoResultParser.h"
 
-static NSRegularExpression* GEO_URL_PATTERN = nil;
+static NSRegularExpression *GEO_URL_PATTERN = nil;
 
 @implementation ZXGeoResultParser
 
@@ -28,18 +28,18 @@ static NSRegularExpression* GEO_URL_PATTERN = nil;
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (rawText == nil || (![rawText hasPrefix:@"geo:"] && ![rawText hasPrefix:@"GEO:"])) {
     return nil;
   }
 
-  NSArray* matches = [GEO_URL_PATTERN matchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)];
+  NSArray *matches = [GEO_URL_PATTERN matchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)];
   if (matches.count == 0) {
     return nil;
   }
 
-  NSTextCheckingResult* match = [matches objectAtIndex:0];
-  NSString* query = nil;
+  NSTextCheckingResult *match = [matches objectAtIndex:0];
+  NSString *query = nil;
   if ([match rangeAtIndex:4].location != NSNotFound) {
     query = [rawText substringWithRange:[match rangeAtIndex:4]];
   }

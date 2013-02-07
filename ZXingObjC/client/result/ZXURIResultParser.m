@@ -18,9 +18,9 @@
 #import "ZXResult.h"
 #import "ZXURIParsedResult.h"
 
-static NSString * ALPHANUM_PART = @"[a-zA-Z0-9\\-]";
-static NSRegularExpression * URL_WITH_PROTOCOL_PATTERN = nil;
-static NSRegularExpression * URL_WITHOUT_PROTOCOL_PATTERN = nil;
+static NSString *ALPHANUM_PART = @"[a-zA-Z0-9\\-]";
+static NSRegularExpression *URL_WITH_PROTOCOL_PATTERN = nil;
+static NSRegularExpression *URL_WITHOUT_PROTOCOL_PATTERN = nil;
 
 @implementation ZXURIResultParser
 
@@ -37,7 +37,7 @@ static NSRegularExpression * URL_WITHOUT_PROTOCOL_PATTERN = nil;
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   // We specifically handle the odd "URL" scheme here for simplicity and add "URI" for fun
   // Assume anything starting this way really means to be a URI
   if ([rawText hasPrefix:@"URL:"] || [rawText hasPrefix:@"URI:"]) {

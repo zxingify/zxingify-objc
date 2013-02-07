@@ -59,7 +59,7 @@
 
 + (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
   if (value != nil) {
-    for (NSString* s in value) {
+    for (NSString *s in value) {
       if (s != nil && s.length > 0) {
         if ([result length] > 0) {
           [result appendString:@"\n"];

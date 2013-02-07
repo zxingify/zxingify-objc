@@ -22,10 +22,10 @@
 
 @property (assign, readonly) CGImageRef cgimage;
 
-- (ZXImage*)initWithCGImageRef:(CGImageRef)image;
-- (ZXImage*)initWithURL:(NSURL const*)url;
+- (ZXImage *)initWithCGImageRef:(CGImageRef)image;
+- (ZXImage *)initWithURL:(NSURL const *)url;
 - (size_t)width;
 - (size_t)height;
-+ (ZXImage*)imageWithMatrix:(ZXBitMatrix*)matrix;
++ (ZXImage *)imageWithMatrix:(ZXBitMatrix *)matrix;
 
 @end

@@ -19,20 +19,20 @@
 
 @interface ZXAddressBookParsedResult ()
 
-@property (nonatomic, retain) NSArray * names;
-@property (nonatomic, copy) NSString * pronunciation;
-@property (nonatomic, retain) NSArray * phoneNumbers;
-@property (nonatomic, retain) NSArray * phoneTypes;
-@property (nonatomic, retain) NSArray * emails;
-@property (nonatomic, retain) NSArray * emailTypes;
-@property (nonatomic, copy) NSString * instantMessenger;
-@property (nonatomic, copy) NSString * note;
-@property (nonatomic, retain) NSArray * addresses;
-@property (nonatomic, retain) NSArray * addressTypes;
-@property (nonatomic, copy) NSString * title;
-@property (nonatomic, copy) NSString * org;
-@property (nonatomic, copy) NSString * url;
-@property (nonatomic, copy) NSString * birthday;
+@property (nonatomic, retain) NSArray *names;
+@property (nonatomic, copy) NSString *pronunciation;
+@property (nonatomic, retain) NSArray *phoneNumbers;
+@property (nonatomic, retain) NSArray *phoneTypes;
+@property (nonatomic, retain) NSArray *emails;
+@property (nonatomic, retain) NSArray *emailTypes;
+@property (nonatomic, copy) NSString *instantMessenger;
+@property (nonatomic, copy) NSString *note;
+@property (nonatomic, retain) NSArray *addresses;
+@property (nonatomic, retain) NSArray *addressTypes;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *org;
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *birthday;
 
 @end
 
@@ -109,7 +109,7 @@
 }
 
 - (NSString *)displayResult {
-  NSMutableString * result = [NSMutableString string];
+  NSMutableString *result = [NSMutableString string];
   [ZXParsedResult maybeAppendArray:self.names result:result];
   [ZXParsedResult maybeAppend:self.pronunciation result:result];
   [ZXParsedResult maybeAppend:self.title result:result];

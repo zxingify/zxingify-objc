@@ -20,9 +20,9 @@
 
 @interface ReedSolomonDecoderQRCodeTestCase ()
 
-@property (nonatomic, retain) ZXReedSolomonDecoder* qrRSDecoder;
+@property (nonatomic, retain) ZXReedSolomonDecoder *qrRSDecoder;
 
-- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen;
+- (BOOL)checkQRRSDecode:(int *)received receivedLen:(int)receivedLen;
 
 @end
 
@@ -94,7 +94,7 @@ const int QR_CODE_CORRECTABLE = QR_CODE_ECC_BYTES / 2;
   }
 }
 
-- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen {
+- (BOOL)checkQRRSDecode:(int *)received receivedLen:(int)receivedLen {
   if (![self.qrRSDecoder decode:received receivedLen:receivedLen twoS:QR_CODE_ECC_BYTES error:nil]) {
     return NO;
   }

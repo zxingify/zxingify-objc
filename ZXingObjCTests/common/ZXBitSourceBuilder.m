@@ -20,7 +20,7 @@
 
 @property (nonatomic, assign) int bitsLeftInNextByte;
 @property (nonatomic, assign) int nextByte;
-@property (nonatomic, retain) NSMutableData* output;
+@property (nonatomic, retain) NSMutableData *output;
 
 @end
 
@@ -64,11 +64,11 @@
   }
 }
 
-- (unsigned char*)toByteArray {
+- (unsigned char *)toByteArray {
   if (self.bitsLeftInNextByte < 8) {
     [self write:0 numBits:self.bitsLeftInNextByte];
   }
-  return (unsigned char*)[self.output bytes];
+  return (unsigned char *)[self.output bytes];
 }
 
 - (int)byteArrayLength {

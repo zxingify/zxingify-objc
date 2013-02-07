@@ -21,7 +21,7 @@
 @interface ZXPDF417ErrorCorrection : NSObject
 
 + (int)errorCorrectionCodewordCount:(int)errorCorrectionLevel;
-+ (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError**)error;
-+ (NSString*)generateErrorCorrection:(NSString*)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel;
++ (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError **)error;
++ (NSString *)generateErrorCorrection:(NSString *)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel;
 
 @end

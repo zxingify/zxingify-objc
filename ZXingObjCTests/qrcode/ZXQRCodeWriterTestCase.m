@@ -21,21 +21,21 @@
 #import "ZXQRCodeWriter.h"
 #import "ZXQRCodeWriterTestCase.h"
 
-static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
+static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 
 @implementation ZXQRCodeWriterTestCase
 
-- (ZXImage*)loadImage:(NSString*)fileName {
+- (ZXImage *)loadImage:(NSString *)fileName {
   return [[[ZXImage alloc] initWithURL:
            [[NSBundle bundleForClass:[self class]] URLForResource:
             [BASE_IMAGE_PATH stringByAppendingString:fileName] withExtension:nil]] autorelease];
 }
 
 // In case the golden images are not monochromatic, convert the RGB values to greyscale.
-- (ZXBitMatrix*)createMatrixFromImage:(ZXImage*)image {
+- (ZXBitMatrix *)createMatrixFromImage:(ZXImage *)image {
   int width = image.width;
   int height = image.height;
-  uint32_t* data;
+  uint32_t *data;
 
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(0, width, height, 8, width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipLast);
@@ -47,7 +47,7 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   data = (uint32_t *) malloc(width * height * sizeof(uint32_t));
   memcpy(data, CGBitmapContextGetData(context), width * height * sizeof(uint32_t));
 
-  ZXBitMatrix* matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
+  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       int pixel = data[y * width + x];
@@ -65,8 +65,8 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 - (void)testQRCodeWriter {
   // The QR should be multiplied up to fit, with extra padding if necessary
   int bigEnough = 256;
-  ZXQRCodeWriter* writer = [[[ZXQRCodeWriter alloc] init] autorelease];
-  ZXBitMatrix* matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:bigEnough
+  ZXQRCodeWriter *writer = [[[ZXQRCodeWriter alloc] init] autorelease];
+  ZXBitMatrix *matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:bigEnough
                                 height:bigEnough hints:nil error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertEquals(matrix.width, bigEnough, @"Width should be %d", bigEnough);
@@ -90,17 +90,17 @@ static NSString* BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   STAssertEquals(matrix.height, strangeHeight, @"Height should be %d", strangeHeight);
 }
 
-- (void)compareToGoldenFile:(NSString*)contents ecLevel:(ZXErrorCorrectionLevel*)ecLevel
-                 resolution:(int)resolution fileName:(NSString*)fileName {
-  ZXImage* image = [self loadImage:fileName];
+- (void)compareToGoldenFile:(NSString *)contents ecLevel:(ZXErrorCorrectionLevel *)ecLevel
+                 resolution:(int)resolution fileName:(NSString *)fileName {
+  ZXImage *image = [self loadImage:fileName];
   STAssertNotNil(image, @"Image should not be nil");
-  ZXBitMatrix* goldenResult = [self createMatrixFromImage:image];
+  ZXBitMatrix *goldenResult = [self createMatrixFromImage:image];
   STAssertNotNil(goldenResult, @"Golden result should not be nil");
 
-  ZXQRCodeWriter* writer = [[[ZXQRCodeWriter alloc] init] autorelease];
-  ZXEncodeHints* hints = [[[ZXEncodeHints alloc] init] autorelease];
+  ZXQRCodeWriter *writer = [[[ZXQRCodeWriter alloc] init] autorelease];
+  ZXEncodeHints *hints = [[[ZXEncodeHints alloc] init] autorelease];
   hints.errorCorrectionLevel = ecLevel;
-  ZXBitMatrix* generatedResult = [writer encode:contents format:kBarcodeFormatQRCode width:resolution
+  ZXBitMatrix *generatedResult = [writer encode:contents format:kBarcodeFormatQRCode width:resolution
                                          height:resolution hints:hints error:nil];
 
   STAssertEquals(generatedResult.width, resolution, @"Expected generatedResult width to be %d", resolution);

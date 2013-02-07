@@ -18,7 +18,7 @@
 
 @interface ZXMaxiCodeBitMatrixParser : NSObject
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError**)error;
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error;
 - (NSArray *)readCodewords;
 
 @end

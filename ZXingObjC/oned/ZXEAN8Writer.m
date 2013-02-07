@@ -32,31 +32,31 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 /**
  * Returns a byte array of horizontal pixels (0 = white, 1 = black)
  */
-- (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
+- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
   if ([contents length] != 8) {
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", [contents length]];
   }
 
   if (pLength) *pLength = EAN8codeWidth;
-  unsigned char* result = (unsigned char*)malloc(EAN8codeWidth * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(EAN8codeWidth * sizeof(unsigned char));
   memset(result, 0, EAN8codeWidth * sizeof(unsigned char));
   int pos = 0;
 
-  pos += [super appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
+  pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
 
   for (int i = 0; i <= 3; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [super appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:0];
+    pos += [super appendPattern:result pos:pos pattern:(int *)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:0];
   }
 
-  pos += [super appendPattern:result pos:pos pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:0];
+  pos += [super appendPattern:result pos:pos pattern:(int *)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:0];
 
   for (int i = 4; i <= 7; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [super appendPattern:result pos:pos pattern:(int*)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:1];
+    pos += [super appendPattern:result pos:pos pattern:(int *)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:1];
   }
 
-  pos += [super appendPattern:result pos:pos pattern:(int*)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
+  pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:1];
 
   return result;
 }

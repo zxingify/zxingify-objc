@@ -22,17 +22,17 @@
 
 @interface ZXAddressBookParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents
-                     title:(NSString*)title
-                     names:(NSArray*)names
-             pronunciation:(NSArray*)pronunciation
-                 addresses:(NSArray*)addresses
-                    emails:(NSArray*)emails
-              phoneNumbers:(NSArray*)phoneNumbers
-                       org:(NSString*)org
-                       url:(NSString*)url
-                  birthday:(NSString*)birthday
-                      note:(NSString*)note;
+- (void)doTestWithContents:(NSString *)contents
+                     title:(NSString *)title
+                     names:(NSArray *)names
+             pronunciation:(NSArray *)pronunciation
+                 addresses:(NSArray *)addresses
+                    emails:(NSArray *)emails
+              phoneNumbers:(NSArray *)phoneNumbers
+                       org:(NSString *)org
+                       url:(NSString *)url
+                  birthday:(NSString *)birthday
+                      note:(NSString *)note;
 
 @end
 
@@ -213,21 +213,21 @@
                       note:@"foo,bar"];
 }
 
-- (void)doTestWithContents:(NSString*)contents
-                     title:(NSString*)title
-                     names:(NSArray*)names
-             pronunciation:(NSArray*)pronunciation
-                 addresses:(NSArray*)addresses
-                    emails:(NSArray*)emails
-              phoneNumbers:(NSArray*)phoneNumbers
-                       org:(NSString*)org
-                       url:(NSString*)url
-                  birthday:(NSString*)birthday
-                      note:(NSString*)note {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+- (void)doTestWithContents:(NSString *)contents
+                     title:(NSString *)title
+                     names:(NSArray *)names
+             pronunciation:(NSArray *)pronunciation
+                 addresses:(NSArray *)addresses
+                    emails:(NSArray *)emails
+              phoneNumbers:(NSArray *)phoneNumbers
+                       org:(NSString *)org
+                       url:(NSString *)url
+                  birthday:(NSString *)birthday
+                      note:(NSString *)note {
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(kParsedResultTypeAddressBook, result.type, @"Result type mismatch");
-  ZXAddressBookParsedResult* addressResult = (ZXAddressBookParsedResult*)result;
+  ZXAddressBookParsedResult *addressResult = (ZXAddressBookParsedResult *)result;
   STAssertEqualObjects(addressResult.title, title, @"Titles do not match");
   STAssertEqualObjects(addressResult.names, names, @"Names do not match");
   STAssertEqualObjects(addressResult.pronunciation, pronunciation, @"Pronunciation does not match");

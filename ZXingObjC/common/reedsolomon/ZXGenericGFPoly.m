@@ -19,9 +19,9 @@
 
 @interface ZXGenericGFPoly ()
 
-@property (nonatomic, assign) int* coefficients;
+@property (nonatomic, assign) int *coefficients;
 @property (nonatomic, assign) int coefficientsLen;
-@property (nonatomic, retain) ZXGenericGF * field;
+@property (nonatomic, retain) ZXGenericGF *field;
 
 @end
 
@@ -41,19 +41,19 @@
         firstNonZero++;
       }
       if (firstNonZero == aCoefficientsLen) {
-        ZXGenericGFPoly* zero = [field zero];
-        self.coefficients = (int*)malloc(zero.coefficientsLen * sizeof(int));
+        ZXGenericGFPoly *zero = [field zero];
+        self.coefficients = (int *)malloc(zero.coefficientsLen * sizeof(int));
         memcpy(self.coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
         self.coefficientsLen = zero.coefficientsLen;
       } else {
         self.coefficientsLen = (aCoefficientsLen - firstNonZero);
-        self.coefficients = (int*)malloc(self.coefficientsLen * sizeof(int));
+        self.coefficients = (int *)malloc(self.coefficientsLen * sizeof(int));
         for (int i = 0; i < self.coefficientsLen; i++) {
           self.coefficients[i] = aCoefficients[firstNonZero + i];
         }
       }
     } else {
-      self.coefficients = (int*)malloc(aCoefficientsLen * sizeof(int));
+      self.coefficients = (int *)malloc(aCoefficientsLen * sizeof(int));
       memcpy(self.coefficients, aCoefficients, aCoefficientsLen * sizeof(int));
       self.coefficientsLen = aCoefficientsLen;
     }
@@ -115,9 +115,9 @@
     return self;
   }
 
-  int* smallerCoefficients = self.coefficients;
+  int *smallerCoefficients = self.coefficients;
   int smallerCoefficientsLen = self.coefficientsLen;
-  int* largerCoefficients = other.coefficients;
+  int *largerCoefficients = other.coefficients;
   int largerCoefficientsLen = other.coefficientsLen;
   if (smallerCoefficientsLen > largerCoefficientsLen) {
     int *temp = smallerCoefficients;
@@ -146,9 +146,9 @@
   if (self.zero || other.zero) {
     return self.field.zero;
   }
-  int* aCoefficients = self.coefficients;
+  int *aCoefficients = self.coefficients;
   int aLength = self.coefficientsLen;
-  int* bCoefficients = other.coefficients;
+  int *bCoefficients = other.coefficients;
   int bLength = other.coefficientsLen;
   int productLen = aLength + bLength - 1;
   int product[productLen];
@@ -207,8 +207,8 @@
     [NSException raise:NSInvalidArgumentException format:@"Divide by 0"];
   }
 
-  ZXGenericGFPoly * quotient = self.field.zero;
-  ZXGenericGFPoly * remainder = self;
+  ZXGenericGFPoly *quotient = self.field.zero;
+  ZXGenericGFPoly *remainder = self;
 
   int denominatorLeadingTerm = [other coefficient:other.degree];
   int inverseDenominatorLeadingTerm = [self.field inverse:denominatorLeadingTerm];
@@ -216,8 +216,8 @@
   while ([remainder degree] >= other.degree && !remainder.zero) {
     int degreeDifference = remainder.degree - other.degree;
     int scale = [self.field multiply:[remainder coefficient:remainder.degree] b:inverseDenominatorLeadingTerm];
-    ZXGenericGFPoly * term = [other multiplyByMonomial:degreeDifference coefficient:scale];
-    ZXGenericGFPoly * iterationQuotient = [field buildMonomial:degreeDifference coefficient:scale];
+    ZXGenericGFPoly *term = [other multiplyByMonomial:degreeDifference coefficient:scale];
+    ZXGenericGFPoly *iterationQuotient = [field buildMonomial:degreeDifference coefficient:scale];
     quotient = [quotient addOrSubtract:iterationQuotient];
     remainder = [remainder addOrSubtract:term];
   }
@@ -226,7 +226,7 @@
 }
 
 - (NSString *) description {
-  NSMutableString * result = [NSMutableString stringWithCapacity:8 * [self degree]];
+  NSMutableString *result = [NSMutableString stringWithCapacity:8 * [self degree]];
   for (int degree = [self degree]; degree >= 0; degree--) {
     int coefficient = [self coefficient:degree];
     if (coefficient != 0) {

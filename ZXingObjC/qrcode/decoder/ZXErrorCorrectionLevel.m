@@ -26,7 +26,7 @@
 
 @implementation ZXErrorCorrectionLevel
 
-static NSArray* FOR_BITS = nil;
+static NSArray *FOR_BITS = nil;
 
 @synthesize bits;
 @synthesize name;
@@ -72,7 +72,7 @@ static NSArray* FOR_BITS = nil;
  * L = ~7% correction
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelL {
-  static ZXErrorCorrectionLevel* thisLevel = nil;
+  static ZXErrorCorrectionLevel *thisLevel = nil;
   if (!thisLevel) {
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:0 bits:0x01 name:@"L"];
   }
@@ -83,7 +83,7 @@ static NSArray* FOR_BITS = nil;
  * M = ~15% correction
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelM {
-  static ZXErrorCorrectionLevel* thisLevel = nil;
+  static ZXErrorCorrectionLevel *thisLevel = nil;
   if (!thisLevel) {
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:1 bits:0x00 name:@"M"];
   }
@@ -94,7 +94,7 @@ static NSArray* FOR_BITS = nil;
  * Q = ~25% correction
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelQ {
-  static ZXErrorCorrectionLevel* thisLevel = nil;
+  static ZXErrorCorrectionLevel *thisLevel = nil;
   if (!thisLevel) {
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:2 bits:0x03 name:@"Q"];
   }
@@ -105,7 +105,7 @@ static NSArray* FOR_BITS = nil;
  * H = ~30% correction
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelH {
-  static ZXErrorCorrectionLevel* thisLevel = nil;
+  static ZXErrorCorrectionLevel *thisLevel = nil;
   if (!thisLevel) {
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:3 bits:0x02 name:@"H"];
   }

@@ -18,14 +18,14 @@
 #import "ZXResult.h"
 #import "ZXVCardResultParser.h"
 
-static NSRegularExpression* BEGIN_VCARD = nil;
-static NSRegularExpression* VCARD_LIKE_DATE = nil;
-static NSRegularExpression* CR_LF_SPACE_TAB = nil;
-static NSRegularExpression* NEWLINE_ESCAPE = nil;
-static NSRegularExpression* VCARD_ESCAPES = nil;
-static NSString* EQUALS = @"=";
-static NSString* SEMICOLON = @";";
-static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
+static NSRegularExpression *BEGIN_VCARD = nil;
+static NSRegularExpression *VCARD_LIKE_DATE = nil;
+static NSRegularExpression *CR_LF_SPACE_TAB = nil;
+static NSRegularExpression *NEWLINE_ESCAPE = nil;
+static NSRegularExpression *VCARD_ESCAPES = nil;
+static NSString *EQUALS = @"=";
+static NSString *SEMICOLON = @";";
+static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
 
 @interface ZXVCardResultParser ()
 
@@ -34,9 +34,9 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 - (BOOL)isLikeVCardDate:(NSString *)value;
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
 - (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
-- (NSString*)toPrimaryValue:(NSArray*)list;
-- (NSArray*)toPrimaryValues:(NSArray*)lists;
-- (NSArray*)toTypes:(NSArray*)lists;
+- (NSString *)toPrimaryValue:(NSArray *)list;
+- (NSArray *)toPrimaryValues:(NSArray *)lists;
+- (NSArray *)toTypes:(NSArray *)lists;
 
 @end
 
@@ -55,28 +55,28 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
   // Although we should insist on the raw text ending with "END:VCARD", there's no reason
   // to throw out everything else we parsed just because this was omitted. In fact, Eclair
   // is doing just that, and we can't parse its contacts without this leniency.
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if ([BEGIN_VCARD numberOfMatchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)] == 0) {
     return nil;
   }
-  NSMutableArray * names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSMutableArray *names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES parseFieldDivider:NO];
   if (names == nil) {
     // If no display names found, look for regular name fields and format them
     names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:NO];
     [self formatNames:names];
   }
-  NSArray * phoneNumbers = [[self class] matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES parseFieldDivider:NO];
-  NSArray * emails = [[self class] matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES parseFieldDivider:NO];
-  NSArray * note = [[self class] matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO parseFieldDivider:NO];
-  NSMutableArray * addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES parseFieldDivider:YES];
-  NSArray * org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES parseFieldDivider:YES];
-  NSArray * birthday = [[self class] matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *phoneNumbers = [[self class] matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *emails = [[self class] matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *note = [[self class] matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO parseFieldDivider:NO];
+  NSMutableArray *addresses = [[self class] matchVCardPrefixedField:@"ADR" rawText:rawText trim:YES parseFieldDivider:YES];
+  NSArray *org = [[self class] matchSingleVCardPrefixedField:@"ORG" rawText:rawText trim:YES parseFieldDivider:YES];
+  NSArray *birthday = [[self class] matchSingleVCardPrefixedField:@"BDAY" rawText:rawText trim:YES parseFieldDivider:NO];
   if (birthday != nil && ![self isLikeVCardDate:[birthday objectAtIndex:0]]) {
     birthday = nil;
   }
-  NSArray * title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES parseFieldDivider:NO];
-  NSArray * url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES parseFieldDivider:NO];
-  NSArray * instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES parseFieldDivider:NO];
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self toPrimaryValues:names]
                                                        pronunciation:nil
                                                         phoneNumbers:[self toPrimaryValues:phoneNumbers]
@@ -94,42 +94,42 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 }
 
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider {
-  NSMutableArray * matches = nil;
+  NSMutableArray *matches = nil;
   int i = 0;
   int max = [rawText length];
 
   while (i < max) {
     // At start or after newling, match prefix, followed by optional metadata 
     // (led by ;) ultimately ending in colon
-    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"(?:^|\n)%@(?:;([^:]*))?:", prefix]
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"(?:^|\n)%@(?:;([^:]*))?:", prefix]
                                                                              options:NSRegularExpressionCaseInsensitive error:nil];
     if (i > 0) {
       i--; // Find from i-1 not i since looking at the preceding character
     }
-    NSArray* regexMatches = [regex matchesInString:rawText options:0 range:NSMakeRange(i, rawText.length - i)];
+    NSArray *regexMatches = [regex matchesInString:rawText options:0 range:NSMakeRange(i, rawText.length - i)];
     if (regexMatches.count == 0) {
       break;
     }
     NSRange matchRange = [[regexMatches objectAtIndex:0] range];
     i = matchRange.location + matchRange.length;
 
-    NSString* metadataString = nil;
+    NSString *metadataString = nil;
     if ([[regexMatches objectAtIndex:0] rangeAtIndex:1].location != NSNotFound) {
       metadataString = [rawText substringWithRange:[[regexMatches objectAtIndex:0] rangeAtIndex:1]];
     }
-    NSMutableArray* metadata = nil;
+    NSMutableArray *metadata = nil;
     BOOL quotedPrintable = NO;
-    NSString * quotedPrintableCharset = nil;
+    NSString *quotedPrintableCharset = nil;
     if (metadataString != nil) {
-      for (NSString* metadatum in [metadataString componentsSeparatedByString:SEMICOLON]) {
+      for (NSString *metadatum in [metadataString componentsSeparatedByString:SEMICOLON]) {
         if (metadata == nil) {
           metadata = [NSMutableArray array];
         }
         [metadata addObject:metadatum];
         int equals = [metadatum rangeOfString:EQUALS].location;
         if (equals != NSNotFound) {
-          NSString* key = [metadatum substringToIndex:equals];
-          NSString* value = [metadatum substringFromIndex:equals + 1];
+          NSString *key = [metadatum substringToIndex:equals];
+          NSString *value = [metadatum substringFromIndex:equals + 1];
           if ([@"ENCODING" caseInsensitiveCompare:key] == NSOrderedSame &&
               [@"QUOTED-PRINTABLE" caseInsensitiveCompare:value] == NSOrderedSame) {
             quotedPrintable = YES;
@@ -167,7 +167,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
       if (i >= 1 && [rawText characterAtIndex:i-1] == '\r') {
         i--; // Back up over \r, which really should be there
       }
-      NSString * element = [rawText substringWithRange:NSMakeRange(matchStart, i - matchStart)];
+      NSString *element = [rawText substringWithRange:NSMakeRange(matchStart, i - matchStart)];
       if (trim) {
         element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
       }
@@ -187,7 +187,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
         element = [VCARD_ESCAPES stringByReplacingMatchesInString:element options:0 range:NSMakeRange(0, element.length) withTemplate:@"$1"];
       }
       if (metadata == nil) {
-        NSMutableArray* match = [NSMutableArray arrayWithObject:element];
+        NSMutableArray *match = [NSMutableArray arrayWithObject:element];
         [match addObject:element];
         [matches addObject:match];
       } else {
@@ -205,8 +205,8 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 
 + (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
   int length = [value length];
-  NSMutableString * result = [NSMutableString stringWithCapacity:length];
-  NSMutableData * fragmentBuffer = [NSMutableData data];
+  NSMutableString *result = [NSMutableString stringWithCapacity:length];
+  NSMutableData *fragmentBuffer = [NSMutableData data];
 
   for (int i = 0; i < length; i++) {
     unichar c = [value characterAtIndex:i];
@@ -242,7 +242,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 
 + (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result {
   if ([fragmentBuffer length] > 0) {
-    NSString * fragment;
+    NSString *fragment;
     if (charset == nil || CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset) == kCFStringEncodingInvalidId) {
       fragment = [[[NSString alloc] initWithData:fragmentBuffer encoding:NSUTF8StringEncoding] autorelease];
     } else {
@@ -254,34 +254,34 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
 }
 
 + (NSArray *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider {
-  NSArray * values = [self matchVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:parseFieldDivider];
+  NSArray *values = [self matchVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:parseFieldDivider];
   return values == nil ? nil : [values objectAtIndex:0];
 }
 
-- (NSString*)toPrimaryValue:(NSArray*)list {
+- (NSString *)toPrimaryValue:(NSArray *)list {
   return list == nil || list.count == 0 ? nil : [list objectAtIndex:0];
 }
 
-- (NSArray*)toPrimaryValues:(NSArray*)lists {
+- (NSArray *)toPrimaryValues:(NSArray *)lists {
   if (lists == nil || lists.count == 0) {
     return nil;
   }
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:lists.count];
-  for (NSArray* list in lists) {
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:lists.count];
+  for (NSArray *list in lists) {
     [result addObject:[list objectAtIndex:0]];
   }
   return result;
 }
 
-- (NSArray*)toTypes:(NSArray*)lists {
+- (NSArray *)toTypes:(NSArray *)lists {
   if (lists == nil || lists.count == 0) {
     return nil;
   }
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:lists.count];
-  for (NSArray* list in lists) {
-    NSString * type = nil;
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:lists.count];
+  for (NSArray *list in lists) {
+    NSString *type = nil;
     for (int i = 1; i < list.count; i++) {
-      NSString * metadatum = [list objectAtIndex:i];
+      NSString *metadatum = [list objectAtIndex:i];
       int equals = [metadatum rangeOfString:@"=" options:NSCaseInsensitiveSearch].location;
       if (equals == NSNotFound) {
         // take the whole thing as a usable label
@@ -308,9 +308,9 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
  */
 - (void)formatNames:(NSMutableArray *)names {
   if (names != nil) {
-    for (NSMutableArray * list in names) {
-      NSString * name = [list objectAtIndex:0];
-      NSMutableArray * components = [NSMutableArray arrayWithCapacity:5];
+    for (NSMutableArray *list in names) {
+      NSString *name = [list objectAtIndex:0];
+      NSMutableArray *components = [NSMutableArray arrayWithCapacity:5];
       int start = 0;
       int end;
       while ((end = [name rangeOfString:@";" options:NSLiteralSearch range:NSMakeRange(start, [name length] - start)].location) != NSNotFound && end > 0) {
@@ -319,7 +319,7 @@ static NSRegularExpression* UNESCAPED_SEMICOLONS = nil;
       }
 
       [components addObject:[name substringFromIndex:start]];
-      NSMutableString * newName = [NSMutableString stringWithCapacity:100];
+      NSMutableString *newName = [NSMutableString stringWithCapacity:100];
       [self maybeAppendComponent:components i:3 newName:newName];
       [self maybeAppendComponent:components i:1 newName:newName];
       [self maybeAppendComponent:components i:2 newName:newName];

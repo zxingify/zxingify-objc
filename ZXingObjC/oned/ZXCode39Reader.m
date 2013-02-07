@@ -44,9 +44,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 @property (nonatomic, assign) BOOL usingCheckDigit;
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b counters:(int*)counters countersLen:(int)countersLen;
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b counters:(int *)counters countersLen:(int)countersLen;
 - (unichar)patternToChar:(int)pattern;
-- (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen;
+- (int)toNarrowWidePattern:(int *)counters countersLen:(unsigned int)countersLen;
 
 @end
 
@@ -110,7 +110,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
-    int pattern = [self toNarrowWidePattern:(int*)counters countersLen:countersLen];
+    int pattern = [self toNarrowWidePattern:(int *)counters countersLen:countersLen];
     if (pattern < 0) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -159,7 +159,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     return nil;
   }
 
-  NSString * resultString;
+  NSString *resultString;
   if (self.extendedMode) {
     resultString = [self decodeExtended:result];
     if (!resultString) {
@@ -181,7 +181,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
                            format:kBarcodeFormatCode39];
 }
 
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int*)a b:(int*)b counters:(int*)counters countersLen:(int)countersLen {
+- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b counters:(int *)counters countersLen:(int)countersLen {
   int width = row.size;
   int rowOffset = [row nextSet:0];
 
@@ -218,7 +218,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   return NO;
 }
 
-- (int)toNarrowWidePattern:(int*)counters countersLen:(unsigned int)countersLen {
+- (int)toNarrowWidePattern:(int *)counters countersLen:(unsigned int)countersLen {
   int numCounters = countersLen;
   int maxNarrowCounter = 0;
   int wideCounters;
@@ -269,7 +269,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {
   int length = [encoded length];
-  NSMutableString * decoded = [NSMutableString stringWithCapacity:length];
+  NSMutableString *decoded = [NSMutableString stringWithCapacity:length];
 
   for (int i = 0; i < length; i++) {
     unichar c = [encoded characterAtIndex:i];

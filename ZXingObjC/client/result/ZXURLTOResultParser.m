@@ -21,7 +21,7 @@
 @implementation ZXURLTOResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (![rawText hasPrefix:@"urlto:"] && ![rawText hasPrefix:@"URLTO:"]) {
     return nil;
   }
@@ -29,8 +29,8 @@
   if (titleEnd == NSNotFound) {
     return nil;
   }
-  NSString * title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, titleEnd - 6)];
-  NSString * uri = [rawText substringFromIndex:titleEnd + 1];
+  NSString *title = titleEnd <= 6 ? nil : [rawText substringWithRange:NSMakeRange(6, titleEnd - 6)];
+  NSString *uri = [rawText substringFromIndex:titleEnd + 1];
   return [ZXURIParsedResult uriParsedResultWithUri:uri title:title];
 }
 

@@ -21,9 +21,9 @@
 @implementation ZXITFWriterTestCase
 
 - (void)testEncode {
-  NSString* testStr = @"000101010100011101110001010001011101110100011100010111010100010111010001000111011100011101010001011101000";
+  NSString *testStr = @"000101010100011101110001010001011101110100011100010111010100010111010001000111011100011101010001011101000";
 
-  ZXBitMatrix* result = [[[[ZXITFWriter alloc] init] autorelease] encode:@"0901512038"
+  ZXBitMatrix *result = [[[[ZXITFWriter alloc] init] autorelease] encode:@"0901512038"
                                                                   format:kBarcodeFormatITF
                                                                    width:testStr.length
                                                                   height:0

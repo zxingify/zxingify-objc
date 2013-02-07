@@ -25,8 +25,8 @@ int const AI013x0x1x_DATE_SIZE = 16;
 
 @interface ZXAI013x0x1xDecoder ()
 
-@property (nonatomic, copy) NSString * dateCode;
-@property (nonatomic, copy) NSString * firstAIdigits;
+@property (nonatomic, copy) NSString *dateCode;
+@property (nonatomic, copy) NSString *firstAIdigits;
 
 - (void)encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos;
 
@@ -58,7 +58,7 @@ int const AI013x0x1x_DATE_SIZE = 16;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSMutableString * buf = [NSMutableString string];
+  NSMutableString *buf = [NSMutableString string];
   [self encodeCompressedGtin:buf currentPos:AI013x0x1x_HEADER_SIZE];
   [self encodeCompressedWeight:buf currentPos:AI013x0x1x_HEADER_SIZE + GTIN_SIZE weightSize:AI013x0x1x_WEIGHT_SIZE];
   [self encodeCompressedDate:buf currentPos:AI013x0x1x_HEADER_SIZE + GTIN_SIZE + AI013x0x1x_WEIGHT_SIZE];

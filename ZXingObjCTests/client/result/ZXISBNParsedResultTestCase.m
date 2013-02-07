@@ -20,7 +20,7 @@
 
 @interface ZXISBNParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents;
+- (void)doTestWithContents:(NSString *)contents;
 
 @end
 
@@ -30,11 +30,11 @@
   [self doTestWithContents:@"9784567890123"];
 }
 
-- (void)doTestWithContents:(NSString*)contents {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatEan13];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+- (void)doTestWithContents:(NSString *)contents {
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatEan13];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeISBN, @"Types don't match");
-  ZXISBNParsedResult* isbnResult = (ZXISBNParsedResult*)result;
+  ZXISBNParsedResult *isbnResult = (ZXISBNParsedResult *)result;
   STAssertEqualObjects(isbnResult.isbn, contents, @"Contents don't match");
 }
 

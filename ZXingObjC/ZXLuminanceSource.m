@@ -102,9 +102,9 @@
                                userInfo:nil];
 }
 
-- (NSString*)description {
-  unsigned char* row = NULL;
-  NSMutableString* result = [NSMutableString stringWithCapacity:height * (width + 1)];
+- (NSString *)description {
+  unsigned char *row = NULL;
+  NSMutableString *result = [NSMutableString stringWithCapacity:height * (width + 1)];
   for (int y = 0; y < height; y++) {
     row = [self row:y row:row];
     for (int x = 0; x < width; x++) {

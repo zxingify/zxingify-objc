@@ -27,8 +27,8 @@
 
 @interface ZXAbstractExpandedDecoder ()
 
-@property (nonatomic, retain) ZXGeneralAppIdDecoder * generalDecoder;
-@property (nonatomic, retain) ZXBitArray * information;
+@property (nonatomic, retain) ZXGeneralAppIdDecoder *generalDecoder;
+@property (nonatomic, retain) ZXBitArray *information;
 
 @end
 

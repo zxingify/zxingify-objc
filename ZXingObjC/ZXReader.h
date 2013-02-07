@@ -28,8 +28,8 @@
 
 @protocol ZXReader <NSObject>
 
-- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError**)error;
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError**)error;
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error;
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
 - (void)reset;
 
 @end

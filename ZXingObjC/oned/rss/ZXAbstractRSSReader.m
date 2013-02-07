@@ -49,17 +49,17 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 
 @interface ZXAbstractRSSReader ()
 
-@property (nonatomic, assign) int * decodeFinderCounters;
+@property (nonatomic, assign) int *decodeFinderCounters;
 @property (nonatomic, assign) unsigned int decodeFinderCountersLen;
-@property (nonatomic, assign) int * dataCharacterCounters;
+@property (nonatomic, assign) int *dataCharacterCounters;
 @property (nonatomic, assign) unsigned int dataCharacterCountersLen;
-@property (nonatomic, assign) float * oddRoundingErrors;
+@property (nonatomic, assign) float *oddRoundingErrors;
 @property (nonatomic, assign) unsigned int oddRoundingErrorsLen;
-@property (nonatomic, assign) float * evenRoundingErrors;
+@property (nonatomic, assign) float *evenRoundingErrors;
 @property (nonatomic, assign) unsigned int evenRoundingErrorsLen;
-@property (nonatomic, assign) int * oddCounts;
+@property (nonatomic, assign) int *oddCounts;
 @property (nonatomic, assign) unsigned int oddCountsLen;
-@property (nonatomic, assign) int * evenCounts;
+@property (nonatomic, assign) int *evenCounts;
 @property (nonatomic, assign) unsigned int evenCountsLen;
 
 @end
@@ -87,27 +87,27 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 - (id)init {
   if (self = [super init]) {
     self.decodeFinderCountersLen = 4;
-    self.decodeFinderCounters = (int*)malloc(self.decodeFinderCountersLen * sizeof(int));
+    self.decodeFinderCounters = (int *)malloc(self.decodeFinderCountersLen * sizeof(int));
     memset(self.decodeFinderCounters, 0, self.decodeFinderCountersLen * sizeof(int));
 
     self.dataCharacterCountersLen = 8;
-    self.dataCharacterCounters = (int*)malloc(self.dataCharacterCountersLen * sizeof(int));
+    self.dataCharacterCounters = (int *)malloc(self.dataCharacterCountersLen * sizeof(int));
     memset(self.dataCharacterCounters, 0, self.dataCharacterCountersLen * sizeof(int));
 
     self.oddRoundingErrorsLen = 4;
-    self.oddRoundingErrors = (float*)malloc(self.oddRoundingErrorsLen * sizeof(float));
+    self.oddRoundingErrors = (float *)malloc(self.oddRoundingErrorsLen * sizeof(float));
     memset(self.oddRoundingErrors, 0, self.oddRoundingErrorsLen * sizeof(float));
 
     self.evenRoundingErrorsLen = 4;
-    self.evenRoundingErrors = (float*)malloc(self.evenRoundingErrorsLen * sizeof(float));
+    self.evenRoundingErrors = (float *)malloc(self.evenRoundingErrorsLen * sizeof(float));
     memset(self.evenRoundingErrors, 0, self.evenRoundingErrorsLen * sizeof(float));
 
     self.oddCountsLen = self.dataCharacterCountersLen / 2;
-    self.oddCounts = (int*)malloc(self.oddCountsLen * sizeof(int));
+    self.oddCounts = (int *)malloc(self.oddCountsLen * sizeof(int));
     memset(self.oddCounts, 0, self.oddCountsLen * sizeof(int));
 
     self.evenCountsLen = self.dataCharacterCountersLen / 2;
-    self.evenCounts = (int*)malloc(self.evenCountsLen * sizeof(int));
+    self.evenCounts = (int *)malloc(self.evenCountsLen * sizeof(int));
     memset(self.evenCounts, 0, self.evenCountsLen * sizeof(int));
   }
 
@@ -148,11 +148,11 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   [super dealloc];
 }
 
-+ (int)parseFinderValue:(int*)counters countersSize:(unsigned int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType {
++ (int)parseFinderValue:(int *)counters countersSize:(unsigned int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType {
   switch (finderPatternType) {
     case RSS_PATTERNS_RSS14_PATTERNS:
       for (int value = 0; value < RSS14_FINDER_PATTERNS_LEN; value++) {
-        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int*)RSS14_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int *)RSS14_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return value;
         }
       }
@@ -160,7 +160,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 
     case RSS_PATTERNS_RSS_EXPANDED_PATTERNS:
       for (int value = 0; value < RSS_EXPANDED_FINDER_PATTERNS_LEN; value++) {
-        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int*)RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int *)RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return value;
         }
       }
@@ -173,7 +173,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   return -1;
 }
 
-+ (int)count:(int*)array arrayLen:(unsigned int)arrayLen {
++ (int)count:(int *)array arrayLen:(unsigned int)arrayLen {
   int count = 0;
 
   for (int i = 0; i < arrayLen; i++) {
@@ -207,7 +207,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   array[index]--;
 }
 
-+ (BOOL)isFinderPattern:(int*)counters countersLen:(unsigned int)countersLen {
++ (BOOL)isFinderPattern:(int *)counters countersLen:(unsigned int)countersLen {
   int firstTwoSum = counters[0] + counters[1];
   int sum = firstTwoSum + counters[2] + counters[3];
   float ratio = (float)firstTwoSum / (float)sum;

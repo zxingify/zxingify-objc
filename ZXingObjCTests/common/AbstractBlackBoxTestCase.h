@@ -25,7 +25,7 @@
 @property (nonatomic, retain, readonly) id<ZXReader> barcodeReader;
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat;
-+ (NSString*)barcodeFormatAsString:(ZXBarcodeFormat)format;
++ (NSString *)barcodeFormatAsString:(ZXBarcodeFormat)format;
 - (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation;
 - (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount maxMisreads:(int)maxMisreads maxTryHarderMisreads:(int)maxTryHarderMisreads rotation:(float)rotation;
 - (void)runTests;

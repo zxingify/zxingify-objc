@@ -49,11 +49,11 @@
   : NSObject
 ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
   ZX(
-    ZXCaptureSession* session;
-    ZXCaptureVideoPreviewLayer* layer;
-    ZXCaptureDevice* capture_device;
-    ZXCaptureDeviceInput* input;
-    ZXCaptureVideoOutput* output;
+    ZXCaptureSession *session;
+    ZXCaptureVideoPreviewLayer *layer;
+    ZXCaptureDevice *capture_device;
+    ZXCaptureDeviceInput *input;
+    ZXCaptureVideoOutput *output;
     id<ZXCaptureDelegate> delegate;
     )
     
@@ -61,13 +61,13 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
   int order_out_skip;
   BOOL running;
   BOOL on_screen;
-  CALayer* luminance;
-  CALayer* binary;
+  CALayer *luminance;
+  CALayer *binary;
   size_t width;
   size_t height;
   size_t reported_width;
   size_t reported_height;
-  NSString* captureToFilename;
+  NSString *captureToFilename;
   BOOL hard_stop;
   int camera;
   BOOL torch;
@@ -77,21 +77,21 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 }
 
 @property (nonatomic, assign) id<ZXCaptureDelegate> delegate;
-@property (nonatomic, copy) NSString* captureToFilename;
+@property (nonatomic, copy) NSString *captureToFilename;
 @property (nonatomic) CGAffineTransform transform;
-@property (nonatomic, readonly) ZXCaptureVideoOutput* output;
-@property (nonatomic, readonly) CALayer* layer;
-@property (nonatomic, retain) ZXCaptureDevice* captureDevice;
+@property (nonatomic, readonly) ZXCaptureVideoOutput *output;
+@property (nonatomic, readonly) CALayer *layer;
+@property (nonatomic, retain) ZXCaptureDevice *captureDevice;
 @property (nonatomic, assign) BOOL mirror;
 @property (nonatomic, readonly) BOOL running;
 @property (nonatomic, retain) id<ZXReader> reader;
-@property (nonatomic, retain) ZXDecodeHints* hints;
+@property (nonatomic, retain) ZXDecodeHints *hints;
 @property (nonatomic, assign) CGFloat rotation;
 
 - (id)init;
-- (CALayer*)luminance;
+- (CALayer *)luminance;
 - (void)setLuminance:(BOOL)on_off;
-- (CALayer*)binary;
+- (CALayer *)binary;
 - (void)setBinary:(BOOL)on_off;
 - (void)start;
 - (void)stop;
@@ -116,18 +116,18 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 }
 
 @property (nonatomic,assign) id<ZXCaptureDelegate> delegate;
-@property (nonatomic,copy) NSString* captureToFilename;
+@property (nonatomic,copy) NSString *captureToFilename;
 @property (nonatomic) CGAffineTransform transform;
-@property (nonatomic, readonly) void* output;
-@property (nonatomic, readonly) CALayer* layer;
+@property (nonatomic, readonly) void *output;
+@property (nonatomic, readonly) CALayer *layer;
 @property (nonatomic, retain) id<ZXReader> reader;
-@property (nonatomic, retain) ZXDecodeHints* hints;
+@property (nonatomic, retain) ZXDecodeHints *hints;
 @property (nonatomic, assign) CGFloat rotation;
 
 - (id)init;
-- (CALayer*)luminance;
+- (CALayer *)luminance;
 - (void)setLuminance:(BOOL)on_off;
-- (CALayer*)binary;
+- (CALayer *)binary;
 - (void)setBinary:(BOOL)on_off;
 - (void)start;
 - (void)stop;

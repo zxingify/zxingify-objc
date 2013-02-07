@@ -27,6 +27,6 @@
 
 @interface ZXPDF417HighLevelEncoder : NSObject
 
-+ (NSString*)encodeHighLevel:(NSString*)msg compaction:(ZXCompaction)compaction error:(NSError**)error;
++ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction error:(NSError **)error;
 
 @end

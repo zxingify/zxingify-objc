@@ -26,7 +26,7 @@
 
 @interface ZXGenericGFPoly : NSObject
 
-@property (nonatomic, assign, readonly) int* coefficients;
+@property (nonatomic, assign, readonly) int *coefficients;
 @property (nonatomic, assign, readonly) int coefficientsLen;
 
 - (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(int)coefficientsLen;

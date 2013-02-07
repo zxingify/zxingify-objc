@@ -24,7 +24,7 @@
   if (format != kBarcodeFormatEan13) {
     return nil;
   }
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   int length = [rawText length];
   if (length != 13) {
     return nil;

@@ -663,17 +663,17 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 
 @interface ZXPDF417BitMatrixParser ()
 
-@property (nonatomic, retain) ZXBitMatrix * bitMatrix;
+@property (nonatomic, retain) ZXBitMatrix *bitMatrix;
 @property (nonatomic, assign) int rows;
 @property (nonatomic, assign) int leftColumnECData;
 @property (nonatomic, assign) int rightColumnECData;
 @property (nonatomic, assign) int eraseCount;
-@property (nonatomic, retain) NSMutableArray * erasures;
+@property (nonatomic, retain) NSMutableArray *erasures;
 @property (nonatomic, assign) int ecLevel;
 
 - (int)codeword:(long)symbol;
 - (int)findCodewordIndex:(long)symbol;
-- (int)processRow:(int*)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next;
+- (int)processRow:(int *)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next;
 
 @end
 
@@ -804,7 +804,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * elements, each of which can be one to six modules wide. The four bar and
  * four space elements shall measure 17 modules in total.
  */
-- (int)processRow:(int*)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next {
+- (int)processRow:(int *)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next {
   int width = bitMatrix.width;
   int columnNumber = 0;
   long symbol = 0;

@@ -28,7 +28,7 @@
 
 @interface ZXMultiFormatOneDReader ()
 
-@property (nonatomic, retain) NSMutableArray * readers;
+@property (nonatomic, retain) NSMutableArray *readers;
 
 @end
 
@@ -99,8 +99,8 @@
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  for (ZXOneDReader * reader in self.readers) {
-    ZXResult* result = [reader decodeRow:rowNumber row:row hints:hints error:error];
+  for (ZXOneDReader *reader in self.readers) {
+    ZXResult *result = [reader decodeRow:rowNumber row:row hints:hints error:error];
     if (result) {
       return result;
     }

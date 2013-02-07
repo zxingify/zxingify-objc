@@ -20,7 +20,7 @@
 
 @interface ZXQRCodeVersionTestCase ()
 
-- (void)checkVersion:(ZXQRCodeVersion*)version number:(int)number dimension:(int)dimension;
+- (void)checkVersion:(ZXQRCodeVersion *)version number:(int)number dimension:(int)dimension;
 - (void)doTestVersion:(int)expectedVersion mask:(int)mask;
 
 @end
@@ -36,7 +36,7 @@
   }
 }
 
-- (void)checkVersion:(ZXQRCodeVersion*)version number:(int)number dimension:(int)dimension {
+- (void)checkVersion:(ZXQRCodeVersion *)version number:(int)number dimension:(int)dimension {
   STAssertNotNil(version, @"Expected version to be non-nil");
   STAssertEquals(version.versionNumber, number, @"Expected version number to be %d", number);
   STAssertNotNil(version.alignmentPatternCenters, @"Expected alignmentPatternCenters to be non-nil");
@@ -73,7 +73,7 @@
 }
 
 - (void)doTestVersion:(int)expectedVersion mask:(int)mask {
-  ZXQRCodeVersion* version = [ZXQRCodeVersion decodeVersionInformation:mask];
+  ZXQRCodeVersion *version = [ZXQRCodeVersion decodeVersionInformation:mask];
   STAssertNotNil(version, @"Expected version to be non-nil");
   STAssertEquals(version.versionNumber, expectedVersion, @"Expected version number to be %d", expectedVersion);
 }

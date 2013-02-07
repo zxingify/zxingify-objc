@@ -27,32 +27,32 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
 @interface ZXOneDReader ()
 
-- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError**)error;
+- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end
 
 @implementation ZXOneDReader
 
-- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError**)error {
+- (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
   return [self decode:image hints:nil error:error];
 }
 
 // Note that we don't try rotation without the try harder flag, even if rotation was supported.
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError**)error {
-  NSError* decodeError = nil;
-  ZXResult* result = [self doDecode:image hints:hints error:&decodeError];
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  NSError *decodeError = nil;
+  ZXResult *result = [self doDecode:image hints:hints error:&decodeError];
   if (result) {
     return result;
   } else if (decodeError.code == ZXNotFoundError) {
     BOOL tryHarder = hints != nil && hints.tryHarder;
     if (tryHarder && [image rotateSupported]) {
-      ZXBinaryBitmap * rotatedImage = [image rotateCounterClockwise];
-      ZXResult * result = [self doDecode:rotatedImage hints:hints error:error];
+      ZXBinaryBitmap *rotatedImage = [image rotateCounterClockwise];
+      ZXResult *result = [self doDecode:rotatedImage hints:hints error:error];
       if (!result) {
         return nil;
       }
       // Record that we found it rotated 90 degrees CCW / 270 degrees CW
-      NSMutableDictionary * metadata = [result resultMetadata];
+      NSMutableDictionary *metadata = [result resultMetadata];
       int orientation = 270;
       if (metadata != nil && [metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) {
         // But if we found it reversed in doDecode(), add in that result here:
@@ -60,13 +60,13 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       }
       [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:orientation]];
       // Update result points
-      NSMutableArray * points = [result resultPoints];
+      NSMutableArray *points = [result resultPoints];
       if (points != nil) {
         int height = [rotatedImage height];
         for (int i = 0; i < [points count]; i++) {
           [points replaceObjectAtIndex:i
-                            withObject:[[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint*)[points objectAtIndex:i] y]
-                                                                       y:[(ZXResultPoint*)[points objectAtIndex:i] x]]
+                            withObject:[[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint *)[points objectAtIndex:i] y]
+                                                                       y:[(ZXResultPoint *)[points objectAtIndex:i] x]]
                                         autorelease]];
         }
       }
@@ -92,10 +92,10 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * decided that moving up and down by about 1/16 of the image is pretty good; we try more of the
  * image if "trying harder".
  */
-- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError**)error {
+- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   int width = image.width;
   int height = image.height;
-  ZXBitArray * row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
+  ZXBitArray *row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
   int middle = height >> 1;
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int rowStep = MAX(1, height >> (tryHarder ? 8 : 5));
@@ -114,7 +114,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       break;
     }
 
-    NSError* rowError = nil;
+    NSError *rowError = nil;
     row = [image blackRow:rowNumber row:row error:&rowError];
     if (!row && rowError.code == ZXNotFoundError) {
       continue;
@@ -132,19 +132,19 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
         }
       }
 
-      ZXResult * result = [self decodeRow:rowNumber row:row hints:hints error:nil];
+      ZXResult *result = [self decodeRow:rowNumber row:row hints:hints error:nil];
       if (result) {
         if (attempt == 1) {
           [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:180]];
-          NSMutableArray * points = [result resultPoints];
+          NSMutableArray *points = [result resultPoints];
           if (points != nil) {
             [points replaceObjectAtIndex:0
-                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:0] x]
-                                                                         y:[(ZXResultPoint*)[points objectAtIndex:0] y]]
+                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:0] x]
+                                                                         y:[(ZXResultPoint *)[points objectAtIndex:0] y]]
                                           autorelease]];
             [points replaceObjectAtIndex:1
-                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint*)[points objectAtIndex:1] x]
-                                                                         y:[(ZXResultPoint*)[points objectAtIndex:1] y]]
+                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:1] x]
+                                                                         y:[(ZXResultPoint *)[points objectAtIndex:1] y]]
                                           autorelease]];
           }
         }
@@ -262,7 +262,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * Attempts to decode a one-dimensional barcode format given a single row of
  * an image.
  */
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError**)error {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

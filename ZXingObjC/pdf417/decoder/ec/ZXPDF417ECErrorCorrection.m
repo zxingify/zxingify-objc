@@ -20,7 +20,7 @@
 
 @interface ZXPDF417ECErrorCorrection ()
 
-@property (nonatomic, retain) ZXModulusGF* field;
+@property (nonatomic, retain) ZXModulusGF *field;
 
 - (NSArray *)runEuclideanAlgorithm:(ZXModulusPoly *)a b:(ZXModulusPoly *)b R:(int)R;
 - (NSArray *)findErrorLocations:(ZXModulusPoly *)errorLocator;
@@ -109,7 +109,7 @@
   return YES;
 }
 
-- (NSArray*)runEuclideanAlgorithm:(ZXModulusPoly *)a b:(ZXModulusPoly *)b R:(int)R {
+- (NSArray *)runEuclideanAlgorithm:(ZXModulusPoly *)a b:(ZXModulusPoly *)b R:(int)R {
   // Assume a's degree is >= b's
   if (a.degree < b.degree) {
     ZXModulusPoly *temp = a;

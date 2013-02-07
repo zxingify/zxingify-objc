@@ -62,7 +62,7 @@
  * with a new estimate. It returns a new ZXQRCodeFinderPattern containing a weighted average
  * based on count.
  */
-- (ZXQRCodeFinderPattern*)combineEstimateI:(float)i j:(float)j newModuleSize:(float)newModuleSize {
+- (ZXQRCodeFinderPattern *)combineEstimateI:(float)i j:(float)j newModuleSize:(float)newModuleSize {
   int combinedCount = self.count + 1;
   float combinedX = (self.count * self.x + j) / combinedCount;
   float combinedY = (self.count * self.y + i) / combinedCount;

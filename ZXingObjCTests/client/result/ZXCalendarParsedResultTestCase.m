@@ -21,21 +21,21 @@
 
 @interface ZXCalendarParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents
-               description:(NSString*)description
-                   summary:(NSString*)summary
-                  location:(NSString*)location
-               startString:(NSString*)startString
-                 endString:(NSString*)endString;
+- (void)doTestWithContents:(NSString *)contents
+               description:(NSString *)description
+                   summary:(NSString *)summary
+                  location:(NSString *)location
+               startString:(NSString *)startString
+                 endString:(NSString *)endString;
 
-- (void)doTestWithContents:(NSString*)contents
-               description:(NSString*)description
-                   summary:(NSString*)summary
-                  location:(NSString*)location
-               startString:(NSString*)startString
-                 endString:(NSString*)endString
-                 organizer:(NSString*)organizer
-                 attendees:(NSArray*)attendees
+- (void)doTestWithContents:(NSString *)contents
+               description:(NSString *)description
+                   summary:(NSString *)summary
+                  location:(NSString *)location
+               startString:(NSString *)startString
+                 endString:(NSString *)endString
+                 organizer:(NSString *)organizer
+                 attendees:(NSArray *)attendees
                   latitude:(double)latitude
                  longitude:(double)longitude;
 
@@ -47,7 +47,7 @@
 @implementation ZXCalendarParsedResultTestCase
 
 static double EPSILON = 0.0000000001;
-static NSDateFormatter * DATE_TIME_FORMAT = nil;
+static NSDateFormatter *DATE_TIME_FORMAT = nil;
 
 + (void)initialize {
   DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
@@ -218,12 +218,12 @@ static NSDateFormatter * DATE_TIME_FORMAT = nil;
                  endString:@"20111110T000000Z"];
 }
 
-- (void)doTestWithContents:(NSString*)contents
-               description:(NSString*)description
-                   summary:(NSString*)summary
-                  location:(NSString*)location
-               startString:(NSString*)startString
-                 endString:(NSString*)endString {
+- (void)doTestWithContents:(NSString *)contents
+               description:(NSString *)description
+                   summary:(NSString *)summary
+                  location:(NSString *)location
+               startString:(NSString *)startString
+                 endString:(NSString *)endString {
   [self doTestWithContents:contents
                description:description
                    summary:summary
@@ -236,20 +236,20 @@ static NSDateFormatter * DATE_TIME_FORMAT = nil;
                  longitude:NAN];
 }
 
-- (void)doTestWithContents:(NSString*)contents
-               description:(NSString*)description
-                   summary:(NSString*)summary
-                  location:(NSString*)location
-               startString:(NSString*)startString
-                 endString:(NSString*)endString
-                 organizer:(NSString*)organizer
-                 attendees:(NSArray*)attendees
+- (void)doTestWithContents:(NSString *)contents
+               description:(NSString *)description
+                   summary:(NSString *)summary
+                  location:(NSString *)location
+               startString:(NSString *)startString
+                 endString:(NSString *)endString
+                 organizer:(NSString *)organizer
+                 attendees:(NSArray *)attendees
                   latitude:(double)latitude
                  longitude:(double)longitude {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeCalendar, @"Types do not match");
-  ZXCalendarParsedResult* calResult = (ZXCalendarParsedResult*)result;
+  ZXCalendarParsedResult *calResult = (ZXCalendarParsedResult *)result;
   STAssertEqualObjects(calResult.description, description, @"Descriptions do not match");
   STAssertEqualObjects(calResult.summary, summary, @"Summaries do not match");
   STAssertEqualObjects(calResult.location, location, @"Locations do not match");

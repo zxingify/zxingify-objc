@@ -191,7 +191,7 @@ int const CODE_STOP = 106;
         int bestVariance = MAX_AVG_VARIANCE;
         int bestMatch = -1;
         for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:(int*)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:(int *)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -228,7 +228,7 @@ int const CODE_STOP = 106;
   int bestMatch = -1;
 
   for (int d = 0; d < CODE_PATTERNS_LENGTH; d++) {
-    int * pattern = (int*)CODE_PATTERNS[d];
+    int *pattern = (int *)CODE_PATTERNS[d];
     int variance = [ZXOneDReader patternMatchVariance:counters countersSize:countersCount pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
@@ -243,8 +243,8 @@ int const CODE_STOP = 106;
   }
 }
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError**)error {
-  NSArray * startPatternInfo = [self findStartPattern:row];
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  NSArray *startPatternInfo = [self findStartPattern:row];
   if (!startPatternInfo) {
     if (error) *error = NotFoundErrorInstance();
     return nil;

@@ -20,7 +20,7 @@
 
 @implementation AbstractReedSolomonTestCase
 
-- (void)corrupt:(int*)received receivedLen:(int)receivedLen howMany:(int)howMany {
+- (void)corrupt:(int *)received receivedLen:(int)receivedLen howMany:(int)howMany {
   BOOL corrupted[receivedLen];
   for (int i = 0; i < receivedLen; i++) {
     corrupted[i] = NO;
@@ -37,8 +37,8 @@
   }
 }
 
-- (void)doTestQRCodeEncoding:(int*)dataBytes dataBytesLen:(int)dataBytesLen
-             expectedECBytes:(int*)expectedECBytes expectedECBytesLen:(int)expectedECBytesLen {
+- (void)doTestQRCodeEncoding:(int *)dataBytes dataBytesLen:(int)dataBytesLen
+             expectedECBytes:(int *)expectedECBytes expectedECBytesLen:(int)expectedECBytesLen {
   int toEncodeLen = dataBytesLen + expectedECBytesLen;
   int toEncode[toEncodeLen];
   for (int i = 0; i < toEncodeLen; i++) {
@@ -53,8 +53,8 @@
   [self assertArraysEqual:expectedECBytes expectedOffset:0 actual:toEncode actualOffset:dataBytesLen length:expectedECBytesLen];
 }
 
-- (void)assertArraysEqual:(int*)expected expectedOffset:(int)expectedOffset
-                   actual:(int*)actual actualOffset:(int)actualOffset length:(int)length {
+- (void)assertArraysEqual:(int *)expected expectedOffset:(int)expectedOffset
+                   actual:(int *)actual actualOffset:(int)actualOffset length:(int)length {
   for (int i = 0; i < length; i++) {
     STAssertEquals(actual[actualOffset + i], expected[expectedOffset + i], @"Expected %d, got %d", actual[actualOffset + i], expected[expectedOffset + i]);
   }

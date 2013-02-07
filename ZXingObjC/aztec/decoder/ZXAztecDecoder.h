@@ -23,6 +23,6 @@
 
 @interface ZXAztecDecoder : NSObject
 
-- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError**)error;
+- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError **)error;
 
 @end

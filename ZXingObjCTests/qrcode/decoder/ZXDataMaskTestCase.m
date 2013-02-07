@@ -23,7 +23,7 @@ typedef BOOL (^MaskCondition)(int i, int j);
 @interface ZXDataMaskTestCase ()
 
 - (void)runTestMaskAcrossDimensions:(int)reference condition:(MaskCondition)condition;
-- (void)runTestMask:(ZXDataMask*)mask dimension:(int)dimension condition:(MaskCondition)condition;
+- (void)runTestMask:(ZXDataMask *)mask dimension:(int)dimension condition:(MaskCondition)condition;
 
 @end
 
@@ -79,15 +79,15 @@ typedef BOOL (^MaskCondition)(int i, int j);
 }
 
 - (void)runTestMaskAcrossDimensions:(int)reference condition:(MaskCondition)condition {
-  ZXDataMask* mask = [ZXDataMask forReference:reference];
+  ZXDataMask *mask = [ZXDataMask forReference:reference];
   for (int version = 1; version <= 40; version++) {
     int dimension = 17 + 4 * version;
     [self runTestMask:mask dimension:dimension condition:condition];
   }
 }
 
-- (void)runTestMask:(ZXDataMask*)mask dimension:(int)dimension condition:(MaskCondition)condition {
-  ZXBitMatrix* bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+- (void)runTestMask:(ZXDataMask *)mask dimension:(int)dimension condition:(MaskCondition)condition {
+  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
   [mask unmaskBitMatrix:bits dimension:dimension];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {

@@ -19,7 +19,7 @@
 
 @interface ZXDecodeHints ()
 
-@property (nonatomic, retain) NSMutableArray* barcodeFormats;
+@property (nonatomic, retain) NSMutableArray *barcodeFormats;
 
 @end
 

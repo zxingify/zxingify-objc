@@ -23,7 +23,7 @@
                          expectedY:(float)expectedY
                            sourceX:(float)sourceX
                            sourceY:(float)sourceY
-                                pt:(ZXPerspectiveTransform*)pt;
+                                pt:(ZXPerspectiveTransform *)pt;
 
 @end
 
@@ -32,7 +32,7 @@
 static float EPSILON = 0.0001f;
 
 - (void)testSquareToQuadrilateral {
-  ZXPerspectiveTransform* pt = [ZXPerspectiveTransform squareToQuadrilateral:2.0f y0:3.0f
+  ZXPerspectiveTransform *pt = [ZXPerspectiveTransform squareToQuadrilateral:2.0f y0:3.0f
                                                                           x1:10.0f y1:4.0f
                                                                           x2:16.0f y2:15.0f
                                                                           x3:4.0f y3:9.0f];
@@ -45,7 +45,7 @@ static float EPSILON = 0.0001f;
 }
 
 - (void)testQuadrilateralToQuadrilateral {
-  ZXPerspectiveTransform* pt = [ZXPerspectiveTransform quadrilateralToQuadrilateral:2.0f y0:3.0f
+  ZXPerspectiveTransform *pt = [ZXPerspectiveTransform quadrilateralToQuadrilateral:2.0f y0:3.0f
                                                                                  x1:10.0f y1:4.0f
                                                                                  x2:16.0f y2:15.0f
                                                                                  x3:4.0f y3:9.0f
@@ -65,7 +65,7 @@ static float EPSILON = 0.0001f;
                          expectedY:(float)expectedY
                            sourceX:(float)sourceX
                            sourceY:(float)sourceY
-                                pt:(ZXPerspectiveTransform*)pt {
+                                pt:(ZXPerspectiveTransform *)pt {
   float points[2] = {sourceX, sourceY};
   [pt transformPoints:points pointsLen:2];
   STAssertEqualsWithAccuracy(points[0], expectedX, EPSILON, @"Expected %f to equal %f", points[0], expectedX);

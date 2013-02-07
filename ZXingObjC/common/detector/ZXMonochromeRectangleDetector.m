@@ -59,7 +59,7 @@ int const MONOCHROME_MAX_MODULES = 32;
  * the topmost point and the last, the bottommost. The second point will be leftmost and the
  * third, the rightmost
  */
-- (NSArray *)detectWithError:(NSError**)error {
+- (NSArray *)detectWithError:(NSError **)error {
   int height = [self.image height];
   int width = [self.image width];
   int halfHeight = height >> 1;
@@ -71,28 +71,28 @@ int const MONOCHROME_MAX_MODULES = 32;
   int bottom = height;
   int left = 0;
   int right = width;
-  ZXResultPoint * pointA = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
+  ZXResultPoint *pointA = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
                                               centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 1];
   if (!pointA) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   top = (int)[pointA y] - 1;
-  ZXResultPoint * pointB = [self findCornerFromCenter:halfWidth deltaX:-deltaX left:left right:right
+  ZXResultPoint *pointB = [self findCornerFromCenter:halfWidth deltaX:-deltaX left:left right:right
                                               centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight >> 1];
   if (!pointB) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   left = (int)[pointB x] - 1;
-  ZXResultPoint * pointC = [self findCornerFromCenter:halfWidth deltaX:deltaX left:left right:right
+  ZXResultPoint *pointC = [self findCornerFromCenter:halfWidth deltaX:deltaX left:left right:right
                                               centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight >> 1];
   if (!pointC) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   right = (int)[pointC x] + 1;
-  ZXResultPoint * pointD = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
+  ZXResultPoint *pointD = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
                                               centerY:halfHeight deltaY:deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 1];
   if (!pointD) {
     if (error) *error = NotFoundErrorInstance();
@@ -129,9 +129,9 @@ int const MONOCHROME_MAX_MODULES = 32;
  * the barcode
  */
 - (ZXResultPoint *)findCornerFromCenter:(int)centerX deltaX:(int)deltaX left:(int)left right:(int)right centerY:(int)centerY deltaY:(int)deltaY top:(int)top bottom:(int)bottom maxWhiteRun:(int)maxWhiteRun {
-  NSArray * lastRange = nil;
+  NSArray *lastRange = nil;
   for (int y = centerY, x = centerX; y < bottom && y >= top && x < right && x >= left; y += deltaY, x += deltaX) {
-    NSArray * range;
+    NSArray *range;
     if (deltaX == 0) {
       range = [self blackWhiteRange:y maxWhiteRun:maxWhiteRun minDim:left maxDim:right horizontal:YES];
     } else {

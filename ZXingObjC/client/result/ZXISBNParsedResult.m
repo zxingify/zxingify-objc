@@ -18,7 +18,7 @@
 
 @interface ZXISBNParsedResult ()
 
-@property (nonatomic, copy) NSString * isbn;
+@property (nonatomic, copy) NSString *isbn;
 
 @end
 
@@ -44,7 +44,7 @@
   [super dealloc];
 }
 
-- (NSString*)displayResult {
+- (NSString *)displayResult {
   return self.isbn;
 }
 

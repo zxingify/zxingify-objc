@@ -29,7 +29,7 @@ int const AI013x0x_WEIGHT_SIZE = 15;
     return nil;
   }
 
-  NSMutableString * buf = [NSMutableString string];
+  NSMutableString *buf = [NSMutableString string];
 
   [self encodeCompressedGtin:buf currentPos:AI013x0x_HEADER_SIZE];
   [self encodeCompressedWeight:buf currentPos:AI013x0x_HEADER_SIZE + GTIN_SIZE weightSize:AI013x0x_WEIGHT_SIZE];

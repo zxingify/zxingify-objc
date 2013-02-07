@@ -19,7 +19,7 @@
 
 @interface ZXEAN8Reader ()
 
-@property (nonatomic, assign) int* decodeMiddleCounters;
+@property (nonatomic, assign) int *decodeMiddleCounters;
 
 @end
 
@@ -29,7 +29,7 @@
 
 - (id)init {
   if (self = [super init]) {
-    self.decodeMiddleCounters = (int*)malloc(sizeof(4) * sizeof(int));
+    self.decodeMiddleCounters = (int *)malloc(sizeof(4) * sizeof(int));
     self.decodeMiddleCounters[0] = 0;
     self.decodeMiddleCounters[1] = 0;
     self.decodeMiddleCounters[2] = 0;
@@ -67,7 +67,7 @@
     }
   }
 
-  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
+  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int *)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
   if (middleRange.location == NSNotFound) {
     return -1;
   }

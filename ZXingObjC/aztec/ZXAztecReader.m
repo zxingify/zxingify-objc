@@ -35,12 +35,12 @@
 }
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+  ZXBitMatrix *matrix = [image blackMatrixWithError:error];
   if (!matrix) {
     return nil;
   }
 
-  ZXAztecDetectorResult * detectorResult = [[[[ZXAztecDetector alloc] initWithImage:matrix] autorelease] detectWithError:error];
+  ZXAztecDetectorResult *detectorResult = [[[[ZXAztecDetector alloc] initWithImage:matrix] autorelease] detectWithError:error];
   if (!detectorResult) {
     return nil;
   }
@@ -59,7 +59,7 @@
   if (!decoderResult) {
     return nil;
   }
-  ZXResult * result = [ZXResult resultWithText:decoderResult.text rawBytes:decoderResult.rawBytes length:decoderResult.length resultPoints:points format:kBarcodeFormatAztec];
+  ZXResult *result = [ZXResult resultWithText:decoderResult.text rawBytes:decoderResult.rawBytes length:decoderResult.length resultPoints:points format:kBarcodeFormatAztec];
 
   NSMutableArray *byteSegments = decoderResult.byteSegments;
   if (byteSegments != nil) {

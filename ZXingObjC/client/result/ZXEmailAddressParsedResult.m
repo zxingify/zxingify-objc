@@ -19,10 +19,10 @@
 
 @interface ZXEmailAddressParsedResult ()
 
-@property (nonatomic, copy) NSString * emailAddress;
-@property (nonatomic, copy) NSString * subject;
-@property (nonatomic, copy) NSString * body;
-@property (nonatomic, copy) NSString * mailtoURI;
+@property (nonatomic, copy) NSString *emailAddress;
+@property (nonatomic, copy) NSString *subject;
+@property (nonatomic, copy) NSString *body;
+@property (nonatomic, copy) NSString *mailtoURI;
 
 @end
 
@@ -58,7 +58,7 @@
 }
 
 - (NSString *)displayResult {
-  NSMutableString * result = [NSMutableString stringWithCapacity:30];
+  NSMutableString *result = [NSMutableString stringWithCapacity:30];
   [ZXParsedResult maybeAppend:emailAddress result:result];
   [ZXParsedResult maybeAppend:subject result:result];
   [ZXParsedResult maybeAppend:body result:result];

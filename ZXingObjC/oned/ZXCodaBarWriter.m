@@ -26,7 +26,7 @@
   return [super initWithSidesMargin:20];
 }
 
-- (unsigned char*)encode:(NSString *)contents length:(int *)pLength {
+- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
 
   // Verify input and calculate decoded length.
   if (![ZXCodaBarReader arrayContains:"ABCD" length:4 key:[[contents uppercaseString] characterAtIndex:0]]) {
@@ -58,7 +58,7 @@
   resultLength += contents.length - 1;
 
   if (pLength) *pLength = resultLength;
-  unsigned char* result = (unsigned char*)malloc(resultLength * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(resultLength * sizeof(unsigned char));
   int position = 0;
   for (int index = 0; index < contents.length; index++) {
     unichar c = [[contents uppercaseString] characterAtIndex:index];

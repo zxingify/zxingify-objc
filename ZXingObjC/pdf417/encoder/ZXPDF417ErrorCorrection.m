@@ -131,7 +131,7 @@ const int EC_COEFFICIENTS[9][512] = {
  * Returns the recommended minimum error correction level as described in annex E of
  * ISO/IEC 15438:2001(E).
  */
-+ (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError**)error {
++ (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError **)error {
   if (n <= 0) {
     [NSException raise:NSInvalidArgumentException
                 format:@"n must be > 0"];
@@ -148,7 +148,7 @@ const int EC_COEFFICIENTS[9][512] = {
   if (n <= 863) {
     return 5;
   }
-  NSDictionary* userInfo = [NSDictionary dictionaryWithObject:@"No recommendation possible"
+  NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"No recommendation possible"
                                                        forKey:NSLocalizedDescriptionKey];
 
   if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
@@ -158,7 +158,7 @@ const int EC_COEFFICIENTS[9][512] = {
 /**
  * Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
  */
-+ (NSString*)generateErrorCorrection:(NSString*)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel {
++ (NSString *)generateErrorCorrection:(NSString *)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel {
   int k = [self errorCorrectionCodewordCount:errorCorrectionLevel];
   unichar e[k];
   memset(e, 0, k * sizeof(unichar));
@@ -177,7 +177,7 @@ const int EC_COEFFICIENTS[9][512] = {
     t3 = 929 - t2;
     e[0] = (unichar) (t3 % 929);
   }
-  NSMutableString* sb = [NSMutableString stringWithCapacity:k];
+  NSMutableString *sb = [NSMutableString stringWithCapacity:k];
   for (int j = k - 1; j >= 0; j--) {
     if (e[j] != 0) {
       e[j] = (unichar) (929 - e[j]);

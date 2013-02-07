@@ -22,10 +22,10 @@
 /*
  * Constructs a BitArray from a String like the one returned from BitArray.toString()
  */
-+ (ZXBitArray*)buildBitArrayFromString:(NSString*)data {
-  NSString* dotsAndXs = [[data stringByReplacingOccurrencesOfString:@"1" withString:@"X"]
++ (ZXBitArray *)buildBitArrayFromString:(NSString *)data {
+  NSString *dotsAndXs = [[data stringByReplacingOccurrencesOfString:@"1" withString:@"X"]
                          stringByReplacingOccurrencesOfString:@"0" withString:@"."];
-  ZXBitArray* binary = [[[ZXBitArray alloc] initWithSize:[dotsAndXs stringByReplacingOccurrencesOfString:@" " withString:@""].length] autorelease];
+  ZXBitArray *binary = [[[ZXBitArray alloc] initWithSize:[dotsAndXs stringByReplacingOccurrencesOfString:@" " withString:@""].length] autorelease];
   int counter = 0;
 
   for(int i = 0; i < dotsAndXs.length; ++i){
@@ -45,10 +45,10 @@
   return binary;
 }
 
-+ (ZXBitArray*)buildBitArrayFromStringWithoutSpaces:(NSString*)data {
-  NSMutableString* sb = [NSMutableString string];
++ (ZXBitArray *)buildBitArrayFromStringWithoutSpaces:(NSString *)data {
+  NSMutableString *sb = [NSMutableString string];
 
-  NSString* dotsAndXs = [[data stringByReplacingOccurrencesOfString:@"1" withString:@"X"]
+  NSString *dotsAndXs = [[data stringByReplacingOccurrencesOfString:@"1" withString:@"X"]
                          stringByReplacingOccurrencesOfString:@"0" withString:@"."];
 
   int current = 0;

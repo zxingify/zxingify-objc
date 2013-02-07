@@ -22,7 +22,7 @@
 
 - (void)testApplyMaskPenaltyRule1 {
   {
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:4 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:4 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -30,7 +30,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule1:matrix], 0, @"Expected applyMaskPenaltyRule1 to return 0");
   }
   {  // Horizontal.
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:6 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:6 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -42,7 +42,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule1:matrix], 4, @"Expected applyMaskPenaltyRule1 to return 4");
   }
   {  // Vertical.
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:6] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:6] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:0 y:1 intValue:0];
     [matrix setX:0 y:2 intValue:0];
@@ -57,12 +57,12 @@
 
 - (void)testApplyMaskPenaltyRule2 {
   {
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule2:matrix], 0, @"Expected applyMaskPenaltyRule2 to return 0");
   }
   {
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:2] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:2] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:0 y:1 intValue:0];
@@ -70,7 +70,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule2:matrix], 0, @"Expected applyMaskPenaltyRule2 to return 0");
   }
   {
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:2] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:2] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:0 y:1 intValue:0];
@@ -78,7 +78,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule2:matrix], 3, @"Expected applyMaskPenaltyRule2 to return 3");
   }
   {
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:3 height:3] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:3 height:3] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -96,7 +96,7 @@
 - (void)testApplyMaskPenaltyRule3 {
   {
     // Horizontal 00001011101.
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -112,7 +112,7 @@
   }
   {
     // Horizontal 10111010000.
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
     [matrix setX:0 y:0 intValue:1];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:1];
@@ -128,7 +128,7 @@
   }
   {
     // Vertical 00001011101.
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -144,7 +144,7 @@
   }
   {
     // Vertical 10111010000.
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
     [matrix setX:0 y:0 intValue:1];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:1];
@@ -163,20 +163,20 @@
 - (void)testApplyMaskPenaltyRule4 {
   {
     // Dark cell ratio = 0%
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule4:matrix], 100, @"Expected applyMaskPenaltyRule4 to return 100");
   }
   {
     // Dark cell ratio = 5%
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:0 y:0 intValue:1];
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule4:matrix], 0, @"Expected applyMaskPenaltyRule4 to return 0");
   }
   {
     // Dark cell ratio = 66.67%
-    ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:6 height:1] autorelease];
+    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:6 height:1] autorelease];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:1];
     [matrix setX:2 y:0 intValue:1];
@@ -187,7 +187,7 @@
   }
 }
 
-BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
+BOOL TestGetDataMaskBitInternal(int maskPattern, int *expected) {
   for (int x = 0; x < 6; ++x) {
     for (int y = 0; y < 6; ++y) {
       if ((expected[y*6+x] == 1) !=
@@ -209,7 +209,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 0, 1, 0, 1, 0},
     {0, 1, 0, 1, 0, 1},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(0, (int*)mask0), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(0, (int *)mask0), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask1[6][6] = {
     {1, 1, 1, 1, 1, 1},
     {0, 0, 0, 0, 0, 0},
@@ -218,7 +218,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 1, 1, 1, 1, 1},
     {0, 0, 0, 0, 0, 0},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(1, (int*)mask1), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(1, (int *)mask1), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask2[6][6] = {
     {1, 0, 0, 1, 0, 0},
     {1, 0, 0, 1, 0, 0},
@@ -227,7 +227,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 0, 0, 1, 0, 0},
     {1, 0, 0, 1, 0, 0},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(2, (int*)mask2), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(2, (int *)mask2), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask3[6][6] = {
     {1, 0, 0, 1, 0, 0},
     {0, 0, 1, 0, 0, 1},
@@ -236,7 +236,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {0, 0, 1, 0, 0, 1},
     {0, 1, 0, 0, 1, 0},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(3, (int*)mask3), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(3, (int *)mask3), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask4[6][6] = {
     {1, 1, 1, 0, 0, 0},
     {1, 1, 1, 0, 0, 0},
@@ -245,7 +245,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 1, 1, 0, 0, 0},
     {1, 1, 1, 0, 0, 0},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(4, (int*)mask4), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(4, (int *)mask4), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask5[6][6] = {
     {1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0},
@@ -254,7 +254,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 0, 0, 1, 0, 0},
     {1, 0, 0, 0, 0, 0},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(5, (int*)mask5), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(5, (int *)mask5), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask6[6][6] = {
     {1, 1, 1, 1, 1, 1},
     {1, 1, 1, 0, 0, 0},
@@ -263,7 +263,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 0, 1, 1, 0, 1},
     {1, 0, 0, 0, 1, 1},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(6, (int*)mask6), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(6, (int *)mask6), @"Expected TestGetDataMaskBitInternal to return YES");
   int mask7[6][6] = {
     {1, 0, 1, 0, 1, 0},
     {0, 0, 0, 1, 1, 1},
@@ -272,7 +272,7 @@ BOOL TestGetDataMaskBitInternal(int maskPattern, int* expected) {
     {1, 1, 1, 0, 0, 0},
     {0, 1, 1, 1, 0, 0},
   };
-  STAssertTrue(TestGetDataMaskBitInternal(7, (int*)mask7), @"Expected TestGetDataMaskBitInternal to return YES");
+  STAssertTrue(TestGetDataMaskBitInternal(7, (int *)mask7), @"Expected TestGetDataMaskBitInternal to return YES");
 }
 
 @end

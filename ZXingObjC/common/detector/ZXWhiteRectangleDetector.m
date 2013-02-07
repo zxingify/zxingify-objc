@@ -191,7 +191,7 @@ int const CORR = 1;
   if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
     int maxSize = right - left;
 
-    ZXResultPoint * z = nil;
+    ZXResultPoint *z = nil;
     for (int i = 1; i < maxSize; i++) {
       z = [self blackPointOnSegment:left aY:down - i bX:left + i bY:down];
       if (z != nil) {
@@ -204,7 +204,7 @@ int const CORR = 1;
       return nil;
     }
 
-    ZXResultPoint * t = nil;
+    ZXResultPoint *t = nil;
     for (int i = 1; i < maxSize; i++) {
       t = [self blackPointOnSegment:left aY:up + i bX:left + i bY:up];
       if (t != nil) {
@@ -217,7 +217,7 @@ int const CORR = 1;
       return nil;
     }
 
-    ZXResultPoint * x = nil;
+    ZXResultPoint *x = nil;
     for (int i = 1; i < maxSize; i++) {
       x = [self blackPointOnSegment:right aY:up + i bX:right - i bY:up];
       if (x != nil) {
@@ -230,7 +230,7 @@ int const CORR = 1;
       return nil;
     }
 
-    ZXResultPoint * y = nil;
+    ZXResultPoint *y = nil;
     for (int i = 1; i < maxSize; i++) {
       y = [self blackPointOnSegment:right aY:down - i bX:right - i bY:down];
       if (y != nil) {

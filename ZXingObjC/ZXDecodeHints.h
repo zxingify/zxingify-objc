@@ -35,7 +35,7 @@
 /**
  * Allowed lengths of encoded data -- reject anything else. Maps to an int[].
  */
-@property (nonatomic, retain) NSArray* allowedLengths;
+@property (nonatomic, retain) NSArray *allowedLengths;
 
 /**
  * Specifies what character encoding to use when decoding, where applicable (type String)

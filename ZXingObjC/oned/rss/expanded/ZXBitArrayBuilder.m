@@ -29,10 +29,10 @@
 
   int size = 12 * charNumber;
 
-  ZXBitArray * binary = [[[ZXBitArray alloc] initWithSize:size] autorelease];
+  ZXBitArray *binary = [[[ZXBitArray alloc] initWithSize:size] autorelease];
   int accPos = 0;
 
-  ZXExpandedPair * firstPair = [pairs objectAtIndex:0];
+  ZXExpandedPair *firstPair = [pairs objectAtIndex:0];
   int firstValue = [[firstPair rightChar] value];
   for (int i = 11; i >= 0; --i) {
     if ((firstValue & (1 << i)) != 0) {
@@ -42,7 +42,7 @@
   }
 
   for (int i = 1; i < [pairs count]; ++i) {
-    ZXExpandedPair * currentPair = [pairs objectAtIndex:i];
+    ZXExpandedPair *currentPair = [pairs objectAtIndex:i];
     int leftValue = [[currentPair leftChar] value];
 
     for (int j = 11; j >= 0; --j) {

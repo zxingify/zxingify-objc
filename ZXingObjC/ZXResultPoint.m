@@ -50,14 +50,14 @@
 
 - (BOOL)isEqual:(id)other {
   if ([other isKindOfClass:[ZXResultPoint class]]) {
-    ZXResultPoint * otherPoint = (ZXResultPoint *)other;
+    ZXResultPoint *otherPoint = (ZXResultPoint *)other;
     return self.x == otherPoint.x && self.y == otherPoint.y;
   }
   return NO;
 }
 
 - (NSUInteger)hash {
-  return 31 * *((int*)(&x)) + *((int*)(&y));
+  return 31 * *((int *)(&x)) + *((int *)(&y));
 }
 
 - (NSString *)description {
@@ -73,9 +73,9 @@
   float zeroOneDistance = [self distance:[patterns objectAtIndex:0] pattern2:[patterns objectAtIndex:1]];
   float oneTwoDistance = [self distance:[patterns objectAtIndex:1] pattern2:[patterns objectAtIndex:2]];
   float zeroTwoDistance = [self distance:[patterns objectAtIndex:0] pattern2:[patterns objectAtIndex:2]];
-  ZXResultPoint * pointA;
-  ZXResultPoint * pointB;
-  ZXResultPoint * pointC;
+  ZXResultPoint *pointA;
+  ZXResultPoint *pointB;
+  ZXResultPoint *pointC;
   if (oneTwoDistance >= zeroOneDistance && oneTwoDistance >= zeroTwoDistance) {
     pointB = [patterns objectAtIndex:0];
     pointA = [patterns objectAtIndex:1];
@@ -91,7 +91,7 @@
   }
 
   if ([self crossProductZ:pointA pointB:pointB pointC:pointC] < 0.0f) {
-    ZXResultPoint * temp = pointA;
+    ZXResultPoint *temp = pointA;
     pointA = pointC;
     pointC = temp;
   }

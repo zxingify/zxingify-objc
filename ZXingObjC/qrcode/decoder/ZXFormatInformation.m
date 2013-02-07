@@ -65,7 +65,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 
 @interface ZXFormatInformation ()
 
-@property (nonatomic, retain) ZXErrorCorrectionLevel * errorCorrectionLevel;
+@property (nonatomic, retain) ZXErrorCorrectionLevel *errorCorrectionLevel;
 @property (nonatomic, assign) char dataMask;
 
 + (ZXFormatInformation *)doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2;
@@ -105,7 +105,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 }
 
 + (ZXFormatInformation *)decodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
-  ZXFormatInformation * formatInfo = [self doDecodeFormatInformation:maskedFormatInfo1 maskedFormatInfo2:maskedFormatInfo2];
+  ZXFormatInformation *formatInfo = [self doDecodeFormatInformation:maskedFormatInfo1 maskedFormatInfo2:maskedFormatInfo2];
   if (formatInfo != nil) {
     return formatInfo;
   }
@@ -149,7 +149,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   if (![o isKindOfClass:[ZXFormatInformation class]]) {
     return NO;
   }
-  ZXFormatInformation * other = (ZXFormatInformation *)o;
+  ZXFormatInformation *other = (ZXFormatInformation *)o;
   return self.errorCorrectionLevel == other.errorCorrectionLevel && self.dataMask == other.dataMask;
 }
 

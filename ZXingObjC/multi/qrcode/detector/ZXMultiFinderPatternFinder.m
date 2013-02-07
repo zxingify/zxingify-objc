@@ -48,7 +48,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
 
 NSInteger moduleSizeCompare(id center1, id center2, void *context);
 
-- (NSArray*)selectBestPatternsWithError:(NSError**)error;
+- (NSArray *)selectBestPatternsWithError:(NSError **)error;
 
 @end
 
@@ -95,16 +95,16 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
    * So, if the layout seems right, lets have the decoder try to decode.     
    */
 
-  NSMutableArray * results = [NSMutableArray array];
+  NSMutableArray *results = [NSMutableArray array];
 
   for (int i1 = 0; i1 < (size - 2); i1++) {
-    ZXQRCodeFinderPattern * p1 = [self.possibleCenters objectAtIndex:i1];
+    ZXQRCodeFinderPattern *p1 = [self.possibleCenters objectAtIndex:i1];
     if (p1 == nil) {
       continue;
     }
 
     for (int i2 = i1 + 1; i2 < (size - 1); i2++) {
-      ZXQRCodeFinderPattern * p2 = [self.possibleCenters objectAtIndex:i2];
+      ZXQRCodeFinderPattern *p2 = [self.possibleCenters objectAtIndex:i2];
       if (p2 == nil) {
         continue;
       }
@@ -116,7 +116,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
       }
 
       for (int i3 = i2 + 1; i3 < size; i3++) {
-        ZXQRCodeFinderPattern * p3 = [self.possibleCenters objectAtIndex:i3];
+        ZXQRCodeFinderPattern *p3 = [self.possibleCenters objectAtIndex:i3];
         if (p3 == nil) {
           continue;
         }
@@ -127,10 +127,10 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
           break;
         }
 
-        NSMutableArray * test = [NSMutableArray arrayWithObjects:p1, p2, p3, nil];
+        NSMutableArray *test = [NSMutableArray arrayWithObjects:p1, p2, p3, nil];
         [ZXResultPoint orderBestPatterns:test];
 
-        ZXFinderPatternInfo * info = [[[ZXFinderPatternInfo alloc] initWithPatternCenters:test] autorelease];
+        ZXFinderPatternInfo *info = [[[ZXFinderPatternInfo alloc] initWithPatternCenters:test] autorelease];
         float dA = [ZXResultPoint distance:[info topLeft] pattern2:[info bottomLeft]];
         float dC = [ZXResultPoint distance:[info topRight] pattern2:[info bottomLeft]];
         float dB = [ZXResultPoint distance:[info topLeft] pattern2:[info topRight]];
@@ -165,7 +165,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
   return nil;
 }
 
-- (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError**)error {
+- (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError **)error {
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int maxI = self.image.height;
   int maxJ = self.image.width;
@@ -234,12 +234,12 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
       [self handlePossibleCenter:stateCount i:i j:maxJ];
     }
   }
-  NSArray * patternInfo = [self selectBestPatternsWithError:error];
+  NSArray *patternInfo = [self selectBestPatternsWithError:error];
   if (!patternInfo) {
     return nil;
   }
-  NSMutableArray * result = [NSMutableArray array];
-  for (NSMutableArray * pattern in patternInfo) {
+  NSMutableArray *result = [NSMutableArray array];
+  for (NSMutableArray *pattern in patternInfo) {
     [ZXResultPoint orderBestPatterns:pattern];
     [result addObject:[[[ZXFinderPatternInfo alloc] initWithPatternCenters:pattern] autorelease]];
   }

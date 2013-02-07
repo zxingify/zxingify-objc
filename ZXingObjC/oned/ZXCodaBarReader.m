@@ -56,13 +56,13 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
 
 @interface ZXCodaBarReader ()
 
-@property (nonatomic, retain) NSMutableString* decodeRowResult;
-@property (nonatomic, assign) int* counters;
+@property (nonatomic, retain) NSMutableString *decodeRowResult;
+@property (nonatomic, assign) int *counters;
 @property (nonatomic, assign) int countersLen;
 @property (nonatomic, assign) int counterLength;
 
 - (BOOL)validatePattern:(int)start;
-- (BOOL)setCountersWithRow:(ZXBitArray*)row;
+- (BOOL)setCountersWithRow:(ZXBitArray *)row;
 - (void)counterAppend:(int)e;
 - (int)findStartPattern;
 - (int)toNarrowWidePattern:(int)position;
@@ -85,7 +85,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
   if (self = [super init]) {
     self.decodeRowResult = [NSMutableString stringWithCapacity:20];
     self.countersLen = 80;
-    self.counters = (int*)malloc(self.countersLen * sizeof(int));
+    self.counters = (int *)malloc(self.countersLen * sizeof(int));
     memset(self.counters, 0, self.countersLen * sizeof(int));
     self.counterLength = 0;
   }
@@ -130,7 +130,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
     nextStart += 8;
     // Stop as soon as we see the end character.
     if (decodeRowResult.length > 1 &&
-        [ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+        [ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
       break;
     }
   } while (nextStart < self.counterLength); // no fixed end pattern so keep on reading while data is available
@@ -161,12 +161,12 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
   }
   // Ensure a valid start and end character
   unichar startchar = [self.decodeRowResult characterAtIndex:0];
-  if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:startchar]) {
+  if (![ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:startchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   unichar endchar = [self.decodeRowResult characterAtIndex:self.decodeRowResult.length - 1];
-  if (![ZXCodaBarReader arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:endchar]) {
+  if (![ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:endchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -293,7 +293,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
   self.counters[self.counterLength] = e;
   self.counterLength++;
   if (self.counterLength >= self.countersLen) {
-    int* temp = (int*)malloc(2 * self.counterLength * sizeof(int));
+    int *temp = (int *)malloc(2 * self.counterLength * sizeof(int));
     memcpy(temp, self.counters, self.countersLen * sizeof(int));
     self.counters = temp;
     memset(self.counters, 0, 2 * self.counterLength * sizeof(int));
@@ -304,7 +304,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
 - (int)findStartPattern {
   for (int i = 1; i < self.counterLength; i += 2) {
     int charOffset = [self toNarrowWidePattern:i];
-    if (charOffset != -1 && [[self class] arrayContains:(char*)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+    if (charOffset != -1 && [[self class] arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
       // Look for whitespace before start pattern, >= 50% of width of start pattern
       // We make an exception if the whitespace is the first element.
       int patternSize = 0;

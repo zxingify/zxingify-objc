@@ -31,7 +31,7 @@
 
 @implementation ZXUPCEANExtension2Support
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError**)error {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError **)error {
   NSMutableString *resultString = [NSMutableString string];
   int end = [self decodeMiddle:row startRange:extensionStartRange result:resultString error:error];
   if (end == -1) {
@@ -53,7 +53,7 @@
   return extensionResult;
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError**)error {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
   const int countersLen = 4;
   int counters[countersLen];
   memset(counters, 0, countersLen * sizeof(int));

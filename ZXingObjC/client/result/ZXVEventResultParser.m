@@ -21,15 +21,15 @@
 
 @interface ZXVEventResultParser ()
 
-- (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
-- (NSMutableArray*)matchVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
+- (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
+- (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
 
 @end
 
 @implementation ZXVEventResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (rawText == nil) {
     return nil;
   }
@@ -38,14 +38,14 @@
     return nil;
   }
 
-  NSString * summary = [self matchSingleVCardPrefixedField:@"SUMMARY" rawText:rawText trim:YES];
-  NSString * start = [self matchSingleVCardPrefixedField:@"DTSTART" rawText:rawText trim:YES];
+  NSString *summary = [self matchSingleVCardPrefixedField:@"SUMMARY" rawText:rawText trim:YES];
+  NSString *start = [self matchSingleVCardPrefixedField:@"DTSTART" rawText:rawText trim:YES];
   if (start == nil) {
     return nil;
   }
-  NSString * end = [self matchSingleVCardPrefixedField:@"DTEND" rawText:rawText trim:YES];
-  NSString * location = [self matchSingleVCardPrefixedField:@"LOCATION" rawText:rawText trim:YES];
-  NSString * organizer = [self stripMailto:[self matchSingleVCardPrefixedField:@"ORGANIZER" rawText:rawText trim:YES]];
+  NSString *end = [self matchSingleVCardPrefixedField:@"DTEND" rawText:rawText trim:YES];
+  NSString *location = [self matchSingleVCardPrefixedField:@"LOCATION" rawText:rawText trim:YES];
+  NSString *organizer = [self stripMailto:[self matchSingleVCardPrefixedField:@"ORGANIZER" rawText:rawText trim:YES]];
 
   NSMutableArray *attendees = [self matchVCardPrefixedField:@"ATTENDEE" rawText:rawText trim:YES];
   if (attendees != nil) {
@@ -53,9 +53,9 @@
       [attendees replaceObjectAtIndex:i withObject:[self stripMailto:[attendees objectAtIndex:i]]];
     }
   }
-  NSString * description = [self matchSingleVCardPrefixedField:@"DESCRIPTION" rawText:rawText trim:YES];
+  NSString *description = [self matchSingleVCardPrefixedField:@"DESCRIPTION" rawText:rawText trim:YES];
 
-  NSString * geoString = [self matchSingleVCardPrefixedField:@"GEO" rawText:rawText trim:YES];
+  NSString *geoString = [self matchSingleVCardPrefixedField:@"GEO" rawText:rawText trim:YES];
   double latitude;
   double longitude;
   if (geoString == nil) {
@@ -77,17 +77,17 @@
                                                        description:description
                                                           latitude:latitude
                                                          longitude:longitude];
-  } @catch (NSException * iae) {
+  } @catch (NSException *iae) {
     return nil;
   }
 }
 
-- (NSString*)matchSingleVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
-  NSArray * values = [ZXVCardResultParser matchSingleVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:NO];
+- (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
+  NSArray *values = [ZXVCardResultParser matchSingleVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:NO];
   return values == nil || values.count == 0 ? nil : [values objectAtIndex:0];
 }
 
-- (NSMutableArray*)matchVCardPrefixedField:(NSString*)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
+- (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
   NSMutableArray *values = [ZXVCardResultParser matchVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:NO];
   if (values == nil || values.count == 0) {
     return nil;
@@ -100,7 +100,7 @@
   return result;
 }
 
-- (NSString*)stripMailto:(NSString*)s {
+- (NSString *)stripMailto:(NSString *)s {
   if (s != nil && ([s hasPrefix:@"mailto:"] || [s hasPrefix:@"MAILTO:"])) {
     s = [s substringFromIndex:7];
   }

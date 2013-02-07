@@ -22,7 +22,7 @@
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
 @property (nonatomic) double altitude;
-@property (nonatomic, copy) NSString * query;
+@property (nonatomic, copy) NSString *query;
 
 @end
 

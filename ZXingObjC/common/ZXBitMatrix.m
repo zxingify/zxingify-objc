@@ -21,7 +21,7 @@
 
 @property (nonatomic) int width;
 @property (nonatomic) int height;
-@property (nonatomic) int* bits;
+@property (nonatomic) int *bits;
 @property (nonatomic) int rowSize;
 @property (nonatomic) int bitsSize;
 
@@ -35,11 +35,11 @@
 @synthesize rowSize;
 @synthesize bitsSize;
 
-+ (ZXBitMatrix*)bitMatrixWithDimension:(int)dimension {
++ (ZXBitMatrix *)bitMatrixWithDimension:(int)dimension {
   return [[[self alloc] initWithDimension:dimension] autorelease];
 }
 
-+ (ZXBitMatrix*)bitMatrixWithWidth:(int)width height:(int)height {
++ (ZXBitMatrix *)bitMatrixWithWidth:(int)width height:(int)height {
   return [[[self alloc] initWithWidth:width height:height] autorelease];
 }
 
@@ -58,7 +58,7 @@
     self.height = aHeight;
     self.rowSize = (self.width + 31) >> 5;
     self.bitsSize = self.rowSize * self.height;
-    self.bits = (int*)malloc(self.bitsSize * sizeof(int));
+    self.bits = (int *)malloc(self.bitsSize * sizeof(int));
     [self clear];
   }
 
@@ -262,7 +262,7 @@
   if (!([o isKindOfClass:[ZXBitMatrix class]])) {
     return NO;
   }
-  ZXBitMatrix * other = (ZXBitMatrix *)o;
+  ZXBitMatrix *other = (ZXBitMatrix *)o;
   if (self.width != other.width || self.height != other.height || self.rowSize != other->rowSize || self.bitsSize != other->bitsSize) {
     return NO;
   }
@@ -286,7 +286,7 @@
 }
 
 - (NSString *)description {
-  NSMutableString * result = [NSMutableString stringWithCapacity:self.height * (self.width + 1)];
+  NSMutableString *result = [NSMutableString stringWithCapacity:self.height * (self.width + 1)];
   for (int y = 0; y < self.height; y++) {
     for (int x = 0; x < self.width; x++) {
       [result appendString:[self getX:x y:y] ? @"X " : @"  "];

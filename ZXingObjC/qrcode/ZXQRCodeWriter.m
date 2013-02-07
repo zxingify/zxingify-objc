@@ -49,21 +49,21 @@ int const QUIET_ZONE_SIZE = 4;
     [NSException raise:NSInvalidArgumentException format:@"Requested dimensions are too small: %dx%d", width, height];
   }
 
-  ZXErrorCorrectionLevel * errorCorrectionLevel = [ZXErrorCorrectionLevel errorCorrectionLevelL];
+  ZXErrorCorrectionLevel *errorCorrectionLevel = [ZXErrorCorrectionLevel errorCorrectionLevelL];
   if (hints != nil) {
-    ZXErrorCorrectionLevel * requestedECLevel = hints.errorCorrectionLevel;
+    ZXErrorCorrectionLevel *requestedECLevel = hints.errorCorrectionLevel;
     if (requestedECLevel != nil) {
       errorCorrectionLevel = requestedECLevel;
     }
   }
 
-  ZXQRCode * code = [[[ZXQRCode alloc] init] autorelease];
+  ZXQRCode *code = [[[ZXQRCode alloc] init] autorelease];
   [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints qrCode:code error:error];
   return [self renderResult:code width:width height:height];
 }
 
 - (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height {
-  ZXByteMatrix * input = code.matrix;
+  ZXByteMatrix *input = code.matrix;
   if (input == nil) {
     return nil;
   }
@@ -82,7 +82,7 @@ int const QUIET_ZONE_SIZE = 4;
   int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
   int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
 
-  ZXBitMatrix * output = [[[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight] autorelease];
+  ZXBitMatrix *output = [[[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight] autorelease];
 
   for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
     for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {

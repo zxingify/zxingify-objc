@@ -21,12 +21,12 @@
 
 @interface ZXParsedReaderResultTestCase ()
 
-- (void)doTestResultWithContents:(NSString*)contents
-                    goldenResult:(NSString*)goldenResult
+- (void)doTestResultWithContents:(NSString *)contents
+                    goldenResult:(NSString *)goldenResult
                             type:(ZXParsedResultType)type;
 
-- (void)doTestResultWithContents:(NSString*)contents
-                    goldenResult:(NSString*)goldenResult
+- (void)doTestResultWithContents:(NSString *)contents
+                    goldenResult:(NSString *)goldenResult
                             type:(ZXParsedResultType)type
                           format:(ZXBarcodeFormat)format;
 
@@ -264,22 +264,22 @@
                     goldenResult:@"212-555-1212\nHere's a longer message. Should be fine." type:kParsedResultTypeSMS];
 }
 
-- (void)doTestResultWithContents:(NSString*)contents
-                    goldenResult:(NSString*)goldenResult
+- (void)doTestResultWithContents:(NSString *)contents
+                    goldenResult:(NSString *)goldenResult
                             type:(ZXParsedResultType)type {
   [self doTestResultWithContents:contents goldenResult:goldenResult type:type format:kBarcodeFormatQRCode]; // QR code is arbitrary
 }
 
-- (void)doTestResultWithContents:(NSString*)contents
-                    goldenResult:(NSString*)goldenResult
+- (void)doTestResultWithContents:(NSString *)contents
+                    goldenResult:(NSString *)goldenResult
                             type:(ZXParsedResultType)type
                           format:(ZXBarcodeFormat)format {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertNotNil(result, @"Result is nil");
   STAssertEquals(result.type, type, @"Types don't match");
 
-  NSString* displayResult = result.displayResult;
+  NSString *displayResult = result.displayResult;
   STAssertEqualObjects(displayResult, goldenResult, @"Display result doesn't match golden result");
 }
 

@@ -53,7 +53,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
 
 @interface ZXEAN13Reader ()
 
-@property (nonatomic, assign) int* decodeMiddleCounters;
+@property (nonatomic, assign) int *decodeMiddleCounters;
 
 - (BOOL)determineFirstDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound;
 
@@ -65,7 +65,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
 
 - (id)init {
   if (self = [super init]) {
-    self.decodeMiddleCounters = (int*)malloc(sizeof(4) * sizeof(int));
+    self.decodeMiddleCounters = (int *)malloc(sizeof(4) * sizeof(int));
     self.decodeMiddleCounters[0] = 0;
     self.decodeMiddleCounters[1] = 0;
     self.decodeMiddleCounters[2] = 0;
@@ -114,7 +114,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
     return -1;
   }
 
-  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int*)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
+  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int *)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
   if (middleRange.location == NSNotFound) {
     return -1;
   }

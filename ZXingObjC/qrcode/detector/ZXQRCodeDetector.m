@@ -33,11 +33,11 @@
 
 @interface ZXQRCodeDetector ()
 
-@property (nonatomic, retain) ZXBitMatrix * image;
+@property (nonatomic, retain) ZXBitMatrix *image;
 @property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
 
 - (float)calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern;
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension error:(NSError**)error;
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension error:(NSError **)error;
 - (float)sizeOfBlackWhiteBlackRun:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
 - (float)sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY;
 
@@ -77,8 +77,8 @@
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
   self.resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
-  ZXFinderPatternFinder * finder = [[[ZXFinderPatternFinder alloc] initWithImage:image resultPointCallback:resultPointCallback] autorelease];
-  ZXFinderPatternInfo * info = [finder find:hints error:error];
+  ZXFinderPatternFinder *finder = [[[ZXFinderPatternFinder alloc] initWithImage:image resultPointCallback:resultPointCallback] autorelease];
+  ZXFinderPatternInfo *info = [finder find:hints error:error];
   if (!info) {
     return nil;
   }
@@ -86,10 +86,10 @@
   return [self processFinderPatternInfo:info error:error];
 }
 
-- (ZXDetectorResult *)processFinderPatternInfo:(ZXFinderPatternInfo *)info error:(NSError**)error {
-  ZXQRCodeFinderPattern * topLeft = info.topLeft;
-  ZXQRCodeFinderPattern * topRight = info.topRight;
-  ZXQRCodeFinderPattern * bottomLeft = info.bottomLeft;
+- (ZXDetectorResult *)processFinderPatternInfo:(ZXFinderPatternInfo *)info error:(NSError **)error {
+  ZXQRCodeFinderPattern *topLeft = info.topLeft;
+  ZXQRCodeFinderPattern *topRight = info.topRight;
+  ZXQRCodeFinderPattern *bottomLeft = info.bottomLeft;
 
   float moduleSize = [self calculateModuleSize:topLeft topRight:topRight bottomLeft:bottomLeft];
   if (moduleSize < 1.0f) {
@@ -101,14 +101,14 @@
     return nil;
   }
 
-  ZXQRCodeVersion * provisionalVersion = [ZXQRCodeVersion provisionalVersionForDimension:dimension];
+  ZXQRCodeVersion *provisionalVersion = [ZXQRCodeVersion provisionalVersionForDimension:dimension];
   if (!provisionalVersion) {
     if (error) *error = FormatErrorInstance();
     return nil;
   }
   int modulesBetweenFPCenters = [provisionalVersion dimensionForVersion] - 7;
 
-  ZXAlignmentPattern * alignmentPattern = nil;
+  ZXAlignmentPattern *alignmentPattern = nil;
   if ([[provisionalVersion alignmentPatternCenters] count] > 0) {
     float bottomRightX = [topRight x] - [topLeft x] + [bottomLeft x];
     float bottomRightY = [topRight y] - [topLeft y] + [bottomLeft y];
@@ -118,7 +118,7 @@
     int estAlignmentY = (int)([topLeft y] + correctionToTopLeft * (bottomRightY - [topLeft y]));
 
     for (int i = 4; i <= 16; i <<= 1) {
-      NSError* alignmentError = nil;
+      NSError *alignmentError = nil;
       alignmentPattern = [self findAlignmentInRegion:moduleSize estAlignmentX:estAlignmentX estAlignmentY:estAlignmentY allowanceFactor:(float)i error:&alignmentError];
       if (alignmentPattern) {
         break;
@@ -129,12 +129,12 @@
     }
   }
 
-  ZXPerspectiveTransform * transform = [ZXQRCodeDetector createTransform:topLeft topRight:topRight bottomLeft:bottomLeft alignmentPattern:alignmentPattern dimension:dimension];
-  ZXBitMatrix * bits = [self sampleGrid:image transform:transform dimension:dimension error:error];
+  ZXPerspectiveTransform *transform = [ZXQRCodeDetector createTransform:topLeft topRight:topRight bottomLeft:bottomLeft alignmentPattern:alignmentPattern dimension:dimension];
+  ZXBitMatrix *bits = [self sampleGrid:image transform:transform dimension:dimension error:error];
   if (!bits) {
     return nil;
   }
-  NSArray * points;
+  NSArray *points;
   if (alignmentPattern == nil) {
     points = [NSArray arrayWithObjects:bottomLeft, topLeft, topRight, nil];
   } else {
@@ -171,7 +171,7 @@
 }
 
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage transform:(ZXPerspectiveTransform *)transform dimension:(int)dimension error:(NSError **)error {
-  ZXGridSampler * sampler = [ZXGridSampler instance];
+  ZXGridSampler *sampler = [ZXGridSampler instance];
   return [sampler sampleGrid:anImage dimensionX:dimension dimensionY:dimension transform:transform error:error];
 }
 
@@ -180,7 +180,7 @@
  * Computes the dimension (number of modules on a size) of the QR Code based on the position
  * of the finder patterns and estimated module size. Returns -1 on an error.
  */
-+ (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize error:(NSError**)error {
++ (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize error:(NSError **)error {
   int tltrCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleSize];
   int tlblCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleSize];
   int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
@@ -339,13 +339,13 @@
     return nil;
   }
 
-  ZXAlignmentPatternFinder * alignmentFinder = [[[ZXAlignmentPatternFinder alloc] initWithImage:self.image
-                                                                                         startX:alignmentAreaLeftX
-                                                                                         startY:alignmentAreaTopY
-                                                                                          width:alignmentAreaRightX - alignmentAreaLeftX
-                                                                                         height:alignmentAreaBottomY - alignmentAreaTopY
-                                                                                     moduleSize:overallEstModuleSize
-                                                                            resultPointCallback:self.resultPointCallback] autorelease];
+  ZXAlignmentPatternFinder *alignmentFinder = [[[ZXAlignmentPatternFinder alloc] initWithImage:self.image
+                                                                                        startX:alignmentAreaLeftX
+                                                                                        startY:alignmentAreaTopY
+                                                                                         width:alignmentAreaRightX - alignmentAreaLeftX
+                                                                                        height:alignmentAreaBottomY - alignmentAreaTopY
+                                                                                    moduleSize:overallEstModuleSize
+                                                                           resultPointCallback:self.resultPointCallback] autorelease];
   return [alignmentFinder findWithError:error];
 }
 

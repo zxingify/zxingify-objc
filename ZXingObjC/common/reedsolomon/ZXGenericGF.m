@@ -19,11 +19,11 @@
 
 @interface ZXGenericGF ()
 
-@property (nonatomic, retain) ZXGenericGFPoly * zero;
-@property (nonatomic, retain) ZXGenericGFPoly * one;
+@property (nonatomic, retain) ZXGenericGFPoly *zero;
+@property (nonatomic, retain) ZXGenericGFPoly *one;
 @property (nonatomic, assign) int size;
-@property (nonatomic, retain) NSMutableArray * expTable;
-@property (nonatomic, retain) NSMutableArray * logTable;
+@property (nonatomic, retain) NSMutableArray *expTable;
+@property (nonatomic, retain) NSMutableArray *logTable;
 @property (nonatomic, assign) int primitive;
 
 @end
@@ -191,7 +191,7 @@
   return [[self.expTable objectAtIndex:logSum % (size - 1)] intValue];
 }
 
-- (BOOL)isEqual:(ZXGenericGF*)object {
+- (BOOL)isEqual:(ZXGenericGF *)object {
   return self.primitive == object->primitive && self.size == object->size;
 }
 

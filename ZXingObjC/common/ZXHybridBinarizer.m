@@ -26,10 +26,10 @@ const int MIN_DYNAMIC_RANGE = 24;
 
 @interface ZXHybridBinarizer ()
 
-@property (nonatomic, retain) ZXBitMatrix * matrix;
+@property (nonatomic, retain) ZXBitMatrix *matrix;
 
-- (int**)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
-- (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(int**)blackPoints matrix:(ZXBitMatrix *)matrix;
+- (int **)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
+- (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(int **)blackPoints matrix:(ZXBitMatrix *)matrix;
 - (int)cap:(int)value min:(int)min max:(int)max;
 - (void)thresholdBlock:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
 
@@ -62,11 +62,11 @@ const int MIN_DYNAMIC_RANGE = 24;
   if (self.matrix != nil) {
     return self.matrix;
   }
-  ZXLuminanceSource * source = [self luminanceSource];
+  ZXLuminanceSource *source = [self luminanceSource];
   int width = source.width;
   int height = source.height;
   if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-    unsigned char * _luminances = source.matrix;
+    unsigned char *_luminances = source.matrix;
     int subWidth = width >> BLOCK_SIZE_POWER;
     if ((width & BLOCK_SIZE_MASK) != 0) {
       subWidth++;
@@ -75,9 +75,9 @@ const int MIN_DYNAMIC_RANGE = 24;
     if ((height & BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    int** blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
+    int **blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
 
-    ZXBitMatrix * newMatrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
+    ZXBitMatrix *newMatrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
     [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
     self.matrix = newMatrix;
 
@@ -108,7 +108,7 @@ const int MIN_DYNAMIC_RANGE = 24;
                          subHeight:(int)subHeight
                              width:(int)width
                             height:(int)height
-                       blackPoints:(int**)blackPoints
+                       blackPoints:(int **)blackPoints
                             matrix:(ZXBitMatrix *)_matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
@@ -126,7 +126,7 @@ const int MIN_DYNAMIC_RANGE = 24;
       int top = [self cap:y min:2 max:subHeight - 3];
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
-        int * blackRow = blackPoints[top + z];
+        int *blackRow = blackPoints[top + z];
         sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
       }
       int average = sum / 25;
@@ -163,14 +163,14 @@ const int MIN_DYNAMIC_RANGE = 24;
  * See the following thread for a discussion of this algorithm:
  *  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
  */
-- (int**)calculateBlackPoints:(unsigned char *)_luminances
+- (int **)calculateBlackPoints:(unsigned char *)_luminances
                          subWidth:(int)subWidth
                         subHeight:(int)subHeight
                             width:(int)width
                            height:(int)height {
-  int** blackPoints = (int**)malloc(subHeight * sizeof(int*));
+  int **blackPoints = (int **)malloc(subHeight * sizeof(int *));
   for (int y = 0; y < subHeight; y++) {
-    blackPoints[y] = (int*)malloc(subWidth * sizeof(int));
+    blackPoints[y] = (int *)malloc(subWidth * sizeof(int));
 
     int yoffset = y << BLOCK_SIZE_POWER;
     int maxYOffset = height - BLOCK_SIZE;

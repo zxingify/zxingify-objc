@@ -29,12 +29,12 @@ extern int const FINDER_PATTERN_MAX_MODULES;
 
 @interface ZXFinderPatternFinder : NSObject
 
-@property (nonatomic, retain, readonly) ZXBitMatrix * image;
-@property (nonatomic, retain, readonly) NSMutableArray * possibleCenters;
+@property (nonatomic, retain, readonly) ZXBitMatrix *image;
+@property (nonatomic, retain, readonly) NSMutableArray *possibleCenters;
 
 - (id)initWithImage:(ZXBitMatrix *)image;
 - (id)initWithImage:(ZXBitMatrix *)image resultPointCallback:(id <ZXResultPointCallback>)resultPointCallback;
-- (ZXFinderPatternInfo *)find:(ZXDecodeHints *)hints error:(NSError**)error;
+- (ZXFinderPatternInfo *)find:(ZXDecodeHints *)hints error:(NSError **)error;
 + (BOOL)foundPatternCross:(int[])stateCount;
 - (BOOL)handlePossibleCenter:(int[])stateCount i:(int)i j:(int)j;
 

@@ -26,7 +26,7 @@
 
 @interface ZXMultiFormatUPCEANReader ()
 
-@property (nonatomic, retain) NSMutableArray * readers;
+@property (nonatomic, retain) NSMutableArray *readers;
 
 @end
 
@@ -75,8 +75,8 @@
   if (startGuardPattern.location == NSNotFound) {
     return nil;
   }
-  for (ZXUPCEANReader * reader in self.readers) {
-    ZXResult * result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints error:error];
+  for (ZXUPCEANReader *reader in self.readers) {
+    ZXResult *result = [reader decodeRow:rowNumber row:row startGuardRange:startGuardPattern hints:hints error:error];
     if (!result) {
       continue;
     }

@@ -28,7 +28,7 @@ const int MATRIX_HEIGHT = 33;
 
 @interface ZXMaxiCodeReader ()
 
-@property (nonatomic, retain) ZXMaxiCodeDecoder * decoder;
+@property (nonatomic, retain) ZXMaxiCodeDecoder *decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
 
@@ -61,13 +61,13 @@ const int MATRIX_HEIGHT = 33;
 }
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXDecoderResult * decoderResult;
+  ZXDecoderResult *decoderResult;
   if (hints != nil && hints.pureBarcode) {
-    ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+    ZXBitMatrix *matrix = [image blackMatrixWithError:error];
     if (!matrix) {
       return nil;
     }
-    ZXBitMatrix * bits = [self extractPureBits:matrix];
+    ZXBitMatrix *bits = [self extractPureBits:matrix];
     if (!bits) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -81,14 +81,14 @@ const int MATRIX_HEIGHT = 33;
     return nil;
   }
 
-  NSArray* points = [NSArray array];
-  ZXResult * result = [ZXResult resultWithText:decoderResult.text
+  NSArray *points = [NSArray array];
+  ZXResult *result = [ZXResult resultWithText:decoderResult.text
                                       rawBytes:decoderResult.rawBytes
                                         length:decoderResult.length
                                   resultPoints:points
                                         format:kBarcodeFormatMaxiCode];
 
-  NSString* ecLevel = decoderResult.ecLevel;
+  NSString *ecLevel = decoderResult.ecLevel;
   if (ecLevel != nil) {
     [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
   }
@@ -107,7 +107,7 @@ const int MATRIX_HEIGHT = 33;
  * case.
  */
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image {
-  NSArray * enclosingRectangle = image.enclosingRectangle;
+  NSArray *enclosingRectangle = image.enclosingRectangle;
   if (enclosingRectangle == nil) {
     return nil;
   }
@@ -118,7 +118,7 @@ const int MATRIX_HEIGHT = 33;
   int height = [[enclosingRectangle objectAtIndex:3] intValue];
 
   // Now just read off the bits
-  ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:MATRIX_WIDTH height:MATRIX_HEIGHT] autorelease];
+  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithWidth:MATRIX_WIDTH height:MATRIX_HEIGHT] autorelease];
   for (int y = 0; y < MATRIX_HEIGHT; y++) {
     int iy = top + (y * height + height / 2) / MATRIX_HEIGHT;
     for (int x = 0; x < MATRIX_WIDTH; x++) {

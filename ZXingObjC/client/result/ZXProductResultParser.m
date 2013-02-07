@@ -26,7 +26,7 @@
   if (!(format == kBarcodeFormatUPCA || format == kBarcodeFormatUPCE || format == kBarcodeFormatEan8 || format == kBarcodeFormatEan13)) {
     return nil;
   }
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   int length = [rawText length];
   for (int x = 0; x < length; x++) {
     unichar c = [rawText characterAtIndex:x];
@@ -35,7 +35,7 @@
     }
   }
 
-  NSString * normalizedProductID;
+  NSString *normalizedProductID;
   if (format == kBarcodeFormatUPCE) {
     normalizedProductID = [ZXUPCEReader convertUPCEtoUPCA:rawText];
   } else {

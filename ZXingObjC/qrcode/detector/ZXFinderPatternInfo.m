@@ -19,9 +19,9 @@
 
 @interface ZXFinderPatternInfo ()
 
-@property (nonatomic, retain) ZXQRCodeFinderPattern * bottomLeft;
-@property (nonatomic, retain) ZXQRCodeFinderPattern * topLeft;
-@property (nonatomic, retain) ZXQRCodeFinderPattern * topRight;
+@property (nonatomic, retain) ZXQRCodeFinderPattern *bottomLeft;
+@property (nonatomic, retain) ZXQRCodeFinderPattern *topLeft;
+@property (nonatomic, retain) ZXQRCodeFinderPattern *topRight;
 
 @end
 

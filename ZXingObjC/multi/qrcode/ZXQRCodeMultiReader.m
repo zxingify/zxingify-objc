@@ -28,29 +28,29 @@
 }
 
 - (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXBitMatrix* matrix = [image blackMatrixWithError:error];
+  ZXBitMatrix *matrix = [image blackMatrixWithError:error];
   if (!matrix) {
     return nil;
   }
-  NSMutableArray * results = [NSMutableArray array];
-  NSArray * detectorResult = [[[[ZXMultiDetector alloc] initWithImage:matrix] autorelease] detectMulti:hints error:error];
+  NSMutableArray *results = [NSMutableArray array];
+  NSArray *detectorResult = [[[[ZXMultiDetector alloc] initWithImage:matrix] autorelease] detectMulti:hints error:error];
   if (!detectorResult) {
     return nil;
   }
   for (int i = 0; i < [detectorResult count]; i++) {
-    ZXDecoderResult * decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits] hints:hints error:nil];
+    ZXDecoderResult *decoderResult = [[self decoder] decodeMatrix:[[detectorResult objectAtIndex:i] bits] hints:hints error:nil];
     if (decoderResult) {
-      NSArray * points = [(ZXDetectorResult *)[detectorResult objectAtIndex:i] points];
-      ZXResult * result = [ZXResult resultWithText:decoderResult.text
+      NSArray *points = [(ZXDetectorResult *)[detectorResult objectAtIndex:i] points];
+      ZXResult *result = [ZXResult resultWithText:decoderResult.text
                                           rawBytes:decoderResult.rawBytes
                                             length:decoderResult.length
                                       resultPoints:points
                                             format:kBarcodeFormatQRCode];
-      NSMutableArray* byteSegments = decoderResult.byteSegments;
+      NSMutableArray *byteSegments = decoderResult.byteSegments;
       if (byteSegments != nil) {
         [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];
       }
-      NSString* ecLevel = decoderResult.ecLevel;
+      NSString *ecLevel = decoderResult.ecLevel;
       if (ecLevel != nil) {
         [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
       }

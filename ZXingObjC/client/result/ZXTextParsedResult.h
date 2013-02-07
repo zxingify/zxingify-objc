@@ -23,8 +23,8 @@
 
 @interface ZXTextParsedResult : ZXParsedResult
 
-@property (nonatomic, copy, readonly) NSString * text;
-@property (nonatomic, copy, readonly) NSString * language;
+@property (nonatomic, copy, readonly) NSString *text;
+@property (nonatomic, copy, readonly) NSString *language;
 
 - (id)initWithText:(NSString *)text language:(NSString *)language;
 + (id)textParsedResultWithText:(NSString *)text language:(NSString *)language;

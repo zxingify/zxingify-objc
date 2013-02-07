@@ -21,13 +21,13 @@
 @implementation ZXSMTPResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (!([rawText hasPrefix:@"smtp:"] || [rawText hasPrefix:@"SMTP:"])) {
     return nil;
   }
-  NSString * emailAddress = [rawText substringFromIndex:5];
-  NSString * subject = nil;
-  NSString * body = nil;
+  NSString *emailAddress = [rawText substringFromIndex:5];
+  NSString *subject = nil;
+  NSString *body = nil;
   int colon = [emailAddress rangeOfString:@":"].location;
   if (colon != NSNotFound) {
     subject = [emailAddress substringFromIndex:colon + 1];
@@ -38,7 +38,7 @@
       subject = [subject substringToIndex:colon];
     }
   }
-  NSString * mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
+  NSString *mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
   return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
                                                                       subject:subject
                                                                          body:body

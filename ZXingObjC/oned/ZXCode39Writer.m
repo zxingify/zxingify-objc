@@ -36,7 +36,7 @@
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (unsigned char*)encode:(NSString*)contents length:(int*)pLength {
+- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
   int length = [contents length];
   if (length > 80) {
     [NSException raise:NSInvalidArgumentException 
@@ -57,7 +57,7 @@
   }
 
   if (pLength) *pLength = codeWidth;
-  unsigned char* result = (unsigned char*)malloc(codeWidth * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(codeWidth * sizeof(unsigned char));
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
   int pos = [super appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:1];
 

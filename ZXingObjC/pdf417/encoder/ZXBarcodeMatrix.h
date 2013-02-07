@@ -28,9 +28,9 @@
 - (void)setX:(int)x y:(int)y value:(unsigned char)value;
 - (void)setMatrixX:(int)x y:(int)y black:(BOOL)black;
 - (void)startRow;
-- (ZXBarcodeRow*)currentRow;
-- (unsigned char**)matrixWithHeight:(int*)height width:(int*)width;
-- (unsigned char**)scaledMatrixWithHeight:(int*)height width:(int*)width scale:(int)scale;
-- (unsigned char**)scaledMatrixWithHeight:(int*)height width:(int*)width xScale:(int)xScale yScale:(int)yScale;
+- (ZXBarcodeRow *)currentRow;
+- (unsigned char **)matrixWithHeight:(int *)height width:(int *)width;
+- (unsigned char **)scaledMatrixWithHeight:(int *)height width:(int *)width scale:(int)scale;
+- (unsigned char **)scaledMatrixWithHeight:(int *)height width:(int *)width xScale:(int)xScale yScale:(int)yScale;
 
 @end

@@ -30,11 +30,11 @@ int const AI01392x_LAST_DIGIT_SIZE = 2;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSMutableString * buf = [NSMutableString string];
+  NSMutableString *buf = [NSMutableString string];
   [self encodeCompressedGtin:buf currentPos:AI01392x_HEADER_SIZE];
   int lastAIdigit = [self.generalDecoder extractNumericValueFromBitArray:AI01392x_HEADER_SIZE + GTIN_SIZE bits:AI01392x_LAST_DIGIT_SIZE];
   [buf appendFormat:@"(392%d)", lastAIdigit];
-  ZXDecodedInformation * decodedInformation = [self.generalDecoder decodeGeneralPurposeField:AI01392x_HEADER_SIZE + GTIN_SIZE + AI01392x_LAST_DIGIT_SIZE remaining:nil];
+  ZXDecodedInformation *decodedInformation = [self.generalDecoder decodeGeneralPurposeField:AI01392x_HEADER_SIZE + GTIN_SIZE + AI01392x_LAST_DIGIT_SIZE remaining:nil];
   [buf appendString:decodedInformation.theNewString];
   return buf;
 }

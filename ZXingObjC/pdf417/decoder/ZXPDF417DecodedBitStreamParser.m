@@ -59,13 +59,13 @@ char const MIXED_CHARS[25] = {
  * Table containing values for the exponent of 900.
  * This is used in the numeric compaction decode algorithm.
  */
-static NSArray* EXP900 = nil;
+static NSArray *EXP900 = nil;
 
 @interface ZXPDF417DecodedBitStreamParser ()
 
 + (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (NSString *)decodeBase900toBase10:(int*)codewords count:(int)count;
-+ (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
++ (NSString *)decodeBase900toBase10:(int *)codewords count:(int)count;
++ (void)decodeTextCompaction:(int *)textCompactionData byteCompactionData:(int *)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
 + (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
 
@@ -74,9 +74,9 @@ static NSArray* EXP900 = nil;
 @implementation ZXPDF417DecodedBitStreamParser
 
 + (void)initialize {
-  NSMutableArray* exponents = [NSMutableArray arrayWithCapacity:16];
+  NSMutableArray *exponents = [NSMutableArray arrayWithCapacity:16];
   [exponents addObject:[NSDecimalNumber one]];
-  NSDecimalNumber* nineHundred = [NSDecimalNumber decimalNumberWithString:@"900"];
+  NSDecimalNumber *nineHundred = [NSDecimalNumber decimalNumberWithString:@"900"];
   [exponents addObject:nineHundred];
   for (int i = 2; i < 16; i++) {
     [exponents addObject:[[exponents objectAtIndex:i - 1] decimalNumberByMultiplyingBy:nineHundred]];
@@ -89,7 +89,7 @@ static NSArray* EXP900 = nil;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSMutableString * result = [NSMutableString stringWithCapacity:100];
+  NSMutableString *result = [NSMutableString stringWithCapacity:100];
   int codeIndex = 1;
   int code = [[codewords objectAtIndex:codeIndex++] intValue];
   while (codeIndex < [[codewords objectAtIndex:0] intValue]) {
@@ -197,7 +197,7 @@ static NSArray* EXP900 = nil;
  * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
  * switches are defined in 5.4.2.3.
  */
-+ (void)decodeTextCompaction:(int*)textCompactionData byteCompactionData:(int*)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
++ (void)decodeTextCompaction:(int *)textCompactionData byteCompactionData:(int *)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
   // Beginning from an initial state of the Alpha sub-mode
   // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
   // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
@@ -464,7 +464,7 @@ static NSArray* EXP900 = nil;
       }
     }
     if (count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) {
-      NSString * s = [self decodeBase900toBase10:numericCodewords count:count];
+      NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
       if (s == nil) {
         return NSIntegerMax;
       }
@@ -515,12 +515,12 @@ static NSArray* EXP900 = nil;
    Remove leading 1 =>  Result is 000213298174000
  */
 + (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
-  NSDecimalNumber* result = [NSDecimalNumber zero];
+  NSDecimalNumber *result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
     result = [[result decimalNumberByAdding:[EXP900 objectAtIndex:count - i - 1]] decimalNumberByMultiplyingBy:
               [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:codewords[i]] decimalValue]]];
   }
-  NSString* resultString = [result stringValue];
+  NSString *resultString = [result stringValue];
   if (![resultString hasPrefix:@"1"]) {
     return nil;
   }

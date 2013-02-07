@@ -17,8 +17,8 @@
 #import "ZXCharacterSetECI.h"
 #import "ZXErrors.h"
 
-static NSMutableDictionary * VALUE_TO_ECI = nil;
-static NSMutableDictionary * ENCODING_TO_ECI = nil;
+static NSMutableDictionary *VALUE_TO_ECI = nil;
+static NSMutableDictionary *ENCODING_TO_ECI = nil;
 
 @interface ZXCharacterSetECI ()
 
@@ -76,7 +76,7 @@ static NSMutableDictionary * ENCODING_TO_ECI = nil;
 }
 
 + (void)addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
-  ZXCharacterSetECI * eci = [[[ZXCharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
+  ZXCharacterSetECI *eci = [[[ZXCharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
   [ENCODING_TO_ECI setObject:eci forKey:[NSNumber numberWithUnsignedInteger:encoding]];
 }

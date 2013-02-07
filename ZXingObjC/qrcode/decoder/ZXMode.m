@@ -20,8 +20,8 @@
 @interface ZXMode ()
 
 @property (nonatomic, assign) int bits;
-@property (nonatomic, retain) NSArray * characterCountBitsForVersions;
-@property (nonatomic, copy) NSString * name;
+@property (nonatomic, retain) NSArray *characterCountBitsForVersions;
+@property (nonatomic, copy) NSString *name;
 
 @end
 
@@ -95,7 +95,7 @@
 }
 
 + (ZXMode *)terminatorMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:0],
@@ -108,7 +108,7 @@
 }
 
 + (ZXMode *)numericMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:10],
@@ -121,7 +121,7 @@
 }
 
 + (ZXMode *)alphanumericMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:9],
@@ -134,7 +134,7 @@
 }
 
 + (ZXMode *)structuredAppendMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:0],
@@ -147,7 +147,7 @@
 }
 
 + (ZXMode *)byteMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:8],
@@ -160,7 +160,7 @@
 }
 
 + (ZXMode *)eciMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:0],
@@ -173,7 +173,7 @@
 }
 
 + (ZXMode *)kanjiMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:8],
@@ -186,7 +186,7 @@
 }
 
 + (ZXMode *)fnc1FirstPositionMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:0],
@@ -199,7 +199,7 @@
 }
 
 + (ZXMode *)fnc1SecondPositionMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:0],
@@ -215,7 +215,7 @@
  * See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
  */
 + (ZXMode *)hanziMode {
-  static ZXMode* thisMode = nil;
+  static ZXMode *thisMode = nil;
   if (!thisMode) {
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
                                                                       [NSNumber numberWithInt:8],

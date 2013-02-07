@@ -21,10 +21,10 @@
 @implementation ZXExpandedInformationDecoderTest
 
 - (void)testNoAi {
-  ZXBitArray* information = [ZXBinaryUtil buildBitArrayFromString:@" .......X ..XX..X. X.X....X .......X ...."];
+  ZXBitArray *information = [ZXBinaryUtil buildBitArrayFromString:@" .......X ..XX..X. X.X....X .......X ...."];
 
-  ZXAbstractExpandedDecoder* decoder = [ZXAbstractExpandedDecoder createDecoder:information];
-  NSString* decoded = [decoder parseInformationWithError:nil];
+  ZXAbstractExpandedDecoder *decoder = [ZXAbstractExpandedDecoder createDecoder:information];
+  NSString *decoded = [decoder parseInformationWithError:nil];
   STAssertEqualObjects(decoded, @"(10)12A", @"Expected %@ to equal \"(10)12A\"");
 }
 

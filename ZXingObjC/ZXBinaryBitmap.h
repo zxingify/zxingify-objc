@@ -30,8 +30,8 @@
 
 - (id)initWithBinarizer:(ZXBinarizer *)binarizer;
 + (id)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer;
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error;
-- (ZXBitMatrix *)blackMatrixWithError:(NSError**)error;
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError **)error;
+- (ZXBitMatrix *)blackMatrixWithError:(NSError **)error;
 - (ZXBinaryBitmap *)crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXBinaryBitmap *)rotateCounterClockwise;
 - (ZXBinaryBitmap *)rotateCounterClockwise45;

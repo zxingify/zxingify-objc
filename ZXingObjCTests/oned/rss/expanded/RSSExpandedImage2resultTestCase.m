@@ -26,7 +26,7 @@
 
 @interface RSSExpandedImage2resultTestCase ()
 
-- (void)assertCorrectImage2result:(NSString*)path expected:(ZXExpandedProductParsedResult*)expected;
+- (void)assertCorrectImage2result:(NSString *)path expected:(ZXExpandedProductParsedResult *)expected;
 
 @end
 
@@ -34,8 +34,8 @@
 
 - (void)testDecodeRow2result_2 {
   // (01)90012345678908(3103)001750
-  NSString* path = @"Resources/blackbox/rssexpanded-1/2.jpg";
-  ZXExpandedProductParsedResult* expected =
+  NSString *path = @"Resources/blackbox/rssexpanded-1/2.jpg";
+  ZXExpandedProductParsedResult *expected =
     [ZXExpandedProductParsedResult expandedProductParsedResultWithProductID:@"90012345678908" sscc:nil lotNumber:nil productionDate:nil
                                                               packagingDate:nil bestBeforeDate:nil expirationDate:nil weight:@"001750"
                                                                  weightType:KILOGRAM weightIncrement:@"3" price:nil priceIncrement:nil
@@ -44,19 +44,19 @@
   [self assertCorrectImage2result:path expected:expected];
 }
 
-- (void)assertCorrectImage2result:(NSString*)path expected:(ZXExpandedProductParsedResult*)expected {
-  ZXRSSExpandedReader* rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+- (void)assertCorrectImage2result:(NSString *)path expected:(ZXExpandedProductParsedResult *)expected {
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
 
-  ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
-  ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
+  ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
+  ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
-  ZXBitArray* row = [binaryMap blackRow:rowNumber row:nil error:nil];
+  ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
-  ZXResult* theResult = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:nil];
+  ZXResult *theResult = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:nil];
 
   STAssertEquals(theResult.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected format to be kBarcodeFormatRSSExpanded");
 
-  ZXParsedResult* result = [ZXResultParser parseResult:theResult];
+  ZXParsedResult *result = [ZXResultParser parseResult:theResult];
 
   STAssertEqualObjects(result, expected, @"Result does not match expected");
 }

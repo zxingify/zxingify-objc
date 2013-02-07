@@ -23,9 +23,9 @@
 
 @interface ZXQRCodeBitMatrixParser ()
 
-@property (nonatomic, retain) ZXBitMatrix * bitMatrix;
-@property (nonatomic, retain) ZXFormatInformation * parsedFormatInfo;
-@property (nonatomic, retain) ZXQRCodeVersion * parsedVersion;
+@property (nonatomic, retain) ZXBitMatrix *bitMatrix;
+@property (nonatomic, retain) ZXFormatInformation *parsedFormatInfo;
+@property (nonatomic, retain) ZXQRCodeVersion *parsedVersion;
 
 - (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits;
 
@@ -158,22 +158,22 @@
  * QR Code.
  */
 - (NSArray *)readCodewordsWithError:(NSError **)error {
-  ZXFormatInformation * formatInfo = [self readFormatInformationWithError:error];
+  ZXFormatInformation *formatInfo = [self readFormatInformationWithError:error];
   if (!formatInfo) {
     return nil;
   }
 
-  ZXQRCodeVersion * version = [self readVersionWithError:error];
+  ZXQRCodeVersion *version = [self readVersionWithError:error];
   if (!version) {
     return nil;
   }
 
-  ZXDataMask * dataMask = [ZXDataMask forReference:(int)[formatInfo dataMask]];
+  ZXDataMask *dataMask = [ZXDataMask forReference:(int)[formatInfo dataMask]];
   int dimension = self.bitMatrix.height;
   [dataMask unmaskBitMatrix:bitMatrix dimension:dimension];
-  ZXBitMatrix * functionPattern = [version buildFunctionPattern];
+  ZXBitMatrix *functionPattern = [version buildFunctionPattern];
   BOOL readingUp = YES;
-  NSMutableArray * result = [NSMutableArray array];
+  NSMutableArray *result = [NSMutableArray array];
   int resultOffset = 0;
   int currentByte = 0;
   int bitsRead = 0;

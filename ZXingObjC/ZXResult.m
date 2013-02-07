@@ -18,12 +18,12 @@
 
 @interface ZXResult ()
 
-@property (nonatomic, copy)   NSString * text;
-@property (nonatomic, assign) unsigned char * rawBytes;
+@property (nonatomic, copy)   NSString *text;
+@property (nonatomic, assign) unsigned char *rawBytes;
 @property (nonatomic, assign) int length;
-@property (nonatomic, retain) NSMutableArray * resultPoints;
+@property (nonatomic, retain) NSMutableArray *resultPoints;
 @property (nonatomic, assign) ZXBarcodeFormat barcodeFormat;
-@property (nonatomic, retain) NSMutableDictionary * resultMetadata;
+@property (nonatomic, retain) NSMutableDictionary *resultMetadata;
 @property (nonatomic, assign) long timestamp;
 
 @end
@@ -46,7 +46,7 @@
   if (self = [super init]) {
     self.text = aText;
     if (aRawBytes != NULL && aLength > 0) {
-      self.rawBytes = (unsigned char*)malloc(aLength * sizeof(unsigned char));
+      self.rawBytes = (unsigned char *)malloc(aLength * sizeof(unsigned char));
       memcpy(self.rawBytes, aRawBytes, aLength);
       self.length = aLength;
     } else {

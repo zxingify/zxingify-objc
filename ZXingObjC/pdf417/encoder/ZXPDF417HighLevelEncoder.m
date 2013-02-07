@@ -101,19 +101,19 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 
 @interface ZXPDF417HighLevelEncoder ()
 
-+ (unsigned char*)bytesForMessage:(NSString*)msg;
-+ (int)encodeText:(NSString*)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString*)sb initialSubmode:(int)initialSubmode;
-+ (void)encodeBinary:(unsigned char*)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString*)sb;
-+ (void)encodeNumeric:(NSString*)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString*)sb;
++ (unsigned char *)bytesForMessage:(NSString *)msg;
++ (int)encodeText:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb initialSubmode:(int)initialSubmode;
++ (void)encodeBinary:(unsigned char *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb;
++ (void)encodeNumeric:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb;
 + (BOOL)isDigit:(char)ch;
 + (BOOL)isAlphaUpper:(char)ch;
 + (BOOL)isAlphaLower:(char)ch;
 + (BOOL)isMixed:(char)ch;
 + (BOOL)isPunctuation:(char)ch;
 + (BOOL)isText:(char)ch;
-+ (int)determineConsecutiveDigitCount:(NSString*)msg startpos:(int)startpos;
-+ (int)determineConsecutiveTextCount:(NSString*)msg startpos:(int)startpos;
-+ (int)determineConsecutiveBinaryCount:(NSString*)msg bytes:(unsigned char*)bytes startpos:(int)startpos error:(NSError**)error;
++ (int)determineConsecutiveDigitCount:(NSString *)msg startpos:(int)startpos;
++ (int)determineConsecutiveTextCount:(NSString *)msg startpos:(int)startpos;
++ (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(unsigned char *)bytes startpos:(int)startpos error:(NSError **)error;
 
 @end
 
@@ -145,8 +145,8 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * Converts the message to a byte array using the default encoding (cp437) as defined by the
  * specification
  */
-+ (unsigned char*)bytesForMessage:(NSString*)msg {
-  return (unsigned char*)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes];
++ (unsigned char *)bytesForMessage:(NSString *)msg {
+  return (unsigned char *)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes];
 }
 
 /**
@@ -154,11 +154,11 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * of ISO/IEC 15438:2001(E).  If byte compaction has been selected, then only byte compaction
  * is used.
  */
-+ (NSString*)encodeHighLevel:(NSString*)msg compaction:(ZXCompaction)compaction error:(NSError**)error {
-  unsigned char* bytes = NULL; //Fill later and only if needed
++ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction error:(NSError **)error {
+  unsigned char *bytes = NULL; //Fill later and only if needed
 
   //the codewords 0..928 are encoded as Unicode characters
-  NSMutableString* sb = [NSMutableString stringWithCapacity:msg.length];
+  NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
 
   int len = msg.length;
   int p = 0;
@@ -227,8 +227,8 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),
  * chapter 4.4.2.
  */
-+ (int)encodeText:(NSString*)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString*)sb initialSubmode:(int)initialSubmode {
-  NSMutableString* tmp = [NSMutableString stringWithCapacity:count];
++ (int)encodeText:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb initialSubmode:(int)initialSubmode {
+  NSMutableString *tmp = [NSMutableString stringWithCapacity:count];
   int submode = initialSubmode;
   int idx = 0;
   while (true) {
@@ -343,7 +343,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * chapter 4.4.3. The Unicode characters will be converted to binary using the cp437
  * codepage.
  */
-+ (void)encodeBinary:(unsigned char*)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString*)sb {
++ (void)encodeBinary:(unsigned char *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb {
   if (count == 1 && startmode == TEXT_COMPACTION) {
     [sb appendFormat:@"%c", (char) SHIFT_TO_BYTE];
   }
@@ -381,13 +381,13 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
   }
 }
 
-+ (void)encodeNumeric:(NSString*)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString*)sb {
++ (void)encodeNumeric:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb {
   int idx = 0;
-  NSMutableString* tmp = [NSMutableString stringWithCapacity:count / 3 + 1];
+  NSMutableString *tmp = [NSMutableString stringWithCapacity:count / 3 + 1];
   while (idx < count - 1) {
     [tmp setString:@""];
     int len = MIN(44, count - idx);
-    NSString* part = [@"1" stringByAppendingString:[msg substringWithRange:NSMakeRange(startpos + idx, len)]];
+    NSString *part = [@"1" stringByAppendingString:[msg substringWithRange:NSMakeRange(startpos + idx, len)]];
     long long bigint = [part longLongValue];
     do {
       long c = bigint % 900;
@@ -430,7 +430,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 /**
  * Determines the number of consecutive characters that are encodable using numeric compaction.
  */
-+ (int)determineConsecutiveDigitCount:(NSString*)msg startpos:(int)startpos {
++ (int)determineConsecutiveDigitCount:(NSString *)msg startpos:(int)startpos {
   int count = 0;
   int len = msg.length;
   int idx = startpos;
@@ -454,7 +454,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * @param startpos the start position within the message
  * @return the requested character count
  */
-+ (int)determineConsecutiveTextCount:(NSString*)msg startpos:(int)startpos {
++ (int)determineConsecutiveTextCount:(NSString *)msg startpos:(int)startpos {
   int len = msg.length;
   int idx = startpos;
   while (idx < len) {
@@ -488,7 +488,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 /**
  * Determines the number of consecutive characters that are encodable using binary compaction.
  */
-+ (int)determineConsecutiveBinaryCount:(NSString*)msg bytes:(unsigned char*)bytes startpos:(int)startpos error:(NSError**)error {
++ (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(unsigned char *)bytes startpos:(int)startpos error:(NSError **)error {
   int len = msg.length;
   int idx = startpos;
   while (idx < len) {
@@ -525,7 +525,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     //Sun returns a ASCII 63 (?) for a character that cannot be mapped. Let's hope all
     //other VMs do the same
     if (bytes[idx] == 63 && ch != '?') {
-      NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Non-encodable character detected: %c (Unicode: %C)", ch, (unichar)ch]
+      NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Non-encodable character detected: %c (Unicode: %C)", ch, (unichar)ch]
                                                            forKey:NSLocalizedDescriptionKey];
 
       if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];

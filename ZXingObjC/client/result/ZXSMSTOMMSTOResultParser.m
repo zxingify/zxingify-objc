@@ -21,12 +21,12 @@
 @implementation ZXSMSTOMMSTOResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (!([rawText hasPrefix:@"smsto:"] || [rawText hasPrefix:@"SMSTO:"] || [rawText hasPrefix:@"mmsto:"] || [rawText hasPrefix:@"MMSTO:"])) {
     return nil;
   }
-  NSString * number = [rawText substringFromIndex:6];
-  NSString * body = nil;
+  NSString *number = [rawText substringFromIndex:6];
+  NSString *body = nil;
   int bodyStart = [number rangeOfString:@":"].location;
   if (bodyStart != NSNotFound) {
     body = [number substringFromIndex:bodyStart + 1];

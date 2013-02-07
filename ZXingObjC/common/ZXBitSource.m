@@ -18,7 +18,7 @@
 
 @interface ZXBitSource ()
 
-@property (nonatomic, assign) unsigned char * bytes;
+@property (nonatomic, assign) unsigned char *bytes;
 @property (nonatomic, assign) int byteOffset;
 @property (nonatomic, assign) int bitOffset;
 @property (nonatomic, assign) int length;

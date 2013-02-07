@@ -55,7 +55,7 @@
 @interface ZXAztecDetector ()
 
 @property (nonatomic, assign) BOOL compact;
-@property (nonatomic, retain) ZXBitMatrix* image;
+@property (nonatomic, retain) ZXBitMatrix *image;
 @property (nonatomic, assign) int nbCenterLayers;
 @property (nonatomic, assign) int nbDataBlocks;
 @property (nonatomic, assign) int nbLayers;
@@ -63,13 +63,13 @@
 
 - (NSArray *)bullEyeCornerPoints:(ZXAztecPoint *)pCenter;
 - (int)color:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2;
-- (BOOL)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact error:(NSError**)error;
+- (BOOL)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact error:(NSError **)error;
 - (float)distance:(ZXAztecPoint *)a b:(ZXAztecPoint *)b;
-- (BOOL)extractParameters:(NSArray *)bullEyeCornerPoints error:(NSError**)error;
+- (BOOL)extractParameters:(NSArray *)bullEyeCornerPoints error:(NSError **)error;
 - (ZXAztecPoint *)firstDifferent:(ZXAztecPoint *)init color:(BOOL)color dx:(int)dx dy:(int)dy;
 - (BOOL)isValidX:(int)x y:(int)y;
 - (BOOL)isWhiteOrBlackRectangle:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 p3:(ZXAztecPoint *)p3 p4:(ZXAztecPoint *)p4;
-- (ZXAztecPoint *)matrixCenterWithError:(NSError**)error;
+- (ZXAztecPoint *)matrixCenterWithError:(NSError **)error;
 - (NSArray *)matrixCornerPoints:(NSArray *)bullEyeCornerPoints;
 - (void)parameters:(NSMutableArray *)parameterData;
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
@@ -77,7 +77,7 @@
                  bottomLeft:(ZXResultPoint *)bottomLeft
                 bottomRight:(ZXResultPoint *)bottomRight
                    topRight:(ZXResultPoint *)topRight
-                      error:(NSError**)error;
+                      error:(NSError **)error;
 - (NSArray *)sampleLine:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 size:(int)size;
 
 @end
@@ -91,7 +91,7 @@
 @synthesize nbLayers;
 @synthesize shift;
 
-- (id)initWithImage:(ZXBitMatrix*)anImage {
+- (id)initWithImage:(ZXBitMatrix *)anImage {
   if (self = [super init]) {
     self.image = anImage;
   }
@@ -109,13 +109,13 @@
  */
 - (ZXAztecDetectorResult *)detectWithError:(NSError **)error {
   // 1. Get the center of the aztec matrix
-  ZXAztecPoint* pCenter = [self matrixCenterWithError:error];
+  ZXAztecPoint *pCenter = [self matrixCenterWithError:error];
   if (!pCenter) {
     return nil;
   }
 
   // 2. Get the corners of the center bull's eye
-  NSArray * bullEyeCornerPoints = [self bullEyeCornerPoints:pCenter];
+  NSArray *bullEyeCornerPoints = [self bullEyeCornerPoints:pCenter];
   if (!bullEyeCornerPoints) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -127,7 +127,7 @@
   }
 
   // 4. Get the corners of the matrix
-  NSArray * corners = [self matrixCornerPoints:bullEyeCornerPoints];
+  NSArray *corners = [self matrixCornerPoints:bullEyeCornerPoints];
   if (!corners) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -155,7 +155,7 @@
 /**
  * Extracts the number of data layers and data blocks from the layer around the bull's eye
  */
-- (BOOL)extractParameters:(NSArray*)bullEyeCornerPoints error:(NSError**)error {
+- (BOOL)extractParameters:(NSArray *)bullEyeCornerPoints error:(NSError **)error {
   ZXAztecPoint *p0 = [bullEyeCornerPoints objectAtIndex:0];
   ZXAztecPoint *p1 = [bullEyeCornerPoints objectAtIndex:1];
   ZXAztecPoint *p2 = [bullEyeCornerPoints objectAtIndex:2];
@@ -281,7 +281,7 @@
  * 
  * Corrects the parameter bits using Reed-Solomon algorithm
  */
-- (BOOL)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)isCompact error:(NSError**)error {
+- (BOOL)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)isCompact error:(NSError **)error {
   int numCodewords;
   int numDataCodewords;
 
@@ -310,7 +310,7 @@
   }
 
   ZXReedSolomonDecoder *rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF AztecDataParam]] autorelease];
-  NSError* decodeError = nil;
+  NSError *decodeError = nil;
   if (![rsDecoder decode:parameterWords receivedLen:parameterWordsLen twoS:numECCodewords error:error]) {
     if (decodeError.code == ZXReedSolomonError) {
       if (error) *error = NotFoundErrorInstance();
@@ -395,10 +395,10 @@
     return nil;
   }
 
-  ZXAztecPoint * pa = [[[ZXAztecPoint alloc] initWithX:targetax y:targetay] autorelease];
-  ZXAztecPoint * pb = [[[ZXAztecPoint alloc] initWithX:targetbx y:targetby] autorelease];
-  ZXAztecPoint * pc = [[[ZXAztecPoint alloc] initWithX:targetcx y:targetcy] autorelease];
-  ZXAztecPoint * pd = [[[ZXAztecPoint alloc] initWithX:targetdx y:targetdy] autorelease];
+  ZXAztecPoint *pa = [[[ZXAztecPoint alloc] initWithX:targetax y:targetay] autorelease];
+  ZXAztecPoint *pb = [[[ZXAztecPoint alloc] initWithX:targetbx y:targetby] autorelease];
+  ZXAztecPoint *pc = [[[ZXAztecPoint alloc] initWithX:targetcx y:targetcy] autorelease];
+  ZXAztecPoint *pd = [[[ZXAztecPoint alloc] initWithX:targetdx y:targetdy] autorelease];
 
   return [NSArray arrayWithObjects:pa, pb, pc, pd, nil];
 }
@@ -408,15 +408,15 @@
  * 
  * Finds a candidate center point of an Aztec code from an image
  */
-- (ZXAztecPoint *)matrixCenterWithError:(NSError**)error {
+- (ZXAztecPoint *)matrixCenterWithError:(NSError **)error {
   ZXResultPoint *pointA;
   ZXResultPoint *pointB;
   ZXResultPoint *pointC;
   ZXResultPoint *pointD;
 
-  NSError* detectorError = nil;
-  ZXWhiteRectangleDetector* detector = [[[ZXWhiteRectangleDetector alloc] initWithImage:self.image error:&detectorError] autorelease];
-  NSArray * cornerPoints = nil;
+  NSError *detectorError = nil;
+  ZXWhiteRectangleDetector *detector = [[[ZXWhiteRectangleDetector alloc] initWithImage:self.image error:&detectorError] autorelease];
+  NSArray *cornerPoints = nil;
   if (detector) {
     cornerPoints = [detector detectWithError:&detectorError];
   }
@@ -489,7 +489,7 @@
     }
   }
 
-  ZXGridSampler * sampler = [ZXGridSampler instance];
+  ZXGridSampler *sampler = [ZXGridSampler instance];
 
   return [sampler sampleGrid:anImage
                   dimensionX:dimension
@@ -553,7 +553,7 @@
  * Samples a line
  */
 - (NSArray *)sampleLine:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 size:(int)size {
-  NSMutableArray * res = [NSMutableArray arrayWithCapacity:size];
+  NSMutableArray *res = [NSMutableArray arrayWithCapacity:size];
   float d = [self distance:p1 b:p2];
   float moduleSize = d / (size - 1);
   float dx = moduleSize * (p2.x - p1.x) / d;

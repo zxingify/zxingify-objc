@@ -27,7 +27,7 @@
 
 @interface ZXBinarizer ()
 
-@property (nonatomic, retain) ZXLuminanceSource* luminanceSource;
+@property (nonatomic, retain) ZXLuminanceSource *luminanceSource;
 
 @end
 
@@ -62,7 +62,7 @@
  * and passed in with each call for performance. However it is legal to keep more than one row
  * at a time if needed.
  */
-- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError**)error {
+- (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

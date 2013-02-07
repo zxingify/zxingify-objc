@@ -18,7 +18,7 @@
 
 @interface ZXBinaryUtil : NSObject
 
-+ (ZXBitArray*)buildBitArrayFromString:(NSString*)data;
-+ (ZXBitArray*)buildBitArrayFromStringWithoutSpaces:(NSString*)data;
++ (ZXBitArray *)buildBitArrayFromString:(NSString *)data;
++ (ZXBitArray *)buildBitArrayFromStringWithoutSpaces:(NSString *)data;
 
 @end

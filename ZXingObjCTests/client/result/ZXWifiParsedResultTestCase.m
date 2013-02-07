@@ -20,7 +20,7 @@
 
 @interface ZXWifiParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents ssid:(NSString*)ssid password:(NSString*)password type:(NSString*)type;
+- (void)doTestWithContents:(NSString *)contents ssid:(NSString *)ssid password:(NSString *)password type:(NSString *)type;
 
 @end
 
@@ -62,13 +62,13 @@
 /**
  * Given the string contents for the barcode, check that it matches our expectations
  */
-- (void)doTestWithContents:(NSString*)contents ssid:(NSString*)ssid password:(NSString*)password type:(NSString*)type {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+- (void)doTestWithContents:(NSString *)contents ssid:(NSString *)ssid password:(NSString *)password type:(NSString *)type {
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
 
   // Ensure it is a wifi code
   STAssertEquals(result.type, kParsedResultTypeWifi, @"Types don't match");
-  ZXWifiParsedResult* wifiResult = (ZXWifiParsedResult*)result;
+  ZXWifiParsedResult *wifiResult = (ZXWifiParsedResult *)result;
 
   STAssertEqualObjects(wifiResult.ssid, ssid, @"Ssid's don't match");
   STAssertEqualObjects(wifiResult.password, password, @"Passwords don't match");

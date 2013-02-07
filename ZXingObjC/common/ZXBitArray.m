@@ -19,7 +19,7 @@
 @interface ZXBitArray ()
 
 @property (nonatomic, assign) int size;
-@property (nonatomic, assign) int* bits;
+@property (nonatomic, assign) int *bits;
 @property (nonatomic, assign) int bitsLength;
 
 - (void)ensureCapacity:(int)aSize;
@@ -37,7 +37,7 @@
 - (id)init {
   if (self = [super init]) {
     self.size = 0;
-    self.bits = (int*)malloc(1 * sizeof(int));
+    self.bits = (int *)malloc(1 * sizeof(int));
     self.bitsLength = 1;
     self.bits[0] = 0;
   }
@@ -71,7 +71,7 @@
 
 - (void)ensureCapacity:(int)aSize {
   if (aSize > self.bitsLength << 5) {
-    int* newBits = [self makeArray:aSize];
+    int *newBits = [self makeArray:aSize];
     
     for (int i = 0; i < self.bitsLength; i++) {
       newBits[i] = self.bits[i];
@@ -285,7 +285,7 @@
  * Reverses all bits in the array.
  */
 - (void)reverse {
-  int *newBits = (int*)malloc(self.size * sizeof(int));
+  int *newBits = (int *)malloc(self.size * sizeof(int));
   for (int i = 0; i < self.size; i++) {
     newBits[i] = 0;
     if ([self get:self.size - i - 1]) {
@@ -301,13 +301,13 @@
 
 - (int *)makeArray:(int)aSize {
   int arraySize = (aSize + 31) >> 5;
-  int *newArray = (int*)malloc(arraySize * sizeof(int));
+  int *newArray = (int *)malloc(arraySize * sizeof(int));
   memset(newArray, 0, arraySize * sizeof(int));
   return newArray;
 }
 
 - (NSString *)description {
-  NSMutableString* result = [NSMutableString string];
+  NSMutableString *result = [NSMutableString string];
 
   for (int i = 0; i < size; i++) {
     if ((i & 0x07) == 0) {

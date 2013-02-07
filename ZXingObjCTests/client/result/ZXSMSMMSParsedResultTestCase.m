@@ -20,17 +20,17 @@
 
 @interface ZXSMSMMSParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents
-                    number:(NSString*)number
-                   subject:(NSString*)subject
-                      body:(NSString*)body
-                       via:(NSString*)via;
+- (void)doTestWithContents:(NSString *)contents
+                    number:(NSString *)number
+                   subject:(NSString *)subject
+                      body:(NSString *)body
+                       via:(NSString *)via;
 
-- (void)doTestWithContents:(NSString*)contents
-                   numbers:(NSArray*)numbers
-                   subject:(NSString*)subject
-                      body:(NSString*)body
-                      vias:(NSArray*)vias;
+- (void)doTestWithContents:(NSString *)contents
+                   numbers:(NSArray *)numbers
+                   subject:(NSString *)subject
+                      body:(NSString *)body
+                      vias:(NSArray *)vias;
 
 @end
 
@@ -48,11 +48,11 @@
   [self doTestWithContents:@"mms:+15551212;via=999333" number:@"+15551212" subject:nil body:nil via:@"999333"];
 }
 
-- (void)doTestWithContents:(NSString*)contents
-                    number:(NSString*)number
-                   subject:(NSString*)subject
-                      body:(NSString*)body
-                       via:(NSString*)via {
+- (void)doTestWithContents:(NSString *)contents
+                    number:(NSString *)number
+                   subject:(NSString *)subject
+                      body:(NSString *)body
+                       via:(NSString *)via {
   [self doTestWithContents:contents
                    numbers:[NSArray arrayWithObject:number ? number : [NSNull null]]
                    subject:subject
@@ -60,15 +60,15 @@
                       vias:[NSArray arrayWithObject:via ? via : [NSNull null]]];
 }
 
-- (void)doTestWithContents:(NSString*)contents
-                   numbers:(NSArray*)numbers
-                   subject:(NSString*)subject
-                      body:(NSString*)body
-                      vias:(NSArray*)vias {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+- (void)doTestWithContents:(NSString *)contents
+                   numbers:(NSArray *)numbers
+                   subject:(NSString *)subject
+                      body:(NSString *)body
+                      vias:(NSArray *)vias {
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeSMS, @"Types don't match");
-  ZXSMSParsedResult* smsResult = (ZXSMSParsedResult*)result;
+  ZXSMSParsedResult *smsResult = (ZXSMSParsedResult *)result;
   STAssertEqualObjects(smsResult.numbers, numbers, @"Numbers don't match");
   STAssertEqualObjects(smsResult.subject, subject, @"Subjects don't match");
   STAssertEqualObjects(smsResult.body, body, @"Bodies don't match");

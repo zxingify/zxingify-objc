@@ -37,7 +37,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 
 @interface ZXUPCEReader ()
 
-@property (nonatomic, assign) int* decodeMiddleCounters;
+@property (nonatomic, assign) int *decodeMiddleCounters;
 
 - (BOOL)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound;
 
@@ -49,7 +49,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 
 - (id)init {
   if (self = [super init]) {
-    self.decodeMiddleCounters = (int*)malloc(sizeof(4) * sizeof(int));
+    self.decodeMiddleCounters = (int *)malloc(sizeof(4) * sizeof(int));
     self.decodeMiddleCounters[0] = 0;
     self.decodeMiddleCounters[1] = 0;
     self.decodeMiddleCounters[2] = 0;
@@ -101,7 +101,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 }
 
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error {
-  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int*)MIDDLE_END_PATTERN patternLen:MIDDLE_END_PATTERN_LEN error:error];
+  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int *)MIDDLE_END_PATTERN patternLen:MIDDLE_END_PATTERN_LEN error:error];
 }
 
 - (BOOL)checkChecksum:(NSString *)s error:(NSError **)error {
@@ -130,8 +130,8 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
  * Expands a UPC-E value back into its full, equivalent UPC-A code value.
  */
 + (NSString *)convertUPCEtoUPCA:(NSString *)upce {
-  NSString * upceChars = [upce substringWithRange:NSMakeRange(1, 6)];
-  NSMutableString * result = [NSMutableString stringWithCapacity:12];
+  NSString *upceChars = [upce substringWithRange:NSMakeRange(1, 6)];
+  NSMutableString *result = [NSMutableString stringWithCapacity:12];
   [result appendFormat:@"%C", [upce characterAtIndex:0]];
   unichar lastChar = [upceChars characterAtIndex:5];
   switch (lastChar) {

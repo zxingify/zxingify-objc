@@ -28,7 +28,7 @@
 
 @interface ZXQRCodeReader ()
 
-@property (nonatomic, retain) ZXQRCodeDecoder * decoder;
+@property (nonatomic, retain) ZXQRCodeDecoder *decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
 - (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
@@ -61,14 +61,14 @@
 }
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXDecoderResult * decoderResult;
-  NSArray * points;
-  ZXBitMatrix * matrix = [image blackMatrixWithError:error];
+  ZXDecoderResult *decoderResult;
+  NSArray *points;
+  ZXBitMatrix *matrix = [image blackMatrixWithError:error];
   if (!matrix) {
     return nil;
   }
   if (hints != nil && hints.pureBarcode) {
-    ZXBitMatrix * bits = [self extractPureBits:matrix];
+    ZXBitMatrix *bits = [self extractPureBits:matrix];
     if (!bits) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -79,7 +79,7 @@
     }
     points = [NSArray array];
   } else {
-    ZXDetectorResult * detectorResult = [[[[ZXQRCodeDetector alloc] initWithImage:matrix] autorelease] detect:hints error:error];
+    ZXDetectorResult *detectorResult = [[[[ZXQRCodeDetector alloc] initWithImage:matrix] autorelease] detect:hints error:error];
     if (!detectorResult) {
       return nil;
     }
@@ -90,16 +90,16 @@
     points = [detectorResult points];
   }
 
-  ZXResult * result = [ZXResult resultWithText:decoderResult.text
+  ZXResult *result = [ZXResult resultWithText:decoderResult.text
                                       rawBytes:decoderResult.rawBytes
                                         length:decoderResult.length
                                   resultPoints:points
                                         format:kBarcodeFormatQRCode];
-  NSMutableArray* byteSegments = decoderResult.byteSegments;
+  NSMutableArray *byteSegments = decoderResult.byteSegments;
   if (byteSegments != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];
   }
-  NSString* ecLevel = decoderResult.ecLevel;
+  NSString *ecLevel = decoderResult.ecLevel;
   if (ecLevel != nil) {
     [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
   }
@@ -118,8 +118,8 @@
  * case.
  */
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image {
-  NSArray * leftTopBlack = image.topLeftOnBit;
-  NSArray * rightBottomBlack = image.bottomRightOnBit;
+  NSArray *leftTopBlack = image.topLeftOnBit;
+  NSArray *rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     return nil;
   }
@@ -153,7 +153,7 @@
   top += nudge;
   left += nudge;
 
-  ZXBitMatrix * bits = [[[ZXBitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
+  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + (int) (y * moduleSize);
     for (int x = 0; x < matrixWidth; x++) {

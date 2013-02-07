@@ -32,7 +32,7 @@ int const AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
     return nil;
   }
 
-  NSMutableString * buf = [NSMutableString string];
+  NSMutableString *buf = [NSMutableString string];
 
   [self encodeCompressedGtin:buf currentPos:AI01393xDecoder_HEADER_SIZE];
 
@@ -49,7 +49,7 @@ int const AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
   }
   [buf appendFormat:@"%d", firstThreeDigits];
 
-  ZXDecodedInformation * generalInformation = [self.generalDecoder decodeGeneralPurposeField:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE + AI01393xDecoder_LAST_DIGIT_SIZE + AI01393xDecoder_FIRST_THREE_DIGITS_SIZE remaining:nil];
+  ZXDecodedInformation *generalInformation = [self.generalDecoder decodeGeneralPurposeField:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE + AI01393xDecoder_LAST_DIGIT_SIZE + AI01393xDecoder_FIRST_THREE_DIGITS_SIZE remaining:nil];
   [buf appendString:generalInformation.theNewString];
 
   return buf;

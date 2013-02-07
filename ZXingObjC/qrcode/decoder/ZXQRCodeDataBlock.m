@@ -20,7 +20,7 @@
 
 @interface ZXQRCodeDataBlock ()
 
-@property (nonatomic, retain) NSMutableArray * codewords;
+@property (nonatomic, retain) NSMutableArray *codewords;
 @property (nonatomic, assign) int numDataCodewords;
 
 @end
@@ -56,15 +56,15 @@
     [NSException raise:NSInvalidArgumentException format:@"Invalid codewords count"];
   }
 
-  ZXQRCodeECBlocks * ecBlocks = [version ecBlocksForLevel:ecLevel];
+  ZXQRCodeECBlocks *ecBlocks = [version ecBlocksForLevel:ecLevel];
 
   int totalBlocks = 0;
-  NSArray * ecBlockArray = ecBlocks.ecBlocks;
-  for (ZXQRCodeECB* ecBlock in ecBlockArray) {
+  NSArray *ecBlockArray = ecBlocks.ecBlocks;
+  for (ZXQRCodeECB *ecBlock in ecBlockArray) {
     totalBlocks += ecBlock.count;
   }
 
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:totalBlocks];
   for (ZXQRCodeECB *ecBlock in ecBlockArray) {
     for (int i = 0; i < ecBlock.count; i++) {
       int numDataCodewords = ecBlock.dataCodewords;

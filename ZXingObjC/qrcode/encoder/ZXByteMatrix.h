@@ -23,7 +23,7 @@
 
 @property (nonatomic, assign, readonly) int height;
 @property (nonatomic, assign, readonly) int width;
-@property (nonatomic, assign, readonly) unsigned char** array;
+@property (nonatomic, assign, readonly) unsigned char **array;
 
 - (id)initWithWidth:(int)width height:(int)height;
 - (char)getX:(int)x y:(int)y;

@@ -19,8 +19,8 @@
 
 @interface ZXDetectorResult ()
 
-@property (nonatomic, retain) ZXBitMatrix * bits;
-@property (nonatomic, retain) NSArray * points;
+@property (nonatomic, retain) ZXBitMatrix *bits;
+@property (nonatomic, retain) NSArray *points;
 
 @end
 

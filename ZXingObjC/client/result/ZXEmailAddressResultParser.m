@@ -22,17 +22,17 @@
 @implementation ZXEmailAddressResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
-  NSString * emailAddress;
+  NSString *rawText = [ZXResultParser massagedText:result];
+  NSString *emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
     emailAddress = [rawText substringFromIndex:7];
     int queryStart = [emailAddress rangeOfString:@"?"].location;
     if (queryStart != NSNotFound) {
       emailAddress = [emailAddress substringToIndex:queryStart];
     }
-    NSMutableDictionary * nameValues = [self parseNameValuePairs:rawText];
-    NSString * subject = nil;
-    NSString * body = nil;
+    NSMutableDictionary *nameValues = [self parseNameValuePairs:rawText];
+    NSString *subject = nil;
+    NSString *body = nil;
     if (nameValues != nil) {
       if ([emailAddress length] == 0) {
         emailAddress = [nameValues objectForKey:@"to"];

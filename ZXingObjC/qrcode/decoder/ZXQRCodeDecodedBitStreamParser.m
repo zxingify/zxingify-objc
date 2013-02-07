@@ -52,12 +52,12 @@ int const GB2312_SUBSET = 1;
 
 + (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
                     ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXBitSource * bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
-  NSMutableString * result = [NSMutableString stringWithCapacity:50];
-  ZXCharacterSetECI * currentCharacterSetECI = nil;
+  ZXBitSource *bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
+  NSMutableString *result = [NSMutableString stringWithCapacity:50];
+  ZXCharacterSetECI *currentCharacterSetECI = nil;
   BOOL fc1InEffect = NO;
-  NSMutableArray * byteSegments = [NSMutableArray arrayWithCapacity:1];
-  ZXMode * mode;
+  NSMutableArray *byteSegments = [NSMutableArray arrayWithCapacity:1];
+  ZXMode *mode;
 
   do {
     if ([bits available] < 4) {

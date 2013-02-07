@@ -20,7 +20,7 @@
 
 @property (nonatomic, assign) int height;
 @property (nonatomic, assign) int width;
-@property (nonatomic, assign) unsigned char** array;
+@property (nonatomic, assign) unsigned char **array;
 
 @end
 
@@ -35,9 +35,9 @@
     self.width = aWidth;
     self.height = aHeight;
 
-    self.array = (unsigned char**)malloc(aHeight * sizeof(unsigned char*));
+    self.array = (unsigned char **)malloc(aHeight * sizeof(unsigned char *));
     for (int i = 0; i < aHeight; i++) {
-      self.array[i] = (unsigned char*)malloc(aWidth * sizeof(unsigned char));
+      self.array[i] = (unsigned char *)malloc(aWidth * sizeof(unsigned char));
     }
     [self clear:0];
   }
@@ -82,7 +82,7 @@
 }
 
 - (NSString *)description {
-  NSMutableString * result = [NSMutableString string];
+  NSMutableString *result = [NSMutableString string];
 
   for (int y = 0; y < self.height; ++y) {
     for (int x = 0; x < self.width; ++x) {

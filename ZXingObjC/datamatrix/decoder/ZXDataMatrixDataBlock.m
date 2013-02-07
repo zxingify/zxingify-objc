@@ -21,7 +21,7 @@
 @interface ZXDataMatrixDataBlock ()
 
 @property (nonatomic, assign) int numDataCodewords;
-@property (nonatomic, retain) NSMutableArray * codewords;
+@property (nonatomic, retain) NSMutableArray *codewords;
 
 @end
 
@@ -52,17 +52,17 @@
  * method will separate the data into original blocks.
  */
 + (NSArray *)dataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version {
-  ZXDataMatrixECBlocks * ecBlocks = version.ecBlocks;
+  ZXDataMatrixECBlocks *ecBlocks = version.ecBlocks;
 
   int totalBlocks = 0;
-  NSArray * ecBlockArray = ecBlocks.ecBlocks;
-  for (ZXDataMatrixECB* ecBlock in ecBlockArray) {
+  NSArray *ecBlockArray = ecBlocks.ecBlocks;
+  for (ZXDataMatrixECB *ecBlock in ecBlockArray) {
     totalBlocks += ecBlock.count;
   }
 
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:totalBlocks];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:totalBlocks];
   int numResultBlocks = 0;
-  for (ZXDataMatrixECB * ecBlock in ecBlockArray) {
+  for (ZXDataMatrixECB *ecBlock in ecBlockArray) {
     for (int i = 0; i < ecBlock.count; i++) {
       int numDataCodewords = ecBlock.dataCodewords;
       int numBlockCodewords = ecBlocks.ecCodewords + numDataCodewords;

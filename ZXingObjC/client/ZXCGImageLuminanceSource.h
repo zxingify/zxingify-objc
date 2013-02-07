@@ -21,7 +21,7 @@
 
 @interface ZXCGImageLuminanceSource : ZXLuminanceSource {
   CGImageRef image;
-  uint32_t* data;
+  uint32_t *data;
   int left;
   int top;
   int dataWidth;
@@ -35,13 +35,13 @@
                               width:(size_t)width
                              height:(size_t)height;
 
-- (id)initWithZXImage:(ZXImage*)image
+- (id)initWithZXImage:(ZXImage *)image
                  left:(size_t)left
                   top:(size_t)top
                 width:(size_t)width
                height:(size_t)height;
 
-- (id)initWithZXImage:(ZXImage*)image;
+- (id)initWithZXImage:(ZXImage *)image;
 
 - (id)initWithCGImage:(CGImageRef)image
                  left:(size_t)left

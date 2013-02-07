@@ -20,8 +20,8 @@
 
 @interface ZXBinaryUtilTest ()
 
-- (void)check:(NSString*)data;
-- (void)checkWithoutSpaces:(NSString*)data;
+- (void)check:(NSString *)data;
+- (void)checkWithoutSpaces:(NSString *)data;
 
 @end
 
@@ -29,7 +29,7 @@
 
 - (void)testBuildBitArrayFromString {
 
-  NSString* data = @" ..X..X.. ..XXX... XXXXXXXX ........";
+  NSString *data = @" ..X..X.. ..XXX... XXXXXXXX ........";
   [self check:data];
 
   data = @" XXX..X..";
@@ -45,14 +45,14 @@
   [self check:data];
 }
 
-- (void)check:(NSString*)data {
-  ZXBitArray* binary = [ZXBinaryUtil buildBitArrayFromString:data];
+- (void)check:(NSString *)data {
+  ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromString:data];
   STAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
 }
 
-- (void)checkWithoutSpaces:(NSString*)data {
-  NSString* dataWithoutSpaces = [data stringByReplacingOccurrencesOfString:@" " withString:@""];
-  ZXBitArray* binary = [ZXBinaryUtil buildBitArrayFromStringWithoutSpaces:dataWithoutSpaces];
+- (void)checkWithoutSpaces:(NSString *)data {
+  NSString *dataWithoutSpaces = [data stringByReplacingOccurrencesOfString:@" " withString:@""];
+  ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromStringWithoutSpaces:dataWithoutSpaces];
   STAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
 }
 

@@ -36,7 +36,7 @@
 // penalty to them.
 + (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix {
   int penalty = 0;
-  unsigned char** array = matrix.array;
+  unsigned char **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
@@ -57,7 +57,7 @@
 // penalties twice (i.e. 40 * 2).
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
   int penalty = 0;
-  unsigned char** array = matrix.array;
+  unsigned char **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
@@ -120,7 +120,7 @@
 // - 100% => 100
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
   int numDarkCells = 0;
-  unsigned char** array = matrix.array;
+  unsigned char **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
@@ -186,7 +186,7 @@
   int prevBit = -1;
   int iLimit = isHorizontal ? matrix.height : matrix.width;
   int jLimit = isHorizontal ? matrix.width : matrix.height;
-  unsigned char** array = matrix.array;
+  unsigned char **array = matrix.array;
 
   for (int i = 0; i < iLimit; ++i) {
     for (int j = 0; j < jLimit; ++j) {

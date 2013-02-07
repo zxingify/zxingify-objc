@@ -20,9 +20,9 @@
 
 @interface ReedSolomonDecoderDataMatrixTestCase ()
 
-@property (nonatomic, retain) ZXReedSolomonDecoder* dmRSDecoder;
+@property (nonatomic, retain) ZXReedSolomonDecoder *dmRSDecoder;
 
-- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen;
+- (BOOL)checkQRRSDecode:(int *)received receivedLen:(int)receivedLen;
 
 @end
 
@@ -88,7 +88,7 @@ const int DM_CODE_CORRECTABLE = DM_CODE_ECC_BYTES / 2;
   }
 }
 
-- (BOOL)checkQRRSDecode:(int*)received receivedLen:(int)receivedLen {
+- (BOOL)checkQRRSDecode:(int *)received receivedLen:(int)receivedLen {
   if (![self.dmRSDecoder decode:received receivedLen:receivedLen twoS:DM_CODE_ECC_BYTES error:nil]) {
     return NO;
   }

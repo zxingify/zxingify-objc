@@ -18,7 +18,7 @@
 
 @interface ZXDecodedInformation : ZXDecodedObject
 
-@property (nonatomic, copy, readonly) NSString * theNewString;
+@property (nonatomic, copy, readonly) NSString *theNewString;
 @property (nonatomic, assign, readonly) int remainingValue;
 @property (nonatomic, assign, readonly) BOOL remaining;
 

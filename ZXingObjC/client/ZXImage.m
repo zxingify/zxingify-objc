@@ -25,7 +25,7 @@
 
 @synthesize cgimage;
 
-- (ZXImage*)initWithCGImageRef:(CGImageRef)image {
+- (ZXImage *)initWithCGImageRef:(CGImageRef)image {
   if (self = [super init]) {
     cgimage = CGImageRetain(image);
   }
@@ -33,7 +33,7 @@
   return self;
 }
 
-- (ZXImage*)initWithURL:(NSURL const*)url {
+- (ZXImage *)initWithURL:(NSURL const *)url {
   if (self = [super init]) {
     CGDataProviderRef provider = CGDataProviderCreateWithURL((CFURLRef)url);
 
@@ -68,7 +68,7 @@
   [super dealloc];
 }
 
-+ (ZXImage*)imageWithMatrix:(ZXBitMatrix*)matrix {
++ (ZXImage *)imageWithMatrix:(ZXBitMatrix *)matrix {
   int width = matrix.width;
   int height = matrix.height;
   unsigned char *bytes = (unsigned char *)malloc(width * height * 4);

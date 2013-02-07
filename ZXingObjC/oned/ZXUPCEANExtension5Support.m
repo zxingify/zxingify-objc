@@ -38,7 +38,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
 @implementation ZXUPCEANExtension5Support
 
-- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError**)error {
+- (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError **)error {
   NSMutableString *resultString = [NSMutableString string];
   int end = [self decodeMiddle:row startRange:extensionStartRange result:resultString error:error];
   if (end == -1) {
@@ -60,7 +60,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return extensionResult;
 }
 
-- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError**)error {
+- (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
   const int countersLen = 4;
   int counters[countersLen];
   memset(counters, 0, countersLen * sizeof(int));
@@ -141,7 +141,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 }
 
 - (NSString *)parseExtension5String:(NSString *)raw {
-  NSString * currency;
+  NSString *currency;
   switch ([raw characterAtIndex:0]) {
     case '0':
       currency = @"£";
@@ -166,9 +166,9 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
       break;
   }
   int rawAmount = [[raw substringFromIndex:1] intValue];
-  NSString * unitsString = [[NSNumber numberWithInt:rawAmount / 100] stringValue];
+  NSString *unitsString = [[NSNumber numberWithInt:rawAmount / 100] stringValue];
   int hundredths = rawAmount % 100;
-  NSString * hundredthsString = hundredths < 10 ?
+  NSString *hundredthsString = hundredths < 10 ?
   [NSString stringWithFormat:@"0%d", hundredths] : [[NSNumber numberWithInt:hundredths] stringValue];
   return [NSString stringWithFormat:@"%@%@.%@", currency, unitsString, hundredthsString];
 }

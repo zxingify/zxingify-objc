@@ -16,12 +16,12 @@
 
 #import "ZXURIParsedResult.h"
 
-static NSRegularExpression* USER_IN_HOST = nil;
+static NSRegularExpression *USER_IN_HOST = nil;
 
 @interface ZXURIParsedResult ()
 
-@property (nonatomic, copy) NSString * uri;
-@property (nonatomic, copy) NSString * title;
+@property (nonatomic, copy) NSString *uri;
+@property (nonatomic, copy) NSString *title;
 
 - (BOOL)isColonFollowedByPortNumber:(NSString *)uri protocolEnd:(int)protocolEnd;
 - (NSString *)massageURI:(NSString *)uri;
@@ -71,7 +71,7 @@ static NSRegularExpression* USER_IN_HOST = nil;
 }
 
 - (NSString *)displayResult {
-  NSMutableString* result = [NSMutableString stringWithCapacity:30];
+  NSMutableString *result = [NSMutableString stringWithCapacity:30];
   [ZXParsedResult maybeAppend:title result:result];
   [ZXParsedResult maybeAppend:uri result:result];
   return result;

@@ -22,7 +22,7 @@
 @interface ZXOneDimensionalCodeWriter : NSObject <ZXWriter>
 
 - (id)initWithSidesMargin:(int)sidesMargin;
-- (unsigned char*)encode:(NSString*)contents length:(int*)pLength;
-- (int)appendPattern:(unsigned char*)target pos:(int)pos pattern:(int*)pattern patternLen:(int)patternLen startColor:(int)startColor;
+- (unsigned char *)encode:(NSString *)contents length:(int *)pLength;
+- (int)appendPattern:(unsigned char *)target pos:(int)pos pattern:(int *)pattern patternLen:(int)patternLen startColor:(int)startColor;
 
 @end

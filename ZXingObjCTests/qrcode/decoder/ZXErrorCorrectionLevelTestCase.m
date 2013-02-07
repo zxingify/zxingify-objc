@@ -31,7 +31,7 @@
   @try {
     [ZXErrorCorrectionLevel forBits:4];
     STFail(@"Should have thrown an exception");
-  } @catch (NSException* ex) {
+  } @catch (NSException *ex) {
     // good
   }
 }

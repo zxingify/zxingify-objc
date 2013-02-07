@@ -27,14 +27,14 @@
 @implementation ZXSMSMMSResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (!([rawText hasPrefix:@"sms:"] || [rawText hasPrefix:@"SMS:"] || [rawText hasPrefix:@"mms:"] || [rawText hasPrefix:@"MMS:"])) {
     return nil;
   }
 
-  NSMutableDictionary * nameValuePairs = [self parseNameValuePairs:rawText];
-  NSString * subject = nil;
-  NSString * body = nil;
+  NSMutableDictionary *nameValuePairs = [self parseNameValuePairs:rawText];
+  NSString *subject = nil;
+  NSString *body = nil;
   BOOL querySyntax = NO;
   if (nameValuePairs != nil && [nameValuePairs count] > 0) {
     subject = [nameValuePairs objectForKey:@"subject"];
@@ -43,7 +43,7 @@
   }
 
   int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
-  NSString * smsURIWithoutQuery;
+  NSString *smsURIWithoutQuery;
   if (queryStart == NSNotFound || !querySyntax) {
     smsURIWithoutQuery = [rawText substringFromIndex:4];
   } else {
@@ -52,10 +52,10 @@
 
   int lastComma = -1;
   int comma;
-  NSMutableArray * numbers = [NSMutableArray arrayWithCapacity:1];
-  NSMutableArray * vias = [NSMutableArray arrayWithCapacity:1];
+  NSMutableArray *numbers = [NSMutableArray arrayWithCapacity:1];
+  NSMutableArray *vias = [NSMutableArray arrayWithCapacity:1];
   while ((comma = [smsURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(lastComma + 1, [smsURIWithoutQuery length] - lastComma - 1)].location) > lastComma && comma != NSNotFound) {
-    NSString * numberPart = [smsURIWithoutQuery substringWithRange:NSMakeRange(lastComma + 1, comma - lastComma - 1)];
+    NSString *numberPart = [smsURIWithoutQuery substringWithRange:NSMakeRange(lastComma + 1, comma - lastComma - 1)];
     [self addNumberVia:numbers vias:vias numberPart:numberPart];
     lastComma = comma;
   }
@@ -74,8 +74,8 @@
     [vias addObject:[NSNull null]];
   } else {
     [numbers addObject:[numberPart substringToIndex:numberEnd]];
-    NSString * maybeVia = [numberPart substringFromIndex:numberEnd + 1];
-    NSString * via;
+    NSString *maybeVia = [numberPart substringFromIndex:numberEnd + 1];
+    NSString *via;
     if ([maybeVia hasPrefix:@"via="]) {
       via = [maybeVia substringFromIndex:4];
     } else {

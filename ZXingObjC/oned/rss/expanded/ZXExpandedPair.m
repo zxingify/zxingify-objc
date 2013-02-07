@@ -20,9 +20,9 @@
 
 @interface ZXExpandedPair ()
 
-@property (nonatomic, retain) ZXDataCharacter * leftChar;
-@property (nonatomic, retain) ZXDataCharacter * rightChar;
-@property (nonatomic, retain) ZXRSSFinderPattern * finderPattern;
+@property (nonatomic, retain) ZXDataCharacter *leftChar;
+@property (nonatomic, retain) ZXDataCharacter *rightChar;
+@property (nonatomic, retain) ZXRSSFinderPattern *finderPattern;
 @property (nonatomic, assign) BOOL mayBeLast;
 
 @end

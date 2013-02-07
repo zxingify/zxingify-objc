@@ -23,7 +23,7 @@
 @implementation ZXQRCodeTestCase
 
 - (void)test {
-  ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
+  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
   // Initially the QR Code should be invalid.
   STAssertFalse([qrCode isValid], @"QR code should not be valid");
 
@@ -54,7 +54,7 @@
   STAssertFalse([qrCode isValid], @"QR code should not be valid");
 
   // Prepare the matrix.
-  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:45 height:45] autorelease];
+  ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:45 height:45] autorelease];
   // Just set bogus zero/one values.
   for (int y = 0; y < 45; ++y) {
     for (int x = 0; x < 45; ++x) {
@@ -79,8 +79,8 @@
 }
 
 - (void)testToString1 {
-  ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
-  NSString* expected =
+  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
+  NSString *expected =
     @"<<\n"
      " mode: (null)\n"
      " ecLevel: (null)\n"
@@ -97,7 +97,7 @@
 }
 
 - (void)testToString2 {
-  ZXQRCode* qrCode = [[[ZXQRCode alloc] init] autorelease];
+  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
   qrCode.mode = [ZXMode byteMode];
   qrCode.ecLevel = [ZXErrorCorrectionLevel errorCorrectionLevelH];
   qrCode.version = 1;
@@ -107,7 +107,7 @@
   qrCode.numDataBytes = 9;
   qrCode.numECBytes = 17;
   qrCode.numRSBlocks = 1;
-  ZXByteMatrix* matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   for (int y = 0; y < 21; ++y) {
     for (int x = 0; x < 21; ++x) {
       [matrix setX:x y:y intValue:(y + x) % 2];
@@ -115,7 +115,7 @@
   }
   qrCode.matrix = matrix;
   STAssertTrue([qrCode isValid], @"QR code should be valid");
-  NSString* expected =
+  NSString *expected =
     @"<<\n"
      " mode: BYTE\n"
      " ecLevel: H\n"

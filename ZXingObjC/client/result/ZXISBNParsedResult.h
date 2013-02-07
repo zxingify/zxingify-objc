@@ -18,7 +18,7 @@
 
 @interface ZXISBNParsedResult : ZXParsedResult
 
-@property (nonatomic, copy, readonly) NSString * isbn;
+@property (nonatomic, copy, readonly) NSString *isbn;
 
 - (id)initWithIsbn:(NSString *)isbn;
 + (id)isbnParsedResultWithIsbn:(NSString *)isbn;

@@ -19,7 +19,7 @@
 
 @interface ZXStringUtilsTestCase ()
 
-- (void)doTestWithBytes:(unsigned char*)bytes length:(int)length encoding:(NSStringEncoding)encoding;
+- (void)doTestWithBytes:(unsigned char *)bytes length:(int)length encoding:(NSStringEncoding)encoding;
 
 @end
 
@@ -43,7 +43,7 @@
   [self doTestWithBytes:bytes length:9 encoding:NSShiftJISStringEncoding];
 }
 
-- (void)doTestWithBytes:(unsigned char*)bytes length:(int)length encoding:(NSStringEncoding)encoding {
+- (void)doTestWithBytes:(unsigned char *)bytes length:(int)length encoding:(NSStringEncoding)encoding {
   STAssertEquals([ZXStringUtils guessEncoding:bytes length:length hints:nil], encoding, @"Encodings do not match");
 }
 

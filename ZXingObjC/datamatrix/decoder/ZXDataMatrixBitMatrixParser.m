@@ -21,9 +21,9 @@
 
 @interface ZXDataMatrixBitMatrixParser ()
 
-@property (nonatomic, retain) ZXBitMatrix* mappingBitMatrix;
-@property (nonatomic, retain) ZXBitMatrix* readMappingMatrix;
-@property (nonatomic, retain) ZXDataMatrixVersion* version;
+@property (nonatomic, retain) ZXBitMatrix *mappingBitMatrix;
+@property (nonatomic, retain) ZXBitMatrix *readMappingMatrix;
+@property (nonatomic, retain) ZXDataMatrixVersion *version;
 
 - (ZXDataMatrixVersion *) readVersion:(ZXBitMatrix *)bitMatrix;
 
@@ -35,7 +35,7 @@
 @synthesize readMappingMatrix;
 @synthesize version;
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError**)error {
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
   if (self = [super init]) {
     int dimension = bitMatrix.height;
     if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
@@ -85,7 +85,7 @@
  * Data Matrix Code.
  */
 - (NSArray *)readCodewords {
-  NSMutableArray * result = [NSMutableArray arrayWithCapacity:version.totalCodewords];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:version.totalCodewords];
   
   int row = 4;
   int column = 0;
@@ -397,7 +397,7 @@
   int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
   int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
   
-  ZXBitMatrix * bitMatrixWithoutAlignment = [[[ZXBitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow] autorelease];
+  ZXBitMatrix *bitMatrixWithoutAlignment = [[[ZXBitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow] autorelease];
   for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
     int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
     for (int dataRegionColumn = 0; dataRegionColumn < numDataRegionsColumn; ++dataRegionColumn) {

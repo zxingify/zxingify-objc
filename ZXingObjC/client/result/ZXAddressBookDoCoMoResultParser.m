@@ -27,26 +27,26 @@
 @implementation ZXAddressBookDoCoMoResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (![rawText hasPrefix:@"MECARD:"]) {
     return nil;
   }
-  NSArray * rawName = [[self class] matchDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
+  NSArray *rawName = [[self class] matchDoCoMoPrefixedField:@"N:" rawText:rawText trim:YES];
   if (rawName == nil) {
     return nil;
   }
-  NSString * name = [self parseName:[rawName objectAtIndex:0]];
-  NSString * pronunciation = [[self class] matchSingleDoCoMoPrefixedField:@"SOUND:" rawText:rawText trim:YES];
-  NSArray * phoneNumbers = [[self class] matchDoCoMoPrefixedField:@"TEL:" rawText:rawText trim:YES];
-  NSArray * emails = [[self class] matchDoCoMoPrefixedField:@"EMAIL:" rawText:rawText trim:YES];
-  NSString * note = [[self class] matchSingleDoCoMoPrefixedField:@"NOTE:" rawText:rawText trim:NO];
-  NSArray * addresses = [[self class] matchDoCoMoPrefixedField:@"ADR:" rawText:rawText trim:YES];
-  NSString * birthday = [[self class] matchSingleDoCoMoPrefixedField:@"BDAY:" rawText:rawText trim:YES];
+  NSString *name = [self parseName:[rawName objectAtIndex:0]];
+  NSString *pronunciation = [[self class] matchSingleDoCoMoPrefixedField:@"SOUND:" rawText:rawText trim:YES];
+  NSArray *phoneNumbers = [[self class] matchDoCoMoPrefixedField:@"TEL:" rawText:rawText trim:YES];
+  NSArray *emails = [[self class] matchDoCoMoPrefixedField:@"EMAIL:" rawText:rawText trim:YES];
+  NSString *note = [[self class] matchSingleDoCoMoPrefixedField:@"NOTE:" rawText:rawText trim:NO];
+  NSArray *addresses = [[self class] matchDoCoMoPrefixedField:@"ADR:" rawText:rawText trim:YES];
+  NSString *birthday = [[self class] matchSingleDoCoMoPrefixedField:@"BDAY:" rawText:rawText trim:YES];
   if (birthday != nil && ![[self class] isStringOfDigits:birthday length:8]) {
     birthday = nil;
   }
-  NSString * url = [[self class] matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
-  NSString * org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
+  NSString *url = [[self class] matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
+  NSString *org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
 
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
                                                        pronunciation:pronunciation

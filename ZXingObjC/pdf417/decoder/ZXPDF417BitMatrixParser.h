@@ -22,7 +22,7 @@
 
 @interface ZXPDF417BitMatrixParser : NSObject
 
-@property (nonatomic, retain, readonly) NSMutableArray * erasures;
+@property (nonatomic, retain, readonly) NSMutableArray *erasures;
 @property (nonatomic, assign, readonly) int ecLevel;
 
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix;

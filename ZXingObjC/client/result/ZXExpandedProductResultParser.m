@@ -32,37 +32,37 @@
   if (kBarcodeFormatRSSExpanded != format) {
     return nil;
   }
-  NSString * rawText = [ZXResultParser massagedText:result];
+  NSString *rawText = [ZXResultParser massagedText:result];
   if (rawText == nil) {
     return nil;
   }
 
-  NSString * productID = nil;
-  NSString * sscc = nil;
-  NSString * lotNumber = nil;
-  NSString * productionDate = nil;
-  NSString * packagingDate = nil;
-  NSString * bestBeforeDate = nil;
-  NSString * expirationDate = nil;
-  NSString * weight = nil;
-  NSString * weightType = nil;
-  NSString * weightIncrement = nil;
-  NSString * price = nil;
-  NSString * priceIncrement = nil;
-  NSString * priceCurrency = nil;
-  NSMutableDictionary * uncommonAIs = [NSMutableDictionary dictionary];
+  NSString *productID = nil;
+  NSString *sscc = nil;
+  NSString *lotNumber = nil;
+  NSString *productionDate = nil;
+  NSString *packagingDate = nil;
+  NSString *bestBeforeDate = nil;
+  NSString *expirationDate = nil;
+  NSString *weight = nil;
+  NSString *weightType = nil;
+  NSString *weightIncrement = nil;
+  NSString *price = nil;
+  NSString *priceIncrement = nil;
+  NSString *priceCurrency = nil;
+  NSMutableDictionary *uncommonAIs = [NSMutableDictionary dictionary];
 
   int i = 0;
 
   while (i < [rawText length]) {
-    NSString * ai = [self findAIvalue:i rawText:rawText];
+    NSString *ai = [self findAIvalue:i rawText:rawText];
     if (ai == nil) {
       // Error. Code doesn't match with RSS expanded pattern
       // ExtendedProductParsedResult NOT created. Not match with RSS Expanded pattern
       return nil;
     }
     i += [ai length] + 2;
-    NSString * value = [self findValue:i rawText:rawText];
+    NSString *value = [self findValue:i rawText:rawText];
     i += [value length];
 
     if ([@"00" isEqualToString:ai]) {
@@ -119,13 +119,13 @@
 }
 
 - (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
-  NSMutableString * buf = [NSMutableString string];
+  NSMutableString *buf = [NSMutableString string];
   unichar c = [rawText characterAtIndex:i];
   if (c != '(') {
     return nil;
   }
 
-  NSString * rawTextAux = [rawText substringFromIndex:i + 1];
+  NSString *rawTextAux = [rawText substringFromIndex:i + 1];
 
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar currentChar = [rawTextAux characterAtIndex:index];
@@ -141,8 +141,8 @@
 }
 
 - (NSString *)findValue:(int)i rawText:(NSString *)rawText {
-  NSMutableString * buf = [NSMutableString string];
-  NSString * rawTextAux = [rawText substringFromIndex:i];
+  NSMutableString *buf = [NSMutableString string];
+  NSString *rawTextAux = [rawText substringFromIndex:i];
 
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar c = [rawTextAux characterAtIndex:index];

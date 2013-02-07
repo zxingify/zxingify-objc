@@ -19,9 +19,9 @@
 
 @interface ZXWifiParsedResult ()
 
-@property (nonatomic, copy) NSString * ssid;
-@property (nonatomic, copy) NSString * networkEncryption;
-@property (nonatomic, copy) NSString * password;
+@property (nonatomic, copy) NSString *ssid;
+@property (nonatomic, copy) NSString *networkEncryption;
+@property (nonatomic, copy) NSString *password;
 
 @end
 

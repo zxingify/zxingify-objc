@@ -20,11 +20,11 @@
 
 @interface ZXGeoParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents
+- (void)doTestWithContents:(NSString *)contents
                   latitude:(double)latitude
                  longitude:(double)longitude
                   altitude:(double)altitude
-                     query:(NSString*)query;
+                     query:(NSString *)query;
 
 @end
 
@@ -40,15 +40,15 @@ static double EPSILON = 0.0000000001;
   [self doTestWithContents:@"GEO:-20.33,132.3344,0.01?q=foobar" latitude:-20.33 longitude:132.3344 altitude:0.01 query:@"q=foobar"];
 }
 
-- (void)doTestWithContents:(NSString*)contents
+- (void)doTestWithContents:(NSString *)contents
                   latitude:(double)latitude
                  longitude:(double)longitude
                   altitude:(double)altitude
-                     query:(NSString*)query {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+                     query:(NSString *)query {
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeGeo, @"Types don't match");
-  ZXGeoParsedResult* geoResult = (ZXGeoParsedResult*)result;
+  ZXGeoParsedResult *geoResult = (ZXGeoParsedResult *)result;
   STAssertEqualsWithAccuracy(geoResult.latitude, latitude, EPSILON, @"Latitudes don't match");
   STAssertEqualsWithAccuracy(geoResult.longitude, longitude, EPSILON, @"Longitudes don't match");
   STAssertEqualsWithAccuracy(geoResult.altitude, altitude, EPSILON, @"Altitudes don't match");

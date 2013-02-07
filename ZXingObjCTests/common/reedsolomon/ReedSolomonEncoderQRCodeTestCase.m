@@ -37,8 +37,8 @@
 }
 
 - (void)testQRCodeVersusDecoder {
-  ZXReedSolomonEncoder* encoder = [[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
-  ZXReedSolomonDecoder* decoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
+  ZXReedSolomonEncoder *encoder = [[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
+  ZXReedSolomonDecoder *decoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]] autorelease];
   for (int i = 0; i < 100; i++) {
     int size = 2 + (arc4random() % 254);
     int toEncode[size];

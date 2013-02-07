@@ -157,7 +157,7 @@
 
 @implementation ZXDataMask
 
-static NSArray* DATA_MASKS = nil;
+static NSArray *DATA_MASKS = nil;
 
 /**
  * Implementations of this method reverse the data masking process applied to a QR Code and

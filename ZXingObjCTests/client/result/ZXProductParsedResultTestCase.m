@@ -20,8 +20,8 @@
 
 @interface ZXProductParsedResultTestCase ()
 
-- (void)doTestWithContents:(NSString*)contents
-                normalized:(NSString*)normalized
+- (void)doTestWithContents:(NSString *)contents
+                normalized:(NSString *)normalized
                     format:(ZXBarcodeFormat)format;
 
 @end
@@ -35,13 +35,13 @@
   [self doTestWithContents:@"01234565" normalized:@"012345000065" format:kBarcodeFormatUPCE];
 }
 
-- (void)doTestWithContents:(NSString*)contents
-                normalized:(NSString*)normalized
+- (void)doTestWithContents:(NSString *)contents
+                normalized:(NSString *)normalized
                     format:(ZXBarcodeFormat)format {
-  ZXResult* fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format];
-  ZXParsedResult* result = [ZXResultParser parseResult:fakeResult];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:format];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   STAssertEquals(result.type, kParsedResultTypeProduct, @"Types don't match");
-  ZXProductParsedResult* productResult = (ZXProductParsedResult*)result;
+  ZXProductParsedResult *productResult = (ZXProductParsedResult *)result;
   STAssertEqualObjects(productResult.productID, contents, @"Contents don't match");
   STAssertEqualObjects(productResult.normalizedProductID, normalized, @"Normalized doesn't match");
 }
