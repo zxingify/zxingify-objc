@@ -19,6 +19,7 @@
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXMatrixUtil.h"
 #import "ZXMatrixUtilTestCase.h"
+#import "ZXQRCodeVersion.h"
 
 @implementation ZXMatrixUtilTestCase
 
@@ -50,7 +51,7 @@
   // Version 1.
   ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
+  [ZXMatrixUtil embedBasicPatterns:[ZXQRCodeVersion versionForNumber:1] matrix:matrix error:nil];
   NSString *expected =
     @" 1 1 1 1 1 1 1 0           0 1 1 1 1 1 1 1\n"
      " 1 0 0 0 0 0 1 0           0 1 0 0 0 0 0 1\n"
@@ -81,7 +82,7 @@
   // bottom corner.
   ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:25 height:25] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedBasicPatterns:2 matrix:matrix error:nil];
+  [ZXMatrixUtil embedBasicPatterns:[ZXQRCodeVersion versionForNumber:2] matrix:matrix error:nil];
   NSString *expected =
     @" 1 1 1 1 1 1 1 0                   0 1 1 1 1 1 1 1\n"
      " 1 0 0 0 0 0 1 0                   0 1 0 0 0 0 0 1\n"
@@ -147,7 +148,7 @@
   // since 45x45 matrix is too big to depict.
   ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil maybeEmbedVersionInfo:7 matrix:matrix error:nil];
+  [ZXMatrixUtil maybeEmbedVersionInfo:[ZXQRCodeVersion versionForNumber:7] matrix:matrix error:nil];
   NSString *expected =
     @"                     0 0 1                \n"
      "                     0 1 0                \n"
@@ -178,7 +179,7 @@
   ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
   ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
-  [ZXMatrixUtil embedBasicPatterns:1 matrix:matrix error:nil];
+  [ZXMatrixUtil embedBasicPatterns:[ZXQRCodeVersion versionForNumber:1] matrix:matrix error:nil];
   [ZXMatrixUtil embedDataBits:bits maskPattern:-1 matrix:matrix error:nil];
   NSString *expected =
     @" 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n"
@@ -218,7 +219,7 @@
   ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil buildMatrix:bits
                     ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]
-                    version:1  // Version 1
+                    version:[ZXQRCodeVersion versionForNumber:1]
                 maskPattern:3  // Mask pattern 3
                      matrix:matrix
                       error:nil];
@@ -279,7 +280,7 @@
 - (void)testMakeVersionInfoBits {
   // From Appendix D in JISX0510:2004 (p 68)
   ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
-  [ZXMatrixUtil makeVersionInfoBits:7 bits:bits error:nil];
+  [ZXMatrixUtil makeVersionInfoBits:[ZXQRCodeVersion versionForNumber:7] bits:bits error:nil];
   NSString *expected = @" ...XXXXX ..X..X.X ..";
   STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }

@@ -57,8 +57,7 @@ int const QUIET_ZONE_SIZE = 4;
     }
   }
 
-  ZXQRCode *code = [[[ZXQRCode alloc] init] autorelease];
-  [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints qrCode:code error:error];
+  ZXQRCode *code = [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints error:error];
   return [self renderResult:code width:width height:height];
 }
 

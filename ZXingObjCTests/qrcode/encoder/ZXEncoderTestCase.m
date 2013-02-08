@@ -15,12 +15,14 @@
  */
 
 #import "ZXBitArray.h"
+#import "ZXEncodeHints.h"
 #import "ZXEncoder.h"
 #import "ZXEncoderTestCase.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXErrors.h"
 #import "ZXMode.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeVersion.h"
 
 @interface ZXEncoderTestCase ()
 
@@ -91,20 +93,14 @@
 }
 
 - (void)testEncode {
-  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
-  [ZXEncoder encode:@"ABCDEF" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH] qrCode:qrCode error:nil];
+  ZXQRCode *qrCode = [ZXEncoder encode:@"ABCDEF" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH] error:nil];
   // The following is a valid QR Code that can be read by cell phones.
   NSString *expected =
     @"<<\n"
     " mode: ALPHANUMERIC\n"
     " ecLevel: H\n"
     " version: 1\n"
-    " matrixWidth: 21\n"
     " maskPattern: 0\n"
-    " numTotalBytes: 26\n"
-    " numDataBytes: 9\n"
-    " numECBytes: 17\n"
-    " numRSBlocks: 1\n"
     " matrix:\n"
     " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n"
     " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n"
@@ -131,6 +127,42 @@
   STAssertEqualObjects([qrCode description], expected, @"Expected qr code to equal %@", expected);
 }
 
+- (void)testSimpleUTF8ECI {
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.encoding = NSUTF8StringEncoding;
+  ZXQRCode *qrCode = [ZXEncoder encode:@"hello" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH] hints:hints error:nil];
+  NSString *expected =
+    @"<<\n"
+    " mode: BYTE\n"
+    " ecLevel: H\n"
+    " version: 1\n"
+    " maskPattern: 3\n"
+    " matrix:\n"
+    " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n"
+    " 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 1\n"
+    " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n"
+    " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 0 1 1 1 0 1\n"
+    " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n"
+    " 1 0 0 0 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 1\n"
+    " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
+    " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0\n"
+    " 0 0 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 0 0 0 0\n"
+    " 0 0 1 1 1 0 0 0 0 0 1 1 0 0 0 1 0 1 1 1 0\n"
+    " 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1\n"
+    " 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 0 1 0 1 1 0\n"
+    " 0 0 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 1 0 0\n"
+    " 0 0 0 0 0 0 0 0 1 1 1 1 0 0 1 1 1 0 0 0 1\n"
+    " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 0 0 1 0 0\n"
+    " 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 0 1\n"
+    " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 0 0\n"
+    " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 0 1 1 0 0 0\n"
+    " 1 0 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 0\n"
+    " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n"
+    " 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n"
+    ">>\n";
+  STAssertEqualObjects([qrCode description], expected, @"Expected qr code to equal %@", expected);
+}
+
 - (void)testAppendModeInfo {
   ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
   [ZXEncoder appendModeInfo:[ZXMode numericMode] bits:bits];
@@ -142,7 +174,7 @@
   {
     ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
     [ZXEncoder appendLengthInfo:1  // 1 letter (1/1).
-                        version:1  // version 1.
+                        version:[ZXQRCodeVersion versionForNumber:1]
                            mode:[ZXMode numericMode]
                            bits:bits
                           error:nil];
@@ -152,7 +184,7 @@
   {
     ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
     [ZXEncoder appendLengthInfo:2  // 2 letter (2/1).
-                        version:10  // version 10.
+                        version:[ZXQRCodeVersion versionForNumber:10]
                            mode:[ZXMode alphanumericMode]
                            bits:bits
                           error:nil];
@@ -162,7 +194,7 @@
   {
     ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
     [ZXEncoder appendLengthInfo:255  // 255 letter (255/1).
-                        version:27  // version 27.
+                        version:[ZXQRCodeVersion versionForNumber:27]
                            mode:[ZXMode byteMode]
                            bits:bits
                           error:nil];
@@ -172,7 +204,7 @@
   {
     ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
     [ZXEncoder appendLengthInfo:512  // 512 letter (1024/2).
-                        version:40  // version 40.
+                        version:[ZXQRCodeVersion versionForNumber:40]
                            mode:[ZXMode kanjiMode]
                            bits:bits
                           error:nil];
@@ -325,8 +357,7 @@
     for (int i = 0; i < dataBytesLen; i++) {
       [in appendBits:dataBytes[i] numBits:8];
     }
-    ZXBitArray *out = [[[ZXBitArray alloc] init] autorelease];
-    [ZXEncoder interleaveWithECBytes:in numTotalBytes:26 numDataBytes:9 numRSBlocks:1 result:out error:nil];
+    ZXBitArray *out = [ZXEncoder interleaveWithECBytes:in numTotalBytes:26 numDataBytes:9 numRSBlocks:1 error:nil];
     const int expectedLen = 26;
     unsigned char expected[expectedLen] = {
       // Data bytes.
@@ -358,8 +389,7 @@
     for (int i = 0; i < dataBytesLen; i++) {
       [in appendBits:dataBytes[i] numBits:8];
     }
-    ZXBitArray *out = [[[ZXBitArray alloc] init] autorelease];
-    [ZXEncoder interleaveWithECBytes:in numTotalBytes:134 numDataBytes:62 numRSBlocks:4 result:out error:nil];
+    ZXBitArray *out = [ZXEncoder interleaveWithECBytes:in numTotalBytes:134 numDataBytes:62 numRSBlocks:4 error:nil];
     const int expectedLen = 134;
     unsigned char expected[expectedLen] = {
       // Data bytes.
@@ -571,8 +601,8 @@
   for (int x = 0; x < 3518; x++) {
     [builder appendString:@"0"];
   }
-  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
-  [ZXEncoder encode:builder ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL] qrCode:qrCode error:nil];
+  ZXQRCode *qrCode = [ZXEncoder encode:builder ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL] error:nil];
+  STAssertNotNil(qrCode, @"Excepted QR code");
 }
 
 - (NSString *)shiftJISString:(unsigned char *)bytes bytesLen:(int)bytesLen {
