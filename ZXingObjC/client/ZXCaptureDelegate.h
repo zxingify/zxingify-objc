@@ -26,4 +26,6 @@
               width:(NSNumber *)width
              height:(NSNumber *)height;
 
+- (void)captureCameraIsReady:(ZXCapture *)capture;
+
 @end

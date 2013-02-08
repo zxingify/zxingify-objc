@@ -74,6 +74,7 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
   BOOL mirror;
   int capture_device_index;
   CGAffineTransform transform;
+  BOOL cameraIsReady;
 }
 
 @property (nonatomic, assign) id<ZXCaptureDelegate> delegate;
