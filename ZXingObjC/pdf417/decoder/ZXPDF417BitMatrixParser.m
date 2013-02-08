@@ -725,7 +725,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     [self.erasures addObject:[NSNumber numberWithInt:0]];
   }
 
-  float moduleWidth = 1.0f;
+  // Get the number of pixels in a module across the X dimension
+  //float moduleWidth = bitMatrix.getModuleWidth();
+  float moduleWidth = 1.0f; // Image has been sampled and reduced
 
   int rowCounters[width];
   memset(rowCounters, 0, width * sizeof(int));
@@ -742,34 +744,47 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   int rowHeight = 0;
   for (int i = 1; i < height; i++) {
     if (rowNumber >= MAX_ROWS) {
+      // Something is wrong, since we have exceeded
+      // the maximum rows in the specification.
       return nil;
     }
     int rowDifference = 0;
-
+    // Scan a line of modules and check the
+    // difference between this and the previous line
     for (int j = 0; j < width; j++) {
+      // Accumulate differences between this line and the
+      // previous line.
       if ([self.bitMatrix getX:j y:i] != [self.bitMatrix getX:j y:i - 1]) {
         rowDifference++;
       }
     }
     if (rowDifference <= moduleWidth * MAX_ROW_DIFFERENCE) {
       for (int j = 0; j < width; j++) {
+        // Accumulate the black pixels on this line
         if ([self.bitMatrix getX:j y:i]) {
           rowCounters[j]++;
         }
       }
-
+      // Increment the number of consecutive rows of pixels
+      // that are more or less the same
       matchingConsecutiveScans++;
-
-      if (matchingConsecutiveScans >= moduleWidth * 2) {
+      // Height of a row is a multiple of the module size in pixels
+      // It's supposed to be >= 3x module width, but, accept anything >= 2x
+      if ((matchingConsecutiveScans + 1) >= 2.0f * moduleWidth) {
+        // We have some previous matches as well as a match here
+        // Set processing a unique row.
         rowInProgress = YES;
       }
     } else {
       if (rowInProgress) {
+        // Process Row
         next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
         if (next == -1) {
+          // Something is wrong, since we have exceeded
+          // the maximum columns in the specification.
           return nil;
         }
-
+        // Reinitialize the row counters.
         for (int j = 0; j < width; j++) {
           rowCounters[j] = 0;
         }
@@ -781,9 +796,12 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     }
     rowHeight++;
   }
-
+  // Check for a row that was in progress before we exited above.
   if (rowInProgress) {
+    // Process Row
     if (rowNumber >= MAX_ROWS) {
+      // Something is wrong, since we have exceeded
+      // the maximum rows in the specification.
       return nil;
     }
     next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
@@ -809,6 +827,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   int columnNumber = 0;
   long symbol = 0;
   for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
+    // This happens in real life and is almost surely a rare misdecode
     if (i + MODULES_IN_SYMBOL > rowCountersLen) {
       return -1;
     }
@@ -820,6 +839,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     if (columnNumber > 0) {
       int cw = [self codeword:symbol];
       if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
+        // Skip errors on the Right row indicator column
         if (eraseCount >= erasures.count) {
           return -1;
         }
@@ -830,6 +850,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
         [codewords replaceObjectAtIndex:next++ withObject:[NSNumber numberWithInt:cw]];
       }
     } else {
+      // Left row indicator column
       int cw = [self codeword:symbol];
       if (ecLevel < 0) {
         if (rowNumber % 3 == 1) {
@@ -838,9 +859,13 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       }
     }
     symbol = 0;
+    //columns = columnNumber;
     columnNumber++;
   }
   if (columnNumber > 1) {
+    // Right row indicator column is in codeword[next]
+    //columns--;
+    // Overwrite the last codeword i.e. Right Row Indicator
     --next;
     if (ecLevel < 0) {
       if (rowNumber % 3 == 2) {
