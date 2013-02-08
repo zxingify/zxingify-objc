@@ -367,6 +367,7 @@ static NSArray *EXP900 = nil;
           nextCode == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
           nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
           nextCode == MACRO_PDF417_TERMINATOR) {
+        codeIndex--;
         end = YES;
       } else {
         if ((count % 5 == 0) && (count > 0)) {
