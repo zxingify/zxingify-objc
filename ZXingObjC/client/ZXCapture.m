@@ -493,6 +493,15 @@ ZXQT(didOutputVideoFrame:(CVImageBufferRef)videoFrame
 ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
        fromConnection:(ZXCaptureConnection *)connection {
   
+  if (!cameraIsReady)
+  {
+    cameraIsReady = YES;
+    if ([self.delegate respondsToSelector:@selector(captureCameraIsReady:)])
+    {
+      [self.delegate captureCameraIsReady:self];
+    }
+  }
+           
   if (!captureToFilename && !luminance && !binary && !delegate) {
     // NSLog(@"skipping capture");
     return;
