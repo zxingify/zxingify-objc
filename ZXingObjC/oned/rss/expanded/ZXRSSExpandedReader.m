@@ -373,9 +373,7 @@ const int MAX_PAIRS = 11;
 
     start = startEnd[0];
 
-    int firstElementStart = [row nextUnset:startEnd[1] + 1];
-
-    end = firstElementStart;
+    end = [row nextUnset:startEnd[1] + 1];
     firstCounter = end - startEnd[1];
   }
 

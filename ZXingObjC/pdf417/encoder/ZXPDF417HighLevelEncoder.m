@@ -162,21 +162,19 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 
   int len = msg.length;
   int p = 0;
-  int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
   int textSubMode = SUBMODE_ALPHA;
 
   // User selected encoding mode
   if (compaction == ZX_COMPACTION_TEXT) {
     [self encodeText:msg startpos:p count:len buffer:sb initialSubmode:textSubMode];
   } else if (compaction == ZX_COMPACTION_BYTE) {
-    encodingMode = BYTE_COMPACTION;
     bytes = [self bytesForMessage:msg];
-    [self encodeBinary:bytes startpos:p count:msg.length startmode:encodingMode buffer:sb];
+    [self encodeBinary:bytes startpos:p count:msg.length startmode:BYTE_COMPACTION buffer:sb];
   } else if (compaction == ZX_COMPACTION_NUMERIC) {
-    encodingMode = NUMERIC_COMPACTION;
     [sb appendFormat:@"%c", (char) LATCH_TO_NUMERIC];
     [self encodeNumeric:msg startpos:p count:len buffer:sb];
   } else {
+    int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
     while (p < len) {
       int n = [self determineConsecutiveDigitCount:msg startpos:p];
       if (n >= 13) {

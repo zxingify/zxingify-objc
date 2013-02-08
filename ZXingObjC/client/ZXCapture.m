@@ -274,14 +274,14 @@ static bool isIPad();
 }
 
 - (void)setOutputAttributes {
-    NSString *key = NSString *kCVPixelBufferPixelFormatTypeKey; 
+    NSString *key = (NSString *)kCVPixelBufferPixelFormatTypeKey;
     NSNumber *value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
     NSMutableDictionary *attributes =
       [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
-    key = NSString *kCVPixelBufferWidthKey;
+    key = (NSString *)kCVPixelBufferWidthKey;
     value = [NSNumber numberWithUnsignedLong:width];
     [attributes setObject:value forKey:key]; 
-    key = NSString *kCVPixelBufferHeightKey;
+    key = (NSString *)kCVPixelBufferHeightKey;
     value = [NSNumber numberWithUnsignedLong:height];
     [attributes setObject:value forKey:key]; 
     [output ZXQT(setPixelBufferAttributes:)ZXAV(setVideoSettings:)attributes];
@@ -439,7 +439,7 @@ static bool isIPad();
   }
 }
 
-- (id<CAAction>)actionForLayer:(CALayer *)_layer forKey:NSString *event {
+- (id<CAAction>)actionForLayer:(CALayer *)_layer forKey:(NSString *)event {
   (void)_layer;
 
   // NSLog(@"layer event %@", event);

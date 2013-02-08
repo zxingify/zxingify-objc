@@ -832,14 +832,8 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     } else {
       int cw = [self codeword:symbol];
       if (ecLevel < 0) {
-        switch (rowNumber % 3) {
-        case 0:
-          break;
-        case 1:
+        if (rowNumber % 3 == 1) {
           leftColumnECData = cw;
-          break;
-        case 2:
-          break;
         }
       }
     }
@@ -849,17 +843,11 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   if (columnNumber > 1) {
     --next;
     if (ecLevel < 0) {
-      switch (rowNumber % 3) {
-      case 0:
-        break;
-      case 1:
-        break;
-      case 2:
-        self.rightColumnECData = [[codewords objectAtIndex:next] intValue];
-        if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
-          ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
+      if (rowNumber % 3 == 2) {
+        rightColumnECData = codewords[next];
+        if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
+          ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
         }
-        break;
       }
     }
     [codewords replaceObjectAtIndex:next withObject:[NSNumber numberWithInt:0]];
