@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#import "ZXUPCEANWriter.h"
+#import "ZXOneDimensionalCodeWriter.h"
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
  */
 
-@interface ZXITFWriter : ZXUPCEANWriter
+@interface ZXITFWriter : ZXOneDimensionalCodeWriter
 
 @end

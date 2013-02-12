@@ -20,6 +20,7 @@
 
 @synthesize encoding;
 @synthesize errorCorrectionLevel;
+@synthesize margin;
 @synthesize pdf417Compact;
 @synthesize pdf417Compaction;
 @synthesize pdf417Dimensions;
@@ -30,6 +31,7 @@
 
 - (void)dealloc {
   [errorCorrectionLevel release];
+  [margin release];
   [pdf417Dimensions release];
 
   [super dealloc];

@@ -15,27 +15,16 @@
  */
 
 #import "ZXBitMatrix.h"
+#import "ZXEncodeHints.h"
 #import "ZXOneDimensionalCodeWriter.h"
 
 @interface ZXOneDimensionalCodeWriter ()
 
-@property (nonatomic, assign) int sidesMargin;
-
-- (ZXBitMatrix *)renderResult:(unsigned char *)code length:(int)length width:(int)width height:(int)height;
+- (ZXBitMatrix *)renderResult:(BOOL *)code length:(int)length width:(int)width height:(int)height sidesMargin:(int)sidesMargin;
 
 @end
 
 @implementation ZXOneDimensionalCodeWriter
-
-@synthesize sidesMargin;
-
-- (id)initWithSidesMargin:(int)aSidesMargin {
-  if (self = [super init]) {
-    self.sidesMargin = aSidesMargin;
-  }
-
-  return self;
-}
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
   return [self encode:contents format:format width:width height:height hints:nil error:error];
@@ -53,17 +42,22 @@
                                  userInfo:nil];
   }
 
+  int sidesMargin = [self defaultMargin];
+  if (hints && hints.margin) {
+    sidesMargin = hints.margin.intValue;
+  }
+
   int length;
-  unsigned char *code = [self encode:contents length:&length];
-  ZXBitMatrix *result = [self renderResult:code length:length width:width height:height];
+  BOOL *code = [self encode:contents length:&length];
+  ZXBitMatrix *result = [self renderResult:code length:length width:width height:height sidesMargin:sidesMargin];
   free(code);
   return result;
 }
 
-- (ZXBitMatrix *)renderResult:(unsigned char *)code length:(int)length width:(int)width height:(int)height {
+- (ZXBitMatrix *)renderResult:(BOOL *)code length:(int)length width:(int)width height:(int)height sidesMargin:(int)sidesMargin {
   int inputWidth = length;
   // Add quiet zone on both sides.
-  int fullWidth = inputWidth + self.sidesMargin;
+  int fullWidth = inputWidth + sidesMargin;
   int outputWidth = MAX(width, fullWidth);
   int outputHeight = MAX(1, height);
 
@@ -72,7 +66,7 @@
 
   ZXBitMatrix *output = [ZXBitMatrix bitMatrixWithWidth:outputWidth height:outputHeight];
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
-    if (code[inputX] == 1) {
+    if (code[inputX]) {
       [output setRegionAtLeft:outputX top:0 width:multiple height:outputHeight];
     }
   }
@@ -82,31 +76,30 @@
 /**
  * Appends the given pattern to the target array starting at pos.
  */
-- (int)appendPattern:(unsigned char *)target pos:(int)pos pattern:(int *)pattern patternLen:(int)patternLen startColor:(int)startColor {
-  if (startColor != 0 && startColor != 1) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"startColor must be either 0 or 1, but got: %d", startColor]
-                                 userInfo:nil];
-  }
-
-  unsigned char color = (unsigned char) startColor;
+- (int)appendPattern:(BOOL *)target pos:(int)pos pattern:(int *)pattern patternLen:(int)patternLen startColor:(BOOL)startColor {
+  BOOL color = startColor;
   int numAdded = 0;
   for (int i = 0; i < patternLen; i++) {
     for (int j = 0; j < pattern[i]; j++) {
-      target[pos] = color;
-      pos += 1;
-      numAdded += 1;
+      target[pos++] = color;
     }
-    color ^= 1; // flip color after each segment
+    numAdded += pattern[i];
+    color = !color; // flip color after each segment
   }
   return numAdded;
+}
+
+- (int)defaultMargin {
+  // CodaBar spec requires a side margin to be more than ten times wider than narrow space.
+  // This seems like a decent idea for a default for all formats.
+  return 10;
 }
 
 /**
  * Encode the contents to byte array expression of one-dimensional barcode.
  * Start code and end code should be included in result, and side margins should not be included.
  */
-- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
+- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

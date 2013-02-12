@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#import "ZXUPCEANWriter.h"
+#import "ZXOneDimensionalCodeWriter.h"
 
 /**
  * This object renders a CODE39 code as a {@link BitMatrix}.
  */
 
-@interface ZXCode39Writer : ZXUPCEANWriter
+@interface ZXCode39Writer : ZXOneDimensionalCodeWriter
 
 @end

@@ -26,7 +26,7 @@ int const QUIET_ZONE_SIZE = 4;
 
 @interface ZXQRCodeWriter ()
 
-- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height;
+- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height quietZone:(int)quietZone;
 
 @end
 
@@ -50,26 +50,29 @@ int const QUIET_ZONE_SIZE = 4;
   }
 
   ZXErrorCorrectionLevel *errorCorrectionLevel = [ZXErrorCorrectionLevel errorCorrectionLevelL];
+  int quietZone = QUIET_ZONE_SIZE;
   if (hints != nil) {
-    ZXErrorCorrectionLevel *requestedECLevel = hints.errorCorrectionLevel;
-    if (requestedECLevel != nil) {
-      errorCorrectionLevel = requestedECLevel;
+    if (hints.errorCorrectionLevel) {
+      errorCorrectionLevel = hints.errorCorrectionLevel;
+    }
+    if (hints.margin) {
+      quietZone = hints.margin;
     }
   }
 
   ZXQRCode *code = [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints error:error];
-  return [self renderResult:code width:width height:height];
+  return [self renderResult:code width:width height:height quietZone:quietZone];
 }
 
-- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height {
+- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height quietZone:(int)quietZone {
   ZXByteMatrix *input = code.matrix;
   if (input == nil) {
     return nil;
   }
   int inputWidth = input.width;
   int inputHeight = input.height;
-  int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
-  int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
+  int qrWidth = inputWidth + (quietZone << 1);
+  int qrHeight = inputHeight + (quietZone << 1);
   int outputWidth = MAX(width, qrWidth);
   int outputHeight = MAX(height, qrHeight);
 

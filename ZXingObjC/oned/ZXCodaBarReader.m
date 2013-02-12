@@ -46,7 +46,7 @@ const int MIN_CHARACTER_LENGTH = 3;
 
 // official start and end patterns
 const int STARTEND_ENCODING_LEN = 4;
-const char STARTEND_ENCODING[STARTEND_ENCODING_LEN] = {'A', 'B', 'C', 'D'};
+const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
 // some codabar generator allow the codabar string to be closed by every
 // character. This will cause lots of false positives!

@@ -17,26 +17,25 @@
 #import "ZXCodaBarReader.h"
 #import "ZXCodaBarWriter.h"
 
+const int START_CHARS_LEN = 4;
+const char START_CHARS[START_CHARS_LEN] = "ABCD";
+
+const int END_CHARS_LEN = 4;
+const char END_CHARS[END_CHARS_LEN] = "TN*E";
+
 @implementation ZXCodaBarWriter
 
-- (id)init {
-  // Super constructor requires the sum of the left and right margin length.
-  // CodaBar spec requires a side margin to be more than ten times wider than narrow space.
-  // In this implementation, narrow space has a unit length, so 20 is required minimum.
-  return [super initWithSidesMargin:20];
-}
-
-- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
+- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
 
   // Verify input and calculate decoded length.
-  if (![ZXCodaBarReader arrayContains:"ABCD" length:4 key:[[contents uppercaseString] characterAtIndex:0]]) {
+  if (![ZXCodaBarReader arrayContains:(char *)START_CHARS length:START_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:0]]) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:@"Codabar should start with one of the following: 'A', 'B', 'C' or 'D'"
+                                   reason:[NSString stringWithFormat:@"Codabar should start with one of the following: %@", [NSString stringWithCString:START_CHARS encoding:NSUTF8StringEncoding]]
                                  userInfo:nil];
   }
-  if (![ZXCodaBarReader arrayContains:"TN*E" length:4 key:[[contents uppercaseString] characterAtIndex:contents.length - 1]]) {
+  if (![ZXCodaBarReader arrayContains:(char *)END_CHARS length:END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:contents.length - 1]]) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:@"Codabar should end with one of the following: 'T', 'N', '*' or 'E'"
+                                   reason:[NSString stringWithFormat:@"Codabar should end with one of the following: %@", [NSString stringWithCString:START_CHARS encoding:NSUTF8StringEncoding]]
                                  userInfo:nil];
   }
   // The start character and the end character are decoded to 10 length each.
@@ -58,7 +57,7 @@
   resultLength += contents.length - 1;
 
   if (pLength) *pLength = resultLength;
-  unsigned char *result = (unsigned char *)malloc(resultLength * sizeof(unsigned char));
+  BOOL *result = (BOOL *)malloc(resultLength * sizeof(BOOL));
   int position = 0;
   for (int index = 0; index < contents.length; index++) {
     unichar c = [[contents uppercaseString] characterAtIndex:index];
@@ -87,14 +86,14 @@
         break;
       }
     }
-    unsigned char color = 1;
+    BOOL color = YES;
     int counter = 0;
     int bit = 0;
     while (bit < 7) { // A character consists of 7 digit.
       result[position] = color;
       position++;
       if (((code >> (6 - bit)) & 1) == 0 || counter == 1) {
-        color ^= 1; // Flip the color.
+        color = !color; // Flip the color.
         bit++;
         counter = 0;
       } else {
@@ -102,7 +101,7 @@
       }
     }
     if (index < contents.length - 1) {
-      result[position] = 0;
+      result[position] = NO;
       position++;
     }
   }

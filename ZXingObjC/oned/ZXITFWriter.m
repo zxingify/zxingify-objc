@@ -17,8 +17,11 @@
 #import "ZXITFReader.h"
 #import "ZXITFWriter.h"
 
-#define ZX_ITF_STARTLEN 4
-#define ZX_ITF_ENDLEN 3
+const int ITF_WRITER_START_PATTERN_LEN = 4;
+const int ITF_WRITER_START_PATTERN[ITF_WRITER_START_PATTERN_LEN] = {1, 1, 1, 1};
+
+const int ITF_WRITER_END_PATTERN_LEN = 3;
+const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
 
 @implementation ZXITFWriter
 
@@ -30,7 +33,7 @@
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
+- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
   int length = [contents length];
   if (length % 2 != 0) {
     [NSException raise:NSInvalidArgumentException format:@"The length of the input should be even"];
@@ -41,11 +44,8 @@
 
   int resultLen = 9 + 9 * length;
   if (pLength) *pLength = resultLen;
-  unsigned char *result = (unsigned char *)malloc(resultLen * sizeof(unsigned char));
-  const int startLen = ZX_ITF_STARTLEN;
-  int start[ZX_ITF_STARTLEN] = {1, 1, 1, 1};
-
-  int pos = [super appendPattern:result pos:0 pattern:start patternLen:startLen startColor:1];
+  BOOL *result = (BOOL *)malloc(resultLen * sizeof(BOOL));
+  int pos = [super appendPattern:result pos:0 pattern:(int *)ITF_WRITER_START_PATTERN patternLen:ITF_WRITER_START_PATTERN_LEN startColor:TRUE];
   for (int i = 0; i < length; i += 2) {
     int one = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     int two = [[contents substringWithRange:NSMakeRange(i + 1, 1)] intValue];
@@ -56,12 +56,9 @@
       encoding[(j << 1)] = PATTERNS[one][j];
       encoding[(j << 1) + 1] = PATTERNS[two][j];
     }
-    pos += [super appendPattern:result pos:pos pattern:encoding patternLen:encodingLen startColor:1];
+    pos += [super appendPattern:result pos:pos pattern:encoding patternLen:encodingLen startColor:TRUE];
   }
-
-  const int endLen = ZX_ITF_ENDLEN;
-  int end[ZX_ITF_ENDLEN] = {3, 1, 1};
-  [super appendPattern:result pos:pos pattern:end patternLen:endLen startColor:1];
+  [super appendPattern:result pos:pos pattern:(int *)ITF_WRITER_END_PATTERN patternLen:ITF_WRITER_END_PATTERN_LEN startColor:TRUE];
 
   return result;
 }

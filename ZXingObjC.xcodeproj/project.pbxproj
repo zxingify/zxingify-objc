@@ -478,11 +478,9 @@
 		25404124166AA0F100E13304 /* UPCEBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25404094166AA0F100E13304 /* UPCEBlackBox2TestCase.m */; };
 		25404125166AA0F100E13304 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25404096166AA0F100E13304 /* UPCEBlackBox3ReflectiveTestCase.m */; };
 		25404126166AA0F100E13304 /* ZXCodaBarWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25404098166AA0F100E13304 /* ZXCodaBarWriterTestCase.m */; };
-		25404127166AA0F100E13304 /* ZXCode39WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540409A166AA0F100E13304 /* ZXCode39WriterTestCase.m */; };
 		25404128166AA0F100E13304 /* ZXEAN13WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540409C166AA0F100E13304 /* ZXEAN13WriterTestCase.m */; };
 		25404129166AA0F100E13304 /* ZXEAN8WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540409E166AA0F100E13304 /* ZXEAN8WriterTestCase.m */; };
 		2540412A166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A0166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.m */; };
-		2540412B166AA0F100E13304 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A2166AA0F100E13304 /* ZXITFWriterTestCase.m */; };
 		2540412C166AA0F100E13304 /* ZXUPCAWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A4166AA0F100E13304 /* ZXUPCAWriterTestCase.m */; };
 		2540412D166AA0F100E13304 /* AbstractErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A9166AA0F100E13304 /* AbstractErrorCorrectionTestCase.m */; };
 		2540412E166AA0F100E13304 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040AB166AA0F100E13304 /* ZXPDF417ECErrorCorrectionTestCase.m */; };
@@ -777,11 +775,9 @@
 		25404368166AB8B800E13304 /* UPCEBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25404094166AA0F100E13304 /* UPCEBlackBox2TestCase.m */; };
 		25404369166AB8B800E13304 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25404096166AA0F100E13304 /* UPCEBlackBox3ReflectiveTestCase.m */; };
 		2540436A166AB8B800E13304 /* ZXCodaBarWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25404098166AA0F100E13304 /* ZXCodaBarWriterTestCase.m */; };
-		2540436B166AB8B800E13304 /* ZXCode39WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540409A166AA0F100E13304 /* ZXCode39WriterTestCase.m */; };
 		2540436C166AB8B800E13304 /* ZXEAN13WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540409C166AA0F100E13304 /* ZXEAN13WriterTestCase.m */; };
 		2540436D166AB8B800E13304 /* ZXEAN8WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540409E166AA0F100E13304 /* ZXEAN8WriterTestCase.m */; };
 		2540436E166AB8B800E13304 /* ZXEANManufacturerOrgSupportTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A0166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.m */; };
-		2540436F166AB8B800E13304 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A2166AA0F100E13304 /* ZXITFWriterTestCase.m */; };
 		25404370166AB8B800E13304 /* ZXUPCAWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A4166AA0F100E13304 /* ZXUPCAWriterTestCase.m */; };
 		25404371166AB8B800E13304 /* AbstractErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040A9166AA0F100E13304 /* AbstractErrorCorrectionTestCase.m */; };
 		25404372166AB8B800E13304 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040AB166AA0F100E13304 /* ZXPDF417ECErrorCorrectionTestCase.m */; };
@@ -1847,16 +1843,12 @@
 		25404096166AA0F100E13304 /* UPCEBlackBox3ReflectiveTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCEBlackBox3ReflectiveTestCase.m; sourceTree = "<group>"; };
 		25404097166AA0F100E13304 /* ZXCodaBarWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCodaBarWriterTestCase.h; sourceTree = "<group>"; };
 		25404098166AA0F100E13304 /* ZXCodaBarWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCodaBarWriterTestCase.m; sourceTree = "<group>"; };
-		25404099166AA0F100E13304 /* ZXCode39WriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode39WriterTestCase.h; sourceTree = "<group>"; };
-		2540409A166AA0F100E13304 /* ZXCode39WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode39WriterTestCase.m; sourceTree = "<group>"; };
 		2540409B166AA0F100E13304 /* ZXEAN13WriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN13WriterTestCase.h; sourceTree = "<group>"; };
 		2540409C166AA0F100E13304 /* ZXEAN13WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN13WriterTestCase.m; sourceTree = "<group>"; };
 		2540409D166AA0F100E13304 /* ZXEAN8WriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN8WriterTestCase.h; sourceTree = "<group>"; };
 		2540409E166AA0F100E13304 /* ZXEAN8WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN8WriterTestCase.m; sourceTree = "<group>"; };
 		2540409F166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEANManufacturerOrgSupportTest.h; sourceTree = "<group>"; };
 		254040A0166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEANManufacturerOrgSupportTest.m; sourceTree = "<group>"; };
-		254040A1166AA0F100E13304 /* ZXITFWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXITFWriterTestCase.h; sourceTree = "<group>"; };
-		254040A2166AA0F100E13304 /* ZXITFWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXITFWriterTestCase.m; sourceTree = "<group>"; };
 		254040A3166AA0F100E13304 /* ZXUPCAWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCAWriterTestCase.h; sourceTree = "<group>"; };
 		254040A4166AA0F100E13304 /* ZXUPCAWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCAWriterTestCase.m; sourceTree = "<group>"; };
 		254040A8166AA0F100E13304 /* AbstractErrorCorrectionTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractErrorCorrectionTestCase.h; sourceTree = "<group>"; };
@@ -2859,16 +2851,12 @@
 				25404096166AA0F100E13304 /* UPCEBlackBox3ReflectiveTestCase.m */,
 				25404097166AA0F100E13304 /* ZXCodaBarWriterTestCase.h */,
 				25404098166AA0F100E13304 /* ZXCodaBarWriterTestCase.m */,
-				25404099166AA0F100E13304 /* ZXCode39WriterTestCase.h */,
-				2540409A166AA0F100E13304 /* ZXCode39WriterTestCase.m */,
 				2540409B166AA0F100E13304 /* ZXEAN13WriterTestCase.h */,
 				2540409C166AA0F100E13304 /* ZXEAN13WriterTestCase.m */,
 				2540409D166AA0F100E13304 /* ZXEAN8WriterTestCase.h */,
 				2540409E166AA0F100E13304 /* ZXEAN8WriterTestCase.m */,
 				2540409F166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.h */,
 				254040A0166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.m */,
-				254040A1166AA0F100E13304 /* ZXITFWriterTestCase.h */,
-				254040A2166AA0F100E13304 /* ZXITFWriterTestCase.m */,
 				254040A3166AA0F100E13304 /* ZXUPCAWriterTestCase.h */,
 				254040A4166AA0F100E13304 /* ZXUPCAWriterTestCase.m */,
 			);
@@ -4014,11 +4002,9 @@
 				25404124166AA0F100E13304 /* UPCEBlackBox2TestCase.m in Sources */,
 				25404125166AA0F100E13304 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 				25404126166AA0F100E13304 /* ZXCodaBarWriterTestCase.m in Sources */,
-				25404127166AA0F100E13304 /* ZXCode39WriterTestCase.m in Sources */,
 				25404128166AA0F100E13304 /* ZXEAN13WriterTestCase.m in Sources */,
 				25404129166AA0F100E13304 /* ZXEAN8WriterTestCase.m in Sources */,
 				2540412A166AA0F100E13304 /* ZXEANManufacturerOrgSupportTest.m in Sources */,
-				2540412B166AA0F100E13304 /* ZXITFWriterTestCase.m in Sources */,
 				2540412C166AA0F100E13304 /* ZXUPCAWriterTestCase.m in Sources */,
 				2540412D166AA0F100E13304 /* AbstractErrorCorrectionTestCase.m in Sources */,
 				2540412E166AA0F100E13304 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */,
@@ -4316,11 +4302,9 @@
 				25404368166AB8B800E13304 /* UPCEBlackBox2TestCase.m in Sources */,
 				25404369166AB8B800E13304 /* UPCEBlackBox3ReflectiveTestCase.m in Sources */,
 				2540436A166AB8B800E13304 /* ZXCodaBarWriterTestCase.m in Sources */,
-				2540436B166AB8B800E13304 /* ZXCode39WriterTestCase.m in Sources */,
 				2540436C166AB8B800E13304 /* ZXEAN13WriterTestCase.m in Sources */,
 				2540436D166AB8B800E13304 /* ZXEAN8WriterTestCase.m in Sources */,
 				2540436E166AB8B800E13304 /* ZXEANManufacturerOrgSupportTest.m in Sources */,
-				2540436F166AB8B800E13304 /* ZXITFWriterTestCase.m in Sources */,
 				25404370166AB8B800E13304 /* ZXUPCAWriterTestCase.m in Sources */,
 				25404371166AB8B800E13304 /* AbstractErrorCorrectionTestCase.m in Sources */,
 				25404372166AB8B800E13304 /* ZXPDF417ECErrorCorrectionTestCase.m in Sources */,

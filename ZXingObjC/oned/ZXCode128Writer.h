@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#import "ZXUPCEANWriter.h"
+#import "ZXOneDimensionalCodeWriter.h"
 
 /**
  * This object renders a CODE128 code as a ZXBitMatrix.
  */
 
-@interface ZXCode128Writer : ZXUPCEANWriter
+@interface ZXCode128Writer : ZXOneDimensionalCodeWriter
 
 @end

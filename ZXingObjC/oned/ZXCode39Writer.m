@@ -36,7 +36,7 @@
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (unsigned char *)encode:(NSString *)contents length:(int *)pLength {
+- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
   int length = [contents length];
   if (length > 80) {
     [NSException raise:NSInvalidArgumentException 
@@ -57,24 +57,24 @@
   }
 
   if (pLength) *pLength = codeWidth;
-  unsigned char *result = (unsigned char *)malloc(codeWidth * sizeof(unsigned char));
+  BOOL *result = (BOOL *)malloc(codeWidth * sizeof(BOOL));
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
-  int pos = [super appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:1];
+  int pos = [super appendPattern:result pos:0 pattern:widths patternLen:widthsLengh startColor:TRUE];
 
   const int narrowWhiteLen = ZX_CODE39_WHITELEN;
   int narrowWhite[ZX_CODE39_WHITELEN] = {1};
 
-  pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
+  pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:FALSE];
 
   for (int i = length - 1; i >= 0; i--) {
     int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
-    pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:1];
-    pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:0];
+    pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:TRUE];
+    pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:FALSE];
   }
 
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
-  pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:1];
+  pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:TRUE];
   return result;
 }
 

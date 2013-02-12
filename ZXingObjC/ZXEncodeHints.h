@@ -37,6 +37,13 @@
 @property (nonatomic, retain) ZXErrorCorrectionLevel *errorCorrectionLevel;
 
 /**
+ * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
+ * by format; for example it controls margin before and after the barcode horizontally for
+ * most 1D formats.
+ */
+@property (nonatomic, retain) NSNumber *margin;
+
+/**
  * Specifies whether to use compact mode for PDF417.
  */
 @property (nonatomic, assign) BOOL pdf417Compact;

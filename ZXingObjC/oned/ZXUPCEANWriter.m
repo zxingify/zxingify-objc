@@ -21,8 +21,9 @@
 
 @implementation ZXUPCEANWriter
 
-- (id)init {
-  return [super initWithSidesMargin:START_END_PATTERN_LEN << 1];
+- (int)defaultMargin {
+  // Use a different default more appropriate for UPC/EAN
+  return START_END_PATTERN_LEN;
 }
 
 @end
