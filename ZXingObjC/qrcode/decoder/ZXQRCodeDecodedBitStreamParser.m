@@ -73,6 +73,10 @@ int const GB2312_SUBSET = 1;
       if ([mode isEqual:[ZXMode fnc1FirstPositionMode]] || [mode isEqual:[ZXMode fnc1SecondPositionMode]]) {
         fc1InEffect = YES;
       } else if ([mode isEqual:[ZXMode structuredAppendMode]]) {
+        if (bits.available < 16) {
+          if (error) *error = FormatErrorInstance();
+          return nil;
+        }
         [bits readBits:16];
       } else if ([mode isEqual:[ZXMode eciMode]]) {
         int value = [self parseECIValue:bits];
