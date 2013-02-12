@@ -869,9 +869,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     --next;
     if (ecLevel < 0) {
       if (rowNumber % 3 == 2) {
-        rightColumnECData = codewords[next];
-        if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
-          ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
+        self.rightColumnECData = [[codewords objectAtIndex:next] intValue];
+        if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
+          self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
         }
       }
     }
