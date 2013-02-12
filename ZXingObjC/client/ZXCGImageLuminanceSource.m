@@ -64,7 +64,7 @@
     for(int y=0; y<height; y++) {
       memcpy(bytes+y*newBytesPerRow,
              baseAddress+left*4+(top+y)*bytesPerRow,
-             bytesPerRow);
+             newBytesPerRow);
     }
   }
   CVPixelBufferUnlockBaseAddress(buffer, 0);
