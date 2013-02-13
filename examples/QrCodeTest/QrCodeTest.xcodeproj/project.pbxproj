@@ -10,6 +10,8 @@
 		022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B185E14D1B5FE000503E2 /* UIKit.framework */; };
 		022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186014D1B5FE000503E2 /* Foundation.framework */; };
 		022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 022B186714D1B5FE000503E2 /* InfoPlist.strings */; };
+		0248363016CC14F8001E03E4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362F16CC14F8001E03E4 /* CoreMedia.framework */; };
+		0248363216CC14FF001E03E4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248363116CC14FF001E03E4 /* QuartzCore.framework */; };
 		026851F8151383A200394C7B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 026851F7151383A200394C7B /* ViewController.xib */; };
 		029BCCF715128A90009E6549 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B186A14D1B5FE000503E2 /* main.m */; };
 		029BCCF815128A92009E6549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 022B187114D1B5FE000503E2 /* ViewController.m */; };
@@ -79,6 +81,8 @@
 		022B186E14D1B5FE000503E2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		022B187014D1B5FE000503E2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = SOURCE_ROOT; };
 		022B187114D1B5FE000503E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
+		0248362F16CC14F8001E03E4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		0248363116CC14FF001E03E4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		026851F7151383A200394C7B /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = SOURCE_ROOT; };
 		02DBD1A8156E876200C6DF66 /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../ZXingObjC.xcodeproj; sourceTree = "<group>"; };
 		2540479A166AFC5900E13304 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -93,6 +97,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0248363216CC14FF001E03E4 /* QuartzCore.framework in Frameworks */,
+				0248363016CC14F8001E03E4 /* CoreMedia.framework in Frameworks */,
 				25404797166AFBDF00E13304 /* libZXingObjC-iOS.a in Frameworks */,
 				2540479D166AFCD800E13304 /* AVFoundation.framework in Frameworks */,
 				2540479F166AFCDC00E13304 /* CoreGraphics.framework in Frameworks */,
@@ -109,10 +115,6 @@
 		022B184F14D1B5FE000503E2 = {
 			isa = PBXGroup;
 			children = (
-				254047A2166AFCE400E13304 /* ImageIO.framework */,
-				254047A0166AFCE100E13304 /* CoreVideo.framework */,
-				2540479E166AFCDC00E13304 /* CoreGraphics.framework */,
-				2540479C166AFCD800E13304 /* AVFoundation.framework */,
 				022B186414D1B5FE000503E2 /* QrCodeTest */,
 				022B185D14D1B5FE000503E2 /* Frameworks */,
 				022B185B14D1B5FE000503E2 /* Products */,
@@ -133,6 +135,12 @@
 				02DBD1A8156E876200C6DF66 /* ZXingObjC.xcodeproj */,
 				022B185E14D1B5FE000503E2 /* UIKit.framework */,
 				022B186014D1B5FE000503E2 /* Foundation.framework */,
+				254047A2166AFCE400E13304 /* ImageIO.framework */,
+				0248363116CC14FF001E03E4 /* QuartzCore.framework */,
+				0248362F16CC14F8001E03E4 /* CoreMedia.framework */,
+				254047A0166AFCE100E13304 /* CoreVideo.framework */,
+				2540479E166AFCDC00E13304 /* CoreGraphics.framework */,
+				2540479C166AFCD800E13304 /* AVFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

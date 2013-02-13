@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0248362016CC1493001E03E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248361F16CC1493001E03E4 /* CoreGraphics.framework */; };
+		0248362216CC14B2001E03E4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362116CC14B2001E03E4 /* CoreMedia.framework */; };
+		0248362416CC14B9001E03E4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362316CC14B9001E03E4 /* CoreVideo.framework */; };
+		0248362616CC14BF001E03E4 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362516CC14BF001E03E4 /* ImageIO.framework */; };
+		0248362816CC14C4001E03E4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362716CC14C4001E03E4 /* QuartzCore.framework */; };
 		024D10E0156EAB6F00FE6872 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10DF156EAB6F00FE6872 /* UIKit.framework */; };
 		024D10E2156EAB6F00FE6872 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10E1156EAB6F00FE6872 /* Foundation.framework */; };
 		02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */; };
@@ -66,6 +71,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0248361F16CC1493001E03E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		0248362116CC14B2001E03E4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		0248362316CC14B9001E03E4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		0248362516CC14BF001E03E4 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0248362716CC14C4001E03E4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		024D10DB156EAB6F00FE6872 /* BarcodeScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarcodeScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		024D10DF156EAB6F00FE6872 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		024D10E1156EAB6F00FE6872 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -89,6 +99,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0248362816CC14C4001E03E4 /* QuartzCore.framework in Frameworks */,
+				0248362616CC14BF001E03E4 /* ImageIO.framework in Frameworks */,
+				0248362416CC14B9001E03E4 /* CoreVideo.framework in Frameworks */,
+				0248362216CC14B2001E03E4 /* CoreMedia.framework in Frameworks */,
+				0248362016CC1493001E03E4 /* CoreGraphics.framework in Frameworks */,
 				25404735166AC28500E13304 /* libZXingObjC-iOS.a in Frameworks */,
 				25404737166AC2EA00E13304 /* AVFoundation.framework in Frameworks */,
 				02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */,
@@ -124,6 +139,11 @@
 				02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */,
 				25404736166AC2EA00E13304 /* AVFoundation.framework */,
 				024D10DF156EAB6F00FE6872 /* UIKit.framework */,
+				0248362716CC14C4001E03E4 /* QuartzCore.framework */,
+				0248362516CC14BF001E03E4 /* ImageIO.framework */,
+				0248362316CC14B9001E03E4 /* CoreVideo.framework */,
+				0248362116CC14B2001E03E4 /* CoreMedia.framework */,
+				0248361F16CC1493001E03E4 /* CoreGraphics.framework */,
 				024D10E1156EAB6F00FE6872 /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -161,7 +181,7 @@
 				2540472C166AC24100E13304 /* ZXingObjCTests-iOS.octest */,
 				2540472E166AC24100E13304 /* libZXingObjC-osx.a */,
 				25404730166AC24100E13304 /* ZXingObjCTests-osx.octest */,
-				25404732166AC24100E13304 /* ZXingObjC-osx.framework */,
+				25404732166AC24100E13304 /* ZXingObjC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -193,7 +213,7 @@
 		024D10D2156EAB6E00FE6872 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Draconis Software";
 			};
 			buildConfigurationList = 024D10D5156EAB6E00FE6872 /* Build configuration list for PBXProject "BarcodeScanner" */;
@@ -248,7 +268,7 @@
 			remoteRef = 2540472F166AC24100E13304 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25404732166AC24100E13304 /* ZXingObjC-osx.framework */ = {
+		25404732166AC24100E13304 /* ZXingObjC.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ZXingObjC.framework;
@@ -316,6 +336,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -340,6 +364,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
