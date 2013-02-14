@@ -517,7 +517,6 @@ static float HEIGHT = 2.0f; //mm
 - (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError **)error;
 - (int)calculateNumberOfRowsM:(int)m k:(int)k c:(int)c;
 - (int)numberOfPadCodewordsM:(int)m k:(int)k c:(int)c r:(int)r;
-- (int)numberOfDataCodewordsM:(int)m errorCorrectionLevel:(int)errorCorrectionLevel c:(int)c error:(NSError **)error;
 - (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic;
 - (void)encodeLowLevel:(NSString *)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)aErrorCorrectionLevel logic:(ZXBarcodeMatrix *)logic;
 
@@ -601,15 +600,6 @@ static float HEIGHT = 2.0f; //mm
 - (int)numberOfPadCodewordsM:(int)m k:(int)k c:(int)c r:(int)r {
   int n = c * r - k;
   return n > m + 1 ? n - m - 1 : 0;
-}
-
-- (int)numberOfDataCodewordsM:(int)m errorCorrectionLevel:(int)anErrorCorrectionLevel c:(int)c error:(NSError **)error {
-  int k = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:anErrorCorrectionLevel];
-  int r = [self numberOfRowsM:m k:k c:c error:error];
-  if (r == -1) {
-    return -1;
-  }
-  return c * r - k;
 }
 
 - (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic {

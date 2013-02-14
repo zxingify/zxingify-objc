@@ -18,7 +18,7 @@
 
 /**
  * This class is used to help decode images from files which arrive as RGB data from
- * an ARGB pixel array. It does not support cropping or rotation.
+ * an ARGB pixel array. It does not support rotation.
  */
 
 @interface ZXRGBLuminanceSource : ZXLuminanceSource
