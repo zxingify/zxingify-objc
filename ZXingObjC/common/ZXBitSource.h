@@ -24,6 +24,7 @@
 
 @interface ZXBitSource : NSObject
 
+@property (nonatomic, assign, readonly) int bitOffset;
 @property (nonatomic, assign, readonly) int byteOffset;
 
 - (id)initWithBytes:(unsigned char *)bytes length:(unsigned int)length;
