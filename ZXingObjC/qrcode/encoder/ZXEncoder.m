@@ -113,9 +113,21 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
 
   // Hard part: need to know version to know how many bits length takes. But need to know how many
-  // bits it takes to know version. To pick version size assume length takes maximum bits
+  // bits it takes to know version. First we take a guess at version by assuming version will be
+  // the minimum, 1:
+
+  int provisionalBitsNeeded = headerBits.size
+    + [mode characterCountBits:[ZXQRCodeVersion versionForNumber:1]]
+    + dataBits.size;
+  ZXQRCodeVersion *provisionalVersion = [self chooseVersion:provisionalBitsNeeded ecLevel:ecLevel error:error];
+  if (!provisionalVersion) {
+    return nil;
+  }
+
+  // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
+
   int bitsNeeded = headerBits.size
-    + [mode characterCountBits:[ZXQRCodeVersion versionForNumber:40]]
+    + [mode characterCountBits:provisionalVersion]
     + dataBits.size;
   ZXQRCodeVersion *version = [self chooseVersion:bitsNeeded ecLevel:ecLevel error:error];
   if (!version) {
