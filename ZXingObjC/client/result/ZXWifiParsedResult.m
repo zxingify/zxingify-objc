@@ -22,6 +22,7 @@
 @property (nonatomic, copy) NSString *ssid;
 @property (nonatomic, copy) NSString *networkEncryption;
 @property (nonatomic, copy) NSString *password;
+@property (nonatomic, assign) BOOL hidden;
 
 @end
 
@@ -30,12 +31,18 @@
 @synthesize ssid;
 @synthesize networkEncryption;
 @synthesize password;
+@synthesize hidden;
 
 - (id)initWithNetworkEncryption:(NSString *)aNetworkEncryption ssid:(NSString *)anSsid password:(NSString *)aPassword {
+  return [self initWithNetworkEncryption:aNetworkEncryption ssid:anSsid password:aPassword];
+}
+
+- (id)initWithNetworkEncryption:(NSString *)aNetworkEncryption ssid:(NSString *)anSsid password:(NSString *)aPassword hidden:(BOOL)isHidden {
   if (self = [super initWithType:kParsedResultTypeWifi]) {
     self.ssid = anSsid;
     self.networkEncryption = aNetworkEncryption;
     self.password = aPassword;
+    self.hidden = isHidden;
   }
 
   return self;
@@ -43,6 +50,10 @@
 
 + (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password {
   return [[[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password] autorelease];
+}
+
++ (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password hidden:(BOOL)hidden {
+  return [[[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password hidden:hidden] autorelease];
 }
 
 - (void)dealloc {
@@ -58,6 +69,7 @@
   [ZXParsedResult maybeAppend:ssid result:result];
   [ZXParsedResult maybeAppend:networkEncryption result:result];
   [ZXParsedResult maybeAppend:password result:result];
+  [ZXParsedResult maybeAppend:[[NSNumber numberWithBool:hidden] stringValue] result:result];
   return result;
 }
 

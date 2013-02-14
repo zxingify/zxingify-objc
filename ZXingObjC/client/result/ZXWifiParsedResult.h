@@ -21,8 +21,11 @@
 @property (nonatomic, copy, readonly) NSString *ssid;
 @property (nonatomic, copy, readonly) NSString *networkEncryption;
 @property (nonatomic, copy, readonly) NSString *password;
+@property (nonatomic, assign, readonly) BOOL hidden;
 
 - (id)initWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password;
+- (id)initWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password hidden:(BOOL)hidden;
 + (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password;
++ (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password hidden:(BOOL)hidden;
 
 @end

@@ -25,19 +25,18 @@
   if (![rawText hasPrefix:@"WIFI:"]) {
     return nil;
   }
-  // Don't remove leading or trailing whitespace
-  BOOL trim = NO;
-  NSString *ssid = [[self class] matchSinglePrefixedField:@"S:" rawText:rawText endChar:';' trim:trim];
+  NSString *ssid = [[self class] matchSinglePrefixedField:@"S:" rawText:rawText endChar:';' trim:NO];
   if (ssid == nil || ssid.length == 0) {
     return nil;
   }
-  NSString *pass = [[self class] matchSinglePrefixedField:@"P:" rawText:rawText endChar:';' trim:trim];
-  NSString *type = [[self class] matchSinglePrefixedField:@"T:" rawText:rawText endChar:';' trim:trim];
+  NSString *pass = [[self class] matchSinglePrefixedField:@"P:" rawText:rawText endChar:';' trim:NO];
+  NSString *type = [[self class] matchSinglePrefixedField:@"T:" rawText:rawText endChar:';' trim:NO];
   if (type == nil) {
     type = @"nopass";
   }
 
-  return [ZXWifiParsedResult wifiParsedResultWithNetworkEncryption:type ssid:ssid password:pass];
+  BOOL hidden = [[[self class] matchSinglePrefixedField:@"B" rawText:rawText endChar:';' trim:NO] boolValue];
+  return [ZXWifiParsedResult wifiParsedResultWithNetworkEncryption:type ssid:ssid password:pass hidden:hidden];
 }
 
 @end
