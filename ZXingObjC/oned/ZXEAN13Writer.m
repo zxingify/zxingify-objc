@@ -39,7 +39,13 @@ const int EAN13_CODE_WIDTH = 3 + // start guard
 
 - (BOOL *)encode:(NSString *)contents length:(int *)pLength {
   if ([contents length] != 13) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 13 digits long, but got %d", [contents length]];
+    [NSException raise:NSInvalidArgumentException
+                format:@"Requested contents should be 13 digits long, but got %d", [contents length]];
+  }
+
+  if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
+    [NSException raise:NSInvalidArgumentException
+                format:@"Contents do not pass checksum"];
   }
 
   int firstDigit = [[contents substringToIndex:1] intValue];

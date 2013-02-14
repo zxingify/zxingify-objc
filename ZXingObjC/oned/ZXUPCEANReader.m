@@ -87,8 +87,6 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 @property (nonatomic, retain) ZXUPCEANExtensionSupport *extensionReader;
 @property (nonatomic, retain) ZXEANManufacturerOrgSupport *eanManSupport;
 
-- (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
-
 @end
 
 @implementation ZXUPCEANReader
@@ -214,7 +212,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 }
 
 - (BOOL)checkChecksum:(NSString *)s error:(NSError **)error {
-  if ([self checkStandardUPCEANChecksum:s]) {
+  if ([[self class] checkStandardUPCEANChecksum:s]) {
     return YES;
   } else {
     if (error) *error = FormatErrorInstance();
@@ -227,7 +225,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
  * Computes the UPC/EAN checksum on a string of digits, and reports
  * whether the checksum is correct or not.
  */
-- (BOOL)checkStandardUPCEANChecksum:(NSString *)s {
++ (BOOL)checkStandardUPCEANChecksum:(NSString *)s {
   int length = [s length];
   if (length == 0) {
     return NO;

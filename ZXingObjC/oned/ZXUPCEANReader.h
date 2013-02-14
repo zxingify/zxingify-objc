@@ -43,6 +43,7 @@ extern const int L_AND_G_PATTERNS[][4];
 + (NSRange)findStartGuardPattern:(ZXBitArray *)row error:(NSError **)error;
 - (ZXBarcodeFormat)barcodeFormat;
 - (BOOL)checkChecksum:(NSString *)s error:(NSError **)error;
++ (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
 + (int)decodeDigit:(ZXBitArray *)row counters:(int[])counters countersLen:(int)countersLen rowOffset:(int)rowOffset patternType:(UPC_EAN_PATTERNS)patternType error:(NSError **)error;
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error;
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error;
