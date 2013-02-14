@@ -18,6 +18,12 @@
 #import "ZXMaskUtil.h"
 #import "ZXQRCode.h"
 
+// Penalty weights from section 6.8.2.1
+const int N1 = 3;
+const int N2 = 3;
+const int N3 = 40;
+const int N4 = 10;
+
 @interface ZXMaskUtil ()
 
 + (int)applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal;
@@ -26,43 +32,50 @@
 
 @implementation ZXMaskUtil
 
-// Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
-// give penalty to them. Example: 00000 or 11111.
+/**
+ * Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
+ * give penalty to them. Example: 00000 or 11111.
+ */
 + (int)applyMaskPenaltyRule1:(ZXByteMatrix *)matrix {
   return [self applyMaskPenaltyRule1Internal:matrix isHorizontal:YES] + [self applyMaskPenaltyRule1Internal:matrix isHorizontal:NO];
 }
 
-// Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
-// penalty to them.
+/**
+ * Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
+ * penalty to them. This is actually equivalent to the spec's rule, which is to find MxN blocks and give a
+ * penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
+ */
 + (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix {
   int penalty = 0;
   unsigned char **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
-  for (int y = 0; y < height - 1; ++y) {
-    for (int x = 0; x < width - 1; ++x) {
+  for (int y = 0; y < height - 1; y++) {
+    for (int x = 0; x < width - 1; x++) {
       int value = array[y][x];
       if (value == array[y][x + 1] && value == array[y + 1][x] && value == array[y + 1][x + 1]) {
-        penalty += 3;
+        penalty++;
       }
     }
   }
 
-  return penalty;
+  return N2 * penalty;
 }
 
-// Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
-// 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
-// penalties twice (i.e. 40 * 2).
+/**
+ * Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
+ * 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
+ * penalties twice (i.e. 40 * 2).
+ */
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
   int penalty = 0;
   unsigned char **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
       if (x + 6 < width &&
           array[y][x] == 1 &&
           array[y][x +  1] == 0 &&
@@ -81,8 +94,8 @@
             array[y][x -  2] == 0 &&
             array[y][x -  3] == 0 &&
             array[y][x -  4] == 0))) {
-        penalty += 40;
-      }
+             penalty += N3;
+           }
       if (y + 6 < height &&
           array[y][x] == 1  &&
           array[y +  1][x] == 0  &&
@@ -101,50 +114,43 @@
             array[y -  2][x] == 0 &&
             array[y -  3][x] == 0 &&
             array[y -  4][x] == 0))) {
-        penalty += 40;
-      }
+             penalty += N3;
+           }
     }
   }
-
   return penalty;
 }
 
-// Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give
-// penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance. Examples:
-// -   0% => 100
-// -  40% =>  20
-// -  45% =>  10
-// -  50% =>   0
-// -  55% =>  10
-// -  55% =>  20
-// - 100% => 100
+/**
+ * Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give
+ * penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
+ */
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
   int numDarkCells = 0;
   unsigned char **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
-
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      if (array[y][x] == 1) {
-        numDarkCells += 1;
+  for (int y = 0; y < height; y++) {
+    unsigned char *arrayY = array[y];
+    for (int x = 0; x < width; x++) {
+      if (arrayY[x] == 1) {
+        numDarkCells++;
       }
     }
   }
-
   int numTotalCells = [matrix height] * [matrix width];
-  double darkRatio = (double)numDarkCells / numTotalCells;
-  return abs((int)(darkRatio * 100 - 50)) / 5 * 10;
+  double darkRatio = (double) numDarkCells / numTotalCells;
+  int fivePercentVariances = abs((int)(darkRatio * 100 - 50)) / 5; // * 100.0 / 5.0
+  return fivePercentVariances * N4;
 }
 
+/**
+ * Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
+ * pattern conditions.
+ */
 + (BOOL)dataMaskBit:(int)maskPattern x:(int)x y:(int)y {
-  if (![ZXQRCode isValidMaskPattern:maskPattern]) {
-    [NSException raise:NSInvalidArgumentException 
-                format:@"Invalid mask pattern."];
-  }
   int intermediate;
   int temp;
-
   switch (maskPattern) {
   case 0:
     intermediate = (y + x) & 0x1;
@@ -180,33 +186,34 @@
   return intermediate == 0;
 }
 
+/**
+ * Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
+ * vertical and horizontal orders respectively.
+ */
 + (int)applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal {
   int penalty = 0;
-  int numSameBitCells = 0;
-  int prevBit = -1;
   int iLimit = isHorizontal ? matrix.height : matrix.width;
   int jLimit = isHorizontal ? matrix.width : matrix.height;
   unsigned char **array = matrix.array;
-
-  for (int i = 0; i < iLimit; ++i) {
-    for (int j = 0; j < jLimit; ++j) {
+  for (int i = 0; i < iLimit; i++) {
+    int numSameBitCells = 0;
+    int prevBit = -1;
+    for (int j = 0; j < jLimit; j++) {
       int bit = isHorizontal ? array[i][j] : array[j][i];
       if (bit == prevBit) {
-        numSameBitCells += 1;
-        if (numSameBitCells == 5) {
-          penalty += 3;
-        } else if (numSameBitCells > 5) {
-          penalty += 1;
-        }
+        numSameBitCells++;
       } else {
-        numSameBitCells = 1;
+        if (numSameBitCells >= 5) {
+          penalty += N1 + (numSameBitCells - 5);
+        }
+        numSameBitCells = 1;  // Include the cell itself.
         prevBit = bit;
       }
     }
-
-    numSameBitCells = 0;
+    if (numSameBitCells > 5) {
+      penalty += N1 + (numSameBitCells - 5);
+    }
   }
-
   return penalty;
 }
 
