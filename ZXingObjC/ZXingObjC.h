@@ -264,5 +264,6 @@
 #import <ZXingObjC/ZXResultMetadataType.h>
 #import <ZXingObjC/ZXResultPoint.h>
 #import <ZXingObjC/ZXResultPointCallback.h>
+#import <ZXingObjC/ZXRGBLuminanceSource.h>
 #import <ZXingObjC/ZXWriter.h>
 #import <ZXingObjC/ZXingObjC.h>

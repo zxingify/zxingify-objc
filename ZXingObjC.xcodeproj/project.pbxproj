@@ -22,6 +22,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		251FCDEB16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		251FCDEC16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		251FCDED16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */; };
+		251FCDEE16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */; };
+		251FCDEF16CC8F6F000C27E5 /* ZXRGBLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */; };
+		251FCDF016CC8F7C000C27E5 /* ZXRGBLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */; };
 		25403CB7166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
 		25403CC6166A96FA00E13304 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CC5166A96FA00E13304 /* SenTestingKit.framework */; };
 		25403CC9166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
@@ -1305,6 +1311,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRGBLuminanceSource.h; sourceTree = "<group>"; };
+		251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRGBLuminanceSource.m; sourceTree = "<group>"; };
 		25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25403CB6166A96FA00E13304 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		25403CBB166A96FA00E13304 /* ZXingObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXingObjC.h; sourceTree = "<group>"; };
@@ -2056,6 +2064,8 @@
 				25403FDB166AA00700E13304 /* ZXResultPoint.h */,
 				25403FDC166AA00700E13304 /* ZXResultPoint.m */,
 				25403FDD166AA00700E13304 /* ZXResultPointCallback.h */,
+				251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */,
+				251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */,
 				25403FDE166AA00700E13304 /* ZXWriter.h */,
 			);
 			path = ZXingObjC;
@@ -3224,6 +3234,7 @@
 				25403FE9166AA00800E13304 /* ZXResultPoint.h in Headers */,
 				25403FEB166AA00800E13304 /* ZXResultPointCallback.h in Headers */,
 				25403FEC166AA00800E13304 /* ZXWriter.h in Headers */,
+				251FCDEB16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3361,6 +3372,7 @@
 				254045AA166ABAF000E13304 /* ZXResultPoint.h in Headers */,
 				254045AB166ABAF000E13304 /* ZXResultPointCallback.h in Headers */,
 				254045AC166ABAF000E13304 /* ZXWriter.h in Headers */,
+				251FCDEC16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3518,6 +3530,7 @@
 				25404640166ABB0A00E13304 /* ZXResultPoint.h in Headers */,
 				25404641166ABB0A00E13304 /* ZXResultPointCallback.h in Headers */,
 				25404642166ABB0A00E13304 /* ZXWriter.h in Headers */,
+				251FCDEF16CC8F6F000C27E5 /* ZXRGBLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3915,6 +3928,7 @@
 				25403FE4166AA00800E13304 /* ZXMultiFormatWriter.m in Sources */,
 				25403FE7166AA00800E13304 /* ZXResult.m in Sources */,
 				25403FEA166AA00800E13304 /* ZXResultPoint.m in Sources */,
+				251FCDED16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4215,6 +4229,7 @@
 				25404240166AAE6000E13304 /* ZXMultiFormatWriter.m in Sources */,
 				25404241166AAE6000E13304 /* ZXResult.m in Sources */,
 				25404242166AAE6000E13304 /* ZXResultPoint.m in Sources */,
+				251FCDEE16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4515,6 +4530,7 @@
 				254046F9166ABBED00E13304 /* ZXMultiFormatWriter.m in Sources */,
 				254046FA166ABBED00E13304 /* ZXResult.m in Sources */,
 				254046FB166ABBED00E13304 /* ZXResultPoint.m in Sources */,
+				251FCDF016CC8F7C000C27E5 /* ZXRGBLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
