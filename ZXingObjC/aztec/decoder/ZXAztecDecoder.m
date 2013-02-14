@@ -177,7 +177,6 @@ static NSString *DIGIT_TABLE[] = {
     } else {
       if (table == BINARY) {
         if (endIndex - startIndex < 8) {
-          end = YES;
           break;
         }
         code = [self readCode:correctedBits startIndex:startIndex length:8];
@@ -193,7 +192,6 @@ static NSString *DIGIT_TABLE[] = {
         }
 
         if (endIndex - startIndex < size) {
-          end = YES;
           break;
         }
 
