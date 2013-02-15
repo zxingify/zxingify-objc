@@ -89,6 +89,27 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
                  endString:nil];
 }
 
+- (void)testDuration {
+  [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+                           @"DTSTART:20080504T123456Z\r\n"
+                           @"DURATION:P1D\r\n"
+                           @"END:VEVENT\r\nEND:VCALENDAR"
+               description:nil
+                   summary:nil
+                  location:nil
+               startString:@"20080504T123456Z"
+                 endString:@"20080505T123456Z"];
+  [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+                           @"DTSTART:20080504T123456Z\r\n"
+                           @"DURATION:P1DT2H3M4S\r\n"
+                           @"END:VEVENT\r\nEND:VCALENDAR"
+               description:nil
+                   summary:nil
+                  location:nil
+               startString:@"20080504T123456Z"
+                 endString:@"20080505T143800Z"];
+}
+
 - (void)testSummary {
   [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
                            @"SUMMARY:foo\r\n"

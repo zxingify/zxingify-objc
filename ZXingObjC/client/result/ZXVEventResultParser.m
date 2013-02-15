@@ -44,6 +44,7 @@
     return nil;
   }
   NSString *end = [self matchSingleVCardPrefixedField:@"DTEND" rawText:rawText trim:YES];
+  NSString *duration = [self matchSingleVCardPrefixedField:@"DURATION" rawText:rawText trim:YES];
   NSString *location = [self matchSingleVCardPrefixedField:@"LOCATION" rawText:rawText trim:YES];
   NSString *organizer = [self stripMailto:[self matchSingleVCardPrefixedField:@"ORGANIZER" rawText:rawText trim:YES]];
 
@@ -71,6 +72,7 @@
     return [ZXCalendarParsedResult calendarParsedResultWithSummary:summary
                                                        startString:start
                                                          endString:end
+                                                    durationString:duration
                                                           location:location
                                                          organizer:organizer
                                                          attendees:attendees
