@@ -26,11 +26,8 @@
                     expectedFormat:kBarcodeFormatEan13];
 
   if (self) {
-    // NOTE (costa@scvngr.com) The java version of ZXing has 6 and 13
-    [self addTest:5 tryHarderCount:12 maxMisreads:1 maxTryHarderMisreads:1 rotation:0.0f];
-
-    // NOTE (costa@scvngr.com) The java version of ZXing has 7 and 13
-    [self addTest:7 tryHarderCount:12 maxMisreads:1 maxTryHarderMisreads:1 rotation:180.0f];
+    [self addTest:6 tryHarderCount:13 maxMisreads:1 maxTryHarderMisreads:1 rotation:0.0f];
+    [self addTest:7 tryHarderCount:13 maxMisreads:1 maxTryHarderMisreads:1 rotation:180.0f];
   }
 
   return self;

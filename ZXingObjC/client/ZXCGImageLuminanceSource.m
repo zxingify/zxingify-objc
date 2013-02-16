@@ -21,7 +21,6 @@
 @interface ZXCGImageLuminanceSource ()
 
 - (void)initializeWithImage:(CGImageRef)image left:(int)left top:(int)top width:(int)width height:(int)height;
-- (void)fillGrayscale:(unsigned char *)array offset:(int)offset size:(int)size;
 
 @end
 
@@ -168,24 +167,18 @@
     row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
   }
 
-  int offset = (y + top) * dataWidth + left;
-  [self fillGrayscale:row offset:offset size:self.width];
+  int offset = y * self.width;
+  memcpy(row, data + offset, self.width);
 
   return row;
 }
 
 - (unsigned char *)matrix {
-  int size = self.width * self.height;
+  int area = self.width * self.height;
 
-  unsigned char *result = (unsigned char *)malloc(size * sizeof(unsigned char));
+  unsigned char *result = (unsigned char *)malloc(area * sizeof(unsigned char));
 
-  if (left == 0 && top == 0 && dataWidth == self.width && dataHeight == self.height) {
-    [self fillGrayscale:result offset:0 size:size];
-  } else {
-    for (int row = 0; row < self.height; row++) {
-      [self fillGrayscale:result + row * self.width offset:(top + row) * dataWidth + left size:self.width];
-    }
-  }
+  memcpy(result, data, area * sizeof(unsigned char));
 
   return result;
 }
@@ -197,50 +190,62 @@
   top = _top;
   self->width = _width;
   self->height = _height;
-  dataWidth = (int)CGImageGetWidth(cgimage);
-  dataHeight = (int)CGImageGetHeight(cgimage);
-  
-  if (left + self.width > dataWidth ||
-      top + self.height > dataHeight ||
+  int sourceWidth = (int)CGImageGetWidth(cgimage);
+  int sourceHeight = (int)CGImageGetHeight(cgimage);
+
+  if (left + self.width > sourceWidth ||
+      top + self.height > sourceHeight ||
       top < 0 ||
       left < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
   }
-  
+
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(0, self.width, self.height, 8, self.width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipLast);
-  CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
-  CGContextSetShouldAntialias(context, NO);
+  CGContextRef context = CGBitmapContextCreate(0, self.width, self.height, 8, self.width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
+  CGContextSetAllowsAntialiasing(context, FALSE);
+  CGContextSetInterpolationQuality(context, kCGInterpolationNone);
 
   if (top || left) {
     CGContextClipToRect(context, CGRectMake(0, 0, self.width, self.height));
   }
-  
+
   CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), image);
 
-  data = (uint32_t *) malloc(self.width * self.height * sizeof(uint32_t));
-  memcpy(data, CGBitmapContextGetData(context), self.width * self.height * sizeof(uint32_t));
+  uint32_t *pixelData = (uint32_t *) malloc(self.width * self.height * sizeof(uint32_t));
+  memcpy(pixelData, CGBitmapContextGetData(context), self.width * self.height * sizeof(uint32_t));
   CGContextRelease(context);
   CGColorSpaceRelease(colorSpace);
 
-  top = 0;
-  left = 0;
-  dataWidth = self.width;
-  dataHeight = self.height;
-}
+  data = (unsigned char *)malloc(self.width * self.height * sizeof(unsigned char));
 
-- (void)fillGrayscale:(unsigned char *)array offset:(int)offset size:(int)size {
-  static double redRatio = 77.0f/255.0f;
-  static double greenRatio = 149.0f/255.0f;
-  static double blueRatio = 29.0f/255.0f;
+  for (int i = 0; i < self.height * self.width; i++) {
+    uint32_t rgbPixel=pixelData[i];
 
-  for (int i = 0; i < size; i++) {
-    uint32_t rgbPixel=data[offset+i];
-    int red = (rgbPixel>>24)&255;
-    int green = (rgbPixel>>16)&255;
-    int blue = (rgbPixel>>8)&255;
-    array[i] = roundf(redRatio * red + greenRatio * green + blueRatio * blue);
+    float red = (rgbPixel>>24)&0xFF;
+    float green = (rgbPixel>>16)&0xFF;
+    float blue = (rgbPixel>>8)&0xFF;
+    float alpha = (float)(rgbPixel & 0xFF) / 255.0f;
+
+    // ImageIO premultiplies all PNGs, so we have to "un-premultiply them":
+    // http://code.google.com/p/cocos2d-iphone/issues/detail?id=697#c26
+    red = round((red / alpha) - 0.001f);
+    green = round((green / alpha) - 0.001f);
+    blue = round((blue / alpha) - 0.001f);
+
+    if (red == green && green == blue) {
+      data[i] = red;
+    } else {
+      data[i] = (306 * (int)red +
+                 601 * (int)green +
+                 117 * (int)blue +
+                (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
+    }
   }
+
+  free(pixelData);
+
+  top = _top;
+  left = _left;
 }
 
 - (BOOL)rotateSupported {

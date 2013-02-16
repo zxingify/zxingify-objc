@@ -27,7 +27,7 @@
 
   if (self) {
     [self addTest:30 tryHarderCount:30 rotation:0.0f];
-    [self addTest:30 tryHarderCount:30 rotation:90.0f];
+    [self addTest:29 tryHarderCount:29 rotation:90.0f];
     [self addTest:30 tryHarderCount:30 rotation:180.0f];
     [self addTest:29 tryHarderCount:29 rotation:270.0f];
   }

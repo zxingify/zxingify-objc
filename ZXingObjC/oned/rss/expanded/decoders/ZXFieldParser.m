@@ -189,7 +189,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
 
 + (NSString *)parseFieldsInGeneralPurpose:(NSString *)rawInformation error:(NSError **)error {
   if ([rawInformation length] == 0) {
-    return nil;
+    return @"";
   }
   if ([rawInformation length] < 2) {
     if (error) *error = NotFoundErrorInstance();

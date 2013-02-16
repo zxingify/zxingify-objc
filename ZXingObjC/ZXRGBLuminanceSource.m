@@ -108,12 +108,6 @@
 }
 
 - (unsigned char *)matrix {
-  // If the caller asks for the entire underlying image, save the copy and give them the
-  // original data. The docs specifically warn that result.length must be ignored.
-  if (self.width == self.dataWidth && self.height == self.dataHeight) {
-    return self.luminances;
-  }
-
   int area = self.width * self.height;
   unsigned char *matrix = (unsigned char *)malloc(area * sizeof(unsigned char));
   int inputOffset = self.top * self.dataWidth + self.left;

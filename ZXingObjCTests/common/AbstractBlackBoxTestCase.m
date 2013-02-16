@@ -212,12 +212,16 @@
         passedCounts[x]++;
       } else if(misread) {
         misreadCounts[x]++;
+      } else {
+        NSLog(@"could not read at rotation %f", rotation);
       }
 
       if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:YES misread:&misread]) {
         tryHarderCounts[x]++;
       } else if(misread) {
         tryHarderMisreadCounts[x]++;
+      } else {
+        NSLog(@"could not read at rotation %f w/TH", rotation);
       }
     }
 
@@ -326,16 +330,16 @@
   if (degrees == 0.0f) {
     return original;
   }
-  double radians = degrees * M_PI / 180;
+  double radians = degrees * (M_PI / 180);
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
   radians = -1 * radians;
 #endif
-  
+
   CGRect imgRect = CGRectMake(0, 0, original.width, original.height);
   CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
   CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
-  
+
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(NULL,
                                                rotatedRect.size.width,
