@@ -510,7 +510,6 @@
 		25404140166AA0F100E13304 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D2166AA0F100E13304 /* QRCodeBlackBox5TestCase.m */; };
 		25404141166AA0F100E13304 /* QRCodeBlackBox6TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D4166AA0F100E13304 /* QRCodeBlackBox6TestCase.m */; };
 		25404142166AA0F100E13304 /* ZXQRCodeWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D6166AA0F100E13304 /* ZXQRCodeWriterTestCase.m */; };
-		25404144166AA10100E13304 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25404143166AA10100E13304 /* Resources */; };
 		25404146166AA16200E13304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404145166AA16200E13304 /* UIKit.framework */; };
 		2540414F166AA33700E13304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540414E166AA33700E13304 /* CoreGraphics.framework */; };
 		25404150166AA33E00E13304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540414E166AA33700E13304 /* CoreGraphics.framework */; };
@@ -812,7 +811,6 @@
 		25404390166AB91700E13304 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540438F166AB91700E13304 /* Cocoa.framework */; };
 		25404395166AB95700E13304 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404394166AB95700E13304 /* ApplicationServices.framework */; };
 		25404397166AB96000E13304 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404394166AB95700E13304 /* ApplicationServices.framework */; };
-		25404398166AB9BB00E13304 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25404143166AA10100E13304 /* Resources */; };
 		254043B5166ABA6B00E13304 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540438F166AB91700E13304 /* Cocoa.framework */; };
 		254043B6166ABA7500E13304 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404394166AB95700E13304 /* ApplicationServices.framework */; };
 		254043B7166ABA7800E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404387166AB8CF00E13304 /* CoreVideo.framework */; };
@@ -1293,6 +1291,7 @@
 		25FE5D3D16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3B16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m */; };
 		25FE5D4016D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3F16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m */; };
 		25FE5D4316D0B8B200826CDB /* TestCaseUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D4216D0B8B200826CDB /* TestCaseUtil.m */; };
+		25FE5D4516D1997C00826CDB /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25FE5D4416D1997C00826CDB /* Resources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1912,7 +1911,6 @@
 		254040D4166AA0F100E13304 /* QRCodeBlackBox6TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeBlackBox6TestCase.m; sourceTree = "<group>"; };
 		254040D5166AA0F100E13304 /* ZXQRCodeWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeWriterTestCase.h; sourceTree = "<group>"; };
 		254040D6166AA0F100E13304 /* ZXQRCodeWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeWriterTestCase.m; sourceTree = "<group>"; };
-		25404143166AA10100E13304 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		25404145166AA16200E13304 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2540414E166AA33700E13304 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2540415B166AA86900E13304 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -1937,6 +1935,7 @@
 		25FE5D3F16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSExpandedStackedInternalTestCase.m; sourceTree = "<group>"; };
 		25FE5D4116D0B8B100826CDB /* TestCaseUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseUtil.h; sourceTree = "<group>"; };
 		25FE5D4216D0B8B200826CDB /* TestCaseUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCaseUtil.m; sourceTree = "<group>"; };
+		25FE5D4416D1997C00826CDB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2111,8 +2110,8 @@
 				25404039166AA0F100E13304 /* oned */,
 				254040A5166AA0F100E13304 /* pdf417 */,
 				254040B0166AA0F100E13304 /* qrcode */,
-				25404143166AA10100E13304 /* Resources */,
 				25403CCE166A96FA00E13304 /* Supporting Files */,
+				25FE5D4416D1997C00826CDB /* Resources */,
 			);
 			path = ZXingObjCTests;
 			sourceTree = "<group>";
@@ -3696,7 +3695,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				25403CD2166A96FA00E13304 /* InfoPlist.strings in Resources */,
-				25404144166AA10100E13304 /* Resources in Resources */,
+				25FE5D4516D1997C00826CDB /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3704,7 +3703,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25404398166AB9BB00E13304 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
