@@ -35,7 +35,7 @@
     type = @"nopass";
   }
 
-  BOOL hidden = [[[self class] matchSinglePrefixedField:@"B" rawText:rawText endChar:';' trim:NO] boolValue];
+  BOOL hidden = [[[self class] matchSinglePrefixedField:@"H:" rawText:rawText endChar:';' trim:NO] boolValue];
   return [ZXWifiParsedResult wifiParsedResultWithNetworkEncryption:type ssid:ssid password:pass hidden:hidden];
 }
 
