@@ -594,12 +594,24 @@ const int MAX_PAIRS = 11;
   int numModules = 17; //left and right data characters have all the same length
   float elementWidth = (float)[ZXAbstractRSSReader count:counters arrayLen:countersLen] / (float)numModules;
 
+  // Sanity check: element width for pattern and the character should match
+  float expectedElementWidth = ([[pattern.startEnd objectAtIndex:1] intValue] - [[pattern.startEnd objectAtIndex:0] intValue]) / 15.0f;
+  if (fabsf(elementWidth - expectedElementWidth) / expectedElementWidth > 0.3f) {
+    return nil;
+  }
+
   for (int i = 0; i < countersLen; i++) {
     float value = 1.0f * counters[i] / elementWidth;
     int count = (int)(value + 0.5f);
     if (count < 1) {
+      if (value < 0.3f) {
+        return nil;
+      }
       count = 1;
     } else if (count > 8) {
+      if (value > 8.7f) {
+        return nil;
+      }
       count = 8;
     }
     int offset = i >> 1;
