@@ -40,6 +40,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
+@property (nonatomic, retain) NSMutableString *decodeRowResult;
+
 - (BOOL)checkChecksums:(NSMutableString *)result error:(NSError **)error ;
 - (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError **)error ;
 - (NSString *)decodeExtended:(NSMutableString *)encoded;
@@ -51,7 +53,29 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @implementation ZXCode93Reader
 
+@synthesize decodeRowResult;
+
+- (id)init {
+  if (self = [super init]) {
+    self.decodeRowResult = [NSMutableString stringWithCapacity:20];
+  }
+
+  return self;
+}
+
+- (void)dealloc {
+  [decodeRowResult release];
+
+  [super dealloc];
+}
+
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  const int countersLen = 6;
+  int counters[countersLen];
+  memset(counters, 0, countersLen * sizeof(int));
+
+  [self.decodeRowResult setString:@""];
+
   int start[2] = {0};
   if (![self findAsteriskPattern:row a:&start[0] b:&start[1]]) {
     if (error) *error = NotFoundErrorInstance();
@@ -61,9 +85,6 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   int nextStart = [row nextSet:start[1]];
   int end = row.size;
 
-  NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  const int countersLen = 6;
-  int counters[countersLen];
   unichar decodedChar;
   int lastStart;
   do {
@@ -81,7 +102,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
-    [result appendFormat:@"%C", decodedChar];
+    [self.decodeRowResult appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
     for (int i = 0; i < countersLen; i++) {
       nextStart += counters[i];
@@ -89,25 +110,25 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
     // Read off white space
     nextStart = [row nextSet:nextStart];
   } while (decodedChar != '*');
-  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
+  [self.decodeRowResult deleteCharactersInRange:NSMakeRange([self.decodeRowResult length] - 1, 1)];
 
   if (nextStart == end || ![row get:nextStart]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  if ([result length] < 2) {
+  if ([self.decodeRowResult length] < 2) {
     // false positive -- need at least 2 checksum digits
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  if (![self checkChecksums:result error:error]) {
+  if (![self checkChecksums:self.decodeRowResult error:error]) {
     return nil;
   }
-  [result deleteCharactersInRange:NSMakeRange([result length] - 2, 2)];
+  [self.decodeRowResult deleteCharactersInRange:NSMakeRange([self.decodeRowResult length] - 2, 2)];
 
-  NSString *resultString = [self decodeExtended:result];
+  NSString *resultString = [self decodeExtended:self.decodeRowResult];
   if (!resultString) {
     if (error) *error = FormatErrorInstance();
     return nil;

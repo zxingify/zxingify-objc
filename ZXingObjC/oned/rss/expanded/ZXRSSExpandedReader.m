@@ -56,7 +56,6 @@ const int WEIGHTS[23][8] = {
   { 45, 135, 194, 160,  58, 174, 100,  89}
 };
 
-/*
 const int FINDER_PAT_A = 0;
 const int FINDER_PAT_B = 1;
 const int FINDER_PAT_C = 2;
@@ -79,8 +78,7 @@ const int FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES_LEN][FINDER_PATTERN_
   { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
 };
 
-#define LONGEST_SEQUENCE_SIZE FINDER_PATTERN_SEQUENCES_SUBLEN
-*/
+//#define LONGEST_SEQUENCE_SIZE FINDER_PATTERN_SEQUENCES_SUBLEN
 
 const int MAX_PAIRS = 11;
 
@@ -103,6 +101,8 @@ const int MAX_PAIRS = 11;
 - (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern;
 - (void)reverseCounters:(int *)counters length:(unsigned int)length;
 - (NSMutableArray *)checkRows:(BOOL)reversed;
+- (NSMutableArray *)checkRows:(NSMutableArray *)rows current:(int)currentRow;
+- (BOOL)isValidSequence:(NSArray *)pairs;
 - (void)storeRow:(int)rowNumber wasReversed:(BOOL)reversed;
 - (BOOL)isPartialRow:(NSArray *)pairs of:(NSArray *)rows;
 - (void)removePartialRows:(NSArray *)pairs from:(NSMutableArray *)rows;
@@ -199,24 +199,81 @@ const int MAX_PAIRS = 11;
 }
 
 - (NSMutableArray *)checkRows:(BOOL)reverse {
+  // Limit number of rows we are checking
+  // We use recursive algorithm with pure complexity and don't want it to take forever
+  // Stacked barcode can have up to 11 rows, so 25 seems resonable enough
+  if (self.rows.count > 25) {
+    [self.rows removeAllObjects];
+    return nil;
+  }
+
 	[self.pairs removeAllObjects];
   if (reverse) {
     self.rows = [[[[self.rows reverseObjectEnumerator] allObjects] mutableCopy] autorelease];
   }
 
-  for (ZXExpandedRow *erow in self.rows) {
-    [self.pairs addObjectsFromArray:erow.pairs];
-  }
-
-  if (self.checkChecksum) {
-    return self.pairs;
-  }
+  NSMutableArray *ps = [self checkRows:[NSMutableArray array] current:0];
 
   if (reverse) {
     self.rows = [[[[self.rows reverseObjectEnumerator] allObjects] mutableCopy] autorelease];
   }
 
+  return ps;
+}
+
+// Try to construct a valid rows sequence
+// Recursion is used to implement backtracking
+- (NSMutableArray *)checkRows:(NSMutableArray *)collectedRows current:(int)currentRow {
+  for (int i = currentRow; i < [self.rows count]; i++) {
+    ZXExpandedRow *row = [self.rows objectAtIndex:i];
+    [self.pairs removeAllObjects];
+    int size = [collectedRows count];
+    for (int j = 0; j < size; j++) {
+      [self.pairs addObjectsFromArray:[[collectedRows objectAtIndex:j] pairs]];
+    }
+    [self.pairs addObjectsFromArray:row.pairs];
+
+    if (![self isValidSequence:self.pairs]) {
+      continue;
+    }
+
+    if ([self checkChecksum]) {
+      return self.pairs;
+    }
+
+    NSMutableArray *rs = [NSMutableArray array];
+    [rs addObjectsFromArray:collectedRows];
+    [rs addObject:row];
+    NSMutableArray *ps = [self checkRows:rs current:i + 1];
+    if (ps) {
+      return ps;
+    }
+  }
   return nil;
+}
+
+// Whether the pairs form a valid find pattern seqience,
+// either complete or a prefix
+- (BOOL)isValidSequence:(NSArray *)pairs {
+  for (int i = 0, sz = 2; i < FINDER_PATTERN_SEQUENCES_LEN; i++, sz++) {
+    if ([self.pairs count] > sz) {
+      continue;
+    }
+
+    BOOL stop = YES;
+    for (int j = 0; j < [self.pairs count]; j++) {
+      if ([[[self.pairs objectAtIndex:j] finderPattern] value] != FINDER_PATTERN_SEQUENCES[i][j]) {
+        stop = NO;
+        break;
+      }
+    }
+
+    if (stop) {
+      return YES;
+    }
+  }
+
+  return NO;
 }
 
 - (void)storeRow:(int)rowNumber wasReversed:(BOOL)wasReversed {
