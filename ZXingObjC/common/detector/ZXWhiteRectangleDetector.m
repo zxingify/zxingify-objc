@@ -292,7 +292,7 @@ int const CORR = 1;
   float ti = t.x;
   float tj = t.y;
 
-  if (yi < self.width / 2) {
+  if (yi < self.width / 2.0f) {
     return [NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:ti - CORR y:tj + CORR] autorelease],
             [[[ZXResultPoint alloc] initWithX:zi + CORR y:zj + CORR] autorelease],
             [[[ZXResultPoint alloc] initWithX:xi - CORR y:xj - CORR] autorelease],

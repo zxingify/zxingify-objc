@@ -458,10 +458,8 @@ const int MAX_PAIRS = 11;
     return nil;
   }
 
-  if (previousPairs.count > 0) {
-    if ([[previousPairs lastObject] mustBeLast]) {
-      return nil;
-    }
+  if (previousPairs.count > 0 && [[previousPairs lastObject] mustBeLast]) {
+    return nil;
   }
 
   ZXDataCharacter *rightChar = [self decodeDataCharacter:row pattern:pattern isOddPattern:isOddPattern leftChar:NO];

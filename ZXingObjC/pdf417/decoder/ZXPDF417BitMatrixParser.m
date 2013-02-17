@@ -852,10 +852,8 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     } else {
       // Left row indicator column
       int cw = [self codeword:symbol];
-      if (ecLevel < 0) {
-        if (rowNumber % 3 == 1) {
-          leftColumnECData = cw;
-        }
+      if (ecLevel < 0 && rowNumber % 3 == 1) {
+        leftColumnECData = cw;
       }
     }
     symbol = 0;
@@ -867,12 +865,10 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     //columns--;
     // Overwrite the last codeword i.e. Right Row Indicator
     --next;
-    if (ecLevel < 0) {
-      if (rowNumber % 3 == 2) {
-        self.rightColumnECData = [[codewords objectAtIndex:next] intValue];
-        if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
-          self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
-        }
+    if (ecLevel < 0 && rowNumber % 3 == 2) {
+      self.rightColumnECData = [[codewords objectAtIndex:next] intValue];
+      if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
+        self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
       }
     }
     [codewords replaceObjectAtIndex:next withObject:[NSNumber numberWithInt:0]];

@@ -514,7 +514,6 @@ static float HEIGHT = 2.0f; //mm
 @property (nonatomic, assign) int minRows;
 @property (nonatomic, assign) int maxRows;
 
-- (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError **)error;
 - (int)calculateNumberOfRowsM:(int)m k:(int)k c:(int)c;
 - (int)numberOfPadCodewordsM:(int)m k:(int)k c:(int)c r:(int)r;
 - (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic;
@@ -553,34 +552,6 @@ static float HEIGHT = 2.0f; //mm
   [barcodeMatrix release];
 
   [super dealloc];
-}
-
-/**
- * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
- */
-- (int)numberOfRowsM:(int)m k:(int)k c:(int)c error:(NSError **)error {
-  int r = [self calculateNumberOfRowsM:m k:k c:c];
-  if (r > 90) {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"The message doesn't fit in the configured symbol size."
-                              @" The resultant number of rows for this barcode exceeds 90."
-                              @" Please increase the number of columns or decrease the error correction"
-                              @" level to reduce the number of rows."
-                                                         forKey:NSLocalizedDescriptionKey];
-
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
-    return -1;
-  }
-  if (r < 2) {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"The message doesn't fit in the configured symbol size."
-                              @" The resultant number of rows for this barcode exceeds 90."
-                              @" Please increase the number of columns or decrease the error correction"
-                              @" level to reduce the number of rows."
-                                                         forKey:NSLocalizedDescriptionKey];
-
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
-    return -1;
-  }
-  return r;
 }
 
 /**
