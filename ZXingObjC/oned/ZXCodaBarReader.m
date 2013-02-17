@@ -337,29 +337,39 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   if (end >= self.counterLength) {
     return -1;
   }
-  // First element is for bars, second is for spaces.
-  int maxes[2] = {0, 0};
-  int mins[2] = {NSIntegerMax, NSIntegerMax};
-  int thresholds[2] = {0, 0};
 
-  for (int i = 0; i < 2; i++) {
-    for (int j = position + i; j < end; j += 2) {
-      if (self.counters[j] < mins[i]) {
-        mins[i] = self.counters[j];
-      }
-      if (self.counters[j] > maxes[i]) {
-        maxes[i] = self.counters[j];
-      }
+  int maxBar = 0;
+  int minBar = NSIntegerMax;
+  for (int j = position; j < end; j += 2) {
+    int currentCounter = counters[j];
+    if (currentCounter < minBar) {
+      minBar = currentCounter;
     }
-    thresholds[i] = (mins[i] + maxes[i]) / 2;
+    if (currentCounter > maxBar) {
+      maxBar = currentCounter;
+    }
   }
+  int thresholdBar = (minBar + maxBar) / 2;
+
+  int maxSpace = 0;
+  int minSpace = NSIntegerMax;
+  for (int j = position + 1; j < end; j += 2) {
+    int currentCounter = counters[j];
+    if (currentCounter < minSpace) {
+      minSpace = currentCounter;
+    }
+    if (currentCounter > maxSpace) {
+      maxSpace = currentCounter;
+    }
+  }
+  int thresholdSpace = (minSpace + maxSpace) / 2;
 
   int bitmask = 1 << 7;
   int pattern = 0;
   for (int i = 0; i < 7; i++) {
-    int barOrSpace = i & 1;
+    int threshold = (i & 1) == 0 ? thresholdBar : thresholdSpace;
     bitmask >>= 1;
-    if (self.counters[position + i] > thresholds[barOrSpace]) {
+    if (counters[position + i] > threshold) {
       pattern |= bitmask;
     }
   }
