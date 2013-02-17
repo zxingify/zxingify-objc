@@ -27,7 +27,7 @@
 
   if (self) {
     [self addTest:21 tryHarderCount:23 rotation:0.0f];
-    [self addTest:19 tryHarderCount:23 rotation:180.0f];
+    [self addTest:21 tryHarderCount:23 rotation:180.0f];
   }
 
   return self;

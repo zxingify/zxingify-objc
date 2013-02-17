@@ -410,7 +410,7 @@ const int MAX_PAIRS = 11;
       return nil;
     }
   } else {
-    if (![ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] + 1 counters:counters countersSize:countersLen]) {
+    if (![ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters countersSize:countersLen]) {
       return nil;
     }
     // reverse it
