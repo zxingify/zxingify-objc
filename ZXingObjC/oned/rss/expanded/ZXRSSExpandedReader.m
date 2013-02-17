@@ -56,6 +56,7 @@ const int WEIGHTS[23][8] = {
   { 45, 135, 194, 160,  58, 174, 100,  89}
 };
 
+/*
 const int FINDER_PAT_A = 0;
 const int FINDER_PAT_B = 1;
 const int FINDER_PAT_C = 2;
@@ -79,11 +80,13 @@ const int FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES_LEN][FINDER_PATTERN_
 };
 
 #define LONGEST_SEQUENCE_SIZE FINDER_PATTERN_SEQUENCES_SUBLEN
+*/
+
 const int MAX_PAIRS = 11;
 
 @interface ZXRSSExpandedReader () {
   int startEnd[2];
-  int currentSequence[LONGEST_SEQUENCE_SIZE];
+//  int currentSequence[LONGEST_SEQUENCE_SIZE];
   BOOL startFromEven;
 }
 
@@ -228,7 +231,7 @@ const int MAX_PAIRS = 11;
       break;
     }
     prevIsSame = [erow isEquivalent:self.pairs];
-    insertPos += 1;
+    insertPos++;
   }
   if (nextIsSame || prevIsSame) {
     return;
@@ -296,6 +299,7 @@ const int MAX_PAIRS = 11;
       }
     }
     if (allFound) {
+      // the row 'r' contain all the pairs from 'pairs'
       return YES;
     }
   }
@@ -406,38 +410,6 @@ const int MAX_PAIRS = 11;
   ZXDataCharacter *rightChar = [self decodeDataCharacter:row pattern:pattern isOddPattern:isOddPattern leftChar:NO];
   BOOL mayBeLast = YES;
   return [[[ZXExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:pattern mayBeLast:mayBeLast] autorelease];
-}
-
-- (BOOL)checkPairSequence:(NSMutableArray *)previousPairs pattern:(ZXRSSFinderPattern *)pattern {
-  int currentSequenceLength = [previousPairs count] + 1;
-  if (currentSequenceLength > LONGEST_SEQUENCE_SIZE) {
-    return NO;
-  }
-
-  for (int pos = 0; pos < [previousPairs count]; ++pos) {
-    currentSequence[pos] = [[[previousPairs objectAtIndex:pos] finderPattern] value];
-  }
-
-  currentSequence[currentSequenceLength - 1] = [pattern value];
-
-  for (int i = 0; i < FINDER_PATTERN_SEQUENCES_LEN; ++i) {
-    int *validSequence = (int *)FINDER_PATTERN_SEQUENCES[i];
-    if (i + 2 >= currentSequenceLength) {
-      BOOL valid = YES;
-      for (int pos = 0; pos < currentSequenceLength; ++pos) {
-        if (currentSequence[pos] != validSequence[pos]) {
-          valid = NO;
-          break;
-        }
-      }
-
-      if (valid) {
-        return currentSequenceLength == i + 2;
-      }
-    }
-  }
-
-  return NO;
 }
 
 - (BOOL)findNextPair:(ZXBitArray *)row previousPairs:(NSMutableArray *)previousPairs forcedOffset:(int)forcedOffset {

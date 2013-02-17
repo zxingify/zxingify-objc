@@ -102,20 +102,21 @@
     }
   }
 
-  return [ZXExpandedProductParsedResult expandedProductParsedResultWithProductID:productID
-                                                                            sscc:sscc
-                                                                       lotNumber:lotNumber
-                                                                  productionDate:productionDate
-                                                                   packagingDate:packagingDate
-                                                                  bestBeforeDate:bestBeforeDate
-                                                                  expirationDate:expirationDate
-                                                                          weight:weight
-                                                                      weightType:weightType
-                                                                 weightIncrement:weightIncrement
-                                                                           price:price
-                                                                  priceIncrement:priceIncrement
-                                                                   priceCurrency:priceCurrency
-                                                                     uncommonAIs:uncommonAIs];
+  return [ZXExpandedProductParsedResult expandedProductParsedResultWithRawText:rawText
+                                                                     productID:productID
+                                                                          sscc:sscc
+                                                                     lotNumber:lotNumber
+                                                                productionDate:productionDate
+                                                                 packagingDate:packagingDate
+                                                                bestBeforeDate:bestBeforeDate
+                                                                expirationDate:expirationDate
+                                                                        weight:weight
+                                                                    weightType:weightType
+                                                               weightIncrement:weightIncrement
+                                                                         price:price
+                                                                priceIncrement:priceIncrement
+                                                                 priceCurrency:priceCurrency
+                                                                   uncommonAIs:uncommonAIs];
 }
 
 - (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
