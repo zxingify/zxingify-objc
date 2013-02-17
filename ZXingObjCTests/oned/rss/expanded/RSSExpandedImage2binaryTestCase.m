@@ -194,6 +194,10 @@
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
   NSArray *pairs = [rssExpandedReader decodeRow2pairs:rowNumber row:row];
+  if (!pairs) {
+    STFail(@"Unable to decode pairs");
+    return;
+  }
   ZXBitArray *binary = [ZXBitArrayBuilder buildBitArray:pairs];
   STAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
 }

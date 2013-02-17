@@ -52,7 +52,12 @@
   int rowNumber = binaryMap.height / 2;
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
-  ZXResult *theResult = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:nil];
+  NSError *error;
+  ZXResult *theResult = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:&error];
+  if (!theResult) {
+    STFail([error description]);
+    return;
+  }
 
   STAssertEquals(theResult.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected format to be kBarcodeFormatRSSExpanded");
 

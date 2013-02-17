@@ -1993,8 +1993,8 @@
 			isa = PBXGroup;
 			children = (
 				25403CB8166A96FA00E13304 /* ZXingObjC */,
-				25403CB9166A96FA00E13304 /* Supporting Files */,
 				25403CCD166A96FA00E13304 /* ZXingObjCTests */,
+				25403CB9166A96FA00E13304 /* Supporting Files */,
 				25403CB5166A96FA00E13304 /* iOS Frameworks */,
 				2540438A166AB8EA00E13304 /* OS X Frameworks */,
 				25403CB4166A96FA00E13304 /* Products */,
