@@ -57,16 +57,6 @@
   return [self encode:contents format:format width:width height:height hints:nil error:error];
 }
 
-- (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format compact:(BOOL)compact width:(int)width height:(int)height
-                minCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows
-             compaction:(ZXCompaction)compaction error:(NSError **)error {
-  ZXEncodeHints *hints = [ZXEncodeHints hints];
-  hints.pdf417Compact = compact;
-  hints.pdf417Compaction = compaction;
-  hints.pdf417Dimensions = [[[ZXDimensions alloc] initWithMinCols:minCols maxCols:maxCols minRows:minRows maxRows:maxRows] autorelease];
-  return [self encode:contents format:format width:width height:height hints:hints error:error];
-}
-
 /**
  * Takes encoder, accounts for width/height, and retrieves bit matrix
  */
