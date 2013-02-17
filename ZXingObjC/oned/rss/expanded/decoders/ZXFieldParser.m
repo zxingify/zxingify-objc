@@ -182,7 +182,8 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                               [NSArray arrayWithObjects:@"8100", [NSNumber numberWithInt:6], nil],
                               [NSArray arrayWithObjects:@"8101", [NSNumber numberWithInt:10], nil],
                               [NSArray arrayWithObjects:@"8102", [NSNumber numberWithInt:2], nil],
-                              [NSArray arrayWithObjects:@"8110", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
+                              [NSArray arrayWithObjects:@"8110", VARIABLE_LENGTH, [NSNumber numberWithInt:70], nil],
+                              [NSArray arrayWithObjects:@"8200", VARIABLE_LENGTH, [NSNumber numberWithInt:70], nil],
                               nil];
   }
 }
