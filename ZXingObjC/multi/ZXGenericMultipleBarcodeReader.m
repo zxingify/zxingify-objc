@@ -72,10 +72,9 @@ int const MIN_DIMENSION_TO_RECUR = 100;
       break;
     }
   }
-  if (alreadyFound) {
-    return YES;
+  if (!alreadyFound) {
+    [results addObject:[self translateResultPoints:result xOffset:xOffset yOffset:yOffset]];
   }
-  [results addObject:[self translateResultPoints:result xOffset:xOffset yOffset:yOffset]];
   NSMutableArray *resultPoints = [result resultPoints];
   if (resultPoints == nil || [resultPoints count] == 0) {
     return YES;
