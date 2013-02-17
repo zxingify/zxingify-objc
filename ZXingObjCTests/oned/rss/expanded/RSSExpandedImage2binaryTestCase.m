@@ -32,7 +32,7 @@
 
 - (void)testDecodeRow2binary_1 {
   // (11)100224(17)110224(3102)000100
-  NSString *path = @"Resources/blackbox/rssexpanded-1/1.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/1.png";
   NSString *expected = @" ...X...X .X....X. .XX...X. X..X...X ...XX.X. ..X.X... ..X.X..X ...X..X. X.X....X .X....X. .....X.. X...X...";
 
   [self assertCorrectImage2binary:path expected:expected];
@@ -40,7 +40,7 @@
 
 - (void)testDecodeRow2binary_2 {
   // (01)90012345678908(3103)001750
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
   NSString *expected = @" ..X..... ......X. .XXX.X.X .X...XX. XXXXX.XX XX.X.... .XX.XX.X .XX.";
 
   [self assertCorrectImage2binary:path expected:expected];
@@ -48,7 +48,7 @@
 
 - (void)testDecodeRow2binary_3 {
   // (10)12A
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   NSString *expected = @" .......X ..XX..X. X.X....X .......X ....";
 
   [self assertCorrectImage2binary:path expected:expected];
@@ -56,7 +56,7 @@
 
 - (void)testDecodeRow2binary_4 {
   // (01)98898765432106(3202)012345(15)991231
-  NSString *path = @"Resources/blackbox/rssexpanded-1/4.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/4.png";
   NSString *expected = @" ..XXXX.X XX.XXXX. .XXX.XX. XX..X... .XXXXX.. XX.X..X. ..XX..XX XX.X.XXX X..XX..X .X.XXXXX XXXX";
 
   [self assertCorrectImage2binary:path expected:expected];
@@ -64,7 +64,7 @@
 
 - (void)testDecodeRow2binary_5 {
   // (01)90614141000015(3202)000150
-  NSString *path = @"Resources/blackbox/rssexpanded-1/5.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/5.png";
   NSString *expected = @" ..X.X... .XXXX.X. XX..XXXX ....XX.. X....... ....X... ....X..X .XX.";
 
   [self assertCorrectImage2binary:path expected:expected];
@@ -90,7 +90,7 @@
   // (01)98898765432106(3103)001750
 
   NSString *expected = @" ..X..XX. XXXX..XX X.XX.XX. .X....XX XXX..XX. X..X.... .XX.XX.X .XX.";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/12.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/12.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -117,7 +117,7 @@
   // (01)90012345678908(3102)001750(11)100312
 
   NSString *expected = @" ..XXX... ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/15.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/15.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -126,7 +126,7 @@
   // (01)90012345678908(3202)001750(11)100312
 
   NSString *expected = @" ..XXX..X ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/16.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/16.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -135,7 +135,7 @@
   // (01)90012345678908(3102)001750(13)100312
 
   NSString *expected = @" ..XXX.X. ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/17.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/17.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -144,7 +144,7 @@
   // (01)90012345678908(3202)001750(13)100312
 
   NSString *expected = @" ..XXX.XX ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/18.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/18.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -153,7 +153,7 @@
   // (01)90012345678908(3102)001750(15)100312
 
   NSString *expected = @" ..XXXX.. ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/19.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/19.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -162,7 +162,7 @@
   // (01)90012345678908(3202)001750(15)100312
 
   NSString *expected = @" ..XXXX.X ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/20.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/20.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -171,7 +171,7 @@
   // (01)90012345678908(3102)001750(17)100312
 
   NSString *expected = @" ..XXXXX. ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/21.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/21.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }
@@ -180,7 +180,7 @@
   // (01)90012345678908(3202)001750(17)100312
 
   NSString *expected = @" ..XXXXXX ........ .X..XXX. X.X.X... XX.XXXXX .XXXX.X. ..XX...X .X.....X .XX..... XXXX.X.. XX..";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/22.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/22.png";
 
   [self assertCorrectImage2binary:path expected:expected];
 }

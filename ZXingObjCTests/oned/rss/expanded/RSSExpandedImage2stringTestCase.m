@@ -32,35 +32,35 @@
 @implementation RSSExpandedImage2stringTestCase
 
 - (void)testDecodeRow2string_1 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/1.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/1.png";
   NSString *expected = @"(11)100224(17)110224(3102)000100";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_2 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
   NSString *expected = @"(01)90012345678908(3103)001750";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_3 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   NSString *expected = @"(10)12A";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_4 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/4.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/4.png";
   NSString *expected = @"(01)98898765432106(3202)012345(15)991231";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_5 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/5.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/5.png";
   NSString *expected = @"(01)90614141000015(3202)000150";
 
   [self assertCorrectImage2string:path expected:expected];
@@ -89,7 +89,7 @@
 
 - (void)testDecodeRow2string_12 {
   NSString *expected = @"(01)98898765432106(3103)001750";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/12.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/12.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
@@ -110,56 +110,56 @@
 
 - (void)testDecodeRow2string_15 {
   NSString *expected = @"(01)90012345678908(3102)001750(11)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/15.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/15.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_16 {
   NSString *expected = @"(01)90012345678908(3202)001750(11)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/16.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/16.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_17 {
   NSString *expected = @"(01)90012345678908(3102)001750(13)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/17.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/17.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_18 {
   NSString *expected = @"(01)90012345678908(3202)001750(13)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/18.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/18.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_19 {
   NSString *expected = @"(01)90012345678908(3102)001750(15)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/19.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/19.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_20 {
   NSString *expected = @"(01)90012345678908(3202)001750(15)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/20.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/20.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_21 {
   NSString *expected = @"(01)90012345678908(3102)001750(17)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/21.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/21.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }
 
 - (void)testDecodeRow2string_22 {
   NSString *expected = @"(01)90012345678908(3202)001750(17)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/22.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/22.png";
 
   [self assertCorrectImage2string:path expected:expected];
 }

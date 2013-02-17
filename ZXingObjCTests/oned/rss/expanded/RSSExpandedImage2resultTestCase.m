@@ -34,7 +34,7 @@
 
 - (void)testDecodeRow2result_2 {
   // (01)90012345678908(3103)001750
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
   ZXExpandedProductParsedResult *expected =
   [ZXExpandedProductParsedResult expandedProductParsedResultWithRawText:@"(01)90012345678908(3103)001750" productID:@"90012345678908" sscc:nil lotNumber:nil productionDate:nil
                                                           packagingDate:nil bestBeforeDate:nil expirationDate:nil weight:@"001750"

@@ -29,7 +29,7 @@
 - (void)testFindFinderPatterns {
   ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
 
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
@@ -63,7 +63,7 @@
 - (void)testRetrieveNextPairPatterns {
   ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
 
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
@@ -86,7 +86,7 @@
 - (void)testDecodeCheckCharacter {
   ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
   
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
@@ -103,7 +103,7 @@
 - (void)testDecodeDataCharacter {
   ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
 
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.jpg";
+  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
