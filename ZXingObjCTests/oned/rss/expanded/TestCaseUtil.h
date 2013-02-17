@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
- */
-@interface ZXExpandedRow : NSObject
+@class ZXBinaryBitmap;
 
-@property (nonatomic, retain, readonly) NSArray *pairs;
-@property (nonatomic, assign, readonly) int rowNumber;
-@property (nonatomic, assign, readonly) BOOL wasReversed;
+@interface TestCaseUtil : NSObject
 
-- (id)initWithPairs:(NSArray *)pairs rowNumber:(int)rowNumber wasReversed:(BOOL)wasReversed;
-- (BOOL)isReversed;
-- (BOOL)isEquivalent:(NSArray *)otherPairs;
++ (ZXBinaryBitmap *)binaryBitmap:(NSString *)path;
 
 @end

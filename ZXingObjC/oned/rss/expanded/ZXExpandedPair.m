@@ -58,22 +58,33 @@
   return self.rightChar == nil;
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat:@"[ %@, %@ : %@ ]",
+          self.leftChar, self.rightChar,
+          self.finderPattern == nil ? @"null" : [NSString stringWithFormat:@"%d", self.finderPattern.value]];
+}
+
+- (BOOL)isEqual:(id)object {
+  if (![object isKindOfClass:[ZXExpandedPair class]]) {
+    return NO;
+  }
+  ZXExpandedPair *that = (ZXExpandedPair *)object;
+  return
+    [ZXExpandedPair isEqualOrNil:self.leftChar toObject:that.leftChar] &&
+    [ZXExpandedPair isEqualOrNil:self.rightChar toObject:that.rightChar] &&
+    [ZXExpandedPair isEqualOrNil:self.finderPattern toObject:that.finderPattern];
+}
+
 + (BOOL)isEqualOrNil:(id)o1 toObject:(id)o2 {
   return o1 == nil ? o2 == nil : [o1 isEqual:o2];
 }
 
-- (BOOL)isEqual:(id)object {
-  if (![object isKindOfClass:[ZXExpandedPair class]])
-    return NO;
-  ZXExpandedPair *that = (ZXExpandedPair *)object;
-  return
-  	[ZXExpandedPair isEqualOrNil:self.leftChar toObject:that.leftChar] &&
-  	[ZXExpandedPair isEqualOrNil:self.rightChar toObject:that.rightChar] &&
-  	[ZXExpandedPair isEqualOrNil:self.finderPattern toObject:that.finderPattern];
+- (NSUInteger)hash {
+  return [self hashNotNil:self.leftChar] ^ [self hashNotNil:self.rightChar] ^ [self hashNotNil:self.finderPattern];
 }
 
-- (NSString *)description {
-  return [NSString stringWithFormat:@"[ %@, %@ : %d ]", self.leftChar, self.rightChar, self.finderPattern.value];
+- (NSUInteger)hashNotNil:(NSObject *)o {
+  return o == nil ? 0 : o.hash;
 }
 
 @end

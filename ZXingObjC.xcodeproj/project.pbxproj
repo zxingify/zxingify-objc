@@ -1284,6 +1284,15 @@
 		25404703166ABC4B00E13304 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404700166ABC3F00E13304 /* QTKit.framework */; };
 		2540471B166AC21000E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540471A166AC21000E13304 /* AVFoundation.framework */; };
 		2540471C166AC21D00E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540471A166AC21000E13304 /* AVFoundation.framework */; };
+		25FE5D3316D0AFED00826CDB /* ZXExpandedRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		25FE5D3416D0AFED00826CDB /* ZXExpandedRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3216D0AFED00826CDB /* ZXExpandedRow.m */; };
+		25FE5D3516D0AFFD00826CDB /* ZXExpandedRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */; };
+		25FE5D3616D0B00600826CDB /* ZXExpandedRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3216D0AFED00826CDB /* ZXExpandedRow.m */; };
+		25FE5D3716D0B00700826CDB /* ZXExpandedRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3216D0AFED00826CDB /* ZXExpandedRow.m */; };
+		25FE5D3C16D0B83000826CDB /* RSSExpandedStackedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3916D0B82F00826CDB /* RSSExpandedStackedBlackBox1TestCase.m */; };
+		25FE5D3D16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3B16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m */; };
+		25FE5D4016D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3F16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m */; };
+		25FE5D4316D0B8B200826CDB /* TestCaseUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D4216D0B8B200826CDB /* TestCaseUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1918,6 +1927,16 @@
 		254046FC166ABC1600E13304 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		25404700166ABC3F00E13304 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/QTKit.framework; sourceTree = DEVELOPER_DIR; };
 		2540471A166AC21000E13304 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXExpandedRow.h; sourceTree = "<group>"; };
+		25FE5D3216D0AFED00826CDB /* ZXExpandedRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXExpandedRow.m; sourceTree = "<group>"; };
+		25FE5D3816D0B82F00826CDB /* RSSExpandedStackedBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSExpandedStackedBlackBox1TestCase.h; sourceTree = "<group>"; };
+		25FE5D3916D0B82F00826CDB /* RSSExpandedStackedBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSExpandedStackedBlackBox1TestCase.m; sourceTree = "<group>"; };
+		25FE5D3A16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSExpandedStackedBlackBox2TestCase.h; sourceTree = "<group>"; };
+		25FE5D3B16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSExpandedStackedBlackBox2TestCase.m; sourceTree = "<group>"; };
+		25FE5D3E16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSExpandedStackedInternalTestCase.h; sourceTree = "<group>"; };
+		25FE5D3F16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSExpandedStackedInternalTestCase.m; sourceTree = "<group>"; };
+		25FE5D4116D0B8B100826CDB /* TestCaseUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCaseUtil.h; sourceTree = "<group>"; };
+		25FE5D4216D0B8B200826CDB /* TestCaseUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCaseUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2478,6 +2497,8 @@
 				25403E67166A9DF300E13304 /* ZXBitArrayBuilder.m */,
 				25403E68166A9DF300E13304 /* ZXExpandedPair.h */,
 				25403E69166A9DF300E13304 /* ZXExpandedPair.m */,
+				25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */,
+				25FE5D3216D0AFED00826CDB /* ZXExpandedRow.m */,
 				25403E6A166A9DF300E13304 /* ZXRSSExpandedReader.h */,
 				25403E6B166A9DF300E13304 /* ZXRSSExpandedReader.m */,
 			);
@@ -2903,6 +2924,14 @@
 				25404074166AA0F100E13304 /* RSSExpandedImage2stringTestCase.m */,
 				25404075166AA0F100E13304 /* RSSExpandedInternalTestCase.h */,
 				25404076166AA0F100E13304 /* RSSExpandedInternalTestCase.m */,
+				25FE5D3816D0B82F00826CDB /* RSSExpandedStackedBlackBox1TestCase.h */,
+				25FE5D3916D0B82F00826CDB /* RSSExpandedStackedBlackBox1TestCase.m */,
+				25FE5D3A16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.h */,
+				25FE5D3B16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m */,
+				25FE5D3E16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.h */,
+				25FE5D3F16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m */,
+				25FE5D4116D0B8B100826CDB /* TestCaseUtil.h */,
+				25FE5D4216D0B8B200826CDB /* TestCaseUtil.m */,
 				25404077166AA0F100E13304 /* ZXBinaryUtil.h */,
 				25404078166AA0F100E13304 /* ZXBinaryUtil.m */,
 				25404079166AA0F100E13304 /* ZXBinaryUtilTest.h */,
@@ -3235,6 +3264,7 @@
 				25403FEB166AA00800E13304 /* ZXResultPointCallback.h in Headers */,
 				25403FEC166AA00800E13304 /* ZXWriter.h in Headers */,
 				251FCDEB16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */,
+				25FE5D3316D0AFED00826CDB /* ZXExpandedRow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3531,6 +3561,7 @@
 				25404641166ABB0A00E13304 /* ZXResultPointCallback.h in Headers */,
 				25404642166ABB0A00E13304 /* ZXWriter.h in Headers */,
 				251FCDEF16CC8F6F000C27E5 /* ZXRGBLuminanceSource.h in Headers */,
+				25FE5D3516D0AFFD00826CDB /* ZXExpandedRow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3929,6 +3960,7 @@
 				25403FE7166AA00800E13304 /* ZXResult.m in Sources */,
 				25403FEA166AA00800E13304 /* ZXResultPoint.m in Sources */,
 				251FCDED16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */,
+				25FE5D3416D0AFED00826CDB /* ZXExpandedRow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4042,6 +4074,10 @@
 				25404140166AA0F100E13304 /* QRCodeBlackBox5TestCase.m in Sources */,
 				25404141166AA0F100E13304 /* QRCodeBlackBox6TestCase.m in Sources */,
 				25404142166AA0F100E13304 /* ZXQRCodeWriterTestCase.m in Sources */,
+				25FE5D3C16D0B83000826CDB /* RSSExpandedStackedBlackBox1TestCase.m in Sources */,
+				25FE5D3D16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m in Sources */,
+				25FE5D4016D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m in Sources */,
+				25FE5D4316D0B8B200826CDB /* TestCaseUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4230,6 +4266,7 @@
 				25404241166AAE6000E13304 /* ZXResult.m in Sources */,
 				25404242166AAE6000E13304 /* ZXResultPoint.m in Sources */,
 				251FCDEE16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */,
+				25FE5D3616D0B00600826CDB /* ZXExpandedRow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4531,6 +4568,7 @@
 				254046FA166ABBED00E13304 /* ZXResult.m in Sources */,
 				254046FB166ABBED00E13304 /* ZXResultPoint.m in Sources */,
 				251FCDF016CC8F7C000C27E5 /* ZXRGBLuminanceSource.m in Sources */,
+				25FE5D3716D0B00700826CDB /* ZXExpandedRow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

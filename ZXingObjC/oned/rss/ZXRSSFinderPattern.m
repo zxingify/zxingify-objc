@@ -19,8 +19,8 @@
 @interface ZXRSSFinderPattern ()
 
 @property (nonatomic, assign) int value;
-@property (nonatomic, retain) NSArray *startEnd;
-@property (nonatomic, retain) NSArray *resultPoints;
+@property (nonatomic, retain) NSMutableArray *startEnd;
+@property (nonatomic, retain) NSMutableArray *resultPoints;
 
 @end
 
@@ -30,7 +30,7 @@
 @synthesize startEnd;
 @synthesize resultPoints;
 
-- (id)initWithValue:(int)aValue startEnd:(NSArray *)aStartEnd start:(int)aStart end:(int)anEnd rowNumber:(int)aRowNumber {
+- (id)initWithValue:(int)aValue startEnd:(NSMutableArray *)aStartEnd start:(int)aStart end:(int)anEnd rowNumber:(int)aRowNumber {
   if (self = [super init]) {
     self.value = aValue;
     self.startEnd = aStartEnd;
@@ -50,13 +50,17 @@
   [super dealloc];
 }
 
-- (BOOL)isEqual:(id)object
-{
-  if (![object isKindOfClass:[ZXRSSFinderPattern class]])
-    return false;
+- (BOOL)isEqual:(id)object {
+  if (![object isKindOfClass:[ZXRSSFinderPattern class]]) {
+    return NO;
+  }
 
-  ZXRSSFinderPattern* that = (ZXRSSFinderPattern*)object;
+  ZXRSSFinderPattern *that = (ZXRSSFinderPattern *)object;
   return self.value == that.value;
+}
+
+- (NSUInteger)hash {
+  return self.value;
 }
 
 @end

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-/**
- * One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
- */
-@interface ZXExpandedRow : NSObject
+#import "TestCaseUtil.h"
+#import "ZXBinaryBitmap.h"
+#import "ZXCGImageLuminanceSource.h"
+#import "ZXGlobalHistogramBinarizer.h"
+#import "ZXImage.h"
 
-@property (nonatomic, retain, readonly) NSArray *pairs;
-@property (nonatomic, assign, readonly) int rowNumber;
-@property (nonatomic, assign, readonly) BOOL wasReversed;
+@implementation TestCaseUtil
 
-- (id)initWithPairs:(NSArray *)pairs rowNumber:(int)rowNumber wasReversed:(BOOL)wasReversed;
-- (BOOL)isReversed;
-- (BOOL)isEquivalent:(NSArray *)otherPairs;
++ (ZXBinaryBitmap *)binaryBitmap:(NSString *)path {
+  ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
+  return [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
+}
 
 @end

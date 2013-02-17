@@ -91,7 +91,7 @@
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
-  NSArray *startEnd = [NSArray arrayWithObjects:[NSNumber numberWithInt:145], [NSNumber numberWithInt:243], nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
+  NSMutableArray *startEnd = [NSMutableArray arrayWithObjects:[NSNumber numberWithInt:145], [NSNumber numberWithInt:243], nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
   ZXRSSFinderPattern *finderPatternA1 = [[[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[[startEnd objectAtIndex:0] intValue] end:[[startEnd objectAtIndex:1] intValue] rowNumber:image.height / 2] autorelease];
   //{1, 8, 4, 1, 1};
@@ -108,7 +108,7 @@
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
-  NSArray *startEnd = [NSArray arrayWithObjects:[NSNumber numberWithInt:145], [NSNumber numberWithInt:243], nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
+  NSMutableArray *startEnd = [NSMutableArray arrayWithObjects:[NSNumber numberWithInt:145], [NSNumber numberWithInt:243], nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
   ZXRSSFinderPattern *finderPatternA1 = [[[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[[startEnd objectAtIndex:0] intValue] end:[[startEnd objectAtIndex:1] intValue] rowNumber:image.height / 2] autorelease];
   //{1, 8, 4, 1, 1};

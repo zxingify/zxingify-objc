@@ -154,6 +154,7 @@
 // ZXingObjC/oned/rss/expanded
 #import <ZXingObjC/ZXBitArrayBuilder.h>
 #import <ZXingObjC/ZXExpandedPair.h>
+#import <ZXingObjC/ZXExpandedRow.h>
 #import <ZXingObjC/ZXRSSExpandedReader.h>
 
 // ZXingObjC/oned/rss

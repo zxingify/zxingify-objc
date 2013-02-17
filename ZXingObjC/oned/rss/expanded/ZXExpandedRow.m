@@ -16,43 +16,61 @@
 
 #import "ZXExpandedRow.h"
 
+@interface ZXExpandedRow ()
+
+@property (nonatomic, retain) NSArray *pairs;
+@property (nonatomic, assign) int rowNumber;
+@property (nonatomic, assign) BOOL wasReversed;
+
+@end
+
 @implementation ZXExpandedRow
 
 @synthesize rowNumber;
 @synthesize wasReversed;
 @synthesize pairs;
 
-- (id)initWithPairs:(NSArray*)_pairs rowNumber:(int)_rowNumber wasReversed:(BOOL)_wasReversed {
-  self = [super init];
-  if (self) {
+- (id)initWithPairs:(NSArray *)_pairs rowNumber:(int)_rowNumber wasReversed:(BOOL)_wasReversed {
+  if (self = [super init]) {
     self.pairs = [NSArray arrayWithArray:_pairs];
     self.rowNumber = _rowNumber;
     self.wasReversed = _wasReversed;
   }
+
   return self;
-}
-
-- (BOOL)isEquivalent:(NSArray *)otherPairs
-{
-  return [self.pairs isEqual:otherPairs];
-}
-
-- (BOOL)isEqual:(id)object {
-  if (![object isKindOfClass:[ZXExpandedRow class]])
-    return false;
-
-  ZXExpandedRow *that = (ZXExpandedRow *)object;
-  return [self.pairs isEqual:that.pairs] && (self.wasReversed == that.wasReversed);
-}
-
-- (NSString *)description {
-  return [NSString stringWithFormat:@"[%d: %@]", self.rowNumber, self.pairs];
 }
 
 - (void)dealloc {
   [pairs release];
 
   [super dealloc];
+}
+
+- (BOOL)isReversed {
+  return self.wasReversed;
+}
+
+- (BOOL)isEquivalent:(NSArray *)otherPairs {
+  return [self.pairs isEqualToArray:otherPairs];
+}
+
+- (NSString *)description {
+  return [NSString stringWithFormat:@"{%@}", self.pairs];
+}
+
+/**
+ * Two rows are equal if they contain the same pairs in the same order.
+ */
+- (BOOL)isEqual:(id)object {
+  if (![object isKindOfClass:[ZXExpandedRow class]]) {
+    return NO;
+  }
+  ZXExpandedRow *that = (ZXExpandedRow *)object;
+  return [self.pairs isEqual:that.pairs] && (self.wasReversed == that.wasReversed);
+}
+
+- (NSUInteger)hash {
+  return self.pairs.hash ^ [NSNumber numberWithBool:self.wasReversed].hash;
 }
 
 @end

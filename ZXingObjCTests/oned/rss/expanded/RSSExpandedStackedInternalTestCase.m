@@ -15,6 +15,7 @@
  */
 
 #import "RSSExpandedStackedInternalTestCase.h"
+#import "TestCaseUtil.h"
 #import "ZXRSSExpandedReader.h"
 #import "ZXExpandedPair.h"
 #import "ZXExpandedRow.h"
@@ -27,55 +28,51 @@
 
 @implementation RSSExpandedStackedInternalTestCase
 
-/*
-- (void) testDecodingRowByRow
-{
-  ZXRSSExpandedReader* rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+- (void)testDecodingRowByRow {
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
 
-  NSString* path = @"Resources/blackbox/rssexpandedstacked-2/1000.png";
-  ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
-  ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
+  ZXBinaryBitmap *binaryMap = [TestCaseUtil binaryBitmap:@"Resources/blackbox/rssexpandedstacked-2/1000.png"];
 
 	int firstRowNumber = [binaryMap height] / 3;
-  NSError* error = nil;
-  ZXBitArray* firstRow = [binaryMap blackRow:firstRowNumber row:nil error:&error];
-  STAssertNil(error, @"");
-  [rssExpandedReader decodeRow2pairs:firstRowNumber row:firstRow];
+  NSError *error = nil;
+  ZXBitArray *firstRow = [binaryMap blackRow:firstRowNumber row:nil error:&error];
+  STAssertNil(error, [error description]);
 
-  STAssertTrue([[rssExpandedReader rows] count] == 1, @"the first row not recognized");
-  ZXExpandedRow* firstExpandedRow = [rssExpandedReader.rows objectAtIndex:0];
-  STAssertTrue(firstExpandedRow.rowNumber == firstRowNumber, @"the first row number doesn't match");
-  STAssertTrue([firstExpandedRow.pairs count] == 2, @"wrong number if pairs in the forst row");
+  if ([rssExpandedReader decodeRow2pairs:firstRowNumber row:firstRow]) {
+    STFail(@"Not found error expected");
+  }
 
-//  NSMutableArray* startEnd = [[[[[firstExpandedRow.pairs objectAtIndex:1] finderPattern] startEnd] mutableCopy] autorelease];
-//  [startEnd replaceObjectAtIndex:1 withObject:[NSNumber numberWithFloat:0.0f]];
+  STAssertEquals([[rssExpandedReader rows] count], (NSUInteger)1, @"the first row not recognized");
+  ZXExpandedRow *firstExpandedRow = [rssExpandedReader.rows objectAtIndex:0];
+  STAssertEquals(firstExpandedRow.rowNumber, firstRowNumber, @"the first row number doesn't match");
+
+  STAssertEquals([firstExpandedRow.pairs count], (NSUInteger)2, @"wrong number if pairs in the first row");
+
+  [[[firstExpandedRow.pairs objectAtIndex:1] finderPattern].startEnd replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
 
 	int secondRowNumber = 2 * [binaryMap height] / 3;
   error = nil;
-  ZXBitArray* secondRow = [binaryMap blackRow:secondRowNumber row:nil error:&error];
-  STAssertNil(error, @"");
+  ZXBitArray *secondRow = [binaryMap blackRow:secondRowNumber row:nil error:&error];
+  STAssertNil(error, [error description]);
   [secondRow reverse];
 
   NSMutableArray* totalPairs = [rssExpandedReader decodeRow2pairs:secondRowNumber row:secondRow];
   error = nil;
-  ZXResult* result = [rssExpandedReader constructResult:totalPairs error:&error];
-  STAssertNil(error, @"");
-  STAssertTrue([result.text isEqualToString:@"(01)98898765432106(3202)012345(15)991231"], @"wrong result");
+
+  ZXResult *result = [rssExpandedReader constructResult:totalPairs error:&error];
+  STAssertNil(error, [error description]);
+  STAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
 }
-*/
 
-- (void) testCompleteDecoding
-{
-  ZXRSSExpandedReader* rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+- (void)testCompleteDecoding {
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
 
-  NSString* path = @"Resources/blackbox/rssexpandedstacked-2/1000.png";
-  ZXImage* image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
-  ZXBinaryBitmap* binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
+  ZXBinaryBitmap *binaryMap = [TestCaseUtil binaryBitmap:@"Resources/blackbox/rssexpandedstacked-2/1000.png"];
 
-  NSError* error = nil;
-  ZXResult* result = [rssExpandedReader decode:binaryMap error:&error];
-  STAssertNil(error, @"");
-  STAssertTrue([result.text isEqualToString:@"(01)98898765432106(3202)012345(15)991231"], @"wrong result");
+  NSError *error = nil;
+  ZXResult *result = [rssExpandedReader decode:binaryMap error:&error];
+  STAssertNil(error, [error description]);
+  STAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
 }
 
 @end
