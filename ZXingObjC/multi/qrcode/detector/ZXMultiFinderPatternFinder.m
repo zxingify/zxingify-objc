@@ -199,14 +199,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
       } else {
         if ((currentState & 1) == 0) {
           if (currentState == 4) {
-            if ([ZXFinderPatternFinder foundPatternCross:stateCount]) {
-              BOOL confirmed = [self handlePossibleCenter:stateCount i:i j:j];
-              if (!confirmed) {
-                do {
-                  j++;
-                } while (j < maxJ && ![self.image getX:j y:i]);
-                j--;
-              }
+            if ([ZXFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j]) {
               currentState = 0;
               stateCount[0] = 0;
               stateCount[1] = 0;
