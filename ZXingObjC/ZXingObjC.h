@@ -260,6 +260,7 @@
 #import <ZXingObjC/ZXLuminanceSource.h>
 #import <ZXingObjC/ZXMultiFormatReader.h>
 #import <ZXingObjC/ZXMultiFormatWriter.h>
+#import <ZXingObjC/ZXPlanarYUVLuminanceSource.h>
 #import <ZXingObjC/ZXReader.h>
 #import <ZXingObjC/ZXResult.h>
 #import <ZXingObjC/ZXResultMetadataType.h>
