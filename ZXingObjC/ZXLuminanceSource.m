@@ -49,7 +49,7 @@
  * to only fetch this row rather than the whole image, since no 2D Readers may be installed and
  * getMatrix() may never be called.
  */
-- (unsigned char *)row:(int)y row:(unsigned char *)row {
+- (unsigned char *)row:(int)y {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -106,7 +106,7 @@
   unsigned char *row = NULL;
   NSMutableString *result = [NSMutableString stringWithCapacity:height * (width + 1)];
   for (int y = 0; y < height; y++) {
-    row = [self row:y row:row];
+    row = [self row:y];
     for (int x = 0; x < width; x++) {
       int luminance = row[x] & 0xFF;
       unichar c;

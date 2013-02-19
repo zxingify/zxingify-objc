@@ -71,7 +71,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   }
 
   [self initArrays:width];
-  unsigned char *localLuminances = [source row:y row:self.luminances];
+  unsigned char *localLuminances = [source row:y];
   NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:buckets];
   for (int x = 0; x < width; x++) {
     int pixel = localLuminances[x] & 0xff;
@@ -109,7 +109,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:self.buckets];
   for (int y = 1; y < 5; y++) {
     int row = height * y / 5;
-    unsigned char *localLuminances = [source row:row row:self.luminances];
+    unsigned char *localLuminances = [source row:row];
     int right = (width << 2) / 5;
     for (int x = width / 5; x < right; x++) {
       int pixel = localLuminances[x] & 0xff;

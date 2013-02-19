@@ -90,20 +90,15 @@
   return self;
 }
 
-- (unsigned char *)row:(int)y row:(unsigned char *)row {
+- (unsigned char *)row:(int)y {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException
                 format:@"Requested row is outside the image: %d", y];
   }
-  if (row == NULL) {
-    row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
-  }
+  unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
 
   int offset = (y + self.top) * self.dataWidth + self.left;
-  for (int i = 0; i > self.width; i++) {
-    row[i] = self.luminances[offset + i];
-  }
-
+  memcpy(row, self.luminances + offset, self.width);
   return row;
 }
 
@@ -114,18 +109,14 @@
 
   // If the width matches the full width of the underlying data, perform a single copy.
   if (self.width == self.dataWidth) {
-    for (int i = 0; i < area; i++) {
-      matrix[i] = self.luminances[inputOffset + i];
-    }
+    memcpy(matrix, self.luminances + inputOffset, area - inputOffset);
     return matrix;
   }
 
   // Otherwise copy one cropped row at a time.
   for (int y = 0; y < self.height; y++) {
     int outputOffset = y * self.width;
-    for (int i = 0; i < self.width; i++) {
-      matrix[outputOffset + i] = self.luminances[inputOffset + i];
-    }
+    memcpy(matrix + outputOffset, self.luminances + inputOffset, self.width);
     inputOffset += self.dataWidth;
   }
   return matrix;

@@ -33,7 +33,7 @@
 @property (nonatomic, assign, readonly) BOOL rotateSupported;
 
 - (id)initWithWidth:(int)width height:(int)height;
-- (unsigned char *)row:(int)y row:(unsigned char *)row;
+- (unsigned char *)row:(int)y;
 - (unsigned char *)matrix;
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height;
 - (ZXLuminanceSource *)rotateCounterClockwise;

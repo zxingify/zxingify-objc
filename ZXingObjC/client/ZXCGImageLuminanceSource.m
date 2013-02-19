@@ -158,18 +158,15 @@
   [super dealloc];
 }
 
-- (unsigned char *)row:(int)y row:(unsigned char *)row {
+- (unsigned char *)row:(int)y {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException format:@"Requested row is outside the image: %d", y];
   }
 
-  if (row == NULL) {
-    row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
-  }
+  unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
 
   int offset = y * self.width;
   memcpy(row, data + offset, self.width);
-
   return row;
 }
 
@@ -177,9 +174,7 @@
   int area = self.width * self.height;
 
   unsigned char *result = (unsigned char *)malloc(area * sizeof(unsigned char));
-
   memcpy(result, data, area * sizeof(unsigned char));
-
   return result;
 }
 

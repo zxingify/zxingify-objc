@@ -67,18 +67,15 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   [super dealloc];
 }
 
-- (unsigned char *)row:(int)y row:(unsigned char *)row {
+- (unsigned char *)row:(int)y {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException
                 format:@"Requested row is outside the image: %d", y];
   }
-  if (row == NULL) {
-    row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
-  }
+  unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
   int offset = (y + top) * dataWidth + left;
   memcpy(row, yuvData + offset, self.width);
   return row;
-
 }
 
 - (unsigned char *)matrix {
