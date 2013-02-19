@@ -26,6 +26,8 @@ static NSRegularExpression *VCARD_ESCAPES = nil;
 static NSString *EQUALS = @"=";
 static NSString *SEMICOLON = @";";
 static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
+static NSCharacterSet *COMMA = nil;
+static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 
 @interface ZXVCardResultParser ()
 
@@ -49,6 +51,8 @@ static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
   NEWLINE_ESCAPE = [[NSRegularExpression alloc] initWithPattern:@"\\\\[nN]" options:0 error:nil];
   VCARD_ESCAPES = [[NSRegularExpression alloc] initWithPattern:@"\\\\([,;\\\\])" options:0 error:nil];
   UNESCAPED_SEMICOLONS = [[NSRegularExpression alloc] initWithPattern:@"(?<!\\\\);+" options:0 error:nil];
+  COMMA = [[NSCharacterSet characterSetWithCharactersInString:@","] retain];
+  SEMICOLON_OR_COMMA = [[NSCharacterSet characterSetWithCharactersInString:@";,"] retain];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -65,6 +69,8 @@ static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
     names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:NO];
     [self formatNames:names];
   }
+  NSArray *nicknameString = [[self class] matchSingleVCardPrefixedField:@"NICKNAME" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *nicknames = nicknameString == nil ? nil : [[nicknameString objectAtIndex:0] componentsSeparatedByCharactersInSet:COMMA];
   NSArray *phoneNumbers = [[self class] matchVCardPrefixedField:@"TEL" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *emails = [[self class] matchVCardPrefixedField:@"EMAIL" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *note = [[self class] matchSingleVCardPrefixedField:@"NOTE" rawText:rawText trim:NO parseFieldDivider:NO];
@@ -77,7 +83,13 @@ static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
   NSArray *title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *geoString = [[self class] matchSingleVCardPrefixedField:@"GEO" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *geo = geoString == nil ? nil : [[geoString objectAtIndex:0] componentsSeparatedByCharactersInSet:SEMICOLON_OR_COMMA];
+  if (geo != nil && geo.count != 2) {
+    geo = nil;
+  }
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self toPrimaryValues:names]
+                                                           nicknames:nicknames
                                                        pronunciation:nil
                                                         phoneNumbers:[self toPrimaryValues:phoneNumbers]
                                                           phoneTypes:[self toTypes:phoneNumbers]
@@ -90,7 +102,8 @@ static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
                                                                  org:[self toPrimaryValue:org]
                                                             birthday:[self toPrimaryValue:birthday]
                                                                title:[self toPrimaryValue:title]
-                                                                 url:[self toPrimaryValue:url]];
+                                                                 url:[self toPrimaryValue:url]
+                                                                 geo:geo];
 }
 
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider {

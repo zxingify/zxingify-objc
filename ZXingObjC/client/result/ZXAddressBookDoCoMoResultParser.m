@@ -49,6 +49,7 @@
   NSString *org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
 
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
+                                                           nicknames:nil
                                                        pronunciation:pronunciation
                                                         phoneNumbers:phoneNumbers
                                                           phoneTypes:nil
@@ -61,7 +62,8 @@
                                                                  org:org
                                                             birthday:birthday
                                                                title:nil
-                                                                 url:url];
+                                                                 url:url
+                                                                 geo:nil];
 }
 
 - (NSString *)parseName:(NSString *)name {

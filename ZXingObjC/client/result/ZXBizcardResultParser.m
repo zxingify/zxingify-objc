@@ -44,6 +44,7 @@
   NSString *email = [[self class] matchSingleDoCoMoPrefixedField:@"E:" rawText:rawText trim:YES];
 
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:fullName]
+                                                           nicknames:nil
                                                        pronunciation:nil
                                                         phoneNumbers:[self buildPhoneNumbers:phoneNumber1 number2:phoneNumber2 number3:phoneNumber3]
                                                           phoneTypes:nil
@@ -56,7 +57,8 @@
                                                                  org:org
                                                             birthday:nil
                                                                title:title
-                                                                 url:nil];
+                                                                 url:nil
+                                                                 geo:nil];
 }
 
 - (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3 {

@@ -19,6 +19,7 @@
 @interface ZXAddressBookParsedResult : ZXParsedResult
 
 @property (nonatomic, readonly, retain) NSArray *names;
+@property (nonatomic, readonly, retain) NSArray *nicknames;
 @property (nonatomic, readonly, copy) NSString *pronunciation;
 @property (nonatomic, readonly, retain) NSArray *phoneNumbers;
 @property (nonatomic, readonly, retain) NSArray *phoneTypes;
@@ -32,16 +33,26 @@
 @property (nonatomic, readonly, copy) NSString *org;
 @property (nonatomic, readonly, copy) NSString *url;
 @property (nonatomic, readonly, copy) NSString *birthday;
+@property (nonatomic, readonly, retain) NSArray *geo;
 
-- (id)initWithNames:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers
+- (id)initWithNames:(NSArray *)names phoneNumbers:(NSArray *)phoneNumbers
          phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
-   instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
-       addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday title:(NSString *)title url:(NSString *)url;
+          addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes;
 
-+ (id)addressBookParsedResultWithNames:(NSArray *)names pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers
+- (id)initWithNames:(NSArray *)names nicknames:(NSArray *)nicknames pronunciation:(NSString *)pronunciation
+       phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
+   instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
+       addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
+              title:(NSString *)title url:(NSString *)url geo:(NSArray *)geo;
+
++ (id)addressBookParsedResultWithNames:(NSArray *)names phoneNumbers:(NSArray *)phoneNumbers
                             phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
+                             addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes;
+
++ (id)addressBookParsedResultWithNames:(NSArray *)names nicknames:(NSArray *)nicknames pronunciation:(NSString *)pronunciation
+                          phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
                       instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
                           addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
-                                 title:(NSString *)title url:(NSString *)url;
+                                 title:(NSString *)title url:(NSString *)url geo:(NSArray *)geo;
 
 @end

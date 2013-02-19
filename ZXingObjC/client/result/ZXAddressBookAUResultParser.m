@@ -43,6 +43,7 @@
   NSArray *addresses = address == nil ? nil : [NSArray arrayWithObjects:address, nil];
 
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
+                                                           nicknames:nil
                                                        pronunciation:pronunciation
                                                         phoneNumbers:phoneNumbers
                                                           phoneTypes:nil
@@ -55,7 +56,8 @@
                                                                  org:nil
                                                             birthday:nil
                                                                title:nil
-                                                                 url:nil];
+                                                                 url:nil
+                                                                 geo:nil];
 }
 
 - (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim {
