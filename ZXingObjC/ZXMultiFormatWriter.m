@@ -18,6 +18,7 @@
 #import "ZXCodaBarWriter.h"
 #import "ZXCode39Writer.h"
 #import "ZXCode128Writer.h"
+#import "ZXDataMatrixWriter.h"
 #import "ZXEAN8Writer.h"
 #import "ZXEAN13Writer.h"
 #import "ZXITFWriter.h"
@@ -73,6 +74,10 @@
 
     case kBarcodeFormatCodabar:
       writer = [[[ZXCodaBarWriter alloc] init] autorelease];
+      break;
+
+    case kBarcodeFormatDataMatrix:
+      writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
       break;
 
     default:

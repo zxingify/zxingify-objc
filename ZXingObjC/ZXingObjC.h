@@ -107,8 +107,25 @@
 // ZXingObjC/datamatrix/detector
 #import "ZXDataMatrixDetector.h"
 
+// ZXingObjC/datamatrix/encoder
+#import "ZXASCIIEncoder.h"
+#import "ZXBase256Encoder.h"
+#import "ZXC40Encoder.h"
+#import "ZXDataMatrixEncoder.h"
+#import "ZXDataMatrixErrorCorrection.h"
+#import "ZXDataMatrixSymbolInfo144.h"
+#import "ZXDefaultPlacement.h"
+#import "ZXEdifactEncoder.h"
+#import "ZXEncoderContext.h"
+#import "ZXHighLevelEncoder.h"
+#import "ZXSymbolInfo.h"
+#import "ZXSymbolShapeHint.h"
+#import "ZXTextEncoder.h"
+#import "ZXX12Encoder.h"
+
 // ZXingObjC/datamatrix
 #import "ZXDataMatrixReader.h"
+#import "ZXDataMatrixWriter.h"
 
 // ZXingObjC/maxicode/decoder
 #import "ZXMaxiCodeBitMatrixParser.h"
@@ -255,6 +272,7 @@
 #import "ZXBinarizer.h"
 #import "ZXBinaryBitmap.h"
 #import "ZXDecodeHints.h"
+#import "ZXDimension.h"
 #import "ZXEncodeHints.h"
 #import "ZXErrors.h"
 #import "ZXLuminanceSource.h"
@@ -268,4 +286,3 @@
 #import "ZXResultPointCallback.h"
 #import "ZXRGBLuminanceSource.h"
 #import "ZXWriter.h"
-#import "ZXingObjC.h"

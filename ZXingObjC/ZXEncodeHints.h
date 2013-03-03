@@ -17,10 +17,13 @@
 #import "ZXCompaction.h"
 #import "ZXDimensions.h"
 #import "ZXErrorCorrectionLevel.h"
+#import "ZXSymbolShapeHint.h"
 
 /**
  * These are a set of hints that you may pass to Writers to specify their behavior.
  */
+
+@class ZXDimension, ZXSymbolShapeHint;
 
 @interface ZXEncodeHints : NSObject
 
@@ -30,6 +33,21 @@
  * Specifies what character encoding to use where applicable.
  */
 @property (nonatomic, assign) NSStringEncoding encoding;
+
+/**
+ * Specifies the matrix shape for Data Matrix .
+ */
+@property (nonatomic, retain) ZXSymbolShapeHint *dataMatrixShape;
+
+/**
+ * Specifies a minimum barcode size. Only applicable to Data Matrix now.
+ */
+@property (nonatomic, retain) ZXDimension *minSize;
+
+/**
+ * Specifies a maximum barcode size. Only applicable to Data Matrix now.
+ */
+@property (nonatomic, retain) ZXDimension *maxSize;
 
 /**
  * Specifies what degree of error correction to use, for example in QR Codes.

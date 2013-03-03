@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,25 @@
  * limitations under the License.
  */
 
-#import "ZXEncodeHints.h"
+#import "ZXDataMatrixSymbolInfo144.h"
 
-@implementation ZXEncodeHints
+@implementation ZXDataMatrixSymbolInfo144
 
-@synthesize encoding;
-@synthesize dataMatrixShape;
-@synthesize minSize;
-@synthesize maxSize;
-@synthesize errorCorrectionLevel;
-@synthesize margin;
-@synthesize pdf417Compact;
-@synthesize pdf417Compaction;
-@synthesize pdf417Dimensions;
+- (id)init {
+  if (self = [super initWithRectangular:NO dataCapacity:1558 errorCodewords:620 matrixWidth:22 matrixHeight:22 dataRegions:36]) {
+    self.rsBlockData = -1; //special! see below
+    self.rsBlockError = 62;
+  }
 
-+ (id)hints {
-  return [[[self alloc] init] autorelease];
+  return self;
 }
 
-- (void)dealloc {
-  [dataMatrixShape release];
-  [minSize release];
-  [maxSize release];
-  [errorCorrectionLevel release];
-  [margin release];
-  [pdf417Dimensions release];
+- (int)interleavedBlockCount {
+  return 10;
+}
 
-  [super dealloc];
+- (int)dataLengthForInterleavedBlock:(int)index {
+  return (index <= 8) ? 156 : 155;
 }
 
 @end
