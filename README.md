@@ -83,18 +83,13 @@ ZXingObjC includes several example applications found in "examples" folder:
 
 Getting Started
 ---------------
-
-To add ZXingObjC to your project:
+> As a simpler alternative to adding files directly, you can consider using [CocoaPods](http://cocoapods.org) to add ZXingObjC as a dependency.
 
 1. [Download ZXingObjC](https://github.com/TheLevelUp/ZXingObjC/tarball/master) or clone it from git: `git clone git://github.com/TheLevelUp/ZXingObjC.git`.
 
-2. Drag the ZXingObjC.xcodeproj file into Xcode. Make sure "Copy items" is unchecked and "Reference Type" is "Relative to Project" before clicking "Add".
+2. Drag the ZXingObjC folder onto Xcode. Make sure "Copy items" is checked before clicking "Add".
 
-3. Selecting your project in the left sidebar, select your target, and choose the "Build Phases" tab. Under "Target Dependencies", click the plus button, and then choose either ZXingObjC-iOS for an iOS app, or ZXingObjC-osx for a Mac app.
-
-4. In the "Link Binary with Libraries" section, click the plus button and choose libZXingObjC-iOS.a for an iOS app, or libZXingObjC-osx.a for a Mac app.
-
-5. Add the following frameworks under "Link Binary With Libraries":
+3. Selecting your project in the left sidebar, select your target, and choose the "Build Phases" tab. Under "Link Binary With Libraries", add the appropriate frameworks for your architecture:
 
   For an iOS app:
     * AVFoundation.framework
@@ -111,10 +106,10 @@ To add ZXingObjC to your project:
     * QuartzCore.framework
     * QTKit.framework
 
-6. Import the ZXingObjC framework header:
+4. Import the ZXingObjC framework header:
 
 ```obj-c
-#import <ZXingObjC/ZXingObjC.h>
+#import "ZXingObjC.h"
 ```
 
 License
