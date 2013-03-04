@@ -648,9 +648,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
     capture_device_index = -1;
     [capture_device release];
     capture_device = 0;
-    if (running) {
-      [self replaceInput];
-    }
+    [self replaceInput];
   }
 }
 
