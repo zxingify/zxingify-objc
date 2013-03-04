@@ -57,14 +57,11 @@
   self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];
   [self.view bringSubviewToFront:self.decodedLabel];
-
-  [self.capture start];
 }
 
 - (void)viewDidUnload {
   [super viewDidUnload];
 
-  [self.capture stop];
   self.decodedLabel = nil;
 }
 
