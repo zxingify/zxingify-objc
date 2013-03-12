@@ -36,7 +36,7 @@
     [NSException raise:NSInvalidArgumentException format:@"Can only encode PDF_417, but got %d", format];
   }
 
-  ZXPDF417* encoder = [[[ZXPDF417 alloc] init] autorelease];
+  ZXPDF417 *encoder = [[[ZXPDF417 alloc] init] autorelease];
 
   if (hints != nil) {
     encoder.compact = hints.pdf417Compact;
@@ -60,7 +60,7 @@
 /**
  * Takes encoder, accounts for width/height, and retrieves bit matrix
  */
-- (ZXBitMatrix *)bitMatrixFromEncoder:(ZXPDF417*)encoder contents:(NSString *)contents width:(int)width height:(int)height error:(NSError **)error {
+- (ZXBitMatrix *)bitMatrixFromEncoder:(ZXPDF417 *)encoder contents:(NSString *)contents width:(int)width height:(int)height error:(NSError **)error {
   int errorCorrectionLevel = 2;
   if (![encoder generateBarcodeLogic:contents errorCorrectionLevel:errorCorrectionLevel error:error]) {
     return nil;

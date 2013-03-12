@@ -171,14 +171,14 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     bytes = [self bytesForMessage:msg];
     [self encodeBinary:bytes startpos:p count:msg.length startmode:BYTE_COMPACTION buffer:sb];
   } else if (compaction == ZX_COMPACTION_NUMERIC) {
-    [sb appendFormat:@"%c", (char) LATCH_TO_NUMERIC];
+    [sb appendFormat:@"%C", (unichar) LATCH_TO_NUMERIC];
     [self encodeNumeric:msg startpos:p count:len buffer:sb];
   } else {
     int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
     while (p < len) {
       int n = [self determineConsecutiveDigitCount:msg startpos:p];
       if (n >= 13) {
-        [sb appendFormat:@"%c", (char) LATCH_TO_NUMERIC];
+        [sb appendFormat:@"%C", (unichar) LATCH_TO_NUMERIC];
         encodingMode = NUMERIC_COMPACTION;
         textSubMode = SUBMODE_ALPHA; //Reset after latch
         [self encodeNumeric:msg startpos:p count:n buffer:sb];
@@ -187,7 +187,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
         int t = [self determineConsecutiveTextCount:msg startpos:p];
         if (t >= 5 || n == len) {
           if (encodingMode != TEXT_COMPACTION) {
-            [sb appendFormat:@"%c", (char) LATCH_TO_TEXT];
+            [sb appendFormat:@"%C", (unichar) LATCH_TO_TEXT];
             encodingMode = TEXT_COMPACTION;
             textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
           }
@@ -235,22 +235,22 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
       case SUBMODE_ALPHA:
         if ([self isAlphaUpper:ch]) {
           if (ch == ' ') {
-            [tmp appendFormat:@"%c", (char) 26]; //space
+            [tmp appendFormat:@"%C", (unichar) 26]; //space
           } else {
-            [tmp appendFormat:@"%c", (char) (ch - 65)];
+            [tmp appendFormat:@"%C", (unichar) (ch - 65)];
           }
         } else {
           if ([self isAlphaLower:ch]) {
             submode = SUBMODE_LOWER;
-            [tmp appendFormat:@"%c", (char) 27]; //ll
+            [tmp appendFormat:@"%C", (unichar) 27]; //ll
             continue;
           } else if ([self isMixed:ch]) {
             submode = SUBMODE_MIXED;
-            [tmp appendFormat:@"%c", (char) 28]; //ml
+            [tmp appendFormat:@"%C", (unichar) 28]; //ml
             continue;
           } else {
-            [tmp appendFormat:@"%c", (char) 29]; //ps
-            [tmp appendFormat:@"%c", (char) PUNCTUATION[ch]];
+            [tmp appendFormat:@"%C", (unichar) 29]; //ps
+            [tmp appendFormat:@"%C", PUNCTUATION[ch]];
             break;
           }
         }
@@ -258,23 +258,23 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
       case SUBMODE_LOWER:
         if ([self isAlphaLower:ch]) {
           if (ch == ' ') {
-            [tmp appendFormat:@"%c", (char) 26]; //space
+            [tmp appendFormat:@"%C", (unichar) 26]; //space
           } else {
-            [tmp appendFormat:@"%c", (char) (ch - 97)];
+            [tmp appendFormat:@"%C", (unichar) (ch - 97)];
           }
         } else {
           if ([self isAlphaUpper:ch]) {
-            [tmp appendFormat:@"%c", (char) 27]; //as
-            [tmp appendFormat:@"%c", (char) (ch - 65)];
+            [tmp appendFormat:@"%C", (unichar) 27]; //as
+            [tmp appendFormat:@"%C", (unichar) (ch - 65)];
             //space cannot happen here, it is also in "Lower"
             break;
           } else if ([self isMixed:ch]) {
             submode = SUBMODE_MIXED;
-            [tmp appendFormat:@"%c", (char) 28]; //ml
+            [tmp appendFormat:@"%C", (unichar) 28]; //ml
             continue;
           } else {
-            [tmp appendFormat:@"%c", (char) 29]; //ps
-            [tmp appendFormat:@"%c", (char) PUNCTUATION[ch]];
+            [tmp appendFormat:@"%C", (unichar) 29]; //ps
+            [tmp appendFormat:@"%C", PUNCTUATION[ch]];
             break;
           }
         }
@@ -285,32 +285,32 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
         } else {
           if ([self isAlphaUpper:ch]) {
             submode = SUBMODE_ALPHA;
-            [tmp appendFormat:@"%c", (char) 28]; //al
+            [tmp appendFormat:@"%C", (unichar) 28]; //al
             continue;
           } else if ([self isAlphaLower:ch]) {
             submode = SUBMODE_LOWER;
-            [tmp appendFormat:@"%c", (char) 27]; //ll
+            [tmp appendFormat:@"%C", (unichar) 27]; //ll
             continue;
           } else {
             if (startpos + idx + 1 < count) {
               char next = [msg characterAtIndex:startpos + idx + 1];
               if ([self isPunctuation:next]) {
                 submode = SUBMODE_PUNCTUATION;
-                [tmp appendFormat:@"%c", (char) 25]; //pl
+                [tmp appendFormat:@"%C", (unichar) 25]; //pl
                 continue;
               }
             }
-            [tmp appendFormat:@"%c", (char) 29]; //ps
-            [tmp appendFormat:@"%c", (char) PUNCTUATION[ch]];
+            [tmp appendFormat:@"%C", (unichar) 29]; //ps
+            [tmp appendFormat:@"%C", PUNCTUATION[ch]];
           }
         }
         break;
       default: //SUBMODE_PUNCTUATION
         if ([self isPunctuation:ch]) {
-          [tmp appendFormat:@"%c", (char) PUNCTUATION[ch]];
+          [tmp appendFormat:@"%C", PUNCTUATION[ch]];
         } else {
           submode = SUBMODE_ALPHA;
-          [tmp appendFormat:@"%c", (char) 29]; //al
+          [tmp appendFormat:@"%C", (unichar) 29]; //al
           continue;
         }
     }
@@ -343,16 +343,16 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  */
 + (void)encodeBinary:(unsigned char *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb {
   if (count == 1 && startmode == TEXT_COMPACTION) {
-    [sb appendFormat:@"%c", (char) SHIFT_TO_BYTE];
+    [sb appendFormat:@"%C", (unichar) SHIFT_TO_BYTE];
   }
 
   int idx = startpos;
   // Encode sixpacks
   if (count >= 6) {
-    [sb appendFormat:@"%c", (char) LATCH_TO_BYTE];
+    [sb appendFormat:@"%C", (unichar) LATCH_TO_BYTE];
     const int charsLen = 5;
-    char chars[charsLen];
-    memset(chars, 0, charsLen * sizeof(char));
+    unichar chars[charsLen];
+    memset(chars, 0, charsLen * sizeof(unichar));
     while ((startpos + count - idx) >= 6) {
       long t = 0;
       for (int i = 0; i < 6; i++) {
@@ -360,22 +360,22 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
         t += bytes[idx + i] & 0xff;
       }
       for (int i = 0; i < 5; i++) {
-        chars[i] = (char) (t % 900);
+        chars[i] = (unichar) (t % 900);
         t /= 900;
       }
       for (int i = charsLen - 1; i >= 0; i--) {
-        [sb appendFormat:@"%c", chars[i]];
+        [sb appendFormat:@"%C", chars[i]];
       }
       idx += 6;
     }
   }
   //Encode rest (remaining n<5 bytes if any)
   if (idx < startpos + count) {
-    [sb appendFormat:@"%c", (char) LATCH_TO_BYTE_PADDED];
+    [sb appendFormat:@"%C", (unichar) LATCH_TO_BYTE_PADDED];
   }
   for (int i = idx; i < startpos + count; i++) {
     int ch = bytes[i] & 0xff;
-    [sb appendFormat:@"%c", ch];
+    [sb appendFormat:@"%C", (unichar)ch];
   }
 }
 
@@ -389,13 +389,13 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     long long bigint = [part longLongValue];
     do {
       long c = bigint % 900;
-      [tmp appendFormat:@"%c", (char) c];
+      [tmp appendFormat:@"%C", (unichar) c];
       bigint /= 900;
     } while (bigint != 0);
 
     //Reverse temporary string
     for (int i = tmp.length - 1; i >= 0; i--) {
-      [tmp appendFormat:@"%c", [tmp characterAtIndex:i]];
+      [tmp appendFormat:@"%C", [tmp characterAtIndex:i]];
     }
     idx += len;
   }

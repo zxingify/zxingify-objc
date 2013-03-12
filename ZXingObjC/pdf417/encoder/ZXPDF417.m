@@ -666,10 +666,10 @@ static float HEIGHT = 2.0f; //mm
 
   int n = sourceCodeWords + pad + 1;
   NSMutableString *sb = [NSMutableString stringWithCapacity:n];
-  [sb appendFormat:@"%c", (char)n];
+  [sb appendFormat:@"%C", (unichar)n];
   [sb appendFormat:@"%@", highLevel];
   for (int i = 0; i < pad; i++) {
-    [sb appendFormat:@"%c", (char) 900]; //PAD characters
+    [sb appendFormat:@"%C", (unichar) 900]; //PAD characters
   }
   NSString *dataCodewords = sb;
 
