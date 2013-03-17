@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import <ZXingObjC/ZXingObjC.h>
 #import "ViewController.h"
 
 @implementation ViewController

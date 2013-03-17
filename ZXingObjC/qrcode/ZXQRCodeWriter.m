@@ -56,7 +56,7 @@ int const QUIET_ZONE_SIZE = 4;
       errorCorrectionLevel = hints.errorCorrectionLevel;
     }
     if (hints.margin) {
-      quietZone = hints.margin;
+      quietZone = [hints.margin intValue];
     }
   }
 

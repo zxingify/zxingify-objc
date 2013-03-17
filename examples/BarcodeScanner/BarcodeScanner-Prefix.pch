@@ -11,5 +11,5 @@
 #ifdef __OBJC__
   #import <Foundation/Foundation.h>
   #import <UIKit/UIKit.h>
-  #import <ZXingObjC/ZXingObjC.h>
+  #import "ZXingObjC.h"
 #endif

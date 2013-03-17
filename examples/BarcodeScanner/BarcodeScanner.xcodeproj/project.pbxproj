@@ -21,54 +21,191 @@
 		02C6AFE0156FCBA00052B145 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02C6AFDE156FCBA00052B145 /* ViewController.xib */; };
 		02C6AFE3156FCBA80052B145 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02C6AFE1156FCBA80052B145 /* InfoPlist.strings */; };
 		25404718166AC1D200E13304 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25404717166AC1D200E13304 /* Default-568h@2x.png */; };
-		25404735166AC28500E13304 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540472A166AC24100E13304 /* libZXingObjC-iOS.a */; };
 		25404737166AC2EA00E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404736166AC2EA00E13304 /* AVFoundation.framework */; };
+		258EDF6716F658BF00A56434 /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDD416F658BF00A56434 /* ZXAztecDecoder.m */; };
+		258EDF6816F658BF00A56434 /* ZXAztecDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDD716F658BF00A56434 /* ZXAztecDetector.m */; };
+		258EDF6916F658BF00A56434 /* ZXAztecDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDD916F658BF00A56434 /* ZXAztecDetectorResult.m */; };
+		258EDF6A16F658BF00A56434 /* ZXAztecReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDDB16F658BF00A56434 /* ZXAztecReader.m */; };
+		258EDF6B16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDDF16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.m */; };
+		258EDF6C16F658BF00A56434 /* ZXAddressBookAUResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDE116F658BF00A56434 /* ZXAddressBookAUResultParser.m */; };
+		258EDF6D16F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDE316F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.m */; };
+		258EDF6E16F658BF00A56434 /* ZXAddressBookParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDE516F658BF00A56434 /* ZXAddressBookParsedResult.m */; };
+		258EDF6F16F658BF00A56434 /* ZXBizcardResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDE716F658BF00A56434 /* ZXBizcardResultParser.m */; };
+		258EDF7016F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDE916F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.m */; };
+		258EDF7116F658BF00A56434 /* ZXCalendarParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDEB16F658BF00A56434 /* ZXCalendarParsedResult.m */; };
+		258EDF7216F658BF00A56434 /* ZXEmailAddressParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDED16F658BF00A56434 /* ZXEmailAddressParsedResult.m */; };
+		258EDF7316F658BF00A56434 /* ZXEmailAddressResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDEF16F658BF00A56434 /* ZXEmailAddressResultParser.m */; };
+		258EDF7416F658BF00A56434 /* ZXEmailDoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDF116F658BF00A56434 /* ZXEmailDoCoMoResultParser.m */; };
+		258EDF7516F658BF00A56434 /* ZXExpandedProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDF316F658BF00A56434 /* ZXExpandedProductParsedResult.m */; };
+		258EDF7616F658BF00A56434 /* ZXExpandedProductResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDF516F658BF00A56434 /* ZXExpandedProductResultParser.m */; };
+		258EDF7716F658BF00A56434 /* ZXGeoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDF716F658BF00A56434 /* ZXGeoParsedResult.m */; };
+		258EDF7816F658BF00A56434 /* ZXGeoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDF916F658BF00A56434 /* ZXGeoResultParser.m */; };
+		258EDF7916F658BF00A56434 /* ZXISBNParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDFB16F658BF00A56434 /* ZXISBNParsedResult.m */; };
+		258EDF7A16F658BF00A56434 /* ZXISBNResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDFD16F658BF00A56434 /* ZXISBNResultParser.m */; };
+		258EDF7B16F658BF00A56434 /* ZXParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDDFF16F658BF00A56434 /* ZXParsedResult.m */; };
+		258EDF7C16F658BF00A56434 /* ZXProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0216F658BF00A56434 /* ZXProductParsedResult.m */; };
+		258EDF7D16F658BF00A56434 /* ZXProductResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0416F658BF00A56434 /* ZXProductResultParser.m */; };
+		258EDF7E16F658BF00A56434 /* ZXResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0616F658BF00A56434 /* ZXResultParser.m */; };
+		258EDF7F16F658BF00A56434 /* ZXSMSMMSResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0816F658BF00A56434 /* ZXSMSMMSResultParser.m */; };
+		258EDF8016F658BF00A56434 /* ZXSMSParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0A16F658BF00A56434 /* ZXSMSParsedResult.m */; };
+		258EDF8116F658BF00A56434 /* ZXSMSTOMMSTOResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0C16F658BF00A56434 /* ZXSMSTOMMSTOResultParser.m */; };
+		258EDF8216F658BF00A56434 /* ZXSMTPResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE0E16F658BF00A56434 /* ZXSMTPResultParser.m */; };
+		258EDF8316F658BF00A56434 /* ZXTelParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1016F658BF00A56434 /* ZXTelParsedResult.m */; };
+		258EDF8416F658BF00A56434 /* ZXTelResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1216F658BF00A56434 /* ZXTelResultParser.m */; };
+		258EDF8516F658BF00A56434 /* ZXTextParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1416F658BF00A56434 /* ZXTextParsedResult.m */; };
+		258EDF8616F658BF00A56434 /* ZXURIParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1616F658BF00A56434 /* ZXURIParsedResult.m */; };
+		258EDF8716F658BF00A56434 /* ZXURIResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1816F658BF00A56434 /* ZXURIResultParser.m */; };
+		258EDF8816F658BF00A56434 /* ZXURLTOResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1A16F658BF00A56434 /* ZXURLTOResultParser.m */; };
+		258EDF8916F658BF00A56434 /* ZXVCardResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1C16F658BF00A56434 /* ZXVCardResultParser.m */; };
+		258EDF8A16F658BF00A56434 /* ZXVEventResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE1E16F658BF00A56434 /* ZXVEventResultParser.m */; };
+		258EDF8B16F658BF00A56434 /* ZXWifiParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE2016F658BF00A56434 /* ZXWifiParsedResult.m */; };
+		258EDF8C16F658BF00A56434 /* ZXWifiResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE2216F658BF00A56434 /* ZXWifiResultParser.m */; };
+		258EDF8D16F658BF00A56434 /* ZXCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE2416F658BF00A56434 /* ZXCapture.m */; };
+		258EDF8E16F658BF00A56434 /* ZXCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE2716F658BF00A56434 /* ZXCaptureView.m */; };
+		258EDF8F16F658BF00A56434 /* ZXCGImageLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE2916F658BF00A56434 /* ZXCGImageLuminanceSource.m */; };
+		258EDF9016F658BF00A56434 /* ZXImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE2B16F658BF00A56434 /* ZXImage.m */; };
+		258EDF9116F658BF00A56434 /* ZXMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3016F658BF00A56434 /* ZXMathUtils.m */; };
+		258EDF9216F658BF00A56434 /* ZXMonochromeRectangleDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3216F658BF00A56434 /* ZXMonochromeRectangleDetector.m */; };
+		258EDF9316F658BF00A56434 /* ZXWhiteRectangleDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3416F658BF00A56434 /* ZXWhiteRectangleDetector.m */; };
+		258EDF9416F658BF00A56434 /* ZXGenericGF.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3716F658BF00A56434 /* ZXGenericGF.m */; };
+		258EDF9516F658BF00A56434 /* ZXGenericGFPoly.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3916F658BF00A56434 /* ZXGenericGFPoly.m */; };
+		258EDF9616F658BF00A56434 /* ZXReedSolomonDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3B16F658BF00A56434 /* ZXReedSolomonDecoder.m */; };
+		258EDF9716F658BF00A56434 /* ZXReedSolomonEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3D16F658BF00A56434 /* ZXReedSolomonEncoder.m */; };
+		258EDF9816F658BF00A56434 /* ZXBitArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE3F16F658BF00A56434 /* ZXBitArray.m */; };
+		258EDF9916F658BF00A56434 /* ZXBitMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4116F658BF00A56434 /* ZXBitMatrix.m */; };
+		258EDF9A16F658BF00A56434 /* ZXBitSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4316F658BF00A56434 /* ZXBitSource.m */; };
+		258EDF9B16F658BF00A56434 /* ZXCharacterSetECI.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4516F658BF00A56434 /* ZXCharacterSetECI.m */; };
+		258EDF9C16F658BF00A56434 /* ZXDecoderResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4716F658BF00A56434 /* ZXDecoderResult.m */; };
+		258EDF9D16F658BF00A56434 /* ZXDefaultGridSampler.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4916F658BF00A56434 /* ZXDefaultGridSampler.m */; };
+		258EDF9E16F658BF00A56434 /* ZXDetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4B16F658BF00A56434 /* ZXDetectorResult.m */; };
+		258EDF9F16F658BF00A56434 /* ZXECI.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4D16F658BF00A56434 /* ZXECI.m */; };
+		258EDFA016F658BF00A56434 /* ZXGlobalHistogramBinarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE4F16F658BF00A56434 /* ZXGlobalHistogramBinarizer.m */; };
+		258EDFA116F658BF00A56434 /* ZXGridSampler.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5116F658BF00A56434 /* ZXGridSampler.m */; };
+		258EDFA216F658BF00A56434 /* ZXHybridBinarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5316F658BF00A56434 /* ZXHybridBinarizer.m */; };
+		258EDFA316F658BF00A56434 /* ZXPerspectiveTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5516F658BF00A56434 /* ZXPerspectiveTransform.m */; };
+		258EDFA416F658BF00A56434 /* ZXStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5716F658BF00A56434 /* ZXStringUtils.m */; };
+		258EDFA516F658BF00A56434 /* ZXDataMatrixBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5B16F658BF00A56434 /* ZXDataMatrixBitMatrixParser.m */; };
+		258EDFA616F658BF00A56434 /* ZXDataMatrixDataBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5D16F658BF00A56434 /* ZXDataMatrixDataBlock.m */; };
+		258EDFA716F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE5F16F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.m */; };
+		258EDFA816F658BF00A56434 /* ZXDataMatrixDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE6116F658BF00A56434 /* ZXDataMatrixDecoder.m */; };
+		258EDFA916F658BF00A56434 /* ZXDataMatrixVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE6316F658BF00A56434 /* ZXDataMatrixVersion.m */; };
+		258EDFAA16F658BF00A56434 /* ZXDataMatrixDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE6616F658BF00A56434 /* ZXDataMatrixDetector.m */; };
+		258EDFAB16F658BF00A56434 /* ZXDataMatrixReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE6816F658BF00A56434 /* ZXDataMatrixReader.m */; };
+		258EDFAC16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE6C16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.m */; };
+		258EDFAD16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE6E16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.m */; };
+		258EDFAE16F658BF00A56434 /* ZXMaxiCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7016F658BF00A56434 /* ZXMaxiCodeDecoder.m */; };
+		258EDFAF16F658BF00A56434 /* ZXMaxiCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7216F658BF00A56434 /* ZXMaxiCodeReader.m */; };
+		258EDFB016F658BF00A56434 /* ZXMultiDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7716F658BF00A56434 /* ZXMultiDetector.m */; };
+		258EDFB116F658BF00A56434 /* ZXMultiFinderPatternFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7916F658BF00A56434 /* ZXMultiFinderPatternFinder.m */; };
+		258EDFB216F658BF00A56434 /* ZXQRCodeMultiReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7B16F658BF00A56434 /* ZXQRCodeMultiReader.m */; };
+		258EDFB316F658BF00A56434 /* ZXByQuadrantReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7D16F658BF00A56434 /* ZXByQuadrantReader.m */; };
+		258EDFB416F658BF00A56434 /* ZXGenericMultipleBarcodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE7F16F658BF00A56434 /* ZXGenericMultipleBarcodeReader.m */; };
+		258EDFB516F658BF00A56434 /* ZXAbstractExpandedDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE8616F658BF00A56434 /* ZXAbstractExpandedDecoder.m */; };
+		258EDFB616F658BF00A56434 /* ZXAI013103decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE8816F658BF00A56434 /* ZXAI013103decoder.m */; };
+		258EDFB716F658BF00A56434 /* ZXAI01320xDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE8A16F658BF00A56434 /* ZXAI01320xDecoder.m */; };
+		258EDFB816F658BF00A56434 /* ZXAI01392xDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE8C16F658BF00A56434 /* ZXAI01392xDecoder.m */; };
+		258EDFB916F658BF00A56434 /* ZXAI01393xDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE8E16F658BF00A56434 /* ZXAI01393xDecoder.m */; };
+		258EDFBA16F658BF00A56434 /* ZXAI013x0x1xDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9016F658BF00A56434 /* ZXAI013x0x1xDecoder.m */; };
+		258EDFBB16F658BF00A56434 /* ZXAI013x0xDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9216F658BF00A56434 /* ZXAI013x0xDecoder.m */; };
+		258EDFBC16F658BF00A56434 /* ZXAI01AndOtherAIs.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9416F658BF00A56434 /* ZXAI01AndOtherAIs.m */; };
+		258EDFBD16F658BF00A56434 /* ZXAI01decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9616F658BF00A56434 /* ZXAI01decoder.m */; };
+		258EDFBE16F658BF00A56434 /* ZXAI01weightDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9816F658BF00A56434 /* ZXAI01weightDecoder.m */; };
+		258EDFBF16F658BF00A56434 /* ZXAnyAIDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9A16F658BF00A56434 /* ZXAnyAIDecoder.m */; };
+		258EDFC016F658BF00A56434 /* ZXBlockParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9C16F658BF00A56434 /* ZXBlockParsedResult.m */; };
+		258EDFC116F658BF00A56434 /* ZXCurrentParsingState.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDE9E16F658BF00A56434 /* ZXCurrentParsingState.m */; };
+		258EDFC216F658BF00A56434 /* ZXDecodedChar.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEA016F658BF00A56434 /* ZXDecodedChar.m */; };
+		258EDFC316F658BF00A56434 /* ZXDecodedInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEA216F658BF00A56434 /* ZXDecodedInformation.m */; };
+		258EDFC416F658BF00A56434 /* ZXDecodedNumeric.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEA416F658BF00A56434 /* ZXDecodedNumeric.m */; };
+		258EDFC516F658BF00A56434 /* ZXDecodedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEA616F658BF00A56434 /* ZXDecodedObject.m */; };
+		258EDFC616F658BF00A56434 /* ZXFieldParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEA816F658BF00A56434 /* ZXFieldParser.m */; };
+		258EDFC716F658BF00A56434 /* ZXGeneralAppIdDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEAA16F658BF00A56434 /* ZXGeneralAppIdDecoder.m */; };
+		258EDFC816F658BF00A56434 /* ZXBitArrayBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEAC16F658BF00A56434 /* ZXBitArrayBuilder.m */; };
+		258EDFC916F658BF00A56434 /* ZXExpandedPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEAE16F658BF00A56434 /* ZXExpandedPair.m */; };
+		258EDFCA16F658BF00A56434 /* ZXExpandedRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEB016F658BF00A56434 /* ZXExpandedRow.m */; };
+		258EDFCB16F658BF00A56434 /* ZXRSSExpandedReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEB216F658BF00A56434 /* ZXRSSExpandedReader.m */; };
+		258EDFCC16F658BF00A56434 /* ZXAbstractRSSReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEB416F658BF00A56434 /* ZXAbstractRSSReader.m */; };
+		258EDFCD16F658BF00A56434 /* ZXDataCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEB616F658BF00A56434 /* ZXDataCharacter.m */; };
+		258EDFCE16F658BF00A56434 /* ZXPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEB816F658BF00A56434 /* ZXPair.m */; };
+		258EDFCF16F658BF00A56434 /* ZXRSS14Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEBA16F658BF00A56434 /* ZXRSS14Reader.m */; };
+		258EDFD016F658BF00A56434 /* ZXRSSFinderPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEBC16F658BF00A56434 /* ZXRSSFinderPattern.m */; };
+		258EDFD116F658BF00A56434 /* ZXRSSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEBE16F658BF00A56434 /* ZXRSSUtils.m */; };
+		258EDFD216F658BF00A56434 /* ZXCodaBarReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEC016F658BF00A56434 /* ZXCodaBarReader.m */; };
+		258EDFD316F658BF00A56434 /* ZXCodaBarWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEC216F658BF00A56434 /* ZXCodaBarWriter.m */; };
+		258EDFD416F658BF00A56434 /* ZXCode128Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEC416F658BF00A56434 /* ZXCode128Reader.m */; };
+		258EDFD516F658BF00A56434 /* ZXCode128Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEC616F658BF00A56434 /* ZXCode128Writer.m */; };
+		258EDFD616F658BF00A56434 /* ZXCode39Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEC816F658BF00A56434 /* ZXCode39Reader.m */; };
+		258EDFD716F658BF00A56434 /* ZXCode39Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDECA16F658BF00A56434 /* ZXCode39Writer.m */; };
+		258EDFD816F658BF00A56434 /* ZXCode93Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDECC16F658BF00A56434 /* ZXCode93Reader.m */; };
+		258EDFD916F658BF00A56434 /* ZXEAN13Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDECE16F658BF00A56434 /* ZXEAN13Reader.m */; };
+		258EDFDA16F658BF00A56434 /* ZXEAN13Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDED016F658BF00A56434 /* ZXEAN13Writer.m */; };
+		258EDFDB16F658BF00A56434 /* ZXEAN8Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDED216F658BF00A56434 /* ZXEAN8Reader.m */; };
+		258EDFDC16F658BF00A56434 /* ZXEAN8Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDED416F658BF00A56434 /* ZXEAN8Writer.m */; };
+		258EDFDD16F658BF00A56434 /* ZXEANManufacturerOrgSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDED616F658BF00A56434 /* ZXEANManufacturerOrgSupport.m */; };
+		258EDFDE16F658BF00A56434 /* ZXITFReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDED816F658BF00A56434 /* ZXITFReader.m */; };
+		258EDFDF16F658BF00A56434 /* ZXITFWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEDA16F658BF00A56434 /* ZXITFWriter.m */; };
+		258EDFE016F658BF00A56434 /* ZXMultiFormatOneDReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEDC16F658BF00A56434 /* ZXMultiFormatOneDReader.m */; };
+		258EDFE116F658BF00A56434 /* ZXMultiFormatUPCEANReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEDE16F658BF00A56434 /* ZXMultiFormatUPCEANReader.m */; };
+		258EDFE216F658BF00A56434 /* ZXOneDimensionalCodeWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEE016F658BF00A56434 /* ZXOneDimensionalCodeWriter.m */; };
+		258EDFE316F658BF00A56434 /* ZXOneDReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEE216F658BF00A56434 /* ZXOneDReader.m */; };
+		258EDFE416F658BF00A56434 /* ZXUPCAReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEE416F658BF00A56434 /* ZXUPCAReader.m */; };
+		258EDFE516F658BF00A56434 /* ZXUPCAWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEE616F658BF00A56434 /* ZXUPCAWriter.m */; };
+		258EDFE616F658BF00A56434 /* ZXUPCEANExtension2Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEE816F658BF00A56434 /* ZXUPCEANExtension2Support.m */; };
+		258EDFE716F658BF00A56434 /* ZXUPCEANExtension5Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEEA16F658BF00A56434 /* ZXUPCEANExtension5Support.m */; };
+		258EDFE816F658BF00A56434 /* ZXUPCEANExtensionSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEEC16F658BF00A56434 /* ZXUPCEANExtensionSupport.m */; };
+		258EDFE916F658BF00A56434 /* ZXUPCEANReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEEE16F658BF00A56434 /* ZXUPCEANReader.m */; };
+		258EDFEA16F658BF00A56434 /* ZXUPCEANWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEF016F658BF00A56434 /* ZXUPCEANWriter.m */; };
+		258EDFEB16F658BF00A56434 /* ZXUPCEReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEF216F658BF00A56434 /* ZXUPCEReader.m */; };
+		258EDFEC16F658BF00A56434 /* ZXModulusGF.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEF716F658BF00A56434 /* ZXModulusGF.m */; };
+		258EDFED16F658BF00A56434 /* ZXModulusPoly.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEF916F658BF00A56434 /* ZXModulusPoly.m */; };
+		258EDFEE16F658BF00A56434 /* ZXPDF417ECErrorCorrection.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEFB16F658BF00A56434 /* ZXPDF417ECErrorCorrection.m */; };
+		258EDFEF16F658BF00A56434 /* ZXPDF417BitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEFD16F658BF00A56434 /* ZXPDF417BitMatrixParser.m */; };
+		258EDFF016F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDEFF16F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.m */; };
+		258EDFF116F658BF00A56434 /* ZXPDF417Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF0116F658BF00A56434 /* ZXPDF417Decoder.m */; };
+		258EDFF216F658BF00A56434 /* ZXPDF417Detector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF0416F658BF00A56434 /* ZXPDF417Detector.m */; };
+		258EDFF316F658BF00A56434 /* ZXBarcodeMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF0716F658BF00A56434 /* ZXBarcodeMatrix.m */; };
+		258EDFF416F658BF00A56434 /* ZXBarcodeRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF0916F658BF00A56434 /* ZXBarcodeRow.m */; };
+		258EDFF516F658BF00A56434 /* ZXDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF0C16F658BF00A56434 /* ZXDimensions.m */; };
+		258EDFF616F658BF00A56434 /* ZXPDF417.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF0E16F658BF00A56434 /* ZXPDF417.m */; };
+		258EDFF716F658BF00A56434 /* ZXPDF417ErrorCorrection.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1016F658BF00A56434 /* ZXPDF417ErrorCorrection.m */; };
+		258EDFF816F658BF00A56434 /* ZXPDF417HighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1216F658BF00A56434 /* ZXPDF417HighLevelEncoder.m */; };
+		258EDFF916F658BF00A56434 /* ZXPDF417Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1416F658BF00A56434 /* ZXPDF417Writer.m */; };
+		258EDFFA16F658BF00A56434 /* ZXPDF417Reader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1616F658BF00A56434 /* ZXPDF417Reader.m */; };
+		258EDFFB16F658BF00A56434 /* ZXDataMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1A16F658BF00A56434 /* ZXDataMask.m */; };
+		258EDFFC16F658BF00A56434 /* ZXErrorCorrectionLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1C16F658BF00A56434 /* ZXErrorCorrectionLevel.m */; };
+		258EDFFD16F658BF00A56434 /* ZXFormatInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF1E16F658BF00A56434 /* ZXFormatInformation.m */; };
+		258EDFFE16F658BF00A56434 /* ZXMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2016F658BF00A56434 /* ZXMode.m */; };
+		258EDFFF16F658BF00A56434 /* ZXQRCodeBitMatrixParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2216F658BF00A56434 /* ZXQRCodeBitMatrixParser.m */; };
+		258EE00016F658BF00A56434 /* ZXQRCodeDataBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2416F658BF00A56434 /* ZXQRCodeDataBlock.m */; };
+		258EE00116F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2616F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.m */; };
+		258EE00216F658BF00A56434 /* ZXQRCodeDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2816F658BF00A56434 /* ZXQRCodeDecoder.m */; };
+		258EE00316F658BF00A56434 /* ZXQRCodeVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2A16F658BF00A56434 /* ZXQRCodeVersion.m */; };
+		258EE00416F658BF00A56434 /* ZXAlignmentPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2D16F658BF00A56434 /* ZXAlignmentPattern.m */; };
+		258EE00516F658BF00A56434 /* ZXAlignmentPatternFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF2F16F658BF00A56434 /* ZXAlignmentPatternFinder.m */; };
+		258EE00616F658BF00A56434 /* ZXFinderPatternFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3116F658BF00A56434 /* ZXFinderPatternFinder.m */; };
+		258EE00716F658BF00A56434 /* ZXFinderPatternInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3316F658BF00A56434 /* ZXFinderPatternInfo.m */; };
+		258EE00816F658BF00A56434 /* ZXQRCodeDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3516F658BF00A56434 /* ZXQRCodeDetector.m */; };
+		258EE00916F658BF00A56434 /* ZXQRCodeFinderPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3716F658BF00A56434 /* ZXQRCodeFinderPattern.m */; };
+		258EE00A16F658BF00A56434 /* ZXBlockPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3A16F658BF00A56434 /* ZXBlockPair.m */; };
+		258EE00B16F658BF00A56434 /* ZXByteMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3C16F658BF00A56434 /* ZXByteMatrix.m */; };
+		258EE00C16F658BF00A56434 /* ZXEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF3E16F658BF00A56434 /* ZXEncoder.m */; };
+		258EE00D16F658BF00A56434 /* ZXMaskUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4016F658BF00A56434 /* ZXMaskUtil.m */; };
+		258EE00E16F658BF00A56434 /* ZXMatrixUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4216F658BF00A56434 /* ZXMatrixUtil.m */; };
+		258EE00F16F658BF00A56434 /* ZXQRCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4416F658BF00A56434 /* ZXQRCode.m */; };
+		258EE01016F658BF00A56434 /* ZXQRCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4616F658BF00A56434 /* ZXQRCodeReader.m */; };
+		258EE01116F658BF00A56434 /* ZXQRCodeWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4816F658BF00A56434 /* ZXQRCodeWriter.m */; };
+		258EE01216F658BF00A56434 /* ZXBinarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4B16F658BF00A56434 /* ZXBinarizer.m */; };
+		258EE01316F658C000A56434 /* ZXBinaryBitmap.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4D16F658BF00A56434 /* ZXBinaryBitmap.m */; };
+		258EE01416F658C000A56434 /* ZXDecodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF4F16F658BF00A56434 /* ZXDecodeHints.m */; };
+		258EE01516F658C000A56434 /* ZXEncodeHints.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5116F658BF00A56434 /* ZXEncodeHints.m */; };
+		258EE01616F658C000A56434 /* ZXErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5316F658BF00A56434 /* ZXErrors.m */; };
+		258EE01716F658C000A56434 /* ZXLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5616F658BF00A56434 /* ZXLuminanceSource.m */; };
+		258EE01816F658C000A56434 /* ZXMultiFormatReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5816F658BF00A56434 /* ZXMultiFormatReader.m */; };
+		258EE01916F658C000A56434 /* ZXMultiFormatWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5A16F658BF00A56434 /* ZXMultiFormatWriter.m */; };
+		258EE01A16F658C000A56434 /* ZXPlanarYUVLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5C16F658BF00A56434 /* ZXPlanarYUVLuminanceSource.m */; };
+		258EE01B16F658C000A56434 /* ZXResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF5F16F658BF00A56434 /* ZXResult.m */; };
+		258EE01C16F658C000A56434 /* ZXResultPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF6216F658BF00A56434 /* ZXResultPoint.m */; };
+		258EE01D16F658C000A56434 /* ZXRGBLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 258EDF6516F658BF00A56434 /* ZXRGBLuminanceSource.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		25404729166AC24100E13304 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25403CB3166A96FA00E13304;
-			remoteInfo = "ZXingObjC-iOS";
-		};
-		2540472B166AC24100E13304 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25403CC4166A96FA00E13304;
-			remoteInfo = "ZXingObjCTests-iOS";
-		};
-		2540472D166AC24100E13304 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25404166166AADAC00E13304;
-			remoteInfo = "ZXingObjC-osx";
-		};
-		2540472F166AC24100E13304 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 25404178166AADAC00E13304;
-			remoteInfo = "ZXingObjCTests-osx";
-		};
-		25404731166AC24100E13304 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2540439E166ABA0A00E13304;
-			remoteInfo = "OS X Framework";
-		};
-		25404733166AC27800E13304 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 25403CB2166A96FA00E13304;
-			remoteInfo = "ZXingObjC-iOS";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0248361F16CC1493001E03E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -90,8 +227,384 @@
 		02C6AFDF156FCBA00052B145 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = SOURCE_ROOT; };
 		02C6AFE2156FCBA80052B145 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		25404717166AC1D200E13304 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
-		2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../ZXingObjC.xcodeproj; sourceTree = "<group>"; };
 		25404736166AC2EA00E13304 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		258EDDD316F658BF00A56434 /* ZXAztecDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDecoder.h; sourceTree = "<group>"; };
+		258EDDD416F658BF00A56434 /* ZXAztecDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDecoder.m; sourceTree = "<group>"; };
+		258EDDD616F658BF00A56434 /* ZXAztecDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDetector.h; sourceTree = "<group>"; };
+		258EDDD716F658BF00A56434 /* ZXAztecDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDetector.m; sourceTree = "<group>"; };
+		258EDDD816F658BF00A56434 /* ZXAztecDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDetectorResult.h; sourceTree = "<group>"; };
+		258EDDD916F658BF00A56434 /* ZXAztecDetectorResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDetectorResult.m; sourceTree = "<group>"; };
+		258EDDDA16F658BF00A56434 /* ZXAztecReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecReader.h; sourceTree = "<group>"; };
+		258EDDDB16F658BF00A56434 /* ZXAztecReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecReader.m; sourceTree = "<group>"; };
+		258EDDDE16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAbstractDoCoMoResultParser.h; sourceTree = "<group>"; };
+		258EDDDF16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAbstractDoCoMoResultParser.m; sourceTree = "<group>"; };
+		258EDDE016F658BF00A56434 /* ZXAddressBookAUResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAddressBookAUResultParser.h; sourceTree = "<group>"; };
+		258EDDE116F658BF00A56434 /* ZXAddressBookAUResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAddressBookAUResultParser.m; sourceTree = "<group>"; };
+		258EDDE216F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAddressBookDoCoMoResultParser.h; sourceTree = "<group>"; };
+		258EDDE316F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAddressBookDoCoMoResultParser.m; sourceTree = "<group>"; };
+		258EDDE416F658BF00A56434 /* ZXAddressBookParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAddressBookParsedResult.h; sourceTree = "<group>"; };
+		258EDDE516F658BF00A56434 /* ZXAddressBookParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAddressBookParsedResult.m; sourceTree = "<group>"; };
+		258EDDE616F658BF00A56434 /* ZXBizcardResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBizcardResultParser.h; sourceTree = "<group>"; };
+		258EDDE716F658BF00A56434 /* ZXBizcardResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBizcardResultParser.m; sourceTree = "<group>"; };
+		258EDDE816F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBookmarkDoCoMoResultParser.h; sourceTree = "<group>"; };
+		258EDDE916F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBookmarkDoCoMoResultParser.m; sourceTree = "<group>"; };
+		258EDDEA16F658BF00A56434 /* ZXCalendarParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCalendarParsedResult.h; sourceTree = "<group>"; };
+		258EDDEB16F658BF00A56434 /* ZXCalendarParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCalendarParsedResult.m; sourceTree = "<group>"; };
+		258EDDEC16F658BF00A56434 /* ZXEmailAddressParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEmailAddressParsedResult.h; sourceTree = "<group>"; };
+		258EDDED16F658BF00A56434 /* ZXEmailAddressParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEmailAddressParsedResult.m; sourceTree = "<group>"; };
+		258EDDEE16F658BF00A56434 /* ZXEmailAddressResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEmailAddressResultParser.h; sourceTree = "<group>"; };
+		258EDDEF16F658BF00A56434 /* ZXEmailAddressResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEmailAddressResultParser.m; sourceTree = "<group>"; };
+		258EDDF016F658BF00A56434 /* ZXEmailDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEmailDoCoMoResultParser.h; sourceTree = "<group>"; };
+		258EDDF116F658BF00A56434 /* ZXEmailDoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEmailDoCoMoResultParser.m; sourceTree = "<group>"; };
+		258EDDF216F658BF00A56434 /* ZXExpandedProductParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXExpandedProductParsedResult.h; sourceTree = "<group>"; };
+		258EDDF316F658BF00A56434 /* ZXExpandedProductParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXExpandedProductParsedResult.m; sourceTree = "<group>"; };
+		258EDDF416F658BF00A56434 /* ZXExpandedProductResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXExpandedProductResultParser.h; sourceTree = "<group>"; };
+		258EDDF516F658BF00A56434 /* ZXExpandedProductResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXExpandedProductResultParser.m; sourceTree = "<group>"; };
+		258EDDF616F658BF00A56434 /* ZXGeoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGeoParsedResult.h; sourceTree = "<group>"; };
+		258EDDF716F658BF00A56434 /* ZXGeoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGeoParsedResult.m; sourceTree = "<group>"; };
+		258EDDF816F658BF00A56434 /* ZXGeoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGeoResultParser.h; sourceTree = "<group>"; };
+		258EDDF916F658BF00A56434 /* ZXGeoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGeoResultParser.m; sourceTree = "<group>"; };
+		258EDDFA16F658BF00A56434 /* ZXISBNParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXISBNParsedResult.h; sourceTree = "<group>"; };
+		258EDDFB16F658BF00A56434 /* ZXISBNParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXISBNParsedResult.m; sourceTree = "<group>"; };
+		258EDDFC16F658BF00A56434 /* ZXISBNResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXISBNResultParser.h; sourceTree = "<group>"; };
+		258EDDFD16F658BF00A56434 /* ZXISBNResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXISBNResultParser.m; sourceTree = "<group>"; };
+		258EDDFE16F658BF00A56434 /* ZXParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXParsedResult.h; sourceTree = "<group>"; };
+		258EDDFF16F658BF00A56434 /* ZXParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXParsedResult.m; sourceTree = "<group>"; };
+		258EDE0016F658BF00A56434 /* ZXParsedResultType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXParsedResultType.h; sourceTree = "<group>"; };
+		258EDE0116F658BF00A56434 /* ZXProductParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXProductParsedResult.h; sourceTree = "<group>"; };
+		258EDE0216F658BF00A56434 /* ZXProductParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXProductParsedResult.m; sourceTree = "<group>"; };
+		258EDE0316F658BF00A56434 /* ZXProductResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXProductResultParser.h; sourceTree = "<group>"; };
+		258EDE0416F658BF00A56434 /* ZXProductResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXProductResultParser.m; sourceTree = "<group>"; };
+		258EDE0516F658BF00A56434 /* ZXResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXResultParser.h; sourceTree = "<group>"; };
+		258EDE0616F658BF00A56434 /* ZXResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXResultParser.m; sourceTree = "<group>"; };
+		258EDE0716F658BF00A56434 /* ZXSMSMMSResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXSMSMMSResultParser.h; sourceTree = "<group>"; };
+		258EDE0816F658BF00A56434 /* ZXSMSMMSResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXSMSMMSResultParser.m; sourceTree = "<group>"; };
+		258EDE0916F658BF00A56434 /* ZXSMSParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXSMSParsedResult.h; sourceTree = "<group>"; };
+		258EDE0A16F658BF00A56434 /* ZXSMSParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXSMSParsedResult.m; sourceTree = "<group>"; };
+		258EDE0B16F658BF00A56434 /* ZXSMSTOMMSTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXSMSTOMMSTOResultParser.h; sourceTree = "<group>"; };
+		258EDE0C16F658BF00A56434 /* ZXSMSTOMMSTOResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXSMSTOMMSTOResultParser.m; sourceTree = "<group>"; };
+		258EDE0D16F658BF00A56434 /* ZXSMTPResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXSMTPResultParser.h; sourceTree = "<group>"; };
+		258EDE0E16F658BF00A56434 /* ZXSMTPResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXSMTPResultParser.m; sourceTree = "<group>"; };
+		258EDE0F16F658BF00A56434 /* ZXTelParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXTelParsedResult.h; sourceTree = "<group>"; };
+		258EDE1016F658BF00A56434 /* ZXTelParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXTelParsedResult.m; sourceTree = "<group>"; };
+		258EDE1116F658BF00A56434 /* ZXTelResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXTelResultParser.h; sourceTree = "<group>"; };
+		258EDE1216F658BF00A56434 /* ZXTelResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXTelResultParser.m; sourceTree = "<group>"; };
+		258EDE1316F658BF00A56434 /* ZXTextParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXTextParsedResult.h; sourceTree = "<group>"; };
+		258EDE1416F658BF00A56434 /* ZXTextParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXTextParsedResult.m; sourceTree = "<group>"; };
+		258EDE1516F658BF00A56434 /* ZXURIParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXURIParsedResult.h; sourceTree = "<group>"; };
+		258EDE1616F658BF00A56434 /* ZXURIParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXURIParsedResult.m; sourceTree = "<group>"; };
+		258EDE1716F658BF00A56434 /* ZXURIResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXURIResultParser.h; sourceTree = "<group>"; };
+		258EDE1816F658BF00A56434 /* ZXURIResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXURIResultParser.m; sourceTree = "<group>"; };
+		258EDE1916F658BF00A56434 /* ZXURLTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXURLTOResultParser.h; sourceTree = "<group>"; };
+		258EDE1A16F658BF00A56434 /* ZXURLTOResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXURLTOResultParser.m; sourceTree = "<group>"; };
+		258EDE1B16F658BF00A56434 /* ZXVCardResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXVCardResultParser.h; sourceTree = "<group>"; };
+		258EDE1C16F658BF00A56434 /* ZXVCardResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXVCardResultParser.m; sourceTree = "<group>"; };
+		258EDE1D16F658BF00A56434 /* ZXVEventResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXVEventResultParser.h; sourceTree = "<group>"; };
+		258EDE1E16F658BF00A56434 /* ZXVEventResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXVEventResultParser.m; sourceTree = "<group>"; };
+		258EDE1F16F658BF00A56434 /* ZXWifiParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXWifiParsedResult.h; sourceTree = "<group>"; };
+		258EDE2016F658BF00A56434 /* ZXWifiParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXWifiParsedResult.m; sourceTree = "<group>"; };
+		258EDE2116F658BF00A56434 /* ZXWifiResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXWifiResultParser.h; sourceTree = "<group>"; };
+		258EDE2216F658BF00A56434 /* ZXWifiResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXWifiResultParser.m; sourceTree = "<group>"; };
+		258EDE2316F658BF00A56434 /* ZXCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCapture.h; sourceTree = "<group>"; };
+		258EDE2416F658BF00A56434 /* ZXCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCapture.m; sourceTree = "<group>"; };
+		258EDE2516F658BF00A56434 /* ZXCaptureDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCaptureDelegate.h; sourceTree = "<group>"; };
+		258EDE2616F658BF00A56434 /* ZXCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCaptureView.h; sourceTree = "<group>"; };
+		258EDE2716F658BF00A56434 /* ZXCaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCaptureView.m; sourceTree = "<group>"; };
+		258EDE2816F658BF00A56434 /* ZXCGImageLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCGImageLuminanceSource.h; sourceTree = "<group>"; };
+		258EDE2916F658BF00A56434 /* ZXCGImageLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCGImageLuminanceSource.m; sourceTree = "<group>"; };
+		258EDE2A16F658BF00A56434 /* ZXImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXImage.h; sourceTree = "<group>"; };
+		258EDE2B16F658BF00A56434 /* ZXImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXImage.m; sourceTree = "<group>"; };
+		258EDE2C16F658BF00A56434 /* ZXView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXView.h; sourceTree = "<group>"; };
+		258EDE2F16F658BF00A56434 /* ZXMathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMathUtils.h; sourceTree = "<group>"; };
+		258EDE3016F658BF00A56434 /* ZXMathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMathUtils.m; sourceTree = "<group>"; };
+		258EDE3116F658BF00A56434 /* ZXMonochromeRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMonochromeRectangleDetector.h; sourceTree = "<group>"; };
+		258EDE3216F658BF00A56434 /* ZXMonochromeRectangleDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMonochromeRectangleDetector.m; sourceTree = "<group>"; };
+		258EDE3316F658BF00A56434 /* ZXWhiteRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXWhiteRectangleDetector.h; sourceTree = "<group>"; };
+		258EDE3416F658BF00A56434 /* ZXWhiteRectangleDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXWhiteRectangleDetector.m; sourceTree = "<group>"; };
+		258EDE3616F658BF00A56434 /* ZXGenericGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGenericGF.h; sourceTree = "<group>"; };
+		258EDE3716F658BF00A56434 /* ZXGenericGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGenericGF.m; sourceTree = "<group>"; };
+		258EDE3816F658BF00A56434 /* ZXGenericGFPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGenericGFPoly.h; sourceTree = "<group>"; };
+		258EDE3916F658BF00A56434 /* ZXGenericGFPoly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGenericGFPoly.m; sourceTree = "<group>"; };
+		258EDE3A16F658BF00A56434 /* ZXReedSolomonDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXReedSolomonDecoder.h; sourceTree = "<group>"; };
+		258EDE3B16F658BF00A56434 /* ZXReedSolomonDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXReedSolomonDecoder.m; sourceTree = "<group>"; };
+		258EDE3C16F658BF00A56434 /* ZXReedSolomonEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXReedSolomonEncoder.h; sourceTree = "<group>"; };
+		258EDE3D16F658BF00A56434 /* ZXReedSolomonEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXReedSolomonEncoder.m; sourceTree = "<group>"; };
+		258EDE3E16F658BF00A56434 /* ZXBitArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBitArray.h; sourceTree = "<group>"; };
+		258EDE3F16F658BF00A56434 /* ZXBitArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBitArray.m; sourceTree = "<group>"; };
+		258EDE4016F658BF00A56434 /* ZXBitMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBitMatrix.h; sourceTree = "<group>"; };
+		258EDE4116F658BF00A56434 /* ZXBitMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBitMatrix.m; sourceTree = "<group>"; };
+		258EDE4216F658BF00A56434 /* ZXBitSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBitSource.h; sourceTree = "<group>"; };
+		258EDE4316F658BF00A56434 /* ZXBitSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBitSource.m; sourceTree = "<group>"; };
+		258EDE4416F658BF00A56434 /* ZXCharacterSetECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCharacterSetECI.h; sourceTree = "<group>"; };
+		258EDE4516F658BF00A56434 /* ZXCharacterSetECI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCharacterSetECI.m; sourceTree = "<group>"; };
+		258EDE4616F658BF00A56434 /* ZXDecoderResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecoderResult.h; sourceTree = "<group>"; };
+		258EDE4716F658BF00A56434 /* ZXDecoderResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecoderResult.m; sourceTree = "<group>"; };
+		258EDE4816F658BF00A56434 /* ZXDefaultGridSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDefaultGridSampler.h; sourceTree = "<group>"; };
+		258EDE4916F658BF00A56434 /* ZXDefaultGridSampler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDefaultGridSampler.m; sourceTree = "<group>"; };
+		258EDE4A16F658BF00A56434 /* ZXDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDetectorResult.h; sourceTree = "<group>"; };
+		258EDE4B16F658BF00A56434 /* ZXDetectorResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDetectorResult.m; sourceTree = "<group>"; };
+		258EDE4C16F658BF00A56434 /* ZXECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXECI.h; sourceTree = "<group>"; };
+		258EDE4D16F658BF00A56434 /* ZXECI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXECI.m; sourceTree = "<group>"; };
+		258EDE4E16F658BF00A56434 /* ZXGlobalHistogramBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGlobalHistogramBinarizer.h; sourceTree = "<group>"; };
+		258EDE4F16F658BF00A56434 /* ZXGlobalHistogramBinarizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGlobalHistogramBinarizer.m; sourceTree = "<group>"; };
+		258EDE5016F658BF00A56434 /* ZXGridSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGridSampler.h; sourceTree = "<group>"; };
+		258EDE5116F658BF00A56434 /* ZXGridSampler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGridSampler.m; sourceTree = "<group>"; };
+		258EDE5216F658BF00A56434 /* ZXHybridBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXHybridBinarizer.h; sourceTree = "<group>"; };
+		258EDE5316F658BF00A56434 /* ZXHybridBinarizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXHybridBinarizer.m; sourceTree = "<group>"; };
+		258EDE5416F658BF00A56434 /* ZXPerspectiveTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPerspectiveTransform.h; sourceTree = "<group>"; };
+		258EDE5516F658BF00A56434 /* ZXPerspectiveTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPerspectiveTransform.m; sourceTree = "<group>"; };
+		258EDE5616F658BF00A56434 /* ZXStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXStringUtils.h; sourceTree = "<group>"; };
+		258EDE5716F658BF00A56434 /* ZXStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXStringUtils.m; sourceTree = "<group>"; };
+		258EDE5A16F658BF00A56434 /* ZXDataMatrixBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixBitMatrixParser.h; sourceTree = "<group>"; };
+		258EDE5B16F658BF00A56434 /* ZXDataMatrixBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixBitMatrixParser.m; sourceTree = "<group>"; };
+		258EDE5C16F658BF00A56434 /* ZXDataMatrixDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDataBlock.h; sourceTree = "<group>"; };
+		258EDE5D16F658BF00A56434 /* ZXDataMatrixDataBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixDataBlock.m; sourceTree = "<group>"; };
+		258EDE5E16F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDecodedBitStreamParser.h; sourceTree = "<group>"; };
+		258EDE5F16F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixDecodedBitStreamParser.m; sourceTree = "<group>"; };
+		258EDE6016F658BF00A56434 /* ZXDataMatrixDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDecoder.h; sourceTree = "<group>"; };
+		258EDE6116F658BF00A56434 /* ZXDataMatrixDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixDecoder.m; sourceTree = "<group>"; };
+		258EDE6216F658BF00A56434 /* ZXDataMatrixVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixVersion.h; sourceTree = "<group>"; };
+		258EDE6316F658BF00A56434 /* ZXDataMatrixVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixVersion.m; sourceTree = "<group>"; };
+		258EDE6516F658BF00A56434 /* ZXDataMatrixDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixDetector.h; sourceTree = "<group>"; };
+		258EDE6616F658BF00A56434 /* ZXDataMatrixDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixDetector.m; sourceTree = "<group>"; };
+		258EDE6716F658BF00A56434 /* ZXDataMatrixReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixReader.h; sourceTree = "<group>"; };
+		258EDE6816F658BF00A56434 /* ZXDataMatrixReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMatrixReader.m; sourceTree = "<group>"; };
+		258EDE6B16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxiCodeBitMatrixParser.h; sourceTree = "<group>"; };
+		258EDE6C16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxiCodeBitMatrixParser.m; sourceTree = "<group>"; };
+		258EDE6D16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxiCodeDecodedBitStreamParser.h; sourceTree = "<group>"; };
+		258EDE6E16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxiCodeDecodedBitStreamParser.m; sourceTree = "<group>"; };
+		258EDE6F16F658BF00A56434 /* ZXMaxiCodeDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxiCodeDecoder.h; sourceTree = "<group>"; };
+		258EDE7016F658BF00A56434 /* ZXMaxiCodeDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxiCodeDecoder.m; sourceTree = "<group>"; };
+		258EDE7116F658BF00A56434 /* ZXMaxiCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxiCodeReader.h; sourceTree = "<group>"; };
+		258EDE7216F658BF00A56434 /* ZXMaxiCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxiCodeReader.m; sourceTree = "<group>"; };
+		258EDE7616F658BF00A56434 /* ZXMultiDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiDetector.h; sourceTree = "<group>"; };
+		258EDE7716F658BF00A56434 /* ZXMultiDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiDetector.m; sourceTree = "<group>"; };
+		258EDE7816F658BF00A56434 /* ZXMultiFinderPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiFinderPatternFinder.h; sourceTree = "<group>"; };
+		258EDE7916F658BF00A56434 /* ZXMultiFinderPatternFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFinderPatternFinder.m; sourceTree = "<group>"; };
+		258EDE7A16F658BF00A56434 /* ZXQRCodeMultiReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeMultiReader.h; sourceTree = "<group>"; };
+		258EDE7B16F658BF00A56434 /* ZXQRCodeMultiReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeMultiReader.m; sourceTree = "<group>"; };
+		258EDE7C16F658BF00A56434 /* ZXByQuadrantReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXByQuadrantReader.h; sourceTree = "<group>"; };
+		258EDE7D16F658BF00A56434 /* ZXByQuadrantReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXByQuadrantReader.m; sourceTree = "<group>"; };
+		258EDE7E16F658BF00A56434 /* ZXGenericMultipleBarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGenericMultipleBarcodeReader.h; sourceTree = "<group>"; };
+		258EDE7F16F658BF00A56434 /* ZXGenericMultipleBarcodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGenericMultipleBarcodeReader.m; sourceTree = "<group>"; };
+		258EDE8016F658BF00A56434 /* ZXMultipleBarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultipleBarcodeReader.h; sourceTree = "<group>"; };
+		258EDE8516F658BF00A56434 /* ZXAbstractExpandedDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAbstractExpandedDecoder.h; sourceTree = "<group>"; };
+		258EDE8616F658BF00A56434 /* ZXAbstractExpandedDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAbstractExpandedDecoder.m; sourceTree = "<group>"; };
+		258EDE8716F658BF00A56434 /* ZXAI013103decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI013103decoder.h; sourceTree = "<group>"; };
+		258EDE8816F658BF00A56434 /* ZXAI013103decoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI013103decoder.m; sourceTree = "<group>"; };
+		258EDE8916F658BF00A56434 /* ZXAI01320xDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI01320xDecoder.h; sourceTree = "<group>"; };
+		258EDE8A16F658BF00A56434 /* ZXAI01320xDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI01320xDecoder.m; sourceTree = "<group>"; };
+		258EDE8B16F658BF00A56434 /* ZXAI01392xDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI01392xDecoder.h; sourceTree = "<group>"; };
+		258EDE8C16F658BF00A56434 /* ZXAI01392xDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI01392xDecoder.m; sourceTree = "<group>"; };
+		258EDE8D16F658BF00A56434 /* ZXAI01393xDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI01393xDecoder.h; sourceTree = "<group>"; };
+		258EDE8E16F658BF00A56434 /* ZXAI01393xDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI01393xDecoder.m; sourceTree = "<group>"; };
+		258EDE8F16F658BF00A56434 /* ZXAI013x0x1xDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI013x0x1xDecoder.h; sourceTree = "<group>"; };
+		258EDE9016F658BF00A56434 /* ZXAI013x0x1xDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI013x0x1xDecoder.m; sourceTree = "<group>"; };
+		258EDE9116F658BF00A56434 /* ZXAI013x0xDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI013x0xDecoder.h; sourceTree = "<group>"; };
+		258EDE9216F658BF00A56434 /* ZXAI013x0xDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI013x0xDecoder.m; sourceTree = "<group>"; };
+		258EDE9316F658BF00A56434 /* ZXAI01AndOtherAIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI01AndOtherAIs.h; sourceTree = "<group>"; };
+		258EDE9416F658BF00A56434 /* ZXAI01AndOtherAIs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI01AndOtherAIs.m; sourceTree = "<group>"; };
+		258EDE9516F658BF00A56434 /* ZXAI01decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI01decoder.h; sourceTree = "<group>"; };
+		258EDE9616F658BF00A56434 /* ZXAI01decoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI01decoder.m; sourceTree = "<group>"; };
+		258EDE9716F658BF00A56434 /* ZXAI01weightDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAI01weightDecoder.h; sourceTree = "<group>"; };
+		258EDE9816F658BF00A56434 /* ZXAI01weightDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAI01weightDecoder.m; sourceTree = "<group>"; };
+		258EDE9916F658BF00A56434 /* ZXAnyAIDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAnyAIDecoder.h; sourceTree = "<group>"; };
+		258EDE9A16F658BF00A56434 /* ZXAnyAIDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAnyAIDecoder.m; sourceTree = "<group>"; };
+		258EDE9B16F658BF00A56434 /* ZXBlockParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBlockParsedResult.h; sourceTree = "<group>"; };
+		258EDE9C16F658BF00A56434 /* ZXBlockParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBlockParsedResult.m; sourceTree = "<group>"; };
+		258EDE9D16F658BF00A56434 /* ZXCurrentParsingState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCurrentParsingState.h; sourceTree = "<group>"; };
+		258EDE9E16F658BF00A56434 /* ZXCurrentParsingState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCurrentParsingState.m; sourceTree = "<group>"; };
+		258EDE9F16F658BF00A56434 /* ZXDecodedChar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecodedChar.h; sourceTree = "<group>"; };
+		258EDEA016F658BF00A56434 /* ZXDecodedChar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecodedChar.m; sourceTree = "<group>"; };
+		258EDEA116F658BF00A56434 /* ZXDecodedInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecodedInformation.h; sourceTree = "<group>"; };
+		258EDEA216F658BF00A56434 /* ZXDecodedInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecodedInformation.m; sourceTree = "<group>"; };
+		258EDEA316F658BF00A56434 /* ZXDecodedNumeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecodedNumeric.h; sourceTree = "<group>"; };
+		258EDEA416F658BF00A56434 /* ZXDecodedNumeric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecodedNumeric.m; sourceTree = "<group>"; };
+		258EDEA516F658BF00A56434 /* ZXDecodedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecodedObject.h; sourceTree = "<group>"; };
+		258EDEA616F658BF00A56434 /* ZXDecodedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecodedObject.m; sourceTree = "<group>"; };
+		258EDEA716F658BF00A56434 /* ZXFieldParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXFieldParser.h; sourceTree = "<group>"; };
+		258EDEA816F658BF00A56434 /* ZXFieldParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXFieldParser.m; sourceTree = "<group>"; };
+		258EDEA916F658BF00A56434 /* ZXGeneralAppIdDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXGeneralAppIdDecoder.h; sourceTree = "<group>"; };
+		258EDEAA16F658BF00A56434 /* ZXGeneralAppIdDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGeneralAppIdDecoder.m; sourceTree = "<group>"; };
+		258EDEAB16F658BF00A56434 /* ZXBitArrayBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBitArrayBuilder.h; sourceTree = "<group>"; };
+		258EDEAC16F658BF00A56434 /* ZXBitArrayBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBitArrayBuilder.m; sourceTree = "<group>"; };
+		258EDEAD16F658BF00A56434 /* ZXExpandedPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXExpandedPair.h; sourceTree = "<group>"; };
+		258EDEAE16F658BF00A56434 /* ZXExpandedPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXExpandedPair.m; sourceTree = "<group>"; };
+		258EDEAF16F658BF00A56434 /* ZXExpandedRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXExpandedRow.h; sourceTree = "<group>"; };
+		258EDEB016F658BF00A56434 /* ZXExpandedRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXExpandedRow.m; sourceTree = "<group>"; };
+		258EDEB116F658BF00A56434 /* ZXRSSExpandedReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRSSExpandedReader.h; sourceTree = "<group>"; };
+		258EDEB216F658BF00A56434 /* ZXRSSExpandedReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRSSExpandedReader.m; sourceTree = "<group>"; };
+		258EDEB316F658BF00A56434 /* ZXAbstractRSSReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAbstractRSSReader.h; sourceTree = "<group>"; };
+		258EDEB416F658BF00A56434 /* ZXAbstractRSSReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAbstractRSSReader.m; sourceTree = "<group>"; };
+		258EDEB516F658BF00A56434 /* ZXDataCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataCharacter.h; sourceTree = "<group>"; };
+		258EDEB616F658BF00A56434 /* ZXDataCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataCharacter.m; sourceTree = "<group>"; };
+		258EDEB716F658BF00A56434 /* ZXPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPair.h; sourceTree = "<group>"; };
+		258EDEB816F658BF00A56434 /* ZXPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPair.m; sourceTree = "<group>"; };
+		258EDEB916F658BF00A56434 /* ZXRSS14Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRSS14Reader.h; sourceTree = "<group>"; };
+		258EDEBA16F658BF00A56434 /* ZXRSS14Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRSS14Reader.m; sourceTree = "<group>"; };
+		258EDEBB16F658BF00A56434 /* ZXRSSFinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRSSFinderPattern.h; sourceTree = "<group>"; };
+		258EDEBC16F658BF00A56434 /* ZXRSSFinderPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRSSFinderPattern.m; sourceTree = "<group>"; };
+		258EDEBD16F658BF00A56434 /* ZXRSSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRSSUtils.h; sourceTree = "<group>"; };
+		258EDEBE16F658BF00A56434 /* ZXRSSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRSSUtils.m; sourceTree = "<group>"; };
+		258EDEBF16F658BF00A56434 /* ZXCodaBarReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCodaBarReader.h; sourceTree = "<group>"; };
+		258EDEC016F658BF00A56434 /* ZXCodaBarReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCodaBarReader.m; sourceTree = "<group>"; };
+		258EDEC116F658BF00A56434 /* ZXCodaBarWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCodaBarWriter.h; sourceTree = "<group>"; };
+		258EDEC216F658BF00A56434 /* ZXCodaBarWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCodaBarWriter.m; sourceTree = "<group>"; };
+		258EDEC316F658BF00A56434 /* ZXCode128Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode128Reader.h; sourceTree = "<group>"; };
+		258EDEC416F658BF00A56434 /* ZXCode128Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode128Reader.m; sourceTree = "<group>"; };
+		258EDEC516F658BF00A56434 /* ZXCode128Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode128Writer.h; sourceTree = "<group>"; };
+		258EDEC616F658BF00A56434 /* ZXCode128Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode128Writer.m; sourceTree = "<group>"; };
+		258EDEC716F658BF00A56434 /* ZXCode39Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode39Reader.h; sourceTree = "<group>"; };
+		258EDEC816F658BF00A56434 /* ZXCode39Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode39Reader.m; sourceTree = "<group>"; };
+		258EDEC916F658BF00A56434 /* ZXCode39Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode39Writer.h; sourceTree = "<group>"; };
+		258EDECA16F658BF00A56434 /* ZXCode39Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode39Writer.m; sourceTree = "<group>"; };
+		258EDECB16F658BF00A56434 /* ZXCode93Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode93Reader.h; sourceTree = "<group>"; };
+		258EDECC16F658BF00A56434 /* ZXCode93Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode93Reader.m; sourceTree = "<group>"; };
+		258EDECD16F658BF00A56434 /* ZXEAN13Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN13Reader.h; sourceTree = "<group>"; };
+		258EDECE16F658BF00A56434 /* ZXEAN13Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN13Reader.m; sourceTree = "<group>"; };
+		258EDECF16F658BF00A56434 /* ZXEAN13Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN13Writer.h; sourceTree = "<group>"; };
+		258EDED016F658BF00A56434 /* ZXEAN13Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN13Writer.m; sourceTree = "<group>"; };
+		258EDED116F658BF00A56434 /* ZXEAN8Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN8Reader.h; sourceTree = "<group>"; };
+		258EDED216F658BF00A56434 /* ZXEAN8Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN8Reader.m; sourceTree = "<group>"; };
+		258EDED316F658BF00A56434 /* ZXEAN8Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN8Writer.h; sourceTree = "<group>"; };
+		258EDED416F658BF00A56434 /* ZXEAN8Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN8Writer.m; sourceTree = "<group>"; };
+		258EDED516F658BF00A56434 /* ZXEANManufacturerOrgSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEANManufacturerOrgSupport.h; sourceTree = "<group>"; };
+		258EDED616F658BF00A56434 /* ZXEANManufacturerOrgSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEANManufacturerOrgSupport.m; sourceTree = "<group>"; };
+		258EDED716F658BF00A56434 /* ZXITFReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXITFReader.h; sourceTree = "<group>"; };
+		258EDED816F658BF00A56434 /* ZXITFReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXITFReader.m; sourceTree = "<group>"; };
+		258EDED916F658BF00A56434 /* ZXITFWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXITFWriter.h; sourceTree = "<group>"; };
+		258EDEDA16F658BF00A56434 /* ZXITFWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXITFWriter.m; sourceTree = "<group>"; };
+		258EDEDB16F658BF00A56434 /* ZXMultiFormatOneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiFormatOneDReader.h; sourceTree = "<group>"; };
+		258EDEDC16F658BF00A56434 /* ZXMultiFormatOneDReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFormatOneDReader.m; sourceTree = "<group>"; };
+		258EDEDD16F658BF00A56434 /* ZXMultiFormatUPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiFormatUPCEANReader.h; sourceTree = "<group>"; };
+		258EDEDE16F658BF00A56434 /* ZXMultiFormatUPCEANReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFormatUPCEANReader.m; sourceTree = "<group>"; };
+		258EDEDF16F658BF00A56434 /* ZXOneDimensionalCodeWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXOneDimensionalCodeWriter.h; sourceTree = "<group>"; };
+		258EDEE016F658BF00A56434 /* ZXOneDimensionalCodeWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXOneDimensionalCodeWriter.m; sourceTree = "<group>"; };
+		258EDEE116F658BF00A56434 /* ZXOneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXOneDReader.h; sourceTree = "<group>"; };
+		258EDEE216F658BF00A56434 /* ZXOneDReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXOneDReader.m; sourceTree = "<group>"; };
+		258EDEE316F658BF00A56434 /* ZXUPCAReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCAReader.h; sourceTree = "<group>"; };
+		258EDEE416F658BF00A56434 /* ZXUPCAReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCAReader.m; sourceTree = "<group>"; };
+		258EDEE516F658BF00A56434 /* ZXUPCAWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCAWriter.h; sourceTree = "<group>"; };
+		258EDEE616F658BF00A56434 /* ZXUPCAWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCAWriter.m; sourceTree = "<group>"; };
+		258EDEE716F658BF00A56434 /* ZXUPCEANExtension2Support.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANExtension2Support.h; sourceTree = "<group>"; };
+		258EDEE816F658BF00A56434 /* ZXUPCEANExtension2Support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANExtension2Support.m; sourceTree = "<group>"; };
+		258EDEE916F658BF00A56434 /* ZXUPCEANExtension5Support.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANExtension5Support.h; sourceTree = "<group>"; };
+		258EDEEA16F658BF00A56434 /* ZXUPCEANExtension5Support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANExtension5Support.m; sourceTree = "<group>"; };
+		258EDEEB16F658BF00A56434 /* ZXUPCEANExtensionSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANExtensionSupport.h; sourceTree = "<group>"; };
+		258EDEEC16F658BF00A56434 /* ZXUPCEANExtensionSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANExtensionSupport.m; sourceTree = "<group>"; };
+		258EDEED16F658BF00A56434 /* ZXUPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANReader.h; sourceTree = "<group>"; };
+		258EDEEE16F658BF00A56434 /* ZXUPCEANReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANReader.m; sourceTree = "<group>"; };
+		258EDEEF16F658BF00A56434 /* ZXUPCEANWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEANWriter.h; sourceTree = "<group>"; };
+		258EDEF016F658BF00A56434 /* ZXUPCEANWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEANWriter.m; sourceTree = "<group>"; };
+		258EDEF116F658BF00A56434 /* ZXUPCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEReader.h; sourceTree = "<group>"; };
+		258EDEF216F658BF00A56434 /* ZXUPCEReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEReader.m; sourceTree = "<group>"; };
+		258EDEF616F658BF00A56434 /* ZXModulusGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXModulusGF.h; sourceTree = "<group>"; };
+		258EDEF716F658BF00A56434 /* ZXModulusGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXModulusGF.m; sourceTree = "<group>"; };
+		258EDEF816F658BF00A56434 /* ZXModulusPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXModulusPoly.h; sourceTree = "<group>"; };
+		258EDEF916F658BF00A56434 /* ZXModulusPoly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXModulusPoly.m; sourceTree = "<group>"; };
+		258EDEFA16F658BF00A56434 /* ZXPDF417ECErrorCorrection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417ECErrorCorrection.h; sourceTree = "<group>"; };
+		258EDEFB16F658BF00A56434 /* ZXPDF417ECErrorCorrection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417ECErrorCorrection.m; sourceTree = "<group>"; };
+		258EDEFC16F658BF00A56434 /* ZXPDF417BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417BitMatrixParser.h; sourceTree = "<group>"; };
+		258EDEFD16F658BF00A56434 /* ZXPDF417BitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417BitMatrixParser.m; sourceTree = "<group>"; };
+		258EDEFE16F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417DecodedBitStreamParser.h; sourceTree = "<group>"; };
+		258EDEFF16F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417DecodedBitStreamParser.m; sourceTree = "<group>"; };
+		258EDF0016F658BF00A56434 /* ZXPDF417Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417Decoder.h; sourceTree = "<group>"; };
+		258EDF0116F658BF00A56434 /* ZXPDF417Decoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Decoder.m; sourceTree = "<group>"; };
+		258EDF0316F658BF00A56434 /* ZXPDF417Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417Detector.h; sourceTree = "<group>"; };
+		258EDF0416F658BF00A56434 /* ZXPDF417Detector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Detector.m; sourceTree = "<group>"; };
+		258EDF0616F658BF00A56434 /* ZXBarcodeMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBarcodeMatrix.h; sourceTree = "<group>"; };
+		258EDF0716F658BF00A56434 /* ZXBarcodeMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBarcodeMatrix.m; sourceTree = "<group>"; };
+		258EDF0816F658BF00A56434 /* ZXBarcodeRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBarcodeRow.h; sourceTree = "<group>"; };
+		258EDF0916F658BF00A56434 /* ZXBarcodeRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBarcodeRow.m; sourceTree = "<group>"; };
+		258EDF0A16F658BF00A56434 /* ZXCompaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCompaction.h; sourceTree = "<group>"; };
+		258EDF0B16F658BF00A56434 /* ZXDimensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDimensions.h; sourceTree = "<group>"; };
+		258EDF0C16F658BF00A56434 /* ZXDimensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDimensions.m; sourceTree = "<group>"; };
+		258EDF0D16F658BF00A56434 /* ZXPDF417.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417.h; sourceTree = "<group>"; };
+		258EDF0E16F658BF00A56434 /* ZXPDF417.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417.m; sourceTree = "<group>"; };
+		258EDF0F16F658BF00A56434 /* ZXPDF417ErrorCorrection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417ErrorCorrection.h; sourceTree = "<group>"; };
+		258EDF1016F658BF00A56434 /* ZXPDF417ErrorCorrection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417ErrorCorrection.m; sourceTree = "<group>"; };
+		258EDF1116F658BF00A56434 /* ZXPDF417HighLevelEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417HighLevelEncoder.h; sourceTree = "<group>"; };
+		258EDF1216F658BF00A56434 /* ZXPDF417HighLevelEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417HighLevelEncoder.m; sourceTree = "<group>"; };
+		258EDF1316F658BF00A56434 /* ZXPDF417Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417Writer.h; sourceTree = "<group>"; };
+		258EDF1416F658BF00A56434 /* ZXPDF417Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Writer.m; sourceTree = "<group>"; };
+		258EDF1516F658BF00A56434 /* ZXPDF417Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417Reader.h; sourceTree = "<group>"; };
+		258EDF1616F658BF00A56434 /* ZXPDF417Reader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Reader.m; sourceTree = "<group>"; };
+		258EDF1916F658BF00A56434 /* ZXDataMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDataMask.h; sourceTree = "<group>"; };
+		258EDF1A16F658BF00A56434 /* ZXDataMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDataMask.m; sourceTree = "<group>"; };
+		258EDF1B16F658BF00A56434 /* ZXErrorCorrectionLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXErrorCorrectionLevel.h; sourceTree = "<group>"; };
+		258EDF1C16F658BF00A56434 /* ZXErrorCorrectionLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXErrorCorrectionLevel.m; sourceTree = "<group>"; };
+		258EDF1D16F658BF00A56434 /* ZXFormatInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXFormatInformation.h; sourceTree = "<group>"; };
+		258EDF1E16F658BF00A56434 /* ZXFormatInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXFormatInformation.m; sourceTree = "<group>"; };
+		258EDF1F16F658BF00A56434 /* ZXMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMode.h; sourceTree = "<group>"; };
+		258EDF2016F658BF00A56434 /* ZXMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMode.m; sourceTree = "<group>"; };
+		258EDF2116F658BF00A56434 /* ZXQRCodeBitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeBitMatrixParser.h; sourceTree = "<group>"; };
+		258EDF2216F658BF00A56434 /* ZXQRCodeBitMatrixParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeBitMatrixParser.m; sourceTree = "<group>"; };
+		258EDF2316F658BF00A56434 /* ZXQRCodeDataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeDataBlock.h; sourceTree = "<group>"; };
+		258EDF2416F658BF00A56434 /* ZXQRCodeDataBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDataBlock.m; sourceTree = "<group>"; };
+		258EDF2516F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeDecodedBitStreamParser.h; sourceTree = "<group>"; };
+		258EDF2616F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDecodedBitStreamParser.m; sourceTree = "<group>"; };
+		258EDF2716F658BF00A56434 /* ZXQRCodeDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeDecoder.h; sourceTree = "<group>"; };
+		258EDF2816F658BF00A56434 /* ZXQRCodeDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDecoder.m; sourceTree = "<group>"; };
+		258EDF2916F658BF00A56434 /* ZXQRCodeVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeVersion.h; sourceTree = "<group>"; };
+		258EDF2A16F658BF00A56434 /* ZXQRCodeVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeVersion.m; sourceTree = "<group>"; };
+		258EDF2C16F658BF00A56434 /* ZXAlignmentPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAlignmentPattern.h; sourceTree = "<group>"; };
+		258EDF2D16F658BF00A56434 /* ZXAlignmentPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAlignmentPattern.m; sourceTree = "<group>"; };
+		258EDF2E16F658BF00A56434 /* ZXAlignmentPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAlignmentPatternFinder.h; sourceTree = "<group>"; };
+		258EDF2F16F658BF00A56434 /* ZXAlignmentPatternFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAlignmentPatternFinder.m; sourceTree = "<group>"; };
+		258EDF3016F658BF00A56434 /* ZXFinderPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXFinderPatternFinder.h; sourceTree = "<group>"; };
+		258EDF3116F658BF00A56434 /* ZXFinderPatternFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXFinderPatternFinder.m; sourceTree = "<group>"; };
+		258EDF3216F658BF00A56434 /* ZXFinderPatternInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXFinderPatternInfo.h; sourceTree = "<group>"; };
+		258EDF3316F658BF00A56434 /* ZXFinderPatternInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXFinderPatternInfo.m; sourceTree = "<group>"; };
+		258EDF3416F658BF00A56434 /* ZXQRCodeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeDetector.h; sourceTree = "<group>"; };
+		258EDF3516F658BF00A56434 /* ZXQRCodeDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDetector.m; sourceTree = "<group>"; };
+		258EDF3616F658BF00A56434 /* ZXQRCodeFinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeFinderPattern.h; sourceTree = "<group>"; };
+		258EDF3716F658BF00A56434 /* ZXQRCodeFinderPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeFinderPattern.m; sourceTree = "<group>"; };
+		258EDF3916F658BF00A56434 /* ZXBlockPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBlockPair.h; sourceTree = "<group>"; };
+		258EDF3A16F658BF00A56434 /* ZXBlockPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBlockPair.m; sourceTree = "<group>"; };
+		258EDF3B16F658BF00A56434 /* ZXByteMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXByteMatrix.h; sourceTree = "<group>"; };
+		258EDF3C16F658BF00A56434 /* ZXByteMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXByteMatrix.m; sourceTree = "<group>"; };
+		258EDF3D16F658BF00A56434 /* ZXEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEncoder.h; sourceTree = "<group>"; };
+		258EDF3E16F658BF00A56434 /* ZXEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEncoder.m; sourceTree = "<group>"; };
+		258EDF3F16F658BF00A56434 /* ZXMaskUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaskUtil.h; sourceTree = "<group>"; };
+		258EDF4016F658BF00A56434 /* ZXMaskUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaskUtil.m; sourceTree = "<group>"; };
+		258EDF4116F658BF00A56434 /* ZXMatrixUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMatrixUtil.h; sourceTree = "<group>"; };
+		258EDF4216F658BF00A56434 /* ZXMatrixUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMatrixUtil.m; sourceTree = "<group>"; };
+		258EDF4316F658BF00A56434 /* ZXQRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCode.h; sourceTree = "<group>"; };
+		258EDF4416F658BF00A56434 /* ZXQRCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCode.m; sourceTree = "<group>"; };
+		258EDF4516F658BF00A56434 /* ZXQRCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeReader.h; sourceTree = "<group>"; };
+		258EDF4616F658BF00A56434 /* ZXQRCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeReader.m; sourceTree = "<group>"; };
+		258EDF4716F658BF00A56434 /* ZXQRCodeWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeWriter.h; sourceTree = "<group>"; };
+		258EDF4816F658BF00A56434 /* ZXQRCodeWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeWriter.m; sourceTree = "<group>"; };
+		258EDF4916F658BF00A56434 /* ZXBarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBarcodeFormat.h; sourceTree = "<group>"; };
+		258EDF4A16F658BF00A56434 /* ZXBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBinarizer.h; sourceTree = "<group>"; };
+		258EDF4B16F658BF00A56434 /* ZXBinarizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBinarizer.m; sourceTree = "<group>"; };
+		258EDF4C16F658BF00A56434 /* ZXBinaryBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBinaryBitmap.h; sourceTree = "<group>"; };
+		258EDF4D16F658BF00A56434 /* ZXBinaryBitmap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBinaryBitmap.m; sourceTree = "<group>"; };
+		258EDF4E16F658BF00A56434 /* ZXDecodeHints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecodeHints.h; sourceTree = "<group>"; };
+		258EDF4F16F658BF00A56434 /* ZXDecodeHints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecodeHints.m; sourceTree = "<group>"; };
+		258EDF5016F658BF00A56434 /* ZXEncodeHints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEncodeHints.h; sourceTree = "<group>"; };
+		258EDF5116F658BF00A56434 /* ZXEncodeHints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEncodeHints.m; sourceTree = "<group>"; };
+		258EDF5216F658BF00A56434 /* ZXErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXErrors.h; sourceTree = "<group>"; };
+		258EDF5316F658BF00A56434 /* ZXErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXErrors.m; sourceTree = "<group>"; };
+		258EDF5416F658BF00A56434 /* ZXingObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXingObjC.h; sourceTree = "<group>"; };
+		258EDF5516F658BF00A56434 /* ZXLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXLuminanceSource.h; sourceTree = "<group>"; };
+		258EDF5616F658BF00A56434 /* ZXLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXLuminanceSource.m; sourceTree = "<group>"; };
+		258EDF5716F658BF00A56434 /* ZXMultiFormatReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiFormatReader.h; sourceTree = "<group>"; };
+		258EDF5816F658BF00A56434 /* ZXMultiFormatReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFormatReader.m; sourceTree = "<group>"; };
+		258EDF5916F658BF00A56434 /* ZXMultiFormatWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiFormatWriter.h; sourceTree = "<group>"; };
+		258EDF5A16F658BF00A56434 /* ZXMultiFormatWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiFormatWriter.m; sourceTree = "<group>"; };
+		258EDF5B16F658BF00A56434 /* ZXPlanarYUVLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPlanarYUVLuminanceSource.h; sourceTree = "<group>"; };
+		258EDF5C16F658BF00A56434 /* ZXPlanarYUVLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPlanarYUVLuminanceSource.m; sourceTree = "<group>"; };
+		258EDF5D16F658BF00A56434 /* ZXReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXReader.h; sourceTree = "<group>"; };
+		258EDF5E16F658BF00A56434 /* ZXResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXResult.h; sourceTree = "<group>"; };
+		258EDF5F16F658BF00A56434 /* ZXResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXResult.m; sourceTree = "<group>"; };
+		258EDF6016F658BF00A56434 /* ZXResultMetadataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXResultMetadataType.h; sourceTree = "<group>"; };
+		258EDF6116F658BF00A56434 /* ZXResultPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXResultPoint.h; sourceTree = "<group>"; };
+		258EDF6216F658BF00A56434 /* ZXResultPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXResultPoint.m; sourceTree = "<group>"; };
+		258EDF6316F658BF00A56434 /* ZXResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXResultPointCallback.h; sourceTree = "<group>"; };
+		258EDF6416F658BF00A56434 /* ZXRGBLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRGBLuminanceSource.h; sourceTree = "<group>"; };
+		258EDF6516F658BF00A56434 /* ZXRGBLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRGBLuminanceSource.m; sourceTree = "<group>"; };
+		258EDF6616F658BF00A56434 /* ZXWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXWriter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +617,6 @@
 				0248362416CC14B9001E03E4 /* CoreVideo.framework in Frameworks */,
 				0248362216CC14B2001E03E4 /* CoreMedia.framework in Frameworks */,
 				0248362016CC1493001E03E4 /* CoreGraphics.framework in Frameworks */,
-				25404735166AC28500E13304 /* libZXingObjC-iOS.a in Frameworks */,
 				25404737166AC2EA00E13304 /* AVFoundation.framework in Frameworks */,
 				02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */,
 				024D10E2156EAB6F00FE6872 /* Foundation.framework in Frameworks */,
@@ -135,7 +647,7 @@
 		024D10DE156EAB6F00FE6872 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */,
+				258EDDD016F658BF00A56434 /* ZXingObjC */,
 				02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */,
 				25404736166AC2EA00E13304 /* AVFoundation.framework */,
 				024D10DF156EAB6F00FE6872 /* UIKit.framework */,
@@ -174,16 +686,621 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		2540471E166AC24100E13304 /* Products */ = {
+		258EDDD016F658BF00A56434 /* ZXingObjC */ = {
 			isa = PBXGroup;
 			children = (
-				2540472A166AC24100E13304 /* libZXingObjC-iOS.a */,
-				2540472C166AC24100E13304 /* ZXingObjCTests-iOS.octest */,
-				2540472E166AC24100E13304 /* libZXingObjC-osx.a */,
-				25404730166AC24100E13304 /* ZXingObjCTests-osx.octest */,
-				25404732166AC24100E13304 /* ZXingObjC.framework */,
+				258EDDD116F658BF00A56434 /* aztec */,
+				258EDDDC16F658BF00A56434 /* client */,
+				258EDE2D16F658BF00A56434 /* common */,
+				258EDE5816F658BF00A56434 /* datamatrix */,
+				258EDE6916F658BF00A56434 /* maxicode */,
+				258EDE7316F658BF00A56434 /* multi */,
+				258EDE8116F658BF00A56434 /* oned */,
+				258EDEF316F658BF00A56434 /* pdf417 */,
+				258EDF1716F658BF00A56434 /* qrcode */,
+				258EDF4916F658BF00A56434 /* ZXBarcodeFormat.h */,
+				258EDF4A16F658BF00A56434 /* ZXBinarizer.h */,
+				258EDF4B16F658BF00A56434 /* ZXBinarizer.m */,
+				258EDF4C16F658BF00A56434 /* ZXBinaryBitmap.h */,
+				258EDF4D16F658BF00A56434 /* ZXBinaryBitmap.m */,
+				258EDF4E16F658BF00A56434 /* ZXDecodeHints.h */,
+				258EDF4F16F658BF00A56434 /* ZXDecodeHints.m */,
+				258EDF5016F658BF00A56434 /* ZXEncodeHints.h */,
+				258EDF5116F658BF00A56434 /* ZXEncodeHints.m */,
+				258EDF5216F658BF00A56434 /* ZXErrors.h */,
+				258EDF5316F658BF00A56434 /* ZXErrors.m */,
+				258EDF5416F658BF00A56434 /* ZXingObjC.h */,
+				258EDF5516F658BF00A56434 /* ZXLuminanceSource.h */,
+				258EDF5616F658BF00A56434 /* ZXLuminanceSource.m */,
+				258EDF5716F658BF00A56434 /* ZXMultiFormatReader.h */,
+				258EDF5816F658BF00A56434 /* ZXMultiFormatReader.m */,
+				258EDF5916F658BF00A56434 /* ZXMultiFormatWriter.h */,
+				258EDF5A16F658BF00A56434 /* ZXMultiFormatWriter.m */,
+				258EDF5B16F658BF00A56434 /* ZXPlanarYUVLuminanceSource.h */,
+				258EDF5C16F658BF00A56434 /* ZXPlanarYUVLuminanceSource.m */,
+				258EDF5D16F658BF00A56434 /* ZXReader.h */,
+				258EDF5E16F658BF00A56434 /* ZXResult.h */,
+				258EDF5F16F658BF00A56434 /* ZXResult.m */,
+				258EDF6016F658BF00A56434 /* ZXResultMetadataType.h */,
+				258EDF6116F658BF00A56434 /* ZXResultPoint.h */,
+				258EDF6216F658BF00A56434 /* ZXResultPoint.m */,
+				258EDF6316F658BF00A56434 /* ZXResultPointCallback.h */,
+				258EDF6416F658BF00A56434 /* ZXRGBLuminanceSource.h */,
+				258EDF6516F658BF00A56434 /* ZXRGBLuminanceSource.m */,
+				258EDF6616F658BF00A56434 /* ZXWriter.h */,
 			);
-			name = Products;
+			name = ZXingObjC;
+			path = ../../ZXingObjC;
+			sourceTree = "<group>";
+		};
+		258EDDD116F658BF00A56434 /* aztec */ = {
+			isa = PBXGroup;
+			children = (
+				258EDDD216F658BF00A56434 /* decoder */,
+				258EDDD516F658BF00A56434 /* detector */,
+				258EDDD816F658BF00A56434 /* ZXAztecDetectorResult.h */,
+				258EDDD916F658BF00A56434 /* ZXAztecDetectorResult.m */,
+				258EDDDA16F658BF00A56434 /* ZXAztecReader.h */,
+				258EDDDB16F658BF00A56434 /* ZXAztecReader.m */,
+			);
+			path = aztec;
+			sourceTree = "<group>";
+		};
+		258EDDD216F658BF00A56434 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDDD316F658BF00A56434 /* ZXAztecDecoder.h */,
+				258EDDD416F658BF00A56434 /* ZXAztecDecoder.m */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		258EDDD516F658BF00A56434 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				258EDDD616F658BF00A56434 /* ZXAztecDetector.h */,
+				258EDDD716F658BF00A56434 /* ZXAztecDetector.m */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		258EDDDC16F658BF00A56434 /* client */ = {
+			isa = PBXGroup;
+			children = (
+				258EDDDD16F658BF00A56434 /* result */,
+				258EDE2316F658BF00A56434 /* ZXCapture.h */,
+				258EDE2416F658BF00A56434 /* ZXCapture.m */,
+				258EDE2516F658BF00A56434 /* ZXCaptureDelegate.h */,
+				258EDE2616F658BF00A56434 /* ZXCaptureView.h */,
+				258EDE2716F658BF00A56434 /* ZXCaptureView.m */,
+				258EDE2816F658BF00A56434 /* ZXCGImageLuminanceSource.h */,
+				258EDE2916F658BF00A56434 /* ZXCGImageLuminanceSource.m */,
+				258EDE2A16F658BF00A56434 /* ZXImage.h */,
+				258EDE2B16F658BF00A56434 /* ZXImage.m */,
+				258EDE2C16F658BF00A56434 /* ZXView.h */,
+			);
+			path = client;
+			sourceTree = "<group>";
+		};
+		258EDDDD16F658BF00A56434 /* result */ = {
+			isa = PBXGroup;
+			children = (
+				258EDDDE16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.h */,
+				258EDDDF16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.m */,
+				258EDDE016F658BF00A56434 /* ZXAddressBookAUResultParser.h */,
+				258EDDE116F658BF00A56434 /* ZXAddressBookAUResultParser.m */,
+				258EDDE216F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.h */,
+				258EDDE316F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.m */,
+				258EDDE416F658BF00A56434 /* ZXAddressBookParsedResult.h */,
+				258EDDE516F658BF00A56434 /* ZXAddressBookParsedResult.m */,
+				258EDDE616F658BF00A56434 /* ZXBizcardResultParser.h */,
+				258EDDE716F658BF00A56434 /* ZXBizcardResultParser.m */,
+				258EDDE816F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.h */,
+				258EDDE916F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.m */,
+				258EDDEA16F658BF00A56434 /* ZXCalendarParsedResult.h */,
+				258EDDEB16F658BF00A56434 /* ZXCalendarParsedResult.m */,
+				258EDDEC16F658BF00A56434 /* ZXEmailAddressParsedResult.h */,
+				258EDDED16F658BF00A56434 /* ZXEmailAddressParsedResult.m */,
+				258EDDEE16F658BF00A56434 /* ZXEmailAddressResultParser.h */,
+				258EDDEF16F658BF00A56434 /* ZXEmailAddressResultParser.m */,
+				258EDDF016F658BF00A56434 /* ZXEmailDoCoMoResultParser.h */,
+				258EDDF116F658BF00A56434 /* ZXEmailDoCoMoResultParser.m */,
+				258EDDF216F658BF00A56434 /* ZXExpandedProductParsedResult.h */,
+				258EDDF316F658BF00A56434 /* ZXExpandedProductParsedResult.m */,
+				258EDDF416F658BF00A56434 /* ZXExpandedProductResultParser.h */,
+				258EDDF516F658BF00A56434 /* ZXExpandedProductResultParser.m */,
+				258EDDF616F658BF00A56434 /* ZXGeoParsedResult.h */,
+				258EDDF716F658BF00A56434 /* ZXGeoParsedResult.m */,
+				258EDDF816F658BF00A56434 /* ZXGeoResultParser.h */,
+				258EDDF916F658BF00A56434 /* ZXGeoResultParser.m */,
+				258EDDFA16F658BF00A56434 /* ZXISBNParsedResult.h */,
+				258EDDFB16F658BF00A56434 /* ZXISBNParsedResult.m */,
+				258EDDFC16F658BF00A56434 /* ZXISBNResultParser.h */,
+				258EDDFD16F658BF00A56434 /* ZXISBNResultParser.m */,
+				258EDDFE16F658BF00A56434 /* ZXParsedResult.h */,
+				258EDDFF16F658BF00A56434 /* ZXParsedResult.m */,
+				258EDE0016F658BF00A56434 /* ZXParsedResultType.h */,
+				258EDE0116F658BF00A56434 /* ZXProductParsedResult.h */,
+				258EDE0216F658BF00A56434 /* ZXProductParsedResult.m */,
+				258EDE0316F658BF00A56434 /* ZXProductResultParser.h */,
+				258EDE0416F658BF00A56434 /* ZXProductResultParser.m */,
+				258EDE0516F658BF00A56434 /* ZXResultParser.h */,
+				258EDE0616F658BF00A56434 /* ZXResultParser.m */,
+				258EDE0716F658BF00A56434 /* ZXSMSMMSResultParser.h */,
+				258EDE0816F658BF00A56434 /* ZXSMSMMSResultParser.m */,
+				258EDE0916F658BF00A56434 /* ZXSMSParsedResult.h */,
+				258EDE0A16F658BF00A56434 /* ZXSMSParsedResult.m */,
+				258EDE0B16F658BF00A56434 /* ZXSMSTOMMSTOResultParser.h */,
+				258EDE0C16F658BF00A56434 /* ZXSMSTOMMSTOResultParser.m */,
+				258EDE0D16F658BF00A56434 /* ZXSMTPResultParser.h */,
+				258EDE0E16F658BF00A56434 /* ZXSMTPResultParser.m */,
+				258EDE0F16F658BF00A56434 /* ZXTelParsedResult.h */,
+				258EDE1016F658BF00A56434 /* ZXTelParsedResult.m */,
+				258EDE1116F658BF00A56434 /* ZXTelResultParser.h */,
+				258EDE1216F658BF00A56434 /* ZXTelResultParser.m */,
+				258EDE1316F658BF00A56434 /* ZXTextParsedResult.h */,
+				258EDE1416F658BF00A56434 /* ZXTextParsedResult.m */,
+				258EDE1516F658BF00A56434 /* ZXURIParsedResult.h */,
+				258EDE1616F658BF00A56434 /* ZXURIParsedResult.m */,
+				258EDE1716F658BF00A56434 /* ZXURIResultParser.h */,
+				258EDE1816F658BF00A56434 /* ZXURIResultParser.m */,
+				258EDE1916F658BF00A56434 /* ZXURLTOResultParser.h */,
+				258EDE1A16F658BF00A56434 /* ZXURLTOResultParser.m */,
+				258EDE1B16F658BF00A56434 /* ZXVCardResultParser.h */,
+				258EDE1C16F658BF00A56434 /* ZXVCardResultParser.m */,
+				258EDE1D16F658BF00A56434 /* ZXVEventResultParser.h */,
+				258EDE1E16F658BF00A56434 /* ZXVEventResultParser.m */,
+				258EDE1F16F658BF00A56434 /* ZXWifiParsedResult.h */,
+				258EDE2016F658BF00A56434 /* ZXWifiParsedResult.m */,
+				258EDE2116F658BF00A56434 /* ZXWifiResultParser.h */,
+				258EDE2216F658BF00A56434 /* ZXWifiResultParser.m */,
+			);
+			path = result;
+			sourceTree = "<group>";
+		};
+		258EDE2D16F658BF00A56434 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE2E16F658BF00A56434 /* detector */,
+				258EDE3516F658BF00A56434 /* reedsolomon */,
+				258EDE3E16F658BF00A56434 /* ZXBitArray.h */,
+				258EDE3F16F658BF00A56434 /* ZXBitArray.m */,
+				258EDE4016F658BF00A56434 /* ZXBitMatrix.h */,
+				258EDE4116F658BF00A56434 /* ZXBitMatrix.m */,
+				258EDE4216F658BF00A56434 /* ZXBitSource.h */,
+				258EDE4316F658BF00A56434 /* ZXBitSource.m */,
+				258EDE4416F658BF00A56434 /* ZXCharacterSetECI.h */,
+				258EDE4516F658BF00A56434 /* ZXCharacterSetECI.m */,
+				258EDE4616F658BF00A56434 /* ZXDecoderResult.h */,
+				258EDE4716F658BF00A56434 /* ZXDecoderResult.m */,
+				258EDE4816F658BF00A56434 /* ZXDefaultGridSampler.h */,
+				258EDE4916F658BF00A56434 /* ZXDefaultGridSampler.m */,
+				258EDE4A16F658BF00A56434 /* ZXDetectorResult.h */,
+				258EDE4B16F658BF00A56434 /* ZXDetectorResult.m */,
+				258EDE4C16F658BF00A56434 /* ZXECI.h */,
+				258EDE4D16F658BF00A56434 /* ZXECI.m */,
+				258EDE4E16F658BF00A56434 /* ZXGlobalHistogramBinarizer.h */,
+				258EDE4F16F658BF00A56434 /* ZXGlobalHistogramBinarizer.m */,
+				258EDE5016F658BF00A56434 /* ZXGridSampler.h */,
+				258EDE5116F658BF00A56434 /* ZXGridSampler.m */,
+				258EDE5216F658BF00A56434 /* ZXHybridBinarizer.h */,
+				258EDE5316F658BF00A56434 /* ZXHybridBinarizer.m */,
+				258EDE5416F658BF00A56434 /* ZXPerspectiveTransform.h */,
+				258EDE5516F658BF00A56434 /* ZXPerspectiveTransform.m */,
+				258EDE5616F658BF00A56434 /* ZXStringUtils.h */,
+				258EDE5716F658BF00A56434 /* ZXStringUtils.m */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		258EDE2E16F658BF00A56434 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE2F16F658BF00A56434 /* ZXMathUtils.h */,
+				258EDE3016F658BF00A56434 /* ZXMathUtils.m */,
+				258EDE3116F658BF00A56434 /* ZXMonochromeRectangleDetector.h */,
+				258EDE3216F658BF00A56434 /* ZXMonochromeRectangleDetector.m */,
+				258EDE3316F658BF00A56434 /* ZXWhiteRectangleDetector.h */,
+				258EDE3416F658BF00A56434 /* ZXWhiteRectangleDetector.m */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		258EDE3516F658BF00A56434 /* reedsolomon */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE3616F658BF00A56434 /* ZXGenericGF.h */,
+				258EDE3716F658BF00A56434 /* ZXGenericGF.m */,
+				258EDE3816F658BF00A56434 /* ZXGenericGFPoly.h */,
+				258EDE3916F658BF00A56434 /* ZXGenericGFPoly.m */,
+				258EDE3A16F658BF00A56434 /* ZXReedSolomonDecoder.h */,
+				258EDE3B16F658BF00A56434 /* ZXReedSolomonDecoder.m */,
+				258EDE3C16F658BF00A56434 /* ZXReedSolomonEncoder.h */,
+				258EDE3D16F658BF00A56434 /* ZXReedSolomonEncoder.m */,
+			);
+			path = reedsolomon;
+			sourceTree = "<group>";
+		};
+		258EDE5816F658BF00A56434 /* datamatrix */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE5916F658BF00A56434 /* decoder */,
+				258EDE6416F658BF00A56434 /* detector */,
+				258EDE6716F658BF00A56434 /* ZXDataMatrixReader.h */,
+				258EDE6816F658BF00A56434 /* ZXDataMatrixReader.m */,
+			);
+			path = datamatrix;
+			sourceTree = "<group>";
+		};
+		258EDE5916F658BF00A56434 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE5A16F658BF00A56434 /* ZXDataMatrixBitMatrixParser.h */,
+				258EDE5B16F658BF00A56434 /* ZXDataMatrixBitMatrixParser.m */,
+				258EDE5C16F658BF00A56434 /* ZXDataMatrixDataBlock.h */,
+				258EDE5D16F658BF00A56434 /* ZXDataMatrixDataBlock.m */,
+				258EDE5E16F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.h */,
+				258EDE5F16F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.m */,
+				258EDE6016F658BF00A56434 /* ZXDataMatrixDecoder.h */,
+				258EDE6116F658BF00A56434 /* ZXDataMatrixDecoder.m */,
+				258EDE6216F658BF00A56434 /* ZXDataMatrixVersion.h */,
+				258EDE6316F658BF00A56434 /* ZXDataMatrixVersion.m */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		258EDE6416F658BF00A56434 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE6516F658BF00A56434 /* ZXDataMatrixDetector.h */,
+				258EDE6616F658BF00A56434 /* ZXDataMatrixDetector.m */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		258EDE6916F658BF00A56434 /* maxicode */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE6A16F658BF00A56434 /* decoder */,
+				258EDE7116F658BF00A56434 /* ZXMaxiCodeReader.h */,
+				258EDE7216F658BF00A56434 /* ZXMaxiCodeReader.m */,
+			);
+			path = maxicode;
+			sourceTree = "<group>";
+		};
+		258EDE6A16F658BF00A56434 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE6B16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.h */,
+				258EDE6C16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.m */,
+				258EDE6D16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.h */,
+				258EDE6E16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.m */,
+				258EDE6F16F658BF00A56434 /* ZXMaxiCodeDecoder.h */,
+				258EDE7016F658BF00A56434 /* ZXMaxiCodeDecoder.m */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		258EDE7316F658BF00A56434 /* multi */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE7416F658BF00A56434 /* qrcode */,
+				258EDE7C16F658BF00A56434 /* ZXByQuadrantReader.h */,
+				258EDE7D16F658BF00A56434 /* ZXByQuadrantReader.m */,
+				258EDE7E16F658BF00A56434 /* ZXGenericMultipleBarcodeReader.h */,
+				258EDE7F16F658BF00A56434 /* ZXGenericMultipleBarcodeReader.m */,
+				258EDE8016F658BF00A56434 /* ZXMultipleBarcodeReader.h */,
+			);
+			path = multi;
+			sourceTree = "<group>";
+		};
+		258EDE7416F658BF00A56434 /* qrcode */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE7516F658BF00A56434 /* detector */,
+				258EDE7A16F658BF00A56434 /* ZXQRCodeMultiReader.h */,
+				258EDE7B16F658BF00A56434 /* ZXQRCodeMultiReader.m */,
+			);
+			path = qrcode;
+			sourceTree = "<group>";
+		};
+		258EDE7516F658BF00A56434 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE7616F658BF00A56434 /* ZXMultiDetector.h */,
+				258EDE7716F658BF00A56434 /* ZXMultiDetector.m */,
+				258EDE7816F658BF00A56434 /* ZXMultiFinderPatternFinder.h */,
+				258EDE7916F658BF00A56434 /* ZXMultiFinderPatternFinder.m */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		258EDE8116F658BF00A56434 /* oned */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE8216F658BF00A56434 /* rss */,
+				258EDEBF16F658BF00A56434 /* ZXCodaBarReader.h */,
+				258EDEC016F658BF00A56434 /* ZXCodaBarReader.m */,
+				258EDEC116F658BF00A56434 /* ZXCodaBarWriter.h */,
+				258EDEC216F658BF00A56434 /* ZXCodaBarWriter.m */,
+				258EDEC316F658BF00A56434 /* ZXCode128Reader.h */,
+				258EDEC416F658BF00A56434 /* ZXCode128Reader.m */,
+				258EDEC516F658BF00A56434 /* ZXCode128Writer.h */,
+				258EDEC616F658BF00A56434 /* ZXCode128Writer.m */,
+				258EDEC716F658BF00A56434 /* ZXCode39Reader.h */,
+				258EDEC816F658BF00A56434 /* ZXCode39Reader.m */,
+				258EDEC916F658BF00A56434 /* ZXCode39Writer.h */,
+				258EDECA16F658BF00A56434 /* ZXCode39Writer.m */,
+				258EDECB16F658BF00A56434 /* ZXCode93Reader.h */,
+				258EDECC16F658BF00A56434 /* ZXCode93Reader.m */,
+				258EDECD16F658BF00A56434 /* ZXEAN13Reader.h */,
+				258EDECE16F658BF00A56434 /* ZXEAN13Reader.m */,
+				258EDECF16F658BF00A56434 /* ZXEAN13Writer.h */,
+				258EDED016F658BF00A56434 /* ZXEAN13Writer.m */,
+				258EDED116F658BF00A56434 /* ZXEAN8Reader.h */,
+				258EDED216F658BF00A56434 /* ZXEAN8Reader.m */,
+				258EDED316F658BF00A56434 /* ZXEAN8Writer.h */,
+				258EDED416F658BF00A56434 /* ZXEAN8Writer.m */,
+				258EDED516F658BF00A56434 /* ZXEANManufacturerOrgSupport.h */,
+				258EDED616F658BF00A56434 /* ZXEANManufacturerOrgSupport.m */,
+				258EDED716F658BF00A56434 /* ZXITFReader.h */,
+				258EDED816F658BF00A56434 /* ZXITFReader.m */,
+				258EDED916F658BF00A56434 /* ZXITFWriter.h */,
+				258EDEDA16F658BF00A56434 /* ZXITFWriter.m */,
+				258EDEDB16F658BF00A56434 /* ZXMultiFormatOneDReader.h */,
+				258EDEDC16F658BF00A56434 /* ZXMultiFormatOneDReader.m */,
+				258EDEDD16F658BF00A56434 /* ZXMultiFormatUPCEANReader.h */,
+				258EDEDE16F658BF00A56434 /* ZXMultiFormatUPCEANReader.m */,
+				258EDEDF16F658BF00A56434 /* ZXOneDimensionalCodeWriter.h */,
+				258EDEE016F658BF00A56434 /* ZXOneDimensionalCodeWriter.m */,
+				258EDEE116F658BF00A56434 /* ZXOneDReader.h */,
+				258EDEE216F658BF00A56434 /* ZXOneDReader.m */,
+				258EDEE316F658BF00A56434 /* ZXUPCAReader.h */,
+				258EDEE416F658BF00A56434 /* ZXUPCAReader.m */,
+				258EDEE516F658BF00A56434 /* ZXUPCAWriter.h */,
+				258EDEE616F658BF00A56434 /* ZXUPCAWriter.m */,
+				258EDEE716F658BF00A56434 /* ZXUPCEANExtension2Support.h */,
+				258EDEE816F658BF00A56434 /* ZXUPCEANExtension2Support.m */,
+				258EDEE916F658BF00A56434 /* ZXUPCEANExtension5Support.h */,
+				258EDEEA16F658BF00A56434 /* ZXUPCEANExtension5Support.m */,
+				258EDEEB16F658BF00A56434 /* ZXUPCEANExtensionSupport.h */,
+				258EDEEC16F658BF00A56434 /* ZXUPCEANExtensionSupport.m */,
+				258EDEED16F658BF00A56434 /* ZXUPCEANReader.h */,
+				258EDEEE16F658BF00A56434 /* ZXUPCEANReader.m */,
+				258EDEEF16F658BF00A56434 /* ZXUPCEANWriter.h */,
+				258EDEF016F658BF00A56434 /* ZXUPCEANWriter.m */,
+				258EDEF116F658BF00A56434 /* ZXUPCEReader.h */,
+				258EDEF216F658BF00A56434 /* ZXUPCEReader.m */,
+			);
+			path = oned;
+			sourceTree = "<group>";
+		};
+		258EDE8216F658BF00A56434 /* rss */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE8316F658BF00A56434 /* expanded */,
+				258EDEB316F658BF00A56434 /* ZXAbstractRSSReader.h */,
+				258EDEB416F658BF00A56434 /* ZXAbstractRSSReader.m */,
+				258EDEB516F658BF00A56434 /* ZXDataCharacter.h */,
+				258EDEB616F658BF00A56434 /* ZXDataCharacter.m */,
+				258EDEB716F658BF00A56434 /* ZXPair.h */,
+				258EDEB816F658BF00A56434 /* ZXPair.m */,
+				258EDEB916F658BF00A56434 /* ZXRSS14Reader.h */,
+				258EDEBA16F658BF00A56434 /* ZXRSS14Reader.m */,
+				258EDEBB16F658BF00A56434 /* ZXRSSFinderPattern.h */,
+				258EDEBC16F658BF00A56434 /* ZXRSSFinderPattern.m */,
+				258EDEBD16F658BF00A56434 /* ZXRSSUtils.h */,
+				258EDEBE16F658BF00A56434 /* ZXRSSUtils.m */,
+			);
+			path = rss;
+			sourceTree = "<group>";
+		};
+		258EDE8316F658BF00A56434 /* expanded */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE8416F658BF00A56434 /* decoders */,
+				258EDEAB16F658BF00A56434 /* ZXBitArrayBuilder.h */,
+				258EDEAC16F658BF00A56434 /* ZXBitArrayBuilder.m */,
+				258EDEAD16F658BF00A56434 /* ZXExpandedPair.h */,
+				258EDEAE16F658BF00A56434 /* ZXExpandedPair.m */,
+				258EDEAF16F658BF00A56434 /* ZXExpandedRow.h */,
+				258EDEB016F658BF00A56434 /* ZXExpandedRow.m */,
+				258EDEB116F658BF00A56434 /* ZXRSSExpandedReader.h */,
+				258EDEB216F658BF00A56434 /* ZXRSSExpandedReader.m */,
+			);
+			path = expanded;
+			sourceTree = "<group>";
+		};
+		258EDE8416F658BF00A56434 /* decoders */ = {
+			isa = PBXGroup;
+			children = (
+				258EDE8516F658BF00A56434 /* ZXAbstractExpandedDecoder.h */,
+				258EDE8616F658BF00A56434 /* ZXAbstractExpandedDecoder.m */,
+				258EDE8716F658BF00A56434 /* ZXAI013103decoder.h */,
+				258EDE8816F658BF00A56434 /* ZXAI013103decoder.m */,
+				258EDE8916F658BF00A56434 /* ZXAI01320xDecoder.h */,
+				258EDE8A16F658BF00A56434 /* ZXAI01320xDecoder.m */,
+				258EDE8B16F658BF00A56434 /* ZXAI01392xDecoder.h */,
+				258EDE8C16F658BF00A56434 /* ZXAI01392xDecoder.m */,
+				258EDE8D16F658BF00A56434 /* ZXAI01393xDecoder.h */,
+				258EDE8E16F658BF00A56434 /* ZXAI01393xDecoder.m */,
+				258EDE8F16F658BF00A56434 /* ZXAI013x0x1xDecoder.h */,
+				258EDE9016F658BF00A56434 /* ZXAI013x0x1xDecoder.m */,
+				258EDE9116F658BF00A56434 /* ZXAI013x0xDecoder.h */,
+				258EDE9216F658BF00A56434 /* ZXAI013x0xDecoder.m */,
+				258EDE9316F658BF00A56434 /* ZXAI01AndOtherAIs.h */,
+				258EDE9416F658BF00A56434 /* ZXAI01AndOtherAIs.m */,
+				258EDE9516F658BF00A56434 /* ZXAI01decoder.h */,
+				258EDE9616F658BF00A56434 /* ZXAI01decoder.m */,
+				258EDE9716F658BF00A56434 /* ZXAI01weightDecoder.h */,
+				258EDE9816F658BF00A56434 /* ZXAI01weightDecoder.m */,
+				258EDE9916F658BF00A56434 /* ZXAnyAIDecoder.h */,
+				258EDE9A16F658BF00A56434 /* ZXAnyAIDecoder.m */,
+				258EDE9B16F658BF00A56434 /* ZXBlockParsedResult.h */,
+				258EDE9C16F658BF00A56434 /* ZXBlockParsedResult.m */,
+				258EDE9D16F658BF00A56434 /* ZXCurrentParsingState.h */,
+				258EDE9E16F658BF00A56434 /* ZXCurrentParsingState.m */,
+				258EDE9F16F658BF00A56434 /* ZXDecodedChar.h */,
+				258EDEA016F658BF00A56434 /* ZXDecodedChar.m */,
+				258EDEA116F658BF00A56434 /* ZXDecodedInformation.h */,
+				258EDEA216F658BF00A56434 /* ZXDecodedInformation.m */,
+				258EDEA316F658BF00A56434 /* ZXDecodedNumeric.h */,
+				258EDEA416F658BF00A56434 /* ZXDecodedNumeric.m */,
+				258EDEA516F658BF00A56434 /* ZXDecodedObject.h */,
+				258EDEA616F658BF00A56434 /* ZXDecodedObject.m */,
+				258EDEA716F658BF00A56434 /* ZXFieldParser.h */,
+				258EDEA816F658BF00A56434 /* ZXFieldParser.m */,
+				258EDEA916F658BF00A56434 /* ZXGeneralAppIdDecoder.h */,
+				258EDEAA16F658BF00A56434 /* ZXGeneralAppIdDecoder.m */,
+			);
+			path = decoders;
+			sourceTree = "<group>";
+		};
+		258EDEF316F658BF00A56434 /* pdf417 */ = {
+			isa = PBXGroup;
+			children = (
+				258EDEF416F658BF00A56434 /* decoder */,
+				258EDF0216F658BF00A56434 /* detector */,
+				258EDF0516F658BF00A56434 /* encoder */,
+				258EDF1516F658BF00A56434 /* ZXPDF417Reader.h */,
+				258EDF1616F658BF00A56434 /* ZXPDF417Reader.m */,
+			);
+			path = pdf417;
+			sourceTree = "<group>";
+		};
+		258EDEF416F658BF00A56434 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDEF516F658BF00A56434 /* ec */,
+				258EDEFC16F658BF00A56434 /* ZXPDF417BitMatrixParser.h */,
+				258EDEFD16F658BF00A56434 /* ZXPDF417BitMatrixParser.m */,
+				258EDEFE16F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.h */,
+				258EDEFF16F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.m */,
+				258EDF0016F658BF00A56434 /* ZXPDF417Decoder.h */,
+				258EDF0116F658BF00A56434 /* ZXPDF417Decoder.m */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		258EDEF516F658BF00A56434 /* ec */ = {
+			isa = PBXGroup;
+			children = (
+				258EDEF616F658BF00A56434 /* ZXModulusGF.h */,
+				258EDEF716F658BF00A56434 /* ZXModulusGF.m */,
+				258EDEF816F658BF00A56434 /* ZXModulusPoly.h */,
+				258EDEF916F658BF00A56434 /* ZXModulusPoly.m */,
+				258EDEFA16F658BF00A56434 /* ZXPDF417ECErrorCorrection.h */,
+				258EDEFB16F658BF00A56434 /* ZXPDF417ECErrorCorrection.m */,
+			);
+			path = ec;
+			sourceTree = "<group>";
+		};
+		258EDF0216F658BF00A56434 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				258EDF0316F658BF00A56434 /* ZXPDF417Detector.h */,
+				258EDF0416F658BF00A56434 /* ZXPDF417Detector.m */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		258EDF0516F658BF00A56434 /* encoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDF0616F658BF00A56434 /* ZXBarcodeMatrix.h */,
+				258EDF0716F658BF00A56434 /* ZXBarcodeMatrix.m */,
+				258EDF0816F658BF00A56434 /* ZXBarcodeRow.h */,
+				258EDF0916F658BF00A56434 /* ZXBarcodeRow.m */,
+				258EDF0A16F658BF00A56434 /* ZXCompaction.h */,
+				258EDF0B16F658BF00A56434 /* ZXDimensions.h */,
+				258EDF0C16F658BF00A56434 /* ZXDimensions.m */,
+				258EDF0D16F658BF00A56434 /* ZXPDF417.h */,
+				258EDF0E16F658BF00A56434 /* ZXPDF417.m */,
+				258EDF0F16F658BF00A56434 /* ZXPDF417ErrorCorrection.h */,
+				258EDF1016F658BF00A56434 /* ZXPDF417ErrorCorrection.m */,
+				258EDF1116F658BF00A56434 /* ZXPDF417HighLevelEncoder.h */,
+				258EDF1216F658BF00A56434 /* ZXPDF417HighLevelEncoder.m */,
+				258EDF1316F658BF00A56434 /* ZXPDF417Writer.h */,
+				258EDF1416F658BF00A56434 /* ZXPDF417Writer.m */,
+			);
+			path = encoder;
+			sourceTree = "<group>";
+		};
+		258EDF1716F658BF00A56434 /* qrcode */ = {
+			isa = PBXGroup;
+			children = (
+				258EDF1816F658BF00A56434 /* decoder */,
+				258EDF2B16F658BF00A56434 /* detector */,
+				258EDF3816F658BF00A56434 /* encoder */,
+				258EDF4516F658BF00A56434 /* ZXQRCodeReader.h */,
+				258EDF4616F658BF00A56434 /* ZXQRCodeReader.m */,
+				258EDF4716F658BF00A56434 /* ZXQRCodeWriter.h */,
+				258EDF4816F658BF00A56434 /* ZXQRCodeWriter.m */,
+			);
+			path = qrcode;
+			sourceTree = "<group>";
+		};
+		258EDF1816F658BF00A56434 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDF1916F658BF00A56434 /* ZXDataMask.h */,
+				258EDF1A16F658BF00A56434 /* ZXDataMask.m */,
+				258EDF1B16F658BF00A56434 /* ZXErrorCorrectionLevel.h */,
+				258EDF1C16F658BF00A56434 /* ZXErrorCorrectionLevel.m */,
+				258EDF1D16F658BF00A56434 /* ZXFormatInformation.h */,
+				258EDF1E16F658BF00A56434 /* ZXFormatInformation.m */,
+				258EDF1F16F658BF00A56434 /* ZXMode.h */,
+				258EDF2016F658BF00A56434 /* ZXMode.m */,
+				258EDF2116F658BF00A56434 /* ZXQRCodeBitMatrixParser.h */,
+				258EDF2216F658BF00A56434 /* ZXQRCodeBitMatrixParser.m */,
+				258EDF2316F658BF00A56434 /* ZXQRCodeDataBlock.h */,
+				258EDF2416F658BF00A56434 /* ZXQRCodeDataBlock.m */,
+				258EDF2516F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.h */,
+				258EDF2616F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.m */,
+				258EDF2716F658BF00A56434 /* ZXQRCodeDecoder.h */,
+				258EDF2816F658BF00A56434 /* ZXQRCodeDecoder.m */,
+				258EDF2916F658BF00A56434 /* ZXQRCodeVersion.h */,
+				258EDF2A16F658BF00A56434 /* ZXQRCodeVersion.m */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		258EDF2B16F658BF00A56434 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				258EDF2C16F658BF00A56434 /* ZXAlignmentPattern.h */,
+				258EDF2D16F658BF00A56434 /* ZXAlignmentPattern.m */,
+				258EDF2E16F658BF00A56434 /* ZXAlignmentPatternFinder.h */,
+				258EDF2F16F658BF00A56434 /* ZXAlignmentPatternFinder.m */,
+				258EDF3016F658BF00A56434 /* ZXFinderPatternFinder.h */,
+				258EDF3116F658BF00A56434 /* ZXFinderPatternFinder.m */,
+				258EDF3216F658BF00A56434 /* ZXFinderPatternInfo.h */,
+				258EDF3316F658BF00A56434 /* ZXFinderPatternInfo.m */,
+				258EDF3416F658BF00A56434 /* ZXQRCodeDetector.h */,
+				258EDF3516F658BF00A56434 /* ZXQRCodeDetector.m */,
+				258EDF3616F658BF00A56434 /* ZXQRCodeFinderPattern.h */,
+				258EDF3716F658BF00A56434 /* ZXQRCodeFinderPattern.m */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		258EDF3816F658BF00A56434 /* encoder */ = {
+			isa = PBXGroup;
+			children = (
+				258EDF3916F658BF00A56434 /* ZXBlockPair.h */,
+				258EDF3A16F658BF00A56434 /* ZXBlockPair.m */,
+				258EDF3B16F658BF00A56434 /* ZXByteMatrix.h */,
+				258EDF3C16F658BF00A56434 /* ZXByteMatrix.m */,
+				258EDF3D16F658BF00A56434 /* ZXEncoder.h */,
+				258EDF3E16F658BF00A56434 /* ZXEncoder.m */,
+				258EDF3F16F658BF00A56434 /* ZXMaskUtil.h */,
+				258EDF4016F658BF00A56434 /* ZXMaskUtil.m */,
+				258EDF4116F658BF00A56434 /* ZXMatrixUtil.h */,
+				258EDF4216F658BF00A56434 /* ZXMatrixUtil.m */,
+				258EDF4316F658BF00A56434 /* ZXQRCode.h */,
+				258EDF4416F658BF00A56434 /* ZXQRCode.m */,
+			);
+			path = encoder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,7 +1317,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				25404734166AC27800E13304 /* PBXTargetDependency */,
 			);
 			name = BarcodeScanner;
 			productName = BarcodeScanner;
@@ -226,56 +1342,12 @@
 			mainGroup = 024D10D0156EAB6E00FE6872;
 			productRefGroup = 024D10DC156EAB6F00FE6872 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 2540471E166AC24100E13304 /* Products */;
-					ProjectRef = 2540471D166AC24100E13304 /* ZXingObjC.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				024D10DA156EAB6F00FE6872 /* BarcodeScanner */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		2540472A166AC24100E13304 /* libZXingObjC-iOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libZXingObjC-iOS.a";
-			remoteRef = 25404729166AC24100E13304 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		2540472C166AC24100E13304 /* ZXingObjCTests-iOS.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-iOS.octest";
-			remoteRef = 2540472B166AC24100E13304 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		2540472E166AC24100E13304 /* libZXingObjC-osx.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libZXingObjC-osx.a";
-			remoteRef = 2540472D166AC24100E13304 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		25404730166AC24100E13304 /* ZXingObjCTests-osx.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-osx.octest";
-			remoteRef = 2540472F166AC24100E13304 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		25404732166AC24100E13304 /* ZXingObjC.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ZXingObjC.framework;
-			remoteRef = 25404731166AC24100E13304 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		024D10D9156EAB6F00FE6872 /* Resources */ = {
@@ -298,18 +1370,193 @@
 				02C6AFD7156FCB330052B145 /* main.m in Sources */,
 				02C6AFDA156FCB4F0052B145 /* ViewController.m in Sources */,
 				02C6AFDD156FCB660052B145 /* AppDelegate.m in Sources */,
+				258EDF6716F658BF00A56434 /* ZXAztecDecoder.m in Sources */,
+				258EDF6816F658BF00A56434 /* ZXAztecDetector.m in Sources */,
+				258EDF6916F658BF00A56434 /* ZXAztecDetectorResult.m in Sources */,
+				258EDF6A16F658BF00A56434 /* ZXAztecReader.m in Sources */,
+				258EDF6B16F658BF00A56434 /* ZXAbstractDoCoMoResultParser.m in Sources */,
+				258EDF6C16F658BF00A56434 /* ZXAddressBookAUResultParser.m in Sources */,
+				258EDF6D16F658BF00A56434 /* ZXAddressBookDoCoMoResultParser.m in Sources */,
+				258EDF6E16F658BF00A56434 /* ZXAddressBookParsedResult.m in Sources */,
+				258EDF6F16F658BF00A56434 /* ZXBizcardResultParser.m in Sources */,
+				258EDF7016F658BF00A56434 /* ZXBookmarkDoCoMoResultParser.m in Sources */,
+				258EDF7116F658BF00A56434 /* ZXCalendarParsedResult.m in Sources */,
+				258EDF7216F658BF00A56434 /* ZXEmailAddressParsedResult.m in Sources */,
+				258EDF7316F658BF00A56434 /* ZXEmailAddressResultParser.m in Sources */,
+				258EDF7416F658BF00A56434 /* ZXEmailDoCoMoResultParser.m in Sources */,
+				258EDF7516F658BF00A56434 /* ZXExpandedProductParsedResult.m in Sources */,
+				258EDF7616F658BF00A56434 /* ZXExpandedProductResultParser.m in Sources */,
+				258EDF7716F658BF00A56434 /* ZXGeoParsedResult.m in Sources */,
+				258EDF7816F658BF00A56434 /* ZXGeoResultParser.m in Sources */,
+				258EDF7916F658BF00A56434 /* ZXISBNParsedResult.m in Sources */,
+				258EDF7A16F658BF00A56434 /* ZXISBNResultParser.m in Sources */,
+				258EDF7B16F658BF00A56434 /* ZXParsedResult.m in Sources */,
+				258EDF7C16F658BF00A56434 /* ZXProductParsedResult.m in Sources */,
+				258EDF7D16F658BF00A56434 /* ZXProductResultParser.m in Sources */,
+				258EDF7E16F658BF00A56434 /* ZXResultParser.m in Sources */,
+				258EDF7F16F658BF00A56434 /* ZXSMSMMSResultParser.m in Sources */,
+				258EDF8016F658BF00A56434 /* ZXSMSParsedResult.m in Sources */,
+				258EDF8116F658BF00A56434 /* ZXSMSTOMMSTOResultParser.m in Sources */,
+				258EDF8216F658BF00A56434 /* ZXSMTPResultParser.m in Sources */,
+				258EDF8316F658BF00A56434 /* ZXTelParsedResult.m in Sources */,
+				258EDF8416F658BF00A56434 /* ZXTelResultParser.m in Sources */,
+				258EDF8516F658BF00A56434 /* ZXTextParsedResult.m in Sources */,
+				258EDF8616F658BF00A56434 /* ZXURIParsedResult.m in Sources */,
+				258EDF8716F658BF00A56434 /* ZXURIResultParser.m in Sources */,
+				258EDF8816F658BF00A56434 /* ZXURLTOResultParser.m in Sources */,
+				258EDF8916F658BF00A56434 /* ZXVCardResultParser.m in Sources */,
+				258EDF8A16F658BF00A56434 /* ZXVEventResultParser.m in Sources */,
+				258EDF8B16F658BF00A56434 /* ZXWifiParsedResult.m in Sources */,
+				258EDF8C16F658BF00A56434 /* ZXWifiResultParser.m in Sources */,
+				258EDF8D16F658BF00A56434 /* ZXCapture.m in Sources */,
+				258EDF8E16F658BF00A56434 /* ZXCaptureView.m in Sources */,
+				258EDF8F16F658BF00A56434 /* ZXCGImageLuminanceSource.m in Sources */,
+				258EDF9016F658BF00A56434 /* ZXImage.m in Sources */,
+				258EDF9116F658BF00A56434 /* ZXMathUtils.m in Sources */,
+				258EDF9216F658BF00A56434 /* ZXMonochromeRectangleDetector.m in Sources */,
+				258EDF9316F658BF00A56434 /* ZXWhiteRectangleDetector.m in Sources */,
+				258EDF9416F658BF00A56434 /* ZXGenericGF.m in Sources */,
+				258EDF9516F658BF00A56434 /* ZXGenericGFPoly.m in Sources */,
+				258EDF9616F658BF00A56434 /* ZXReedSolomonDecoder.m in Sources */,
+				258EDF9716F658BF00A56434 /* ZXReedSolomonEncoder.m in Sources */,
+				258EDF9816F658BF00A56434 /* ZXBitArray.m in Sources */,
+				258EDF9916F658BF00A56434 /* ZXBitMatrix.m in Sources */,
+				258EDF9A16F658BF00A56434 /* ZXBitSource.m in Sources */,
+				258EDF9B16F658BF00A56434 /* ZXCharacterSetECI.m in Sources */,
+				258EDF9C16F658BF00A56434 /* ZXDecoderResult.m in Sources */,
+				258EDF9D16F658BF00A56434 /* ZXDefaultGridSampler.m in Sources */,
+				258EDF9E16F658BF00A56434 /* ZXDetectorResult.m in Sources */,
+				258EDF9F16F658BF00A56434 /* ZXECI.m in Sources */,
+				258EDFA016F658BF00A56434 /* ZXGlobalHistogramBinarizer.m in Sources */,
+				258EDFA116F658BF00A56434 /* ZXGridSampler.m in Sources */,
+				258EDFA216F658BF00A56434 /* ZXHybridBinarizer.m in Sources */,
+				258EDFA316F658BF00A56434 /* ZXPerspectiveTransform.m in Sources */,
+				258EDFA416F658BF00A56434 /* ZXStringUtils.m in Sources */,
+				258EDFA516F658BF00A56434 /* ZXDataMatrixBitMatrixParser.m in Sources */,
+				258EDFA616F658BF00A56434 /* ZXDataMatrixDataBlock.m in Sources */,
+				258EDFA716F658BF00A56434 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */,
+				258EDFA816F658BF00A56434 /* ZXDataMatrixDecoder.m in Sources */,
+				258EDFA916F658BF00A56434 /* ZXDataMatrixVersion.m in Sources */,
+				258EDFAA16F658BF00A56434 /* ZXDataMatrixDetector.m in Sources */,
+				258EDFAB16F658BF00A56434 /* ZXDataMatrixReader.m in Sources */,
+				258EDFAC16F658BF00A56434 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
+				258EDFAD16F658BF00A56434 /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
+				258EDFAE16F658BF00A56434 /* ZXMaxiCodeDecoder.m in Sources */,
+				258EDFAF16F658BF00A56434 /* ZXMaxiCodeReader.m in Sources */,
+				258EDFB016F658BF00A56434 /* ZXMultiDetector.m in Sources */,
+				258EDFB116F658BF00A56434 /* ZXMultiFinderPatternFinder.m in Sources */,
+				258EDFB216F658BF00A56434 /* ZXQRCodeMultiReader.m in Sources */,
+				258EDFB316F658BF00A56434 /* ZXByQuadrantReader.m in Sources */,
+				258EDFB416F658BF00A56434 /* ZXGenericMultipleBarcodeReader.m in Sources */,
+				258EDFB516F658BF00A56434 /* ZXAbstractExpandedDecoder.m in Sources */,
+				258EDFB616F658BF00A56434 /* ZXAI013103decoder.m in Sources */,
+				258EDFB716F658BF00A56434 /* ZXAI01320xDecoder.m in Sources */,
+				258EDFB816F658BF00A56434 /* ZXAI01392xDecoder.m in Sources */,
+				258EDFB916F658BF00A56434 /* ZXAI01393xDecoder.m in Sources */,
+				258EDFBA16F658BF00A56434 /* ZXAI013x0x1xDecoder.m in Sources */,
+				258EDFBB16F658BF00A56434 /* ZXAI013x0xDecoder.m in Sources */,
+				258EDFBC16F658BF00A56434 /* ZXAI01AndOtherAIs.m in Sources */,
+				258EDFBD16F658BF00A56434 /* ZXAI01decoder.m in Sources */,
+				258EDFBE16F658BF00A56434 /* ZXAI01weightDecoder.m in Sources */,
+				258EDFBF16F658BF00A56434 /* ZXAnyAIDecoder.m in Sources */,
+				258EDFC016F658BF00A56434 /* ZXBlockParsedResult.m in Sources */,
+				258EDFC116F658BF00A56434 /* ZXCurrentParsingState.m in Sources */,
+				258EDFC216F658BF00A56434 /* ZXDecodedChar.m in Sources */,
+				258EDFC316F658BF00A56434 /* ZXDecodedInformation.m in Sources */,
+				258EDFC416F658BF00A56434 /* ZXDecodedNumeric.m in Sources */,
+				258EDFC516F658BF00A56434 /* ZXDecodedObject.m in Sources */,
+				258EDFC616F658BF00A56434 /* ZXFieldParser.m in Sources */,
+				258EDFC716F658BF00A56434 /* ZXGeneralAppIdDecoder.m in Sources */,
+				258EDFC816F658BF00A56434 /* ZXBitArrayBuilder.m in Sources */,
+				258EDFC916F658BF00A56434 /* ZXExpandedPair.m in Sources */,
+				258EDFCA16F658BF00A56434 /* ZXExpandedRow.m in Sources */,
+				258EDFCB16F658BF00A56434 /* ZXRSSExpandedReader.m in Sources */,
+				258EDFCC16F658BF00A56434 /* ZXAbstractRSSReader.m in Sources */,
+				258EDFCD16F658BF00A56434 /* ZXDataCharacter.m in Sources */,
+				258EDFCE16F658BF00A56434 /* ZXPair.m in Sources */,
+				258EDFCF16F658BF00A56434 /* ZXRSS14Reader.m in Sources */,
+				258EDFD016F658BF00A56434 /* ZXRSSFinderPattern.m in Sources */,
+				258EDFD116F658BF00A56434 /* ZXRSSUtils.m in Sources */,
+				258EDFD216F658BF00A56434 /* ZXCodaBarReader.m in Sources */,
+				258EDFD316F658BF00A56434 /* ZXCodaBarWriter.m in Sources */,
+				258EDFD416F658BF00A56434 /* ZXCode128Reader.m in Sources */,
+				258EDFD516F658BF00A56434 /* ZXCode128Writer.m in Sources */,
+				258EDFD616F658BF00A56434 /* ZXCode39Reader.m in Sources */,
+				258EDFD716F658BF00A56434 /* ZXCode39Writer.m in Sources */,
+				258EDFD816F658BF00A56434 /* ZXCode93Reader.m in Sources */,
+				258EDFD916F658BF00A56434 /* ZXEAN13Reader.m in Sources */,
+				258EDFDA16F658BF00A56434 /* ZXEAN13Writer.m in Sources */,
+				258EDFDB16F658BF00A56434 /* ZXEAN8Reader.m in Sources */,
+				258EDFDC16F658BF00A56434 /* ZXEAN8Writer.m in Sources */,
+				258EDFDD16F658BF00A56434 /* ZXEANManufacturerOrgSupport.m in Sources */,
+				258EDFDE16F658BF00A56434 /* ZXITFReader.m in Sources */,
+				258EDFDF16F658BF00A56434 /* ZXITFWriter.m in Sources */,
+				258EDFE016F658BF00A56434 /* ZXMultiFormatOneDReader.m in Sources */,
+				258EDFE116F658BF00A56434 /* ZXMultiFormatUPCEANReader.m in Sources */,
+				258EDFE216F658BF00A56434 /* ZXOneDimensionalCodeWriter.m in Sources */,
+				258EDFE316F658BF00A56434 /* ZXOneDReader.m in Sources */,
+				258EDFE416F658BF00A56434 /* ZXUPCAReader.m in Sources */,
+				258EDFE516F658BF00A56434 /* ZXUPCAWriter.m in Sources */,
+				258EDFE616F658BF00A56434 /* ZXUPCEANExtension2Support.m in Sources */,
+				258EDFE716F658BF00A56434 /* ZXUPCEANExtension5Support.m in Sources */,
+				258EDFE816F658BF00A56434 /* ZXUPCEANExtensionSupport.m in Sources */,
+				258EDFE916F658BF00A56434 /* ZXUPCEANReader.m in Sources */,
+				258EDFEA16F658BF00A56434 /* ZXUPCEANWriter.m in Sources */,
+				258EDFEB16F658BF00A56434 /* ZXUPCEReader.m in Sources */,
+				258EDFEC16F658BF00A56434 /* ZXModulusGF.m in Sources */,
+				258EDFED16F658BF00A56434 /* ZXModulusPoly.m in Sources */,
+				258EDFEE16F658BF00A56434 /* ZXPDF417ECErrorCorrection.m in Sources */,
+				258EDFEF16F658BF00A56434 /* ZXPDF417BitMatrixParser.m in Sources */,
+				258EDFF016F658BF00A56434 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
+				258EDFF116F658BF00A56434 /* ZXPDF417Decoder.m in Sources */,
+				258EDFF216F658BF00A56434 /* ZXPDF417Detector.m in Sources */,
+				258EDFF316F658BF00A56434 /* ZXBarcodeMatrix.m in Sources */,
+				258EDFF416F658BF00A56434 /* ZXBarcodeRow.m in Sources */,
+				258EDFF516F658BF00A56434 /* ZXDimensions.m in Sources */,
+				258EDFF616F658BF00A56434 /* ZXPDF417.m in Sources */,
+				258EDFF716F658BF00A56434 /* ZXPDF417ErrorCorrection.m in Sources */,
+				258EDFF816F658BF00A56434 /* ZXPDF417HighLevelEncoder.m in Sources */,
+				258EDFF916F658BF00A56434 /* ZXPDF417Writer.m in Sources */,
+				258EDFFA16F658BF00A56434 /* ZXPDF417Reader.m in Sources */,
+				258EDFFB16F658BF00A56434 /* ZXDataMask.m in Sources */,
+				258EDFFC16F658BF00A56434 /* ZXErrorCorrectionLevel.m in Sources */,
+				258EDFFD16F658BF00A56434 /* ZXFormatInformation.m in Sources */,
+				258EDFFE16F658BF00A56434 /* ZXMode.m in Sources */,
+				258EDFFF16F658BF00A56434 /* ZXQRCodeBitMatrixParser.m in Sources */,
+				258EE00016F658BF00A56434 /* ZXQRCodeDataBlock.m in Sources */,
+				258EE00116F658BF00A56434 /* ZXQRCodeDecodedBitStreamParser.m in Sources */,
+				258EE00216F658BF00A56434 /* ZXQRCodeDecoder.m in Sources */,
+				258EE00316F658BF00A56434 /* ZXQRCodeVersion.m in Sources */,
+				258EE00416F658BF00A56434 /* ZXAlignmentPattern.m in Sources */,
+				258EE00516F658BF00A56434 /* ZXAlignmentPatternFinder.m in Sources */,
+				258EE00616F658BF00A56434 /* ZXFinderPatternFinder.m in Sources */,
+				258EE00716F658BF00A56434 /* ZXFinderPatternInfo.m in Sources */,
+				258EE00816F658BF00A56434 /* ZXQRCodeDetector.m in Sources */,
+				258EE00916F658BF00A56434 /* ZXQRCodeFinderPattern.m in Sources */,
+				258EE00A16F658BF00A56434 /* ZXBlockPair.m in Sources */,
+				258EE00B16F658BF00A56434 /* ZXByteMatrix.m in Sources */,
+				258EE00C16F658BF00A56434 /* ZXEncoder.m in Sources */,
+				258EE00D16F658BF00A56434 /* ZXMaskUtil.m in Sources */,
+				258EE00E16F658BF00A56434 /* ZXMatrixUtil.m in Sources */,
+				258EE00F16F658BF00A56434 /* ZXQRCode.m in Sources */,
+				258EE01016F658BF00A56434 /* ZXQRCodeReader.m in Sources */,
+				258EE01116F658BF00A56434 /* ZXQRCodeWriter.m in Sources */,
+				258EE01216F658BF00A56434 /* ZXBinarizer.m in Sources */,
+				258EE01316F658C000A56434 /* ZXBinaryBitmap.m in Sources */,
+				258EE01416F658C000A56434 /* ZXDecodeHints.m in Sources */,
+				258EE01516F658C000A56434 /* ZXEncodeHints.m in Sources */,
+				258EE01616F658C000A56434 /* ZXErrors.m in Sources */,
+				258EE01716F658C000A56434 /* ZXLuminanceSource.m in Sources */,
+				258EE01816F658C000A56434 /* ZXMultiFormatReader.m in Sources */,
+				258EE01916F658C000A56434 /* ZXMultiFormatWriter.m in Sources */,
+				258EE01A16F658C000A56434 /* ZXPlanarYUVLuminanceSource.m in Sources */,
+				258EE01B16F658C000A56434 /* ZXResult.m in Sources */,
+				258EE01C16F658C000A56434 /* ZXResultPoint.m in Sources */,
+				258EE01D16F658C000A56434 /* ZXRGBLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		25404734166AC27800E13304 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "ZXingObjC-iOS";
-			targetProxy = 25404733166AC27800E13304 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		02C6AFDE156FCBA00052B145 /* ViewController.xib */ = {
@@ -388,7 +1635,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -400,7 +1646,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
