@@ -421,12 +421,12 @@ static NSArray *EXP900 = nil;
       if ((count % 5 == 0) && (count > 0)) {
         // Decode every 5 codewords
         // Convert to Base 256
-        NSMutableString *decodedData = [NSMutableString stringWithCapacity:6];
+        unichar decodedData[6];
         for (int j = 0; j < 6; ++j) {
-          [decodedData replaceCharactersInRange:NSMakeRange(5-j, 1) withString:[NSString stringWithFormat:@"%C", (unichar)(value & 0xFF)]];
+          decodedData[5 - j] = (unichar)(value & 0xFF);
           value >>= 8;
         }
-        [result appendString:decodedData];
+        [result appendString:[NSString stringWithCharacters:decodedData length:6]];
         count = 0;
       }
     }
