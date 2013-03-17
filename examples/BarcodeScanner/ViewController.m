@@ -21,7 +21,7 @@
 @interface ViewController ()
 
 @property (nonatomic, retain) ZXCapture* capture;
-@property (nonatomic, retain) IBOutlet UILabel* decodedLabel;
+@property (nonatomic, assign) IBOutlet UILabel* decodedLabel;
 
 - (NSString*)displayForResult:(ZXResult*)result;
 
@@ -44,8 +44,8 @@
 
 #pragma mark - View Controller Methods
 
-- (void)viewDidLoad {
-  [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
 
   self.capture = [[[ZXCapture alloc] init] autorelease];
   self.capture.delegate = self;
@@ -57,12 +57,6 @@
   self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];
   [self.view bringSubviewToFront:self.decodedLabel];
-}
-
-- (void)viewDidUnload {
-  [super viewDidUnload];
-
-  self.decodedLabel = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

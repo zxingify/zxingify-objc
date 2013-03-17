@@ -211,6 +211,10 @@ static bool isIPad();
 }
 
 - (void)replaceInput {
+  if ([session respondsToSelector:@selector(beginConfiguration)]) {
+    [session beginConfiguration];
+  }
+
   if (session && input) {
     [session removeInput:input];
     [input release];
@@ -246,6 +250,10 @@ static bool isIPad();
       session.sessionPreset = preset;
     });
     [session addInput:input ZXQT(error:nil)];
+  }
+
+  if ([session respondsToSelector:@selector(commitConfiguration)]) {
+    [session commitConfiguration];
   }
 }
 
