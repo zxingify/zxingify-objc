@@ -22,6 +22,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2504D4C616F698AA00DF8882 /* ZXInvertedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2504D4C716F698AA00DF8882 /* ZXInvertedLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */; };
+		2504D4C816F698BE00DF8882 /* ZXInvertedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2504D4C916F698BE00DF8882 /* ZXInvertedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */; };
+		2504D4CA16F698C900DF8882 /* ZXInvertedLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */; };
+		2504D4CB16F698C900DF8882 /* ZXInvertedLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */; };
 		251FCDEB16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		251FCDEC16CC8F53000C27E5 /* ZXRGBLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		251FCDED16CC8F53000C27E5 /* ZXRGBLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */; };
@@ -1425,6 +1431,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXInvertedLuminanceSource.h; sourceTree = "<group>"; };
+		2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXInvertedLuminanceSource.m; sourceTree = "<group>"; };
 		251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXRGBLuminanceSource.h; sourceTree = "<group>"; };
 		251FCDEA16CC8F53000C27E5 /* ZXRGBLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXRGBLuminanceSource.m; sourceTree = "<group>"; };
 		25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2222,6 +2230,8 @@
 				25403FC4166A9FFC00E13304 /* ZXErrors.h */,
 				25403FC5166A9FFC00E13304 /* ZXErrors.m */,
 				25403CBB166A96FA00E13304 /* ZXingObjC.h */,
+				2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */,
+				2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */,
 				25403FD1166AA00700E13304 /* ZXLuminanceSource.h */,
 				25403FD2166AA00700E13304 /* ZXLuminanceSource.m */,
 				25403FD3166AA00700E13304 /* ZXMultiFormatReader.h */,
@@ -3492,6 +3502,7 @@
 				254299D916D5D12000D4C045 /* ZXSymbolShapeHint.h in Headers */,
 				254299E516D5D81A00D4C045 /* ZXTextEncoder.h in Headers */,
 				254299ED16D5D94B00D4C045 /* ZXX12Encoder.h in Headers */,
+				2504D4C616F698AA00DF8882 /* ZXInvertedLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3646,6 +3657,7 @@
 				254299DA16D5D12000D4C045 /* ZXSymbolShapeHint.h in Headers */,
 				254299E616D5D81A00D4C045 /* ZXTextEncoder.h in Headers */,
 				254299EE16D5D94B00D4C045 /* ZXX12Encoder.h in Headers */,
+				2504D4C816F698BE00DF8882 /* ZXInvertedLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3820,6 +3832,7 @@
 				254299DB16D5D12000D4C045 /* ZXSymbolShapeHint.h in Headers */,
 				254299E716D5D81A00D4C045 /* ZXTextEncoder.h in Headers */,
 				254299EF16D5D94B00D4C045 /* ZXX12Encoder.h in Headers */,
+				2504D4C916F698BE00DF8882 /* ZXInvertedLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4234,6 +4247,7 @@
 				254299E016D5D24E00D4C045 /* ZXSymbolShapeHint.m in Sources */,
 				254299E816D5D81A00D4C045 /* ZXTextEncoder.m in Sources */,
 				254299F016D5D94B00D4C045 /* ZXX12Encoder.m in Sources */,
+				2504D4C716F698AA00DF8882 /* ZXInvertedLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4562,6 +4576,7 @@
 				254299E116D5D24E00D4C045 /* ZXSymbolShapeHint.m in Sources */,
 				254299E916D5D81A00D4C045 /* ZXTextEncoder.m in Sources */,
 				254299F116D5D94B00D4C045 /* ZXX12Encoder.m in Sources */,
+				2504D4CA16F698C900DF8882 /* ZXInvertedLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4885,6 +4900,7 @@
 				254299E216D5D24E00D4C045 /* ZXSymbolShapeHint.m in Sources */,
 				254299EA16D5D81A00D4C045 /* ZXTextEncoder.m in Sources */,
 				254299F216D5D94B00D4C045 /* ZXX12Encoder.m in Sources */,
+				2504D4CB16F698C900DF8882 /* ZXInvertedLuminanceSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

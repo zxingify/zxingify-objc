@@ -275,6 +275,7 @@
 #import "ZXDimension.h"
 #import "ZXEncodeHints.h"
 #import "ZXErrors.h"
+#import "ZXInvertedLuminanceSource.h"
 #import "ZXLuminanceSource.h"
 #import "ZXMultiFormatReader.h"
 #import "ZXMultiFormatWriter.h"

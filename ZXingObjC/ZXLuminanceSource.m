@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXInvertedLuminanceSource.h"
 #import "ZXLuminanceSource.h"
 
 @interface ZXLuminanceSource ()
@@ -81,6 +82,13 @@
                                userInfo:nil];
 }
 
+/**
+ * Returns a wrapper of this ZXLuminanceSource which inverts the luminances it returns -- black becomes
+ * white and vice versa, and each value becomes (255-value).
+ */
+- (ZXLuminanceSource *)invert {
+  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:self] autorelease];
+}
 
 /**
  * Returns a new object with rotated image data by 90 degrees counterclockwise.
