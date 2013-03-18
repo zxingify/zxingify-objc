@@ -39,6 +39,7 @@
 + (BOOL)isSubstringOfAlphaNumeric:(NSString *)value offset:(int)offset length:(unsigned int)length;
 + (int)parseHexDigit:(unichar)c;
 - (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri;
++ (NSString *)urlDecode:(NSString *)encoded;
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 + (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim;
 

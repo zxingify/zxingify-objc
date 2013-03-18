@@ -30,6 +30,7 @@
     if (queryStart != NSNotFound) {
       emailAddress = [emailAddress substringToIndex:queryStart];
     }
+    emailAddress = [[self class] urlDecode:emailAddress];
     NSMutableDictionary *nameValues = [self parseNameValuePairs:rawText];
     NSString *subject = nil;
     NSString *body = nil;

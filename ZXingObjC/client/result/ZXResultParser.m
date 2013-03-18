@@ -263,6 +263,12 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
   }
 }
 
++ (NSString *)urlDecode:(NSString *)encoded {
+  NSString *result = [encoded stringByReplacingOccurrencesOfString:@"+" withString:@" "];
+  result = [result stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  return result;
+}
+
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
   NSMutableArray *matches = nil;
   int i = 0;
