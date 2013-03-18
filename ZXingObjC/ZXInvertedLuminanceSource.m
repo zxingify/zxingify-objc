@@ -52,4 +52,31 @@
   return invertedMatrix;
 }
 
+- (BOOL)cropSupported {
+  return _delegate.cropSupported;
+}
+
+- (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
+  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate crop:left top:top width:aWidth height:aHeight]] autorelease];
+}
+
+- (BOOL)rotateSupported {
+  return _delegate.rotateSupported;
+}
+
+/**
+ * Returns original delegate ZXLuminanceSource since invert undoes itself
+ */
+- (ZXLuminanceSource *)invert {
+  return _delegate;
+}
+
+- (ZXLuminanceSource *)rotateCounterClockwise {
+  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise]] autorelease];
+}
+
+- (ZXLuminanceSource *)rotateCounterClockwise45 {
+  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise45]] autorelease];
+}
+
 @end
