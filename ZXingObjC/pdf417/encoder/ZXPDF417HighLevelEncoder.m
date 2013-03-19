@@ -122,7 +122,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 + (void)initialize {
   //Construct inverse lookups
   for (int i = 0; i < MIXED_TABLE_LEN; i++) {
-    MIXED_TABLE[i] = -1;
+    MIXED_TABLE[i] = 0xFF;
   }
   for (unsigned char i = 0; i < TEXT_MIXED_RAW_LEN; i++) {
     unsigned char b = TEXT_MIXED_RAW[i];
@@ -131,7 +131,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     }
   }
   for (int i = 0; i < PUNCTUATION_LEN; i++) {
-    PUNCTUATION[i] = -1;
+    PUNCTUATION[i] = 0xFF;
   }
   for (unsigned char i = 0; i < TEXT_PUNCTUATION_RAW_LEN; i++) {
     unsigned char b = TEXT_PUNCTUATION_RAW[i];
@@ -230,7 +230,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
   int submode = initialSubmode;
   int idx = 0;
   while (true) {
-    char ch = [msg characterAtIndex:startpos + idx];
+    unichar ch = [msg characterAtIndex:startpos + idx];
     switch (submode) {
       case SUBMODE_ALPHA:
         if ([self isAlphaUpper:ch]) {
@@ -414,11 +414,11 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 }
 
 + (BOOL)isMixed:(char)ch {
-  return MIXED_TABLE[ch] != -1;
+  return MIXED_TABLE[ch] != 0xFF;
 }
 
 + (BOOL)isPunctuation:(char)ch {
-  return PUNCTUATION[ch] != -1;
+  return PUNCTUATION[ch] != 0xFF;
 }
 
 + (BOOL)isText:(char)ch {
