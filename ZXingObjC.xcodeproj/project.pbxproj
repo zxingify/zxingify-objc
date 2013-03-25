@@ -1394,6 +1394,9 @@
 		25429A0D16D5F4E000D4C045 /* ZXPlacementTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25429A0B16D5F4E000D4C045 /* ZXPlacementTestCase.m */; };
 		25429A1016D5F66D00D4C045 /* ZXSymbolInfoTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25429A0F16D5F66D00D4C045 /* ZXSymbolInfoTestCase.m */; };
 		25429A1116D5F66D00D4C045 /* ZXSymbolInfoTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25429A0F16D5F66D00D4C045 /* ZXSymbolInfoTestCase.m */; };
+		255B9DB116FFCDE000EEEE61 /* ZXDataMatrixEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 2542998C16D478F800D4C045 /* ZXDataMatrixEncoder.h */; };
+		255B9DB216FFCDE100EEEE61 /* ZXDataMatrixEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 2542998C16D478F800D4C045 /* ZXDataMatrixEncoder.h */; };
+		255B9DB316FFCDE100EEEE61 /* ZXDataMatrixEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 2542998C16D478F800D4C045 /* ZXDataMatrixEncoder.h */; };
 		25FE5D3316D0AFED00826CDB /* ZXExpandedRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25FE5D3416D0AFED00826CDB /* ZXExpandedRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3216D0AFED00826CDB /* ZXExpandedRow.m */; };
 		25FE5D3516D0AFFD00826CDB /* ZXExpandedRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */; };
@@ -3503,6 +3506,7 @@
 				254299E516D5D81A00D4C045 /* ZXTextEncoder.h in Headers */,
 				254299ED16D5D94B00D4C045 /* ZXX12Encoder.h in Headers */,
 				2504D4C616F698AA00DF8882 /* ZXInvertedLuminanceSource.h in Headers */,
+				255B9DB116FFCDE000EEEE61 /* ZXDataMatrixEncoder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3658,6 +3662,7 @@
 				254299E616D5D81A00D4C045 /* ZXTextEncoder.h in Headers */,
 				254299EE16D5D94B00D4C045 /* ZXX12Encoder.h in Headers */,
 				2504D4C816F698BE00DF8882 /* ZXInvertedLuminanceSource.h in Headers */,
+				255B9DB216FFCDE100EEEE61 /* ZXDataMatrixEncoder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3833,6 +3838,7 @@
 				254299E716D5D81A00D4C045 /* ZXTextEncoder.h in Headers */,
 				254299EF16D5D94B00D4C045 /* ZXX12Encoder.h in Headers */,
 				2504D4C916F698BE00DF8882 /* ZXInvertedLuminanceSource.h in Headers */,
+				255B9DB316FFCDE100EEEE61 /* ZXDataMatrixEncoder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
