@@ -165,11 +165,10 @@ static int LOG[256], ALOG[256];
       ecc[0] = 0;
     }
   }
-  unichar eccReversed[numECWords+1];
+  unichar eccReversed[numECWords];
   for (int i = 0; i < numECWords; i++) {
     eccReversed[i] = ecc[numECWords - i - 1];
   }
-  eccReversed[numECWords] = NULL;
   return [NSString stringWithCharacters:eccReversed length:numECWords];
 }
 
