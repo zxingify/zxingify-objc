@@ -296,7 +296,9 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
         if (trim) {
           element = [element stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
-        [matches addObject:element];
+        if (element.length > 0) {
+          [matches addObject:element];
+        }
         i++;
         more = NO;
       }

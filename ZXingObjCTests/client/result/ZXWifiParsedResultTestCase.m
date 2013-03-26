@@ -27,8 +27,8 @@
 @implementation ZXWifiParsedResultTestCase
 
 - (void)testNoPassword {
-  [self doTestWithContents:@"WIFI:S:NoPassword;P:;T:;;" ssid:@"NoPassword" password:@"" type:@""];
-  [self doTestWithContents:@"WIFI:S:No Password;P:;T:;;" ssid:@"No Password" password:@"" type:@""];
+  [self doTestWithContents:@"WIFI:S:NoPassword;P:;T:;;" ssid:@"NoPassword" password:nil type:@"nopass"];
+  [self doTestWithContents:@"WIFI:S:No Password;P:;T:;;" ssid:@"No Password" password:nil type:@"nopass"];
 }
 
 - (void)testWep {

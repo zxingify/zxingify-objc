@@ -57,7 +57,7 @@
                                                                  org:org
                                                             birthday:nil
                                                                title:title
-                                                                 url:nil
+                                                                urls:nil
                                                                  geo:nil];
 }
 

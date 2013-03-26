@@ -31,7 +31,7 @@
 @property (nonatomic, readonly, retain) NSArray *addressTypes;
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *org;
-@property (nonatomic, readonly, copy) NSString *url;
+@property (nonatomic, readonly, retain) NSArray *urls;
 @property (nonatomic, readonly, copy) NSString *birthday;
 @property (nonatomic, readonly, retain) NSArray *geo;
 
@@ -43,7 +43,7 @@
        phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
    instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
        addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
-              title:(NSString *)title url:(NSString *)url geo:(NSArray *)geo;
+              title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo;
 
 + (id)addressBookParsedResultWithNames:(NSArray *)names phoneNumbers:(NSArray *)phoneNumbers
                             phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
@@ -53,6 +53,6 @@
                           phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
                       instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
                           addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
-                                 title:(NSString *)title url:(NSString *)url geo:(NSArray *)geo;
+                                 title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo;
 
 @end

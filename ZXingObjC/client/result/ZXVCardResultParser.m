@@ -81,7 +81,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
     birthday = nil;
   }
   NSArray *title = [[self class] matchSingleVCardPrefixedField:@"TITLE" rawText:rawText trim:YES parseFieldDivider:NO];
-  NSArray *url = [[self class] matchSingleVCardPrefixedField:@"URL" rawText:rawText trim:YES parseFieldDivider:NO];
+  NSArray *urls = [[self class] matchVCardPrefixedField:@"URL" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *instantMessenger = [[self class] matchSingleVCardPrefixedField:@"IMPP" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *geoString = [[self class] matchSingleVCardPrefixedField:@"GEO" rawText:rawText trim:YES parseFieldDivider:NO];
   NSArray *geo = geoString == nil ? nil : [[geoString objectAtIndex:0] componentsSeparatedByCharactersInSet:SEMICOLON_OR_COMMA];
@@ -102,7 +102,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
                                                                  org:[self toPrimaryValue:org]
                                                             birthday:[self toPrimaryValue:birthday]
                                                                title:[self toPrimaryValue:title]
-                                                                 url:[self toPrimaryValue:url]
+                                                                urls:[self toPrimaryValues:urls]
                                                                  geo:geo];
 }
 
@@ -281,7 +281,10 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   }
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:lists.count];
   for (NSArray *list in lists) {
-    [result addObject:[list objectAtIndex:0]];
+    NSString *value = [list objectAtIndex:0];
+    if (value != nil && value.length > 0) {
+      [result addObject:value];
+    }
   }
   return result;
 }

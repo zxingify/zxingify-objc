@@ -277,8 +277,7 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
   STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.start], startString, @"Starts do not match");
   STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.end], endString, @"Ends do not match");
   STAssertEqualObjects(organizer, calResult.organizer, @"Organizers do not match");
-  STAssertTrue((attendees == nil && calResult.attendees == nil) ||
-               [attendees isEqualToArray:calResult.attendees], @"Attendees do not match");
+  STAssertEqualObjects(attendees, calResult.attendees, @"Attendees do not match");
   [self assertEqualOrNAN:latitude actual:calResult.latitude];
   [self assertEqualOrNAN:longitude actual:calResult.longitude];
 }

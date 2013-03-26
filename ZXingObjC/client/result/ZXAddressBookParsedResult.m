@@ -32,7 +32,7 @@
 @property (nonatomic, retain) NSArray *addressTypes;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *org;
-@property (nonatomic, copy) NSString *url;
+@property (nonatomic, retain) NSArray *urls;
 @property (nonatomic, copy) NSString *birthday;
 @property (nonatomic, retain) NSArray *geo;
 
@@ -53,7 +53,7 @@
 @synthesize addressTypes;
 @synthesize title;
 @synthesize org;
-@synthesize url;
+@synthesize urls;
 @synthesize birthday;
 @synthesize geo;
 
@@ -62,14 +62,14 @@
           addresses:(NSArray *)_addresses addressTypes:(NSArray *)_addressTypes {
   return [self initWithNames:_names nicknames:nil pronunciation:nil phoneNumbers:_phoneNumbers phoneTypes:_phoneNumbers
                       emails:_emails emailTypes:_emailTypes instantMessenger:nil note:nil
-                   addresses:_addresses addressTypes:_addressTypes org:nil birthday:nil title:nil url:nil geo:nil];
+                   addresses:_addresses addressTypes:_addressTypes org:nil birthday:nil title:nil urls:nil geo:nil];
 }
 
 - (id)initWithNames:(NSArray *)_names nicknames:(NSArray *)_nicknames pronunciation:(NSString *)_pronunciation
        phoneNumbers:(NSArray *)_phoneNumbers phoneTypes:(NSArray *)_phoneTypes emails:(NSArray *)_emails emailTypes:(NSArray *)_emailTypes
    instantMessenger:(NSString *)_instantMessenger note:(NSString *)_note addresses:(NSArray *)_addresses
        addressTypes:(NSArray *)_addressTypes org:(NSString *)_org birthday:(NSString *)_birthday
-              title:(NSString *)_title url:(NSString *)_url geo:(NSArray *)_geo {
+              title:(NSString *)_title urls:(NSArray *)_urls geo:(NSArray *)_geo {
   if (self = [super initWithType:kParsedResultTypeAddressBook]) {
     self.names = _names;
     self.nicknames = _nicknames;
@@ -85,7 +85,7 @@
     self.org = _org;
     self.birthday = _birthday;
     self.title = _title;
-    self.url = _url;
+    self.urls = _urls;
     self.geo = _geo;
   }
 
@@ -104,11 +104,11 @@
                          pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes
                                 emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes instantMessenger:(NSString *)instantMessenger
                                   note:(NSString *)note addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes org:(NSString *)org
-                              birthday:(NSString *)birthday title:(NSString *)title url:(NSString *)url geo:(NSArray *)geo {
+                              birthday:(NSString *)birthday title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo {
   return [[[self alloc] initWithNames:names nicknames:nicknames pronunciation:pronunciation phoneNumbers:phoneNumbers
                            phoneTypes:phoneTypes emails:emails emailTypes:emailTypes
                      instantMessenger:instantMessenger note:note addresses:addresses
-                         addressTypes:addressTypes org:org birthday:birthday title:title url:url geo:geo] autorelease];
+                         addressTypes:addressTypes org:org birthday:birthday title:title urls:urls geo:geo] autorelease];
 }
 
 - (void)dealloc {
@@ -126,7 +126,7 @@
   [org release];
   [birthday release];
   [title release];
-  [url release];
+  [urls release];
   [geo release];
 
   [super dealloc];
@@ -143,7 +143,7 @@
   [ZXParsedResult maybeAppendArray:self.phoneNumbers result:result];
   [ZXParsedResult maybeAppendArray:self.emails result:result];
   [ZXParsedResult maybeAppend:self.instantMessenger result:result];
-  [ZXParsedResult maybeAppend:self.url result:result];
+  [ZXParsedResult maybeAppendArray:self.urls result:result];
   [ZXParsedResult maybeAppend:self.birthday result:result];
   [ZXParsedResult maybeAppendArray:self.geo result:result];
   [ZXParsedResult maybeAppend:self.note result:result];

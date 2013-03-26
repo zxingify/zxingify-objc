@@ -57,15 +57,10 @@
   }
 }
 
-+ (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result {
-  if (value != nil) {
-    for (NSString *s in value) {
-      if (s != nil && s.length > 0) {
-        if ([result length] > 0) {
-          [result appendString:@"\n"];
-        }
-        [result appendString:s];
-      }
++ (void)maybeAppendArray:(NSArray *)values result:(NSMutableString *)result {
+  if (values != nil) {
+    for (NSString *value in values) {
+      [self maybeAppend:value result:result];
     }
   }
 }

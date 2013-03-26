@@ -30,7 +30,7 @@
                     emails:(NSArray *)emails
               phoneNumbers:(NSArray *)phoneNumbers
                        org:(NSString *)org
-                       url:(NSString *)url
+                      urls:(NSArray *)urls
                   birthday:(NSString *)birthday
                       note:(NSString *)note;
 
@@ -47,7 +47,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:nil];
 
@@ -59,7 +59,7 @@
                     emails:[NSArray arrayWithObject:@"srowen@example.org"]
               phoneNumbers:nil
                        org:nil
-                       url:@"google.com"
+                      urls:[NSArray arrayWithObject:@"google.com"]
                   birthday:nil
                       note:@"ZXing Team"];
 }
@@ -73,7 +73,7 @@
                     emails:nil
               phoneNumbers:[NSArray arrayWithObject:@"+12125551212"]
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:@"foo"];
 }
@@ -87,7 +87,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:nil];
 }
@@ -101,7 +101,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:nil];
 }
@@ -115,7 +115,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:nil];
 }
@@ -129,7 +129,7 @@
                     emails:[NSArray arrayWithObject:@"srowen@example.org"]
               phoneNumbers:[NSArray arrayWithObject:@"+12125551212"]
                        org:@"Google"
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:nil];
 }
@@ -144,7 +144,7 @@
                     emails:[NSArray arrayWithObject:@"foo.bar@xyz.com"]
               phoneNumbers:[NSArray arrayWithObject:@"5555555555"]
                        org:@"Company"
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:@"This is the memo."];
 }
@@ -161,7 +161,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:nil];
 }
@@ -175,7 +175,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:@"foo\nbar"];
   [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\;bar\r\nEND:VCARD"
@@ -186,7 +186,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:@"foo;bar"];
   [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\\\bar\r\nEND:VCARD"
@@ -197,7 +197,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:@"foo\\bar"];
   [self doTestWithContents:@"BEGIN:VCARD\r\nNOTE:foo\\,bar\r\nEND:VCARD"
@@ -208,7 +208,7 @@
                     emails:nil
               phoneNumbers:nil
                        org:nil
-                       url:nil
+                      urls:nil
                   birthday:nil
                       note:@"foo,bar"];
 }
@@ -221,7 +221,7 @@
                     emails:(NSArray *)emails
               phoneNumbers:(NSArray *)phoneNumbers
                        org:(NSString *)org
-                       url:(NSString *)url
+                      urls:(NSArray *)urls
                   birthday:(NSString *)birthday
                       note:(NSString *)note {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
@@ -235,7 +235,7 @@
   STAssertEqualObjects(addressResult.emails, emails, @"Emails do not match");
   STAssertEqualObjects(addressResult.phoneNumbers, phoneNumbers, @"Phone numbers do not match");
   STAssertEqualObjects(addressResult.org, org, @"Org does not match");
-  STAssertEqualObjects(addressResult.url, url, @"URL does not match");
+  STAssertEqualObjects(addressResult.urls, urls, @"URLs do not match");
   STAssertEqualObjects(addressResult.birthday, birthday, @"Birthday does not match");
   STAssertEqualObjects(addressResult.note, note, @"Note does not match");
 }

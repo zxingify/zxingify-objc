@@ -45,7 +45,7 @@
   if (birthday != nil && ![[self class] isStringOfDigits:birthday length:8]) {
     birthday = nil;
   }
-  NSString *url = [[self class] matchSingleDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
+  NSArray *urls = [[self class] matchDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
   NSString *org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
 
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
@@ -62,7 +62,7 @@
                                                                  org:org
                                                             birthday:birthday
                                                                title:nil
-                                                                 url:url
+                                                                urls:urls
                                                                  geo:nil];
 }
 
