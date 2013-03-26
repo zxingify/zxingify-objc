@@ -25,7 +25,7 @@
 
 - (NSArray *)runEuclideanAlgorithm:(ZXGenericGFPoly *)a b:(ZXGenericGFPoly *)b R:(int)R error:(NSError **)error;
 - (NSArray *)findErrorLocations:(ZXGenericGFPoly *)errorLocator error:(NSError **)error;
-- (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations dataMatrix:(BOOL)dataMatrix;
+- (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations;
 
 @end
 
@@ -56,14 +56,12 @@
  */
 - (BOOL)decode:(int *)received receivedLen:(int)receivedLen twoS:(int)twoS error:(NSError **)error {
   ZXGenericGFPoly *poly = [[[ZXGenericGFPoly alloc] initWithField:field coefficients:received coefficientsLen:receivedLen] autorelease];
-
   int syndromeCoefficientsLen = twoS;
   int syndromeCoefficients[syndromeCoefficientsLen];
-  BOOL dataMatrix = [self.field isEqual:[ZXGenericGF DataMatrixField256]];
   BOOL noError = YES;
 
   for (int i = 0; i < twoS; i++) {
-    int eval = [poly evaluateAt:[self.field exp:dataMatrix ? i + 1 : i]];
+    int eval = [poly evaluateAt:[field exp:i + field.generatorBase]];
     syndromeCoefficients[syndromeCoefficientsLen - 1 - i] = eval;
     if (eval != 0) {
       noError = NO;
@@ -83,9 +81,9 @@
   if (!errorLocations) {
     return NO;
   }
-  NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations dataMatrix:dataMatrix];
+  NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations];
   for (int i = 0; i < [errorLocations count]; i++) {
-    int position = receivedLen - 1 - [self.field log:[[errorLocations objectAtIndex:i] intValue]];
+    int position = receivedLen - 1 - [field log:[[errorLocations objectAtIndex:i] intValue]];
     if (position < 0) {
       NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Bad error location"
                                                            forKey:NSLocalizedDescriptionKey];
@@ -177,7 +175,7 @@
   return result;
 }
 
-- (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations dataMatrix:(BOOL)dataMatrix {
+- (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations {
   int s = [errorLocations count];
   NSMutableArray *result = [NSMutableArray array];
   for (int i = 0; i < s; i++) {
@@ -192,7 +190,7 @@
     }
 
     [result addObject:[NSNumber numberWithInt:[self.field multiply:[errorEvaluator evaluateAt:xiInverse] b:[self.field inverse:denominator]]]];
-    if (dataMatrix) {
+    if (self.field.generatorBase != 0) {
       [result replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:[self.field multiply:[[result objectAtIndex:i] intValue] b:xiInverse]]];
     }
   }

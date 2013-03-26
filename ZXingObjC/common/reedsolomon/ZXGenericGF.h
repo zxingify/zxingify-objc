@@ -29,17 +29,18 @@
 @property (nonatomic, retain, readonly) ZXGenericGFPoly *zero;
 @property (nonatomic, retain, readonly) ZXGenericGFPoly *one;
 @property (nonatomic, assign, readonly) int size;
+@property (nonatomic, assign, readonly) int generatorBase;
 
 + (ZXGenericGF *)AztecData12;
 + (ZXGenericGF *)AztecData10;
 + (ZXGenericGF *)AztecData6;
-+ (ZXGenericGF *)AztecDataParam;
++ (ZXGenericGF *)AztecParam;
 + (ZXGenericGF *)QrCodeField256;
 + (ZXGenericGF *)DataMatrixField256;
 + (ZXGenericGF *)AztecData8;
 + (ZXGenericGF *)MaxiCodeField64;
 
-- (id)initWithPrimitive:(int)primitive size:(int)size;
+- (id)initWithPrimitive:(int)primitive size:(int)size b:(int)b;
 - (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int)coefficient;
 + (int)addOrSubtract:(int)a b:(int)b;
 - (int)exp:(int)a;

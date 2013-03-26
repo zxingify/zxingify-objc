@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-#import "AbstractReedSolomonTestCase.h"
+#import "ZXAztecCode.h"
 
-@interface ReedSolomonDecoderDataMatrixTestCase : AbstractReedSolomonTestCase
+@implementation ZXAztecCode
+
+@synthesize codeWords;
+@synthesize compact;
+@synthesize matrix;
+@synthesize layers;
+@synthesize size;
+
+- (void)dealloc {
+  [matrix release];
+
+  [super dealloc];
+}
 
 @end

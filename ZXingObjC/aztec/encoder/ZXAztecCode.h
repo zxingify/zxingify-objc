@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,36 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
+@class ZXBitMatrix;
 
-@interface AbstractReedSolomonTestCase : SenTestCase
+/**
+ * Aztec 2D code representation
+ */
+@interface ZXAztecCode : NSObject
 
-- (void)corrupt:(int *)received receivedLen:(int)receivedLen howMany:(int)howMany;
-- (void)doTestQRCodeEncoding:(int *)dataBytes dataBytesLen:(int)dataBytesLen
-             expectedECBytes:(int *)expectedECBytes expectedECBytesLen:(int)expectedECBytesLen;
-- (void)assertArraysEqual:(int *)expected expectedOffset:(int)expectedOffset
-                   actual:(int *)actual actualOffset:(int)actualOffset length:(int)length;
+/**
+ * Number of data codewords
+ */
+@property (nonatomic, assign) int codeWords;
+
+/**
+ * Compact or full symbol indicator
+ */
+@property (nonatomic, assign) BOOL compact;
+
+/**
+ * Number of levels
+ */
+@property (nonatomic, assign) int layers;
+
+/**
+ * The symbol image
+ */
+@property (nonatomic, retain) ZXBitMatrix *matrix;
+
+/**
+ * Size in pixels (width and height)
+ */
+@property (nonatomic, assign) int size;
 
 @end

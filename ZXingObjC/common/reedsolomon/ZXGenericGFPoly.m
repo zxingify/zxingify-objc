@@ -93,13 +93,13 @@
   if (a == 1) {
     int result = 0;
     for (int i = 0; i < size; i++) {
-      result = [ZXGenericGF addOrSubtract:result b:self.coefficients[i]];
+      result = [ZXGenericGF addOrSubtract:result b:coefficients[i]];
     }
     return result;
   }
-  int result = self.coefficients[0];
+  int result = coefficients[0];
   for (int i = 1; i < size; i++) {
-    result = [ZXGenericGF addOrSubtract:[self.field multiply:a b:result] b:self.coefficients[i]];
+    result = [ZXGenericGF addOrSubtract:[field multiply:a b:result] b:coefficients[i]];
   }
   return result;
 }

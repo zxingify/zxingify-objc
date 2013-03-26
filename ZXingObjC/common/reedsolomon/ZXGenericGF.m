@@ -22,12 +22,12 @@
 @property (nonatomic, retain) ZXGenericGFPoly *zero;
 @property (nonatomic, retain) ZXGenericGFPoly *one;
 @property (nonatomic, assign) int size;
-@property (nonatomic, retain) NSMutableArray *expTable;
-@property (nonatomic, retain) NSMutableArray *logTable;
+@property (nonatomic, assign) int *expTable;
+@property (nonatomic, assign) int *logTable;
 @property (nonatomic, assign) int primitive;
+@property (nonatomic, assign) int generatorBase;
 
 @end
-
 
 @implementation ZXGenericGF
 
@@ -37,37 +37,33 @@
 @synthesize expTable;
 @synthesize logTable;
 @synthesize primitive;
-
+@synthesize generatorBase;
 
 /**
  * Create a representation of GF(size) using the given primitive polynomial.
  */
-- (id)initWithPrimitive:(int)aPrimitive size:(int)aSize {
+- (id)initWithPrimitive:(int)aPrimitive size:(int)aSize b:(int)b {
   if (self = [super init]) {
     self.primitive = aPrimitive;
     self.size = aSize;
-    self.expTable = [NSMutableArray arrayWithCapacity:size];
-    self.logTable = [NSMutableArray arrayWithCapacity:size];
+    self.generatorBase = b;
+    self.expTable = (int *)malloc(size * sizeof(int));
+    self.logTable = (int *)malloc(size * sizeof(int));
     int x = 1;
     for (int i = 0; i < size; i++) {
-      [self.expTable addObject:[NSNumber numberWithInt:x]];
-      x <<= 1;
-      if (x >= self.size) {
-        x ^= self.primitive;
-        x &= self.size - 1;
+      expTable[i] = x;
+      x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
+      if (x >= size) {
+        x ^= primitive;
+        x &= size - 1;
       }
     }
 
-    for (int i = 0; i < self.size; i++) {
-      [self.logTable addObject:[NSNumber numberWithInt:0]];
+    for (int i = 0; i < self.size-1; i++) {
+      logTable[expTable[i]] = i;
     }
-
-    for (int i = 0; i < self.size - 1; i++) {
-      [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
-    }
-
+    // logTable[0] == 0 but this should never be used
     self.zero = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0] autorelease];
-
     int oneInt = 1;
     self.one = [[[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1] autorelease];
   }
@@ -76,8 +72,8 @@
 }
 
 - (void)dealloc {
-  [expTable release];
-  [logTable release];
+  free(expTable);
+  free(logTable);
   [zero release];
   [one release];
   
@@ -87,7 +83,7 @@
 + (ZXGenericGF *)AztecData12 {
   static ZXGenericGF *AztecData12 = nil;
   if (!AztecData12) {
-    AztecData12 = [[ZXGenericGF alloc] initWithPrimitive:0x1069 size:4096];
+    AztecData12 = [[ZXGenericGF alloc] initWithPrimitive:0x1069 size:4096 b:1]; // x^12 + x^6 + x^5 + x^3 + 1
   }
   return AztecData12;
 }
@@ -95,7 +91,7 @@
 + (ZXGenericGF *)AztecData10 {
   static ZXGenericGF *AztecData10 = nil;
   if (!AztecData10) {
-    AztecData10 = [[ZXGenericGF alloc] initWithPrimitive:0x409 size:1024];
+    AztecData10 = [[ZXGenericGF alloc] initWithPrimitive:0x409 size:1024 b:1]; // x^10 + x^3 + 1
   }
   return AztecData10;
 }
@@ -103,23 +99,23 @@
 + (ZXGenericGF *)AztecData6 {
   static ZXGenericGF *AztecData6 = nil;
   if (!AztecData6) {
-    AztecData6 = [[ZXGenericGF alloc] initWithPrimitive:0x43 size:64];
+    AztecData6 = [[ZXGenericGF alloc] initWithPrimitive:0x43 size:64 b:1]; // x^6 + x + 1
   }
   return AztecData6;
 }
 
-+ (ZXGenericGF *)AztecDataParam {
-  static ZXGenericGF *AztecDataParam = nil;
-  if (!AztecDataParam) {
-    AztecDataParam = [[ZXGenericGF alloc] initWithPrimitive:0x13 size:16];
++ (ZXGenericGF *)AztecParam {
+  static ZXGenericGF *AztecParam = nil;
+  if (!AztecParam) {
+    AztecParam = [[ZXGenericGF alloc] initWithPrimitive:0x13 size:16 b:1]; // x^4 + x + 1
   }
-  return AztecDataParam;
+  return AztecParam;
 }
 
 + (ZXGenericGF *)QrCodeField256 {
   static ZXGenericGF *QrCodeField256 = nil;
   if (!QrCodeField256) {
-    QrCodeField256 = [[ZXGenericGF alloc] initWithPrimitive:0x011D size:256];
+    QrCodeField256 = [[ZXGenericGF alloc] initWithPrimitive:0x011D size:256 b:0]; // x^8 + x^4 + x^3 + x^2 + 1
   }
   return QrCodeField256;
 }
@@ -127,7 +123,7 @@
 + (ZXGenericGF *)DataMatrixField256 {
   static ZXGenericGF *DataMatrixField256 = nil;
   if (!DataMatrixField256) {
-    DataMatrixField256 = [[ZXGenericGF alloc] initWithPrimitive:0x012D size:256];
+    DataMatrixField256 = [[ZXGenericGF alloc] initWithPrimitive:0x012D size:256 b:1]; // x^8 + x^5 + x^3 + x^2 + 1
   }
   return DataMatrixField256;
 }
@@ -140,7 +136,7 @@
   return [self AztecData6];
 }
 
-- (ZXGenericGFPoly *) buildMonomial:(int)degree coefficient:(int)coefficient {
+- (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int)coefficient {
   if (degree < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
@@ -165,21 +161,21 @@
 }
 
 - (int)exp:(int)a {
-  return [[self.expTable objectAtIndex:a] intValue];
+  return expTable[a];
 }
 
 - (int)log:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [[self.logTable objectAtIndex:a] intValue];
+  return logTable[a];
 }
 
 - (int)inverse:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [[self.expTable objectAtIndex:self.size - [[self.logTable objectAtIndex:a] intValue] - 1] intValue];
+  return self.expTable[self.size - self.logTable[a] - 1];
 }
 
 - (int)multiply:(int)a b:(int)b {
@@ -187,12 +183,15 @@
     return 0;
   }
 
-  int logSum = [[self.logTable objectAtIndex:a] intValue] + [[self.logTable objectAtIndex:b] intValue];
-  return [[self.expTable objectAtIndex:logSum % (size - 1)] intValue];
+  return expTable[(logTable[a] + logTable[b]) % (size - 1)];
 }
 
 - (BOOL)isEqual:(ZXGenericGF *)object {
   return self.primitive == object->primitive && self.size == object->size;
+}
+
+- (NSString *)description {
+  return [NSString stringWithFormat:@"GF(0x%X,%d)", self.primitive, self.size];
 }
 
 @end

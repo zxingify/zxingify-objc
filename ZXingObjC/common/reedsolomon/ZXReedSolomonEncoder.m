@@ -33,11 +33,6 @@
 
 - (id)initWithField:(ZXGenericGF *)aField {
   if (self = [super init]) {
-    if (![[ZXGenericGF QrCodeField256] isEqual:aField]) {
-      @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                     reason:@"Only QR Code is supported at this time"
-                                   userInfo:nil];
-    }
     self.field = aField;
     int one = 1;
     self.cachedGenerators = [NSMutableArray arrayWithObject:[[[ZXGenericGFPoly alloc] initWithField:aField coefficients:&one coefficientsLen:1] autorelease]];
@@ -57,7 +52,7 @@
   if (degree >= self.cachedGenerators.count) {
     ZXGenericGFPoly *lastGenerator = [self.cachedGenerators objectAtIndex:[cachedGenerators count] - 1];
     for (int d = [self.cachedGenerators count]; d <= degree; d++) {
-      int next[2] = { 1, [field exp:d - 1] };
+      int next[2] = { 1, [field exp:d - 1 + field.generatorBase] };
       ZXGenericGFPoly *nextGenerator = [lastGenerator multiply:[[[ZXGenericGFPoly alloc] initWithField:field coefficients:next coefficientsLen:2] autorelease]];
       [self.cachedGenerators addObject:nextGenerator];
       lastGenerator = nextGenerator;
