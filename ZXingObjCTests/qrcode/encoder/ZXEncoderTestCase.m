@@ -485,9 +485,8 @@
   }
   {
     // Invalid data.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
     NSError *error;
-    if ([ZXEncoder appendAlphanumericBytes:@"abc" bits:bits error:&error] || error.code != ZXWriterError) {
+    if ([ZXEncoder appendAlphanumericBytes:@"abc" bits:[[[ZXBitArray alloc] init] autorelease] error:&error] || error.code != ZXWriterError) {
       STFail(@"Expected ZXWriterError");
     }
   }

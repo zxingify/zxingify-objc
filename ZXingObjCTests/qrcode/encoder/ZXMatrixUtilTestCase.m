@@ -176,10 +176,10 @@
 
 - (void)testEmbedDataBits {
   // Cells other than basic patterns should be filled with zero.
-  ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
   ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
   [ZXMatrixUtil clearMatrix:matrix];
   [ZXMatrixUtil embedBasicPatterns:[ZXQRCodeVersion versionForNumber:1] matrix:matrix error:nil];
+  ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
   [ZXMatrixUtil embedDataBits:bits maskPattern:-1 matrix:matrix error:nil];
   NSString *expected =
     @" 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n"

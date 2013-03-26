@@ -125,8 +125,6 @@ static int WORD_SIZE[33] = {
  * Encodes the given binary content as an Aztec symbol
  */
 + (ZXAztecCode *)encode:(unsigned char *)data len:(int)len minECCPercent:(int)minECCPercent {
-  ZXAztecCode *aztec = [[[ZXAztecCode alloc] init] autorelease];
-
   // High-level encode
   ZXBitArray *bits = [self highLevelEncode:data len:len];
 
@@ -255,6 +253,7 @@ static int WORD_SIZE[33] = {
     }
   }
 
+  ZXAztecCode *aztec = [[[ZXAztecCode alloc] init] autorelease];
   aztec.compact = compact;
   aztec.size = matrixSize;
   aztec.layers = layers;

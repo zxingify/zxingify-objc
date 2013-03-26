@@ -120,7 +120,6 @@
 }
 
 - (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
-  NSMutableString *buf = [NSMutableString string];
   unichar c = [rawText characterAtIndex:i];
   if (c != '(') {
     return nil;
@@ -128,6 +127,7 @@
 
   NSString *rawTextAux = [rawText substringFromIndex:i + 1];
 
+  NSMutableString *buf = [NSMutableString string];
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar currentChar = [rawTextAux characterAtIndex:index];
     if (currentChar == ')') {

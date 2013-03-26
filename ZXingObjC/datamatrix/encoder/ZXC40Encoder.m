@@ -115,9 +115,8 @@
     }
     if ([context hasMoreCharacters]) {
       [context writeCodeword:[ZXHighLevelEncoder c40Unlatch]];
-    } else {
-      //No unlatch
     }
+    // else no latch
     context.pos--;
   } else if (rest == 0) {
     while (buffer.length >= 3) {

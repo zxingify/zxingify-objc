@@ -148,10 +148,10 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (BOOL)checkChecksum:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair {
-  int leftFPValue = leftPair.finderPattern.value;
-  int rightFPValue = rightPair.finderPattern.value;
-  if ((leftFPValue == 0 && rightFPValue == 8) || (leftFPValue == 8 && rightFPValue == 0)) {
-  }
+//  int leftFPValue = leftPair.finderPattern.value;
+//  int rightFPValue = rightPair.finderPattern.value;
+//  if ((leftFPValue == 0 && rightFPValue == 8) || (leftFPValue == 8 && rightFPValue == 0)) {
+//  }
   int checkValue = (leftPair.checksumPortion + 16 * rightPair.checksumPortion) % 79;
   int targetCheckValue = 9 * leftPair.finderPattern.value + rightPair.finderPattern.value;
   if (targetCheckValue > 72) {

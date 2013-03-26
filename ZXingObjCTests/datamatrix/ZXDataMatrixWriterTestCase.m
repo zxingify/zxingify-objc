@@ -23,12 +23,11 @@
 @implementation ZXDataMatrixWriterTestCase
 
 - (void)testDataMatrixImageWriter {
-  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
-
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.dataMatrixShape = [ZXSymbolShapeHint forceSquare];
 
   int bigEnough = 64;
+  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
   ZXBitMatrix *matrix = [writer encode:@"Hello Google" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertTrue(bigEnough >= matrix.width, @"Matrix width should be less than %d", bigEnough);
@@ -36,12 +35,11 @@
 }
 
 - (void)testDataMatrixWriter {
-  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
-
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.dataMatrixShape = [ZXSymbolShapeHint forceSquare];
 
   int bigEnough = 14;
+  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
   ZXBitMatrix *matrix = [writer encode:@"Hello Me" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertEquals(matrix.width, bigEnough, @"Expected matrix width to equal %d", bigEnough);

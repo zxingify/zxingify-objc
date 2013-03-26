@@ -53,7 +53,7 @@ const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
     int encoding[encodingLen];
     memset(encoding, 0, encodingLen * sizeof(int));
     for (int j = 0; j < 5; j++) {
-      encoding[(j << 1)] = PATTERNS[one][j];
+      encoding[j << 1] = PATTERNS[one][j];
       encoding[(j << 1) + 1] = PATTERNS[two][j];
     }
     pos += [super appendPattern:result pos:pos pattern:encoding patternLen:encodingLen startColor:TRUE];

@@ -97,9 +97,9 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   ZXBitMatrix *goldenResult = [self createMatrixFromImage:image];
   STAssertNotNil(goldenResult, @"Golden result should not be nil");
 
-  ZXQRCodeWriter *writer = [[[ZXQRCodeWriter alloc] init] autorelease];
   ZXEncodeHints *hints = [[[ZXEncodeHints alloc] init] autorelease];
   hints.errorCorrectionLevel = ecLevel;
+  ZXQRCodeWriter *writer = [[[ZXQRCodeWriter alloc] init] autorelease];
   ZXBitMatrix *generatedResult = [writer encode:contents format:kBarcodeFormatQRCode width:resolution
                                          height:resolution hints:hints error:nil];
 

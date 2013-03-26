@@ -27,8 +27,6 @@
 @implementation RSSExpandedInternalTestCase
 
 - (void)testFindFinderPatterns {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
-
   NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
@@ -36,6 +34,7 @@
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
   NSMutableArray *previousPairs = [NSMutableArray array];
 
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
   ZXExpandedPair *pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair1];
   ZXRSSFinderPattern *finderPattern = pair1.finderPattern;
@@ -61,8 +60,6 @@
 }
 
 - (void)testRetrieveNextPairPatterns {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
-
   NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
@@ -70,6 +67,7 @@
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
   NSMutableArray *previousPairs = [NSMutableArray array];
 
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
   ZXExpandedPair *pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair1];
   ZXRSSFinderPattern *finderPattern = pair1.finderPattern;
@@ -84,8 +82,6 @@
 }
 
 - (void)testDecodeCheckCharacter {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
-  
   NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
@@ -95,14 +91,13 @@
   int value = 0;// A
   ZXRSSFinderPattern *finderPatternA1 = [[[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[[startEnd objectAtIndex:0] intValue] end:[[startEnd objectAtIndex:1] intValue] rowNumber:image.height / 2] autorelease];
   //{1, 8, 4, 1, 1};
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:YES];
 
   STAssertEquals(dataCharacter.value, 98, @"Expected dataCharacter.value to equal 98");
 }
 
 - (void)testDecodeDataCharacter {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
-
   NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
@@ -112,6 +107,7 @@
   int value = 0;// A
   ZXRSSFinderPattern *finderPatternA1 = [[[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[[startEnd objectAtIndex:0] intValue] end:[[startEnd objectAtIndex:1] intValue] rowNumber:image.height / 2] autorelease];
   //{1, 8, 4, 1, 1};
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:NO];
 
   STAssertEquals(dataCharacter.value, 19, @"Expected dataCharacter.value to equal 19");

@@ -45,14 +45,13 @@
 }
 
 - (void)assertCorrectImage2result:(NSString *)path expected:(ZXExpandedProductParsedResult *)expected {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
-
   ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
   ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
   int rowNumber = binaryMap.height / 2;
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
   NSError *error;
+  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
   ZXResult *theResult = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:&error];
   if (!theResult) {
     STFail([error description]);
