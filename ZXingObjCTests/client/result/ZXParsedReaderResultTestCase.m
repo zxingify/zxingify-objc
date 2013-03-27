@@ -42,7 +42,7 @@
                             type:kParsedResultTypeText];
   [self doTestResultWithContents:@"This: a test with lots of @ nearly-random punctuation! No? OK then."
                     goldenResult:@"This: a test with lots of @ nearly-random punctuation! No? OK then."
-                            type:kParsedResultTypeURI]; // Yeah, it's OK that this is thought of as maybe a URI
+                            type:kParsedResultTypeText];
 }
 
 - (void)testBookmarkType {
@@ -72,8 +72,7 @@
   [self doTestResultWithContents:@"MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;"
                     goldenResult:@"srowen@example.org\nStuff\nThis is some text" type:kParsedResultTypeEmailAddress];
   [self doTestResultWithContents:@"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;"
-                    goldenResult:@"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;" type:kParsedResultTypeURI];
-  // Yeah, it's OK that this is thought of as maybe a URI as long as it's not EMAIL_ADDRESS
+                    goldenResult:@"TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;" type:kParsedResultTypeText];
 }
 
 - (void)testEmailAddressType {

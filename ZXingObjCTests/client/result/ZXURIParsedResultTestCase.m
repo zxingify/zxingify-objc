@@ -54,6 +54,7 @@
   [self doTestNotUri:@".com"];
   [self doTestNotUri:@":80/"];
   [self doTestNotUri:@"ABC,20.3,AB,AD"];
+  [self doTestNotUri:@"http://google.com?q=foo bar"];
 }
 
 - (void)testURLTO {

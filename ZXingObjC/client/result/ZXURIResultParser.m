@@ -50,6 +50,11 @@ static NSRegularExpression *URL_WITHOUT_PROTOCOL_PATTERN = nil;
 
 
 + (BOOL)isBasicallyValidURI:(NSString *)uri {
+  if ([uri rangeOfString:@" "].location != NSNotFound) {
+    // Quick hack check for a common case
+    return NO;
+  }
+
   if ([URL_WITH_PROTOCOL_PATTERN numberOfMatchesInString:uri options:NSMatchingWithoutAnchoringBounds range:NSMakeRange(0, uri.length)] > 0) { // match at start only
     return YES;
   }
