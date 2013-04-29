@@ -186,12 +186,12 @@
 }
 
 - (void)assertCorrectImage2binary:(NSString *)path expected:(NSString *)expected {
-  ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
-  ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
+  ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
+  ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   int rowNumber = binaryMap.height / 2;
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+  ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   NSArray *pairs = [rssExpandedReader decodeRow2pairs:rowNumber row:row];
   if (!pairs) {
     STFail(@"Unable to decode pairs");

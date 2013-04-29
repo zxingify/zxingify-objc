@@ -55,7 +55,7 @@
   float combinedX = (self.x + j) / 2.0f;
   float combinedY = (self.y + i) / 2.0f;
   float combinedModuleSize = (self.estimatedModuleSize + newModuleSize) / 2.0f;
-  return [[[ZXAlignmentPattern alloc] initWithPosX:combinedX posY:combinedY estimatedModuleSize:combinedModuleSize] autorelease];
+  return [[ZXAlignmentPattern alloc] initWithPosX:combinedX posY:combinedY estimatedModuleSize:combinedModuleSize];
 }
 
 @end

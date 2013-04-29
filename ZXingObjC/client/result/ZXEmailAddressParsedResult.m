@@ -45,16 +45,10 @@
 }
 
 + (id)emailAddressParsedResultWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI {
-  return [[[self alloc] initWithEmailAddress:emailAddress subject:subject body:body mailtoURI:mailtoURI] autorelease];
+  return [[self alloc] initWithEmailAddress:emailAddress subject:subject body:body mailtoURI:mailtoURI];
 }
 
 - (void)dealloc {
-  [emailAddress release];
-  [subject release];
-  [body release];
-  [mailtoURI release];
-  
-  [super dealloc];
 }
 
 - (NSString *)displayResult {

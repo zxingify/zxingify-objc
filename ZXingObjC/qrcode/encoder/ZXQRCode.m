@@ -42,12 +42,6 @@ int const NUM_MASK_PATTERNS = 8;
 }
 
 - (void)dealloc {
-  [mode release];
-  [ecLevel release];
-  [matrix release];
-  [version release];
-
-  [super dealloc];
 }
 
 - (NSString *)description {

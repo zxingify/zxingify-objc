@@ -41,9 +41,6 @@
 }
 
 - (void)dealloc {
-  [pairs release];
-
-  [super dealloc];
 }
 
 - (BOOL)isReversed {

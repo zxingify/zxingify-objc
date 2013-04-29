@@ -39,10 +39,6 @@
 }
 
 - (void)dealloc {
-  [bits release];
-  [points release];
-
-  [super dealloc];
 }
 
 @end

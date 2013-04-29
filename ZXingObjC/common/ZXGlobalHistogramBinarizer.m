@@ -56,16 +56,13 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     free(luminances);
     luminances = NULL;
   }
-  [buckets release];
-
-  [super dealloc];
 }
 
 - (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError **)error {
   ZXLuminanceSource *source = self.luminanceSource;
   int width = source.width;
   if (row == nil || row.size < width) {
-    row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
+    row = [[ZXBitArray alloc] initWithSize:width];
   } else {
     [row clear];
   }
@@ -103,7 +100,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   ZXLuminanceSource *source = self.luminanceSource;
   int width = source.width;
   int height = source.height;
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
 
   [self initArrays:width];
   NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:self.buckets];
@@ -138,7 +135,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 }
 
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source {
-  return [[[ZXGlobalHistogramBinarizer alloc] initWithSource:source] autorelease];
+  return [[ZXGlobalHistogramBinarizer alloc] initWithSource:source];
 }
 
 - (void)initArrays:(int)luminanceSize {

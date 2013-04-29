@@ -22,7 +22,7 @@
 - (id)initWithInvocation:(NSInvocation *)anInvocation {
   self = [super initWithInvocation:anInvocation
                 testBasePathSuffix:@"Resources/blackbox/code93-1"
-                     barcodeReader:[[[ZXMultiFormatReader alloc] init] autorelease]
+                     barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatCode93];
 
   if (self) {

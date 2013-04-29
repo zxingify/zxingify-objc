@@ -35,7 +35,7 @@
 }
 
 + (id)parsedResultWithType:(ZXParsedResultType)type {
-  return [[[self alloc] initWithType:type] autorelease];
+  return [[self alloc] initWithType:type];
 }
 
 - (NSString *)displayResult {

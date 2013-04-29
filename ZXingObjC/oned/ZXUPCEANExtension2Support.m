@@ -40,13 +40,13 @@
 
   NSMutableDictionary *extensionData = [self parseExtensionString:resultString];
 
-  ZXResult *extensionResult = [[[ZXResult alloc] initWithText:resultString
+  ZXResult *extensionResult = [[ZXResult alloc] initWithText:resultString
                                                      rawBytes:nil
                                                        length:0
                                                  resultPoints:[NSArray arrayWithObjects:
-                                                               [[[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:rowNumber] autorelease],
-                                                               [[[ZXResultPoint alloc] initWithX:end y:rowNumber] autorelease], nil]
-                                                       format:kBarcodeFormatUPCEANExtension] autorelease];
+                                                               [[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:rowNumber],
+                                                               [[ZXResultPoint alloc] initWithX:end y:rowNumber], nil]
+                                                       format:kBarcodeFormatUPCEANExtension];
   if (extensionData != nil) {
     [extensionResult putAllMetadata:extensionData];
   }

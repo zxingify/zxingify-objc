@@ -51,9 +51,6 @@
 }
 
 - (void)dealloc {
-  [theNewString release];
-
-  [super dealloc];
 }
 
 @end

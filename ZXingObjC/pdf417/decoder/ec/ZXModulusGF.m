@@ -34,7 +34,7 @@
 @synthesize zero;
 
 + (ZXModulusGF *)PDF417_GF {
-  return [[[ZXModulusGF alloc] initWithModulus:929 generator:3] autorelease];
+  return [[ZXModulusGF alloc] initWithModulus:929 generator:3];
 }
 
 - (id)initWithModulus:(int)aModulus generator:(int)generator {
@@ -57,10 +57,10 @@
     }
     // logTable[0] == 0 but this should never be used
     int zeroInt = 0;
-    self.zero = [[[ZXModulusPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1] autorelease];
+    self.zero = [[ZXModulusPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
 
     int oneInt = 1;
-    self.one = [[[ZXModulusPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1] autorelease];
+    self.one = [[ZXModulusPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
   }
 
   return self;
@@ -80,7 +80,7 @@
   for (int i = 1; i < coefficientsLen; i++) {
     coefficients[i] = 0;
   }
-  return [[[ZXModulusPoly alloc] initWithField:self coefficients:coefficients coefficientsLen:coefficientsLen] autorelease];
+  return [[ZXModulusPoly alloc] initWithField:self coefficients:coefficients coefficientsLen:coefficientsLen];
 }
 
 - (int)add:(int)a b:(int)b {

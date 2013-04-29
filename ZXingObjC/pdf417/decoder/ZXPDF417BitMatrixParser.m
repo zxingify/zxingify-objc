@@ -702,12 +702,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 }
 
 - (void)dealloc {
-  [bitMatrix release];
-  [erasures release];
-
-  [super dealloc];
 }
-
 
 /**
  * To ensure separability of rows, codewords of consecutive rows belong to
@@ -811,7 +806,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     rowNumber++;
     self.rows = rowNumber;
   }
-  self.erasures = [[[self.erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy] autorelease];
+  self.erasures = [[self.erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy];
   return [codewords subarrayWithRange:NSMakeRange(0, next)];
 }
 

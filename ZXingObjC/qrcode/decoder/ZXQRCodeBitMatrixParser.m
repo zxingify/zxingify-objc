@@ -53,11 +53,6 @@
 }
 
 - (void)dealloc {
-  [bitMatrix release];
-  [parsedVersion release];
-  [parsedFormatInfo release];
-
-  [super dealloc];
 }
 
 /**

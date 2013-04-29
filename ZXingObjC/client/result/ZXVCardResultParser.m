@@ -51,8 +51,8 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   NEWLINE_ESCAPE = [[NSRegularExpression alloc] initWithPattern:@"\\\\[nN]" options:0 error:nil];
   VCARD_ESCAPES = [[NSRegularExpression alloc] initWithPattern:@"\\\\([,;\\\\])" options:0 error:nil];
   UNESCAPED_SEMICOLONS = [[NSRegularExpression alloc] initWithPattern:@"(?<!\\\\);+" options:0 error:nil];
-  COMMA = [[NSCharacterSet characterSetWithCharactersInString:@","] retain];
-  SEMICOLON_OR_COMMA = [[NSCharacterSet characterSetWithCharactersInString:@";,"] retain];
+  COMMA = [NSCharacterSet characterSetWithCharactersInString:@","];
+  SEMICOLON_OR_COMMA = [NSCharacterSet characterSetWithCharactersInString:@";,"];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -257,9 +257,9 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   if ([fragmentBuffer length] > 0) {
     NSString *fragment;
     if (charset == nil || CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset) == kCFStringEncodingInvalidId) {
-      fragment = [[[NSString alloc] initWithData:fragmentBuffer encoding:NSUTF8StringEncoding] autorelease];
+      fragment = [[NSString alloc] initWithData:fragmentBuffer encoding:NSUTF8StringEncoding];
     } else {
-      fragment = [[[NSString alloc] initWithData:fragmentBuffer encoding:CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset))] autorelease];
+      fragment = [[NSString alloc] initWithData:fragmentBuffer encoding:CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset))];
     }
     [fragmentBuffer setLength:0];
     [result appendString:fragment];

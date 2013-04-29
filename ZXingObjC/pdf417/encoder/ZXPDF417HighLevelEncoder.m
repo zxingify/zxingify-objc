@@ -526,7 +526,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
       NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Non-encodable character detected: %c (Unicode: %C)", ch, (unichar)ch]
                                                            forKey:NSLocalizedDescriptionKey];
 
-      if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+      if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
       return -1;
     }
     idx++;

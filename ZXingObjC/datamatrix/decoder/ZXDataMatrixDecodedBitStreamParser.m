@@ -75,7 +75,7 @@ enum {
 @implementation ZXDataMatrixDecodedBitStreamParser
 
 + (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length error:(NSError **)error {
-  ZXBitSource *bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
+  ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes length:length];
   NSMutableString *result = [NSMutableString stringWithCapacity:100];
   NSMutableString *resultTrailer = [NSMutableString string];
   NSMutableArray *byteSegments = [NSMutableArray arrayWithCapacity:1];
@@ -126,13 +126,12 @@ enum {
   if ([resultTrailer length] > 0) {
     [result appendString:resultTrailer];
   }
-  return [[[ZXDecoderResult alloc] initWithRawBytes:bytes
+  return [[ZXDecoderResult alloc] initWithRawBytes:bytes
                                              length:length
                                                text:result
                                        byteSegments:[byteSegments count] == 0 ? nil : byteSegments
-                                            ecLevel:nil] autorelease];
+                                            ecLevel:nil];
 }
-
 
 /**
  * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
@@ -494,7 +493,7 @@ enum {
   }
   [byteSegments addObject:bytesArray];
 
-  [result appendString:[[[NSString alloc] initWithBytes:bytes length:count encoding:NSISOLatin1StringEncoding] autorelease]];
+  [result appendString:[[NSString alloc] initWithBytes:bytes length:count encoding:NSISOLatin1StringEncoding]];
   return YES;
 }
 

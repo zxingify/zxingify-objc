@@ -105,11 +105,11 @@ const unichar SETS[1][383] = {
       [result appendString:[self message:bytes length:length start:1 len:77]];
       break;
   }
-  return [[[ZXDecoderResult alloc] initWithRawBytes:bytes
+  return [[ZXDecoderResult alloc] initWithRawBytes:bytes
                                              length:length
                                                text:result
                                        byteSegments:nil
-                                            ecLevel:[NSString stringWithFormat:@"%d", mode]] autorelease];
+                                            ecLevel:[NSString stringWithFormat:@"%d", mode]];
 }
 
 + (int)bit:(int)bit bytes:(unsigned char *)bytes length:(unsigned int)length {

@@ -42,18 +42,14 @@
 }
 
 + (id)productParsedResultWithProductID:(NSString *)productID {
-  return [[[self alloc] initWithProductID:productID] autorelease];
+  return [[self alloc] initWithProductID:productID];
 }
 
 + (id)productParsedResultWithProductID:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID {
-  return [[[self alloc] initWithProductID:productID normalizedProductID:normalizedProductID] autorelease];
+  return [[self alloc] initWithProductID:productID normalizedProductID:normalizedProductID];
 }
 
 - (void)dealloc {
-  [productID release];
-  [normalizedProductID release];
-
-  [super dealloc];
 }
 
 - (NSString *)displayResult {

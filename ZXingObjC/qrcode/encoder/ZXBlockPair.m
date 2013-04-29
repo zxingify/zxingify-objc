@@ -55,8 +55,6 @@
     free(self.errorCorrectionBytes);
     self.errorCorrectionBytes = NULL;
   }
-
-  [super dealloc];
 }
 
 @end

@@ -151,7 +151,7 @@ const int EC_COEFFICIENTS[9][512] = {
   NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"No recommendation possible"
                                                        forKey:NSLocalizedDescriptionKey];
 
-  if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+  if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
   return -1;
 }
 

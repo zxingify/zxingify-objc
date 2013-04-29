@@ -43,9 +43,7 @@
 }
 
 - (void)dealloc {
-  [decodedInformation release];
 
-  [super dealloc];
 }
 
 @end

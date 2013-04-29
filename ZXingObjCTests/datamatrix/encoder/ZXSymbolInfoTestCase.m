@@ -68,7 +68,7 @@
   STAssertEquals(info.symbolWidth, 24, @"");
   STAssertEquals(info.symbolHeight, 24, @"");
 
-  ZXDimension *fixedSize = [[[ZXDimension alloc] initWithWidth:26 height:26] autorelease];
+  ZXDimension *fixedSize = [[ZXDimension alloc] initWithWidth:26 height:26];
   info = [ZXSymbolInfo lookup:35 shape:[ZXSymbolShapeHint forceNone] minSize:fixedSize maxSize:fixedSize fail:NO];
   STAssertEquals(info.symbolWidth, 26, @"");
   STAssertEquals(info.symbolHeight, 26, @"");
@@ -77,7 +77,7 @@
   STAssertNil(info, @"");
 
   ZXDimension *minSize = fixedSize;
-  ZXDimension *maxSize = [[[ZXDimension alloc] initWithWidth:32 height:32] autorelease];
+  ZXDimension *maxSize = [[ZXDimension alloc] initWithWidth:32 height:32];
 
   info = [ZXSymbolInfo lookup:35 shape:[ZXSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
   STAssertEquals(info.symbolWidth, 26, @"");

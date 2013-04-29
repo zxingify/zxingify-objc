@@ -22,7 +22,7 @@
 - (id)initWithInvocation:(NSInvocation *)anInvocation {
   self = [super initWithInvocation:anInvocation
                 testBasePathSuffix:@"Resources/blackbox/aztec-2"
-                     barcodeReader:[[[ZXAztecReader alloc] init] autorelease]
+                     barcodeReader:[[ZXAztecReader alloc] init]
                     expectedFormat:kBarcodeFormatAztec];
 
   if (self) {

@@ -76,7 +76,7 @@ static NSMutableDictionary *ENCODING_TO_ECI = nil;
 }
 
 + (void)addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
-  ZXCharacterSetECI *eci = [[[ZXCharacterSetECI alloc] initWithValue:value encoding:encoding] autorelease];
+  ZXCharacterSetECI *eci = [[ZXCharacterSetECI alloc] initWithValue:value encoding:encoding];
   [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
   [ENCODING_TO_ECI setObject:eci forKey:[NSNumber numberWithUnsignedInteger:encoding]];
 }

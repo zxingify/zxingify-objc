@@ -105,31 +105,14 @@
                                 emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes instantMessenger:(NSString *)instantMessenger
                                   note:(NSString *)note addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes org:(NSString *)org
                               birthday:(NSString *)birthday title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo {
-  return [[[self alloc] initWithNames:names nicknames:nicknames pronunciation:pronunciation phoneNumbers:phoneNumbers
+  return [[self alloc] initWithNames:names nicknames:nicknames pronunciation:pronunciation phoneNumbers:phoneNumbers
                            phoneTypes:phoneTypes emails:emails emailTypes:emailTypes
                      instantMessenger:instantMessenger note:note addresses:addresses
-                         addressTypes:addressTypes org:org birthday:birthday title:title urls:urls geo:geo] autorelease];
+                         addressTypes:addressTypes org:org birthday:birthday title:title urls:urls geo:geo];
 }
 
 - (void)dealloc {
-  [names release];
-  [nicknames release];
-  [pronunciation release];
-  [phoneNumbers release];
-  [phoneTypes release];
-  [emails release];
-  [emailTypes release];
-  [instantMessenger release];
-  [note release];
-  [addresses release];
-  [addressTypes release];
-  [org release];
-  [birthday release];
-  [title release];
-  [urls release];
-  [geo release];
 
-  [super dealloc];
 }
 
 - (NSString *)displayResult {

@@ -64,9 +64,6 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 }
 
 - (void)dealloc {
-  [decodeRowResult release];
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
@@ -140,8 +137,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
                          rawBytes:nil
                            length:0
                      resultPoints:[NSArray arrayWithObjects:
-                                   [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                   [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                   [[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
+                                   [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber], nil]
                            format:kBarcodeFormatCode93];
 }
 

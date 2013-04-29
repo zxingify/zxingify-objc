@@ -40,7 +40,7 @@
     return nil;
   }
 
-  ZXAztecDetectorResult *detectorResult = [[[[ZXAztecDetector alloc] initWithImage:matrix] autorelease] detectWithError:error];
+  ZXAztecDetectorResult *detectorResult = [[[ZXAztecDetector alloc] initWithImage:matrix] detectWithError:error];
   if (!detectorResult) {
     return nil;
   }
@@ -55,7 +55,7 @@
     }
   }
 
-  ZXDecoderResult *decoderResult = [[[[ZXAztecDecoder alloc] init] autorelease] decode:detectorResult error:error];
+  ZXDecoderResult *decoderResult = [[[ZXAztecDecoder alloc] init] decode:detectorResult error:error];
   if (!decoderResult) {
     return nil;
   }

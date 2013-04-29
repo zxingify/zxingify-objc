@@ -125,7 +125,7 @@ static NSArray *EXP900 = nil;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  return [[[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil] autorelease];
+  return [[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil];
 }
 
 

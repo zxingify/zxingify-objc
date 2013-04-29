@@ -38,11 +38,7 @@
 }
 
 - (void)dealloc {
-  [finderPattern release];
-
-  [super dealloc];
 }
-
 
 - (void)incrementCount {
   self.count++;

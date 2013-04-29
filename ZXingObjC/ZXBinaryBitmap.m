@@ -45,14 +45,11 @@
 }
 
 + (id)binaryBitmapWithBinarizer:(ZXBinarizer *)binarizer {
-  return [[[self alloc] initWithBinarizer:binarizer] autorelease];
+  return [[self alloc] initWithBinarizer:binarizer];
 }
 
 - (void)dealloc {
-  [binarizer release];
-  [matrix release];
 
-  [super dealloc];
 }
 
 - (int)width {
@@ -99,7 +96,7 @@
  */
 - (ZXBinaryBitmap *)crop:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
   ZXLuminanceSource *newSource = [[self.binarizer luminanceSource] crop:left top:top width:aWidth height:aHeight];
-  return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
+  return [[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]];
 }
 
 - (BOOL)rotateSupported {
@@ -113,12 +110,12 @@
  */
 - (ZXBinaryBitmap *)rotateCounterClockwise {
   ZXLuminanceSource *newSource = [[self.binarizer luminanceSource] rotateCounterClockwise];
-  return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
+  return [[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]];
 }
 
 - (ZXBinaryBitmap *)rotateCounterClockwise45 {
   ZXLuminanceSource *newSource = [[self.binarizer luminanceSource] rotateCounterClockwise45];
-  return [[[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]] autorelease];
+  return [[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]];
 }
 
 @end

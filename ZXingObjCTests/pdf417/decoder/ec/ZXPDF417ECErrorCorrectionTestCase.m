@@ -117,16 +117,14 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation {
   if (self = [super initWithInvocation:anInvocation]) {
-    self.ec = [[[ZXPDF417ECErrorCorrection alloc] init] autorelease];
+    self.ec = [[[ZXPDF417ECErrorCorrection alloc] init];
   }
 
   return self;
 }
 
 - (void)dealloc {
-  [ec release];
 
-  [super dealloc];
 }
 
 - (void)testNoError {
