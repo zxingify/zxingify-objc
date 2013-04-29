@@ -27,7 +27,7 @@
   hints.dataMatrixShape = [ZXSymbolShapeHint forceSquare];
 
   int bigEnough = 64;
-  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
+  ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"Hello Google" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertTrue(bigEnough >= matrix.width, @"Matrix width should be less than %d", bigEnough);
@@ -39,7 +39,7 @@
   hints.dataMatrixShape = [ZXSymbolShapeHint forceSquare];
 
   int bigEnough = 14;
-  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
+  ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"Hello Me" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
   STAssertEquals(matrix.width, bigEnough, @"Expected matrix width to equal %d", bigEnough);
@@ -49,7 +49,7 @@
 - (void)testDataMatrixTooSmall {
   // The DataMatrix will not fit in this size, so the matrix should come back bigger
   int tooSmall = 8;
-  ZXDataMatrixWriter *writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
+  ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatDataMatrix width:tooSmall height:tooSmall hints:nil error:nil];
 
   STAssertNotNil(matrix, @"Matrix should not be nil");

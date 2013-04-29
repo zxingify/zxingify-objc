@@ -40,18 +40,11 @@ const int MATRIX_HEIGHT = 33;
 
 - (id)init {
   if (self = [super init]) {
-    self.decoder = [[[ZXMaxiCodeDecoder alloc] init] autorelease];
+    self.decoder = [[ZXMaxiCodeDecoder alloc] init];
   }
 
   return self;
 }
-
-- (void) dealloc {
-  [decoder release];
-
-  [super dealloc];
-}
-
 
 /**
  * Locates and decodes a MaxiCode code in an image.
@@ -118,7 +111,7 @@ const int MATRIX_HEIGHT = 33;
   int height = [[enclosingRectangle objectAtIndex:3] intValue];
 
   // Now just read off the bits
-  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithWidth:MATRIX_WIDTH height:MATRIX_HEIGHT] autorelease];
+  ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithWidth:MATRIX_WIDTH height:MATRIX_HEIGHT];
   for (int y = 0; y < MATRIX_HEIGHT; y++) {
     int iy = top + (y * height + height / 2) / MATRIX_HEIGHT;
     for (int x = 0; x < MATRIX_WIDTH; x++) {

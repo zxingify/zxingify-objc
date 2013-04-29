@@ -126,13 +126,6 @@ const int MAX_PAIRS = 11;
   return self;
 }
 
-- (void)dealloc {
-  [pairs release];
-  [rows release];
-
-  [super dealloc];
-}
-
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   // Rows can start with even pattern in case in prev rows there where odd number of patters.
   // So lets try twice
@@ -209,13 +202,13 @@ const int MAX_PAIRS = 11;
 
 	[self.pairs removeAllObjects];
   if (reverse) {
-    self.rows = [[[[self.rows reverseObjectEnumerator] allObjects] mutableCopy] autorelease];
+    self.rows = [[[self.rows reverseObjectEnumerator] allObjects] mutableCopy];
   }
 
   NSMutableArray *ps = [self checkRows:[NSMutableArray array] current:0];
 
   if (reverse) {
-    self.rows = [[[[self.rows reverseObjectEnumerator] allObjects] mutableCopy] autorelease];
+    self.rows = [[[self.rows reverseObjectEnumerator] allObjects] mutableCopy];
   }
 
   return ps;
@@ -303,7 +296,7 @@ const int MAX_PAIRS = 11;
     return;
   }
 
-  [self.rows insertObject:[[[ZXExpandedRow alloc] initWithPairs:self.pairs rowNumber:rowNumber wasReversed:wasReversed] autorelease] atIndex:insertPos];
+  [self.rows insertObject:[[ZXExpandedRow alloc] initWithPairs:self.pairs rowNumber:rowNumber wasReversed:wasReversed] atIndex:insertPos];
 
   [self removePartialRows:self.pairs from:self.rows];
 }
@@ -464,7 +457,7 @@ const int MAX_PAIRS = 11;
 
   ZXDataCharacter *rightChar = [self decodeDataCharacter:row pattern:pattern isOddPattern:isOddPattern leftChar:NO];
   BOOL mayBeLast = YES;
-  return [[[ZXExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:pattern mayBeLast:mayBeLast] autorelease];
+  return [[ZXExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:pattern mayBeLast:mayBeLast];
 }
 
 - (BOOL)findNextPair:(ZXBitArray *)row previousPairs:(NSMutableArray *)previousPairs forcedOffset:(int)forcedOffset {
@@ -587,7 +580,7 @@ const int MAX_PAIRS = 11;
   if (value == -1) {
     return nil;
   }
-  return [[[ZXRSSFinderPattern alloc] initWithValue:value startEnd:[NSMutableArray arrayWithObjects:[NSNumber numberWithInt:start], [NSNumber numberWithInt:end], nil] start:start end:end rowNumber:rowNumber] autorelease];
+  return [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:[NSMutableArray arrayWithObjects:[NSNumber numberWithInt:start], [NSNumber numberWithInt:end], nil] start:start end:end rowNumber:rowNumber];
 }
 
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
@@ -689,7 +682,7 @@ const int MAX_PAIRS = 11;
   int tEven = EVEN_TOTAL_SUBSET[group];
   int gSum = GSUM[group];
   int value = vOdd * tEven + vEven + gSum;
-  return [[[ZXDataCharacter alloc] initWithValue:value checksumPortion:checksumPortion] autorelease];
+  return [[ZXDataCharacter alloc] initWithValue:value checksumPortion:checksumPortion];
 }
 
 - (BOOL)isNotA1left:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {

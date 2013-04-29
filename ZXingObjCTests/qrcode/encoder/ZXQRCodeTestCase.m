@@ -24,7 +24,7 @@
 @implementation ZXQRCodeTestCase
 
 - (void)test {
-  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
+  ZXQRCode *qrCode = [[ZXQRCode alloc] init];
 
   // First, test simple setters and getters.
   // We use numbers of version 7-H.
@@ -40,7 +40,7 @@
   STAssertEquals(qrCode.maskPattern, 3, @"Expected qrCode maskPattern to be 3");
 
   // Prepare the matrix.
-  ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:45 height:45] autorelease];
+  ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:45 height:45];
   // Just set bogus zero/one values.
   for (int y = 0; y < 45; ++y) {
     for (int x = 0; x < 45; ++x) {
@@ -54,7 +54,7 @@
 }
 
 - (void)testToString1 {
-  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
+  ZXQRCode *qrCode = [[ZXQRCode alloc] init];
   NSString *expected =
     @"<<\n"
      " mode: (null)\n"
@@ -67,12 +67,12 @@
 }
 
 - (void)testToString2 {
-  ZXQRCode *qrCode = [[[ZXQRCode alloc] init] autorelease];
+  ZXQRCode *qrCode = [[ZXQRCode alloc] init];
   qrCode.mode = [ZXMode byteMode];
   qrCode.ecLevel = [ZXErrorCorrectionLevel errorCorrectionLevelH];
   qrCode.version = [ZXQRCodeVersion versionForNumber:1];
   qrCode.maskPattern = 3;
-  ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:21 height:21] autorelease];
+  ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:21 height:21];
   for (int y = 0; y < 21; ++y) {
     for (int x = 0; x < 21; ++x) {
       [matrix setX:x y:y intValue:(y + x) % 2];

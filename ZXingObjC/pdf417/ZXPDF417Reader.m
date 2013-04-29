@@ -43,16 +43,9 @@
 
 - (id)init {
   if (self = [super init]) {
-    self.decoder = [[[ZXPDF417Decoder alloc] init] autorelease];
+    self.decoder = [[ZXPDF417Decoder alloc] init];
   }
   return self;
-}
-
-
-- (void)dealloc {
-  [decoder release];
-
-  [super dealloc];
 }
 
 /**
@@ -81,7 +74,7 @@
     }
     points = [NSArray array];
   } else {
-    ZXDetectorResult *detectorResult = [[[[ZXPDF417Detector alloc] initWithImage:image] autorelease] detectWithError:error];
+    ZXDetectorResult *detectorResult = [[[ZXPDF417Detector alloc] initWithImage:image] detectWithError:error];
     if (!detectorResult) {
       return nil;
     }
@@ -142,7 +135,7 @@
   top += nudge;
   left += nudge;
 
-  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight] autorelease];
+  ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight];
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + y * moduleSize;
     for (int x = 0; x < matrixWidth; x++) {

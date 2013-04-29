@@ -69,25 +69,25 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 + (void)initialize {
   PARSERS = [[NSArray alloc] initWithObjects:
-             [[[ZXBookmarkDoCoMoResultParser alloc] init] autorelease],
-             [[[ZXAddressBookDoCoMoResultParser alloc] init] autorelease],
-             [[[ZXEmailDoCoMoResultParser alloc] init] autorelease],
-             [[[ZXAddressBookAUResultParser alloc] init] autorelease],
-             [[[ZXVCardResultParser alloc] init] autorelease],
-             [[[ZXBizcardResultParser alloc] init] autorelease],
-             [[[ZXVEventResultParser alloc] init] autorelease],
-             [[[ZXEmailAddressResultParser alloc] init] autorelease],
-             [[[ZXSMTPResultParser alloc] init] autorelease],
-             [[[ZXTelResultParser alloc] init] autorelease],
-             [[[ZXSMSMMSResultParser alloc] init] autorelease],
-             [[[ZXSMSTOMMSTOResultParser alloc] init] autorelease],
-             [[[ZXGeoResultParser alloc] init] autorelease],
-             [[[ZXWifiResultParser alloc] init] autorelease],
-             [[[ZXURLTOResultParser alloc] init] autorelease],
-             [[[ZXURIResultParser alloc] init] autorelease],
-             [[[ZXISBNResultParser alloc] init] autorelease],
-             [[[ZXProductResultParser alloc] init] autorelease],
-             [[[ZXExpandedProductResultParser alloc] init] autorelease], nil];
+             [[ZXBookmarkDoCoMoResultParser alloc] init],
+             [[ZXAddressBookDoCoMoResultParser alloc] init],
+             [[ZXEmailDoCoMoResultParser alloc] init],
+             [[ZXAddressBookAUResultParser alloc] init],
+             [[ZXVCardResultParser alloc] init],
+             [[ZXBizcardResultParser alloc] init],
+             [[ZXVEventResultParser alloc] init],
+             [[ZXEmailAddressResultParser alloc] init],
+             [[ZXSMTPResultParser alloc] init],
+             [[ZXTelResultParser alloc] init],
+             [[ZXSMSMMSResultParser alloc] init],
+             [[ZXSMSTOMMSTOResultParser alloc] init],
+             [[ZXGeoResultParser alloc] init],
+             [[ZXWifiResultParser alloc] init],
+             [[ZXURLTOResultParser alloc] init],
+             [[ZXURIResultParser alloc] init],
+             [[ZXISBNResultParser alloc] init],
+             [[ZXProductResultParser alloc] init],
+             [[ZXExpandedProductResultParser alloc] init], nil];
   DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
   ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
 }

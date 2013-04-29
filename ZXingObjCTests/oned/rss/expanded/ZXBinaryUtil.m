@@ -25,7 +25,7 @@
 + (ZXBitArray *)buildBitArrayFromString:(NSString *)data {
   NSString *dotsAndXs = [[data stringByReplacingOccurrencesOfString:@"1" withString:@"X"]
                          stringByReplacingOccurrencesOfString:@"0" withString:@"."];
-  ZXBitArray *binary = [[[ZXBitArray alloc] initWithSize:[dotsAndXs stringByReplacingOccurrencesOfString:@" " withString:@""].length] autorelease];
+  ZXBitArray *binary = [[ZXBitArray alloc] initWithSize:[dotsAndXs stringByReplacingOccurrencesOfString:@" " withString:@""].length];
   int counter = 0;
 
   for(int i = 0; i < dotsAndXs.length; ++i){

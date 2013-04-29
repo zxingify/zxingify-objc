@@ -98,19 +98,11 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 - (id)init {
   if (self = [super init]) {
     self.decodeRowNSMutableString = [NSMutableString stringWithCapacity:20];
-    self.extensionReader = [[[ZXUPCEANExtensionSupport alloc] init] autorelease];
-    self.eanManSupport = [[[ZXEANManufacturerOrgSupport alloc] init] autorelease];
+    self.extensionReader = [[ZXUPCEANExtensionSupport alloc] init];
+    self.eanManSupport = [[ZXEANManufacturerOrgSupport alloc] init];
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [decodeRowNSMutableString release];
-  [extensionReader release];
-  [eanManSupport release];
-
-  [super dealloc];
 }
 
 + (NSRange)findStartGuardPattern:(ZXBitArray *)row error:(NSError **)error {
@@ -149,7 +141,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:(startGuardRange.location + NSMaxRange(startGuardRange)) / 2.0f y:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[ZXResultPoint alloc] initWithX:(startGuardRange.location + NSMaxRange(startGuardRange)) / 2.0f y:rowNumber]];
   }
 
   NSMutableString *result = [NSMutableString string];
@@ -159,7 +151,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   }
 
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:endStart y:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[ZXResultPoint alloc] initWithX:endStart y:rowNumber]];
   }
 
   NSRange endRange = [self decodeEnd:row endStart:endStart error:error];
@@ -168,7 +160,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   }
 
   if (resultPointCallback != nil) {
-    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:(endRange.location + NSMaxRange(endRange)) / 2.0f y:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[ZXResultPoint alloc] initWithX:(endRange.location + NSMaxRange(endRange)) / 2.0f y:rowNumber]];
   }
 
   // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
@@ -189,11 +181,12 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   float left = (float)(NSMaxRange(startGuardRange) + startGuardRange.location) / 2.0f;
   float right = (float)(NSMaxRange(endRange) + endRange.location) / 2.0f;
   ZXBarcodeFormat format = [self barcodeFormat];
+
   ZXResult *decodeResult = [ZXResult resultWithText:resultString
-                                            rawBytes:NULL
-                                              length:0
-                                        resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease], [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
-                                              format:format];
+                                           rawBytes:NULL
+                                             length:0
+                                       resultPoints:[NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber], [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber], nil]
+                                             format:format];
 
   ZXResult *extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
   if (extensionResult) {

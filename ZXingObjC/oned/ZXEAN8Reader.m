@@ -44,8 +44,6 @@
     free(self.decodeMiddleCounters);
     self.decodeMiddleCounters = NULL;
   }
-
-  [super dealloc];
 }
 
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {

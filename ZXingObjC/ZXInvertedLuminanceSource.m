@@ -21,16 +21,10 @@
 - (id)initWithDelegate:(ZXLuminanceSource *)delegate {
   self = [super initWithWidth:delegate.width height:delegate.height];
   if (self) {
-    _delegate = [delegate retain];
+    _delegate = delegate;
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [_delegate release];
-
-  [super dealloc];
 }
 
 - (unsigned char *)row:(int)y {
@@ -57,7 +51,7 @@
 }
 
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
-  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate crop:left top:top width:aWidth height:aHeight]] autorelease];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate crop:left top:top width:aWidth height:aHeight]];
 }
 
 - (BOOL)rotateSupported {
@@ -72,11 +66,11 @@
 }
 
 - (ZXLuminanceSource *)rotateCounterClockwise {
-  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise]] autorelease];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise]];
 }
 
 - (ZXLuminanceSource *)rotateCounterClockwise45 {
-  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise45]] autorelease];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise45]];
 }
 
 @end

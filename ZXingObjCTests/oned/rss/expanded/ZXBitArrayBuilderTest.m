@@ -57,19 +57,19 @@
     if (i == 0) {
       leftChar = nil;
     } else {
-      leftChar = [[[ZXDataCharacter alloc] initWithValue:pair[0] checksumPortion:0] autorelease];
+      leftChar = [[ZXDataCharacter alloc] initWithValue:pair[0] checksumPortion:0];
     }
 
     ZXDataCharacter *rightChar;
     if (i == 0) {
-      rightChar = [[[ZXDataCharacter alloc] initWithValue:pair[0] checksumPortion:0] autorelease];
+      rightChar = [[ZXDataCharacter alloc] initWithValue:pair[0] checksumPortion:0];
     } else if (lengths[i] == 2) {
-      rightChar = [[[ZXDataCharacter alloc] initWithValue:pair[1] checksumPortion:0] autorelease];
+      rightChar = [[ZXDataCharacter alloc] initWithValue:pair[1] checksumPortion:0];
     } else {
       rightChar = nil;
     }
 
-    ZXExpandedPair *expandedPair = [[[ZXExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:nil mayBeLast:YES] autorelease];
+    ZXExpandedPair *expandedPair = [[ZXExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:nil mayBeLast:YES];
     [pairs addObject:expandedPair];
   }
 

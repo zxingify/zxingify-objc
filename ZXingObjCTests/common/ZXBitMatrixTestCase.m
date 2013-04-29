@@ -21,7 +21,7 @@
 @implementation ZXBitMatrixTestCase
 
 - (void)testGetSet {
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithDimension:33] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:33];
   STAssertEquals(matrix.height, 33, @"Expected matrix height to be 33");
   for (int y = 0; y < 33; y++) {
     for (int x = 0; x < 33; x++) {
@@ -38,7 +38,7 @@
 }
 
 - (void)testSetRegion {
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithDimension:5] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:5];
   [matrix setRegionAtLeft:1 top:1 width:3 height:3];
   for (int y = 0; y < 5; y++) {
     for (int x = 0; x < 5; x++) {
@@ -49,7 +49,7 @@
 }
 
 - (void)testRectangularMatrix {
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:75 height:20] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:75 height:20];
   STAssertEquals(matrix.width, 75, @"Expected matrix.width to be 75");
   STAssertEquals(matrix.height, 20, @"Expected matrix.height to be 20");
   [matrix setX:10 y:0];
@@ -75,7 +75,7 @@
 }
 
 - (void)testRectangularSetRegion {
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:320 height:240] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:320 height:240];
   STAssertEquals(matrix.width, 320, @"Expected matrix.width to be 320");
   STAssertEquals(matrix.height, 240, @"Expected matrix.height to be 240");
   [matrix setRegionAtLeft:105 top:22 width:80 height:12];
@@ -90,7 +90,7 @@
 }
 
 - (void)testGetRow {
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:102 height:5] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:102 height:5];
   for (int x = 0; x < 102; x++) {
     if ((x & 0x03) == 0) {
       [matrix setX:x y:2];
@@ -102,12 +102,12 @@
   STAssertEquals(array.size, 102, @"Expected array.size to equal 102");
 
   // Should reallocate
-  ZXBitArray *array2 = [[[ZXBitArray alloc] initWithSize:60] autorelease];
+  ZXBitArray *array2 = [[ZXBitArray alloc] initWithSize:60];
   array2 = [matrix rowAtY:2 row:array2];
   STAssertEquals(array2.size, 102, @"Expected array2.size to equal 102");
 
   // Should use provided object, with original BitArray size
-  ZXBitArray *array3 = [[[ZXBitArray alloc] initWithSize:200] autorelease];
+  ZXBitArray *array3 = [[ZXBitArray alloc] initWithSize:200];
   array3 = [matrix rowAtY:2 row:array3];
   STAssertEquals(array3.size, 200, @"Expected array3.size to equal 200");
 

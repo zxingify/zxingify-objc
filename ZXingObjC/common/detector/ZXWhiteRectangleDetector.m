@@ -57,7 +57,6 @@ int const CORR = 1;
     self.upInit = (self.height - INIT_SIZE) >> 1;
     self.downInit = (self.height + INIT_SIZE) >> 1;
     if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
-      [self release];
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
@@ -77,19 +76,12 @@ int const CORR = 1;
     self.upInit = y - halfsize;
     self.downInit = y + halfsize;
     if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
-      [self release];
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [image release];
-
-  [super dealloc];
 }
 
 /**
@@ -259,7 +251,7 @@ int const CORR = 1;
     int x = [ZXMathUtils round:aX + i * xStep];
     int y = [ZXMathUtils round:aY + i * yStep];
     if ([self.image getX:x y:y]) {
-      return [[[ZXResultPoint alloc] initWithX:x y:y] autorelease];
+      return [[ZXResultPoint alloc] initWithX:x y:y];
     }
   }
 
@@ -293,15 +285,15 @@ int const CORR = 1;
   float tj = t.y;
 
   if (yi < self.width / 2.0f) {
-    return [NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:ti - CORR y:tj + CORR] autorelease],
-            [[[ZXResultPoint alloc] initWithX:zi + CORR y:zj + CORR] autorelease],
-            [[[ZXResultPoint alloc] initWithX:xi - CORR y:xj - CORR] autorelease],
-            [[[ZXResultPoint alloc] initWithX:yi + CORR y:yj - CORR] autorelease], nil];
+    return [NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:ti - CORR y:tj + CORR],
+            [[ZXResultPoint alloc] initWithX:zi + CORR y:zj + CORR],
+            [[ZXResultPoint alloc] initWithX:xi - CORR y:xj - CORR],
+            [[ZXResultPoint alloc] initWithX:yi + CORR y:yj - CORR], nil];
   } else {
-    return [NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:ti + CORR y:tj + CORR] autorelease],
-            [[[ZXResultPoint alloc] initWithX:zi + CORR y:zj - CORR] autorelease],
-            [[[ZXResultPoint alloc] initWithX:xi - CORR y:xj + CORR] autorelease],
-            [[[ZXResultPoint alloc] initWithX:yi - CORR y:yj - CORR] autorelease], nil];
+    return [NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:ti + CORR y:tj + CORR],
+            [[ZXResultPoint alloc] initWithX:zi + CORR y:zj - CORR],
+            [[ZXResultPoint alloc] initWithX:xi - CORR y:xj + CORR],
+            [[ZXResultPoint alloc] initWithX:yi - CORR y:yj - CORR], nil];
   }
 }
 

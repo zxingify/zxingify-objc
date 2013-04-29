@@ -23,7 +23,7 @@
 @implementation ZXQRCodeDecodedBitStreamParserTestCase
 
 - (void)testSimpleByteMode {
-  ZXBitSourceBuilder *builder = [[[ZXBitSourceBuilder alloc] init] autorelease];
+  ZXBitSourceBuilder *builder = [[ZXBitSourceBuilder alloc] init];
   [builder write:0x04 numBits:4]; // Byte mode
   [builder write:0x03 numBits:8]; // 3 bytes
   [builder write:0xF1 numBits:8];
@@ -36,7 +36,7 @@
 }
 
 - (void)testSimpleSJIS {
-  ZXBitSourceBuilder *builder = [[[ZXBitSourceBuilder alloc] init] autorelease];
+  ZXBitSourceBuilder *builder = [[ZXBitSourceBuilder alloc] init];
   [builder write:0x04 numBits:4]; // Byte mode
   [builder write:0x04 numBits:8]; // 4 bytes
   [builder write:0xA1 numBits:8];
@@ -50,7 +50,7 @@
 }
 
 - (void)testECI {
-  ZXBitSourceBuilder *builder = [[[ZXBitSourceBuilder alloc] init] autorelease];
+  ZXBitSourceBuilder *builder = [[ZXBitSourceBuilder alloc] init];
   [builder write:0x07 numBits:4]; // ECI mode
   [builder write:0x02 numBits:8]; // ECI 2 = CP437 encoding
   [builder write:0x04 numBits:4]; // Byte mode
@@ -65,7 +65,7 @@
 }
 
 - (void)testHanzi {
-  ZXBitSourceBuilder *builder = [[[ZXBitSourceBuilder alloc] init] autorelease];
+  ZXBitSourceBuilder *builder = [[ZXBitSourceBuilder alloc] init];
   [builder write:0x0D numBits:4]; // Hanzi mode
   [builder write:0x01 numBits:4]; // Subset 1 = GB2312 encoding
   [builder write:0x01 numBits:8]; // 1 characters

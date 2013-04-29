@@ -174,7 +174,7 @@ static int WORD_SIZE[33] = {
   }
 
   // generate check words
-  ZXReedSolomonEncoder *rs = [[[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]] autorelease];
+  ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
   int totalSizeInFullWords = totalSymbolBits / wordSize;
 
   int messageWords[totalSizeInFullWords];
@@ -183,7 +183,7 @@ static int WORD_SIZE[33] = {
 
   // convert to bit array and pad in the beginning
   int startPad = totalSymbolBits % wordSize;
-  ZXBitArray *messageBits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *messageBits = [[ZXBitArray alloc] init];
   [messageBits appendBits:0 numBits:startPad];
   for (int i = 0; i < totalSizeInFullWords; i++) {
     [messageBits appendBits:messageWords[i] numBits:wordSize];
@@ -212,7 +212,7 @@ static int WORD_SIZE[33] = {
       alignmentMap[origCenter + i] = center + newOffset + 1;
     }
   }
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithDimension:matrixSize] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:matrixSize];
 
   // draw mode and data bits
   for (int i = 0, rowOffset = 0; i < layers; i++) {
@@ -253,7 +253,7 @@ static int WORD_SIZE[33] = {
     }
   }
 
-  ZXAztecCode *aztec = [[[ZXAztecCode alloc] init] autorelease];
+  ZXAztecCode *aztec = [[ZXAztecCode alloc] init];
   aztec.compact = compact;
   aztec.size = matrixSize;
   aztec.layers = layers;
@@ -280,7 +280,7 @@ static int WORD_SIZE[33] = {
 }
 
 + (ZXBitArray *)generateModeMessageCompact:(BOOL)compact layers:(int)layers messageSizeInWords:(int)messageSizeInWords {
-  ZXBitArray *modeMessage = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *modeMessage = [[ZXBitArray alloc] init];
   if (compact) {
     [modeMessage appendBits:layers - 1 numBits:2];
     [modeMessage appendBits:messageSizeInWords - 1 numBits:6];
@@ -332,7 +332,7 @@ static int WORD_SIZE[33] = {
   for (int i = messageSizeInWords * wordSize - stuffedBits.size; i > 0; i--) {
     [stuffedBits appendBit:YES];
   }
-  ZXReedSolomonEncoder *rs = [[[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]] autorelease];
+  ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
   int totalSizeInFullWords = totalSymbolBits / wordSize;
 
   int messageWords[totalSizeInFullWords];
@@ -340,7 +340,7 @@ static int WORD_SIZE[33] = {
 
   [rs encode:messageWords toEncodeLen:totalSizeInFullWords ecBytes:totalSizeInFullWords - messageSizeInWords];
   int startPad = totalSymbolBits % wordSize;
-  ZXBitArray *messageBits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *messageBits = [[ZXBitArray alloc] init];
   [messageBits appendBits:0 numBits:startPad];
   for (int i = 0; i < totalSizeInFullWords; i++) {
     [messageBits appendBits:messageWords[i] numBits:wordSize];
@@ -378,7 +378,7 @@ static int WORD_SIZE[33] = {
 }
 
 + (ZXBitArray *)stuffBits:(ZXBitArray *)bits wordSize:(int)wordSize {
-  ZXBitArray *arrayOut = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *arrayOut = [[ZXBitArray alloc] init];
 
   // 1. stuff the bits
   int n = bits.size;
@@ -420,7 +420,7 @@ static int WORD_SIZE[33] = {
 }
 
 + (ZXBitArray *)highLevelEncode:(unsigned char *)data len:(int)len {
-  ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *bits = [[ZXBitArray alloc] init];
   int mode = TABLE_UPPER;
   int idx[5] = {0, 0, 0, 0, 0};
   int idxnext[5] = {0, 0, 0, 0, 0};

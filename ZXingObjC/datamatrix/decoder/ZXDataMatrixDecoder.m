@@ -39,18 +39,11 @@
 
 - (id) init {
   if (self = [super init]) {
-    self.rsDecoder = [[[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF DataMatrixField256]] autorelease];
+    self.rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF DataMatrixField256]];
   }
 
   return self;
 }
-
-- (void) dealloc {
-  [rsDecoder release];
-
-  [super dealloc];
-}
-
 
 /**
  * Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
@@ -58,7 +51,7 @@
  */
 - (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error {
   int dimension = length;
-  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+  ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithDimension:dimension];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if (image[i][j]) {
@@ -76,7 +69,7 @@
  * to mean a black module.
  */
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
-  ZXDataMatrixBitMatrixParser *parser = [[[ZXDataMatrixBitMatrixParser alloc] initWithBitMatrix:bits error:error] autorelease];
+  ZXDataMatrixBitMatrixParser *parser = [[ZXDataMatrixBitMatrixParser alloc] initWithBitMatrix:bits error:error];
   if (!parser) {
     return nil;
   }

@@ -53,18 +53,12 @@
   return self;
 }
 
-- (void)dealloc {
-  [ecBlocks release];
-
-  [super dealloc];
-}
-
 + (ZXQRCodeECBlocks *)ecBlocksWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)ecBlocks {
-  return [[[ZXQRCodeECBlocks alloc] initWithEcCodewordsPerBlock:ecCodewordsPerBlock ecBlocks:ecBlocks] autorelease];
+  return [[ZXQRCodeECBlocks alloc] initWithEcCodewordsPerBlock:ecCodewordsPerBlock ecBlocks:ecBlocks];
 }
 
 + (ZXQRCodeECBlocks *)ecBlocksWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2 {
-  return [[[ZXQRCodeECBlocks alloc] initWithEcCodewordsPerBlock:ecCodewordsPerBlock ecBlocks1:ecBlocks1 ecBlocks2:ecBlocks2] autorelease];
+  return [[ZXQRCodeECBlocks alloc] initWithEcCodewordsPerBlock:ecCodewordsPerBlock ecBlocks1:ecBlocks1 ecBlocks2:ecBlocks2];
 }
 
 - (int)numBlocks {
@@ -105,7 +99,7 @@
 }
 
 + (ZXQRCodeECB *)ecbWithCount:(int)count dataCodewords:(int)dataCodewords {
-  return [[[ZXQRCodeECB alloc] initWithCount:count dataCodewords:dataCodewords] autorelease];
+  return [[ZXQRCodeECB alloc] initWithCount:count dataCodewords:dataCodewords];
 }
 
 @end
@@ -163,15 +157,8 @@ static NSArray *VERSIONS = nil;
   return self;
 }
 
-- (void)dealloc {
-  [alignmentPatternCenters release];
-  [ecBlocks release];
-
-  [super dealloc];
-}
-
 + (ZXQRCodeVersion *)ZXQRCodeVersionWithVersionNumber:(int)aVersionNumber alignmentPatternCenters:(NSArray *)anAlignmentPatternCenters ecBlocks1:(ZXQRCodeECBlocks *)ecBlocks1 ecBlocks2:(ZXQRCodeECBlocks *)ecBlocks2 ecBlocks3:(ZXQRCodeECBlocks *)ecBlocks3 ecBlocks4:(ZXQRCodeECBlocks *)ecBlocks4 {
-  return [[[ZXQRCodeVersion alloc] initWithVersionNumber:aVersionNumber alignmentPatternCenters:anAlignmentPatternCenters ecBlocks1:ecBlocks1 ecBlocks2:ecBlocks2 ecBlocks3:ecBlocks3 ecBlocks4:ecBlocks4] autorelease];
+  return [[ZXQRCodeVersion alloc] initWithVersionNumber:aVersionNumber alignmentPatternCenters:anAlignmentPatternCenters ecBlocks1:ecBlocks1 ecBlocks2:ecBlocks2 ecBlocks3:ecBlocks3 ecBlocks4:ecBlocks4];
 }
 
 - (int)dimensionForVersion {
@@ -229,7 +216,7 @@ static NSArray *VERSIONS = nil;
  */
 - (ZXBitMatrix *)buildFunctionPattern {
   int dimension = [self dimensionForVersion];
-  ZXBitMatrix *bitMatrix = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+  ZXBitMatrix *bitMatrix = [[ZXBitMatrix alloc] initWithDimension:dimension];
   [bitMatrix setRegionAtLeft:0 top:0 width:9 height:9];
   [bitMatrix setRegionAtLeft:dimension - 8 top:0 width:8 height:9];
   [bitMatrix setRegionAtLeft:0 top:dimension - 8 width:9 height:8];

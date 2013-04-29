@@ -50,12 +50,4 @@
   return self;
 }
 
-- (void) dealloc {
-  [text release];
-  [byteSegments release];
-  [ecLevel release];
-
-  [super dealloc];
-}
-
 @end

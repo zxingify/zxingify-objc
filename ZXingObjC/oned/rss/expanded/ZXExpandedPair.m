@@ -46,14 +46,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [leftChar release];
-  [rightChar release];
-  [finderPattern release];
-
-  [super dealloc];
-}
-
 - (BOOL)mustBeLast {
   return self.rightChar == nil;
 }

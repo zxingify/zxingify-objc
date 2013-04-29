@@ -42,16 +42,9 @@ static NSArray *FOR_BITS = nil;
   return self;
 }
 
-- (void)dealloc {
-  [name release];
-
-  [super dealloc];
-}
-
 - (NSString *)description {
   return self.name;
 }
-
 
 + (ZXErrorCorrectionLevel *)forBits:(int)bits {
   if (!FOR_BITS) {

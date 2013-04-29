@@ -86,12 +86,6 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   return self;
 }
 
-- (void)dealloc {
-  [errorCorrectionLevel release];
-
-  [super dealloc];
-}
-
 + (int)numBitsDiffering:(int)a b:(int)b {
   a ^= b;
   return BITS_SET_IN_HALF_BYTE[a & 0x0F] +
@@ -119,7 +113,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP_LEN; i++) {
     int targetInfo = FORMAT_INFO_DECODE_LOOKUP[i][0];
     if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
-      return [[[ZXFormatInformation alloc] initWithFormatInfo:FORMAT_INFO_DECODE_LOOKUP[i][1]] autorelease];
+      return [[ZXFormatInformation alloc] initWithFormatInfo:FORMAT_INFO_DECODE_LOOKUP[i][1]];
     }
     int bitsDifference = [self numBitsDiffering:maskedFormatInfo1 b:targetInfo];
     if (bitsDifference < bestDifference) {
@@ -136,7 +130,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   }
 
   if (bestDifference <= 3) {
-    return [[[ZXFormatInformation alloc] initWithFormatInfo:bestFormatInfo] autorelease];
+    return [[ZXFormatInformation alloc] initWithFormatInfo:bestFormatInfo];
   }
   return nil;
 }

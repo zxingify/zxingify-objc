@@ -548,12 +548,6 @@ static float HEIGHT = 2.0f; //mm
   return self;
 }
 
-- (void)dealloc {
-  [barcodeMatrix release];
-
-  [super dealloc];
-}
-
 /**
  * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
  */
@@ -660,7 +654,7 @@ static float HEIGHT = 2.0f; //mm
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Encoded message contains to many code words, message to big (%d bytes)", msg.length]
                                                          forKey:NSLocalizedDescriptionKey];
 
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
     return NO;
   }
 
@@ -678,7 +672,7 @@ static float HEIGHT = 2.0f; //mm
   NSString *fullCodewords = [dataCodewords stringByAppendingString:ec];
 
   //4. step: low-level encoding
-  self.barcodeMatrix = [[[ZXBarcodeMatrix alloc] initWithHeight:rows width:cols] autorelease];
+  self.barcodeMatrix = [[ZXBarcodeMatrix alloc] initWithHeight:rows width:cols];
   [self encodeLowLevel:fullCodewords c:cols r:rows errorCorrectionLevel:anErrorCorrectionLevel logic:self.barcodeMatrix];
 
   return YES;
@@ -730,7 +724,7 @@ static float HEIGHT = 2.0f; //mm
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Unable to fit message in columns"
                                                          forKey:NSLocalizedDescriptionKey];
 
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
     return NO;
   }
 

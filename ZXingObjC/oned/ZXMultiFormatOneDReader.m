@@ -45,57 +45,51 @@
           [hints containsFormat:kBarcodeFormatUPCA] ||
           [hints containsFormat:kBarcodeFormatEan8] ||
           [hints containsFormat:kBarcodeFormatUPCE]) {
-        [self.readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
+        [self.readers addObject:[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode39]) {
-        [self.readers addObject:[[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit] autorelease]];
+        [self.readers addObject:[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode93]) {
-        [self.readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXCode93Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode128]) {
-        [self.readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXCode128Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatITF]) {
-        [self.readers addObject:[[[ZXITFReader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXITFReader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCodabar]) {
-        [self.readers addObject:[[[ZXCodaBarReader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXCodaBarReader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatRSS14]) {
-        [self.readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXRSS14Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatRSSExpanded]) {
-        [self.readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXRSSExpandedReader alloc] init]];
       }
     }
 
     if ([self.readers count] == 0) {
-      [self.readers addObject:[[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints] autorelease]];
-      [self.readers addObject:[[[ZXCode39Reader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXCodaBarReader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXCode93Reader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXCode128Reader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXITFReader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXRSS14Reader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXRSSExpandedReader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints]];
+      [self.readers addObject:[[ZXCode39Reader alloc] init]];
+      [self.readers addObject:[[ZXCodaBarReader alloc] init]];
+      [self.readers addObject:[[ZXCode93Reader alloc] init]];
+      [self.readers addObject:[[ZXCode128Reader alloc] init]];
+      [self.readers addObject:[[ZXITFReader alloc] init]];
+      [self.readers addObject:[[ZXRSS14Reader alloc] init]];
+      [self.readers addObject:[[ZXRSSExpandedReader alloc] init]];
     }
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [readers release];
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {

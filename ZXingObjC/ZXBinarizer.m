@@ -44,15 +44,8 @@
 }
 
 + (id)binarizerWithSource:(ZXLuminanceSource *)source {
-  return [[[self alloc] initWithSource:source] autorelease];
+  return [[self alloc] initWithSource:source];
 }
-
-- (void)dealloc {
-  [luminanceSource release];
-
-  [super dealloc];
-}
-
 
 /**
  * Converts one row of luminance data to 1 bit data. May actually do the conversion, or return
@@ -137,7 +130,6 @@
   }
 
   CGImageRef binary = CGBitmapContextCreateImage(context);
-  [NSMakeCollectable(binary) autorelease];
 
   CGContextRelease(context);
 

@@ -438,7 +438,7 @@ const int RANDOM_SEED = 3735928559;
 - (void)testEncodeDecodeRandom:(ZXGenericGF *)field dataSize:(int)dataSize ecSize:(int)ecSize {
   STAssertTrue(dataSize > 0 && dataSize <= field.size - 3, @"Invalid data size for %@", field);
   STAssertTrue(ecSize > 0 && ecSize + dataSize <= field.size, @"Invalid ECC size for %@", field);
-  ZXReedSolomonEncoder *encoder = [[[ZXReedSolomonEncoder alloc] initWithField:field] autorelease];
+  ZXReedSolomonEncoder *encoder = [[ZXReedSolomonEncoder alloc] initWithField:field];
   int message[dataSize + ecSize];
   int dataWords[dataSize];
   int ecWords[ecSize];
@@ -464,7 +464,7 @@ const int RANDOM_SEED = 3735928559;
 }
 
 - (void)testEncoder:(ZXGenericGF *)field dataWords:(int *)dataWords dataWordsLen:(int)dataWordsLen ecWords:(int *)ecWords ecWordsLen:(int)ecWordsLen {
-  ZXReedSolomonEncoder *encoder = [[[ZXReedSolomonEncoder alloc] initWithField:field] autorelease];
+  ZXReedSolomonEncoder *encoder = [[ZXReedSolomonEncoder alloc] initWithField:field];
 
   int length = dataWordsLen + ecWordsLen;
   int messageExpected[length];
@@ -478,7 +478,7 @@ const int RANDOM_SEED = 3735928559;
 }
 
 - (void)testDecoder:(ZXGenericGF *)field dataWords:(int *)dataWords dataWordsLen:(int)dataWordsLen ecWords:(int *)ecWords ecWordsLen:(int)ecWordsLen {
-  ZXReedSolomonDecoder *decoder = [[[ZXReedSolomonDecoder alloc] initWithField:field] autorelease];
+  ZXReedSolomonDecoder *decoder = [[ZXReedSolomonDecoder alloc] initWithField:field];
   int length = dataWordsLen + ecWordsLen;
   int message[length];
   int maxErrors = ecWordsLen / 2;

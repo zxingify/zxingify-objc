@@ -40,17 +40,10 @@
 - (id)initWithInformation:(ZXBitArray *)anInformation {
   if (self = [super init]) {
     self.information = anInformation;
-    self.generalDecoder = [[[ZXGeneralAppIdDecoder alloc] initWithInformation:anInformation] autorelease];
+    self.generalDecoder = [[ZXGeneralAppIdDecoder alloc] initWithInformation:anInformation];
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [information release];
-  [generalDecoder release];
-
-  [super dealloc];
 }
 
 - (NSString *)parseInformationWithError:(NSError **)error {
@@ -61,47 +54,47 @@
 
 + (ZXAbstractExpandedDecoder *)createDecoder:(ZXBitArray *)information {
   if ([information get:1]) {
-    return [[[ZXAI01AndOtherAIs alloc] initWithInformation:information] autorelease];
+    return [[ZXAI01AndOtherAIs alloc] initWithInformation:information];
   }
   if (![information get:2]) {
-    return [[[ZXAnyAIDecoder alloc] initWithInformation:information] autorelease];
+    return [[ZXAnyAIDecoder alloc] initWithInformation:information];
   }
 
   int fourBitEncodationMethod = [ZXGeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:4];
 
   switch (fourBitEncodationMethod) {
   case 4:
-    return [[[ZXAI013103decoder alloc] initWithInformation:information] autorelease];
+    return [[ZXAI013103decoder alloc] initWithInformation:information];
   case 5:
-    return [[[ZXAI01320xDecoder alloc] initWithInformation:information] autorelease];
+    return [[ZXAI01320xDecoder alloc] initWithInformation:information];
   }
 
   int fiveBitEncodationMethod = [ZXGeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:5];
   switch (fiveBitEncodationMethod) {
   case 12:
-    return [[[ZXAI01392xDecoder alloc] initWithInformation:information] autorelease];
+    return [[ZXAI01392xDecoder alloc] initWithInformation:information];
   case 13:
-    return [[[ZXAI01393xDecoder alloc] initWithInformation:information] autorelease];
+    return [[ZXAI01393xDecoder alloc] initWithInformation:information];
   }
   
   int sevenBitEncodationMethod = [ZXGeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:7];
   switch (sevenBitEncodationMethod) {
   case 56:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"11"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"11"];
   case 57:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"11"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"11"];
   case 58:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"13"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"13"];
   case 59:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"13"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"13"];
   case 60:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"15"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"15"];
   case 61:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"15"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"15"];
   case 62:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"17"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"310" dateCode:@"17"];
   case 63:
-    return [[[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"17"] autorelease];
+    return [[ZXAI013x0x1xDecoder alloc] initWithInformation:information firstAIdigits:@"320" dateCode:@"17"];
   }
 
   @throw [NSException exceptionWithName:NSInternalInconsistencyException

@@ -52,23 +52,12 @@
     }
 
     _message = [[NSString alloc] initWithString:sb];
-    _symbolShape = [[ZXSymbolShapeHint forceNone] retain];
+    _symbolShape = [ZXSymbolShapeHint forceNone];
     _codewords = [[NSMutableString alloc] initWithCapacity:msg.length];
     _newEncoding = -1;
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [_codewords release];
-  [_maxSize release];
-  [_message release];
-  [_minSize release];
-  [_symbolInfo release];
-  [_symbolShape release];
-
-  [super dealloc];
 }
 
 - (void)setSizeConstraints:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize {

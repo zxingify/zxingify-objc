@@ -48,12 +48,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [rowMatrix release];
-
-  [super dealloc];
-}
-
 - (void)setX:(int)x y:(int)y value:(unsigned char)value {
   [[self.rowMatrix objectAtIndex:y] setX:x value:value];
 }

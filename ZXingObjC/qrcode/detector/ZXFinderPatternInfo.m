@@ -41,12 +41,4 @@
   return self;
 }
 
-- (void)dealloc {
-  [bottomLeft release];
-  [topLeft release];
-  [topRight release];
-
-  [super dealloc];
-}
-
 @end

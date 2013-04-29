@@ -58,20 +58,11 @@
 }
 
 + (id)smsParsedResultWithNumber:(NSString *)number via:(NSString *)via subject:(NSString *)subject body:(NSString *)body {
-  return [[[self alloc] initWithNumber:number via:via subject:subject body:body] autorelease];
+  return [[self alloc] initWithNumber:number via:via subject:subject body:body];
 }
 
 + (id)smsParsedResultWithNumbers:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body {
-  return [[[self alloc] initWithNumbers:numbers vias:vias subject:subject body:body] autorelease];
-}
-
-- (void)dealloc {
-  [numbers release];
-  [vias release];
-  [subject release];
-  [body release];
-
-  [super dealloc];
+  return [[self alloc] initWithNumbers:numbers vias:vias subject:subject body:body];
 }
 
 - (NSString *)sMSURI {

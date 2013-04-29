@@ -66,9 +66,6 @@
     free(self.coefficients);
     self.coefficients = NULL;
   }
-  [field release];
-
-  [super dealloc];
 }
 
 - (int)degree {
@@ -135,7 +132,7 @@
     sumDiff[i] = [self.field add:smallerCoefficients[i - lengthDiff] b:largerCoefficients[i]];
   }
 
-  return [[[ZXModulusPoly alloc] initWithField:self.field coefficients:sumDiff coefficientsLen:largerCoefficientsLen] autorelease];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:sumDiff coefficientsLen:largerCoefficientsLen];
 }
 
 - (ZXModulusPoly *)subtract:(ZXModulusPoly *)other {
@@ -170,7 +167,7 @@
                                      b:[self.field multiply:aCoeff b:bCoefficients[j]]];
     }
   }
-  return [[[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:productLen] autorelease];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:productLen];
 }
 
 - (ZXModulusPoly *)negative {
@@ -179,7 +176,7 @@
   for (int i = 0; i < self.coefficientsLen; i++) {
     negativeCoefficients[i] = [self.field subtract:0 b:self.coefficients[i]];
   }
-  return [[[ZXModulusPoly alloc] initWithField:self.field coefficients:negativeCoefficients coefficientsLen:negativeCoefficientsLen] autorelease];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:negativeCoefficients coefficientsLen:negativeCoefficientsLen];
 }
 
 - (ZXModulusPoly *)multiplyScalar:(int)scalar {
@@ -194,7 +191,7 @@
   for (int i = 0; i < size; i++) {
     product[i] = [self.field multiply:self.coefficients[i] b:scalar];
   }
-  return [[[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size] autorelease];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size];
 }
 
 - (ZXModulusPoly *)multiplyByMonomial:(int)degree coefficient:(int)coefficient {
@@ -214,7 +211,7 @@
     }
   }
 
-  return [[[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size + degree] autorelease];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size + degree];
 }
 
 - (NSArray *)divide:(ZXModulusPoly *)other {

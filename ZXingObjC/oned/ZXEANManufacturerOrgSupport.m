@@ -40,13 +40,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [countryIdentifiers release];
-  [ranges release];
-
-  [super dealloc];
-}
-
 - (NSString *)lookupCountryIdentifier:(NSString *)productCode {
   [self initIfNeeded];
   

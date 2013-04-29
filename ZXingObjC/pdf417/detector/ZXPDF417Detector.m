@@ -84,19 +84,12 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   return self;
 }
 
-- (void)dealloc {
-  [image release];
-
-  [super dealloc];
-}
-
 /**
  * Detects a PDF417 Code in an image, simply.
  */
 - (ZXDetectorResult *)detectWithError:(NSError **)error {
   return [self detect:nil error:error];
 }
-
 
 /**
  * Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.
@@ -162,10 +155,10 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   if (!bits) {
     return nil;
   }
-  return [[[ZXDetectorResult alloc] initWithBits:bits
+  return [[ZXDetectorResult alloc] initWithBits:bits
                                           points:[NSArray arrayWithObjects:[vertices objectAtIndex:5],
                                                   [vertices objectAtIndex:4], [vertices objectAtIndex:6],
-                                                  [vertices objectAtIndex:7], nil]] autorelease];
+                                                  [vertices objectAtIndex:7], nil]];
 }
 
 
@@ -202,8 +195,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   for (int i = 0; i < height; i += rowStep) {
     NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
     if (loc.location != NSNotFound) {
-      [result replaceObjectAtIndex:0 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
-      [result replaceObjectAtIndex:4 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
+      [result replaceObjectAtIndex:0 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
+      [result replaceObjectAtIndex:4 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
       found = YES;
       break;
     }
@@ -214,8 +207,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     for (int i = height - 1; i > 0; i -= rowStep) {
       NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
       if (loc.location != NSNotFound) {
-        [result replaceObjectAtIndex:1 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
-        [result replaceObjectAtIndex:5 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
+        [result replaceObjectAtIndex:1 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
+        [result replaceObjectAtIndex:5 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
         found = YES;
         break;
       }
@@ -231,8 +224,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     for (int i = 0; i < height; i += rowStep) {
       NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
       if (loc.location != NSNotFound) {
-        [result replaceObjectAtIndex:2 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
-        [result replaceObjectAtIndex:6 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
+        [result replaceObjectAtIndex:2 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
+        [result replaceObjectAtIndex:6 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
         found = YES;
         break;
       }
@@ -244,8 +237,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     for (int i = height - 1; i > 0; i -= rowStep) {
       NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
       if (loc.location != NSNotFound) {
-        [result replaceObjectAtIndex:3 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
-        [result replaceObjectAtIndex:7 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
+        [result replaceObjectAtIndex:3 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
+        [result replaceObjectAtIndex:7 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
         found = YES;
         break;
       }
@@ -292,8 +285,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   for (int i = height - 1; i > 0; i -= rowStep) {
     NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int *)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
     if (loc.location != NSNotFound) {
-      [result replaceObjectAtIndex:0 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
-      [result replaceObjectAtIndex:4 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
+      [result replaceObjectAtIndex:0 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
+      [result replaceObjectAtIndex:4 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
       found = YES;
       break;
     }
@@ -304,8 +297,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     for (int i = 0; i < height; i += rowStep) {
       NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int *)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
       if (loc.location != NSNotFound) {
-        [result replaceObjectAtIndex:1 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
-        [result replaceObjectAtIndex:5 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
+        [result replaceObjectAtIndex:1 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
+        [result replaceObjectAtIndex:5 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
         found = YES;
         break;
       }
@@ -321,8 +314,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     for (int i = height - 1; i > 0; i -= rowStep) {
       NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int *)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
       if (loc.location != NSNotFound) {
-        [result replaceObjectAtIndex:2 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
-        [result replaceObjectAtIndex:6 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
+        [result replaceObjectAtIndex:2 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
+        [result replaceObjectAtIndex:6 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
         found = YES;
         break;
       }
@@ -334,8 +327,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     for (int i = 0; i < height; i += rowStep) {
       NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int *)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
       if (loc.location != NSNotFound) {
-        [result replaceObjectAtIndex:3 withObject:[[[ZXResultPoint alloc] initWithX:loc.location y:i] autorelease]];
-        [result replaceObjectAtIndex:7 withObject:[[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i] autorelease]];
+        [result replaceObjectAtIndex:3 withObject:[[ZXResultPoint alloc] initWithX:loc.location y:i]];
+        [result replaceObjectAtIndex:7 withObject:[[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i]];
         found = YES;
         break;
       }
@@ -372,8 +365,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v4x - v0x) * deltax / delta2;
     [vertices replaceObjectAtIndex:4
-                        withObject:[[[ZXResultPoint alloc] initWithX:v0x + correction * deltax
-                                                                   y:v0y + correction * deltay] autorelease]];
+                        withObject:[[ZXResultPoint alloc] initWithX:v0x + correction * deltax
+                                                                   y:v0y + correction * deltay]];
   } else if (-skew > SKEW_THRESHOLD) {
     // Fix v6
     float deltax = v2x - v4x;
@@ -381,8 +374,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v2x - v6x) * deltax / delta2;
     [vertices replaceObjectAtIndex:6
-                        withObject:[[[ZXResultPoint alloc] initWithX:v2x - correction * deltax
-                                                                   y:v2y - correction * deltay] autorelease]];
+                        withObject:[[ZXResultPoint alloc] initWithX:v2x - correction * deltax
+                                                                   y:v2y - correction * deltay]];
   }
   
   float v1x = [(ZXResultPoint *)[vertices objectAtIndex:1] x];
@@ -405,8 +398,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v5x - v1x) * deltax / delta2;
     [vertices replaceObjectAtIndex:5
-                        withObject:[[[ZXResultPoint alloc] initWithX:v1x + correction * deltax
-                                                                   y:v1y + correction * deltay] autorelease]];
+                        withObject:[[ZXResultPoint alloc] initWithX:v1x + correction * deltax
+                                                                   y:v1y + correction * deltay]];
   } else if (-skew > SKEW_THRESHOLD) {
     // Fix v7
     float deltax = v3x - v5x;
@@ -414,8 +407,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v3x - v7x) * deltax / delta2;
     [vertices replaceObjectAtIndex:7
-                        withObject:[[[ZXResultPoint alloc] initWithX:v3x - correction * deltax
-                                                                   y:v3y - correction * deltay] autorelease]];
+                        withObject:[[ZXResultPoint alloc] initWithX:v3x - correction * deltax
+                                                                   y:v3y - correction * deltay]];
   }
 }
 

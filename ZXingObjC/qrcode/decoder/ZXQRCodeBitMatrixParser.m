@@ -52,14 +52,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [bitMatrix release];
-  [parsedVersion release];
-  [parsedFormatInfo release];
-
-  [super dealloc];
-}
-
 /**
  * Reads format information from one of its two locations within the QR Code.
  */

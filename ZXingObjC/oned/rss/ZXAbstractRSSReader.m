@@ -144,8 +144,6 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
     free(self.evenCounts);
     self.evenCounts = NULL;
   }
-
-  [super dealloc];
 }
 
 + (int)parseFinderValue:(int *)counters countersSize:(unsigned int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType {

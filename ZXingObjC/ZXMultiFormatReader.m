@@ -48,7 +48,7 @@
 }
 
 + (id)reader {
-  return [[[ZXMultiFormatReader alloc] init] autorelease];
+  return [[ZXMultiFormatReader alloc] init];
 }
 
 /**
@@ -89,8 +89,7 @@
  * is important for performance in continuous scan clients.
  */
 - (void)setHints:(ZXDecodeHints *)_hints {
-  [hints release];
-  hints = [_hints retain];
+  hints = _hints;
 
   BOOL tryHarder = hints != nil && hints.tryHarder;
   self.readers = [NSMutableArray array];
@@ -107,38 +106,38 @@
       [hints containsFormat:kBarcodeFormatRSS14] ||
       [hints containsFormat:kBarcodeFormatRSSExpanded];
     if (addZXOneDReader && !tryHarder) {
-      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[ZXMultiFormatOneDReader alloc] initWithHints:hints]];
     }
     if ([hints containsFormat:kBarcodeFormatQRCode]) {
-      [self.readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXQRCodeReader alloc] init]];
     }
     if ([hints containsFormat:kBarcodeFormatDataMatrix]) {
-      [self.readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXDataMatrixReader alloc] init]];
     }
     if ([hints containsFormat:kBarcodeFormatAztec]) {
-      [self.readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXAztecReader alloc] init]];
     }
     if ([hints containsFormat:kBarcodeFormatPDF417]) {
-      [self.readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXPDF417Reader alloc] init]];
     }
     if ([hints containsFormat:kBarcodeFormatMaxiCode]) {
-      [self.readers addObject:[[[ZXMaxiCodeReader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXMaxiCodeReader alloc] init]];
     }
     if (addZXOneDReader && tryHarder) {
-      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[ZXMultiFormatOneDReader alloc] initWithHints:hints]];
     }
   }
   if ([self.readers count] == 0) {
     if (!tryHarder) {
-      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[ZXMultiFormatOneDReader alloc] initWithHints:hints]];
     }
-    [self.readers addObject:[[[ZXQRCodeReader alloc] init] autorelease]];
-    [self.readers addObject:[[[ZXDataMatrixReader alloc] init] autorelease]];
-    [self.readers addObject:[[[ZXAztecReader alloc] init] autorelease]];
-    [self.readers addObject:[[[ZXPDF417Reader alloc] init] autorelease]];
-    [self.readers addObject:[[[ZXMaxiCodeReader alloc] init] autorelease]];
+    [self.readers addObject:[[ZXQRCodeReader alloc] init]];
+    [self.readers addObject:[[ZXDataMatrixReader alloc] init]];
+    [self.readers addObject:[[ZXAztecReader alloc] init]];
+    [self.readers addObject:[[ZXPDF417Reader alloc] init]];
+    [self.readers addObject:[[ZXMaxiCodeReader alloc] init]];
     if (tryHarder) {
-      [self.readers addObject:[[[ZXMultiFormatOneDReader alloc] initWithHints:hints] autorelease]];
+      [self.readers addObject:[[ZXMultiFormatOneDReader alloc] initWithHints:hints]];
     }
   }
 }
@@ -163,13 +162,6 @@
 
   if (error) *error = NotFoundErrorInstance();
   return nil;
-}
-
-- (void)dealloc {
-  [hints release];
-  [readers release];
-
-  [super dealloc];
 }
 
 @end

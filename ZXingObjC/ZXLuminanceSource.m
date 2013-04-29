@@ -87,7 +87,7 @@
  * white and vice versa, and each value becomes (255-value).
  */
 - (ZXLuminanceSource *)invert {
-  return [[[ZXInvertedLuminanceSource alloc] initWithDelegate:self] autorelease];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:self];
 }
 
 /**

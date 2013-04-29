@@ -40,31 +40,20 @@
     int dimension = bitMatrix.height;
     if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
       if (error) *error = FormatErrorInstance();
-      [self release];
       return nil;
     }
     self.version = [self readVersion:bitMatrix];
     if (!self.version) {
       if (error) *error = FormatErrorInstance();
-      [self release];
       return nil;
     }
     self.mappingBitMatrix = [self extractDataRegion:bitMatrix];
-    self.readMappingMatrix = [[[ZXBitMatrix alloc] initWithWidth:mappingBitMatrix.width
-                                                          height:mappingBitMatrix.height] autorelease];
+    self.readMappingMatrix = [[ZXBitMatrix alloc] initWithWidth:mappingBitMatrix.width
+                                                          height:mappingBitMatrix.height];
   }
   
   return self;
 }
-
-- (void)dealloc {
-  [mappingBitMatrix release];
-  [readMappingMatrix release];
-  [version release];
-  
-  [super dealloc];
-}
-
 
 /**
  * Creates the version object based on the dimension of the original bit matrix from 
@@ -397,7 +386,7 @@
   int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
   int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
   
-  ZXBitMatrix *bitMatrixWithoutAlignment = [[[ZXBitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow] autorelease];
+  ZXBitMatrix *bitMatrixWithoutAlignment = [[ZXBitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow];
   for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
     int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
     for (int dataRegionColumn = 0; dataRegionColumn < numDataRegionsColumn; ++dataRegionColumn) {

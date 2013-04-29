@@ -20,7 +20,7 @@
 @implementation ZXEANManufacturerOrgSupportTest
 
 - (void)testEncode {
-  ZXEANManufacturerOrgSupport *support = [[[ZXEANManufacturerOrgSupport alloc] init] autorelease];
+  ZXEANManufacturerOrgSupport *support = [[ZXEANManufacturerOrgSupport alloc] init];
   STAssertNil([support lookupCountryIdentifier:@"472000"], @"Expected country identifier to be nil");
   STAssertEqualObjects([support lookupCountryIdentifier:@"000000"], @"US/CA", @"Expected country identifier to be US/CA");
   STAssertEqualObjects([support lookupCountryIdentifier:@"958000"], @"MO", @"Expected country identifier to be MO");

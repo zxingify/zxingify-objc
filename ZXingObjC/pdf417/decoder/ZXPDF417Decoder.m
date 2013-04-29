@@ -45,19 +45,13 @@ int const MAX_EC_CODEWORDS = 512;
   return self;
 }
 
-- (void)dealloc {
-  [errorCorrection release];
-
-  [super dealloc];
-}
-
 /**
  * Convenience method that can decode a PDF417 Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.
  */
 - (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error {
   int dimension = length;
-  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+  ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithDimension:dimension];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       if (image[j][i]) {
@@ -74,8 +68,8 @@ int const MAX_EC_CODEWORDS = 512;
  * A 1 or "true" is taken to mean a black module.
  */
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
-  ZXPDF417BitMatrixParser *parser = [[[ZXPDF417BitMatrixParser alloc] initWithBitMatrix:bits] autorelease];
-  NSMutableArray *codewords = [[[parser readCodewords] mutableCopy] autorelease];
+  ZXPDF417BitMatrixParser *parser = [[ZXPDF417BitMatrixParser alloc] initWithBitMatrix:bits];
+  NSMutableArray *codewords = [[parser readCodewords] mutableCopy];
   if (codewords.count == 0) {
     if (error) *error = FormatErrorInstance();
     return nil;

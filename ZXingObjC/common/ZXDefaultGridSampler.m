@@ -54,7 +54,7 @@
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY] autorelease];
+  ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY];
   int pointsLen = dimensionX << 1;
   float pointsf[pointsLen];
   memset(pointsf, 0, pointsLen * sizeof(float));

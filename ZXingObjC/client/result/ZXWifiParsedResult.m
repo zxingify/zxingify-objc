@@ -49,19 +49,11 @@
 }
 
 + (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password {
-  return [[[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password] autorelease];
+  return [[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password];
 }
 
 + (id)wifiParsedResultWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password hidden:(BOOL)hidden {
-  return [[[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password hidden:hidden] autorelease];
-}
-
-- (void)dealloc {
-  [ssid release];
-  [networkEncryption release];
-  [password release];
-  
-  [super dealloc];
+  return [[self alloc] initWithNetworkEncryption:networkEncryption ssid:ssid password:password hidden:hidden];
 }
 
 - (NSString *)displayResult {

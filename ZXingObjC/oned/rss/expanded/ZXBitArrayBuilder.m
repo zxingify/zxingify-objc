@@ -29,7 +29,7 @@
 
   int size = 12 * charNumber;
 
-  ZXBitArray *binary = [[[ZXBitArray alloc] initWithSize:size] autorelease];
+  ZXBitArray *binary = [[ZXBitArray alloc] initWithSize:size];
   int accPos = 0;
 
   ZXExpandedPair *firstPair = [pairs objectAtIndex:0];

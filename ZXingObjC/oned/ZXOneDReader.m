@@ -65,9 +65,9 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
         int height = [rotatedImage height];
         for (int i = 0; i < [points count]; i++) {
           [points replaceObjectAtIndex:i
-                            withObject:[[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint *)[points objectAtIndex:i] y]
+                            withObject:[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint *)[points objectAtIndex:i] y]
                                                                        y:[(ZXResultPoint *)[points objectAtIndex:i] x]]
-                                        autorelease]];
+                                        ];
         }
       }
       return result;
@@ -95,7 +95,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 - (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   int width = image.width;
   int height = image.height;
-  ZXBitArray *row = [[[ZXBitArray alloc] initWithSize:width] autorelease];
+  ZXBitArray *row = [[ZXBitArray alloc] initWithSize:width];
   int middle = height >> 1;
   BOOL tryHarder = hints != nil && hints.tryHarder;
   int rowStep = MAX(1, height >> (tryHarder ? 8 : 5));
@@ -127,7 +127,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       if (attempt == 1) {
         [row reverse];
         if (hints != nil && hints.resultPointCallback) {
-          hints = [[hints copy] autorelease];
+          hints = [hints copy];
           hints.resultPointCallback = nil;
         }
       }
@@ -139,13 +139,13 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
           NSMutableArray *points = [result resultPoints];
           if (points != nil) {
             [points replaceObjectAtIndex:0
-                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:0] x]
+                              withObject:[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:0] x]
                                                                          y:[(ZXResultPoint *)[points objectAtIndex:0] y]]
-                                          autorelease]];
+                                          ];
             [points replaceObjectAtIndex:1
-                              withObject:[[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:1] x]
+                              withObject:[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:1] x]
                                                                          y:[(ZXResultPoint *)[points objectAtIndex:1] y]]
-                                          autorelease]];
+                                          ];
           }
         }
         return result;

@@ -27,7 +27,7 @@
 
 - (void)testPlacement {
   NSString *codewords = [self unvisualize:@"66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221"]; //"AIMAIM" encoded
-  ZXDebugPlacement *placement = [[[ZXDebugPlacement alloc] initWithCodewords:codewords numcols:12 numrows:12] autorelease];
+  ZXDebugPlacement *placement = [[ZXDebugPlacement alloc] initWithCodewords:codewords numcols:12 numrows:12];
   [placement place];
   NSArray *expected = [NSArray arrayWithObjects:
     @"011100001111",

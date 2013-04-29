@@ -43,13 +43,6 @@ int const MONOCHROME_MAX_MODULES = 32;
   return self;
 }
 
-- (void)dealloc {
-  [image release];
-
-  [super dealloc];
-}
-
-
 /**
  * Detects a rectangular region of black and white -- mostly black -- with a region of mostly
  * white, in an image.
@@ -145,21 +138,21 @@ int const MONOCHROME_MAX_MODULES = 32;
         int lastY = y - deltaY;
         if ([[lastRange objectAtIndex:0] intValue] < centerX) {
           if ([[lastRange objectAtIndex:0] intValue] > centerX) {
-            return [[[ZXResultPoint alloc] initWithX:deltaY > 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue] y:lastY] autorelease];
+            return [[ZXResultPoint alloc] initWithX:deltaY > 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue] y:lastY];
           }
-          return [[[ZXResultPoint alloc] initWithX:[[lastRange objectAtIndex:0] intValue] y:lastY] autorelease];
+          return [[ZXResultPoint alloc] initWithX:[[lastRange objectAtIndex:0] intValue] y:lastY];
         } else {
-          return [[[ZXResultPoint alloc] initWithX:[[lastRange objectAtIndex:1] intValue] y:lastY] autorelease];
+          return [[ZXResultPoint alloc] initWithX:[[lastRange objectAtIndex:1] intValue] y:lastY];
         }
       } else {
         int lastX = x - deltaX;
         if ([[lastRange objectAtIndex:0] intValue] < centerY) {
           if ([[lastRange objectAtIndex:1] intValue] > centerY) {
-            return [[[ZXResultPoint alloc] initWithX:lastX y:deltaX < 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue]] autorelease];
+            return [[ZXResultPoint alloc] initWithX:lastX y:deltaX < 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue]];
           }
-          return [[[ZXResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:0] intValue]] autorelease];
+          return [[ZXResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:0] intValue]];
         } else {
-          return [[[ZXResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:1] intValue]] autorelease];
+          return [[ZXResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:1] intValue]];
         }
       }
     }

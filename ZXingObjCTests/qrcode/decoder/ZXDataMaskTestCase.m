@@ -87,7 +87,7 @@ typedef BOOL (^MaskCondition)(int i, int j);
 }
 
 - (void)runTestMask:(ZXDataMask *)mask dimension:(int)dimension condition:(MaskCondition)condition {
-  ZXBitMatrix *bits = [[[ZXBitMatrix alloc] initWithDimension:dimension] autorelease];
+  ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithDimension:dimension];
   [mask unmaskBitMatrix:bits dimension:dimension];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {

@@ -80,7 +80,7 @@
   NSString *codewords = [ZXDataMatrixErrorCorrection encodeECC200:encoded symbolInfo:symbolInfo];
 
   //3. step: Module placement in Matrix
-  ZXDefaultPlacement *placement = [[[ZXDefaultPlacement alloc] initWithCodewords:codewords numcols:symbolInfo.symbolDataWidth numrows:symbolInfo.symbolDataHeight] autorelease];
+  ZXDefaultPlacement *placement = [[ZXDefaultPlacement alloc] initWithCodewords:codewords numcols:symbolInfo.symbolDataWidth numrows:symbolInfo.symbolDataHeight];
   [placement place];
 
   //4. step: low-level encoding
@@ -94,7 +94,7 @@
   int symbolWidth = symbolInfo.symbolDataWidth;
   int symbolHeight = symbolInfo.symbolDataHeight;
 
-  ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:symbolInfo.symbolWidth height:symbolInfo.symbolHeight] autorelease];
+  ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:symbolInfo.symbolWidth height:symbolInfo.symbolHeight];
 
   int matrixY = 0;
 
@@ -146,7 +146,7 @@
   int matrixWidgth = matrix.width;
   int matrixHeight = matrix.height;
 
-  ZXBitMatrix *output = [[[ZXBitMatrix alloc] initWithWidth:matrixWidgth height:matrixHeight] autorelease];
+  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:matrixWidgth height:matrixHeight];
   [output clear];
   for (int i = 0; i < matrixWidgth; i++) {
     for (int j = 0; j < matrixHeight; j++) {

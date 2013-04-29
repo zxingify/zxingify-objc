@@ -40,18 +40,12 @@
   return self;
 }
 
-- (void)dealloc {
-  [field release];
-
-  [super dealloc];
-}
-
 - (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords erasures:(NSArray *)erasures {
   int coefficients[received.count];
   for (int i = 0; i < received.count; i++) {
     coefficients[i] = [[received objectAtIndex:i] intValue];
   }
-  ZXModulusPoly *poly = [[[ZXModulusPoly alloc] initWithField:self.field coefficients:coefficients coefficientsLen:received.count] autorelease];
+  ZXModulusPoly *poly = [[ZXModulusPoly alloc] initWithField:self.field coefficients:coefficients coefficientsLen:received.count];
 
   int S[numECCodewords];
   for (int i = 0; i < numECCodewords; i++) {
@@ -74,11 +68,11 @@
       int b = [self.field exp:received.count - 1 - [erasure intValue]];
       // Add (1 - bx) term:
       int termCoefficients[2] = { [self.field subtract:0 b:b], 1 };
-      ZXModulusPoly *term = [[[ZXModulusPoly alloc] initWithField:field coefficients:termCoefficients coefficientsLen:2] autorelease];
+      ZXModulusPoly *term = [[ZXModulusPoly alloc] initWithField:field coefficients:termCoefficients coefficientsLen:2];
       knownErrors = [knownErrors multiply:term];
     }
 
-    ZXModulusPoly *syndrome = [[[ZXModulusPoly alloc] initWithField:self.field coefficients:S coefficientsLen:numECCodewords] autorelease];
+    ZXModulusPoly *syndrome = [[ZXModulusPoly alloc] initWithField:self.field coefficients:S coefficientsLen:numECCodewords];
     //[syndrome multiply:knownErrors];
 
     NSArray *sigmaOmega = [self runEuclideanAlgorithm:[self.field buildMonomial:numECCodewords coefficient:1] b:syndrome R:numECCodewords];
@@ -185,7 +179,7 @@
     formalDerivativeCoefficients[errorLocatorDegree - i] =
       [self.field multiply:i b:[errorLocator coefficient:i]];
   }
-  ZXModulusPoly *formalDerivative = [[[ZXModulusPoly alloc] initWithField:self.field coefficients:formalDerivativeCoefficients coefficientsLen:errorLocatorDegree] autorelease];
+  ZXModulusPoly *formalDerivative = [[ZXModulusPoly alloc] initWithField:self.field coefficients:formalDerivativeCoefficients coefficientsLen:errorLocatorDegree];
 
   // This is directly applying Forney's Formula
   int s = errorLocations.count;

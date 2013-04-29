@@ -127,14 +127,14 @@
 }
 
 - (ZXLuminanceSource *)crop:(int)aLeft top:(int)aTop width:(int)aWidth height:(int)aHeight {
-  return [[[[self class] alloc] initWithPixels:self.luminances
+  return [[[self class] alloc] initWithPixels:self.luminances
                                      pixelsLen:self.luminancesCount
                                      dataWidth:self.dataWidth
                                     dataHeight:self.dataHeight
                                           left:self.left + aLeft
                                            top:self.top + aTop
                                          width:aWidth
-                                        height:aHeight] autorelease];
+                                        height:aHeight];
 }
 
 @end

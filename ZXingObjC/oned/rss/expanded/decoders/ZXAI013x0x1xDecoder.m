@@ -46,13 +46,6 @@ int const AI013x0x1x_DATE_SIZE = 16;
   return self;
 }
 
-- (void)dealloc {
-  [dateCode release];
-  [firstAIdigits release];
-
-  [super dealloc];
-}
-
 - (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size != AI013x0x1x_HEADER_SIZE + GTIN_SIZE + AI013x0x1x_WEIGHT_SIZE + AI013x0x1x_DATE_SIZE) {
     if (error) *error = NotFoundErrorInstance();

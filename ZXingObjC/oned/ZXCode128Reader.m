@@ -475,8 +475,8 @@ int const CODE_STOP = 106;
   return [ZXResult resultWithText:result
                          rawBytes:rawBytes
                            length:rawCodesSize
-                     resultPoints:[NSArray arrayWithObjects:[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                   [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                     resultPoints:[NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
+                                   [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber], nil]
                            format:kBarcodeFormatCode128];
 }
 

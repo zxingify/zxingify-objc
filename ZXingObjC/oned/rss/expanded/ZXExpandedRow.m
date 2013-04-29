@@ -40,12 +40,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [pairs release];
-
-  [super dealloc];
-}
-
 - (BOOL)isReversed {
   return self.wasReversed;
 }

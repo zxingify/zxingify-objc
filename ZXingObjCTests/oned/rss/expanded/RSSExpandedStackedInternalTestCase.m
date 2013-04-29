@@ -29,7 +29,7 @@
 @implementation RSSExpandedStackedInternalTestCase
 
 - (void)testDecodingRowByRow {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+  ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
 
   ZXBinaryBitmap *binaryMap = [TestCaseUtil binaryBitmap:@"Resources/blackbox/rssexpandedstacked-2/1000.png"];
 
@@ -65,7 +65,7 @@
 }
 
 - (void)testCompleteDecoding {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+  ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
 
   ZXBinaryBitmap *binaryMap = [TestCaseUtil binaryBitmap:@"Resources/blackbox/rssexpandedstacked-2/1000.png"];
 

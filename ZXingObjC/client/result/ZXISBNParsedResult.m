@@ -35,13 +35,7 @@
 }
 
 + (id)isbnParsedResultWithIsbn:(NSString *)isbn {
-  return [[[self alloc] initWithIsbn:isbn] autorelease];
-}
-
-- (void)dealloc {
-  [isbn release];
-
-  [super dealloc];
+  return [[self alloc] initWithIsbn:isbn];
 }
 
 - (NSString *)displayResult {

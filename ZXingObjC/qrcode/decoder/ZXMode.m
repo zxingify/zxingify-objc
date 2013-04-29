@@ -43,13 +43,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [characterCountBitsForVersions release];
-  [name release];
-
-  [super dealloc];
-}
-
 + (ZXMode *)forBits:(int)bits {
   switch (bits) {
     case 0x0:

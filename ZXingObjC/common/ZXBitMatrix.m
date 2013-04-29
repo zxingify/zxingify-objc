@@ -36,11 +36,11 @@
 @synthesize bitsSize;
 
 + (ZXBitMatrix *)bitMatrixWithDimension:(int)dimension {
-  return [[[self alloc] initWithDimension:dimension] autorelease];
+  return [[self alloc] initWithDimension:dimension];
 }
 
 + (ZXBitMatrix *)bitMatrixWithWidth:(int)width height:(int)height {
-  return [[[self alloc] initWithWidth:width height:height] autorelease];
+  return [[self alloc] initWithWidth:width height:height];
 }
 
 - (id)initWithDimension:(int)dimension {
@@ -70,8 +70,6 @@
     free(self.bits);
     self.bits = NULL;
   }
-
-  [super dealloc];
 }
 
 /**
@@ -140,7 +138,7 @@
  */
 - (ZXBitArray *)rowAtY:(int)y row:(ZXBitArray *)row {
   if (row == nil || [row size] < self.width) {
-    row = [[[ZXBitArray alloc] initWithSize:self.width] autorelease];
+    row = [[ZXBitArray alloc] initWithSize:self.width];
   }
   int offset = y * self.rowSize;
   for (int x = 0; x < self.rowSize; x++) {

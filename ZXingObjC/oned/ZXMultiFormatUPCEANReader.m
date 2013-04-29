@@ -40,34 +40,28 @@
 
     if (hints != nil) {
       if ([hints containsFormat:kBarcodeFormatEan13]) {
-        [self.readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXEAN13Reader alloc] init]];
       } else if ([hints containsFormat:kBarcodeFormatUPCA]) {
-        [self.readers addObject:[[[ZXUPCAReader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXUPCAReader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatEan8]) {
-        [self.readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXEAN8Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatUPCE]) {
-        [self.readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
+        [self.readers addObject:[[ZXUPCEReader alloc] init]];
       }
     }
 
     if ([self.readers count] == 0) {
-      [self.readers addObject:[[[ZXEAN13Reader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXEAN8Reader alloc] init] autorelease]];
-      [self.readers addObject:[[[ZXUPCEReader alloc] init] autorelease]];
+      [self.readers addObject:[[ZXEAN13Reader alloc] init]];
+      [self.readers addObject:[[ZXEAN8Reader alloc] init]];
+      [self.readers addObject:[[ZXUPCEReader alloc] init]];
     }
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [readers release];
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {

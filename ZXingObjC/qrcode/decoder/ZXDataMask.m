@@ -186,14 +186,14 @@ static NSArray *DATA_MASKS = nil;
      * See ISO 18004:2006 6.8.1
      */
     DATA_MASKS = [[NSArray alloc] initWithObjects:
-                  [[[ZXDataMask000 alloc] init] autorelease],
-                  [[[ZXDataMask001 alloc] init] autorelease],
-                  [[[ZXDataMask010 alloc] init] autorelease],
-                  [[[ZXDataMask011 alloc] init] autorelease],
-                  [[[ZXDataMask100 alloc] init] autorelease],
-                  [[[ZXDataMask101 alloc] init] autorelease],
-                  [[[ZXDataMask110 alloc] init] autorelease],
-                  [[[ZXDataMask111 alloc] init] autorelease], nil];
+                  [[ZXDataMask000 alloc] init],
+                  [[ZXDataMask001 alloc] init],
+                  [[ZXDataMask010 alloc] init],
+                  [[ZXDataMask011 alloc] init],
+                  [[ZXDataMask100 alloc] init],
+                  [[ZXDataMask101 alloc] init],
+                  [[ZXDataMask110 alloc] init],
+                  [[ZXDataMask111 alloc] init], nil];
   }
 
   if (reference < 0 || reference > 7) {

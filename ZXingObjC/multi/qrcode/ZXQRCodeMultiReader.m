@@ -33,7 +33,7 @@
     return nil;
   }
   NSMutableArray *results = [NSMutableArray array];
-  NSArray *detectorResult = [[[[ZXMultiDetector alloc] initWithImage:matrix] autorelease] detectMulti:hints error:error];
+  NSArray *detectorResult = [[[ZXMultiDetector alloc] initWithImage:matrix] detectMulti:hints error:error];
   if (!detectorResult) {
     return nil;
   }

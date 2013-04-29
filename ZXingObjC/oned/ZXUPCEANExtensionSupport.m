@@ -36,18 +36,11 @@ const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
 
 - (id)init {
   if (self = [super init]) {
-    self.twoSupport = [[[ZXUPCEANExtension2Support alloc] init] autorelease];
-    self.fiveSupport = [[[ZXUPCEANExtension5Support alloc] init] autorelease];
+    self.twoSupport = [[ZXUPCEANExtension2Support alloc] init];
+    self.fiveSupport = [[ZXUPCEANExtension5Support alloc] init];
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [twoSupport release];
-  [fiveSupport release];
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError **)error {

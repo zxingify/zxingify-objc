@@ -64,8 +64,6 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
     free(self.decodeMiddleCounters);
     self.decodeMiddleCounters = NULL;
   }
-
-  [super dealloc];
 }
 
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {

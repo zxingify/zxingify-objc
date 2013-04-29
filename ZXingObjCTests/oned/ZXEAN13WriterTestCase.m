@@ -22,7 +22,7 @@
 
 - (void)testEncode {
   NSString *testStr = @"00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
-  ZXBitMatrix *result = [[[[ZXEAN13Writer alloc] init] autorelease] encode:@"5901234123457"
+  ZXBitMatrix *result = [[[ZXEAN13Writer alloc] init] encode:@"5901234123457"
                                                                     format:kBarcodeFormatEan13
                                                                      width:testStr.length height:0
                                                                      error:nil];

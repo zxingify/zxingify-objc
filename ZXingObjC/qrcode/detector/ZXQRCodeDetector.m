@@ -57,13 +57,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [image release];
-
-  [super dealloc];
-}
-
-
 /**
  * Detects a QR Code in an image, simply.
  */
@@ -71,14 +64,13 @@
   return [self detect:nil error:error];
 }
 
-
 /**
  * Detects a QR Code in an image, simply.
  */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
   self.resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
-  ZXFinderPatternFinder *finder = [[[ZXFinderPatternFinder alloc] initWithImage:image resultPointCallback:resultPointCallback] autorelease];
+  ZXFinderPatternFinder *finder = [[ZXFinderPatternFinder alloc] initWithImage:image resultPointCallback:resultPointCallback];
   ZXFinderPatternInfo *info = [finder find:hints error:error];
   if (!info) {
     return nil;
@@ -141,7 +133,7 @@
   } else {
     points = [NSArray arrayWithObjects:bottomLeft, topLeft, topRight, alignmentPattern, nil];
   }
-  return [[[ZXDetectorResult alloc] initWithBits:bits points:points] autorelease];
+  return [[ZXDetectorResult alloc] initWithBits:bits points:points];
 }
 
 + (ZXPerspectiveTransform *)createTransform:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft alignmentPattern:(ZXResultPoint *)alignmentPattern dimension:(int)dimension {
@@ -340,13 +332,13 @@
     return nil;
   }
 
-  ZXAlignmentPatternFinder *alignmentFinder = [[[ZXAlignmentPatternFinder alloc] initWithImage:self.image
+  ZXAlignmentPatternFinder *alignmentFinder = [[ZXAlignmentPatternFinder alloc] initWithImage:self.image
                                                                                         startX:alignmentAreaLeftX
                                                                                         startY:alignmentAreaTopY
                                                                                          width:alignmentAreaRightX - alignmentAreaLeftX
                                                                                         height:alignmentAreaBottomY - alignmentAreaTopY
                                                                                     moduleSize:overallEstModuleSize
-                                                                           resultPointCallback:self.resultPointCallback] autorelease];
+                                                                           resultPointCallback:self.resultPointCallback];
   return [alignmentFinder findWithError:error];
 }
 

@@ -26,7 +26,7 @@
   NSString *resultStr = @"0000000000"
     @"1001001011011010100101010110010110101001010100110101100101010110110101101001001011"
     @"0000000000";
-  ZXBitMatrix *result = [[[[ZXCodaBarWriter alloc] init] autorelease] encode:@"B515-3/N" format:kBarcodeFormatCodabar width:resultStr.length height:0 error:nil];
+  ZXBitMatrix *result = [[[ZXCodaBarWriter alloc] init] encode:@"B515-3/N" format:kBarcodeFormatCodabar width:resultStr.length height:0 error:nil];
   for (int i = 0; i < resultStr.length; i++) {
     STAssertEquals([result getX:i y:0], (BOOL)([resultStr characterAtIndex:i] == '1'), @"Element %d", i);
   }

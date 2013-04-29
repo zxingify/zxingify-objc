@@ -22,7 +22,7 @@
 
 - (void)testApplyMaskPenaltyRule1 {
   {
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:4 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:4 height:1];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -30,7 +30,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule1:matrix], 0, @"Expected applyMaskPenaltyRule1 to return 0");
   }
   {  // Horizontal.
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:6 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:6 height:1];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -42,7 +42,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule1:matrix], 4, @"Expected applyMaskPenaltyRule1 to return 4");
   }
   {  // Vertical.
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:6] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:1 height:6];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:0 y:1 intValue:0];
     [matrix setX:0 y:2 intValue:0];
@@ -57,12 +57,12 @@
 
 - (void)testApplyMaskPenaltyRule2 {
   {
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:1 height:1];
     [matrix setX:0 y:0 intValue:0];
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule2:matrix], 0, @"Expected applyMaskPenaltyRule2 to return 0");
   }
   {
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:2] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:2 height:2];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:0 y:1 intValue:0];
@@ -70,7 +70,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule2:matrix], 0, @"Expected applyMaskPenaltyRule2 to return 0");
   }
   {
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:2] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:2 height:2];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:0 y:1 intValue:0];
@@ -78,7 +78,7 @@
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule2:matrix], 3, @"Expected applyMaskPenaltyRule2 to return 3");
   }
   {
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:3 height:3] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:3 height:3];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -96,7 +96,7 @@
 - (void)testApplyMaskPenaltyRule3 {
   {
     // Horizontal 00001011101.
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -112,7 +112,7 @@
   }
   {
     // Horizontal 10111010000.
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
     [matrix setX:0 y:0 intValue:1];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:1];
@@ -128,7 +128,7 @@
   }
   {
     // Vertical 00001011101.
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:0];
@@ -144,7 +144,7 @@
   }
   {
     // Vertical 10111010000.
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:11 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
     [matrix setX:0 y:0 intValue:1];
     [matrix setX:1 y:0 intValue:0];
     [matrix setX:2 y:0 intValue:1];
@@ -163,20 +163,20 @@
 - (void)testApplyMaskPenaltyRule4 {
   {
     // Dark cell ratio = 0%
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:1 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:1 height:1];
     [matrix setX:0 y:0 intValue:0];
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule4:matrix], 100, @"Expected applyMaskPenaltyRule4 to return 100");
   }
   {
     // Dark cell ratio = 5%
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:2 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:2 height:1];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:0 y:0 intValue:1];
     STAssertEquals([ZXMaskUtil applyMaskPenaltyRule4:matrix], 0, @"Expected applyMaskPenaltyRule4 to return 0");
   }
   {
     // Dark cell ratio = 66.67%
-    ZXByteMatrix *matrix = [[[ZXByteMatrix alloc] initWithWidth:6 height:1] autorelease];
+    ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:6 height:1];
     [matrix setX:0 y:0 intValue:0];
     [matrix setX:1 y:0 intValue:1];
     [matrix setX:2 y:0 intValue:1];

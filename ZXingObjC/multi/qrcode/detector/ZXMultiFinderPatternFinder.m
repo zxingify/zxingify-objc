@@ -130,7 +130,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
         NSMutableArray *test = [NSMutableArray arrayWithObjects:p1, p2, p3, nil];
         [ZXResultPoint orderBestPatterns:test];
 
-        ZXFinderPatternInfo *info = [[[ZXFinderPatternInfo alloc] initWithPatternCenters:test] autorelease];
+        ZXFinderPatternInfo *info = [[ZXFinderPatternInfo alloc] initWithPatternCenters:test];
         float dA = [ZXResultPoint distance:[info topLeft] pattern2:[info bottomLeft]];
         float dC = [ZXResultPoint distance:[info topRight] pattern2:[info bottomLeft]];
         float dB = [ZXResultPoint distance:[info topLeft] pattern2:[info topRight]];
@@ -234,7 +234,7 @@ NSInteger moduleSizeCompare(id center1, id center2, void *context);
   NSMutableArray *result = [NSMutableArray array];
   for (NSMutableArray *pattern in patternInfo) {
     [ZXResultPoint orderBestPatterns:pattern];
-    [result addObject:[[[ZXFinderPatternInfo alloc] initWithPatternCenters:pattern] autorelease]];
+    [result addObject:[[ZXFinderPatternInfo alloc] initWithPatternCenters:pattern]];
   }
 
   return result;

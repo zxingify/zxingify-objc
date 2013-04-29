@@ -67,10 +67,10 @@
   float combinedX = (self.count * self.x + j) / combinedCount;
   float combinedY = (self.count * self.y + i) / combinedCount;
   float combinedModuleSize = (self.count * self.estimatedModuleSize + newModuleSize) / combinedCount;
-  return [[[ZXQRCodeFinderPattern alloc] initWithPosX:combinedX
+  return [[ZXQRCodeFinderPattern alloc] initWithPosX:combinedX
                                                  posY:combinedY
                                   estimatedModuleSize:combinedModuleSize
-                                                count:combinedCount] autorelease];
+                                                count:combinedCount];
 }
 
 @end

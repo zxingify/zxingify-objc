@@ -29,18 +29,7 @@
 @synthesize pdf417Dimensions;
 
 + (id)hints {
-  return [[[self alloc] init] autorelease];
-}
-
-- (void)dealloc {
-  [dataMatrixShape release];
-  [minSize release];
-  [maxSize release];
-  [errorCorrectionLevel release];
-  [margin release];
-  [pdf417Dimensions release];
-
-  [super dealloc];
+  return [[self alloc] init];
 }
 
 @end

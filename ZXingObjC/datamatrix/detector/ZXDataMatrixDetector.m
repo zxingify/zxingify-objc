@@ -53,13 +53,6 @@
   return self;
 }
 
-- (void) dealloc {
-  [from release];
-  [to release];
-  
-  [super dealloc];
-}
-
 - (NSString *)description {
   return [NSString stringWithFormat:@"%@/%@/%d", self.from, self.to, self.transitions];
 }
@@ -101,23 +94,14 @@
 - (id)initWithImage:(ZXBitMatrix *)anImage error:(NSError **)error {
   if (self = [super init]) {
     self.image = anImage;
-    self.rectangleDetector = [[[ZXWhiteRectangleDetector alloc] initWithImage:anImage error:error] autorelease];
+    self.rectangleDetector = [[ZXWhiteRectangleDetector alloc] initWithImage:anImage error:error];
     if (!self.rectangleDetector) {
-      [self release];
       return nil;
     }
   }
 
   return self;
 }
-
-- (void)dealloc {
-  [image release];
-  [rectangleDetector release];
-
-  [super dealloc];
-}
-
 
 /**
  * Detects a Data Matrix Code in an image.
@@ -242,8 +226,8 @@
       return nil;
     }
   }
-  return [[[ZXDetectorResult alloc] initWithBits:bits
-                                          points:[NSArray arrayWithObjects:topLeft, bottomLeft, bottomRight, correctedTopRight, nil]] autorelease];
+  return [[ZXDetectorResult alloc] initWithBits:bits
+                                          points:[NSArray arrayWithObjects:topLeft, bottomLeft, bottomRight, correctedTopRight, nil]];
 }
 
 
@@ -257,14 +241,14 @@
   float cos = ([topRight x] - [topLeft x]) / norm;
   float sin = ([topRight y] - [topLeft y]) / norm;
 
-  ZXResultPoint *c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c1 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
 
   corr = [self distance:bottomLeft b:topLeft] / (float)dimensionRight;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
 
-  ZXResultPoint *c2 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c2 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
 
   if (![self isValid:c1]) {
     if ([self isValid:c2]) {
@@ -296,14 +280,14 @@
   float cos = ([topRight x] - [topLeft x]) / norm;
   float sin = ([topRight y] - [topLeft y]) / norm;
 
-  ZXResultPoint *c1 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c1 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
 
   corr = [self distance:bottomLeft b:topLeft] / (float)dimension;
   norm = [self distance:bottomRight b:topRight];
   cos = ([topRight x] - [bottomRight x]) / norm;
   sin = ([topRight y] - [bottomRight y]) / norm;
 
-  ZXResultPoint *c2 = [[[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin] autorelease];
+  ZXResultPoint *c2 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
 
   if (![self isValid:c1]) {
     if ([self isValid:c2]) {
@@ -400,7 +384,7 @@
       error -= dx;
     }
   }
-  return [[[ResultPointsAndTransitions alloc] initWithFrom:from to:to transitions:transitions] autorelease];
+  return [[ResultPointsAndTransitions alloc] initWithFrom:from to:to transitions:transitions];
 }
 
 @end

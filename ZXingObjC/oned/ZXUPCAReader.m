@@ -33,16 +33,10 @@
 
 - (id)init {
   if (self = [super init]) {
-    self.ean13Reader = [[[ZXEAN13Reader alloc] init] autorelease];
+    self.ean13Reader = [[ZXEAN13Reader alloc] init];
   }
 
   return self;
-}
-
-- (void)dealloc {
-  [ean13Reader release];
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSRange)startGuardRange hints:(ZXDecodeHints *)hints error:(NSError **)error {

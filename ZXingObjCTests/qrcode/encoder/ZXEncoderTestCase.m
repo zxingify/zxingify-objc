@@ -164,7 +164,7 @@
 }
 
 - (void)testAppendModeInfo {
-  ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendModeInfo:[ZXMode numericMode] bits:bits];
   NSString *expected = @" ...X";
   STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
@@ -172,7 +172,7 @@
 
 - (void)testAppendLengthInfo {
   {
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendLengthInfo:1  // 1 letter (1/1).
                         version:[ZXQRCodeVersion versionForNumber:1]
                            mode:[ZXMode numericMode]
@@ -182,7 +182,7 @@
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 10 bits.
   }
   {
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendLengthInfo:2  // 2 letter (2/1).
                         version:[ZXQRCodeVersion versionForNumber:10]
                            mode:[ZXMode alphanumericMode]
@@ -192,7 +192,7 @@
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 11 bits.
   }
   {
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendLengthInfo:255  // 255 letter (255/1).
                         version:[ZXQRCodeVersion versionForNumber:27]
                            mode:[ZXMode byteMode]
@@ -202,7 +202,7 @@
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 16 bits.
   }
   {
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendLengthInfo:512  // 512 letter (1024/2).
                         version:[ZXQRCodeVersion versionForNumber:40]
                            mode:[ZXMode kanjiMode]
@@ -217,7 +217,7 @@
   {
     // Should use appendNumericBytes.
     // 1 = 01 = 0001 in 4 bits.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendBytes:@"1" mode:[ZXMode numericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
     NSString *expected = @" ...X";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
@@ -225,7 +225,7 @@
   {
     // Should use appendAlphanumericBytes.
     // A = 10 = 0xa = 001010 in 6 bits
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendBytes:@"A" mode:[ZXMode alphanumericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
     NSString *expected = @" ..X.X.";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
@@ -239,7 +239,7 @@
   {
     // Should use append8BitBytes.
     // 0x61, 0x62, 0x63
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendBytes:@"abc" mode:[ZXMode byteMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
     NSString *expected = @" .XX....X .XX...X. .XX...XX";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
@@ -249,7 +249,7 @@
   {
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     unsigned char bytes[2] = {0x93, 0x5f};
     [ZXEncoder appendBytes:[self shiftJISString:bytes bytesLen:2] mode:[ZXMode kanjiMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
     NSString *expected = @" .XX.XX.. XXXXX";
@@ -259,45 +259,45 @@
 
 - (void)testTerminateBits {
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [ZXEncoder terminateBits:0 bits:v error:nil];
     STAssertEqualObjects([v description], @"", @"Expected v to equal \"\"");
   }
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [ZXEncoder terminateBits:1 bits:v error:nil];
     NSString *expected = @" ........";
     STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
   }
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [v appendBits:0 numBits:3];  // Append 000
     [ZXEncoder terminateBits:1 bits:v error:nil];
     NSString *expected = @" ........";
     STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
   }
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [v appendBits:0 numBits:5];  // Append 00000
     [ZXEncoder terminateBits:1 bits:v error:nil];
     NSString *expected = @" ........";
     STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
   }
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [v appendBits:0 numBits:8];  // Append 00000000
     [ZXEncoder terminateBits:1 bits:v error:nil];
     NSString *expected = @" ........";
     STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
   }
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [ZXEncoder terminateBits:2 bits:v error:nil];
     NSString *expected = @" ........ XXX.XX..";
     STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
   }
   {
-    ZXBitArray *v = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *v = [[ZXBitArray alloc] init];
     [v appendBits:0 numBits:1];  // Append 0
     [ZXEncoder terminateBits:3 bits:v error:nil];
     NSString *expected = @" ........ XXX.XX.. ...X...X";
@@ -353,7 +353,7 @@
   {
     const int dataBytesLen = 9;
     unsigned char dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
-    ZXBitArray *in = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *in = [[ZXBitArray alloc] init];
     for (int i = 0; i < dataBytesLen; i++) {
       [in appendBits:dataBytes[i] numBits:8];
     }
@@ -385,7 +385,7 @@
       135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
       17
     };
-    ZXBitArray *in = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *in = [[ZXBitArray alloc] init];
     for (int i = 0; i < dataBytesLen; i++) {
       [in appendBits:dataBytes[i] numBits:8];
     }
@@ -421,35 +421,35 @@
 - (void)testAppendNumericBytes {
   {
     // 1 = 01 = 0001 in 4 bits.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendNumericBytes:@"1" bits:bits];
     NSString *expected = @" ...X";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // 12 = 0xc = 0001100 in 7 bits.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendNumericBytes:@"12" bits:bits];
     NSString *expected = @" ...XX..";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // 123 = 0x7b = 0001111011 in 10 bits.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendNumericBytes:@"123" bits:bits];
     NSString *expected = @" ...XXXX. XX";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // 1234 = "123" + "4" = 0001111011 + 0100
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendNumericBytes:@"1234" bits:bits];
     NSString *expected = @" ...XXXX. XX.X..";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // Empty.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendNumericBytes:@"" bits:bits];
     STAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
   }
@@ -458,35 +458,35 @@
 - (void)testAppendAlphanumericBytes {
   {
     // A = 10 = 0xa = 001010 in 6 bits
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendAlphanumericBytes:@"A" bits:bits error:nil];
     NSString *expected = @" ..X.X.";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendAlphanumericBytes:@"AB" bits:bits error:nil];
     NSString *expected = @" ..XXX..X X.X";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // ABC = "AB" + "C" = 00111001101 + 001100
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendAlphanumericBytes:@"ABC" bits:bits error:nil];
     NSString *expected = @" ..XXX..X X.X..XX. .";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // Empty.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder appendAlphanumericBytes:@"" bits:bits error:nil];
     STAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
   }
   {
     // Invalid data.
     NSError *error;
-    if ([ZXEncoder appendAlphanumericBytes:@"abc" bits:[[[ZXBitArray alloc] init] autorelease] error:&error] || error.code != ZXWriterError) {
+    if ([ZXEncoder appendAlphanumericBytes:@"abc" bits:[[ZXBitArray alloc] init] error:&error] || error.code != ZXWriterError) {
       STFail(@"Expected ZXWriterError");
     }
   }
@@ -495,14 +495,14 @@
 - (void)testAppend8BitBytes {
   {
     // 0x61, 0x62, 0x63
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder append8BitBytes:@"abc" bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING];
     NSString *expected = @" .XX....X .XX...X. .XX...XX";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   }
   {
     // Empty.
-    ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+    ZXBitArray *bits = [[ZXBitArray alloc] init];
     [ZXEncoder append8BitBytes:@"" bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING];
     STAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
   }
@@ -510,7 +510,7 @@
 
 // Numbers are from page 21 of JISX0510:2004
 - (void)testAppendKanjiBytes {
-  ZXBitArray *bits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *bits = [[ZXBitArray alloc] init];
   unsigned char bytes[2] = {0x93,0x5f};
   [ZXEncoder appendKanjiBytes:[self shiftJISString:bytes bytesLen:2] bits:bits error:nil];
   NSString *expected = @" .XX.XX.. XXXXX";
@@ -605,7 +605,7 @@
 }
 
 - (NSString *)shiftJISString:(unsigned char *)bytes bytesLen:(int)bytesLen {
-  return [[[NSString alloc] initWithBytes:bytes length:bytesLen encoding:NSShiftJISStringEncoding] autorelease];
+  return [[NSString alloc] initWithBytes:bytes length:bytesLen encoding:NSShiftJISStringEncoding];
 }
 
 @end

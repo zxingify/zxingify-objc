@@ -127,8 +127,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
                          rawBytes:nil
                            length:0
                      resultPoints:[NSArray arrayWithObjects:
-                                   [[[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber] autorelease],
-                                   [[[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber] autorelease], nil]
+                                   [[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber],
+                                   [[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber], nil]
                            format:kBarcodeFormatITF];
 }
 
@@ -250,7 +250,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  NSMutableArray *endPattern = [[[self findGuardPattern:row rowOffset:endStart pattern:(int *)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy] autorelease];
+  NSMutableArray *endPattern = [[self findGuardPattern:row rowOffset:endStart pattern:(int *)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy];
   if (!endPattern) {
     [row reverse];
     return nil;

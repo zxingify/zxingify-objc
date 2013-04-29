@@ -317,8 +317,8 @@
   STAssertEquals(aztec.compact, compact, @"Unexpected symbol format (compact)");
   STAssertEquals(aztec.layers, layers, @"Unexpected nr. of layers");
   ZXBitMatrix *matrix = aztec.matrix;
-  ZXAztecDetectorResult *r = [[[ZXAztecDetectorResult alloc] initWithBits:matrix points:[NSArray array] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers] autorelease];
-  ZXDecoderResult *res = [[[[ZXAztecDecoder alloc] init] autorelease] decode:r error:nil];
+  ZXAztecDetectorResult *r = [[ZXAztecDetectorResult alloc] initWithBits:matrix points:[NSArray array] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers];
+  ZXDecoderResult *res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
   STAssertEqualObjects(res.text, data, @"Data did not match");
   // Check error correction by introducing a few minor errors
   srand(3735928559);
@@ -326,8 +326,8 @@
   [matrix flipX:rand() % matrix.width y:matrix.height - 2 + rand() % 2];
   [matrix flipX:rand() % 2 y:rand() % matrix.height];
   [matrix flipX:matrix.width - 2 + rand() % 2 y:rand() % matrix.height];
-  r = [[[ZXAztecDetectorResult alloc] initWithBits:matrix points:[NSArray array] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers] autorelease];
-  res = [[[[ZXAztecDecoder alloc] init] autorelease] decode:r error:nil];
+  r = [[ZXAztecDetectorResult alloc] initWithBits:matrix points:[NSArray array] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers];
+  res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
   STAssertEqualObjects(res.text, data, @"Data did not match");
 }
 
@@ -348,7 +348,7 @@
     DOTX = [NSRegularExpression regularExpressionWithPattern:@"[^.X]" options:0 error:nil];
   }
 
-  ZXBitArray *inArray = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *inArray = [[ZXBitArray alloc] init];
   NSString *str = [DOTX stringByReplacingMatchesInString:bits options:0 range:NSMakeRange(0, bits.length) withTemplate:@""];
   for (int i = 0; i < str.length; i++) {
     unichar aStr = [str characterAtIndex:i];

@@ -43,14 +43,14 @@
 }
 
 + (id)hints {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
   ZXDecodeHints *result = [[[self class] allocWithZone:zone] init];
   if (result) {
     result.assumeCode39CheckDigit = self.assumeCode39CheckDigit;
-    result.allowedLengths = [[self.allowedLengths copy] autorelease];
+    result.allowedLengths = [self.allowedLengths copy];
 
     for (NSNumber *formatNumber in self.barcodeFormats) {
       [result addPossibleFormat:[formatNumber intValue]];
@@ -64,15 +64,6 @@
   }
 
   return result;
-}
-
-- (void)dealloc {
-  [allowedLengths release];
-  [barcodeFormats release];
-  [other release];
-  [resultPointCallback release];
-
-  [super dealloc];
 }
 
 - (void)addPossibleFormat:(ZXBarcodeFormat)format {

@@ -39,14 +39,7 @@
 }
 
 + (id)textParsedResultWithText:(NSString *)text language:(NSString *)language {
-  return [[[self alloc] initWithText:text language:language] autorelease];
-}
-
-- (void)dealloc {
-  [text release];
-  [language release];
-
-  [super dealloc];
+  return [[self alloc] initWithText:text language:language];
 }
 
 - (NSString *)displayResult {
