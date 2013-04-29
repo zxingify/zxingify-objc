@@ -52,7 +52,7 @@ int const GB2312_SUBSET = 1;
 
 + (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
                     ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXBitSource *bits = [[[ZXBitSource alloc] initWithBytes:bytes length:length] autorelease];
+  ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes length:length];
   NSMutableString *result = [NSMutableString stringWithCapacity:50];
   ZXCharacterSetECI *currentCharacterSetECI = nil;
   BOOL fc1InEffect = NO;
@@ -125,11 +125,11 @@ int const GB2312_SUBSET = 1;
       }
     }
   } while (![mode isEqual:[ZXMode terminatorMode]]);
-  return [[[ZXDecoderResult alloc] initWithRawBytes:bytes
+  return [[ZXDecoderResult alloc] initWithRawBytes:bytes
                                              length:length
                                                text:result.description
                                        byteSegments:byteSegments.count == 0 ? nil : byteSegments
-                                            ecLevel:ecLevel == nil ? nil : ecLevel.description] autorelease];
+                                            ecLevel:ecLevel == nil ? nil : ecLevel.description];
 }
 
 
@@ -159,7 +159,7 @@ int const GB2312_SUBSET = 1;
     count--;
   }
 
-  NSString *string = [[[NSString alloc] initWithData:buffer encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)] autorelease];
+  NSString *string = [[NSString alloc] initWithData:buffer encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
   if (string) {
     [result appendString:string];
   }
@@ -189,7 +189,7 @@ int const GB2312_SUBSET = 1;
     count--;
   }
 
-  NSString *string = [[[NSString alloc] initWithData:buffer encoding:NSShiftJISStringEncoding] autorelease];
+  NSString *string = [[NSString alloc] initWithData:buffer encoding:NSShiftJISStringEncoding];
   if (string) {
     [result appendString:string];
   }
@@ -215,7 +215,7 @@ int const GB2312_SUBSET = 1;
     encoding = [currentCharacterSetECI encoding];
   }
 
-  NSString *string = [[[NSString alloc] initWithBytes:readBytes length:count encoding:encoding] autorelease];
+  NSString *string = [[NSString alloc] initWithBytes:readBytes length:count encoding:encoding];
   if (string) {
     [result appendString:string];
   }

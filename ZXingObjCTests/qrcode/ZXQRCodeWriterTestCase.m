@@ -26,9 +26,9 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 @implementation ZXQRCodeWriterTestCase
 
 - (ZXImage *)loadImage:(NSString *)fileName {
-  return [[[ZXImage alloc] initWithURL:
+  return [[ZXImage alloc] initWithURL:
            [[NSBundle bundleForClass:[self class]] URLForResource:
-            [BASE_IMAGE_PATH stringByAppendingString:fileName] withExtension:nil]] autorelease];
+            [BASE_IMAGE_PATH stringByAppendingString:fileName] withExtension:nil]];
 }
 
 // In case the golden images are not monochromatic, convert the RGB values to greyscale.
@@ -47,7 +47,7 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   data = (uint32_t *) malloc(width * height * sizeof(uint32_t));
   memcpy(data, CGBitmapContextGetData(context), width * height * sizeof(uint32_t));
 
-  ZXBitMatrix *matrix = [[[ZXBitMatrix alloc] initWithWidth:width height:height] autorelease];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       int pixel = data[y * width + x];
@@ -65,7 +65,7 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 - (void)testQRCodeWriter {
   // The QR should be multiplied up to fit, with extra padding if necessary
   int bigEnough = 256;
-  ZXQRCodeWriter *writer = [[[ZXQRCodeWriter alloc] init] autorelease];
+  ZXQRCodeWriter *writer = [[ZXQRCodeWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:bigEnough
                                 height:bigEnough hints:nil error:nil];
   STAssertNotNil(matrix, @"Matrix should not be nil");
@@ -97,9 +97,9 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   ZXBitMatrix *goldenResult = [self createMatrixFromImage:image];
   STAssertNotNil(goldenResult, @"Golden result should not be nil");
 
-  ZXEncodeHints *hints = [[[ZXEncodeHints alloc] init] autorelease];
+  ZXEncodeHints *hints = [[ZXEncodeHints alloc] init];
   hints.errorCorrectionLevel = ecLevel;
-  ZXQRCodeWriter *writer = [[[ZXQRCodeWriter alloc] init] autorelease];
+  ZXQRCodeWriter *writer = [[ZXQRCodeWriter alloc] init];
   ZXBitMatrix *generatedResult = [writer encode:contents format:kBarcodeFormatQRCode width:resolution
                                          height:resolution hints:hints error:nil];
 

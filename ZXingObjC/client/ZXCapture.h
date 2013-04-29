@@ -54,7 +54,7 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
     ZXCaptureDevice *capture_device;
     ZXCaptureDeviceInput *input;
     ZXCaptureVideoOutput *output;
-    id<ZXCaptureDelegate> delegate;
+    __unsafe_unretained id<ZXCaptureDelegate> delegate;
     )
     
   int order_in_skip;

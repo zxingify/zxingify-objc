@@ -31,13 +31,13 @@ static NSArray *TEST_SYMBOLS;
 
 + (void)initialize {
   TEST_SYMBOLS = [[NSArray alloc] initWithObjects:
-                  [[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:3 errorCodewords:5 matrixWidth:8 matrixHeight:8 dataRegions:1] autorelease],
-                  [[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:5 errorCodewords:7 matrixWidth:10 matrixHeight:10 dataRegions:1] autorelease],
-                  /*rect*/[[[ZXSymbolInfo alloc] initWithRectangular:YES dataCapacity:5 errorCodewords:7 matrixWidth:16 matrixHeight:6 dataRegions:1] autorelease],
-                  [[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:8 errorCodewords:10 matrixWidth:12 matrixHeight:12 dataRegions:1] autorelease],
-                  /*rect*/[[[ZXSymbolInfo alloc] initWithRectangular:YES dataCapacity:10 errorCodewords:11 matrixWidth:14 matrixHeight:6 dataRegions:2] autorelease],
-                  [[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:13 errorCodewords:0 matrixWidth:0 matrixHeight:0 dataRegions:1] autorelease],
-                  [[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:77 errorCodewords:0 matrixWidth:0 matrixHeight:0 dataRegions:1] autorelease], nil];
+                  [[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:3 errorCodewords:5 matrixWidth:8 matrixHeight:8 dataRegions:1],
+                  [[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:5 errorCodewords:7 matrixWidth:10 matrixHeight:10 dataRegions:1],
+                  /*rect*/[[ZXSymbolInfo alloc] initWithRectangular:YES dataCapacity:5 errorCodewords:7 matrixWidth:16 matrixHeight:6 dataRegions:1],
+                  [[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:8 errorCodewords:10 matrixWidth:12 matrixHeight:12 dataRegions:1],
+                  /*rect*/[[ZXSymbolInfo alloc] initWithRectangular:YES dataCapacity:10 errorCodewords:11 matrixWidth:14 matrixHeight:6 dataRegions:2],
+                  [[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:13 errorCodewords:0 matrixWidth:0 matrixHeight:0 dataRegions:1],
+                  [[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:77 errorCodewords:0 matrixWidth:0 matrixHeight:0 dataRegions:1], nil];
   //The last entries are fake entries to test special conditions with C40 encoding
 }
 

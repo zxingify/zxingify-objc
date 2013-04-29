@@ -40,11 +40,7 @@
 }
 
 - (void)dealloc {
-  [codewords release];
-
-  [super dealloc];
 }
-
 
 /**
  * When Data Matrix Codes use multiple data blocks, they actually interleave the bytes of each of them.
@@ -70,7 +66,7 @@
       for (int j = 0; j < numBlockCodewords; j++) {
         [tempCodewords addObject:[NSNumber numberWithInt:0]];
       }
-      [result addObject:[[[ZXDataMatrixDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:tempCodewords] autorelease]];
+      [result addObject:[[ZXDataMatrixDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:tempCodewords]];
       numResultBlocks++;
     }
   }

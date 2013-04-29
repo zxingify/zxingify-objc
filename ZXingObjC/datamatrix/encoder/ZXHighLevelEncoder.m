@@ -148,14 +148,14 @@ static NSString *MACRO_TRAILER = nil;
 + (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXSymbolShapeHint *)shape
                       minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize {
   //the codewords 0..255 are encoded as Unicode characters
-  NSArray *encoders = [NSArray arrayWithObjects:[[[ZXASCIIEncoder alloc] init] autorelease],
-                       [[[ZXC40Encoder alloc] init] autorelease],
-                       [[[ZXTextEncoder alloc] init] autorelease],
-                       [[[ZXX12Encoder alloc] init] autorelease],
-                       [[[ZXEdifactEncoder alloc] init] autorelease],
-                       [[[ZXBase256Encoder alloc] init] autorelease], nil];
+  NSArray *encoders = [NSArray arrayWithObjects:[[ZXASCIIEncoder alloc] init],
+                       [[ZXC40Encoder alloc] init],
+                       [[ZXTextEncoder alloc] init],
+                       [[ZXX12Encoder alloc] init],
+                       [[ZXEdifactEncoder alloc] init],
+                       [[ZXBase256Encoder alloc] init], nil];
 
-  ZXEncoderContext *context = [[[ZXEncoderContext alloc] initWithMessage:msg] autorelease];
+  ZXEncoderContext *context = [[ZXEncoderContext alloc] initWithMessage:msg];
   context.symbolShape = shape;
   [context setSizeConstraints:minSize maxSize:maxSize];
 

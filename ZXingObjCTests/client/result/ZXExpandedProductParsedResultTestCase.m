@@ -29,7 +29,7 @@
                                        length:0
                                  resultPoints:nil
                                        format:kBarcodeFormatRSSExpanded];
-  ZXExpandedProductParsedResult *o = (ZXExpandedProductParsedResult *)[[[[ZXExpandedProductResultParser alloc] init] autorelease] parse:result];
+  ZXExpandedProductParsedResult *o = (ZXExpandedProductParsedResult *)[[[ZXExpandedProductResultParser alloc] init] parse:result];
   STAssertNotNil(o, @"Expected result to be non-nil");
   STAssertEqualObjects(o.productID, @"66546", @"Product IDs don't match");
   STAssertNil(o.sscc, @"Expected sscc to be nil");

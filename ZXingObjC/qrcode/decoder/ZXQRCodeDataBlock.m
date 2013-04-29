@@ -40,11 +40,7 @@
 }
 
 - (void)dealloc {
-  [codewords release];
-
-  [super dealloc];
 }
-
 
 /**
  * When QR Codes use multiple data blocks, they are actually interleaved.
@@ -74,7 +70,7 @@
         [newCodewords addObject:[NSNull null]];
       }
 
-      [result addObject:[[[ZXQRCodeDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:newCodewords] autorelease]];
+      [result addObject:[[ZXQRCodeDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:newCodewords]];
     }
   }
 

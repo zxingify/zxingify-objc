@@ -63,10 +63,6 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (void)dealloc {
-  [possibleLeftPairs release];
-  [possibleRightPairs release];
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
@@ -178,16 +174,16 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     if (right) {
       center = [row size] - 1 - center;
     }
-    [resultPointCallback foundPossibleResultPoint:[[[ZXResultPoint alloc] initWithX:center y:rowNumber] autorelease]];
+    [resultPointCallback foundPossibleResultPoint:[[ZXResultPoint alloc] initWithX:center y:rowNumber]];
   }
   ZXDataCharacter *outside = [self decodeDataCharacter:row pattern:pattern outsideChar:YES];
   ZXDataCharacter *inside = [self decodeDataCharacter:row pattern:pattern outsideChar:NO];
   if (!outside || !inside) {
     return nil;
   }
-  return [[[ZXPair alloc] initWithValue:1597 * outside.value + inside.value
+  return [[ZXPair alloc] initWithValue:1597 * outside.value + inside.value
                         checksumPortion:outside.checksumPortion + 4 * inside.checksumPortion
-                          finderPattern:pattern] autorelease];
+                          finderPattern:pattern];
 }
 
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar {
@@ -270,7 +266,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     int vEven = [ZXRSSUtils rssValue:self.evenCounts widthsLen:self.evenCountsLen maxWidth:evenWidest noNarrow:YES];
     int tEven = OUTSIDE_EVEN_TOTAL_SUBSET[group];
     int gSum = OUTSIDE_GSUM[group];
-    return [[[ZXDataCharacter alloc] initWithValue:vOdd * tEven + vEven + gSum checksumPortion:checksumPortion] autorelease];
+    return [[ZXDataCharacter alloc] initWithValue:vOdd * tEven + vEven + gSum checksumPortion:checksumPortion];
   } else {
     if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
       return nil;
@@ -282,7 +278,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     int vEven = [ZXRSSUtils rssValue:self.evenCounts widthsLen:self.evenCountsLen maxWidth:evenWidest noNarrow:NO];
     int tOdd = INSIDE_ODD_TOTAL_SUBSET[group];
     int gSum = INSIDE_GSUM[group];
-    return [[[ZXDataCharacter alloc] initWithValue:vEven * tOdd + vOdd + gSum checksumPortion:checksumPortion] autorelease];
+    return [[ZXDataCharacter alloc] initWithValue:vEven * tOdd + vOdd + gSum checksumPortion:checksumPortion];
   }
 }
 
@@ -358,11 +354,11 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     start = [row size] - 1 - start;
     end = [row size] - 1 - end;
   }
-  return [[[ZXRSSFinderPattern alloc] initWithValue:value
+  return [[ZXRSSFinderPattern alloc] initWithValue:value
                                            startEnd:[NSArray arrayWithObjects:[NSNumber numberWithInt:firstElementStart], [startEnd objectAtIndex:1], nil] 
                                               start:start
                                                 end:end
-                                          rowNumber:rowNumber] autorelease];
+                                          rowNumber:rowNumber];
 }
 
 - (BOOL)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules {

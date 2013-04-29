@@ -64,7 +64,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
     yuvData = NULL;
   }
 
-  [super dealloc];
+  
 }
 
 - (unsigned char *)row:(int)y {

@@ -31,7 +31,7 @@
 @implementation ZXMultiFormatWriter
 
 + (id)writer {
-  return [[[ZXMultiFormatWriter alloc] init] autorelease];
+  return [[ZXMultiFormatWriter alloc] init];
 }
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
@@ -42,47 +42,47 @@
   id<ZXWriter> writer;
   switch (format) {
     case kBarcodeFormatEan8:
-      writer = [[[ZXEAN8Writer alloc] init] autorelease];
+      writer = [[ZXEAN8Writer alloc] init];
       break;
 
     case kBarcodeFormatEan13:
-      writer = [[[ZXEAN13Writer alloc] init] autorelease];
+      writer = [[ZXEAN13Writer alloc] init];
       break;
 
     case kBarcodeFormatUPCA:
-      writer = [[[ZXUPCAWriter alloc] init] autorelease];
+      writer = [[ZXUPCAWriter alloc] init];
       break;
 
     case kBarcodeFormatQRCode:
-      writer = [[[ZXQRCodeWriter alloc] init] autorelease];
+      writer = [[ZXQRCodeWriter alloc] init];
       break;
 
     case kBarcodeFormatCode39:
-      writer = [[[ZXCode39Writer alloc] init] autorelease];
+      writer = [[ZXCode39Writer alloc] init];
       break;
 
     case kBarcodeFormatCode128:
-      writer = [[[ZXCode128Writer alloc] init] autorelease];
+      writer = [[ZXCode128Writer alloc] init];
       break;
 
     case kBarcodeFormatITF:
-      writer = [[[ZXITFWriter alloc] init] autorelease];
+      writer = [[ZXITFWriter alloc] init];
       break;
 
     case kBarcodeFormatPDF417:
-      writer = [[[ZXPDF417Writer alloc] init] autorelease];
+      writer = [[ZXPDF417Writer alloc] init];
       break;
 
     case kBarcodeFormatCodabar:
-      writer = [[[ZXCodaBarWriter alloc] init] autorelease];
+      writer = [[ZXCodaBarWriter alloc] init];
       break;
 
     case kBarcodeFormatDataMatrix:
-      writer = [[[ZXDataMatrixWriter alloc] init] autorelease];
+      writer = [[ZXDataMatrixWriter alloc] init];
       break;
 
     case kBarcodeFormatAztec:
-      writer = [[[ZXAztecWriter alloc] init] autorelease];
+      writer = [[ZXAztecWriter alloc] init];
       break;
 
     default:

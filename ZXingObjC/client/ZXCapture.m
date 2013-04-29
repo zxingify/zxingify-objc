@@ -91,8 +91,6 @@ static bool isIPad();
                        original);
 
     CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
-    [NSMakeCollectable(rotatedImage) autorelease];
-
     CFRelease(context);
 
     return rotatedImage;
@@ -185,7 +183,7 @@ static bool isIPad();
         ZXQT(defaultInputDeviceWithMediaType:) ZXMediaTypeVideo];
   }
 
-  capture_device = [zxd retain];
+  capture_device = zxd;
 
   return zxd;
 }
@@ -204,10 +202,9 @@ static bool isIPad();
       if ([capture_device isOpen]) {
         [capture_device close];
       }});
-    [capture_device release];
   }
 
-  capture_device = [device retain];
+  capture_device = device;
 }
 
 - (void)replaceInput {
@@ -217,7 +214,6 @@ static bool isIPad();
 
   if (session && input) {
     [session removeInput:input];
-    [input release];
     input = nil;
   }
 
@@ -228,7 +224,6 @@ static bool isIPad();
     input =
       [ZXCaptureDeviceInput deviceInputWithDevice:zxd
                                        ZXAV(error:nil)];
-    [input retain];
   }
   
   if (input) {
@@ -266,8 +261,8 @@ static bool isIPad();
 }
 
 - (void)stop {
+    
   // NSLog(@"stop");
-
   if (!running) {
     return;
   }
@@ -281,11 +276,19 @@ static bool isIPad();
   running = false;
 }
 
+- (void) setOutputAttributes {
+    
+    // Specify the pixel format
+    // Sourced from: https://github.com/TheLevelUp/ZXingObjC/issues/53
+    output.videoSettings =
+        [NSDictionary dictionaryWithObject: [NSNumber numberWithInt: kCVPixelFormatType_32BGRA] forKey: (id)kCVPixelBufferPixelFormatTypeKey];
+}
+
+/*
 - (void)setOutputAttributes {
     NSString *key = (NSString *)kCVPixelBufferPixelFormatTypeKey;
     NSNumber *value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
-    NSMutableDictionary *attributes =
-      [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
     key = (NSString *)kCVPixelBufferWidthKey;
     value = [NSNumber numberWithUnsignedLong:width];
     [attributes setObject:value forKey:key]; 
@@ -294,6 +297,7 @@ static bool isIPad();
     [attributes setObject:value forKey:key]; 
     [output ZXQT(setPixelBufferAttributes:)ZXAV(setVideoSettings:)attributes];
 }
+*/
 
 - (ZXCaptureVideoOutput *)output {
   if (!output) {
@@ -365,10 +369,8 @@ static bool isIPad();
 
 - (void)setLuminance:(BOOL)on {
   if (on && !luminance) {
-    [luminance release];
-    luminance = [[CALayer layer] retain];
+    luminance = [CALayer layer];
   } else if (!on && luminance) {
-    [luminance release];
     luminance = nil;
   }
 }
@@ -379,10 +381,8 @@ static bool isIPad();
 
 - (void)setBinary:(BOOL)on {
   if (on && !binary) {
-    [binary release];
-    binary = [[CALayer layer] retain];
+    binary = [CALayer layer];
   } else if (!on && binary) {
-    [binary release];
     binary = nil;
   }
 }
@@ -483,16 +483,6 @@ static bool isIPad();
   if (output && session) {
     [session removeOutput:output];
   }
-  [captureToFilename release];
-  [binary release];
-  [luminance release];
-  [output release];
-  [input release];
-  [layer release];
-  [session release];
-  [reader release];
-  [hints release];
-  [super dealloc];
 }
 
 - (void)captureOutput:(ZXCaptureOutput *)captureOutput
@@ -529,7 +519,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
           formatDescriptionAttributes] objectForKey:@"videoEncodedPixelsSize"] sizeValue];
     width = size.width;
     height = size.height;
-    // NSLog(@"reported: %f x %f", size.width, size.height);
+    NSLog(@"reported: %f x %f", size.width, size.height);
     [self performSelectorOnMainThread:@selector(setOutputAttributes) withObject:nil waitUntilDone:NO];
     reported_width = size.width;
     reported_height = size.height;
@@ -541,9 +531,6 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   }});
 
   (void)sampleBuffer;
-
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
   (void)captureOutput;
   (void)connection;
 
@@ -570,34 +557,31 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   CGImageRef rotatedImage = [self rotateImage:videoFrameImage degrees:rotation];
 
   ZXCGImageLuminanceSource *source
-    = [[[ZXCGImageLuminanceSource alloc]
-        initWithCGImage:rotatedImage]
-        autorelease];
+    = [[ZXCGImageLuminanceSource alloc]
+        initWithCGImage:rotatedImage];
 
   if (luminance) {
     CGImageRef image = source.image;
     CGImageRetain(image);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-        luminance.contents = (id)image;
+        luminance.contents = (__bridge id)image;
         CGImageRelease(image);
       });
   }
 
   if (binary || delegate) {
-    ZXHybridBinarizer *binarizer = [ZXHybridBinarizer alloc];
-    [[binarizer initWithSource:source] autorelease];
+    ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
 
     if (binary) {
       CGImageRef image = binarizer.createImage;
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-        binary.contents = (id)image;
+        binary.contents = (__bridge id)image;
         CGImageRelease(image);
       });
     }
 
     if (delegate) {
-      ZXBinaryBitmap *bitmap =
-        [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
+      ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
 
       NSError *error;
       ZXResult *result = [self.reader decode:bitmap hints:hints error:&error];
@@ -606,8 +590,6 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
       }
     }
   }
-
-  [pool drain];
 }
 
 - (BOOL)hasFront {
@@ -654,7 +636,6 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   if (camera  != camera_) {
     camera = camera_;
     capture_device_index = -1;
-    [capture_device release];
     capture_device = 0;
     [self replaceInput];
   }
@@ -721,7 +702,7 @@ static bool isIPad() {
 
 - (id)init {
   if ((self = [super init])) {
-    [self release];
+
   }
   return 0;
 }

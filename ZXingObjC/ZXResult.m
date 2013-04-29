@@ -53,7 +53,7 @@
       self.rawBytes = NULL;
       self.length = 0;
     }
-    self.resultPoints = [[aResultPoints mutableCopy] autorelease];
+    self.resultPoints = [aResultPoints mutableCopy];
     self.barcodeFormat = aFormat;
     self.resultMetadata = nil;
     self.timestamp = aTimestamp;
@@ -63,11 +63,11 @@
 }
 
 + (id)resultWithText:(NSString *)text rawBytes:(unsigned char *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
-  return [[[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format] autorelease];
+  return [[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format];
 }
 
 + (id)resultWithText:(NSString *)text rawBytes:(unsigned char *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
-  return [[[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format timestamp:timestamp] autorelease];
+  return [[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format timestamp:timestamp];
 }
 
 - (void)dealloc {
@@ -75,12 +75,6 @@
     free(self.rawBytes);
     self.rawBytes = NULL;
   }
-
-  [text release];
-  [resultPoints release];
-  [resultMetadata release];
-
-  [super dealloc];
 }
 
 - (void)putMetadata:(ZXResultMetadataType)type value:(id)value {
@@ -102,7 +96,7 @@
 
 - (void)addResultPoints:(NSArray *)newPoints {
   if (self.resultPoints == nil) {
-    self.resultPoints = [[newPoints mutableCopy] autorelease];
+    self.resultPoints = [newPoints mutableCopy];
   } else if (newPoints != nil && [newPoints count] > 0) {
     [self.resultPoints addObjectsFromArray:newPoints];
   }

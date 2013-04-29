@@ -45,13 +45,10 @@
 }
 
 + (id)geoParsedResultWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query {
-  return [[[self alloc] initWithLatitude:latitude longitude:longitude altitude:altitude query:query] autorelease];
+  return [[self alloc] initWithLatitude:latitude longitude:longitude altitude:altitude query:query];
 }
 
 - (void)dealloc {
-  [query release];
-
-  [super dealloc];
 }
 
 - (NSString *)geoURI {

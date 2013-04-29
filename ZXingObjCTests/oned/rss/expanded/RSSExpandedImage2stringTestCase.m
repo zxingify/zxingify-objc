@@ -221,10 +221,10 @@
 }
 
 - (void)assertCorrectImage2string:(NSString *)path expected:(NSString *)expected {
-  ZXRSSExpandedReader *rssExpandedReader = [[[ZXRSSExpandedReader alloc] init] autorelease];
+  ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
 
-  ZXImage *image = [[[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]] autorelease];
-  ZXBinaryBitmap *binaryMap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[[ZXCGImageLuminanceSource alloc] initWithZXImage:image] autorelease]] autorelease]] autorelease];
+  ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
+  ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   int rowNumber = binaryMap.height / 2;
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 

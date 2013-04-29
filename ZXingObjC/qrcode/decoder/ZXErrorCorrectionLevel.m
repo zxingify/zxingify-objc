@@ -43,9 +43,6 @@ static NSArray *FOR_BITS = nil;
 }
 
 - (void)dealloc {
-  [name release];
-
-  [super dealloc];
 }
 
 - (NSString *)description {

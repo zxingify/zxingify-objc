@@ -35,8 +35,8 @@
     self.value = aValue;
     self.startEnd = aStartEnd;
     self.resultPoints = [NSArray arrayWithObjects:
-                         [[[ZXResultPoint alloc] initWithX:(float)aStart y:(float)aRowNumber] autorelease],
-                         [[[ZXResultPoint alloc] initWithX:(float)anEnd y:(float)aRowNumber] autorelease],
+                         [[ZXResultPoint alloc] initWithX:(float)aStart y:(float)aRowNumber],
+                         [[ZXResultPoint alloc] initWithX:(float)anEnd y:(float)aRowNumber],
                          nil];
   }
 
@@ -44,10 +44,6 @@
 }
 
 - (void)dealloc {
-  [startEnd release];
-  [resultPoints release];
-
-  [super dealloc];
 }
 
 - (BOOL)isEqual:(id)object {

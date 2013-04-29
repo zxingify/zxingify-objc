@@ -163,12 +163,12 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 + (BOOL)embedBasicPatterns:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   // Let's get started with embedding big squares at corners.
   if (![self embedPositionDetectionPatternsAndSeparators:matrix]) {
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil];
     return NO;
   }
   // Then, embed the dark dot at the left bottom corner.
   if (![self embedDarkDotAtLeftBottomCorner:matrix]) {
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:nil];
     return NO;
   }
 
@@ -182,7 +182,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 // Embed type information. On success, modify the matrix.
 + (BOOL)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
-  ZXBitArray *typeInfoBits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *typeInfoBits = [[ZXBitArray alloc] init];
   if (![self makeTypeInfoBits:ecLevel maskPattern:maskPattern bits:typeInfoBits error:error]) {
     return NO;
   }
@@ -219,7 +219,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   if (version.versionNumber < 7) { // Version info is necessary if version >= 7.
     return YES; // Don't need version info.
   }
-  ZXBitArray *versionInfoBits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *versionInfoBits = [[ZXBitArray alloc] init];
   if (![self makeVersionInfoBits:version bits:versionInfoBits error:error]) {
     return NO;
   }
@@ -288,7 +288,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]
                                                          forKey:NSLocalizedDescriptionKey];
 
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
   }
 
@@ -355,7 +355,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Invalid mask pattern"
                                                          forKey:NSLocalizedDescriptionKey];
 
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
   }
   int typeInfo = ([ecLevel bits] << 3) | maskPattern;
@@ -364,7 +364,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   int bchCode = [self calculateBCHCode:typeInfo poly:TYPE_INFO_POLY];
   [bits appendBits:bchCode numBits:10];
 
-  ZXBitArray *maskBits = [[[ZXBitArray alloc] init] autorelease];
+  ZXBitArray *maskBits = [[ZXBitArray alloc] init];
   [maskBits appendBits:TYPE_INFO_MASK_PATTERN numBits:15];
   [bits xor:maskBits];
 
@@ -372,7 +372,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
                                                          forKey:NSLocalizedDescriptionKey];
 
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
   }
 
@@ -390,7 +390,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
                                                          forKey:NSLocalizedDescriptionKey];
 
-    if (error) *error = [[[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo] autorelease];
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
   }
 

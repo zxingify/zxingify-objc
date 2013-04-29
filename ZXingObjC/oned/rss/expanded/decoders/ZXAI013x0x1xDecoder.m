@@ -47,10 +47,7 @@ int const AI013x0x1x_DATE_SIZE = 16;
 }
 
 - (void)dealloc {
-  [dateCode release];
-  [firstAIdigits release];
 
-  [super dealloc];
 }
 
 - (NSString *)parseInformationWithError:(NSError **)error {

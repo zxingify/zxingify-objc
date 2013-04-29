@@ -72,7 +72,7 @@
       break;
     }
     if (values == nil) {
-      values = [[[NSMutableArray alloc] initWithCapacity:max] autorelease];
+      values = [[NSMutableArray alloc] initWithCapacity:max];
     }
     [values addObject:value];
   }

@@ -73,9 +73,6 @@ const int BITNR[33][30] = {
 }
 
 - (void)dealloc {
-  [bitMatrix release];
-
-  [super dealloc];
 }
 
 - (NSArray *)readCodewords {

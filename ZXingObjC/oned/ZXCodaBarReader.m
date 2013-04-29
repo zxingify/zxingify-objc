@@ -98,8 +98,6 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
     free(self.counters);
     self.counters = NULL;
   }
-
-  [super dealloc];
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
@@ -193,8 +191,8 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
                          rawBytes:nil
                            length:0
                      resultPoints:[NSArray arrayWithObjects:
-                                   [[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber] autorelease],
-                                   [[[ZXResultPoint alloc] initWithX:right y:(float)rowNumber] autorelease], nil]
+                                   [[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
+                                   [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber], nil]
                            format:kBarcodeFormatCodabar];
 }
 

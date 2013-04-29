@@ -75,11 +75,6 @@
     free(self.crossCheckStateCount);
     self.crossCheckStateCount = NULL;
   }
-
-  [image release];
-  [possibleCenters release];
-
-  [super dealloc];
 }
 
 
@@ -247,7 +242,7 @@
       }
     }
     // Hadn't found this before; save it
-    ZXResultPoint *point = [[[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize] autorelease];
+    ZXResultPoint *point = [[ZXAlignmentPattern alloc] initWithPosX:centerJ posY:centerI estimatedModuleSize:estimatedModuleSize];
     [self.possibleCenters addObject:point];
     if (self.resultPointCallback != nil) {
       [self.resultPointCallback foundPossibleResultPoint:point];

@@ -54,11 +54,7 @@
 }
 
 - (void)dealloc {
-  [barcodeReader release];
-  [testBase release];
-  [testResults release];
 
-  [super dealloc];
 }
 
 - (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount rotation:(float)rotation {
@@ -69,7 +65,7 @@
  * Adds a new test for the current directory of images.
  */
 - (void)addTest:(int)mustPassCount tryHarderCount:(int)tryHarderCount maxMisreads:(int)maxMisreads maxTryHarderMisreads:(int)maxTryHarderMisreads rotation:(float)rotation {
-  [self.testResults addObject:[[[TestResult alloc] initWithMustPassCount:mustPassCount tryHarderCount:tryHarderCount maxMisreads:maxMisreads maxTryHarderMisreads:maxTryHarderMisreads rotation:rotation] autorelease]];
+  [self.testResults addObject:[[TestResult alloc] initWithMustPassCount:mustPassCount tryHarderCount:tryHarderCount maxMisreads:maxMisreads maxTryHarderMisreads:maxTryHarderMisreads rotation:rotation]];
 }
 
 - (NSArray *)imageFiles {
@@ -205,8 +201,8 @@
     for (int x = 0; x < testCount; x++) {
       float rotation = [[self.testResults objectAtIndex:x] rotation];
       ZXImage *rotatedImage = [self rotateImage:image degrees:rotation];
-      ZXLuminanceSource *source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage] autorelease];
-      ZXBinaryBitmap *bitmap = [[[ZXBinaryBitmap alloc] initWithBinarizer:[[[ZXHybridBinarizer alloc] initWithSource:source] autorelease]] autorelease];
+      ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage];
+      ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];
       BOOL misread;
       if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:NO misread:&misread]) {
         passedCounts[x]++;
@@ -224,8 +220,6 @@
         NSLog(@"could not read at rotation %f w/TH", rotation);
       }
     }
-
-    [image release];
   }
 
   // Print the results of all tests first
@@ -364,11 +358,10 @@
                      original.cgimage);
 
   CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
-  CFMakeCollectable(rotatedImage);
 
   CFRelease(context);
 
-  return [[[ZXImage alloc] initWithCGImageRef:rotatedImage] autorelease];
+  return [[[ZXImage alloc] initWithCGImageRef:rotatedImage];
 }
 
 @end
