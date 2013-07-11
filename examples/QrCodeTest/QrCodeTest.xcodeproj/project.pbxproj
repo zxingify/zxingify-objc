@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0137B37A178EFE2E001EFE42 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B375178EFE2E001EFE42 /* ZXAztecCode.m */; };
+		0137B37B178EFE2E001EFE42 /* ZXAztecEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B377178EFE2E001EFE42 /* ZXAztecEncoder.m */; };
+		0137B37C178EFE2E001EFE42 /* ZXAztecWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B379178EFE2E001EFE42 /* ZXAztecWriter.m */; };
 		022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B185E14D1B5FE000503E2 /* UIKit.framework */; };
 		022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186014D1B5FE000503E2 /* Foundation.framework */; };
 		022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 022B186714D1B5FE000503E2 /* InfoPlist.strings */; };
@@ -223,6 +226,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0137B374178EFE2E001EFE42 /* ZXAztecCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecCode.h; sourceTree = "<group>"; };
+		0137B375178EFE2E001EFE42 /* ZXAztecCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecCode.m; sourceTree = "<group>"; };
+		0137B376178EFE2E001EFE42 /* ZXAztecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecEncoder.h; sourceTree = "<group>"; };
+		0137B377178EFE2E001EFE42 /* ZXAztecEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecEncoder.m; sourceTree = "<group>"; };
+		0137B378178EFE2E001EFE42 /* ZXAztecWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecWriter.h; sourceTree = "<group>"; };
+		0137B379178EFE2E001EFE42 /* ZXAztecWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecWriter.m; sourceTree = "<group>"; };
 		022B185A14D1B5FE000503E2 /* QrCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QrCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		022B185E14D1B5FE000503E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		022B186014D1B5FE000503E2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -673,6 +682,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0137B373178EFE2E001EFE42 /* encoder */ = {
+			isa = PBXGroup;
+			children = (
+				0137B374178EFE2E001EFE42 /* ZXAztecCode.h */,
+				0137B375178EFE2E001EFE42 /* ZXAztecCode.m */,
+				0137B376178EFE2E001EFE42 /* ZXAztecEncoder.h */,
+				0137B377178EFE2E001EFE42 /* ZXAztecEncoder.m */,
+				0137B378178EFE2E001EFE42 /* ZXAztecWriter.h */,
+				0137B379178EFE2E001EFE42 /* ZXAztecWriter.m */,
+			);
+			path = encoder;
+			sourceTree = "<group>";
+		};
 		022B184F14D1B5FE000503E2 = {
 			isa = PBXGroup;
 			children = (
@@ -785,6 +807,7 @@
 		2504D4CD16F80FF900DF8882 /* aztec */ = {
 			isa = PBXGroup;
 			children = (
+				0137B373178EFE2E001EFE42 /* encoder */,
 				2504D4CE16F80FF900DF8882 /* decoder */,
 				2504D4D116F80FF900DF8882 /* detector */,
 				2504D4D416F80FF900DF8882 /* ZXAztecDetectorResult.h */,
@@ -1655,6 +1678,9 @@
 				2504D74916F80FFA00DF8882 /* ZXResult.m in Sources */,
 				2504D74A16F80FFA00DF8882 /* ZXResultPoint.m in Sources */,
 				2504D74B16F80FFA00DF8882 /* ZXRGBLuminanceSource.m in Sources */,
+				0137B37A178EFE2E001EFE42 /* ZXAztecCode.m in Sources */,
+				0137B37B178EFE2E001EFE42 /* ZXAztecEncoder.m in Sources */,
+				0137B37C178EFE2E001EFE42 /* ZXAztecWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
