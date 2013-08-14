@@ -40,6 +40,12 @@
 static bool isIPad();
 #endif
 
+@interface ZXCapture ()
+
+@property (nonatomic, assign) dispatch_queue_t captureQueue;
+
+@end
+
 @implementation ZXCapture
 
 @synthesize delegate;
@@ -115,6 +121,7 @@ static bool isIPad();
       });
     self.reader = [ZXMultiFormatReader reader];
     self.hints = [ZXDecodeHints hints];
+    _captureQueue = dispatch_queue_create("com.zxing.captureQueue", NULL);
   }
   return self;
 }
@@ -294,8 +301,10 @@ static bool isIPad();
     [self setOutputAttributes];
     [output ZXQT(setAutomaticallyDropsLateVideoFrames:)
                 ZXAV(setAlwaysDiscardsLateVideoFrames:)YES];
+
     [output ZXQT(setDelegate:)ZXAV(setSampleBufferDelegate:)self
-                  ZXAV(queue:dispatch_get_main_queue())];
+                  ZXAV(queue:self.captureQueue)];
+
     [self.session addOutput:output ZXQT(error:nil)];
   }
   return output;
@@ -472,6 +481,10 @@ static bool isIPad();
   if (output && session) {
     [session removeOutput:output];
   }
+  if (_captureQueue) {
+    dispatch_release(_captureQueue);
+    _captureQueue = nil;
+  }
 }
 
 - (void)captureOutput:(ZXCaptureOutput *)captureOutput
@@ -479,103 +492,110 @@ ZXQT(didOutputVideoFrame:(CVImageBufferRef)videoFrame
      withSampleBuffer:(QTSampleBuffer *)sampleBuffer)
 ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
        fromConnection:(ZXCaptureConnection *)connection {
-  
-  if (!cameraIsReady)
-  {
-    cameraIsReady = YES;
-    if ([self.delegate respondsToSelector:@selector(captureCameraIsReady:)])
+  @autoreleasepool {
+    if (!cameraIsReady)
     {
-      [self.delegate captureCameraIsReady:self];
+      cameraIsReady = YES;
+      if ([self.delegate respondsToSelector:@selector(captureCameraIsReady:)])
+      {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.delegate captureCameraIsReady:self];
+        });
+      }
     }
-  }
-           
-  if (!captureToFilename && !luminance && !binary && !delegate) {
-    // NSLog(@"skipping capture");
-    return;
-  }
-
-  // NSLog(@"received frame");
-
-  ZXAV(CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer));
-
-  // NSLog(@"%ld %ld", CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame));
-  // NSLog(@"delegate %@", delegate);
-
-  ZXQT({
-  if (!reported_width || !reported_height) {
-    NSSize size = 
-      [[[[input.device.formatDescriptions objectAtIndex:0]
-          formatDescriptionAttributes] objectForKey:@"videoEncodedPixelsSize"] sizeValue];
-    width = size.width;
-    height = size.height;
-    // NSLog(@"reported: %f x %f", size.width, size.height);
-    [self performSelectorOnMainThread:@selector(setOutputAttributes) withObject:nil waitUntilDone:NO];
-    reported_width = size.width;
-    reported_height = size.height;
-    if ([delegate  respondsToSelector:@selector(captureSize:width:height:)]) {
-      [delegate captureSize:self
-                      width:[NSNumber numberWithFloat:size.width]
-                     height:[NSNumber numberWithFloat:size.height]];
+             
+    if (!captureToFilename && !luminance && !binary && !delegate) {
+      // NSLog(@"skipping capture");
+      return;
     }
-  }});
 
-  (void)sampleBuffer;
-  (void)captureOutput;
-  (void)connection;
+    // NSLog(@"received frame");
+
+    ZXAV(CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer));
+
+    // NSLog(@"%ld %ld", CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame));
+    // NSLog(@"delegate %@", delegate);
+
+    ZXQT({
+    if (!reported_width || !reported_height) {
+      NSSize size = 
+        [[[[input.device.formatDescriptions objectAtIndex:0]
+            formatDescriptionAttributes] objectForKey:@"videoEncodedPixelsSize"] sizeValue];
+      width = size.width;
+      height = size.height;
+      // NSLog(@"reported: %f x %f", size.width, size.height);
+      [self performSelectorOnMainThread:@selector(setOutputAttributes) withObject:nil waitUntilDone:NO];
+      reported_width = size.width;
+      reported_height = size.height;
+      if ([delegate  respondsToSelector:@selector(captureSize:width:height:)]) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+              [delegate captureSize:self
+                              width:[NSNumber numberWithFloat:size.width]
+                             height:[NSNumber numberWithFloat:size.height]];
+          });
+      }
+    }});
+
+    (void)sampleBuffer;
+    (void)captureOutput;
+    (void)connection;
 
 #if !TARGET_OS_EMBEDDED
-  // The routines don't exist in iOS. There are alternatives, but a good
-  // solution would have to figure out a reasonable path and might be
-  // better as a post to url
+    // The routines don't exist in iOS. There are alternatives, but a good
+    // solution would have to figure out a reasonable path and might be
+    // better as a post to url
 
-  if (captureToFilename) {
-    CGImageRef image = 
-      [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-    NSURL *url = [NSURL fileURLWithPath:captureToFilename];
-    CGImageDestinationRef dest =
-      CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
-    CGImageDestinationAddImage(dest, image, nil);
-    CGImageDestinationFinalize(dest);
-    CGImageRelease(image);
-    CFRelease(dest);
-    self.captureToFilename = nil;
-  }
+    if (captureToFilename) {
+      CGImageRef image = 
+        [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
+      NSURL *url = [NSURL fileURLWithPath:captureToFilename];
+      CGImageDestinationRef dest =
+        CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
+      CGImageDestinationAddImage(dest, image, nil);
+      CGImageDestinationFinalize(dest);
+      CGImageRelease(image);
+      CFRelease(dest);
+      self.captureToFilename = nil;
+    }
 #endif
 
-  CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-  CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:rotation];
-  CFRelease(videoFrameImage);
+    CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
+    CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:rotation];
+    CFRelease(videoFrameImage);
 
-  ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
-  CFRelease(rotatedImage);
+    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
+    CFRelease(rotatedImage);
 
-  if (luminance) {
-    CGImageRef image = source.image;
-    CGImageRetain(image);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-        luminance.contents = (__bridge id)image;
-        CGImageRelease(image);
-      });
-  }
-
-  if (binary || delegate) {
-    ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
-
-    if (binary) {
-      CGImageRef image = binarizer.createImage;
+    if (luminance) {
+      CGImageRef image = source.image;
+      CGImageRetain(image);
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-        binary.contents = (__bridge id)image;
-        CGImageRelease(image);
-      });
+          luminance.contents = (__bridge id)image;
+          CGImageRelease(image);
+        });
     }
 
-    if (delegate) {
-      ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
+    if (binary || delegate) {
+      ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
 
-      NSError *error;
-      ZXResult *result = [self.reader decode:bitmap hints:hints error:&error];
-      if (result) {
-        [delegate captureResult:self result:result];
+      if (binary) {
+        CGImageRef image = binarizer.createImage;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+          binary.contents = (__bridge id)image;
+          CGImageRelease(image);
+        });
+      }
+
+      if (delegate) {
+        ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
+
+        NSError *error;
+        ZXResult *result = [self.reader decode:bitmap hints:hints error:&error];
+        if (result) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+            [delegate captureResult:self result:result];
+          });
+        }
       }
     }
   }
