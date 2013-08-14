@@ -301,8 +301,12 @@ static bool isIPad();
     [self setOutputAttributes];
     [output ZXQT(setAutomaticallyDropsLateVideoFrames:)
                 ZXAV(setAlwaysDiscardsLateVideoFrames:)YES];
+      
+    dispatch_queue_t queue = dispatch_queue_create("captureQueue", NULL);      
     [output ZXQT(setDelegate:)ZXAV(setSampleBufferDelegate:)self
-                  ZXAV(queue:dispatch_get_main_queue())];
+                  ZXAV(queue:queue)];
+    dispatch_release(queue);
+      
     [self.session addOutput:output ZXQT(error:nil)];
   }
   return output;
@@ -506,7 +510,9 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
     cameraIsReady = YES;
     if ([self.delegate respondsToSelector:@selector(captureCameraIsReady:)])
     {
-      [self.delegate captureCameraIsReady:self];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate captureCameraIsReady:self];
+        });
     }
   }
            
@@ -534,9 +540,11 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
     reported_width = size.width;
     reported_height = size.height;
     if ([delegate  respondsToSelector:@selector(captureSize:width:height:)]) {
-      [delegate captureSize:self
-                      width:[NSNumber numberWithFloat:size.width]
-                     height:[NSNumber numberWithFloat:size.height]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [delegate captureSize:self
+                            width:[NSNumber numberWithFloat:size.width]
+                           height:[NSNumber numberWithFloat:size.height]];
+        });
     }
   }});
 
@@ -602,7 +610,9 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
       NSError *error;
       ZXResult *result = [self.reader decode:bitmap hints:hints error:&error];
       if (result) {
-        [delegate captureResult:self result:result];
+          dispatch_async(dispatch_get_main_queue(), ^{
+              [delegate captureResult:self result:result];
+          });
       }
     }
   }
