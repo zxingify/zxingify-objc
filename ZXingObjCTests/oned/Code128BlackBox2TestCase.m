@@ -19,8 +19,8 @@
 
 @implementation Code128BlackBox2TestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation
                 testBasePathSuffix:@"Resources/blackbox/code128-2"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatCode128];

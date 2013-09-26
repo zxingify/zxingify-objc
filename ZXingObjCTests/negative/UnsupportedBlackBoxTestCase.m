@@ -22,8 +22,8 @@
  */
 @implementation UnsupportedBlackBoxTestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation testBasePathSuffix:@"Resources/blackbox/unsupported"];
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation testBasePathSuffix:@"Resources/blackbox/unsupported"];
 
   if (self) {
     [self addTest:0 rotation:0.0f];

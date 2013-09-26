@@ -31,17 +31,13 @@
 
 @property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
 
-- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error;
-
 @end
 
 @implementation ZXQRCodeDecoder
 
-@synthesize rsDecoder;
-
 - (id)init {
   if (self = [super init]) {
-    self.rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]];
+    _rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF QrCodeField256]];
   }
 
   return self;
@@ -72,7 +68,6 @@
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error {
   return [self decodeMatrix:bits hints:nil error:error];
 }
-
 
 /**
  * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
@@ -139,7 +134,7 @@
 
   int numECCodewords = [codewordBytes count] - numDataCodewords;
   NSError *decodeError = nil;
-  if (![rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
+  if (![self.rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
       if (error) *error = ChecksumErrorInstance();
       return NO;

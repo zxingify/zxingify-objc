@@ -67,13 +67,6 @@ const int MODULO_VALUE = 0x12D;
 
 static int LOG[256], ALOG[256];
 
-@interface ZXDataMatrixErrorCorrection ()
-
-+ (NSString *)createECCBlock:(NSString *)codewords numECWords:(int)numECWords;
-+ (NSString *)createECCBlock:(NSString *)codewords start:(int)start len:(int)len numECWords:(int)numECWords;
-
-@end
-
 @implementation ZXDataMatrixErrorCorrection
 
 + (void)initialize {

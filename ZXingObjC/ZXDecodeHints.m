@@ -25,18 +25,9 @@
 
 @implementation ZXDecodeHints
 
-@synthesize assumeCode39CheckDigit;
-@synthesize allowedLengths;
-@synthesize barcodeFormats;
-@synthesize encoding;
-@synthesize other;
-@synthesize pureBarcode;
-@synthesize resultPointCallback;
-@synthesize tryHarder;
-
 - (id)init {
   if (self = [super init]) {
-    self.barcodeFormats = [NSMutableArray array];
+    _barcodeFormats = [NSMutableArray array];
   }
 
   return self;

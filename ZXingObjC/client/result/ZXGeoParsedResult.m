@@ -17,28 +17,14 @@
 #import "ZXGeoParsedResult.h"
 #import "ZXParsedResultType.h"
 
-@interface ZXGeoParsedResult ()
-
-@property (nonatomic) double latitude;
-@property (nonatomic) double longitude;
-@property (nonatomic) double altitude;
-@property (nonatomic, copy) NSString *query;
-
-@end
-
 @implementation ZXGeoParsedResult
 
-@synthesize latitude;
-@synthesize longitude;
-@synthesize altitude;
-@synthesize query;
-
-- (id)initWithLatitude:(double)aLatitude longitude:(double)aLongitude altitude:(double)anAltitude query:(NSString *)aQuery {
+- (id)initWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query {
   if (self = [super initWithType:kParsedResultTypeGeo]) {
-    self.latitude = aLatitude;
-    self.longitude = aLongitude;
-    self.altitude = anAltitude;
-    self.query = aQuery;
+    _latitude = latitude;
+    _longitude = longitude;
+    _altitude = altitude;
+    _query = query;
   }
 
   return self;
@@ -55,7 +41,7 @@
     [result appendFormat:@",%f", self.altitude];
   }
   if (self.query != nil) {
-    [result appendFormat:@"?%@", query];
+    [result appendFormat:@"?%@", self.query];
   }
   return result;
 }

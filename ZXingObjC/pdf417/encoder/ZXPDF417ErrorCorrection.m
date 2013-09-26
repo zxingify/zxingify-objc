@@ -121,8 +121,7 @@ const int EC_COEFFICIENTS[9][512] = {
  */
 + (int)errorCorrectionCodewordCount:(int)errorCorrectionLevel {
   if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Error correction level must be between 0 and 8!"];
+    [NSException raise:NSInvalidArgumentException format:@"Error correction level must be between 0 and 8!"];
   }
   return 1 << (errorCorrectionLevel + 1);
 }
@@ -133,8 +132,7 @@ const int EC_COEFFICIENTS[9][512] = {
  */
 + (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError **)error {
   if (n <= 0) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"n must be > 0"];
+    [NSException raise:NSInvalidArgumentException format:@"n must be > 0"];
   }
   if (n <= 40) {
     return 2;

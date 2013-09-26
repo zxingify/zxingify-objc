@@ -23,12 +23,6 @@ const unichar ESCAPE_FNC_2 = L'\u00f2';
 const unichar ESCAPE_FNC_3 = L'\u00f3';
 const unichar ESCAPE_FNC_4 = L'\u00f4';
 
-@interface ZXCode128Writer ()
-
-- (BOOL)isDigits:(NSString *)value start:(int)start length:(unsigned int)length;
-
-@end
-
 @implementation ZXCode128Writer
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {

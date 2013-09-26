@@ -18,12 +18,6 @@
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXImage.h"
 
-@interface ZXCGImageLuminanceSource ()
-
-- (void)initializeWithImage:(CGImageRef)image left:(int)left top:(int)top width:(int)width height:(int)height;
-
-@end
-
 @implementation ZXCGImageLuminanceSource
 
 + (CGImageRef)createImageFromBuffer:(CVImageBufferRef)buffer {
@@ -88,70 +82,60 @@
   return result;
 }
 
-- (id)initWithZXImage:(ZXImage *)_image 
-                 left:(size_t)_left
-                  top:(size_t)_top
-                width:(size_t)_width
-               height:(size_t)_height {
-  self = [self initWithCGImage:_image.cgimage left:(int)_left top:(int)_top width:(int)_width height:(int)_height];
-
-  return self;
+- (id)initWithZXImage:(ZXImage *)image
+                 left:(size_t)left
+                  top:(size_t)top
+                width:(size_t)width
+               height:(size_t)height {
+  return [self initWithCGImage:image.cgimage left:(int)left top:(int)top width:(int)width height:(int)height];
 }
 
-- (id)initWithZXImage:(ZXImage *)_image {
-  self = [self initWithCGImage:_image.cgimage];
-
-  return self;
+- (id)initWithZXImage:(ZXImage *)image {
+  return [self initWithCGImage:image.cgimage];
 }
 
-- (id)initWithCGImage:(CGImageRef)_image 
-                 left:(size_t)_left
-                  top:(size_t)_top
-                width:(size_t)_width
-               height:(size_t)_height {
-  if (self = [super init]) {
-    [self initializeWithImage:_image left:(int)_left top:(int)_top width:(int)_width height:(int)_height];
+- (id)initWithCGImage:(CGImageRef)image
+                 left:(size_t)left
+                  top:(size_t)top
+                width:(size_t)width
+               height:(size_t)height {
+  if (self = [super initWithWidth:(int)width height:(int)height]) {
+    [self initializeWithImage:image left:(int)left top:(int)top width:(int)width height:(int)height];
   }
 
   return self;
 }
 
-- (id)initWithCGImage:(CGImageRef)_image {
-  self = [self initWithCGImage:_image left:0 top:0 width:(int)CGImageGetWidth(_image) height:(int)CGImageGetHeight(_image)];
-
-  return self;
+- (id)initWithCGImage:(CGImageRef)image {
+  return [self initWithCGImage:image left:0 top:0 width:(int)CGImageGetWidth(image) height:(int)CGImageGetHeight(image)];
 }
 
 - (id)initWithBuffer:(CVPixelBufferRef)buffer
-                left:(size_t)_left
-                 top:(size_t)_top
-               width:(size_t)_width
-              height:(size_t)_height {
-  CGImageRef _image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer left:(int)_left top:(int)_top width:(int)_width height:(int)_height];
+                left:(size_t)left
+                 top:(size_t)top
+               width:(size_t)width
+              height:(size_t)height {
+  CGImageRef image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer left:(int)left top:(int)top width:(int)width height:(int)height];
 
-  self = [self initWithCGImage:_image];
-
-  return self;
+  return [self initWithCGImage:image];
 }
 
 - (id )initWithBuffer:(CVPixelBufferRef)buffer {
-  CGImageRef _image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer];
+  CGImageRef image = [ZXCGImageLuminanceSource createImageFromBuffer:buffer];
 
-  self = [self initWithCGImage:_image];
-
-  return self;
+  return [self initWithCGImage:image];
 }
 
 - (CGImageRef)image {
-  return image;
+  return _image;
 }
 
 - (void)dealloc {  
-  if (image) {
-    CGImageRelease(image);
+  if (_image) {
+    CGImageRelease(_image);
   }
-  if (data) {
-    free(data);
+  if (_data) {
+    free(_data);
   }
 }
 
@@ -163,7 +147,7 @@
   unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
 
   int offset = y * self.width;
-  memcpy(row, data + offset, self.width);
+  memcpy(row, _data + offset, self.width);
   return row;
 }
 
@@ -171,17 +155,15 @@
   int area = self.width * self.height;
 
   unsigned char *result = (unsigned char *)malloc(area * sizeof(unsigned char));
-  memcpy(result, data, area * sizeof(unsigned char));
+  memcpy(result, _data, area * sizeof(unsigned char));
   return result;
 }
 
-- (void)initializeWithImage:(CGImageRef)cgimage left:(int)_left top:(int)_top width:(int)_width height:(int)_height {
-  data = 0;
-  image = CGImageRetain(cgimage);
-  left = _left;
-  top = _top;
-  self->width = _width;
-  self->height = _height;
+- (void)initializeWithImage:(CGImageRef)cgimage left:(int)left top:(int)top width:(int)width height:(int)height {
+  _data = 0;
+  _image = CGImageRetain(cgimage);
+  _left = left;
+  _top = top;
   int sourceWidth = (int)CGImageGetWidth(cgimage);
   int sourceHeight = (int)CGImageGetHeight(cgimage);
 
@@ -201,14 +183,14 @@
     CGContextClipToRect(context, CGRectMake(0, 0, self.width, self.height));
   }
 
-  CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), image);
+  CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), self.image);
 
   uint32_t *pixelData = (uint32_t *) malloc(self.width * self.height * sizeof(uint32_t));
   memcpy(pixelData, CGBitmapContextGetData(context), self.width * self.height * sizeof(uint32_t));
   CGContextRelease(context);
   CGColorSpaceRelease(colorSpace);
 
-  data = (unsigned char *)malloc(self.width * self.height * sizeof(unsigned char));
+  _data = (unsigned char *)malloc(self.width * self.height * sizeof(unsigned char));
 
   for (int i = 0; i < self.height * self.width; i++) {
     uint32_t rgbPixel=pixelData[i];
@@ -225,9 +207,9 @@
     blue = round((blue / alpha) - 0.001f);
 
     if (red == green && green == blue) {
-      data[i] = red;
+      _data[i] = red;
     } else {
-      data[i] = (306 * (int)red +
+      _data[i] = (306 * (int)red +
                  601 * (int)green +
                  117 * (int)blue +
                 (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
@@ -236,8 +218,8 @@
 
   free(pixelData);
 
-  top = _top;
-  left = _left;
+  _top = top;
+  _left = left;
 }
 
 - (BOOL)rotateSupported {
@@ -285,8 +267,7 @@
 
   CFRelease(context);
 
-  int _width = self.width;
-  return [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage left:top top:sourceWidth - (left + _width) width:self.height height:_width];
+  return [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage left:_top top:sourceWidth - (_left + self.width) width:self.height height:self.width];
 }
 
 @end

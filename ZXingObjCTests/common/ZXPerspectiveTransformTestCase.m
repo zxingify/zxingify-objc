@@ -17,16 +17,6 @@
 #import "ZXPerspectiveTransform.h"
 #import "ZXPerspectiveTransformTestCase.h"
 
-@interface ZXPerspectiveTransformTestCase ()
-
-- (void)assertPointEqualsExpectedX:(float)expectedX
-                         expectedY:(float)expectedY
-                           sourceX:(float)sourceX
-                           sourceY:(float)sourceY
-                                pt:(ZXPerspectiveTransform *)pt;
-
-@end
-
 @implementation ZXPerspectiveTransformTestCase
 
 static float EPSILON = 0.0001f;

@@ -27,40 +27,34 @@
 
 @implementation ZXModulusGF
 
-@synthesize expTable;
-@synthesize logTable;
-@synthesize modulus;
-@synthesize one;
-@synthesize zero;
-
 + (ZXModulusGF *)PDF417_GF {
   return [[ZXModulusGF alloc] initWithModulus:929 generator:3];
 }
 
-- (id)initWithModulus:(int)aModulus generator:(int)generator {
+- (id)initWithModulus:(int)modulus generator:(int)generator {
   if (self = [super init]) {
-    self.modulus = aModulus;
-    self.expTable = [NSMutableArray arrayWithCapacity:self.modulus];
-    self.logTable = [NSMutableArray arrayWithCapacity:self.modulus];
+    _modulus = modulus;
+    _expTable = [NSMutableArray arrayWithCapacity:self.modulus];
+    _logTable = [NSMutableArray arrayWithCapacity:self.modulus];
     int x = 1;
-    for (int i = 0; i < self.modulus; i++) {
-      [self.expTable addObject:@(x)];
-      x = (x * generator) % self.modulus;
+    for (int i = 0; i < modulus; i++) {
+      [_expTable addObject:@(x)];
+      x = (x * generator) % modulus;
     }
 
     for (int i = 0; i < self.size; i++) {
-      [self.logTable addObject:@0];
+      [_logTable addObject:@0];
     }
 
     for (int i = 0; i < self.size - 1; i++) {
-      self.logTable[[self.expTable[i] intValue]] = @(i);
+      _logTable[[_expTable[i] intValue]] = @(i);
     }
     // logTable[0] == 0 but this should never be used
     int zeroInt = 0;
-    self.zero = [[ZXModulusPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
+    _zero = [[ZXModulusPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
 
     int oneInt = 1;
-    self.one = [[ZXModulusPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
+    _one = [[ZXModulusPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
   }
 
   return self;

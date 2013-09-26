@@ -18,12 +18,6 @@
 #import "ZXSMSMMSResultParser.h"
 #import "ZXSMSParsedResult.h"
 
-@interface ZXSMSMMSResultParser ()
-
-- (void)addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart;
-
-@end
-
 @implementation ZXSMSMMSResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

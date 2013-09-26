@@ -19,12 +19,6 @@
 #import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 
-@interface ZXBase256Encoder ()
-
-- (unichar)randomize255State:(unichar)ch codewordPosition:(int)codewordPosition;
-
-@end
-
 @implementation ZXBase256Encoder
 
 - (int)encodingMode {

@@ -18,22 +18,12 @@
 #import "ZXQRCodeDataBlock.h"
 #import "ZXQRCodeVersion.h"
 
-@interface ZXQRCodeDataBlock ()
-
-@property (nonatomic, strong) NSMutableArray *codewords;
-@property (nonatomic, assign) int numDataCodewords;
-
-@end
-
 @implementation ZXQRCodeDataBlock
 
-@synthesize codewords;
-@synthesize numDataCodewords;
-
-- (id)initWithNumDataCodewords:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
+- (id)initWithNumDataCodewords:(int)numDataCodewords codewords:(NSMutableArray *)codewords {
   if (self = [super init]) {
-    self.numDataCodewords = theNumDataCodewords;
-    self.codewords = theCodewords;
+    _numDataCodewords = numDataCodewords;
+    _codewords = codewords;
   }
 
   return self;

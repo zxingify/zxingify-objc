@@ -18,30 +18,19 @@
 
 const int FNC1 = 10;
 
-@interface ZXDecodedNumeric ()
-
-@property (nonatomic, assign) int firstDigit;
-@property (nonatomic, assign) int secondDigit;
-
-@end
-
-
 @implementation ZXDecodedNumeric
-
-@synthesize firstDigit;
-@synthesize secondDigit;
 
 - (id)initWithNewPosition:(int)newPosition firstDigit:(int)aFirstDigit secondDigit:(int)aSecondDigit {
   if (self = [super initWithNewPosition:newPosition]) {
-    self.firstDigit = aFirstDigit;
-    self.secondDigit = aSecondDigit;
+    _firstDigit = aFirstDigit;
+    _secondDigit = aSecondDigit;
 
-    if (self.firstDigit < 0 || self.firstDigit > 10) {
-      [NSException raise:NSInvalidArgumentException format:@"Invalid firstDigit: %d", firstDigit];
+    if (_firstDigit < 0 || _firstDigit > 10) {
+      [NSException raise:NSInvalidArgumentException format:@"Invalid firstDigit: %d", _firstDigit];
     }
 
-    if (self.secondDigit < 0 || self.secondDigit > 10) {
-      [NSException raise:NSInvalidArgumentException format:@"Invalid secondDigit: %d", secondDigit];
+    if (_secondDigit < 0 || _secondDigit > 10) {
+      [NSException raise:NSInvalidArgumentException format:@"Invalid secondDigit: %d", _secondDigit];
     }
   }
 

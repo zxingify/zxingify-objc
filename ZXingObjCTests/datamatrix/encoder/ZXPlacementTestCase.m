@@ -17,12 +17,6 @@
 #import "ZXDebugPlacement.h"
 #import "ZXPlacementTestCase.h"
 
-@interface ZXPlacementTestCase ()
-
-- (NSString *)unvisualize:(NSString *)visualize;
-
-@end
-
 @implementation ZXPlacementTestCase
 
 - (void)testPlacement {

@@ -20,22 +20,6 @@
 #import "ZXParsedResult.h"
 #import "ZXResultParser.h"
 
-@interface ZXAddressBookParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents
-                     title:(NSString *)title
-                     names:(NSArray *)names
-             pronunciation:(NSArray *)pronunciation
-                 addresses:(NSArray *)addresses
-                    emails:(NSArray *)emails
-              phoneNumbers:(NSArray *)phoneNumbers
-                       org:(NSString *)org
-                      urls:(NSArray *)urls
-                  birthday:(NSString *)birthday
-                      note:(NSString *)note;
-
-@end
-
 @implementation ZXAddressBookParsedResultTestCase
 
 - (void)testAddressBookDocomo {

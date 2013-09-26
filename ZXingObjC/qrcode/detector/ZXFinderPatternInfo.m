@@ -17,25 +17,13 @@
 #import "ZXFinderPatternInfo.h"
 #import "ZXQRCodeFinderPattern.h"
 
-@interface ZXFinderPatternInfo ()
-
-@property (nonatomic, strong) ZXQRCodeFinderPattern *bottomLeft;
-@property (nonatomic, strong) ZXQRCodeFinderPattern *topLeft;
-@property (nonatomic, strong) ZXQRCodeFinderPattern *topRight;
-
-@end
-
 @implementation ZXFinderPatternInfo
-
-@synthesize bottomLeft;
-@synthesize topLeft;
-@synthesize topRight;
 
 - (id)initWithPatternCenters:(NSArray *)patternCenters {
   if (self = [super init]) {
-    self.bottomLeft = patternCenters[0];
-    self.topLeft = patternCenters[1];
-    self.topRight = patternCenters[2];
+    _bottomLeft = patternCenters[0];
+    _topLeft = patternCenters[1];
+    _topRight = patternCenters[2];
   }
 
   return self;

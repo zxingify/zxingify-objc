@@ -30,18 +30,13 @@
 
 @property (nonatomic, strong) NSMutableArray *readers;
 
-- (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error;
-
 @end
 
 @implementation ZXMultiFormatReader
 
-@synthesize hints;
-@synthesize readers;
-
 - (id)init {
   if (self = [super init]) {
-    self.readers = [NSMutableArray array];
+    _readers = [NSMutableArray array];
   }
 
   return self;
@@ -65,11 +60,10 @@
 /**
  * Decode an image using the hints provided. Does not honor existing state.
  */
-- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)_hints error:(NSError **)error {
-  self.hints = _hints;
+- (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  self.hints = hints;
   return [self decodeInternal:image error:error];
 }
-
 
 /**
  * Decode an image using the state set up by calling setHints() previously. Continuous scan
@@ -82,14 +76,13 @@
   return [self decodeInternal:image error:error];
 }
 
-
 /**
  * This method adds state to the ZXMultiFormatReader. By setting the hints once, subsequent calls
  * to decodeWithState(image) can reuse the same set of readers without reallocating memory. This
  * is important for performance in continuous scan clients.
  */
-- (void)setHints:(ZXDecodeHints *)_hints {
-  hints = _hints;
+- (void)setHints:(ZXDecodeHints *)hints {
+  _hints = hints;
 
   BOOL tryHarder = hints != nil && hints.tryHarder;
   self.readers = [NSMutableArray array];

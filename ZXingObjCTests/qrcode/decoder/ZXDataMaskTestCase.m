@@ -20,14 +20,6 @@
 
 typedef BOOL (^MaskCondition)(int i, int j);
 
-@interface ZXDataMaskTestCase ()
-
-- (void)runTestMaskAcrossDimensions:(int)reference condition:(MaskCondition)condition;
-- (void)runTestMask:(ZXDataMask *)mask dimension:(int)dimension condition:(MaskCondition)condition;
-
-@end
-
-
 @implementation ZXDataMaskTestCase
 
 - (void)testMask0 {

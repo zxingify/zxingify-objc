@@ -19,14 +19,6 @@
 #import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 
-@interface ZXEdifactEncoder ()
-
-- (void)handleEOD:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer;
-- (void)encodeChar:(unichar)c buffer:(NSMutableString *)sb;
-- (NSString *)encodeToCodewords:(NSMutableString *)sb startpos:(int)startPos;
-
-@end
-
 @implementation ZXEdifactEncoder
 
 - (int)encodingMode {

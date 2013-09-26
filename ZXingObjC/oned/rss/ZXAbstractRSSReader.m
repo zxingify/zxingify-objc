@@ -47,37 +47,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   {2,2,9,1}  // F
 };
 
-@interface ZXAbstractRSSReader ()
-
-@property (nonatomic, assign) int *decodeFinderCounters;
-@property (nonatomic, assign) unsigned int decodeFinderCountersLen;
-@property (nonatomic, assign) int *dataCharacterCounters;
-@property (nonatomic, assign) unsigned int dataCharacterCountersLen;
-@property (nonatomic, assign) float *oddRoundingErrors;
-@property (nonatomic, assign) unsigned int oddRoundingErrorsLen;
-@property (nonatomic, assign) float *evenRoundingErrors;
-@property (nonatomic, assign) unsigned int evenRoundingErrorsLen;
-@property (nonatomic, assign) int *oddCounts;
-@property (nonatomic, assign) unsigned int oddCountsLen;
-@property (nonatomic, assign) int *evenCounts;
-@property (nonatomic, assign) unsigned int evenCountsLen;
-
-@end
-
 @implementation ZXAbstractRSSReader
-
-@synthesize decodeFinderCounters;
-@synthesize decodeFinderCountersLen;
-@synthesize dataCharacterCounters;
-@synthesize dataCharacterCountersLen;
-@synthesize oddRoundingErrors;
-@synthesize oddRoundingErrorsLen;
-@synthesize evenRoundingErrors;
-@synthesize evenRoundingErrorsLen;
-@synthesize oddCounts;
-@synthesize oddCountsLen;
-@synthesize evenCounts;
-@synthesize evenCountsLen;
 
 + (void)initialize {
   MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
@@ -86,63 +56,63 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 
 - (id)init {
   if (self = [super init]) {
-    self.decodeFinderCountersLen = 4;
-    self.decodeFinderCounters = (int *)malloc(self.decodeFinderCountersLen * sizeof(int));
+    _decodeFinderCountersLen = 4;
+    _decodeFinderCounters = (int *)malloc(_decodeFinderCountersLen * sizeof(int));
     memset(self.decodeFinderCounters, 0, self.decodeFinderCountersLen * sizeof(int));
 
-    self.dataCharacterCountersLen = 8;
-    self.dataCharacterCounters = (int *)malloc(self.dataCharacterCountersLen * sizeof(int));
+    _dataCharacterCountersLen = 8;
+    _dataCharacterCounters = (int *)malloc(_dataCharacterCountersLen * sizeof(int));
     memset(self.dataCharacterCounters, 0, self.dataCharacterCountersLen * sizeof(int));
 
-    self.oddRoundingErrorsLen = 4;
-    self.oddRoundingErrors = (float *)malloc(self.oddRoundingErrorsLen * sizeof(float));
-    memset(self.oddRoundingErrors, 0, self.oddRoundingErrorsLen * sizeof(float));
+    _oddRoundingErrorsLen = 4;
+    _oddRoundingErrors = (float *)malloc(_oddRoundingErrorsLen * sizeof(float));
+    memset(_oddRoundingErrors, 0, _oddRoundingErrorsLen * sizeof(float));
 
-    self.evenRoundingErrorsLen = 4;
-    self.evenRoundingErrors = (float *)malloc(self.evenRoundingErrorsLen * sizeof(float));
-    memset(self.evenRoundingErrors, 0, self.evenRoundingErrorsLen * sizeof(float));
+    _evenRoundingErrorsLen = 4;
+    _evenRoundingErrors = (float *)malloc(_evenRoundingErrorsLen * sizeof(float));
+    memset(_evenRoundingErrors, 0, _evenRoundingErrorsLen * sizeof(float));
 
-    self.oddCountsLen = self.dataCharacterCountersLen / 2;
-    self.oddCounts = (int *)malloc(self.oddCountsLen * sizeof(int));
-    memset(self.oddCounts, 0, self.oddCountsLen * sizeof(int));
+    _oddCountsLen = _dataCharacterCountersLen / 2;
+    _oddCounts = (int *)malloc(_oddCountsLen * sizeof(int));
+    memset(_oddCounts, 0, _oddCountsLen * sizeof(int));
 
-    self.evenCountsLen = self.dataCharacterCountersLen / 2;
-    self.evenCounts = (int *)malloc(self.evenCountsLen * sizeof(int));
-    memset(self.evenCounts, 0, self.evenCountsLen * sizeof(int));
+    _evenCountsLen = _dataCharacterCountersLen / 2;
+    _evenCounts = (int *)malloc(_evenCountsLen * sizeof(int));
+    memset(_evenCounts, 0, _evenCountsLen * sizeof(int));
   }
 
   return self;
 }
 
 - (void)dealloc {
-  if (self.decodeFinderCounters != NULL) {
-    free(self.decodeFinderCounters);
-    self.decodeFinderCounters = NULL;
+  if (_decodeFinderCounters != NULL) {
+    free(_decodeFinderCounters);
+    _decodeFinderCounters = NULL;
   }
 
-  if (self.dataCharacterCounters != NULL) {
-    free(self.dataCharacterCounters);
-    self.dataCharacterCounters = NULL;
+  if (_dataCharacterCounters != NULL) {
+    free(_dataCharacterCounters);
+    _dataCharacterCounters = NULL;
   }
 
-  if (self.oddRoundingErrors != NULL) {
-    free(self.oddRoundingErrors);
-    self.oddRoundingErrors = NULL;
+  if (_oddRoundingErrors != NULL) {
+    free(_oddRoundingErrors);
+    _oddRoundingErrors = NULL;
   }
 
-  if (self.evenRoundingErrors != NULL) {
-    free(self.evenRoundingErrors);
-    self.evenRoundingErrors = NULL;
+  if (_evenRoundingErrors != NULL) {
+    free(_evenRoundingErrors);
+    _evenRoundingErrors = NULL;
   }
 
-  if (self.oddCounts != NULL) {
-    free(self.oddCounts);
-    self.oddCounts = NULL;
+  if (_oddCounts != NULL) {
+    free(_oddCounts);
+    _oddCounts = NULL;
   }
 
-  if (self.evenCounts != NULL) {
-    free(self.evenCounts);
-    self.evenCounts = NULL;
+  if (_evenCounts != NULL) {
+    free(_evenCounts);
+    _evenCounts = NULL;
   }
 }
 

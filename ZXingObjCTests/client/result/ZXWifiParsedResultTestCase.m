@@ -18,12 +18,6 @@
 #import "ZXWifiParsedResult.h"
 #import "ZXWifiParsedResultTestCase.h"
 
-@interface ZXWifiParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents ssid:(NSString *)ssid password:(NSString *)password type:(NSString *)type;
-
-@end
-
 @implementation ZXWifiParsedResultTestCase
 
 - (void)testNoPassword {

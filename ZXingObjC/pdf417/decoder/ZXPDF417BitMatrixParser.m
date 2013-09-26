@@ -671,31 +671,19 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 @property (nonatomic, strong) NSMutableArray *erasures;
 @property (nonatomic, assign) int ecLevel;
 
-- (int)codeword:(long)symbol;
-- (int)findCodewordIndex:(long)symbol;
-- (int)processRow:(int *)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next;
-
 @end
 
 @implementation ZXPDF417BitMatrixParser
 
-@synthesize bitMatrix;
-@synthesize rows;
-@synthesize leftColumnECData;
-@synthesize rightColumnECData;
-@synthesize eraseCount;
-@synthesize erasures;
-@synthesize ecLevel;
-
-- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix {
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix {
   if (self = [super init]) {
-    self.rows = 0;
-    self.leftColumnECData = 0;
-    self.rightColumnECData = 0;
-    self.eraseCount = 0;
-    self.erasures = nil;
-    self.ecLevel = -1;
-    self.bitMatrix = aBitMatrix;
+    _rows = 0;
+    _leftColumnECData = 0;
+    _rightColumnECData = 0;
+    _eraseCount = 0;
+    _erasures = nil;
+    _ecLevel = -1;
+    _bitMatrix = bitMatrix;
   }
 
   return self;
@@ -709,8 +697,8 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * them into a codeword array.
  */
 - (NSArray *)readCodewords {
-  int width = bitMatrix.width;
-  int height = bitMatrix.height;
+  int width = self.bitMatrix.width;
+  int height = self.bitMatrix.height;
 
   self.erasures = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
   for (int i = 0; i < MAX_CW_CAPACITY; i++) {
@@ -815,7 +803,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * four space elements shall measure 17 modules in total.
  */
 - (int)processRow:(int *)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next {
-  int width = bitMatrix.width;
+  int width = self.bitMatrix.width;
   int columnNumber = 0;
   long symbol = 0;
   for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
@@ -832,7 +820,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       int cw = [self codeword:symbol];
       if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
         // Skip errors on the Right row indicator column
-        if (eraseCount >= erasures.count) {
+        if (self.eraseCount >= self.erasures.count) {
           return -1;
         }
         [self.erasures addObject:@(next)];
@@ -844,8 +832,8 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     } else {
       // Left row indicator column
       int cw = [self codeword:symbol];
-      if (ecLevel < 0 && rowNumber % 3 == 1) {
-        leftColumnECData = cw;
+      if (self.ecLevel < 0 && rowNumber % 3 == 1) {
+        self.leftColumnECData = cw;
       }
     }
     symbol = 0;
@@ -857,7 +845,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     //columns--;
     // Overwrite the last codeword i.e. Right Row Indicator
     --next;
-    if (ecLevel < 0 && rowNumber % 3 == 2) {
+    if (self.ecLevel < 0 && rowNumber % 3 == 2) {
       self.rightColumnECData = [codewords[next] intValue];
       if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
         self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
@@ -867,7 +855,6 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   }
   return next;
 }
-
 
 /**
  * Translate the symbol into a codeword.
@@ -883,7 +870,6 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     return (int)cw;
   }
 }
-
 
 /**
  * Use a binary search to find the index of the codeword corresponding to

@@ -62,11 +62,9 @@ const int BITNR[33][30] = {
 
 @implementation ZXMaxiCodeBitMatrixParser
 
-@synthesize bitMatrix;
-
-- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix error:(NSError **)error {
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
   if (self = [super init]) {
-    self.bitMatrix = aBitMatrix;
+    _bitMatrix = bitMatrix;
   }
 
   return self;
@@ -83,7 +81,7 @@ const int BITNR[33][30] = {
     int *bitnrRow = (int *)BITNR[y];
     for (int x = 0; x < width; x++) {
       int bit = bitnrRow[x];
-      if (bit >= 0 && [bitMatrix getX:x y:y]) {
+      if (bit >= 0 && [self.bitMatrix getX:x y:y]) {
         result[bit / 6] |= (unsigned char) (1 << (5 - (bit % 6)));
       }
     }

@@ -16,35 +16,23 @@
 
 #import "ZXDecodedInformation.h"
 
-@interface ZXDecodedInformation ()
-
-@property (nonatomic, copy) NSString *theNewString;
-@property (nonatomic, assign) int remainingValue;
-@property (nonatomic, assign) BOOL remaining;
-
-@end
-
 @implementation ZXDecodedInformation
 
-@synthesize remaining;
-@synthesize remainingValue;
-@synthesize theNewString;
-
-- (id)initWithNewPosition:(int)aNewPosition newString:(NSString *)aNewString {
-  if (self = [super initWithNewPosition:aNewPosition]) {
-    self.remaining = NO;
-    self.remainingValue = 0;
-    self.theNewString = aNewString;
+- (id)initWithNewPosition:(int)newPosition newString:(NSString *)newString {
+  if (self = [super initWithNewPosition:newPosition]) {
+    _remaining = NO;
+    _remainingValue = 0;
+    _theNewString = newString;
   }
 
   return self;
 }
 
-- (id)initWithNewPosition:(int)aNewPosition newString:(NSString *)aNewString remainingValue:(int)aRemainingValue {
-  if (self = [super initWithNewPosition:aNewPosition]) {
-    self.remaining = YES;
-    self.remainingValue = aRemainingValue;
-    self.theNewString = aNewString;
+- (id)initWithNewPosition:(int)newPosition newString:(NSString *)newString remainingValue:(int)remainingValue {
+  if (self = [super initWithNewPosition:newPosition]) {
+    _remaining = YES;
+    _remainingValue = remainingValue;
+    _theNewString = newString;
   }
 
   return self;

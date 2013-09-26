@@ -19,31 +19,6 @@
 #import "ZXParsedResult.h"
 #import "ZXResultParser.h"
 
-@interface ZXCalendarParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents
-               description:(NSString *)description
-                   summary:(NSString *)summary
-                  location:(NSString *)location
-               startString:(NSString *)startString
-                 endString:(NSString *)endString;
-
-- (void)doTestWithContents:(NSString *)contents
-               description:(NSString *)description
-                   summary:(NSString *)summary
-                  location:(NSString *)location
-               startString:(NSString *)startString
-                 endString:(NSString *)endString
-                 organizer:(NSString *)organizer
-                 attendees:(NSArray *)attendees
-                  latitude:(double)latitude
-                 longitude:(double)longitude;
-
-
-- (void)assertEqualOrNAN:(double)expected actual:(double)actual;
-
-@end
-
 @implementation ZXCalendarParsedResultTestCase
 
 static double EPSILON = 0.0000000001;

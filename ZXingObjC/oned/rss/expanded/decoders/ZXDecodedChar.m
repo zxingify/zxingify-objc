@@ -18,19 +18,11 @@
 
 unichar const FNC1char = '$';
 
-@interface ZXDecodedChar ()
-
-@property (nonatomic, assign) unichar value;
-
-@end
-
 @implementation ZXDecodedChar
 
-@synthesize value;
-
-- (id) initWithNewPosition:(int)aNewPosition value:(unichar)aValue {
-  if (self = [super initWithNewPosition:aNewPosition]) {
-    self.value = aValue;
+- (id)initWithNewPosition:(int)newPosition value:(unichar)value {
+  if (self = [super initWithNewPosition:newPosition]) {
+    _value = value;
   }
 
   return self;

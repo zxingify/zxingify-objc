@@ -23,17 +23,6 @@
 #import "ZXBitMatrix.h"
 #import "ZXDecoderResult.h"
 
-@interface ZXAztecEncoderTest ()
-
-- (void)testEncode:(NSString *)data compact:(BOOL)compact layers:(int)layers expected:(NSString *)expected;
-- (void)testEncodeDecode:(NSString *)data compact:(BOOL)compact layers:(int)layers;
-- (void)testModeMessageCompact:(BOOL)compact layers:(int)layers words:(int)words expected:(NSString *)expected;
-- (void)testStuffBits:(int)wordSize bits:(NSString *)bits expected:(NSString *)expected;
-- (void)testHighLevelEncodeString:(NSString *)s expectedBits:(NSString *)expectedBits;
-- (ZXBitArray *)toBitArray:(NSString *)bits;
-
-@end
-
 @implementation ZXAztecEncoderTest
 
 // real life tests

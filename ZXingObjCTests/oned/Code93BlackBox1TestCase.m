@@ -19,8 +19,8 @@
 
 @implementation Code93BlackBox1TestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation
                 testBasePathSuffix:@"Resources/blackbox/code93-1"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatCode93];

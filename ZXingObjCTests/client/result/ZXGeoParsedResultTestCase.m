@@ -18,16 +18,6 @@
 #import "ZXGeoParsedResultTestCase.h"
 #import "ZXResultParser.h"
 
-@interface ZXGeoParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents
-                  latitude:(double)latitude
-                 longitude:(double)longitude
-                  altitude:(double)altitude
-                     query:(NSString *)query;
-
-@end
-
 @implementation ZXGeoParsedResultTestCase
 
 static double EPSILON = 0.0000000001;

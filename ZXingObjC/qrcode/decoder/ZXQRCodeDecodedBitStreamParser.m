@@ -37,17 +37,6 @@ char const ALPHANUMERIC_CHARS[45] = {
 
 int const GB2312_SUBSET = 1;
 
-@interface ZXQRCodeDecodedBitStreamParser ()
-
-+ (BOOL)decodeHanziSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (BOOL)decodeKanjiSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (BOOL)decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints;
-+ (BOOL)decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect;
-+ (BOOL)decodeNumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count;
-+ (int)parseECIValue:(ZXBitSource *)bits;
-
-@end
-
 @implementation ZXQRCodeDecodedBitStreamParser
 
 + (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version

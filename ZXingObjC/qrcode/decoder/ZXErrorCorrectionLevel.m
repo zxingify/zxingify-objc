@@ -16,27 +16,15 @@
 
 #import "ZXErrorCorrectionLevel.h"
 
-@interface ZXErrorCorrectionLevel ()
-
-@property (nonatomic, assign) int bits;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, assign) int ordinal;
-
-@end
-
 @implementation ZXErrorCorrectionLevel
 
 static NSArray *FOR_BITS = nil;
 
-@synthesize bits;
-@synthesize name;
-@synthesize ordinal;
-
-- (id)initWithOrdinal:(int)anOrdinal bits:(int)theBits name:(NSString *)aName {
+- (id)initWithOrdinal:(int)ordinal bits:(int)bits name:(NSString *)name {
   if (self = [super init]) {
-    self.ordinal = anOrdinal;
-    self.bits = theBits;
-    self.name = aName;
+    _ordinal = ordinal;
+    _bits = bits;
+    _name = name;
   }
 
   return self;

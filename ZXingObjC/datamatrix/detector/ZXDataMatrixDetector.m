@@ -28,26 +28,19 @@
 
 @interface ResultPointsAndTransitions : NSObject
 
-@property(nonatomic, strong) ZXResultPoint *from;
-@property(nonatomic, strong) ZXResultPoint *to;
-@property(nonatomic, assign) int transitions;
-
-- (id)initWithFrom:(ZXResultPoint *)from to:(ZXResultPoint *)to transitions:(int)transitions;
-- (NSComparisonResult)compare:(ResultPointsAndTransitions *)otherObject;
+@property (nonatomic, strong) ZXResultPoint *from;
+@property (nonatomic, strong) ZXResultPoint *to;
+@property (nonatomic, assign) int transitions;
 
 @end
 
 @implementation ResultPointsAndTransitions
 
-@synthesize from;
-@synthesize to;
-@synthesize transitions;
-
-- (id)initWithFrom:(ZXResultPoint *)aFrom to:(ZXResultPoint *)aTo transitions:(int)aTransitions {
+- (id)initWithFrom:(ZXResultPoint *)from to:(ZXResultPoint *)to transitions:(int)transitions {
   if (self = [super init]) {
-    self.from = aFrom;
-    self.to = aTo;
-    self.transitions = aTransitions;
+    _from = from;
+    _to = to;
+    _transitions = transitions;
   }
 
   return self;
@@ -58,7 +51,7 @@
 }
 
 - (NSComparisonResult)compare:(ResultPointsAndTransitions *)otherObject {
-  return [@(transitions) compare:@(otherObject.transitions)];
+  return [@(self.transitions) compare:@(otherObject.transitions)];
 }
 
 @end
@@ -69,33 +62,15 @@
 @property (nonatomic, strong) ZXBitMatrix *image;
 @property (nonatomic, strong) ZXWhiteRectangleDetector *rectangleDetector;
 
-- (ZXResultPoint *)correctTopRight:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimension:(int)dimension;
-- (ZXResultPoint *)correctTopRightRectangular:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight;
-- (int)distance:(ZXResultPoint *)a b:(ZXResultPoint *)b;
-- (void)increment:(NSMutableDictionary *)table key:(ZXResultPoint *)key;
-- (BOOL)isValid:(ZXResultPoint *)p;
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
-                    topLeft:(ZXResultPoint *)topLeft
-                 bottomLeft:(ZXResultPoint *)bottomLeft
-                bottomRight:(ZXResultPoint *)bottomRight
-                   topRight:(ZXResultPoint *)topRight
-                 dimensionX:(int)dimensionX
-                 dimensionY:(int)dimensionY
-                      error:(NSError **)error;
-- (ResultPointsAndTransitions *)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to;
-
 @end
 
 @implementation ZXDataMatrixDetector
 
-@synthesize image;
-@synthesize rectangleDetector;
-
-- (id)initWithImage:(ZXBitMatrix *)anImage error:(NSError **)error {
+- (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error {
   if (self = [super init]) {
-    self.image = anImage;
-    self.rectangleDetector = [[ZXWhiteRectangleDetector alloc] initWithImage:anImage error:error];
-    if (!self.rectangleDetector) {
+    _image = image;
+    _rectangleDetector = [[ZXWhiteRectangleDetector alloc] initWithImage:_image error:error];
+    if (!_rectangleDetector) {
       return nil;
     }
   }
@@ -204,7 +179,7 @@
       dimensionRight++;
     }
 
-    bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionTop dimensionY:dimensionRight error:error];
+    bits = [self sampleGrid:self.image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionTop dimensionY:dimensionRight error:error];
     if (!bits) {
       return nil;
     }
@@ -221,13 +196,12 @@
       dimensionCorrected++;
     }
 
-    bits = [self sampleGrid:image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionCorrected dimensionY:dimensionCorrected error:error];
+    bits = [self sampleGrid:self.image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionCorrected dimensionY:dimensionCorrected error:error];
     if (!bits) {
       return nil;
     }
   }
-  return [[ZXDetectorResult alloc] initWithBits:bits
-                                          points:@[topLeft, bottomLeft, bottomRight, correctedTopRight]];
+  return [[ZXDetectorResult alloc] initWithBits:bits points:@[topLeft, bottomLeft, bottomRight, correctedTopRight]];
 }
 
 
@@ -235,7 +209,9 @@
  * Calculates the position of the white top right module using the output of the rectangle detector
  * for a rectangular matrix
  */
-- (ZXResultPoint *)correctTopRightRectangular:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight {
+- (ZXResultPoint *)correctTopRightRectangular:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight
+                                      topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight
+                                 dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight {
   float corr = [self distance:bottomLeft b:bottomRight] / (float)dimensionTop;
   int norm = [self distance:topLeft b:topRight];
   float cos = ([topRight x] - [topLeft x]) / norm;
@@ -274,7 +250,8 @@
  * Calculates the position of the white top right module using the output of the rectangle detector
  * for a square matrix
  */
-- (ZXResultPoint *)correctTopRight:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimension:(int)dimension {
+- (ZXResultPoint *)correctTopRight:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight
+                           topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimension:(int)dimension {
   float corr = [self distance:bottomLeft b:bottomRight] / (float)dimension;
   int norm = [self distance:topLeft b:topRight];
   float cos = ([topRight x] - [topLeft x]) / norm;
@@ -305,7 +282,7 @@
 }
 
 - (BOOL) isValid:(ZXResultPoint *)p {
-  return [p x] >= 0 && [p x] < image.width && [p y] > 0 && [p y] < image.height;
+  return [p x] >= 0 && [p x] < self.image.width && [p y] > 0 && [p y] < self.image.height;
 }
 
 - (int)distance:(ZXResultPoint *)a b:(ZXResultPoint *)b {
@@ -321,7 +298,7 @@
   table[key] = value == nil ? @1 : @([value intValue] + 1);
 }
 
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage
+- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                     topLeft:(ZXResultPoint *)topLeft
                  bottomLeft:(ZXResultPoint *)bottomLeft
                 bottomRight:(ZXResultPoint *)bottomRight
@@ -330,7 +307,7 @@
                  dimensionY:(int)dimensionY
                       error:(NSError **)error {
   ZXGridSampler *sampler = [ZXGridSampler instance];
-  return [sampler sampleGrid:anImage
+  return [sampler sampleGrid:image
                   dimensionX:dimensionX dimensionY:dimensionY
                        p1ToX:0.5f p1ToY:0.5f
                        p2ToX:dimensionX - 0.5f p2ToY:0.5f

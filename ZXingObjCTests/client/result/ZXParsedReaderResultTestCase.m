@@ -19,19 +19,6 @@
 #import "ZXParsedResult.h"
 #import "ZXResultParser.h"
 
-@interface ZXParsedReaderResultTestCase ()
-
-- (void)doTestResultWithContents:(NSString *)contents
-                    goldenResult:(NSString *)goldenResult
-                            type:(ZXParsedResultType)type;
-
-- (void)doTestResultWithContents:(NSString *)contents
-                    goldenResult:(NSString *)goldenResult
-                            type:(ZXParsedResultType)type
-                          format:(ZXBarcodeFormat)format;
-
-@end
-
 @implementation ZXParsedReaderResultTestCase
 
 - (void)testTextType {

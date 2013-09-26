@@ -24,12 +24,6 @@
 #import "ZXQRCode.h"
 #import "ZXQRCodeVersion.h"
 
-@interface ZXEncoderTestCase ()
-
-- (NSString *)shiftJISString:(unsigned char *)bytes bytesLen:(int)bytesLen;
-
-@end
-
 @implementation ZXEncoderTestCase
 
 - (void)testGetAlphanumericCode {

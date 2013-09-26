@@ -22,10 +22,7 @@
  * for other Readers in the chain.
  */
 
-@interface ZXLuminanceSource : NSObject {
-  int width;
-  int height;
-}
+@interface ZXLuminanceSource : NSObject
 
 @property (nonatomic, assign, readonly) int width;
 @property (nonatomic, assign, readonly) int height;

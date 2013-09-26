@@ -19,23 +19,19 @@
 @interface ZXQRCodeFinderPattern ()
 
 @property (nonatomic, assign) int count;
-@property (nonatomic, assign) float estimatedModuleSize;
 
 @end
 
 @implementation ZXQRCodeFinderPattern
 
-@synthesize count;
-@synthesize estimatedModuleSize;
-
-- (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)anEstimatedModuleSize {
-  return [self initWithPosX:posX posY:posY estimatedModuleSize:anEstimatedModuleSize count:1];
+- (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize {
+  return [self initWithPosX:posX posY:posY estimatedModuleSize:estimatedModuleSize count:1];
 }
 
-- (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)anEstimatedModuleSize count:(int)aCount {
+- (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize count:(int)count {
   if (self = [super initWithX:posX y:posY]) {
-    self.estimatedModuleSize = anEstimatedModuleSize;
-    self.count = aCount;
+    _estimatedModuleSize = estimatedModuleSize;
+    _count = count;
   }
 
   return self;
@@ -52,7 +48,7 @@
 - (BOOL)aboutEquals:(float)moduleSize i:(float)i j:(float)j {
   if (fabsf(i - [self y]) <= moduleSize && fabsf(j - [self x]) <= moduleSize) {
     float moduleSizeDiff = fabsf(moduleSize - self.estimatedModuleSize);
-    return moduleSizeDiff <= 1.0f || moduleSizeDiff <= estimatedModuleSize;
+    return moduleSizeDiff <= 1.0f || moduleSizeDiff <= self.estimatedModuleSize;
   }
   return NO;
 }

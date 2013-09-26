@@ -18,12 +18,6 @@
 #import "ZXTelParsedResult.h"
 #import "ZXTelParsedResultTestCase.h"
 
-@interface ZXTelParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents number:(NSString *)number title:(NSString *)title;
-
-@end
-
 @implementation ZXTelParsedResultTestCase
 
 - (void)testTel {

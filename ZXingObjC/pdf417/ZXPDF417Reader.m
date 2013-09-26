@@ -30,20 +30,13 @@
 
 @property (nonatomic, strong) ZXPDF417Decoder *decoder;
 
-- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
-- (int)findPatternStart:(int)x y:(int)y image:(ZXBitMatrix *)image;
-- (int)findPatternEnd:(int)x y:(int)y image:(ZXBitMatrix *)image;
-- (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
-
 @end
 
 @implementation ZXPDF417Reader
 
-@synthesize decoder;
-
 - (id)init {
   if (self = [super init]) {
-    self.decoder = [[ZXPDF417Decoder alloc] init];
+    _decoder = [[ZXPDF417Decoder alloc] init];
   }
   return self;
 }
@@ -68,7 +61,7 @@
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
-    decoderResult = [decoder decodeMatrix:bits error:error];
+    decoderResult = [self.decoder decodeMatrix:bits error:error];
     if (!decoderResult) {
       return nil;
     }
@@ -78,7 +71,7 @@
     if (!detectorResult) {
       return nil;
     }
-    decoderResult = [decoder decodeMatrix:detectorResult.bits error:error];
+    decoderResult = [self.decoder decodeMatrix:detectorResult.bits error:error];
     if (!decoderResult) {
       return nil;
     }
@@ -94,7 +87,6 @@
 - (void)reset {
   // do nothing
 }
-
 
 /**
  * This method detects a code in a "pure" image -- that is, pure monochrome image

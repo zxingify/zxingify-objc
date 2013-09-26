@@ -34,58 +34,56 @@
 
 @implementation ZXMultiFormatOneDReader
 
-@synthesize readers;
-
 - (id)initWithHints:(ZXDecodeHints *)hints {
   if (self = [super init]) {
     BOOL useCode39CheckDigit = hints != nil && hints.assumeCode39CheckDigit;
-    self.readers = [NSMutableArray array];
+    _readers = [NSMutableArray array];
     if (hints != nil) {
       if ([hints containsFormat:kBarcodeFormatEan13] ||
           [hints containsFormat:kBarcodeFormatUPCA] ||
           [hints containsFormat:kBarcodeFormatEan8] ||
           [hints containsFormat:kBarcodeFormatUPCE]) {
-        [self.readers addObject:[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints]];
+        [_readers addObject:[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode39]) {
-        [self.readers addObject:[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit]];
+        [_readers addObject:[[ZXCode39Reader alloc] initUsingCheckDigit:useCode39CheckDigit]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode93]) {
-        [self.readers addObject:[[ZXCode93Reader alloc] init]];
+        [_readers addObject:[[ZXCode93Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCode128]) {
-        [self.readers addObject:[[ZXCode128Reader alloc] init]];
+        [_readers addObject:[[ZXCode128Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatITF]) {
-        [self.readers addObject:[[ZXITFReader alloc] init]];
+        [_readers addObject:[[ZXITFReader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatCodabar]) {
-        [self.readers addObject:[[ZXCodaBarReader alloc] init]];
+        [_readers addObject:[[ZXCodaBarReader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatRSS14]) {
-        [self.readers addObject:[[ZXRSS14Reader alloc] init]];
+        [_readers addObject:[[ZXRSS14Reader alloc] init]];
       }
 
       if ([hints containsFormat:kBarcodeFormatRSSExpanded]) {
-        [self.readers addObject:[[ZXRSSExpandedReader alloc] init]];
+        [_readers addObject:[[ZXRSSExpandedReader alloc] init]];
       }
     }
 
-    if ([self.readers count] == 0) {
-      [self.readers addObject:[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints]];
-      [self.readers addObject:[[ZXCode39Reader alloc] init]];
-      [self.readers addObject:[[ZXCodaBarReader alloc] init]];
-      [self.readers addObject:[[ZXCode93Reader alloc] init]];
-      [self.readers addObject:[[ZXCode128Reader alloc] init]];
-      [self.readers addObject:[[ZXITFReader alloc] init]];
-      [self.readers addObject:[[ZXRSS14Reader alloc] init]];
-      [self.readers addObject:[[ZXRSSExpandedReader alloc] init]];
+    if ([_readers count] == 0) {
+      [_readers addObject:[[ZXMultiFormatUPCEANReader alloc] initWithHints:hints]];
+      [_readers addObject:[[ZXCode39Reader alloc] init]];
+      [_readers addObject:[[ZXCodaBarReader alloc] init]];
+      [_readers addObject:[[ZXCode93Reader alloc] init]];
+      [_readers addObject:[[ZXCode128Reader alloc] init]];
+      [_readers addObject:[[ZXITFReader alloc] init]];
+      [_readers addObject:[[ZXRSS14Reader alloc] init]];
+      [_readers addObject:[[ZXRSSExpandedReader alloc] init]];
     }
   }
 

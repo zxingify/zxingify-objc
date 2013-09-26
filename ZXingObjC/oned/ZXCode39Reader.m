@@ -43,18 +43,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 @property (nonatomic, assign) BOOL extendedMode;
 @property (nonatomic, assign) BOOL usingCheckDigit;
 
-- (NSString *)decodeExtended:(NSMutableString *)encoded;
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b counters:(int *)counters countersLen:(int)countersLen;
-- (unichar)patternToChar:(int)pattern;
-- (int)toNarrowWidePattern:(int *)counters countersLen:(unsigned int)countersLen;
-
 @end
 
 @implementation ZXCode39Reader
-
-@synthesize extendedMode;
-@synthesize usingCheckDigit;
-
 
 /**
  * Creates a reader that assumes all encoded data is data, and does not treat the final
@@ -79,10 +70,10 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
  * or optionally attempt to decode "extended Code 39" sequences that are used to encode
  * the full ASCII character set.
  */
-- (id)initUsingCheckDigit:(BOOL)isUsingCheckDigit extendedMode:(BOOL)isExtendedMode {
+- (id)initUsingCheckDigit:(BOOL)usingCheckDigit extendedMode:(BOOL)extendedMode {
   if (self = [super init]) {
-    self.usingCheckDigit = isUsingCheckDigit;
-    self.extendedMode = isExtendedMode;
+    _usingCheckDigit = usingCheckDigit;
+    _extendedMode = extendedMode;
   }
 
   return self;
@@ -140,7 +131,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     return nil;
   }
 
-  if (usingCheckDigit) {
+  if (self.usingCheckDigit) {
     int max = [result length] - 1;
     int total = 0;
     for (int i = 0; i < max; i++) {

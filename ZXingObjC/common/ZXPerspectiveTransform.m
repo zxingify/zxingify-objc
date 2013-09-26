@@ -32,27 +32,17 @@
 
 @implementation ZXPerspectiveTransform
 
-@synthesize a11;
-@synthesize a12;
-@synthesize a13;
-@synthesize a21;
-@synthesize a22;
-@synthesize a23;
-@synthesize a31;
-@synthesize a32;
-@synthesize a33;
-
-- (id)initWithA11:(float)_a11 a21:(float)_a21 a31:(float)_a31 a12:(float)_a12 a22:(float)_a22 a32:(float)_a32 a13:(float)_a13 a23:(float)_a23 a33:(float)_a33 {
+- (id)initWithA11:(float)a11 a21:(float)a21 a31:(float)a31 a12:(float)a12 a22:(float)a22 a32:(float)a32 a13:(float)a13 a23:(float)a23 a33:(float)a33 {
   if (self = [super init]) {
-    self.a11 = _a11;
-    self.a12 = _a12;
-    self.a13 = _a13;
-    self.a21 = _a21;
-    self.a22 = _a22;
-    self.a23 = _a23;
-    self.a31 = _a31;
-    self.a32 = _a32;
-    self.a33 = _a33;
+    _a11 = a11;
+    _a12 = a12;
+    _a13 = a13;
+    _a21 = a21;
+    _a22 = a22;
+    _a23 = a23;
+    _a31 = a31;
+    _a32 = a32;
+    _a33 = a33;
   }
 
   return self;
@@ -74,7 +64,6 @@
     points[i + 1] = (self.a12 * x + self.a22 * y + self.a32) / denominator;
   }
 }
-
 
 /**
  * Convenience method, not optimized for performance.
@@ -113,27 +102,27 @@
 }
 
 - (ZXPerspectiveTransform *)buildAdjoint {
-  return [[ZXPerspectiveTransform alloc] initWithA11:a22 * a33 - a23 * a32
-                                                  a21:a23 * a31 - a21 * a33
-                                                  a31:a21 * a32 - a22 * a31
-                                                  a12:a13 * a32 - a12 * a33
-                                                  a22:a11 * a33 - a13 * a31
-                                                  a32:a12 * a31 - a11 * a32
-                                                  a13:a12 * a23 - a13 * a22
-                                                  a23:a13 * a21 - a11 * a23
-                                                  a33:a11 * a22 - a12 * a21];
+  return [[ZXPerspectiveTransform alloc] initWithA11:self.a22 * self.a33 - self.a23 * self.a32
+                                                 a21:self.a23 * self.a31 - self.a21 * self.a33
+                                                 a31:self.a21 * self.a32 - self.a22 * self.a31
+                                                 a12:self.a13 * self.a32 - self.a12 * self.a33
+                                                 a22:self.a11 * self.a33 - self.a13 * self.a31
+                                                 a32:self.a12 * self.a31 - self.a11 * self.a32
+                                                 a13:self.a12 * self.a23 - self.a13 * self.a22
+                                                 a23:self.a13 * self.a21 - self.a11 * self.a23
+                                                 a33:self.a11 * self.a22 - self.a12 * self.a21];
 }
 
 - (ZXPerspectiveTransform *)times:(ZXPerspectiveTransform *)other {
-  return [[ZXPerspectiveTransform alloc] initWithA11:a11 * other->a11 + a21 * other->a12 + a31 * other->a13
-                                                  a21:a11 * other->a21 + a21 * other->a22 + a31 * other->a23
-                                                  a31:a11 * other->a31 + a21 * other->a32 + a31 * other->a33
-                                                  a12:a12 * other->a11 + a22 * other->a12 + a32 * other->a13
-                                                  a22:a12 * other->a21 + a22 * other->a22 + a32 * other->a23
-                                                  a32:a12 * other->a31 + a22 * other->a32 + a32 * other->a33
-                                                  a13:a13 * other->a11 + a23 * other->a12 + a33 * other->a13
-                                                  a23:a13 * other->a21 + a23 * other->a22 + a33 * other->a23
-                                                  a33:a13 * other->a31 + a23 * other->a32 + a33 * other->a33];
+  return [[ZXPerspectiveTransform alloc] initWithA11:self.a11 * other.a11 + self.a21 * other.a12 + self.a31 * other.a13
+                                                 a21:self.a11 * other.a21 + self.a21 * other.a22 + self.a31 * other.a23
+                                                 a31:self.a11 * other.a31 + self.a21 * other.a32 + self.a31 * other.a33
+                                                 a12:self.a12 * other.a11 + self.a22 * other.a12 + self.a32 * other.a13
+                                                 a22:self.a12 * other.a21 + self.a22 * other.a22 + self.a32 * other.a23
+                                                 a32:self.a12 * other.a31 + self.a22 * other.a32 + self.a32 * other.a33
+                                                 a13:self.a13 * other.a11 + self.a23 * other.a12 + self.a33 * other.a13
+                                                 a23:self.a13 * other.a21 + self.a23 * other.a22 + self.a33 * other.a23
+                                                 a33:self.a13 * other.a31 + self.a23 * other.a32 + self.a33 * other.a33];
 }
 
 @end

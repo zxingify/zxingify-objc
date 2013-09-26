@@ -18,12 +18,6 @@
 #import "ZXISBNParsedResultTestCase.h"
 #import "ZXResultParser.h"
 
-@interface ZXISBNParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents;
-
-@end
-
 @implementation ZXISBNParsedResultTestCase
 
 - (void)testISBN {

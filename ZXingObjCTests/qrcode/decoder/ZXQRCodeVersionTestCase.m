@@ -18,13 +18,6 @@
 #import "ZXQRCodeVersion.h"
 #import "ZXQRCodeVersionTestCase.h"
 
-@interface ZXQRCodeVersionTestCase ()
-
-- (void)checkVersion:(ZXQRCodeVersion *)version number:(int)number dimension:(int)dimension;
-- (void)doTestVersion:(int)expectedVersion mask:(int)mask;
-
-@end
-
 @implementation ZXQRCodeVersionTestCase
 
 - (void)testVersionForNumber {

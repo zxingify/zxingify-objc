@@ -16,6 +16,12 @@
 
 #import "ZXInvertedLuminanceSource.h"
 
+@interface ZXInvertedLuminanceSource ()
+
+@property (nonatomic, weak) ZXLuminanceSource *delegate;
+
+@end
+
 @implementation ZXInvertedLuminanceSource
 
 - (id)initWithDelegate:(ZXLuminanceSource *)delegate {
@@ -28,7 +34,7 @@
 }
 
 - (unsigned char *)row:(int)y {
-  unsigned char *row = [_delegate row:y];
+  unsigned char *row = [self.delegate row:y];
   for (int i = 0; i < self.width; i++) {
     row[i] = (unsigned char) (255 - (row[i] & 0xFF));
   }
@@ -36,7 +42,7 @@
 }
 
 - (unsigned char *)matrix {
-  unsigned char *matrix = [_delegate matrix];
+  unsigned char *matrix = [self.delegate matrix];
   int length = self.width * self.height;
   unsigned char *invertedMatrix = (unsigned char *)malloc(length * sizeof(unsigned char));
   for (int i = 0; i < length; i++) {
@@ -47,30 +53,30 @@
 }
 
 - (BOOL)cropSupported {
-  return _delegate.cropSupported;
+  return self.delegate.cropSupported;
 }
 
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
-  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate crop:left top:top width:aWidth height:aHeight]];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[self.delegate crop:left top:top width:aWidth height:aHeight]];
 }
 
 - (BOOL)rotateSupported {
-  return _delegate.rotateSupported;
+  return self.delegate.rotateSupported;
 }
 
 /**
  * Returns original delegate ZXLuminanceSource since invert undoes itself
  */
 - (ZXLuminanceSource *)invert {
-  return _delegate;
+  return self.delegate;
 }
 
 - (ZXLuminanceSource *)rotateCounterClockwise {
-  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise]];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[self.delegate rotateCounterClockwise]];
 }
 
 - (ZXLuminanceSource *)rotateCounterClockwise45 {
-  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[_delegate rotateCounterClockwise45]];
+  return [[ZXInvertedLuminanceSource alloc] initWithDelegate:[self.delegate rotateCounterClockwise45]];
 }
 
 @end

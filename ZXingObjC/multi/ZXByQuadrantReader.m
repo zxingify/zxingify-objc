@@ -28,12 +28,11 @@
 
 @implementation ZXByQuadrantReader
 
-@synthesize delegate;
-
-- (id)initWithDelegate:(id<ZXReader>)aDelegate {
+- (id)initWithDelegate:(id<ZXReader>)delegate {
   if (self = [super init]) {
-    self.delegate = aDelegate;
+    _delegate = delegate;
   }
+
   return self;
 }
 

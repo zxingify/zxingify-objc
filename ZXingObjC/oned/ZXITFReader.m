@@ -59,17 +59,9 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 @property (nonatomic, assign) int narrowLineWidth;
 
-- (int)decodeDigit:(int[])counters countersSize:(int)countersSize;
-- (BOOL)decodeMiddle:(ZXBitArray *)row payloadStart:(int)payloadStart payloadEnd:(int)payloadEnd resultString:(NSMutableString *)resultString;
-- (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen;
-- (int)skipWhiteSpace:(ZXBitArray *)row;
-- (BOOL)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern;
-
 @end
 
 @implementation ZXITFReader
-
-@synthesize narrowLineWidth;
 
 + (void)initialize {
   MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
@@ -78,7 +70,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
 - (id)init {
   if (self = [super init]) {
-    self.narrowLineWidth = -1;
+    _narrowLineWidth = -1;
   }
 
   return self;
@@ -296,7 +288,6 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 
   return nil;
 }
-
 
 /**
  * Attempts to decode a sequence of ITF black/white lines into single

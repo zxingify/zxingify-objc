@@ -24,15 +24,6 @@ static NSArray *symbols = nil;
 
 @implementation ZXSymbolInfo
 
-@synthesize rectangular = _rectangular;
-@synthesize errorCodewords = _errorCodewords;
-@synthesize dataCapacity = _dataCapacity;
-@synthesize dataRegions = _dataRegions;
-@synthesize matrixHeight = _matrixHeight;
-@synthesize matrixWidth = _matrixWidth;
-@synthesize rsBlockData = _rsBlockData;
-@synthesize rsBlockError = _rsBlockError;
-
 + (void)initialize {
   PROD_SYMBOLS = @[[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:3 errorCodewords:5 matrixWidth:8 matrixHeight:8 dataRegions:1],
                    [[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:5 errorCodewords:7 matrixWidth:10 matrixHeight:10 dataRegions:1],

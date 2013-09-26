@@ -18,12 +18,6 @@
 #import "ZXAddressBookParsedResult.h"
 #import "ZXResult.h"
 
-@interface ZXAddressBookDoCoMoResultParser ()
-
-- (NSString *)parseName:(NSString *)name;
-
-@end
-
 @implementation ZXAddressBookDoCoMoResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

@@ -19,13 +19,6 @@
 #import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 
-@interface ZXC40Encoder ()
-
-- (int)backtrackOneCharacter:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer
-                     removed:(NSMutableString *)removed lastCharSize:(int)lastCharSize;
-
-@end
-
 @implementation ZXC40Encoder
 
 - (int)encodingMode {

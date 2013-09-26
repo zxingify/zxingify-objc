@@ -18,38 +18,30 @@
 
 @interface ZXBitArray ()
 
-@property (nonatomic, assign) int size;
 @property (nonatomic, assign) int *bits;
 @property (nonatomic, assign) int bitsLength;
-
-- (void)ensureCapacity:(int)aSize;
-- (int *)makeArray:(int)size;
-- (int)numberOfTrailingZeros:(int)i;
+@property (nonatomic, assign) int size;
 
 @end
 
 @implementation ZXBitArray
 
-@synthesize bits;
-@synthesize bitsLength;
-@synthesize size;
-
 - (id)init {
   if (self = [super init]) {
-    self.size = 0;
-    self.bits = (int *)malloc(1 * sizeof(int));
-    self.bitsLength = 1;
-    self.bits[0] = 0;
+    _size = 0;
+    _bits = (int *)malloc(1 * sizeof(int));
+    _bitsLength = 1;
+    _bits[0] = 0;
   }
 
   return self;
 }
 
-- (id)initWithSize:(int)aSize {
+- (id)initWithSize:(int)size {
   if (self = [super init]) {
-    self.size = aSize;
-    self.bits = [self makeArray:aSize];
-    self.bitsLength = (aSize + 31) >> 5;
+    _size = size;
+    _bits = [self makeArray:size];
+    _bitsLength = (size + 31) >> 5;
   }
 
   return self;
@@ -57,9 +49,9 @@
 
 
 - (void)dealloc {
-  if (bits != NULL) {
-    free(bits);
-    bits = NULL;
+  if (_bits != NULL) {
+    free(_bits);
+    _bits = NULL;
   }
 }
 
@@ -130,7 +122,7 @@
   currentBits &= ~((1 << (from & 0x1F)) - 1);
   while (currentBits == 0) {
     if (++bitsOffset == self.bitsLength) {
-      return size;
+      return self.size;
     }
     currentBits = ~self.bits[bitsOffset];
   }
@@ -254,7 +246,7 @@
 }
 
 - (void)xor:(ZXBitArray *)other {
-  if (self.bitsLength != other->bitsLength) {
+  if (self.bitsLength != other.bitsLength) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Sizes don't match"
                                  userInfo:nil];
@@ -307,7 +299,7 @@
 - (NSString *)description {
   NSMutableString *result = [NSMutableString string];
 
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < self.size; i++) {
     if ((i & 0x07) == 0) {
       [result appendString:@" "];
     }

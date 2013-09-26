@@ -20,14 +20,6 @@
 #import "ZXPDF417.h"
 #import "ZXPDF417Writer.h"
 
-@interface ZXPDF417Writer ()
-
-- (ZXBitMatrix *)bitMatrixFromEncoder:(ZXPDF417 *)encoder contents:(NSString *)contents width:(int)width height:(int)height error:(NSError **)error;
-- (ZXBitMatrix *)bitMatrixFrombitArray:(unsigned char **)input height:(int)height width:(int)width;
-- (unsigned char **)rotateArray:(unsigned char **)bitarray height:(int)height width:(int)width;
-
-@end
-
 @implementation ZXPDF417Writer
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height

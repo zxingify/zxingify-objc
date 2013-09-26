@@ -19,87 +19,53 @@
 NSString *const KILOGRAM = @"KG";
 NSString *const POUND = @"LB";
 
-@interface ZXExpandedProductParsedResult ()
-
-@property (nonatomic, copy) NSString *rawText;
-@property (nonatomic, copy) NSString *productID;
-@property (nonatomic, copy) NSString *sscc;
-@property (nonatomic, copy) NSString *lotNumber;
-@property (nonatomic, copy) NSString *productionDate;
-@property (nonatomic, copy) NSString *packagingDate;
-@property (nonatomic, copy) NSString *bestBeforeDate;
-@property (nonatomic, copy) NSString *expirationDate;
-@property (nonatomic, copy) NSString *weight;
-@property (nonatomic, copy) NSString *weightType;
-@property (nonatomic, copy) NSString *weightIncrement;
-@property (nonatomic, copy) NSString *price;
-@property (nonatomic, copy) NSString *priceIncrement;
-@property (nonatomic, copy) NSString *priceCurrency;
-@property (nonatomic, strong) NSMutableDictionary *uncommonAIs;
-
-- (BOOL)equalsOrNil:(id)o1 o2:(id)o2;
-
-@end
-
 @implementation ZXExpandedProductParsedResult
 
-@synthesize rawText;
-@synthesize productID;
-@synthesize sscc;
-@synthesize lotNumber;
-@synthesize productionDate;
-@synthesize packagingDate;
-@synthesize bestBeforeDate;
-@synthesize expirationDate;
-@synthesize weight;
-@synthesize weightType;
-@synthesize weightIncrement;
-@synthesize price;
-@synthesize priceIncrement;
-@synthesize priceCurrency;
-@synthesize uncommonAIs;
-
 - (id)init {
-  return [self initWithRawText:@"" productID:@"" sscc:@"" lotNumber:@"" productionDate:@"" packagingDate:@"" bestBeforeDate:@""
-                  expirationDate:@"" weight:@"" weightType:@"" weightIncrement:@"" price:@"" priceIncrement:@""
-                   priceCurrency:@"" uncommonAIs:[NSMutableDictionary dictionary]];
+  return [self initWithRawText:@"" productID:@"" sscc:@"" lotNumber:@"" productionDate:@"" packagingDate:@""
+                bestBeforeDate:@"" expirationDate:@"" weight:@"" weightType:@"" weightIncrement:@"" price:@""
+                priceIncrement:@"" priceCurrency:@"" uncommonAIs:[NSMutableDictionary dictionary]];
 }
 
-- (id)initWithRawText:(NSString *)aRawText productID:(NSString *)aProductID sscc:(NSString *)anSscc lotNumber:(NSString *)aLotNumber
-       productionDate:(NSString *)aProductionDate packagingDate:(NSString *)aPackagingDate bestBeforeDate:(NSString *)aBestBeforeDate
-       expirationDate:(NSString *)anExpirationDate weight:(NSString *)aWeight weightType:(NSString *)aWeightType
-      weightIncrement:(NSString *)aWeightIncrement price:(NSString *)aPrice priceIncrement:(NSString *)aPriceIncrement
-        priceCurrency:(NSString *)aPriceCurrency uncommonAIs:(NSMutableDictionary *)theUncommonAIs {
+- (id)initWithRawText:(NSString *)rawText productID:(NSString *)productID sscc:(NSString *)sscc
+            lotNumber:(NSString *)lotNumber productionDate:(NSString *)productionDate
+        packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate
+       expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType
+      weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement
+        priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs {
   if (self = [super initWithType:kParsedResultTypeProduct]) {
-    self.rawText = aRawText;
-    self.productID = aProductID;
-    self.sscc = anSscc;
-    self.lotNumber = aLotNumber;
-    self.productionDate = aProductionDate;
-    self.packagingDate = aPackagingDate;
-    self.bestBeforeDate = aBestBeforeDate;
-    self.expirationDate = anExpirationDate;
-    self.weight = aWeight;
-    self.weightType = aWeightType;
-    self.weightIncrement = aWeightIncrement;
-    self.price = aPrice;
-    self.priceIncrement = aPriceIncrement;
-    self.priceCurrency = aPriceCurrency;
-    self.uncommonAIs = theUncommonAIs;
+    _rawText = rawText;
+    _productID = productID;
+    _sscc = sscc;
+    _lotNumber = lotNumber;
+    _productionDate = productionDate;
+    _packagingDate = packagingDate;
+    _bestBeforeDate = bestBeforeDate;
+    _expirationDate = expirationDate;
+    _weight = weight;
+    _weightType = weightType;
+    _weightIncrement = weightIncrement;
+    _price = price;
+    _priceIncrement = priceIncrement;
+    _priceCurrency = priceCurrency;
+    _uncommonAIs = uncommonAIs;
   }
 
   return self;
 }
 
-+ (id)expandedProductParsedResultWithRawText:(NSString *)rawText productID:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber
-                              productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate
-                              expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType
-                             weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement
++ (id)expandedProductParsedResultWithRawText:(NSString *)rawText productID:(NSString *)productID sscc:(NSString *)sscc
+                                   lotNumber:(NSString *)lotNumber productionDate:(NSString *)productionDate
+                               packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate
+                              expirationDate:(NSString *)expirationDate weight:(NSString *)weight
+                                  weightType:(NSString *)weightType weightIncrement:(NSString *)weightIncrement
+                                       price:(NSString *)price priceIncrement:(NSString *)priceIncrement
                                priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs {
-  return [[self alloc] initWithRawText:rawText productID:productID sscc:sscc lotNumber:lotNumber productionDate:productionDate
-                          packagingDate:packagingDate bestBeforeDate:bestBeforeDate expirationDate:expirationDate
-                                 weight:weight weightType:weightType weightIncrement:weightIncrement price:price
-                         priceIncrement:priceIncrement priceCurrency:priceCurrency uncommonAIs:uncommonAIs];
+  return [[self alloc] initWithRawText:rawText productID:productID sscc:sscc lotNumber:lotNumber
+                        productionDate:productionDate packagingDate:packagingDate bestBeforeDate:bestBeforeDate
+                        expirationDate:expirationDate weight:weight weightType:weightType
+                       weightIncrement:weightIncrement price:price priceIncrement:priceIncrement
+                         priceCurrency:priceCurrency uncommonAIs:uncommonAIs];
 }
 
 - (BOOL)isEqual:(id)o {
@@ -109,19 +75,19 @@ NSString *const POUND = @"LB";
 
   ZXExpandedProductParsedResult *other = (ZXExpandedProductParsedResult *)o;
 
-  return [self equalsOrNil:productID o2:other.productID]
-    && [self equalsOrNil:sscc o2:other.sscc]
-    && [self equalsOrNil:lotNumber o2:other.lotNumber]
-    && [self equalsOrNil:productionDate o2:other.productionDate]
-    && [self equalsOrNil:bestBeforeDate o2:other.bestBeforeDate]
-    && [self equalsOrNil:expirationDate o2:other.expirationDate]
-    && [self equalsOrNil:weight o2:other.weight]
-    && [self equalsOrNil:weightType o2:other.weightType]
-    && [self equalsOrNil:weightIncrement o2:other.weightIncrement]
-    && [self equalsOrNil:price o2:other.price]
-    && [self equalsOrNil:priceIncrement o2:other.priceIncrement]
-    && [self equalsOrNil:priceCurrency o2:other.priceCurrency]
-    && [self equalsOrNil:uncommonAIs o2:other.uncommonAIs];
+  return [self equalsOrNil:self.productID o2:other.productID]
+    && [self equalsOrNil:self.sscc o2:other.sscc]
+    && [self equalsOrNil:self.lotNumber o2:other.lotNumber]
+    && [self equalsOrNil:self.productionDate o2:other.productionDate]
+    && [self equalsOrNil:self.bestBeforeDate o2:other.bestBeforeDate]
+    && [self equalsOrNil:self.expirationDate o2:other.expirationDate]
+    && [self equalsOrNil:self.weight o2:other.weight]
+    && [self equalsOrNil:self.weightType o2:other.weightType]
+    && [self equalsOrNil:self.weightIncrement o2:other.weightIncrement]
+    && [self equalsOrNil:self.price o2:other.price]
+    && [self equalsOrNil:self.priceIncrement o2:other.priceIncrement]
+    && [self equalsOrNil:self.priceCurrency o2:other.priceCurrency]
+    && [self equalsOrNil:self.uncommonAIs o2:other.uncommonAIs];
 }
 
 - (BOOL)equalsOrNil:(id)o1 o2:(id)o2 {
@@ -130,19 +96,19 @@ NSString *const POUND = @"LB";
 
 - (NSUInteger)hash {
   int hash = 0;
-  hash ^= [productID hash];
-  hash ^= [sscc hash];
-  hash ^= [lotNumber hash];
-  hash ^= [productionDate hash];
-  hash ^= [bestBeforeDate hash];
-  hash ^= [expirationDate hash];
-  hash ^= [weight hash];
-  hash ^= [weightType hash];
-  hash ^= [weightIncrement hash];
-  hash ^= [price hash];
-  hash ^= [priceIncrement hash];
-  hash ^= [priceCurrency hash];
-  hash ^= [uncommonAIs hash];
+  hash ^= [self.productID hash];
+  hash ^= [self.sscc hash];
+  hash ^= [self.lotNumber hash];
+  hash ^= [self.productionDate hash];
+  hash ^= [self.bestBeforeDate hash];
+  hash ^= [self.expirationDate hash];
+  hash ^= [self.weight hash];
+  hash ^= [self.weightType hash];
+  hash ^= [self.weightIncrement hash];
+  hash ^= [self.price hash];
+  hash ^= [self.priceIncrement hash];
+  hash ^= [self.priceCurrency hash];
+  hash ^= [self.uncommonAIs hash];
   return hash;
 }
 

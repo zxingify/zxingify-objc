@@ -24,30 +24,20 @@
 
 @interface AbstractBlackBoxTestCase ()
 
-@property (nonatomic, strong) id<ZXReader> barcodeReader;
 @property (nonatomic, assign) ZXBarcodeFormat expectedFormat;
 @property (nonatomic, copy) NSString *testBase;
 @property (nonatomic, strong) NSMutableArray *testResults;
-
-- (void)runTests;
-- (NSString *)pathInBundle:(NSURL *)file;
-- (void)testBlackBoxCountingResults:(BOOL)assertOnFailure;
 
 @end
 
 @implementation AbstractBlackBoxTestCase
 
-@synthesize barcodeReader;
-@synthesize expectedFormat;
-@synthesize testBase;
-@synthesize testResults;
-
-- (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)reader expectedFormat:(ZXBarcodeFormat)format {
-  if (self = [super initWithInvocation:anInvocation]) {
-    self.testBase = testBasePathSuffix;
-    self.barcodeReader = reader;
-    self.expectedFormat = format;
-    self.testResults = [NSMutableArray array];
+- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat {
+  if (self = [super initWithInvocation:invocation]) {
+    _testBase = testBasePathSuffix;
+    _barcodeReader = barcodeReader;
+    _expectedFormat = expectedFormat;
+    _testResults = [NSMutableArray array];
   }
 
   return self;
@@ -150,7 +140,7 @@
 }
 
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure {
-  if (testResults.count == 0) {
+  if (self.testResults.count == 0) {
     STFail(@"No test results");
   }
 
@@ -177,18 +167,18 @@
 
     NSString *testImageFileName = [[[testImage path] componentsSeparatedByString:@"/"] lastObject];
     NSString *fileBaseName = [testImageFileName substringToIndex:[testImageFileName rangeOfString:@"."].location];
-    NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:testBase];
+    NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"txt" inDirectory:self.testBase];
 
     NSString *expectedText;
     if (expectedTextFile) {
       expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSUTF8StringEncoding error:nil];
     } else {
-      NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:testBase];
+      NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:self.testBase];
       STAssertNotNil(expectedTextFile, @"Expected text does not exist");
       expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSISOLatin1StringEncoding error:nil];
     }
 
-    NSURL *expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:testBase]];
+    NSURL *expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:self.testBase]];
     NSMutableDictionary *expectedMetadata = [NSMutableDictionary dictionary];
     if ([fileManager fileExistsAtPath:[expectedMetadataFile path]]) {
       expectedMetadata = [NSMutableDictionary dictionaryWithContentsOfFile:[expectedMetadataFile path]];
@@ -288,7 +278,7 @@
 
   if (self.expectedFormat != result.barcodeFormat) {
     NSLog(@"Format mismatch: expected '%@' but got '%@'%@",
-          [[self class] barcodeFormatAsString:expectedFormat], [[self class] barcodeFormatAsString:result.barcodeFormat], suffix);
+          [[self class] barcodeFormatAsString:self.expectedFormat], [[self class] barcodeFormatAsString:result.barcodeFormat], suffix);
     *misread = YES;
     return NO;
   }

@@ -30,15 +30,11 @@
  */
 @implementation ZXBitSourceBuilder
 
-@synthesize bitsLeftInNextByte;
-@synthesize nextByte;
-@synthesize output;
-
 - (id)init {
   if(self = [super init]) {
-    self.bitsLeftInNextByte = 8;
-    self.nextByte = 0;
-    self.output = [NSMutableData data];
+    _bitsLeftInNextByte = 8;
+    _nextByte = 0;
+    _output = [NSMutableData data];
   }
 
   return self;
@@ -50,7 +46,7 @@
     self.nextByte |= value;
     self.bitsLeftInNextByte -= numBits;
     if (self.bitsLeftInNextByte == 0) {
-      [self.output appendBytes:&nextByte length:1];
+      [self.output appendBytes:&_nextByte length:1];
       self.nextByte = 0;
       self.bitsLeftInNextByte = 8;
     }

@@ -30,16 +30,9 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 @property (nonatomic, assign) int luminancesCount;
 @property (nonatomic, strong) NSMutableArray *buckets;
 
-- (void)initArrays:(int)luminanceSize;
-- (int)estimateBlackPoint:(NSArray *)buckets;
-
 @end
 
 @implementation ZXGlobalHistogramBinarizer
-
-@synthesize luminances;
-@synthesize luminancesCount;
-@synthesize buckets;
 
 - (id)initWithSource:(ZXLuminanceSource *)source {
   if (self = [super initWithSource:source]) {
@@ -52,9 +45,9 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 }
 
 - (void)dealloc {
-  if (luminances != NULL) {
-    free(luminances);
-    luminances = NULL;
+  if (_luminances != NULL) {
+    free(_luminances);
+    _luminances = NULL;
   }
 }
 
@@ -69,7 +62,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   [self initArrays:width];
   unsigned char *localLuminances = [source row:y];
-  NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:buckets];
+  NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:self.buckets];
   for (int x = 0; x < width; x++) {
     int pixel = localLuminances[x] & 0xff;
     localBuckets[pixel >> LUMINANCE_SHIFT] = @([localBuckets[pixel >> LUMINANCE_SHIFT] intValue] + 1);

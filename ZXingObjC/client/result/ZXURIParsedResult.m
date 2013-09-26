@@ -18,29 +18,16 @@
 
 static NSRegularExpression *USER_IN_HOST = nil;
 
-@interface ZXURIParsedResult ()
-
-@property (nonatomic, copy) NSString *uri;
-@property (nonatomic, copy) NSString *title;
-
-- (BOOL)isColonFollowedByPortNumber:(NSString *)uri protocolEnd:(int)protocolEnd;
-- (NSString *)massageURI:(NSString *)uri;
-
-@end
-
 @implementation ZXURIParsedResult
-
-@synthesize uri;
-@synthesize title;
 
 + (void)initialize {
   USER_IN_HOST = [[NSRegularExpression alloc] initWithPattern:@":/*([^/@]+)@[^/]+" options:0 error:nil];
 }
 
-- (id)initWithUri:(NSString *)aUri title:(NSString *)aTitle {
+- (id)initWithUri:(NSString *)uri title:(NSString *)title {
   if (self = [super initWithType:kParsedResultTypeURI]) {
-    self.uri = [self massageURI:aUri];
-    self.title = aTitle;
+    _uri = [self massageURI:uri];
+    _title = title;
   }
 
   return self;
@@ -59,13 +46,13 @@ static NSRegularExpression *USER_IN_HOST = nil;
  * to connect to yourbank.com at first glance.
  */
 - (BOOL)possiblyMaliciousURI {
-  return [USER_IN_HOST numberOfMatchesInString:uri options:0 range:NSMakeRange(0, uri.length)] > 0;
+  return [USER_IN_HOST numberOfMatchesInString:self.uri options:0 range:NSMakeRange(0, self.uri.length)] > 0;
 }
 
 - (NSString *)displayResult {
   NSMutableString *result = [NSMutableString stringWithCapacity:30];
-  [ZXParsedResult maybeAppend:title result:result];
-  [ZXParsedResult maybeAppend:uri result:result];
+  [ZXParsedResult maybeAppend:self.title result:result];
+  [ZXParsedResult maybeAppend:self.uri result:result];
   return result;
 }
 
@@ -73,17 +60,17 @@ static NSRegularExpression *USER_IN_HOST = nil;
  * Transforms a string that represents a URI into something more proper, by adding or canonicalizing
  * the protocol.
  */
-- (NSString *)massageURI:(NSString *)aUri {
-  NSString *_uri = [aUri stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  int protocolEnd = [_uri rangeOfString:@":"].location;
+- (NSString *)massageURI:(NSString *)uri {
+  NSString *massagedUri = [uri stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  int protocolEnd = [massagedUri rangeOfString:@":"].location;
   if (protocolEnd == NSNotFound) {
     // No protocol, assume http
-    _uri = [NSString stringWithFormat:@"http://%@", _uri];
-  } else if ([self isColonFollowedByPortNumber:_uri protocolEnd:protocolEnd]) {
+    massagedUri = [NSString stringWithFormat:@"http://%@", massagedUri];
+  } else if ([self isColonFollowedByPortNumber:massagedUri protocolEnd:protocolEnd]) {
     // Found a colon, but it looks like it is after the host, so the protocol is still missing
-    _uri = [NSString stringWithFormat:@"http://%@", _uri];
+    massagedUri = [NSString stringWithFormat:@"http://%@", massagedUri];
   }
-  return _uri;
+  return massagedUri;
 }
 
 - (BOOL)isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {

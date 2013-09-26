@@ -61,19 +61,6 @@ const unichar SETS[1][383] = {
   0x003B, 0x003C, 0x003D, 0x003E, 0x003F
 };
 
-@interface ZXMaxiCodeDecodedBitStreamParser ()
-
-+ (int)bit:(int)bit bytes:(unsigned char *)bytes length:(unsigned int)length;
-+ (int)integer:(unsigned char *)bytes length:(unsigned int)length x:(unsigned char *)x xLength:(unsigned int)xLength;
-+ (int)country:(unsigned char *)bytes length:(unsigned int)length;
-+ (int)serviceClass:(unsigned char *)bytes length:(unsigned int)length;
-+ (int)postCode2Length:(unsigned char *)bytes length:(unsigned int)length;
-+ (int)postCode2:(unsigned char *)bytes length:(unsigned int)length;
-+ (NSString *)postCode3:(unsigned char *)bytes length:(unsigned int)length;
-+ (NSString *)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len;
-
-@end
-
 @implementation ZXMaxiCodeDecodedBitStreamParser
 
 + (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length mode:(int)mode {

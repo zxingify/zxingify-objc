@@ -16,30 +16,7 @@
 
 #import "ZXDefaultPlacement.h"
 
-@interface ZXDefaultPlacement ()
-
-@property (nonatomic, copy) NSString *codewords;
-@property (nonatomic, assign) int numrows;
-@property (nonatomic, assign) int numcols;
-@property (nonatomic, assign) unsigned char *bits;
-@property (nonatomic, assign) int bitsLen;
-
-- (void)moduleAtRow:(int)row col:(int)col pos:(int)pos bit:(int)bit;
-- (void)utahAtRow:(int)row col:(int)col pos:(int)pos;
-- (void)corner1:(int)pos;
-- (void)corner2:(int)pos;
-- (void)corner3:(int)pos;
-- (void)corner4:(int)pos;
-
-@end
-
 @implementation ZXDefaultPlacement
-
-@synthesize codewords = _codewords;
-@synthesize numcols = _numcols;
-@synthesize numrows = _numrows;
-@synthesize bits = _bits;
-@synthesize bitsLen = _bitsLen;
 
 - (id)initWithCodewords:(NSString *)codewords numcols:(int)numcols numrows:(int)numrows {
   if (self = [super init]) {

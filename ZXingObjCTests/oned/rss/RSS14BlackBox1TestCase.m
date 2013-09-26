@@ -19,8 +19,8 @@
 
 @implementation RSS14BlackBox1TestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation
                 testBasePathSuffix:@"Resources/blackbox/rss14-1"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatRSS14];

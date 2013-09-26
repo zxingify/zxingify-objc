@@ -20,29 +20,22 @@
 @interface ZXBarcodeMatrix ()
 
 @property (nonatomic, assign) int currentRowIndex;
-@property (nonatomic, assign) int height;
 @property (nonatomic, strong) NSArray *rowMatrix;
-@property (nonatomic, assign) int width;
 
 @end
 
 @implementation ZXBarcodeMatrix
 
-@synthesize currentRowIndex;
-@synthesize height;
-@synthesize rowMatrix;
-@synthesize width;
-
-- (id)initWithHeight:(int)aHeight width:(int)aWidth {
+- (id)initWithHeight:(int)height width:(int)width {
   if (self = [super init]) {
-    NSMutableArray *_matrix = [NSMutableArray array];
-    for (int i = 0, matrixLength = aHeight + 2; i < matrixLength; i++) {
-      [_matrix addObject:[ZXBarcodeRow barcodeRowWithWidth:(aWidth + 4) * 17 + 1]];
+    NSMutableArray *matrix = [NSMutableArray array];
+    for (int i = 0, matrixLength = height + 2; i < matrixLength; i++) {
+      [matrix addObject:[ZXBarcodeRow barcodeRowWithWidth:(width + 4) * 17 + 1]];
     }
-    self.rowMatrix = _matrix;
-    self.width = aWidth * 17;
-    self.height = aHeight + 2;
-    self.currentRowIndex = 0;
+    _rowMatrix = matrix;
+    _width = width * 17;
+    _height = height + 2;
+    _currentRowIndex = 0;
   }
 
   return self;

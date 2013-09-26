@@ -19,8 +19,8 @@
 
 @implementation EAN13BlackBox5BlurryTestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation
                 testBasePathSuffix:@"Resources/blackbox/ean13-5"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatEan13];

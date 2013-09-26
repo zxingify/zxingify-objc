@@ -20,13 +20,6 @@
 #import "ZXDataCharacter.h"
 #import "ZXExpandedPair.h"
 
-@interface ZXBitArrayBuilderTest ()
-
-- (void)checkBinaryValues:(int **)pairValues pairValuesLen:(int)pairValuesLen lengths:(int *)lengths expected:(NSString *)expected;
-- (ZXBitArray *)buildBitArrayPairValues:(int **)pairValues pairValuesLen:(int)pairValuesLen lengths:(int *)lengths;
-
-@end
-
 @implementation ZXBitArrayBuilderTest
 
 - (void)testBuildBitArray1 {

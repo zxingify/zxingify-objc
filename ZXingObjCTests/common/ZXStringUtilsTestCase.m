@@ -17,12 +17,6 @@
 #import "ZXStringUtils.h"
 #import "ZXStringUtilsTestCase.h"
 
-@interface ZXStringUtilsTestCase ()
-
-- (void)doTestWithBytes:(unsigned char *)bytes length:(int)length encoding:(NSStringEncoding)encoding;
-
-@end
-
 @implementation ZXStringUtilsTestCase
 
 - (void)testShortShiftJIS_1 {

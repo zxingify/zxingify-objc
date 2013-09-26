@@ -18,17 +18,12 @@
 
 @implementation ZXDimensions
 
-@synthesize minCols;
-@synthesize maxCols;
-@synthesize minRows;
-@synthesize maxRows;
-
-- (id)initWithMinCols:(int)aMinCols maxCols:(int)aMaxCols minRows:(int)aMinRows maxRows:(int)aMaxRows {
+- (id)initWithMinCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows {
   if (self = [super init]) {
-    self.minCols = aMinCols;
-    self.maxCols = aMaxCols;
-    self.minRows = aMinRows;
-    self.maxRows = aMaxRows;
+    _minCols = minCols;
+    _maxCols = maxCols;
+    _minRows = minRows;
+    _maxRows = maxRows;
   }
 
   return self;

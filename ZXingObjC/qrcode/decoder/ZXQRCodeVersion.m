@@ -19,35 +19,21 @@
 #import "ZXFormatInformation.h"
 #import "ZXQRCodeVersion.h"
 
-@interface ZXQRCodeECBlocks ()
-
-@property (nonatomic, assign) int ecCodewordsPerBlock;
-@property (nonatomic, assign) int numBlocks;
-@property (nonatomic, assign) int totalECCodewords;
-@property (nonatomic, strong) NSArray *ecBlocks;
-
-@end
-
 @implementation ZXQRCodeECBlocks
 
-@synthesize ecCodewordsPerBlock;
-@synthesize numBlocks;
-@synthesize totalECCodewords;
-@synthesize ecBlocks;
-
-- (id)initWithEcCodewordsPerBlock:(int)anEcCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)theEcBlocks {
+- (id)initWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)ecBlocks {
   if (self = [super init]) {
-    self.ecCodewordsPerBlock = anEcCodewordsPerBlock;
-    self.ecBlocks = @[theEcBlocks];
+    _ecCodewordsPerBlock = ecCodewordsPerBlock;
+    _ecBlocks = @[ecBlocks];
   }
 
   return self;
 }
 
-- (id)initWithEcCodewordsPerBlock:(int)anEcCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2 {
+- (id)initWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2 {
   if (self = [super init]) {
-    self.ecCodewordsPerBlock = anEcCodewordsPerBlock;
-    self.ecBlocks = @[ecBlocks1, ecBlocks2];
+    _ecCodewordsPerBlock = ecCodewordsPerBlock;
+    _ecBlocks = @[ecBlocks1, ecBlocks2];
   }
 
   return self;
@@ -77,22 +63,12 @@
 
 @end
 
-@interface ZXQRCodeECB ()
-
-@property (nonatomic, assign) int count;
-@property (nonatomic, assign) int dataCodewords;
-
-@end
-
 @implementation ZXQRCodeECB
 
-@synthesize count;
-@synthesize dataCodewords;
-
-- (id)initWithCount:(int)aCount dataCodewords:(int)aDataCodewords {
+- (id)initWithCount:(int)count dataCodewords:(int)dataCodewords {
   if (self = [super init]) {
-    self.count = aCount;
-    self.dataCodewords = aDataCodewords;
+    _count = count;
+    _dataCodewords = dataCodewords;
   }
 
   return self;
@@ -123,27 +99,13 @@ int const VERSION_DECODE_INFO[VERSION_DECODE_INFO_LEN] = {
 
 static NSArray *VERSIONS = nil;
 
-@interface ZXQRCodeVersion ()
-
-@property (nonatomic, assign) int versionNumber;
-@property (nonatomic, strong) NSArray *alignmentPatternCenters;
-@property (nonatomic, strong) NSArray *ecBlocks;
-@property (nonatomic, assign) int totalCodewords;
-
-@end
-
 @implementation ZXQRCodeVersion
 
-@synthesize versionNumber;
-@synthesize alignmentPatternCenters;
-@synthesize ecBlocks;
-@synthesize totalCodewords;
-
-- (id)initWithVersionNumber:(int)aVersionNumber alignmentPatternCenters:(NSArray *)anAlignmentPatternCenters ecBlocks1:(ZXQRCodeECBlocks *)ecBlocks1 ecBlocks2:(ZXQRCodeECBlocks *)ecBlocks2 ecBlocks3:(ZXQRCodeECBlocks *)ecBlocks3 ecBlocks4:(ZXQRCodeECBlocks *)ecBlocks4 {
+- (id)initWithVersionNumber:(int)versionNumber alignmentPatternCenters:(NSArray *)alignmentPatternCenters ecBlocks1:(ZXQRCodeECBlocks *)ecBlocks1 ecBlocks2:(ZXQRCodeECBlocks *)ecBlocks2 ecBlocks3:(ZXQRCodeECBlocks *)ecBlocks3 ecBlocks4:(ZXQRCodeECBlocks *)ecBlocks4 {
   if (self = [super init]) {
-    self.versionNumber = aVersionNumber;
-    self.alignmentPatternCenters = anAlignmentPatternCenters;
-    self.ecBlocks = @[ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4];
+    _versionNumber = versionNumber;
+    _alignmentPatternCenters = alignmentPatternCenters;
+    _ecBlocks = @[ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4];
     int total = 0;
     int ecCodewords = ecBlocks1.ecCodewordsPerBlock;
 
@@ -151,7 +113,7 @@ static NSArray *VERSIONS = nil;
       total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
     }
 
-    self.totalCodewords = total;
+    _totalCodewords = total;
   }
 
   return self;
@@ -162,13 +124,12 @@ static NSArray *VERSIONS = nil;
 }
 
 - (int)dimensionForVersion {
-  return 17 + 4 * versionNumber;
+  return 17 + 4 * self.versionNumber;
 }
 
 - (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXErrorCorrectionLevel *)ecLevel {
   return self.ecBlocks[[ecLevel ordinal]];
 }
-
 
 /**
  * Deduces version information purely from QR Code dimensions.
@@ -210,7 +171,6 @@ static NSArray *VERSIONS = nil;
   return nil;
 }
 
-
 /**
  * See ISO 18004:2006 Annex E
  */
@@ -245,7 +205,6 @@ static NSArray *VERSIONS = nil;
 - (NSString *)description {
   return [@(self.versionNumber) stringValue];
 }
-
 
 /**
  * See ISO 18004:2006 6.5.1 Table 9

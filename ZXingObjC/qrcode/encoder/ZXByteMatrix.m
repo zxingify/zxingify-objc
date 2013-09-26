@@ -16,28 +16,16 @@
 
 #import "ZXByteMatrix.h"
 
-@interface ZXByteMatrix ()
-
-@property (nonatomic, assign) int height;
-@property (nonatomic, assign) int width;
-@property (nonatomic, assign) unsigned char **array;
-
-@end
-
 @implementation ZXByteMatrix
 
-@synthesize array;
-@synthesize height;
-@synthesize width;
-
-- (id)initWithWidth:(int)aWidth height:(int)aHeight {
+- (id)initWithWidth:(int)width height:(int)height {
   if (self = [super init]) {
-    self.width = aWidth;
-    self.height = aHeight;
+    _width = width;
+    _height = height;
 
-    self.array = (unsigned char **)malloc(aHeight * sizeof(unsigned char *));
-    for (int i = 0; i < aHeight; i++) {
-      self.array[i] = (unsigned char *)malloc(aWidth * sizeof(unsigned char));
+    _array = (unsigned char **)malloc(height * sizeof(unsigned char *));
+    for (int i = 0; i < height; i++) {
+      _array[i] = (unsigned char *)malloc(width * sizeof(unsigned char));
     }
     [self clear:0];
   }
@@ -46,12 +34,12 @@
 }
 
 - (void)dealloc {
-  if (self.array != NULL) {
-    for (int i = 0; i < height; i++) {
-      free(self.array[i]);
+  if (_array != NULL) {
+    for (int i = 0; i < self.height; i++) {
+      free(_array[i]);
     }
-    free(self.array);
-    self.array = NULL;
+    free(_array);
+    _array = NULL;
   }
 }
 

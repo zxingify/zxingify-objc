@@ -16,19 +16,11 @@
 
 #import "ZXParsedResult.h"
 
-@interface ZXParsedResult ()
-
-@property (nonatomic) ZXParsedResultType type;
-
-@end
-
 @implementation ZXParsedResult
 
-@synthesize type;
-
-- (id)initWithType:(ZXParsedResultType)aType {
+- (id)initWithType:(ZXParsedResultType)type {
   if (self = [super init]) {
-    self.type = aType;
+    _type = type;
   }
 
   return self;

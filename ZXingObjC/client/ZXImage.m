@@ -21,13 +21,17 @@
 #import <ImageIO/ImageIO.h>
 #endif
 
-@implementation ZXImage
+@interface ZXImage ()
 
-@synthesize cgimage;
+@property (nonatomic, assign) CGImageRef cgimage;
+
+@end
+
+@implementation ZXImage
 
 - (ZXImage *)initWithCGImageRef:(CGImageRef)image {
   if (self = [super init]) {
-    cgimage = CGImageRetain(image);
+    _cgimage = CGImageRetain(image);
   }
 
   return self;
@@ -41,7 +45,7 @@
       CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, 0);
 
       if (source) {
-        cgimage = CGImageSourceCreateImageAtIndex(source, 0, 0);
+        self.cgimage = CGImageSourceCreateImageAtIndex(source, 0, 0);
 
         CFRelease(source);
       }
@@ -54,16 +58,16 @@
 }
 
 - (size_t)width {
-  return CGImageGetWidth(cgimage);
+  return CGImageGetWidth(self.cgimage);
 }
 
 - (size_t)height {
-  return CGImageGetHeight(cgimage);
+  return CGImageGetHeight(self.cgimage);
 }
 
 - (void)dealloc {
-  if (cgimage) {
-    CGImageRelease(cgimage);
+  if (_cgimage) {
+    CGImageRelease(_cgimage);
   }
 }
 

@@ -18,12 +18,6 @@
 #import "ZXAddressBookParsedResult.h"
 #import "ZXResult.h"
 
-@interface ZXAddressBookAUResultParser ()
-
-- (NSArray *)matchMultipleValuePrefix:(NSString *)prefix max:(int)max rawText:(NSString *)rawText trim:(BOOL)trim;
-
-@end
-
 @implementation ZXAddressBookAUResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

@@ -39,30 +39,26 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 
 @property (nonatomic, assign) int *decodeMiddleCounters;
 
-- (BOOL)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound;
-
 @end
 
 @implementation ZXUPCEReader
 
-@synthesize decodeMiddleCounters;
-
 - (id)init {
   if (self = [super init]) {
-    self.decodeMiddleCounters = (int *)malloc(sizeof(4) * sizeof(int));
-    self.decodeMiddleCounters[0] = 0;
-    self.decodeMiddleCounters[1] = 0;
-    self.decodeMiddleCounters[2] = 0;
-    self.decodeMiddleCounters[3] = 0;
+    _decodeMiddleCounters = (int *)malloc(sizeof(4) * sizeof(int));
+    _decodeMiddleCounters[0] = 0;
+    _decodeMiddleCounters[1] = 0;
+    _decodeMiddleCounters[2] = 0;
+    _decodeMiddleCounters[3] = 0;
   }
 
   return self;
 }
 
 - (void)dealloc {
-  if (self.decodeMiddleCounters != NULL) {
-    free(self.decodeMiddleCounters);
-    self.decodeMiddleCounters = NULL;
+  if (_decodeMiddleCounters != NULL) {
+    free(_decodeMiddleCounters);
+    _decodeMiddleCounters = NULL;
   }
 }
 

@@ -16,44 +16,30 @@
 
 #import "ZXBlockPair.h"
 
-@interface ZXBlockPair ()
-
-@property (nonatomic, assign) unsigned char *dataBytes;
-@property (nonatomic, assign) unsigned char *errorCorrectionBytes;
-@property (nonatomic, assign) int errorCorrectionLength;
-@property (nonatomic, assign) int length;
-
-@end
-
 @implementation ZXBlockPair
 
-@synthesize dataBytes;
-@synthesize errorCorrectionBytes;
-@synthesize errorCorrectionLength;
-@synthesize length;
-
-- (id)initWithData:(unsigned char *)data length:(unsigned int)aLength errorCorrection:(unsigned char *)errorCorrection errorCorrectionLength:(unsigned int)anErrorCorrectionLength{
+- (id)initWithData:(unsigned char *)data length:(unsigned int)length errorCorrection:(unsigned char *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength {
   if (self = [super init]) {
-    self.dataBytes = (unsigned char *)malloc(aLength * sizeof(char));
-    memcpy(self.dataBytes, data, aLength * sizeof(char));
-    self.errorCorrectionBytes = (unsigned char *)malloc(anErrorCorrectionLength * sizeof(char));
-    memcpy(self.errorCorrectionBytes, errorCorrection, anErrorCorrectionLength);
-    self.length = aLength;
-    self.errorCorrectionLength = anErrorCorrectionLength;
+    _dataBytes = (unsigned char *)malloc(length * sizeof(char));
+    memcpy(_dataBytes, data, length * sizeof(char));
+    _errorCorrectionBytes = (unsigned char *)malloc(errorCorrectionLength * sizeof(char));
+    memcpy(_errorCorrectionBytes, errorCorrection, errorCorrectionLength);
+    _length = length;
+    _errorCorrectionLength = errorCorrectionLength;
   }
 
   return self;
 }
 
 - (void)dealloc {
-  if (self.dataBytes != NULL) {
-    free(self.dataBytes);
-    self.dataBytes = NULL;
+  if (_dataBytes != NULL) {
+    free(_dataBytes);
+    _dataBytes = NULL;
   }
 
-  if (self.errorCorrectionBytes != NULL) {
-    free(self.errorCorrectionBytes);
-    self.errorCorrectionBytes = NULL;
+  if (_errorCorrectionBytes != NULL) {
+    free(_errorCorrectionBytes);
+    _errorCorrectionBytes = NULL;
   }
 }
 

@@ -26,9 +26,7 @@
 @property (nonatomic, assign, readonly) int bits;
 @property (nonatomic, copy, readonly) NSString *name;
 
-- (id)initWithCharacterCountBitsForVersions:(NSArray *)characterCountBitsForVersions
-                                       bits:(int)bits
-                                       name:(NSString *)name;
+- (id)initWithCharacterCountBitsForVersions:(NSArray *)characterCountBitsForVersions bits:(int)bits name:(NSString *)name;
 + (ZXMode *)forBits:(int)bits;
 - (int)characterCountBits:(ZXQRCodeVersion *)version;
 

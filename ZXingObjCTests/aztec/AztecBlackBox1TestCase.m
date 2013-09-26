@@ -19,8 +19,8 @@
 
 @implementation AztecBlackBox1TestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation
                 testBasePathSuffix:@"Resources/blackbox/aztec-1"
                      barcodeReader:[[ZXAztecReader alloc] init]
                     expectedFormat:kBarcodeFormatAztec];

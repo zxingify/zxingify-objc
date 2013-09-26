@@ -30,17 +30,13 @@ const int MATRIX_HEIGHT = 33;
 
 @property (nonatomic, strong) ZXMaxiCodeDecoder *decoder;
 
-- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
-
 @end
 
 @implementation ZXMaxiCodeReader
 
-@synthesize decoder;
-
 - (id)init {
   if (self = [super init]) {
-    self.decoder = [[ZXMaxiCodeDecoder alloc] init];
+    _decoder = [[ZXMaxiCodeDecoder alloc] init];
   }
 
   return self;
@@ -88,10 +84,9 @@ const int MATRIX_HEIGHT = 33;
   return result;
 }
 
-- (void) reset {
+- (void)reset {
   // do nothing
 }
-
 
 /**
  * This method detects a code in a "pure" image -- that is, pure monochrome image

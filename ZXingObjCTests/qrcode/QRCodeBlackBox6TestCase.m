@@ -23,8 +23,8 @@
  * These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
  * rotation, which was a weak spot.
  */
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation
                 testBasePathSuffix:@"Resources/blackbox/qrcode-6"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatQRCode];

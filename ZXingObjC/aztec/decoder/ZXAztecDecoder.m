@@ -81,28 +81,15 @@ static NSString *DIGIT_TABLE[] = {
 @property (nonatomic, assign) int invertedBitCount;
 @property (nonatomic, assign) int numCodewords;
 
-- (NSString *)character:(int)table code:(int)code;
-- (NSArray *)correctBits:(NSArray *)rawbits error:(NSError **)error;
-- (NSString *)encodedData:(NSArray *)correctedBits error:(NSError **)error;
-- (NSArray *)extractBits:(ZXBitMatrix *)matrix;
-- (int)readCode:(NSArray *)rawbits startIndex:(int)startIndex length:(unsigned int)length;
-- (ZXBitMatrix *)removeDashedLines:(ZXBitMatrix *)matrix;
-- (int)table:(unichar)t;
-
 @end
 
 @implementation ZXAztecDecoder
 
-@synthesize codewordSize;
-@synthesize ddata;
-@synthesize invertedBitCount;
-@synthesize numCodewords;
-
 - (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError **)error {
   self.ddata = detectorResult;
   ZXBitMatrix *matrix = [detectorResult bits];
-  if (![ddata compact]) {
-    matrix = [self removeDashedLines:[ddata bits]];
+  if (![self.ddata compact]) {
+    matrix = [self removeDashedLines:[self.ddata bits]];
   }
   NSArray *rawbits = [self extractBits:matrix];
   if (!rawbits) {
@@ -285,10 +272,10 @@ static NSString *DIGIT_TABLE[] = {
   if ([self.ddata nbLayers] <= 2) {
     self.codewordSize = 6;
     gf = [ZXGenericGF AztecData6];
-  } else if ([ddata nbLayers] <= 8) {
+  } else if ([self.ddata nbLayers] <= 8) {
     self.codewordSize = 8;
     gf = [ZXGenericGF AztecData8];
-  } else if ([ddata nbLayers] <= 22) {
+  } else if ([self.ddata nbLayers] <= 22) {
     self.codewordSize = 10;
     gf = [ZXGenericGF AztecData10];
   } else {
@@ -302,10 +289,10 @@ static NSString *DIGIT_TABLE[] = {
 
   if ([self.ddata compact]) {
     offset = NB_BITS_COMPACT[[self.ddata nbLayers]] - self.numCodewords * self.codewordSize;
-    numECCodewords = NB_DATABLOCK_COMPACT[[ddata nbLayers]] - numDataCodewords;
+    numECCodewords = NB_DATABLOCK_COMPACT[[self.ddata nbLayers]] - numDataCodewords;
   } else {
-    offset = NB_BITS[[ddata nbLayers]] - numCodewords * codewordSize;
-    numECCodewords = NB_DATABLOCK[[ddata nbLayers]] - numDataCodewords;
+    offset = NB_BITS[[self.ddata nbLayers]] - self.numCodewords * self.codewordSize;
+    numECCodewords = NB_DATABLOCK[[self.ddata nbLayers]] - numDataCodewords;
   }
 
   int dataWordsLen = self.numCodewords;
@@ -314,7 +301,7 @@ static NSString *DIGIT_TABLE[] = {
     dataWords[i] = 0;
     int flag = 1;
     for (int j = 1; j <= self.codewordSize; j++) {
-      if ([rawbits[codewordSize * i + codewordSize - j + offset] boolValue]) {
+      if ([rawbits[self.codewordSize * i + self.codewordSize - j + offset] boolValue]) {
         dataWords[i] += flag;
       }
       flag <<= 1;
@@ -336,7 +323,7 @@ static NSString *DIGIT_TABLE[] = {
   self.invertedBitCount = 0;
 
   NSMutableArray *correctedBits = [NSMutableArray array];
-  for (int i = 0; i < numDataCodewords*codewordSize; i++) {
+  for (int i = 0; i < numDataCodewords*self.codewordSize; i++) {
     [correctedBits addObject:@NO];
   }
 
@@ -387,7 +374,7 @@ static NSString *DIGIT_TABLE[] = {
       return nil;
     }
     capacity = NB_BITS_COMPACT[[self.ddata nbLayers]];
-    self.numCodewords = NB_DATABLOCK_COMPACT[[ddata nbLayers]];
+    self.numCodewords = NB_DATABLOCK_COMPACT[[self.ddata nbLayers]];
   } else {
     if ([self.ddata nbLayers] > (sizeof(NB_BITS) / sizeof(int))) {
       return nil;

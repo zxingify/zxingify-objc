@@ -16,25 +16,13 @@
 
 #import "ZXTelParsedResult.h"
 
-@interface ZXTelParsedResult ()
-
-@property (nonatomic, copy) NSString *number;
-@property (nonatomic, copy) NSString *telURI;
-@property (nonatomic, copy) NSString *title;
-
-@end
-
 @implementation ZXTelParsedResult
 
-@synthesize number;
-@synthesize telURI;
-@synthesize title;
-
-- (id)initWithNumber:(NSString *)aNumber telURI:(NSString *)aTelURI title:(NSString *)aTitle {
+- (id)initWithNumber:(NSString *)number telURI:(NSString *)telURI title:(NSString *)title {
   if (self = [super initWithType:kParsedResultTypeTel]) {
-    self.number = aNumber;
-    self.telURI = aTelURI;
-    self.title = aTitle;
+    _number = number;
+    _telURI = telURI;
+    _title = title;
   }
 
   return self;
@@ -46,8 +34,8 @@
 
 - (NSString *)displayResult {
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  [ZXParsedResult maybeAppend:number result:result];
-  [ZXParsedResult maybeAppend:title result:result];
+  [ZXParsedResult maybeAppend:self.number result:result];
+  [ZXParsedResult maybeAppend:self.title result:result];
   return result;
 }
 

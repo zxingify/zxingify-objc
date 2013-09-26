@@ -28,18 +28,13 @@ int const MAX_EC_CODEWORDS = 512;
 
 @property (nonatomic, strong) ZXPDF417ECErrorCorrection *errorCorrection;
 
-- (BOOL)correctErrors:(NSMutableArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords;
-- (BOOL)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords;
-
 @end
 
 @implementation ZXPDF417Decoder
 
-@synthesize errorCorrection;
-
 - (id)init {
   if (self = [super init]) {
-    self.errorCorrection = [[ZXPDF417ECErrorCorrection alloc] init];
+    _errorCorrection = [[ZXPDF417ECErrorCorrection alloc] init];
   }
 
   return self;
@@ -61,7 +56,6 @@ int const MAX_EC_CODEWORDS = 512;
   }
   return [self decodeMatrix:bits error:error];
 }
-
 
 /**
  * Decodes a PDF417 Code represented as a ZXBitMatrix.
@@ -92,7 +86,6 @@ int const MAX_EC_CODEWORDS = 512;
   return [ZXPDF417DecodedBitStreamParser decode:codewords error:error];
 }
 
-
 /**
  * Verify that all is OK with the codeword array.
  */
@@ -114,7 +107,6 @@ int const MAX_EC_CODEWORDS = 512;
   }
   return YES;
 }
-
 
 /**
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to

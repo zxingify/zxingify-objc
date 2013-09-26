@@ -31,7 +31,7 @@ static ZXGridSampler *gridSampler = nil;
  * in the whole lifetime of the JVM. For instance, an Android activity can swap in
  * an implementation that takes advantage of native platform libraries.
  */
-+ (void) setGridSampler:(ZXGridSampler *)newGridSampler {
++ (void)setGridSampler:(ZXGridSampler *)newGridSampler {
   gridSampler = newGridSampler;
 }
 

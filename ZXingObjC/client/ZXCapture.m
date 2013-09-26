@@ -43,11 +43,10 @@ static bool isIPad();
 @implementation ZXCapture
 
 @synthesize delegate;
-@synthesize transform;
 @synthesize captureToFilename;
-@synthesize reader;
-@synthesize hints;
+@synthesize transform;
 @synthesize rotation;
+@synthesize hints;
 
 // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
 - (CGImageRef)rotateImage:(CGImageRef)original degrees:(float)degrees {
@@ -74,7 +73,7 @@ static bool isIPad();
                                                  CGImageGetBitsPerComponent(original),
                                                  0,
                                                  colorSpace,
-                                                 kCGImageAlphaPremultipliedFirst);
+                                                 kCGBitmapAlphaInfoMask & kCGImageAlphaPremultipliedFirst);
     CGContextSetAllowsAntialiasing(context, FALSE);
     CGContextSetInterpolationQuality(context, kCGInterpolationNone);
     CGColorSpaceRelease(colorSpace);
@@ -681,14 +680,6 @@ static bool isIPad() {
 #else
 
 @implementation ZXCapture
-
-@synthesize delegate;
-@synthesize transform;
-@synthesize captureToFilename;
-@synthesize mirror;
-@synthesize reader;
-@synthesize hints;
-@synthesize rotation;
 
 - (id)init {
   if ((self = [super init])) {

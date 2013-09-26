@@ -18,12 +18,6 @@
 #import "ZXEncoderContext.h"
 #import "ZXHighLevelEncoder.h"
 
-@interface ZXASCIIEncoder ()
-
-- (unichar)encodeASCIIDigits:(unichar)digit1 digit2:(unichar)digit2;
-
-@end
-
 @implementation ZXASCIIEncoder
 
 - (int)encodingMode {

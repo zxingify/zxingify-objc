@@ -32,18 +32,13 @@ const int ODD = 2;
 
 @property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
 
-- (BOOL)correctErrors:(NSMutableArray *)codewordBytes start:(int)start dataCodewords:(int)dataCodewords
-          ecCodewords:(int)ecCodewords mode:(int)mode error:(NSError **)error;
-
 @end
 
 @implementation ZXMaxiCodeDecoder
 
-@synthesize rsDecoder;
-
 - (id)init {
   if (self = [super init]) {
-    self.rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF MaxiCodeField64]];
+    _rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF MaxiCodeField64]];
   }
 
   return self;

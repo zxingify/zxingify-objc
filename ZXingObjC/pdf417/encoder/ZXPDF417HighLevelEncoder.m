@@ -99,24 +99,6 @@ unichar MIXED_TABLE[MIXED_TABLE_LEN];
 const int PUNCTUATION_LEN = 128;
 unichar PUNCTUATION[PUNCTUATION_LEN];
 
-@interface ZXPDF417HighLevelEncoder ()
-
-+ (unsigned char *)bytesForMessage:(NSString *)msg;
-+ (int)encodeText:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb initialSubmode:(int)initialSubmode;
-+ (void)encodeBinary:(unsigned char *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb;
-+ (void)encodeNumeric:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb;
-+ (BOOL)isDigit:(char)ch;
-+ (BOOL)isAlphaUpper:(char)ch;
-+ (BOOL)isAlphaLower:(char)ch;
-+ (BOOL)isMixed:(char)ch;
-+ (BOOL)isPunctuation:(char)ch;
-+ (BOOL)isText:(char)ch;
-+ (int)determineConsecutiveDigitCount:(NSString *)msg startpos:(int)startpos;
-+ (int)determineConsecutiveTextCount:(NSString *)msg startpos:(int)startpos;
-+ (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(unsigned char *)bytes startpos:(int)startpos error:(NSError **)error;
-
-@end
-
 @implementation ZXPDF417HighLevelEncoder
 
 + (void)initialize {

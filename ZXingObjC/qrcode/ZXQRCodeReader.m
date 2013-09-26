@@ -26,22 +26,11 @@
 #import "ZXQRCodeReader.h"
 #import "ZXResult.h"
 
-@interface ZXQRCodeReader ()
-
-@property (nonatomic, strong) ZXQRCodeDecoder *decoder;
-
-- (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
-- (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;
-
-@end
-
 @implementation ZXQRCodeReader
-
-@synthesize decoder;
 
 - (id)init {
   if (self = [super init]) {
-    self.decoder = [[ZXQRCodeDecoder alloc] init];
+    _decoder = [[ZXQRCodeDecoder alloc] init];
   }
 
   return self;
@@ -67,7 +56,7 @@
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
-    decoderResult = [decoder decodeMatrix:bits hints:hints error:error];
+    decoderResult = [self.decoder decodeMatrix:bits hints:hints error:error];
     if (!decoderResult) {
       return nil;
     }
@@ -77,7 +66,7 @@
     if (!detectorResult) {
       return nil;
     }
-    decoderResult = [decoder decodeMatrix:[detectorResult bits] hints:hints error:error];
+    decoderResult = [self.decoder decodeMatrix:[detectorResult bits] hints:hints error:error];
     if (!decoderResult) {
       return nil;
     }
@@ -103,7 +92,6 @@
 - (void)reset {
   // do nothing
 }
-
 
 /**
  * This method detects a code in a "pure" image -- that is, pure monochrome image

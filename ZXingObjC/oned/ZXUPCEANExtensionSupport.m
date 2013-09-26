@@ -31,13 +31,10 @@ const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
 
 @implementation ZXUPCEANExtensionSupport
 
-@synthesize twoSupport;
-@synthesize fiveSupport;
-
 - (id)init {
   if (self = [super init]) {
-    self.twoSupport = [[ZXUPCEANExtension2Support alloc] init];
-    self.fiveSupport = [[ZXUPCEANExtension5Support alloc] init];
+    _twoSupport = [[ZXUPCEANExtension2Support alloc] init];
+    _fiveSupport = [[ZXUPCEANExtension5Support alloc] init];
   }
 
   return self;

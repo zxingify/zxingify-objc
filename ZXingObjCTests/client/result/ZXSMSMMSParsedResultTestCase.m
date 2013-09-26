@@ -18,22 +18,6 @@
 #import "ZXSMSParsedResult.h"
 #import "ZXSMSMMSParsedResultTestCase.h"
 
-@interface ZXSMSMMSParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents
-                    number:(NSString *)number
-                   subject:(NSString *)subject
-                      body:(NSString *)body
-                       via:(NSString *)via;
-
-- (void)doTestWithContents:(NSString *)contents
-                   numbers:(NSArray *)numbers
-                   subject:(NSString *)subject
-                      body:(NSString *)body
-                      vias:(NSArray *)vias;
-
-@end
-
 @implementation ZXSMSMMSParsedResultTestCase
 
 - (void)testSMS {

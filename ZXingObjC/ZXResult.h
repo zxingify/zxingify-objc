@@ -23,7 +23,7 @@
 
 @interface ZXResult : NSObject
 
-@property (nonatomic, copy,   readonly) NSString *text;
+@property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, assign, readonly) unsigned char *rawBytes;
 @property (nonatomic, assign, readonly) int length;
 @property (nonatomic, strong, readonly) NSMutableArray *resultPoints;

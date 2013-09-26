@@ -25,13 +25,6 @@
 #import "ZXSymbolInfo.h"
 #import "ZXSymbolShapeHint.h"
 
-@interface ZXDataMatrixWriter ()
-
-- (ZXBitMatrix *)encodeLowLevel:(ZXDefaultPlacement *)placement symbolInfo:(ZXSymbolInfo *)symbolInfo;
-- (ZXBitMatrix *)convertByteMatrixToBitMatrix:(ZXByteMatrix *)matrix;
-
-@end
-
 @implementation ZXDataMatrixWriter
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {

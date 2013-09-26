@@ -91,15 +91,11 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 
 @implementation ZXUPCEANReader
 
-@synthesize decodeRowNSMutableString;
-@synthesize extensionReader;
-@synthesize eanManSupport;
-
 - (id)init {
   if (self = [super init]) {
-    self.decodeRowNSMutableString = [NSMutableString stringWithCapacity:20];
-    self.extensionReader = [[ZXUPCEANExtensionSupport alloc] init];
-    self.eanManSupport = [[ZXEANManufacturerOrgSupport alloc] init];
+    _decodeRowNSMutableString = [NSMutableString stringWithCapacity:20];
+    _extensionReader = [[ZXUPCEANExtensionSupport alloc] init];
+    _eanManSupport = [[ZXEANManufacturerOrgSupport alloc] init];
   }
 
   return self;
@@ -188,7 +184,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
                                        resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber], [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                                              format:format];
 
-  ZXResult *extensionResult = [extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
+  ZXResult *extensionResult = [self.extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
   if (extensionResult) {
     [decodeResult putMetadata:kResultMetadataTypeUPCEANExtension value:extensionResult.text];
     [decodeResult putAllMetadata:[extensionResult resultMetadata]];
@@ -196,7 +192,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   }
 
   if (format == kBarcodeFormatEan13 || format == kBarcodeFormatUPCA) {
-    NSString *countryID = [eanManSupport lookupCountryIdentifier:resultString];
+    NSString *countryID = [self.eanManSupport lookupCountryIdentifier:resultString];
     if (countryID != nil) {
       [decodeResult putMetadata:kResultMetadataTypePossibleCountry value:countryID];
     }

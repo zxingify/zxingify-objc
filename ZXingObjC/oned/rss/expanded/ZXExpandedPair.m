@@ -18,29 +18,15 @@
 #import "ZXDataCharacter.h"
 #import "ZXRSSFinderPattern.h"
 
-@interface ZXExpandedPair ()
-
-@property (nonatomic, strong) ZXDataCharacter *leftChar;
-@property (nonatomic, strong) ZXDataCharacter *rightChar;
-@property (nonatomic, strong) ZXRSSFinderPattern *finderPattern;
-@property (nonatomic, assign) BOOL mayBeLast;
-
-@end
-
 @implementation ZXExpandedPair
 
-@synthesize finderPattern;
-@synthesize leftChar;
-@synthesize mayBeLast;
-@synthesize rightChar;
-
-- (id)initWithLeftChar:(ZXDataCharacter *)aLeftChar rightChar:(ZXDataCharacter *)aRightChar
-         finderPattern:(ZXRSSFinderPattern *)aFinderPattern mayBeLast:(BOOL)aMayBeLast {
+- (id)initWithLeftChar:(ZXDataCharacter *)leftChar rightChar:(ZXDataCharacter *)rightChar
+         finderPattern:(ZXRSSFinderPattern *)finderPattern mayBeLast:(BOOL)mayBeLast {
   if (self = [super init]) {
-    self.leftChar = aLeftChar;
-    self.rightChar = aRightChar;
-    self.finderPattern = aFinderPattern;
-    mayBeLast = aMayBeLast;
+    _leftChar = leftChar;
+    _rightChar = rightChar;
+    _finderPattern = finderPattern;
+    _mayBeLast = mayBeLast;
   }
 
   return self;
@@ -61,8 +47,7 @@
     return NO;
   }
   ZXExpandedPair *that = (ZXExpandedPair *)object;
-  return
-    [ZXExpandedPair isEqualOrNil:self.leftChar toObject:that.leftChar] &&
+  return [ZXExpandedPair isEqualOrNil:self.leftChar toObject:that.leftChar] &&
     [ZXExpandedPair isEqualOrNil:self.rightChar toObject:that.rightChar] &&
     [ZXExpandedPair isEqualOrNil:self.finderPattern toObject:that.finderPattern];
 }

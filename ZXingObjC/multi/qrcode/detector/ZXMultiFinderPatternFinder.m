@@ -43,16 +43,6 @@ float const DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
  */
 float const DIFF_MODSIZE_CUTOFF = 0.5f;
 
-
-@interface ZXMultiFinderPatternFinder ()
-
-NSInteger moduleSizeCompare(id center1, id center2, void *context);
-
-- (NSArray *)selectBestPatternsWithError:(NSError **)error;
-
-@end
-
-
 @implementation ZXMultiFinderPatternFinder
 
 /**

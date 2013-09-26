@@ -22,7 +22,7 @@
  */
 @interface AbstractNegativeBlackBoxTestCase : AbstractBlackBoxTestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix;
+- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix;
 - (void)addTest:(int)falsePositivesAllowed rotation:(float)rotation;
 - (void)runTests;
 

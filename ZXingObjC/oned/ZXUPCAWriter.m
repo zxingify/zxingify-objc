@@ -17,13 +17,6 @@
 #import "ZXEAN13Writer.h"
 #import "ZXUPCAWriter.h"
 
-@interface ZXUPCAWriter ()
-
-- (ZXEAN13Writer *)subWriter;
-- (NSString *)preencode:(NSString *)contents;
-
-@end
-
 @implementation ZXUPCAWriter
 
 - (ZXEAN13Writer *)subWriter {

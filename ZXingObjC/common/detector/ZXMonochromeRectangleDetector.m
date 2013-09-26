@@ -25,19 +25,13 @@ int const MONOCHROME_MAX_MODULES = 32;
 
 @property (nonatomic, strong) ZXBitMatrix *image;
 
-- (NSArray *)blackWhiteRange:(int)fixedDimension maxWhiteRun:(int)maxWhiteRun minDim:(int)minDim maxDim:(int)maxDim horizontal:(BOOL)horizontal;
-- (ZXResultPoint *)findCornerFromCenter:(int)centerX deltaX:(int)deltaX left:(int)left right:(int)right centerY:(int)centerY deltaY:(int)deltaY top:(int)top bottom:(int)bottom maxWhiteRun:(int)maxWhiteRun;
-
 @end
-
 
 @implementation ZXMonochromeRectangleDetector
 
-@synthesize image;
-
-- (id)initWithImage:(ZXBitMatrix *)anImage {
+- (id)initWithImage:(ZXBitMatrix *)image {
   if (self = [super init]) {
-    self.image = anImage;
+    _image = image;
   }
 
   return self;

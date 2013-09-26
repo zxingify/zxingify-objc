@@ -16,28 +16,14 @@
 
 #import "ZXRSSFinderPattern.h"
 
-@interface ZXRSSFinderPattern ()
-
-@property (nonatomic, assign) int value;
-@property (nonatomic, strong) NSMutableArray *startEnd;
-@property (nonatomic, strong) NSMutableArray *resultPoints;
-
-@end
-
 @implementation ZXRSSFinderPattern
 
-@synthesize value;
-@synthesize startEnd;
-@synthesize resultPoints;
-
-- (id)initWithValue:(int)aValue startEnd:(NSMutableArray *)aStartEnd start:(int)aStart end:(int)anEnd rowNumber:(int)aRowNumber {
+- (id)initWithValue:(int)value startEnd:(NSMutableArray *)startEnd start:(int)start end:(int)end rowNumber:(int)rowNumber {
   if (self = [super init]) {
-    self.value = aValue;
-    self.startEnd = aStartEnd;
-    self.resultPoints = [NSMutableArray arrayWithObjects:
-                         [[ZXResultPoint alloc] initWithX:(float)aStart y:(float)aRowNumber],
-                         [[ZXResultPoint alloc] initWithX:(float)anEnd y:(float)aRowNumber],
-                         nil];
+    _value = value;
+    _startEnd = startEnd;
+    _resultPoints = [@[[[ZXResultPoint alloc] initWithX:(float)start y:(float)rowNumber],
+                       [[ZXResultPoint alloc] initWithX:(float)end y:(float)rowNumber]] mutableCopy];
   }
 
   return self;

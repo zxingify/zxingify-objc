@@ -28,10 +28,6 @@
 @property (nonatomic, assign) int downInit;
 @property (nonatomic, assign) int upInit;
 
-- (NSArray *)centerEdges:(ZXResultPoint *)y z:(ZXResultPoint *)z x:(ZXResultPoint *)x t:(ZXResultPoint *)t;
-- (BOOL)containsBlackPoint:(int)a b:(int)b fixed:(int)fixed horizontal:(BOOL)horizontal;
-- (ZXResultPoint *)blackPointOnSegment:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
-
 @end
 
 int const INIT_SIZE = 30;
@@ -39,24 +35,16 @@ int const CORR = 1;
 
 @implementation ZXWhiteRectangleDetector
 
-@synthesize image;
-@synthesize height;
-@synthesize width;
-@synthesize leftInit;
-@synthesize rightInit;
-@synthesize downInit;
-@synthesize upInit;
-
-- (id)initWithImage:(ZXBitMatrix *)anImage error:(NSError **)error {
+- (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error {
   if (self = [super init]) {
-    self.image = anImage;
-    self.height = anImage.height;
-    self.width = anImage.width;
-    self.leftInit = (self.width - INIT_SIZE) >> 1;
-    self.rightInit = (self.width + INIT_SIZE) >> 1;
-    self.upInit = (self.height - INIT_SIZE) >> 1;
-    self.downInit = (self.height + INIT_SIZE) >> 1;
-    if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
+    _image = image;
+    _height = image.height;
+    _width = image.width;
+    _leftInit = (_width - INIT_SIZE) >> 1;
+    _rightInit = (_width + INIT_SIZE) >> 1;
+    _upInit = (_height - INIT_SIZE) >> 1;
+    _downInit = (_height + INIT_SIZE) >> 1;
+    if (_upInit < 0 || _leftInit < 0 || _downInit >= _height || _rightInit >= _width) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
@@ -65,17 +53,17 @@ int const CORR = 1;
   return self;
 }
 
-- (id)initWithImage:(ZXBitMatrix *)anImage initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error {
+- (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error {
   if (self = [super init]) {
-    self.image = anImage;
-    self.height = anImage.height;
-    self.width = anImage.width;
+    _image = image;
+    _height = image.height;
+    _width = image.width;
     int halfsize = initSize >> 1;
-    self.leftInit = x - halfsize;
-    self.rightInit = x + halfsize;
-    self.upInit = y - halfsize;
-    self.downInit = y + halfsize;
-    if (self.upInit < 0 || self.leftInit < 0 || self.downInit >= self.height || self.rightInit >= self.width) {
+    _leftInit = x - halfsize;
+    _rightInit = x + halfsize;
+    _upInit = y - halfsize;
+    _downInit = y + halfsize;
+    if (_upInit < 0 || _leftInit < 0 || _downInit >= _height || _rightInit >= _width) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }

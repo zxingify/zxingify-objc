@@ -42,22 +42,13 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @property (nonatomic, strong) NSMutableString *decodeRowResult;
 
-- (BOOL)checkChecksums:(NSMutableString *)result error:(NSError **)error ;
-- (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError **)error ;
-- (NSString *)decodeExtended:(NSMutableString *)encoded;
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b;
-- (unichar)patternToChar:(int)pattern;
-- (int)toPattern:(int *)counters countersLen:(unsigned int)countersLen;
-
 @end
 
 @implementation ZXCode93Reader
 
-@synthesize decodeRowResult;
-
 - (id)init {
   if (self = [super init]) {
-    self.decodeRowResult = [NSMutableString stringWithCapacity:20];
+    _decodeRowResult = [NSMutableString stringWithCapacity:20];
   }
 
   return self;

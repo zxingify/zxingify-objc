@@ -18,16 +18,6 @@
 
 @implementation ZXEncodeHints
 
-@synthesize encoding;
-@synthesize dataMatrixShape;
-@synthesize minSize;
-@synthesize maxSize;
-@synthesize errorCorrectionLevel;
-@synthesize margin;
-@synthesize pdf417Compact;
-@synthesize pdf417Compaction;
-@synthesize pdf417Dimensions;
-
 + (id)hints {
   return [[self alloc] init];
 }

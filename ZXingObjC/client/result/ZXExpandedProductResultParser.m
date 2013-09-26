@@ -18,13 +18,6 @@
 #import "ZXExpandedProductParsedResult.h"
 #import "ZXResult.h"
 
-@interface ZXExpandedProductResultParser ()
-
-- (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText;
-- (NSString *)findValue:(int)i rawText:(NSString *)rawText;
-
-@end
-
 @implementation ZXExpandedProductResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

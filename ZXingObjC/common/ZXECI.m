@@ -17,25 +17,15 @@
 #import "ZXCharacterSetECI.h"
 #import "ZXECI.h"
 
-@interface ZXECI ()
-
-@property (nonatomic) int value;
-
-@end
-
-
 @implementation ZXECI
 
-@synthesize value;
-
-- (id)initWithValue:(int)aValue {
+- (id)initWithValue:(int)value {
   if (self = [super init]) {
-    self.value = aValue;
+    _value = value;
   }
 
   return self;
 }
-
 
 + (ZXECI *)eciByValue:(int)value {
   if (value < 0 || value > 999999) {

@@ -24,12 +24,6 @@ const int N2 = 3;
 const int N3 = 40;
 const int N4 = 10;
 
-@interface ZXMaskUtil ()
-
-+ (int)applyMaskPenaltyRule1Internal:(ZXByteMatrix *)matrix isHorizontal:(BOOL)isHorizontal;
-
-@end
-
 @implementation ZXMaskUtil
 
 /**

@@ -18,13 +18,6 @@
 #import "ZXBinaryUtilTest.h"
 #import "ZXBitArray.h"
 
-@interface ZXBinaryUtilTest ()
-
-- (void)check:(NSString *)data;
-- (void)checkWithoutSpaces:(NSString *)data;
-
-@end
-
 @implementation ZXBinaryUtilTest
 
 - (void)testBuildBitArrayFromString {

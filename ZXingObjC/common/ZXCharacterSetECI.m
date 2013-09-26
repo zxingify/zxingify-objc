@@ -20,17 +20,7 @@
 static NSMutableDictionary *VALUE_TO_ECI = nil;
 static NSMutableDictionary *ENCODING_TO_ECI = nil;
 
-@interface ZXCharacterSetECI ()
-
-@property (nonatomic) NSStringEncoding encoding;
-
-+ (void)addCharacterSet:(int)value encoding:(NSStringEncoding)encoding;
-
-@end
-
 @implementation ZXCharacterSetECI
-
-@synthesize encoding;
 
 + (void)initialize {
   VALUE_TO_ECI = [[NSMutableDictionary alloc] initWithCapacity:29];
@@ -67,9 +57,9 @@ static NSMutableDictionary *ENCODING_TO_ECI = nil;
   [self addCharacterSet:170 encoding:NSASCIIStringEncoding];
 }
 
-- (id)initWithValue:(int)value encoding:(NSStringEncoding)anEncoding {
+- (id)initWithValue:(int)value encoding:(NSStringEncoding)encoding {
   if (self = [super initWithValue:value]) {
-    self.encoding = anEncoding;
+    _encoding = encoding;
   }
 
   return self;

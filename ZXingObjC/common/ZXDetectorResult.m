@@ -17,22 +17,12 @@
 #import "ZXBitMatrix.h"
 #import "ZXDetectorResult.h"
 
-@interface ZXDetectorResult ()
-
-@property (nonatomic, strong) ZXBitMatrix *bits;
-@property (nonatomic, strong) NSArray *points;
-
-@end
-
 @implementation ZXDetectorResult
 
-@synthesize bits;
-@synthesize points;
-
-- (id)initWithBits:(ZXBitMatrix *)theBits points:(NSArray *)thePoints {
+- (id)initWithBits:(ZXBitMatrix *)bits points:(NSArray *)points {
   if (self = [super init]) {
-    self.bits = theBits;
-    self.points = thePoints;
+    _bits = bits;
+    _points = points;
   }
 
   return self;

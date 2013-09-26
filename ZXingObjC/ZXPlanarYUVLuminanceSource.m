@@ -20,38 +20,34 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 
 @interface ZXPlanarYUVLuminanceSource ()
 
-- (void)reverseHorizontal:(int)width height:(int)height;
+@property (nonatomic, assign) unsigned char *yuvData;
+@property (nonatomic, assign) int yuvDataLen;
+@property (nonatomic, assign) int dataWidth;
+@property (nonatomic, assign) int dataHeight;
+@property (nonatomic, assign) int left;
+@property (nonatomic, assign) int top;
 
 @end
 
-@implementation ZXPlanarYUVLuminanceSource {
-  unsigned char *yuvData;
-  int yuvDataLen;
-  int dataWidth;
-  int dataHeight;
-  int left;
-  int top;
-}
+@implementation ZXPlanarYUVLuminanceSource
 
-- (id)initWithYuvData:(unsigned char *)_yuvData yuvDataLen:(int)_yuvDataLen dataWidth:(int)_dataWidth
-           dataHeight:(int)_dataHeight left:(int)_left top:(int)_top width:(int)_width height:(int)_height
-    reverseHorizontal:(BOOL)_reverseHorizontal {
-  if (self = [super initWithWidth:_width height:_height]) {
-    if (_left + _width > _dataWidth || _top + _height > _dataHeight) {
-      [NSException raise:NSInvalidArgumentException
-                  format:@"Crop rectangle does not fit within image data."];
-
+- (id)initWithYuvData:(unsigned char *)yuvData yuvDataLen:(int)yuvDataLen dataWidth:(int)dataWidth
+           dataHeight:(int)dataHeight left:(int)left top:(int)top width:(int)width height:(int)height
+    reverseHorizontal:(BOOL)reverseHorizontal {
+  if (self = [super initWithWidth:width height:height]) {
+    if (left + width > dataWidth || top + height > dataHeight) {
+      [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
     }
 
-    yuvDataLen = _yuvDataLen;
-    yuvData = (unsigned char *)malloc(_yuvDataLen * sizeof(unsigned char));
-    memcpy(yuvData, _yuvData, _yuvDataLen);
-    dataWidth = _dataWidth;
-    dataHeight = _dataHeight;
-    left = _left;
-    top = _top;
-    if (_reverseHorizontal) {
-      [self reverseHorizontal:_width height:_height];
+    _yuvDataLen = yuvDataLen;
+    _yuvData = (unsigned char *)malloc(yuvDataLen * sizeof(unsigned char));
+    memcpy(_yuvData, yuvData, yuvDataLen);
+    _dataWidth = dataWidth;
+    _dataHeight = dataHeight;
+    _left = left;
+    _top = top;
+    if (reverseHorizontal) {
+      [self reverseHorizontal:width height:height];
     }
   }
 
@@ -59,9 +55,9 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 }
 
 - (void)dealloc {
-  if (yuvData != NULL) {
-    free(yuvData);
-    yuvData = NULL;
+  if (_yuvData != NULL) {
+    free(_yuvData);
+    _yuvData = NULL;
   }
 }
 
@@ -71,27 +67,27 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
                 format:@"Requested row is outside the image: %d", y];
   }
   unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
-  int offset = (y + top) * dataWidth + left;
-  memcpy(row, yuvData + offset, self.width);
+  int offset = (y + self.top) * self.dataWidth + self.left;
+  memcpy(row, self.yuvData + offset, self.width);
   return row;
 }
 
 - (unsigned char *)matrix {
-  int area = width * height;
+  int area = self.width * self.height;
   unsigned char *matrix = malloc(area * sizeof(unsigned char));
-  int inputOffset = top * dataWidth + left;
+  int inputOffset = self.top * self.dataWidth + self.left;
 
   // If the width matches the full width of the underlying data, perform a single copy.
-  if (width == dataWidth) {
-    memcpy(matrix, yuvData + inputOffset, area - inputOffset);
+  if (self.width == self.dataWidth) {
+    memcpy(matrix, self.yuvData + inputOffset, area - inputOffset);
     return matrix;
   }
 
   // Otherwise copy one cropped row at a time.
-  for (int y = 0; y < height; y++) {
-    int outputOffset = y * width;
-    memcpy(matrix + outputOffset, yuvData + inputOffset, self.width);
-    inputOffset += dataWidth;
+  for (int y = 0; y < self.height; y++) {
+    int outputOffset = y * self.width;
+    memcpy(matrix + outputOffset, self.yuvData + inputOffset, self.width);
+    inputOffset += self.dataWidth;
   }
   return matrix;
 }
@@ -100,25 +96,25 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   return YES;
 }
 
-- (ZXLuminanceSource *)crop:(int)_left top:(int)_top width:(int)_width height:(int)_height {
-  return [[[self class] alloc] initWithYuvData:yuvData yuvDataLen:yuvDataLen dataWidth:dataWidth
-                                    dataHeight:dataHeight left:left + _left top:top + _top
-                                         width:_width height:_height reverseHorizontal:NO];
+- (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height {
+  return [[[self class] alloc] initWithYuvData:self.yuvData yuvDataLen:self.yuvDataLen dataWidth:self.dataWidth
+                                    dataHeight:self.dataHeight left:self.left + left top:self.top + top
+                                         width:width height:height reverseHorizontal:NO];
 }
 
 - (int *)renderThumbnail {
   int thumbWidth = self.width / THUMBNAIL_SCALE_FACTOR;
   int thumbHeight = self.height / THUMBNAIL_SCALE_FACTOR;
   int *pixels = (int *)malloc(thumbWidth * thumbHeight * sizeof(int));
-  int inputOffset = top * dataWidth + left;
+  int inputOffset = self.top * self.dataWidth + self.left;
 
-  for (int y = 0; y < height; y++) {
-    int outputOffset = y * width;
-    for (int x = 0; x < width; x++) {
-      int grey = yuvData[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff;
+  for (int y = 0; y < self.height; y++) {
+    int outputOffset = y * self.width;
+    for (int x = 0; x < self.width; x++) {
+      int grey = self.yuvData[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff;
       pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
     }
-    inputOffset += dataWidth * THUMBNAIL_SCALE_FACTOR;
+    inputOffset += self.dataWidth * THUMBNAIL_SCALE_FACTOR;
   }
   return pixels;
 }
@@ -132,12 +128,12 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 }
 
 - (void)reverseHorizontal:(int)_width height:(int)_height {
-  for (int y = 0, rowStart = top * dataWidth + left; y < _height; y++, rowStart += dataWidth) {
+  for (int y = 0, rowStart = self.top * self.dataWidth + self.left; y < _height; y++, rowStart += self.dataWidth) {
     int middle = rowStart + _width / 2;
     for (int x1 = rowStart, x2 = rowStart + _width - 1; x1 < middle; x1++, x2--) {
-      unsigned char temp = yuvData[x1];
-      yuvData[x1] = yuvData[x2];
-      yuvData[x2] = temp;
+      unsigned char temp = self.yuvData[x1];
+      self.yuvData[x1] = self.yuvData[x2];
+      self.yuvData[x2] = temp;
     }
   }
 }

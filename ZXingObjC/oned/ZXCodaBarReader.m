@@ -61,20 +61,9 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 @property (nonatomic, assign) int countersLen;
 @property (nonatomic, assign) int counterLength;
 
-- (BOOL)validatePattern:(int)start;
-- (BOOL)setCountersWithRow:(ZXBitArray *)row;
-- (void)counterAppend:(int)e;
-- (int)findStartPattern;
-- (int)toNarrowWidePattern:(int)position;
-
 @end
 
 @implementation ZXCodaBarReader
-
-@synthesize decodeRowResult;
-@synthesize counters;
-@synthesize countersLen;
-@synthesize counterLength;
 
 + (void)initialize {
   MAX_ACCEPTABLE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 2.0f);
@@ -83,20 +72,20 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
 - (id)init {
   if (self = [super init]) {
-    self.decodeRowResult = [NSMutableString stringWithCapacity:20];
-    self.countersLen = 80;
-    self.counters = (int *)malloc(self.countersLen * sizeof(int));
-    memset(self.counters, 0, self.countersLen * sizeof(int));
-    self.counterLength = 0;
+    _decodeRowResult = [NSMutableString stringWithCapacity:20];
+    _countersLen = 80;
+    _counters = (int *)malloc(_countersLen * sizeof(int));
+    memset(_counters, 0, _countersLen * sizeof(int));
+    _counterLength = 0;
   }
 
   return self;
 }
 
 - (void)dealloc {
-  if (self.counters != NULL) {
-    free(self.counters);
-    self.counters = NULL;
+  if (_counters != NULL) {
+    free(_counters);
+    _counters = NULL;
   }
 }
 
@@ -127,7 +116,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
     [self.decodeRowResult appendFormat:@"%C", (unichar)charOffset];
     nextStart += 8;
     // Stop as soon as we see the end character.
-    if (decodeRowResult.length > 1 &&
+    if (self.decodeRowResult.length > 1 &&
         [ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
       break;
     }
@@ -155,7 +144,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
   // Translate character table offsets to actual characters.
   for (int i = 0; i < self.decodeRowResult.length; i++) {
-    [self.decodeRowResult replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%c", CODA_ALPHABET[[decodeRowResult characterAtIndex:i]]]];
+    [self.decodeRowResult replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%c", CODA_ALPHABET[[self.decodeRowResult characterAtIndex:i]]]];
   }
   // Ensure a valid start and end character
   unichar startchar = [self.decodeRowResult characterAtIndex:0];
@@ -170,21 +159,21 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   }
 
   // remove stop/start characters character and check if a long enough string is contained
-  if (decodeRowResult.length <= MIN_CHARACTER_LENGTH) {
+  if (self.decodeRowResult.length <= MIN_CHARACTER_LENGTH) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  [self.decodeRowResult deleteCharactersInRange:NSMakeRange(decodeRowResult.length - 1, 1)];
+  [self.decodeRowResult deleteCharactersInRange:NSMakeRange(self.decodeRowResult.length - 1, 1)];
   [self.decodeRowResult deleteCharactersInRange:NSMakeRange(0, 1)];
 
   int runningCount = 0;
   for (int i = 0; i < startOffset; i++) {
-    runningCount += counters[i];
+    runningCount += self.counters[i];
   }
   float left = (float) runningCount;
   for (int i = startOffset; i < nextStart - 1; i++) {
-    runningCount += counters[i];
+    runningCount += self.counters[i];
   }
   float right = (float) runningCount;
   return [ZXResult resultWithText:self.decodeRowResult
@@ -205,7 +194,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   // inter-character spaces properly.
   int pos = start;
   for (int i = 0; true; i++) {
-    int pattern = CODA_CHARACTER_ENCODINGS[[decodeRowResult characterAtIndex:i]];
+    int pattern = CODA_CHARACTER_ENCODINGS[[self.decodeRowResult characterAtIndex:i]];
     for (int j = 6; j >= 0; j--) {
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
@@ -238,12 +227,12 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   // Now verify that all of the stripes are within the thresholds.
   pos = start;
   for (int i = 0; true; i++) {
-    int pattern = CODA_CHARACTER_ENCODINGS[[decodeRowResult characterAtIndex:i]];
+    int pattern = CODA_CHARACTER_ENCODINGS[[self.decodeRowResult characterAtIndex:i]];
     for (int j = 6; j >= 0; j--) {
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
       int category = (j & 1) + (pattern & 1) * 2;
-      int size = counters[pos + j] << INTEGER_MATH_SHIFT;
+      int size = self.counters[pos + j] << INTEGER_MATH_SHIFT;
       if (size < mins[category] || size > maxes[category]) {
         return NO;
       }
@@ -338,7 +327,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   int maxBar = 0;
   int minBar = NSIntegerMax;
   for (int j = position; j < end; j += 2) {
-    int currentCounter = counters[j];
+    int currentCounter = self.counters[j];
     if (currentCounter < minBar) {
       minBar = currentCounter;
     }
@@ -351,7 +340,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   int maxSpace = 0;
   int minSpace = NSIntegerMax;
   for (int j = position + 1; j < end; j += 2) {
-    int currentCounter = counters[j];
+    int currentCounter = self.counters[j];
     if (currentCounter < minSpace) {
       minSpace = currentCounter;
     }
@@ -366,7 +355,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   for (int i = 0; i < 7; i++) {
     int threshold = (i & 1) == 0 ? thresholdBar : thresholdSpace;
     bitmask >>= 1;
-    if (counters[position + i] > threshold) {
+    if (self.counters[position + i] > threshold) {
       pattern |= bitmask;
     }
   }

@@ -16,22 +16,11 @@
 
 #import "ZXDimension.h"
 
-@interface ZXDimension ()
-
-@property (nonatomic, assign) int height;
-@property (nonatomic, assign) int width;
-
-@end
-
 @implementation ZXDimension
-
-@synthesize width = _width;
-@synthesize height = _height;
 
 - (id)initWithWidth:(int)width height:(int)height {
   if (width < 0 || height < 0) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Width and height must not be negative"];
+    [NSException raise:NSInvalidArgumentException format:@"Width and height must not be negative"];
   }
 
   if (self = [super init]) {

@@ -20,13 +20,6 @@
 
 static NSArray *TEST_SYMBOLS;
 
-@interface ZXHighLevelEncodeTestCase ()
-
-- (NSString *)createBinaryMessage:(int)len;
-- (NSString *)encodeHighLevel:(NSString *)msg;
-
-@end
-
 @implementation ZXHighLevelEncodeTestCase
 
 + (void)initialize {

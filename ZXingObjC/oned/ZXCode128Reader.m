@@ -151,13 +151,6 @@ int const CODE_START_B = 104;
 int const CODE_START_C = 105;
 int const CODE_STOP = 106;
 
-@interface ZXCode128Reader ()
-
-- (int)decodeCode:(ZXBitArray *)row counters:(int[])counters countersCount:(int)countersCount rowOffset:(int)rowOffset;
-- (NSArray *)findStartPattern:(ZXBitArray *)row;
-
-@end
-
 @implementation ZXCode128Reader
 
 + (void)initialize {

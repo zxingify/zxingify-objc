@@ -20,7 +20,7 @@
 
 @interface ZXImage : NSObject
 
-@property (assign, readonly) CGImageRef cgimage;
+@property (nonatomic, assign, readonly) CGImageRef cgimage;
 
 - (ZXImage *)initWithCGImageRef:(CGImageRef)image;
 - (ZXImage *)initWithURL:(NSURL const *)url;

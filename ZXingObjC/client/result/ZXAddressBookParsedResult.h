@@ -40,17 +40,18 @@
           addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes;
 
 - (id)initWithNames:(NSArray *)names nicknames:(NSArray *)nicknames pronunciation:(NSString *)pronunciation
-       phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
-   instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
-       addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
-              title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo;
+       phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails
+         emailTypes:(NSArray *)emailTypes instantMessenger:(NSString *)instantMessenger note:(NSString *)note
+          addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes org:(NSString *)org
+           birthday:(NSString *)birthday title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo;
 
 + (id)addressBookParsedResultWithNames:(NSArray *)names phoneNumbers:(NSArray *)phoneNumbers
                             phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
                              addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes;
 
-+ (id)addressBookParsedResultWithNames:(NSArray *)names nicknames:(NSArray *)nicknames pronunciation:(NSString *)pronunciation
-                          phoneNumbers:(NSArray *)phoneNumbers phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
++ (id)addressBookParsedResultWithNames:(NSArray *)names nicknames:(NSArray *)nicknames
+                         pronunciation:(NSString *)pronunciation phoneNumbers:(NSArray *)phoneNumbers
+                            phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes
                       instantMessenger:(NSString *)instantMessenger note:(NSString *)note addresses:(NSArray *)addresses
                           addressTypes:(NSArray *)addressTypes org:(NSString *)org birthday:(NSString *)birthday
                                  title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo;

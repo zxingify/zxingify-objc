@@ -19,21 +19,12 @@
 
 @interface ZXBitMatrix ()
 
-@property (nonatomic) int width;
-@property (nonatomic) int height;
-@property (nonatomic) int *bits;
-@property (nonatomic) int rowSize;
-@property (nonatomic) int bitsSize;
+@property (nonatomic, assign) int rowSize;
+@property (nonatomic, assign) int bitsSize;
 
 @end
 
 @implementation ZXBitMatrix
-
-@synthesize width;
-@synthesize height;
-@synthesize bits;
-@synthesize rowSize;
-@synthesize bitsSize;
 
 + (ZXBitMatrix *)bitMatrixWithDimension:(int)dimension {
   return [[self alloc] initWithDimension:dimension];
@@ -47,18 +38,18 @@
   return [self initWithWidth:dimension height:dimension];
 }
 
-- (id)initWithWidth:(int)aWidth height:(int)aHeight {
+- (id)initWithWidth:(int)width height:(int)height {
   if (self = [super init]) {
-    if (aWidth < 1 || aHeight < 1) {
+    if (width < 1 || height < 1) {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
                                      reason:@"Both dimensions must be greater than 0"
                                    userInfo:nil];
     }
-    self.width = aWidth;
-    self.height = aHeight;
-    self.rowSize = (self.width + 31) >> 5;
-    self.bitsSize = self.rowSize * self.height;
-    self.bits = (int *)malloc(self.bitsSize * sizeof(int));
+    _width = width;
+    _height = height;
+    _rowSize = (_width + 31) >> 5;
+    _bitsSize = _rowSize * _height;
+    _bits = (int *)malloc(_bitsSize * sizeof(int));
     [self clear];
   }
 
@@ -66,9 +57,9 @@
 }
 
 - (void)dealloc {
-  if (self.bits != NULL) {
-    free(self.bits);
-    self.bits = NULL;
+  if (_bits != NULL) {
+    free(_bits);
+    _bits = NULL;
   }
 }
 
@@ -197,10 +188,10 @@
     }
   }
 
-  int _width = right - left;
-  int _height = bottom - top;
+  int width = right - left;
+  int height = bottom - top;
 
-  if (_width < 0 || _height < 0) {
+  if (width < 0 || height < 0) {
     return nil;
   }
 
@@ -259,11 +250,11 @@
     return NO;
   }
   ZXBitMatrix *other = (ZXBitMatrix *)o;
-  if (self.width != other.width || self.height != other.height || self.rowSize != other->rowSize || self.bitsSize != other->bitsSize) {
+  if (self.width != other.width || self.height != other.height || self.rowSize != other.rowSize || self.bitsSize != other.bitsSize) {
     return NO;
   }
   for (int i = 0; i < self.bitsSize; i++) {
-    if (self.bits[i] != other->bits[i]) {
+    if (self.bits[i] != other.bits[i]) {
       return NO;
     }
   }

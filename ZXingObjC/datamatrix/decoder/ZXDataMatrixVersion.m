@@ -16,31 +16,21 @@
 
 #import "ZXDataMatrixVersion.h"
 
-@interface ZXDataMatrixECBlocks ()
-
-@property (nonatomic, strong) NSArray *ecBlocks;
-@property (nonatomic, assign) int ecCodewords;
-
-@end
-
 @implementation ZXDataMatrixECBlocks
 
-@synthesize ecBlocks;
-@synthesize ecCodewords;
-
-- (id)initWithCodewords:(int)theEcCodewords ecBlocks:(ZXDataMatrixECB *)theEcBlocks {
+- (id)initWithCodewords:(int)ecCodewords ecBlocks:(ZXDataMatrixECB *)ecBlocks {
   if (self = [super init]) {
-    self.ecCodewords = theEcCodewords;
-    self.ecBlocks = @[theEcBlocks];
+    _ecCodewords = ecCodewords;
+    _ecBlocks = @[ecBlocks];
   }
 
   return self;
 }
 
-- (id)initWithCodewords:(int)theEcCodewords ecBlocks1:(ZXDataMatrixECB *)ecBlocks1 ecBlocks2:(ZXDataMatrixECB *)ecBlocks2 {
+- (id)initWithCodewords:(int)ecCodewords ecBlocks1:(ZXDataMatrixECB *)ecBlocks1 ecBlocks2:(ZXDataMatrixECB *)ecBlocks2 {
   if (self = [super init]) {
-    self.ecCodewords = theEcCodewords;
-    self.ecBlocks = @[ecBlocks1, ecBlocks2];
+    _ecCodewords = ecCodewords;
+    _ecBlocks = @[ecBlocks1, ecBlocks2];
   }
 
   return self;
@@ -48,22 +38,13 @@
 
 @end
 
-@interface ZXDataMatrixECB ()
-
-@property (nonatomic, assign) int count;
-@property (nonatomic, assign) int dataCodewords;
-
-@end
 
 @implementation ZXDataMatrixECB
 
-@synthesize count;
-@synthesize dataCodewords;
-
-- (id)initWithCount:(int)aCount dataCodewords:(int)theDataCodewords {
+- (id)initWithCount:(int)count dataCodewords:(int)dataCodewords {
   if (self = [super init]) {
-    self.count = aCount;
-    self.dataCodewords = theDataCodewords;
+    _count = count;
+    _dataCodewords = dataCodewords;
   }
 
   return self;
@@ -71,38 +52,20 @@
 
 @end
 
+
 static NSArray *VERSIONS = nil;
-
-@interface ZXDataMatrixVersion ()
-
-@property (nonatomic, strong) ZXDataMatrixECBlocks *ecBlocks;
-@property (nonatomic, assign) int dataRegionSizeRows;
-@property (nonatomic, assign) int dataRegionSizeColumns;
-@property (nonatomic, assign) int symbolSizeColumns;
-@property (nonatomic, assign) int symbolSizeRows;
-@property (nonatomic, assign) int totalCodewords;
-@property (nonatomic, assign) int versionNumber;
-
-@end
 
 @implementation ZXDataMatrixVersion
 
-@synthesize ecBlocks;
-@synthesize dataRegionSizeColumns;
-@synthesize dataRegionSizeRows;
-@synthesize symbolSizeColumns;
-@synthesize symbolSizeRows;
-@synthesize totalCodewords;
-@synthesize versionNumber;
-
-- (id)initWithVersionNumber:(int)aVersionNumber symbolSizeRows:(int)theSymbolSizeRows symbolSizeColumns:(int)theSymbolSizeColumns dataRegionSizeRows:(int)theDataRegionSizeRows dataRegionSizeColumns:(int)theDataRegionSizeColumns ecBlocks:(ZXDataMatrixECBlocks *)anEcBlocks {
+- (id)initWithVersionNumber:(int)versionNumber symbolSizeRows:(int)symbolSizeRows symbolSizeColumns:(int)symbolSizeColumns
+         dataRegionSizeRows:(int)dataRegionSizeRows dataRegionSizeColumns:(int)dataRegionSizeColumns ecBlocks:(ZXDataMatrixECBlocks *)ecBlocks {
   if (self = [super init]) {
-    self.versionNumber = aVersionNumber;
-    self.symbolSizeRows = theSymbolSizeRows;
-    self.symbolSizeColumns = theSymbolSizeColumns;
-    self.dataRegionSizeRows = theDataRegionSizeRows;
-    self.dataRegionSizeColumns = theDataRegionSizeColumns;
-    self.ecBlocks = anEcBlocks;
+    _versionNumber = versionNumber;
+    _symbolSizeRows = symbolSizeRows;
+    _symbolSizeColumns = symbolSizeColumns;
+    _dataRegionSizeRows = dataRegionSizeRows;
+    _dataRegionSizeColumns = dataRegionSizeColumns;
+    _ecBlocks = ecBlocks;
 
     int total = 0;
     int ecCodewords = ecBlocks.ecCodewords;
@@ -110,7 +73,7 @@ static NSArray *VERSIONS = nil;
     for (ZXDataMatrixECB *ecBlock in ecbArray) {
       total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
     }
-    self.totalCodewords = total;
+    _totalCodewords = total;
   }
 
   return self;
@@ -134,7 +97,7 @@ static NSArray *VERSIONS = nil;
 }
 
 - (NSString *)description {
-  return [@(versionNumber) stringValue];
+  return [@(self.versionNumber) stringValue];
 }
 
 

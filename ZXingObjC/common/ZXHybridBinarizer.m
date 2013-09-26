@@ -28,24 +28,9 @@ const int MIN_DYNAMIC_RANGE = 24;
 
 @property (nonatomic, strong) ZXBitMatrix *matrix;
 
-- (int **)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
-- (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(int **)blackPoints matrix:(ZXBitMatrix *)matrix;
-- (int)cap:(int)value min:(int)min max:(int)max;
-- (void)thresholdBlock:(unsigned char *)luminances xoffset:(int)xoffset yoffset:(int)yoffset threshold:(int)threshold stride:(int)stride matrix:(ZXBitMatrix *)matrix;
-
 @end
 
 @implementation ZXHybridBinarizer
-
-@synthesize matrix;
-
-- (id)initWithSource:(ZXLuminanceSource *)aSource {
-  if (self = [super initWithSource:aSource]) {
-    self.matrix = nil;
-  }
-
-  return self;
-}
 
 /**
  * Calculates the final BitMatrix once for all requests. This could be called once from the
@@ -97,13 +82,13 @@ const int MIN_DYNAMIC_RANGE = 24;
  * of the blocks around it. Also handles the corner cases (fractional blocks are computed based
  * on the last pixels in the row/column which are also used in the previous block).
  */
-- (void)calculateThresholdForBlock:(unsigned char *)_luminances
+- (void)calculateThresholdForBlock:(unsigned char *)luminances
                           subWidth:(int)subWidth
                          subHeight:(int)subHeight
                              width:(int)width
                             height:(int)height
                        blackPoints:(int **)blackPoints
-                            matrix:(ZXBitMatrix *)_matrix {
+                            matrix:(ZXBitMatrix *)matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
     int maxYOffset = height - BLOCK_SIZE;
@@ -124,7 +109,7 @@ const int MIN_DYNAMIC_RANGE = 24;
         sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
       }
       int average = sum / 25;
-      [self thresholdBlock:_luminances xoffset:xoffset yoffset:yoffset threshold:average stride:width matrix:_matrix];
+      [self thresholdBlock:luminances xoffset:xoffset yoffset:yoffset threshold:average stride:width matrix:matrix];
     }
   }
 }
@@ -136,17 +121,17 @@ const int MIN_DYNAMIC_RANGE = 24;
 /**
  * Applies a single threshold to a block of pixels.
  */
-- (void)thresholdBlock:(unsigned char *)_luminances
+- (void)thresholdBlock:(unsigned char *)luminances
                xoffset:(int)xoffset
                yoffset:(int)yoffset
              threshold:(int)threshold
                 stride:(int)stride
-                matrix:(ZXBitMatrix *)_matrix {
+                matrix:(ZXBitMatrix *)matrix {
   for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride) {
     for (int x = 0; x < BLOCK_SIZE; x++) {
       // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0
-      if ((_luminances[offset + x] & 0xFF) <= threshold) {
-        [_matrix setX:xoffset + x y:yoffset + y];
+      if ((luminances[offset + x] & 0xFF) <= threshold) {
+        [matrix setX:xoffset + x y:yoffset + y];
       }
     }
   }

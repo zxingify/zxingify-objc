@@ -22,12 +22,6 @@
 #import "ZXImage.h"
 #import "ZXRSSExpandedReader.h"
 
-@interface RSSExpandedImage2binaryTestCase ()
-
-- (void)assertCorrectImage2binary:(NSString *)path expected:(NSString *)expected;
-
-@end
-
 @implementation RSSExpandedImage2binaryTestCase
 
 - (void)testDecodeRow2binary_1 {

@@ -49,15 +49,6 @@
 #import "ZXWifiParsedResult.h"
 #import "ZXWifiResultParser.h"
 
-@interface ZXResultParser ()
-
-+ (NSString *)unescapeBackslash:(NSString *)escaped;
-- (void)appendKeyValue:(NSString *)keyValue result:(NSMutableDictionary *)result;
-- (NSString *)urlDecode:(NSString *)escaped;
-- (int)findFirstEscape:(NSString *)escaped;
-
-@end
-
 static NSArray *PARSERS = nil;
 static NSRegularExpression *DIGITS = nil;
 static NSRegularExpression *ALPHANUM = nil;

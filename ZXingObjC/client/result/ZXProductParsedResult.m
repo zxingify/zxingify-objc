@@ -16,26 +16,16 @@
 
 #import "ZXProductParsedResult.h"
 
-@interface ZXProductParsedResult ()
-
-@property (nonatomic, copy) NSString *normalizedProductID;
-@property (nonatomic, copy) NSString *productID;
-
-@end
-
 @implementation ZXProductParsedResult
 
-@synthesize normalizedProductID;
-@synthesize productID;
-
-- (id)initWithProductID:(NSString *)aProductID {
-  return [self initWithProductID:aProductID normalizedProductID:aProductID];
+- (id)initWithProductID:(NSString *)productID {
+  return [self initWithProductID:productID normalizedProductID:productID];
 }
 
-- (id)initWithProductID:(NSString *)aProductID normalizedProductID:(NSString *)aNormalizedProductID {
+- (id)initWithProductID:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID {
   if (self = [super initWithType:kParsedResultTypeProduct]) {
-    self.normalizedProductID = aNormalizedProductID;
-    self.productID = aProductID;
+    _normalizedProductID = normalizedProductID;
+    _productID = productID;
   }
 
   return self;

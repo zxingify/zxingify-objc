@@ -24,12 +24,6 @@
 
 int const QUIET_ZONE_SIZE = 4;
 
-@interface ZXQRCodeWriter ()
-
-- (ZXBitMatrix *)renderResult:(ZXQRCode *)code width:(int)width height:(int)height quietZone:(int)quietZone;
-
-@end
-
 @implementation ZXQRCodeWriter
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {

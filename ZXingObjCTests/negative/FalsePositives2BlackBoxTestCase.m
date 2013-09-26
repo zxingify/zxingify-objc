@@ -19,8 +19,8 @@
 
 @implementation FalsePositives2BlackBoxTestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation testBasePathSuffix:@"Resources/blackbox/falsepositives-2"];
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation testBasePathSuffix:@"Resources/blackbox/falsepositives-2"];
 
   if (self) {
     [self addTest:4 rotation:0.0f];

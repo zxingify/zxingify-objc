@@ -16,26 +16,6 @@
 
 #import "ZXCalendarParsedResult.h"
 
-@interface ZXCalendarParsedResult ()
-
-@property(nonatomic, strong) NSString *summary;
-@property(nonatomic, strong) NSDate *start;
-@property(nonatomic) BOOL startAllDay;
-@property(nonatomic, strong) NSDate *end;
-@property(nonatomic) BOOL endAllDay;
-@property(nonatomic, strong) NSString *location;
-@property(nonatomic, strong) NSString *organizer;
-@property(nonatomic, strong) NSArray *attendees;
-@property(nonatomic, strong) NSString *description;
-@property(nonatomic) double latitude;
-@property(nonatomic) double longitude;
-
-- (NSDate *)parseDate:(NSString *)when;
-- (NSString *)format:(BOOL)allDay date:(NSDate *)date;
-- (long)parseDurationMS:(NSString *)durationString;
-
-@end
-
 static NSRegularExpression *DATE_TIME = nil;
 static NSRegularExpression *RFC2445_DURATION = nil;
 static NSDateFormatter *DATE_FORMAT = nil;
@@ -51,16 +31,6 @@ const long RFC2445_DURATION_FIELD_UNITS[RFC2445_DURATION_FIELD_UNITS_LEN] = {
 };
 
 @implementation ZXCalendarParsedResult
-
-@synthesize summary;
-@synthesize start;
-@synthesize end;
-@synthesize location;
-@synthesize organizer;
-@synthesize attendees;
-@synthesize description;
-@synthesize latitude;
-@synthesize longitude;
 
 + (void)initialize {
   DATE_TIME = [[NSRegularExpression alloc] initWithPattern:@"[0-9]{8}(T[0-9]{6}Z?)?"
@@ -78,36 +48,42 @@ const long RFC2445_DURATION_FIELD_UNITS[RFC2445_DURATION_FIELD_UNITS_LEN] = {
   DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss";
 }
 
-- (id)initWithSummary:(NSString *)aSummary startString:(NSString *)aStartString endString:(NSString *)anEndString durationString:(NSString *)aDurationString
-             location:(NSString *)aLocation organizer:(NSString *)anOrganizer attendees:(NSArray *)anAttendees description:(NSString *)aDescription latitude:(double)aLatitude longitude:(double)aLongitude {
+- (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString
+       durationString:(NSString *)durationString location:(NSString *)location organizer:(NSString *)organizer
+            attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude
+            longitude:(double)longitude {
   if (self = [super initWithType:kParsedResultTypeCalendar]) {
-    self.summary = aSummary;
-    self.start = [self parseDate:aStartString];
+    _summary = summary;
+    _start = [self parseDate:startString];
 
-    if (anEndString == nil) {
-      long durationMS = [self parseDurationMS:aDurationString];
-      self.end = durationMS < 0 ? nil : [NSDate dateWithTimeIntervalSince1970:[start timeIntervalSince1970] + durationMS / 1000];
+    if (endString == nil) {
+      long durationMS = [self parseDurationMS:durationString];
+      _end = durationMS < 0 ? nil : [NSDate dateWithTimeIntervalSince1970:[_start timeIntervalSince1970] + durationMS / 1000];
     } else {
-      self.end = [self parseDate:anEndString];
+      _end = [self parseDate:endString];
     }
 
-    self.startAllDay = aStartString.length == 8;
-    self.endAllDay = anEndString != nil && anEndString.length == 8;
+    _startAllDay = startString.length == 8;
+    _endAllDay = endString != nil && endString.length == 8;
 
-    self.location = aLocation;
-    self.organizer = anOrganizer;
-    self.attendees = anAttendees;
-    self.description = aDescription;
-    self.latitude = aLatitude;
-    self.longitude = aLongitude;
+    _location = location;
+    _organizer = organizer;
+    _attendees = attendees;
+    _description = description;
+    _latitude = latitude;
+    _longitude = longitude;
   }
   return self;
 }
 
-+ (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString durationString:(NSString *)durationString
-                             location:(NSString *)location organizer:(NSString *)organizer attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude longitude:(double)longitude {
-  return [[self alloc] initWithSummary:summary startString:startString endString:endString durationString:durationString location:location organizer:organizer attendees:attendees
-                            description:description latitude:latitude longitude:longitude];
++ (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString
+                            endString:(NSString *)endString durationString:(NSString *)durationString
+                             location:(NSString *)location organizer:(NSString *)organizer
+                            attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude
+                            longitude:(double)longitude {
+  return [[self alloc] initWithSummary:summary startString:startString endString:endString durationString:durationString
+                              location:location organizer:organizer attendees:attendees description:description
+                              latitude:latitude longitude:longitude];
 }
 
 - (NSString *)displayResult {

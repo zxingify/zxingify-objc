@@ -17,26 +17,16 @@
 #import "ZXBlockParsedResult.h"
 #import "ZXDecodedInformation.h"
 
-@interface ZXBlockParsedResult ()
-
-@property (nonatomic, strong) ZXDecodedInformation *decodedInformation;
-@property (nonatomic, assign) BOOL finished;
-
-@end
-
 @implementation ZXBlockParsedResult
 
-@synthesize decodedInformation;
-@synthesize finished;
-
-- (id)initWithFinished:(BOOL)isFinished {
-  return [self initWithInformation:nil finished:isFinished];
+- (id)initWithFinished:(BOOL)finished {
+  return [self initWithInformation:nil finished:finished];
 }
 
-- (id)initWithInformation:(ZXDecodedInformation *)information finished:(BOOL)isFinished {
+- (id)initWithInformation:(ZXDecodedInformation *)information finished:(BOOL)finished {
   if (self = [super init]) {
-    self.decodedInformation = information;
-    self.finished = isFinished;
+    _decodedInformation = information;
+    _finished = finished;
   }
 
   return self;

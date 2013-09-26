@@ -26,7 +26,6 @@ const char END_CHARS[END_CHARS_LEN] = "TN*E";
 @implementation ZXCodaBarWriter
 
 - (BOOL *)encode:(NSString *)contents length:(int *)pLength {
-
   // Verify input and calculate decoded length.
   if (![ZXCodaBarReader arrayContains:(char *)START_CHARS length:START_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:0]]) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException

@@ -29,19 +29,6 @@ static NSRegularExpression *UNESCAPED_SEMICOLONS = nil;
 static NSCharacterSet *COMMA = nil;
 static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 
-@interface ZXVCardResultParser ()
-
-+ (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset;
-- (void)formatNames:(NSMutableArray *)names;
-- (BOOL)isLikeVCardDate:(NSString *)value;
-+ (void)maybeAppendFragment:(NSMutableData *)fragmentBuffer charset:(NSString *)charset result:(NSMutableString *)result;
-- (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName;
-- (NSString *)toPrimaryValue:(NSArray *)list;
-- (NSArray *)toPrimaryValues:(NSArray *)lists;
-- (NSArray *)toTypes:(NSArray *)lists;
-
-@end
-
 @implementation ZXVCardResultParser
 
 + (void)initialize {

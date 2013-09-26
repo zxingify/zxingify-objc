@@ -29,25 +29,20 @@
 @property (nonatomic, assign) int x;
 @property (nonatomic, assign) int y;
 
-- (id)initWithX:(int) x y:(int)y;
-- (ZXResultPoint *)toResultPoint;
-
 @end
 
 @implementation ZXAztecPoint
 
-@synthesize x, y;
-
-- (id)initWithX:(int)anX y:(int)aY {
+- (id)initWithX:(int)x y:(int)y {
   if (self = [super init]) {
-    x = anX;
-    y = aY;
+    _x = x;
+    _y = y;
   }
   return self;
 }
 
 - (ZXResultPoint *)toResultPoint {
-  return [[ZXResultPoint alloc] initWithX:x y:y];
+  return [[ZXResultPoint alloc] initWithX:self.x y:self.y];
 }
 
 @end
@@ -61,39 +56,13 @@
 @property (nonatomic, assign) int nbLayers;
 @property (nonatomic, assign) int shift;
 
-- (NSArray *)bullEyeCornerPoints:(ZXAztecPoint *)pCenter;
-- (int)color:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2;
-- (BOOL)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)compact error:(NSError **)error;
-- (float)distance:(ZXAztecPoint *)a b:(ZXAztecPoint *)b;
-- (BOOL)extractParameters:(NSArray *)bullEyeCornerPoints error:(NSError **)error;
-- (ZXAztecPoint *)firstDifferent:(ZXAztecPoint *)init color:(BOOL)color dx:(int)dx dy:(int)dy;
-- (BOOL)isValidX:(int)x y:(int)y;
-- (BOOL)isWhiteOrBlackRectangle:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 p3:(ZXAztecPoint *)p3 p4:(ZXAztecPoint *)p4;
-- (ZXAztecPoint *)matrixCenterWithError:(NSError **)error;
-- (NSArray *)matrixCornerPoints:(NSArray *)bullEyeCornerPoints;
-- (void)parameters:(NSMutableArray *)parameterData;
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
-                    topLeft:(ZXResultPoint *)topLeft
-                 bottomLeft:(ZXResultPoint *)bottomLeft
-                bottomRight:(ZXResultPoint *)bottomRight
-                   topRight:(ZXResultPoint *)topRight
-                      error:(NSError **)error;
-- (NSArray *)sampleLine:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 size:(int)size;
-
 @end
 
 @implementation ZXAztecDetector
 
-@synthesize compact;
-@synthesize image;
-@synthesize nbCenterLayers;
-@synthesize nbDataBlocks;
-@synthesize nbLayers;
-@synthesize shift;
-
-- (id)initWithImage:(ZXBitMatrix *)anImage {
+- (id)initWithImage:(ZXBitMatrix *)image {
   if (self = [super init]) {
-    self.image = anImage;
+    _image = image;
   }
   return self;
 }
@@ -192,7 +161,7 @@
     }
 
     for (int i = 0; i < 28; i++) {
-      [parameterData addObject:shiftedParameterData[(i + shift * 7) % 28]];
+      [parameterData addObject:shiftedParameterData[(i + self.shift * 7) % 28]];
     }
   } else {
     for (int i = 0; i < 40; i++) {
@@ -215,7 +184,7 @@
     }
 
     for (int i = 0; i < 40; i++) {
-      [parameterData addObject:shiftedParameterData[(i + shift * 10) % 40]];
+      [parameterData addObject:shiftedParameterData[(i + self.shift * 10) % 40]];
     }
   }
 
@@ -358,13 +327,13 @@
     color = !color;
   }
 
-  if (nbCenterLayers != 5 && nbCenterLayers != 7) {
+  if (self.nbCenterLayers != 5 && self.nbCenterLayers != 7) {
     return nil;
   }
 
   self.compact = self.nbCenterLayers == 5;
 
-  float ratio = 0.75f * 2 / (2 * nbCenterLayers - 3);
+  float ratio = 0.75f * 2 / (2 * self.nbCenterLayers - 3);
 
   int dx = pina.x - pinc.x;
   int dy = pina.y - pinc.y;

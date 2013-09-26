@@ -30,13 +30,10 @@ enum {
 
 @implementation ZXCurrentParsingState
 
-@synthesize encoding;
-@synthesize position;
-
 - (id)init {
   if (self = [super init]) {
-    self.position = 0;
-    self.encoding = NUMERIC_STATE;
+    _position = 0;
+    _encoding = NUMERIC_STATE;
   }
   return self;
 }

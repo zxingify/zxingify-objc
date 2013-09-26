@@ -28,7 +28,7 @@
   ZXBitArray *binary = [[ZXBitArray alloc] initWithSize:[dotsAndXs stringByReplacingOccurrencesOfString:@" " withString:@""].length];
   int counter = 0;
 
-  for(int i = 0; i < dotsAndXs.length; ++i){
+  for (int i = 0; i < dotsAndXs.length; ++i){
     if(i % 9 == 0) { // spaces
       if([dotsAndXs characterAtIndex:i] != ' ') {
         @throw [NSException exceptionWithName:@"IllegalStateException" reason:@"space expected" userInfo:nil];
@@ -37,7 +37,7 @@
     }
 
     unichar currentChar = [dotsAndXs characterAtIndex:i];
-    if(currentChar == 'X' || currentChar == 'x') {
+    if (currentChar == 'X' || currentChar == 'x') {
       [binary set:counter];
     }
     counter++;
@@ -52,9 +52,9 @@
                          stringByReplacingOccurrencesOfString:@"0" withString:@"."];
 
   int current = 0;
-  while(current < dotsAndXs.length) {
+  while (current < dotsAndXs.length) {
     [sb appendString:@" "];
-    for(int i = 0; i < 8 && current < dotsAndXs.length; ++i){
+    for (int i = 0; i < 8 && current < dotsAndXs.length; ++i){
       [sb appendFormat:@"%C", [dotsAndXs characterAtIndex:current]];
       current++;
     }

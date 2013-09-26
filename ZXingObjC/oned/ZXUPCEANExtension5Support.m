@@ -27,15 +27,6 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05
 };
 
-@interface ZXUPCEANExtension5Support ()
-
-- (int)extensionChecksum:(NSString *)s;
-- (int)determineCheckDigit:(int)lgPatternFound;
-- (NSMutableDictionary *)parseExtensionString:(NSString *)raw;
-- (NSString *)parseExtension5String:(NSString *)raw;
-
-@end
-
 @implementation ZXUPCEANExtension5Support
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError **)error {

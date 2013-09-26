@@ -18,13 +18,6 @@
 #import "ZXBizcardResultParser.h"
 #import "ZXResult.h"
 
-@interface ZXBizcardResultParser ()
-
-- (NSString *)buildName:(NSString *)firstName lastName:(NSString *)lastName;
-- (NSArray *)buildPhoneNumbers:(NSString *)number1 number2:(NSString *)number2 number3:(NSString *)number3;
-
-@end
-
 @implementation ZXBizcardResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

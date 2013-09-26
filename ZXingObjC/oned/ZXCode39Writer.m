@@ -20,12 +20,6 @@
 
 #define ZX_CODE39_WHITELEN 1
 
-@interface ZXCode39Writer ()
-
-- (void)toIntArray:(int)a toReturn:(int[])toReturn;
-
-@end
-
 @implementation ZXCode39Writer
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {

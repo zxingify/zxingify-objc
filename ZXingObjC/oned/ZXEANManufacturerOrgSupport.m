@@ -21,20 +21,14 @@
 @property (nonatomic, strong) NSMutableArray *countryIdentifiers;
 @property (nonatomic, strong) NSMutableArray *ranges;
 
-- (void)add:(NSArray *)range identifier:(NSString *)identifier;
-- (void)initIfNeeded;
-
 @end
 
 @implementation ZXEANManufacturerOrgSupport
 
-@synthesize countryIdentifiers;
-@synthesize ranges;
-
 - (id)init {
   if (self = [super init]) {
-    self.ranges = [NSMutableArray array];
-    self.countryIdentifiers = [NSMutableArray array];
+    _ranges = [NSMutableArray array];
+    _countryIdentifiers = [NSMutableArray array];
   }
 
   return self;

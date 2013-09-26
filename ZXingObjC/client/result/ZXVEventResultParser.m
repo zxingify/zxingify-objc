@@ -19,13 +19,6 @@
 #import "ZXVCardResultParser.h"
 #import "ZXVEventResultParser.h"
 
-@interface ZXVEventResultParser ()
-
-- (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
-- (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim;
-
-@end
-
 @implementation ZXVEventResultParser
 
 - (ZXParsedResult *)parse:(ZXResult *)result {

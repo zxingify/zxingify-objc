@@ -27,16 +27,6 @@
 
 @implementation ZXEncoderContext
 
-@synthesize codewords = _codewords;
-@synthesize message = _message;
-@synthesize symbolShape = _symbolShape;
-@synthesize newEncoding = _newEncoding;
-@synthesize maxSize = _maxSize;
-@synthesize minSize = _minSize;
-@synthesize skipAtEnd = _skipAtEnd;
-@synthesize pos = _pos;
-@synthesize symbolInfo = _symbolInfo;
-
 - (id)initWithMessage:(NSString *)msg {
   if (self = [super init]) {
     //From this point on Strings are not Unicode anymore!

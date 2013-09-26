@@ -29,17 +29,13 @@
 
 @property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
 
-- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error;
-
 @end
 
 @implementation ZXDataMatrixDecoder
 
-@synthesize rsDecoder;
-
-- (id) init {
+- (id)init {
   if (self = [super init]) {
-    self.rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF DataMatrixField256]];
+    _rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF DataMatrixField256]];
   }
 
   return self;
@@ -120,7 +116,7 @@
   int numECCodewords = [codewordBytes count] - numDataCodewords;
 
   NSError *decodeError = nil;
-  if (![rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
+  if (![self.rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
       if (error) *error = ChecksumErrorInstance();
       return NO;

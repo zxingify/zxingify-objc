@@ -20,13 +20,6 @@
 
 int const GTIN_SIZE = 40;
 
-@interface ZXAI01decoder ()
-
-- (void)appendCheckDigit:(NSMutableString *)buf currentPos:(int)currentPos;
-
-@end
-
-
 @implementation ZXAI01decoder
 
 - (void)encodeCompressedGtin:(NSMutableString *)buf currentPos:(int)currentPos {

@@ -18,14 +18,6 @@
 #import "ZXProductParsedResultTestCase.h"
 #import "ZXResultParser.h"
 
-@interface ZXProductParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents
-                normalized:(NSString *)normalized
-                    format:(ZXBarcodeFormat)format;
-
-@end
-
 @implementation ZXProductParsedResultTestCase
 
 - (void)testProduct {

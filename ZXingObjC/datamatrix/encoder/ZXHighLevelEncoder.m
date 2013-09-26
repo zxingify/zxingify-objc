@@ -45,20 +45,6 @@ static NSString *MACRO_06_HEADER = nil;
  */
 static NSString *MACRO_TRAILER = nil;
 
-@interface ZXHighLevelEncoder ()
-
-+ (unichar)randomize253State:(unichar)ch codewordPosition:(int)codewordPosition;
-+ (int)findMinimums:(float *)charCounts intCharCounts:(int *)intCharCounts min:(int)min mins:(unsigned char *)mins;
-+ (int)minimumCount:(unsigned char *)mins;
-+ (BOOL)isNativeC40:(unichar)ch;
-+ (BOOL)isNativeText:(unichar)ch;
-+ (BOOL)isNativeX12:(unichar)ch;
-+ (BOOL)isX12TermSep:(unichar)ch;
-+ (BOOL)isNativeEDIFACT:(unichar)ch;
-+ (BOOL)isSpecialB256:(unichar)ch;
-
-@end
-
 @implementation ZXHighLevelEncoder
 
 + (void)initialize {

@@ -19,39 +19,27 @@
 
 @interface ZXGenericGF ()
 
-@property (nonatomic, strong) ZXGenericGFPoly *zero;
-@property (nonatomic, strong) ZXGenericGFPoly *one;
-@property (nonatomic, assign) int size;
 @property (nonatomic, assign) int *expTable;
 @property (nonatomic, assign) int *logTable;
 @property (nonatomic, assign) int primitive;
-@property (nonatomic, assign) int generatorBase;
 
 @end
 
 @implementation ZXGenericGF
 
-@synthesize zero;
-@synthesize one;
-@synthesize size;
-@synthesize expTable;
-@synthesize logTable;
-@synthesize primitive;
-@synthesize generatorBase;
-
 /**
  * Create a representation of GF(size) using the given primitive polynomial.
  */
-- (id)initWithPrimitive:(int)aPrimitive size:(int)aSize b:(int)b {
+- (id)initWithPrimitive:(int)primitive size:(int)size b:(int)b {
   if (self = [super init]) {
-    self.primitive = aPrimitive;
-    self.size = aSize;
-    self.generatorBase = b;
-    self.expTable = (int *)malloc(size * sizeof(int));
-    self.logTable = (int *)malloc(size * sizeof(int));
+    _primitive = primitive;
+    _size = size;
+    _generatorBase = b;
+    _expTable = (int *)malloc(size * sizeof(int));
+    _logTable = (int *)malloc(size * sizeof(int));
     int x = 1;
     for (int i = 0; i < size; i++) {
-      expTable[i] = x;
+      _expTable[i] = x;
       x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
       if (x >= size) {
         x ^= primitive;
@@ -60,12 +48,12 @@
     }
 
     for (int i = 0; i < self.size-1; i++) {
-      logTable[expTable[i]] = i;
+      _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    self.zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0];
+    _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0];
     int oneInt = 1;
-    self.one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
+    _one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
   }
 
   return self;
@@ -132,7 +120,7 @@
     [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
   if (coefficient == 0) {
-    return zero;
+    return self.zero;
   }
 
   int coefficientsLen = degree + 1;
@@ -152,14 +140,14 @@
 }
 
 - (int)exp:(int)a {
-  return expTable[a];
+  return self.expTable[a];
 }
 
 - (int)log:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return logTable[a];
+  return self.logTable[a];
 }
 
 - (int)inverse:(int)a {
@@ -174,11 +162,11 @@
     return 0;
   }
 
-  return expTable[(logTable[a] + logTable[b]) % (size - 1)];
+  return self.expTable[(self.logTable[a] + self.logTable[b]) % (self.size - 1)];
 }
 
 - (BOOL)isEqual:(ZXGenericGF *)object {
-  return self.primitive == object->primitive && self.size == object->size;
+  return self.primitive == object.primitive && self.size == object.size;
 }
 
 - (NSString *)description {

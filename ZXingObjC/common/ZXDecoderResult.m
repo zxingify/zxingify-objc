@@ -16,35 +16,19 @@
 
 #import "ZXDecoderResult.h"
 
-@interface ZXDecoderResult ()
-
-@property (nonatomic, assign) unsigned char *rawBytes;
-@property (nonatomic, assign) int length;
-@property (nonatomic, copy) NSString *text;
-@property (nonatomic, strong) NSMutableArray *byteSegments;
-@property (nonatomic, copy) NSString *ecLevel;
-
-@end
-
 @implementation ZXDecoderResult
 
-@synthesize rawBytes;
-@synthesize length;
-@synthesize text;
-@synthesize byteSegments;
-@synthesize ecLevel;
-
-- (id)initWithRawBytes:(unsigned char *)theRawBytes
-                length:(unsigned int)aLength
-                  text:(NSString *)theText
-          byteSegments:(NSMutableArray *)theByteSegments
-               ecLevel:(NSString *)anEcLevel {
+- (id)initWithRawBytes:(unsigned char *)rawBytes
+                length:(unsigned int)length
+                  text:(NSString *)text
+          byteSegments:(NSMutableArray *)byteSegments
+               ecLevel:(NSString *)ecLevel {
   if (self = [super init]) {
-    self.rawBytes = theRawBytes;
-    self.length = aLength;
-    self.text = theText;
-    self.byteSegments = theByteSegments;
-    self.ecLevel = anEcLevel;
+    _rawBytes = rawBytes;
+    _length = length;
+    _text = text;
+    _byteSegments = byteSegments;
+    _ecLevel = ecLevel;
   }
 
   return self;

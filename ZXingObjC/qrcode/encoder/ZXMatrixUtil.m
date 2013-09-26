@@ -111,20 +111,6 @@ int const VERSION_INFO_POLY = 0x1f25;  // 1 1111 0010 0101
 int const TYPE_INFO_POLY = 0x537;
 int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
-@interface ZXMatrixUtil ()
-
-+ (BOOL)isEmpty:(int)value;
-+ (void)embedTimingPatterns:(ZXByteMatrix *)matrix;
-+ (BOOL)embedDarkDotAtLeftBottomCorner:(ZXByteMatrix *)matrix;
-+ (BOOL)embedHorizontalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (BOOL)embedVerticalSeparationPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (void)embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix;
-+ (BOOL)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix;
-+ (void)maybeEmbedPositionAdjustmentPatterns:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix;
-
-@end
-
 @implementation ZXMatrixUtil
 
 // Set all cells to -1.  -1 means that the cell is empty (not set yet).

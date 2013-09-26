@@ -23,12 +23,6 @@
 #import "ZXResult.h"
 #import "ZXRSSExpandedReader.h"
 
-@interface RSSExpandedImage2stringTestCase ()
-
-- (void)assertCorrectImage2string:(NSString *)path expected:(NSString *)expected;
-
-@end
-
 @implementation RSSExpandedImage2stringTestCase
 
 - (void)testDecodeRow2string_1 {

@@ -61,16 +61,6 @@ char const MIXED_CHARS[25] = {
  */
 static NSArray *EXP900 = nil;
 
-@interface ZXPDF417DecodedBitStreamParser ()
-
-+ (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (NSString *)decodeBase900toBase10:(int *)codewords count:(int)count;
-+ (void)decodeTextCompaction:(int *)textCompactionData byteCompactionData:(int *)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result;
-+ (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-+ (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result;
-
-@end
-
 @implementation ZXPDF417DecodedBitStreamParser
 
 + (void)initialize {
@@ -433,7 +423,6 @@ static NSArray *EXP900 = nil;
   }
   return codeIndex;
 }
-
 
 /**
  * Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.

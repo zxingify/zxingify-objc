@@ -19,16 +19,10 @@
 @interface ZXBarcodeRow ()
 
 @property (nonatomic, assign) int currentLocation;
-@property (nonatomic, assign) unsigned char *row;
-@property (nonatomic, assign) int rowLength;
 
 @end
 
 @implementation ZXBarcodeRow
-
-@synthesize currentLocation;
-@synthesize row;
-@synthesize rowLength;
 
 + (ZXBarcodeRow *)barcodeRowWithWidth:(int)width {
   return [[ZXBarcodeRow alloc] initWithWidth:width];
@@ -36,18 +30,18 @@
 
 - (id)initWithWidth:(int)width {
   if (self = [super init]) {
-    self.rowLength = width;
-    self.row = (unsigned char *)malloc(self.rowLength * sizeof(unsigned char));
-    memset(self.row, 0, self.rowLength * sizeof(unsigned char));
-    self.currentLocation = 0;
+    _rowLength = width;
+    _row = (unsigned char *)malloc(_rowLength * sizeof(unsigned char));
+    memset(_row, 0, self.rowLength * sizeof(unsigned char));
+    _currentLocation = 0;
   }
   return self;
 }
 
 - (void)dealloc {
-  if (self.row != NULL) {
-    free(self.row);
-    self.row = NULL;
+  if (_row != NULL) {
+    free(_row);
+    _row = NULL;
   }
 }
 
@@ -68,7 +62,7 @@
 - (unsigned char *)scaledRow:(int)scale {
   unsigned char *output = (unsigned char *)malloc(self.rowLength * scale);
   for (int i = 0; i < self.rowLength * scale; i++) {
-    output[i] = row[i / scale];
+    output[i] = self.row[i / scale];
   }
   return output;
 }

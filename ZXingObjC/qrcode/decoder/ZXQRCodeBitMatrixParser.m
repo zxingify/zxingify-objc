@@ -27,27 +27,21 @@
 @property (nonatomic, strong) ZXFormatInformation *parsedFormatInfo;
 @property (nonatomic, strong) ZXQRCodeVersion *parsedVersion;
 
-- (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits;
-
 @end
 
 @implementation ZXQRCodeBitMatrixParser
 
-@synthesize bitMatrix;
-@synthesize parsedFormatInfo;
-@synthesize parsedVersion;
-
-- (id)initWithBitMatrix:(ZXBitMatrix *)aBitMatrix error:(NSError **)error {
-  int dimension = aBitMatrix.height;
+- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
+  int dimension = bitMatrix.height;
   if (dimension < 21 || (dimension & 0x03) != 1) {
     if (error) *error = FormatErrorInstance();
     return nil;
   }
 
   if (self = [super init]) {
-    self.bitMatrix = aBitMatrix;
-    self.parsedFormatInfo = nil;
-    self.parsedVersion = nil;
+    _bitMatrix = bitMatrix;
+    _parsedFormatInfo = nil;
+    _parsedVersion = nil;
   }
   return self;
 }
@@ -162,7 +156,7 @@
 
   ZXDataMask *dataMask = [ZXDataMask forReference:(int)[formatInfo dataMask]];
   int dimension = self.bitMatrix.height;
-  [dataMask unmaskBitMatrix:bitMatrix dimension:dimension];
+  [dataMask unmaskBitMatrix:self.bitMatrix dimension:dimension];
   ZXBitMatrix *functionPattern = [version buildFunctionPattern];
   BOOL readingUp = YES;
   NSMutableArray *result = [NSMutableArray array];

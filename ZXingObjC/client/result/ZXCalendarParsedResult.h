@@ -30,9 +30,14 @@
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
 
-- (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString durationString:(NSString *)durationString
-             location:(NSString *)location organizer:(NSString *)organizer attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
-+ (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString durationString:(NSString *)durationString
-                             location:(NSString *)location organizer:(NSString *)organizer attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude longitude:(double)longitude;
+- (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString
+       durationString:(NSString *)durationString location:(NSString *)location organizer:(NSString *)organizer
+            attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude
+            longitude:(double)longitude;
++ (id)calendarParsedResultWithSummary:(NSString *)summary startString:(NSString *)startString
+                            endString:(NSString *)endString durationString:(NSString *)durationString
+                             location:(NSString *)location organizer:(NSString *)organizer
+                            attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude
+                            longitude:(double)longitude;
 
 @end

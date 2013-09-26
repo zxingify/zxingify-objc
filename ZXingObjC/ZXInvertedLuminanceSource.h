@@ -20,9 +20,7 @@
  * A wrapper implementation of ZXLuminanceSource which inverts the luminances it returns -- black becomes
  * white and vice versa, and each value becomes (255-value).
  */
-@interface ZXInvertedLuminanceSource : ZXLuminanceSource {
-  ZXLuminanceSource *_delegate;
-}
+@interface ZXInvertedLuminanceSource : ZXLuminanceSource
 
 - (id)initWithDelegate:(ZXLuminanceSource *)delegate;
 

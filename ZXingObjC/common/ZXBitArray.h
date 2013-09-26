@@ -20,8 +20,8 @@
 
 @interface ZXBitArray : NSObject
 
-@property (nonatomic, readonly) int size;
 @property (nonatomic, readonly) int *bits;
+@property (nonatomic, readonly) int size;
 
 - (id)initWithSize:(int)size;
 - (int)sizeInBytes;

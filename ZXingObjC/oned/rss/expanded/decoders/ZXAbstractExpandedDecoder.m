@@ -25,22 +25,12 @@
 #import "ZXBitArray.h"
 #import "ZXGeneralAppIdDecoder.h"
 
-@interface ZXAbstractExpandedDecoder ()
-
-@property (nonatomic, strong) ZXGeneralAppIdDecoder *generalDecoder;
-@property (nonatomic, strong) ZXBitArray *information;
-
-@end
-
 @implementation ZXAbstractExpandedDecoder
 
-@synthesize generalDecoder;
-@synthesize information;
-
-- (id)initWithInformation:(ZXBitArray *)anInformation {
+- (id)initWithInformation:(ZXBitArray *)information {
   if (self = [super init]) {
-    self.information = anInformation;
-    self.generalDecoder = [[ZXGeneralAppIdDecoder alloc] initWithInformation:anInformation];
+    _information = information;
+    _generalDecoder = [[ZXGeneralAppIdDecoder alloc] initWithInformation:information];
   }
 
   return self;

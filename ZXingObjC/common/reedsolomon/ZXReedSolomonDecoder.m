@@ -23,20 +23,13 @@
 
 @property (nonatomic, strong) ZXGenericGF *field;
 
-- (NSArray *)runEuclideanAlgorithm:(ZXGenericGFPoly *)a b:(ZXGenericGFPoly *)b R:(int)R error:(NSError **)error;
-- (NSArray *)findErrorLocations:(ZXGenericGFPoly *)errorLocator error:(NSError **)error;
-- (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations;
-
 @end
-
 
 @implementation ZXReedSolomonDecoder
 
-@synthesize field;
-
-- (id)initWithField:(ZXGenericGF *)aField {
+- (id)initWithField:(ZXGenericGF *)field {
   if (self = [super init]) {
-    self.field = aField;
+    _field = field;
   }
 
   return self;
@@ -48,13 +41,13 @@
  * in the input.
  */
 - (BOOL)decode:(int *)received receivedLen:(int)receivedLen twoS:(int)twoS error:(NSError **)error {
-  ZXGenericGFPoly *poly = [[ZXGenericGFPoly alloc] initWithField:field coefficients:received coefficientsLen:receivedLen];
+  ZXGenericGFPoly *poly = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:received coefficientsLen:receivedLen];
   int syndromeCoefficientsLen = twoS;
   int syndromeCoefficients[syndromeCoefficientsLen];
   BOOL noError = YES;
 
   for (int i = 0; i < twoS; i++) {
-    int eval = [poly evaluateAt:[field exp:i + field.generatorBase]];
+    int eval = [poly evaluateAt:[self.field exp:i + self.field.generatorBase]];
     syndromeCoefficients[syndromeCoefficientsLen - 1 - i] = eval;
     if (eval != 0) {
       noError = NO;
@@ -63,8 +56,8 @@
   if (noError) {
     return YES;
   }
-  ZXGenericGFPoly *syndrome = [[ZXGenericGFPoly alloc] initWithField:field coefficients:syndromeCoefficients coefficientsLen:syndromeCoefficientsLen];
-  NSArray *sigmaOmega = [self runEuclideanAlgorithm:[field buildMonomial:twoS coefficient:1] b:syndrome R:twoS error:error];
+  ZXGenericGFPoly *syndrome = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:syndromeCoefficients coefficientsLen:syndromeCoefficientsLen];
+  NSArray *sigmaOmega = [self runEuclideanAlgorithm:[self.field buildMonomial:twoS coefficient:1] b:syndrome R:twoS error:error];
   if (!sigmaOmega) {
     return NO;
   }
@@ -76,7 +69,7 @@
   }
   NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations];
   for (int i = 0; i < [errorLocations count]; i++) {
-    int position = receivedLen - 1 - [field log:[errorLocations[i] intValue]];
+    int position = receivedLen - 1 - [self.field log:[errorLocations[i] intValue]];
     if (position < 0) {
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Bad error location"};
       
@@ -97,8 +90,8 @@
 
   ZXGenericGFPoly *rLast = a;
   ZXGenericGFPoly *r = b;
-  ZXGenericGFPoly *tLast = field.zero;
-  ZXGenericGFPoly *t = field.one;
+  ZXGenericGFPoly *tLast = self.field.zero;
+  ZXGenericGFPoly *t = self.field.one;
 
   while ([r degree] >= R / 2) {
     ZXGenericGFPoly *rLastLast = rLast;
@@ -113,14 +106,14 @@
       return NO;
     }
     r = rLastLast;
-    ZXGenericGFPoly *q = [field zero];
+    ZXGenericGFPoly *q = [self.field zero];
     int denominatorLeadingTerm = [rLast coefficient:[rLast degree]];
-    int dltInverse = [field inverse:denominatorLeadingTerm];
+    int dltInverse = [self.field inverse:denominatorLeadingTerm];
 
     while ([r degree] >= [rLast degree] && ![r zero]) {
       int degreeDiff = [r degree] - [rLast degree];
-      int scale = [field multiply:[r coefficient:[r degree]] b:dltInverse];
-      q = [q addOrSubtract:[field buildMonomial:degreeDiff coefficient:scale]];
+      int scale = [self.field multiply:[r coefficient:[r degree]] b:dltInverse];
+      q = [q addOrSubtract:[self.field buildMonomial:degreeDiff coefficient:scale]];
       r = [r addOrSubtract:[rLast multiplyByMonomial:degreeDiff coefficient:scale]];
     }
 
@@ -135,7 +128,7 @@
     return NO;
   }
 
-  int inverse = [field inverse:sigmaTildeAtZero];
+  int inverse = [self.field inverse:sigmaTildeAtZero];
   ZXGenericGFPoly *sigma = [t multiplyScalar:inverse];
   ZXGenericGFPoly *omega = [r multiplyScalar:inverse];
   return @[sigma, omega];
@@ -148,9 +141,9 @@
   }
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:numErrors];
   int e = 0;
-  for (int i = 1; i < [field size] && e < numErrors; i++) {
+  for (int i = 1; i < [self.field size] && e < numErrors; i++) {
     if ([errorLocator evaluateAt:i] == 0) {
-      [result addObject:@([field inverse:i])];
+      [result addObject:@([self.field inverse:i])];
       e++;
     }
   }

@@ -22,8 +22,8 @@
  */
 @implementation PartialBlackBoxTestCase
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  self = [super initWithInvocation:anInvocation testBasePathSuffix:@"Resources/blackbox/partial"];
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  self = [super initWithInvocation:invocation testBasePathSuffix:@"Resources/blackbox/partial"];
 
   if (self) {
     [self addTest:2 rotation:0.0f];

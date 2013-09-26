@@ -63,24 +63,12 @@ int const FORMAT_INFO_DECODE_LOOKUP[FORMAT_INFO_DECODE_LOOKUP_LEN][2] = {
  */
 int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
-@interface ZXFormatInformation ()
-
-@property (nonatomic, strong) ZXErrorCorrectionLevel *errorCorrectionLevel;
-@property (nonatomic, assign) char dataMask;
-
-+ (ZXFormatInformation *)doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2;
-
-@end
-
 @implementation ZXFormatInformation
-
-@synthesize dataMask;
-@synthesize errorCorrectionLevel;
 
 - (id)initWithFormatInfo:(int)formatInfo {
   if (self = [super init]) {
-    self.errorCorrectionLevel = [ZXErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03];
-    self.dataMask = (char)(formatInfo & 0x07);
+    _errorCorrectionLevel = [ZXErrorCorrectionLevel forBits:(formatInfo >> 3) & 0x03];
+    _dataMask = (char)(formatInfo & 0x07);
   }
 
   return self;

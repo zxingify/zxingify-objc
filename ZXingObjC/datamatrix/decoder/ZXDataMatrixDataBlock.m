@@ -18,22 +18,12 @@
 #import "ZXDataMatrixVersion.h"
 #import "ZXQRCodeVersion.h"
 
-@interface ZXDataMatrixDataBlock ()
-
-@property (nonatomic, assign) int numDataCodewords;
-@property (nonatomic, strong) NSMutableArray *codewords;
-
-@end
-
 @implementation ZXDataMatrixDataBlock
 
-@synthesize codewords;
-@synthesize numDataCodewords;
-
-- (id)initWithNumDataCodewords:(int)theNumDataCodewords codewords:(NSMutableArray *)theCodewords {
+- (id)initWithNumDataCodewords:(int)numDataCodewords codewords:(NSMutableArray *)codewords {
   if (self = [super init]) {
-    self.numDataCodewords = theNumDataCodewords;
-    self.codewords = theCodewords;
+    _numDataCodewords = numDataCodewords;
+    _codewords = codewords;
   }
 
   return self;
@@ -93,8 +83,7 @@
   }
 
   if (rawCodewordsOffset != [rawCodewords count]) {
-    [NSException raise:NSInvalidArgumentException 
-                format:@"Codewords size mismatch"];
+    [NSException raise:NSInvalidArgumentException format:@"Codewords size mismatch"];
   }
   return result;
 }

@@ -23,13 +23,6 @@ static NSArray *THREE_DIGIT_DATA_LENGTH = nil;
 static NSArray *THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = nil;
 static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
 
-@interface ZXFieldParser ()
-
-+ (NSString *)processFixedAI:(int)aiSize fieldSize:(int)fieldSize rawInformation:(NSString *)rawInformation;
-+ (NSString *)processVariableAI:(int)aiSize variableFieldSize:(int)variableFieldSize rawInformation:(NSString *)rawInformation;
-
-@end
-
 @implementation ZXFieldParser
 
 + (void)initialize {

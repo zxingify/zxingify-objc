@@ -23,19 +23,13 @@ int const NUM_MASK_PATTERNS = 8;
 
 @implementation ZXQRCode
 
-@synthesize mode;
-@synthesize ecLevel;
-@synthesize version;
-@synthesize maskPattern;
-@synthesize matrix;
-
 - (id)init {
   if (self = [super init]) {
-    self.mode = nil;
-    self.ecLevel = nil;
-    self.version = nil;
-    self.maskPattern = -1;
-    self.matrix = nil;
+    _mode = nil;
+    _ecLevel = nil;
+    _version = nil;
+    _maskPattern = -1;
+    _matrix = nil;
   }
 
   return self;

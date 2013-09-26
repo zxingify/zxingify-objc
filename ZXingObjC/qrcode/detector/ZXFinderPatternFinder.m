@@ -33,37 +33,26 @@ int const FINDER_PATTERN_MAX_MODULES = 57;
 NSInteger centerCompare(id center1, id center2, void *context);
 NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
-@property (nonatomic, strong) ZXBitMatrix *image;
-@property (nonatomic, strong) NSMutableArray *possibleCenters;
 @property (nonatomic, assign) BOOL hasSkipped;
 @property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
-
-- (float)centerFromEnd:(int *)stateCount end:(int)end;
-- (int)findRowSkip;
-- (BOOL)haveMultiplyConfirmedCenters;
-- (NSMutableArray *)selectBestPatterns;
+@property (nonatomic, strong) NSMutableArray *possibleCenters;
 
 @end
 
 @implementation ZXFinderPatternFinder
 
-@synthesize image;
-@synthesize possibleCenters;
-@synthesize hasSkipped;
-@synthesize resultPointCallback;
-
 /**
  * Creates a finder that will search the image for three finder patterns.
  */
-- (id)initWithImage:(ZXBitMatrix *)anImage {
-  return [self initWithImage:anImage resultPointCallback:nil];
+- (id)initWithImage:(ZXBitMatrix *)image {
+  return [self initWithImage:image resultPointCallback:nil];
 }
 
-- (id)initWithImage:(ZXBitMatrix *)anImage resultPointCallback:(id <ZXResultPointCallback>)aResultPointCallback {
+- (id)initWithImage:(ZXBitMatrix *)image resultPointCallback:(id<ZXResultPointCallback>)resultPointCallback {
   if (self = [super init]) {
-    self.image = anImage;
-    self.possibleCenters = [NSMutableArray array];
-    self.resultPointCallback = aResultPointCallback;
+    _image = image;
+    _possibleCenters = [NSMutableArray array];
+    _resultPointCallback = resultPointCallback;
   }
 
   return self;
@@ -89,7 +78,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     int currentState = 0;
 
     for (int j = 0; j < maxJ; j++) {
-      if ([image getX:j y:i]) {
+      if ([self.image getX:j y:i]) {
         if ((currentState & 1) == 1) {
           currentState++;
         }
@@ -101,7 +90,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
               BOOL confirmed = [self handlePossibleCenter:stateCount i:i j:j];
               if (confirmed) {
                 iSkip = 2;
-                if (hasSkipped) {
+                if (self.hasSkipped) {
                   done = [self haveMultiplyConfirmedCenters];
                 } else {
                   int rowSkip = [self findRowSkip];
@@ -255,7 +244,6 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   return [ZXFinderPatternFinder foundPatternCross:stateCount] ? [self centerFromEnd:stateCount end:i] : NAN;
 }
 
-
 /**
  * Like crossCheckVertical, and in fact is basically identical,
  * except it reads horizontally instead of vertically. This is used to cross-cross
@@ -344,7 +332,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
       for (int index = 0; index < max; index++) {
         ZXQRCodeFinderPattern *center = self.possibleCenters[index];
         if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
-          possibleCenters[index] = [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];
+          self.possibleCenters[index] = [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];
           found = YES;
           break;
         }
@@ -382,7 +370,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
       if (firstConfirmedCenter == nil) {
         firstConfirmedCenter = center;
       } else {
-        hasSkipped = YES;
+        self.hasSkipped = YES;
         return (int)(fabsf([firstConfirmedCenter x] - [center x]) - fabsf([firstConfirmedCenter y] - [center y])) / 2;
       }
     }
@@ -487,7 +475,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
 
     [self.possibleCenters sortUsingFunction:centerCompare context:(__bridge void *)(@(average))];
 
-    self.possibleCenters = [[NSMutableArray alloc] initWithArray:[possibleCenters subarrayWithRange:NSMakeRange(0, 3)]];
+    self.possibleCenters = [[NSMutableArray alloc] initWithArray:[self.possibleCenters subarrayWithRange:NSMakeRange(0, 3)]];
   }
 
   return [@[self.possibleCenters[0], self.possibleCenters[1], self.possibleCenters[2]] mutableCopy];

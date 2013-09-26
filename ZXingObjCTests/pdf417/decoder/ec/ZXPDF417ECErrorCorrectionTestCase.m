@@ -21,9 +21,6 @@
 
 @property (nonatomic, strong) ZXPDF417ECErrorCorrection *ec;
 
-- (BOOL)checkDecode:(NSMutableArray *)received;
-- (BOOL)checkDecode:(NSMutableArray *)received erasures:(NSArray *)erasures;
-
 @end
 
 @implementation ZXPDF417ECErrorCorrectionTestCase
@@ -37,8 +34,6 @@ const int EC_LEVEL = 5;
 const int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
 const int MAX_ERRORS = ERROR_LIMIT / 2;
 //const int MAX_ERASURES = ERROR_LIMIT;
-
-@synthesize ec;
 
 + (void)initialize {
 //  PDF417_TEST = [[NSMutableArray alloc] initWithObjects:
@@ -75,9 +70,9 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
   ECC_BYTES = PDF417_TEST_WITH_EC.count - PDF417_TEST.count;
 }
 
-- (id)initWithInvocation:(NSInvocation *)anInvocation {
-  if (self = [super initWithInvocation:anInvocation]) {
-    self.ec = [[ZXPDF417ECErrorCorrection alloc] init];
+- (id)initWithInvocation:(NSInvocation *)invocation {
+  if (self = [super initWithInvocation:invocation]) {
+    _ec = [[ZXPDF417ECErrorCorrection alloc] init];
   }
 
   return self;

@@ -37,26 +37,14 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 @property (nonatomic, strong) NSMutableArray *possibleLeftPairs;
 @property (nonatomic, strong) NSMutableArray *possibleRightPairs;
 
-- (void)addOrTally:(NSMutableArray *)possiblePairs pair:(ZXPair *)pair;
-- (BOOL)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules;
-- (BOOL)checkChecksum:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair;
-- (ZXResult *)constructResult:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair;
-- (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar;
-- (ZXPair *)decodePair:(ZXBitArray *)row right:(BOOL)right rowNumber:(int)rowNumber hints:(ZXDecodeHints *)hints;
-- (NSArray *)findFinderPattern:(ZXBitArray *)row rowOffset:(int)rowOffset rightFinderPattern:(BOOL)rightFinderPattern;
-- (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber right:(BOOL)right startEnd:(NSArray *)startEnd;
-
 @end
 
 @implementation ZXRSS14Reader
 
-@synthesize possibleLeftPairs;
-@synthesize possibleRightPairs;
-
 - (id)init {
   if (self = [super init]) {
-    self.possibleLeftPairs = [NSMutableArray array];
-    self.possibleRightPairs = [NSMutableArray array];
+    _possibleLeftPairs = [NSMutableArray array];
+    _possibleRightPairs = [NSMutableArray array];
   }
 
   return self;

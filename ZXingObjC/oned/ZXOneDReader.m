@@ -25,12 +25,6 @@
 int const INTEGER_MATH_SHIFT = 8;
 int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
-@interface ZXOneDReader ()
-
-- (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
-
-@end
-
 @implementation ZXOneDReader
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {

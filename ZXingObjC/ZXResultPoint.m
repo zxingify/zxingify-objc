@@ -17,24 +17,12 @@
 #import "ZXMathUtils.h"
 #import "ZXResultPoint.h"
 
-@interface ZXResultPoint ()
-
-@property (nonatomic, assign) float x;
-@property (nonatomic, assign) float y;
-
-+ (float)crossProductZ:(ZXResultPoint *)pointA pointB:(ZXResultPoint *)pointB pointC:(ZXResultPoint *)pointC;
-
-@end
-
 @implementation ZXResultPoint
 
-@synthesize x;
-@synthesize y;
-
-- (id)initWithX:(float)anX y:(float)aY {
+- (id)initWithX:(float)x y:(float)y {
   if (self = [super init]) {
-    self.x = anX;
-    self.y = aY;
+    _x = x;
+    _y = y;
   }
 
   return self;
@@ -45,7 +33,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-  return [[ZXResultPoint allocWithZone:zone] initWithX:x y:y];
+  return [[ZXResultPoint allocWithZone:zone] initWithX:self.x y:self.y];
 }
 
 - (BOOL)isEqual:(id)other {
@@ -57,13 +45,12 @@
 }
 
 - (NSUInteger)hash {
-  return 31 * *((int *)(&x)) + *((int *)(&y));
+  return 31 * *((int *)(&_x)) + *((int *)(&_y));
 }
 
 - (NSString *)description {
   return [NSString stringWithFormat:@"(%f,%f)", self.x, self.y];
 }
-
 
 /**
  * Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
@@ -100,14 +87,12 @@
   patterns[2] = pointC;
 }
 
-
 /**
  * Returns distance between two points
  */
 + (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2 {
   return [ZXMathUtils distance:pattern1.x aY:pattern1.y bX:pattern2.x bY:pattern2.y];
 }
-
 
 /**
  * Returns the z component of the cross product between vectors BC and BA.

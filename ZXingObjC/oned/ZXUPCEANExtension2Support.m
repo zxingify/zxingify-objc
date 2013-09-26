@@ -23,12 +23,6 @@
 #import "ZXUPCEANExtension2Support.h"
 #import "ZXUPCEANReader.h"
 
-@interface ZXUPCEANExtension2Support ()
-
-- (NSMutableDictionary *)parseExtensionString:(NSString *)raw;
-
-@end
-
 @implementation ZXUPCEANExtension2Support
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError **)error {

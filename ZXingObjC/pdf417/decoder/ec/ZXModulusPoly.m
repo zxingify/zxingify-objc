@@ -27,34 +27,30 @@
 
 @implementation ZXModulusPoly
 
-@synthesize coefficients;
-@synthesize coefficientsLen;
-@synthesize field;
-
-- (id)initWithField:(ZXModulusGF *)aField coefficients:(int *)aCoefficients coefficientsLen:(int)aCoefficientsLen {
+- (id)initWithField:(ZXModulusGF *)field coefficients:(int *)coefficients coefficientsLen:(int)coefficientsLen {
   if (self = [super init]) {
-    self.field = aField;
-    if (aCoefficientsLen > 1 && aCoefficients[0] == 0) {
+    _field = field;
+    if (coefficientsLen > 1 && coefficients[0] == 0) {
       // Leading term must be non-zero for anything except the constant polynomial "0"
       int firstNonZero = 1;
-      while (firstNonZero < aCoefficientsLen && aCoefficients[firstNonZero] == 0) {
+      while (firstNonZero < coefficientsLen && coefficients[firstNonZero] == 0) {
         firstNonZero++;
       }
-      if (firstNonZero == aCoefficientsLen) {
-        ZXModulusPoly *zero = self.field.zero;
-        self.coefficients = (int *)malloc(zero.coefficientsLen * sizeof(int));
-        memcpy(self.coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
+      if (firstNonZero == coefficientsLen) {
+        ZXModulusPoly *zero = field.zero;
+        _coefficients = (int *)malloc(zero.coefficientsLen * sizeof(int));
+        memcpy(_coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
       } else {
-        self.coefficientsLen = (aCoefficientsLen - firstNonZero);
-        self.coefficients = (int *)malloc(self.coefficientsLen * sizeof(int));
-        for (int i = 0; i < self.coefficientsLen; i++) {
-          self.coefficients[i] = aCoefficients[firstNonZero + i];
+        _coefficientsLen = (coefficientsLen - firstNonZero);
+        _coefficients = (int *)malloc(_coefficientsLen * sizeof(int));
+        for (int i = 0; i < _coefficientsLen; i++) {
+          _coefficients[i] = coefficients[firstNonZero + i];
         }
       }
     } else {
-      self.coefficients = (int *)malloc(aCoefficientsLen * sizeof(int));
-      memcpy(self.coefficients, aCoefficients, aCoefficientsLen * sizeof(int));
-      self.coefficientsLen = aCoefficientsLen;
+      _coefficients = (int *)malloc(coefficientsLen * sizeof(int));
+      memcpy(_coefficients, coefficients, coefficientsLen * sizeof(int));
+      _coefficientsLen = coefficientsLen;
     }
   }
 
@@ -62,9 +58,9 @@
 }
 
 - (void)dealloc {
-  if (self.coefficients != NULL) {
-    free(self.coefficients);
-    self.coefficients = NULL;
+  if (_coefficients != NULL) {
+    free(_coefficients);
+    _coefficients = NULL;
   }
 }
 
@@ -101,7 +97,7 @@
 }
 
 - (ZXModulusPoly *)add:(ZXModulusPoly *)other {
-  if (![self.field isEqual:other->field]) {
+  if (![self.field isEqual:other.field]) {
     [NSException raise:NSInvalidArgumentException format:@"ZXModulusPolys do not have same ZXModulusGF field"];
   }
   if (self.zero) {
@@ -136,7 +132,7 @@
 }
 
 - (ZXModulusPoly *)subtract:(ZXModulusPoly *)other {
-  if (![self.field isEqual:other->field]) {
+  if (![self.field isEqual:other.field]) {
     [NSException raise:NSInvalidArgumentException format:@"ZXModulusPolys do not have same ZXModulusGF field"];
   }
   if (self.zero) {
@@ -146,7 +142,7 @@
 }
 
 - (ZXModulusPoly *)multiply:(ZXModulusPoly *)other {
-  if (![self.field isEqual:other->field]) {
+  if (![self.field isEqual:other.field]) {
     [NSException raise:NSInvalidArgumentException format:@"ZXModulusPolys do not have same ZXModulusGF field"];
   }
   if (self.zero || other.zero) {
@@ -215,7 +211,7 @@
 }
 
 - (NSArray *)divide:(ZXModulusPoly *)other {
-  if (![self.field isEqual:other->field]) {
+  if (![self.field isEqual:other.field]) {
     [NSException raise:NSInvalidArgumentException format:@"ZXModulusPolys do not have same ZXModulusGF field"];
   }
   if (other.zero) {
@@ -232,7 +228,7 @@
     int degreeDifference = remainder.degree - other.degree;
     int scale = [self.field multiply:[remainder coefficient:remainder.degree] b:inverseDenominatorLeadingTerm];
     ZXModulusPoly *term = [other multiplyByMonomial:degreeDifference coefficient:scale];
-    ZXModulusPoly *iterationQuotient = [field buildMonomial:degreeDifference coefficient:scale];
+    ZXModulusPoly *iterationQuotient = [self.field buildMonomial:degreeDifference coefficient:scale];
     quotient = [quotient add:iterationQuotient];
     remainder = [remainder subtract:term];
   }

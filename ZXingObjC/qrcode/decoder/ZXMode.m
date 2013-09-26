@@ -19,25 +19,17 @@
 
 @interface ZXMode ()
 
-@property (nonatomic, assign) int bits;
 @property (nonatomic, strong) NSArray *characterCountBitsForVersions;
-@property (nonatomic, copy) NSString *name;
 
 @end
 
 @implementation ZXMode
 
-@synthesize bits;
-@synthesize characterCountBitsForVersions;
-@synthesize name;
-
-- (id)initWithCharacterCountBitsForVersions:(NSArray *)aCharacterCountBitsForVersions
-                                       bits:(int)aBits
-                                       name:(NSString *)aName {
+- (id)initWithCharacterCountBitsForVersions:(NSArray *)characterCountBitsForVersions bits:(int)bits name:(NSString *)name {
   if (self = [super init]) {
-    self.characterCountBitsForVersions = aCharacterCountBitsForVersions;
-    self.bits = aBits;
-    self.name = aName;
+    _characterCountBitsForVersions = characterCountBitsForVersions;
+    _bits = bits;
+    _name = name;
   }
 
   return self;
@@ -90,9 +82,7 @@
 + (ZXMode *)terminatorMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
-                                                                bits:0x00
-                                                                name:@"TERMINATOR"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x00 name:@"TERMINATOR"];
   }
   return thisMode;
 }
@@ -100,9 +90,7 @@
 + (ZXMode *)numericMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@10, @12, @14]
-                                                                bits:0x01
-                                                                name:@"NUMERIC"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@10, @12, @14] bits:0x01 name:@"NUMERIC"];
   }
   return thisMode;
 }
@@ -110,9 +98,7 @@
 + (ZXMode *)alphanumericMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@9, @11, @13]
-                                                                bits:0x02
-                                                                name:@"ALPHANUMERIC"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@9, @11, @13] bits:0x02 name:@"ALPHANUMERIC"];
   }
   return thisMode;
 }
@@ -120,9 +106,7 @@
 + (ZXMode *)structuredAppendMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
-                                                                bits:0x03
-                                                                name:@"STRUCTURED_APPEND"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x03 name:@"STRUCTURED_APPEND"];
   }
   return thisMode;
 }
@@ -130,9 +114,7 @@
 + (ZXMode *)byteMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @16, @16]
-                                                                bits:0x04
-                                                                name:@"BYTE"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @16, @16] bits:0x04 name:@"BYTE"];
   }
   return thisMode;
 }
@@ -140,9 +122,7 @@
 + (ZXMode *)eciMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
-                                                                bits:0x07
-                                                                name:@"ECI"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x07 name:@"ECI"];
   }
   return thisMode;
 }
@@ -150,9 +130,7 @@
 + (ZXMode *)kanjiMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12]
-                                                                bits:0x08
-                                                                name:@"KANJI"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12] bits:0x08 name:@"KANJI"];
   }
   return thisMode;
 }
@@ -160,9 +138,7 @@
 + (ZXMode *)fnc1FirstPositionMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
-                                                                bits:0x05
-                                                                name:@"FNC1_FIRST_POSITION"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x05 name:@"FNC1_FIRST_POSITION"];
   }
   return thisMode;
 }
@@ -170,9 +146,7 @@
 + (ZXMode *)fnc1SecondPositionMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
-                                                                bits:0x09
-                                                                name:@"FNC1_SECOND_POSITION"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x09 name:@"FNC1_SECOND_POSITION"];
   }
   return thisMode;
 }
@@ -183,9 +157,7 @@
 + (ZXMode *)hanziMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12]
-                                                                bits:0x0D
-                                                                name:@"HANZI"];
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12] bits:0x0D name:@"HANZI"];
   }
   return thisMode;
 }

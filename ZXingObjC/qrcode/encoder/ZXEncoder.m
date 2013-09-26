@@ -43,17 +43,6 @@ const int ALPHANUMERIC_TABLE[96] = {
 
 const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
-@interface ZXEncoder ()
-
-+ (void)appendECI:(ZXECI *)eci bits:(ZXBitArray *)bits;
-+ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error;
-+ (ZXMode *)chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding;
-+ (ZXQRCodeVersion *)chooseVersion:(int)numInputBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error;
-+ (BOOL)isOnlyDoubleByteKanji:(NSString *)content;
-+ (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion *)version mode:(ZXMode *)mode;
-
-@end
-
 @implementation ZXEncoder
 
 + (int)calculateMaskPenalty:(ZXByteMatrix *)matrix {
@@ -62,7 +51,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     + [ZXMaskUtil applyMaskPenaltyRule3:matrix]
     + [ZXMaskUtil applyMaskPenaltyRule4:matrix];
 }
-
 
 /**
  * Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
@@ -183,7 +171,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return qrCode;
 }
 
-
 /**
  * Return the code point of the table used in alphanumeric mode or
  * -1 if there is no corresponding code in the table.
@@ -198,7 +185,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 + (ZXMode *)chooseMode:(NSString *)content {
   return [self chooseMode:content encoding:-1];
 }
-
 
 /**
  * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
@@ -261,7 +247,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
   return bestMaskPattern;
 }
-
 
 + (ZXQRCodeVersion *)chooseVersion:(int)numInputBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error {
   // In the following comments, we use numbers of Version 7-H.
@@ -328,7 +313,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return YES;
 }
 
-
 /**
  * Get number of data bytes and number of error correction bytes for block id "blockID". Store
  * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
@@ -376,7 +360,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   }
   return YES;
 }
-
 
 /**
  * Interleave "bits" with corresponding error correction bytes. On success, store the result in
@@ -479,14 +462,12 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return ecBytes;
 }
 
-
 /**
  * Append mode info. On success, store the result in "bits".
  */
 + (void)appendModeInfo:(ZXMode *)mode bits:(ZXBitArray *)bits {
   [bits appendBits:[mode bits] numBits:4];
 }
-
 
 /**
  * Append length info. On success, store the result in "bits".
@@ -502,7 +483,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   [bits appendBits:numLetters numBits:numBits];
   return YES;
 }
-
 
 /**
  * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".

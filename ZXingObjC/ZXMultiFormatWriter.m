@@ -86,8 +86,7 @@
       break;
 
     default:
-      [NSException raise:NSInvalidArgumentException 
-                  format:@"No encoder available for format"];
+      [NSException raise:NSInvalidArgumentException  format:@"No encoder available for format"];
   }
   return [writer encode:contents format:format width:width height:height hints:hints error:error];
 }

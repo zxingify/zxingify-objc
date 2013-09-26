@@ -28,19 +28,14 @@ int const AI013x0x1x_DATE_SIZE = 16;
 @property (nonatomic, copy) NSString *dateCode;
 @property (nonatomic, copy) NSString *firstAIdigits;
 
-- (void)encodeCompressedDate:(NSMutableString *)buf currentPos:(int)currentPos;
-
 @end
 
 @implementation ZXAI013x0x1xDecoder
 
-@synthesize dateCode;
-@synthesize firstAIdigits;
-
-- (id)initWithInformation:(ZXBitArray *)anInformation firstAIdigits:(NSString *)aFirstAIdigits dateCode:(NSString *)aDateCode {
-  if (self = [super initWithInformation:anInformation]) {
-    self.dateCode = aDateCode;
-    self.firstAIdigits = aFirstAIdigits;
+- (id)initWithInformation:(ZXBitArray *)information firstAIdigits:(NSString *)firstAIdigits dateCode:(NSString *)dateCode {
+  if (self = [super initWithInformation:information]) {
+    _dateCode = dateCode;
+    _firstAIdigits = firstAIdigits;
   }
 
   return self;
@@ -63,7 +58,7 @@ int const AI013x0x1x_DATE_SIZE = 16;
   if (numericDate == 38400) {
     return;
   }
-  [buf appendFormat:@"(%@)", dateCode];
+  [buf appendFormat:@"(%@)", self.dateCode];
   int day = numericDate % 32;
   numericDate /= 32;
   int month = numericDate % 12 + 1;
@@ -85,7 +80,7 @@ int const AI013x0x1x_DATE_SIZE = 16;
 
 - (void)addWeightCode:(NSMutableString *)buf weight:(int)weight {
   int lastAI = weight / 100000;
-  [buf appendFormat:@"(%@%d)", firstAIdigits, lastAI];
+  [buf appendFormat:@"(%@%d)", self.firstAIdigits, lastAI];
 }
 
 - (int)checkWeight:(int)weight {

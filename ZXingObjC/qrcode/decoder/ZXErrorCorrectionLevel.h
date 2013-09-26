@@ -25,7 +25,7 @@
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, assign, readonly) int ordinal;
 
-- (id)initWithOrdinal:(int)anOrdinal bits:(int)theBits name:(NSString *)aName;
+- (id)initWithOrdinal:(int)anOrdinal bits:(int)bits name:(NSString *)name;
 + (ZXErrorCorrectionLevel *)forBits:(int)bits;
 
 /**

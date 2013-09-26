@@ -19,15 +19,6 @@
 #import "ZXParsedResult.h"
 #import "ZXResultParser.h"
 
-@interface ZXEmailAddressParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents
-                     email:(NSString *)email
-                   subject:(NSString *)subject
-                      body:(NSString *)body;
-
-@end
-
 @implementation ZXEmailAddressParsedResultTestCase
 
 - (void)testEmailAddress {

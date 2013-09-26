@@ -23,18 +23,6 @@ const int DECODER_RANDOM_TEST_ITERATIONS = 3;
 const int DECODER_TEST_ITERATIONS = 10;
 const int RANDOM_SEED = 3735928559;
 
-@interface ReedSolomonTestCase ()
-
-- (void)corrupt:(int *)received receivedLen:(int)receivedLen howMany:(int)howMany max:(int)max;
-- (void)testEncodeDecodeRandom:(ZXGenericGF *)field dataSize:(int)dataSize ecSize:(int)ecSize;
-- (void)testEncodeDecode:(ZXGenericGF *)field dataWords:(int *)dataWords dataWordsLen:(int)dataWordsLen ecWords:(int *)ecWords ecWordsLen:(int)ecWordsLen;
-- (void)testEncoder:(ZXGenericGF *)field dataWords:(int *)dataWords dataWordsLen:(int)dataWordsLen ecWords:(int *)ecWords ecWordsLen:(int)ecWordsLen;
-- (void)testDecoder:(ZXGenericGF *)field dataWords:(int *)dataWords dataWordsLen:(int)dataWordsLen ecWords:(int *)ecWords ecWordsLen:(int)ecWordsLen;
-- (void)assertDataEqualsExpected:(int *)expected received:(int *)received length:(int)length message:(NSString *)message;
-- (NSString *)arrayToString:(int *)data length:(int)length;
-
-@end
-
 @implementation ReedSolomonTestCase
 
 - (void)testDataMatrix {

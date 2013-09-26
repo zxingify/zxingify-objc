@@ -28,19 +28,14 @@
 @property (nonatomic, assign) int falsePositivesAllowed;
 @property (nonatomic, assign) float rotation;
 
-- (id)initWithFalsePositivesAllowed:(int)falsePositivesAllowed rotation:(float)rotation;
-
 @end
 
 @implementation NegativeTestResult
 
-@synthesize falsePositivesAllowed;
-@synthesize rotation;
-
-- (id)initWithFalsePositivesAllowed:(int)_falsePositivesAllowed rotation:(float)_rotation {
+- (id)initWithFalsePositivesAllowed:(int)falsePositivesAllowed rotation:(float)rotation {
   if (self = [super init]) {
-    self.falsePositivesAllowed = _falsePositivesAllowed;
-    self.rotation = _rotation;
+    _falsePositivesAllowed = falsePositivesAllowed;
+    _rotation = rotation;
   }
 
   return self;
@@ -52,19 +47,14 @@
 
 @property (nonatomic, strong) NSMutableArray *testResults;
 
-- (NSString *)pathInBundle:(NSURL *)file;
-- (BOOL)checkForFalsePositives:(ZXImage *)image rotationInDegrees:(CGFloat)rotationInDegrees;
-
 @end
 
 @implementation AbstractNegativeBlackBoxTestCase
 
-@synthesize testResults;
-
 // Use the multiformat reader to evaluate all decoders in the system.
-- (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix {
-  if (self = [super initWithInvocation:anInvocation testBasePathSuffix:testBasePathSuffix barcodeReader:[[ZXMultiFormatReader alloc] init] expectedFormat:0]) {
-    self.testResults = [NSMutableArray array];
+- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix {
+  if (self = [super initWithInvocation:invocation testBasePathSuffix:testBasePathSuffix barcodeReader:[[ZXMultiFormatReader alloc] init] expectedFormat:0]) {
+    _testResults = [NSMutableArray array];
   }
 
   return self;
@@ -108,8 +98,8 @@
   int totalFalsePositives = 0;
   int totalAllowed = 0;
 
-  for (int x = 0; x < testResults.count; x++) {
-    NegativeTestResult *testResult = testResults[x];
+  for (int x = 0; x < self.testResults.count; x++) {
+    NegativeTestResult *testResult = self.testResults[x];
     totalFalsePositives += falsePositives[x];
     totalAllowed += testResult.falsePositivesAllowed;
   }

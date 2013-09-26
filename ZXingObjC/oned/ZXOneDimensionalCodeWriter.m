@@ -18,12 +18,6 @@
 #import "ZXEncodeHints.h"
 #import "ZXOneDimensionalCodeWriter.h"
 
-@interface ZXOneDimensionalCodeWriter ()
-
-- (ZXBitMatrix *)renderResult:(BOOL *)code length:(int)length width:(int)width height:(int)height sidesMargin:(int)sidesMargin;
-
-@end
-
 @implementation ZXOneDimensionalCodeWriter
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {

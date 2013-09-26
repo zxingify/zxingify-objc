@@ -18,14 +18,6 @@
 #import "ZXURIParsedResult.h"
 #import "ZXURIParsedResultTestCase.h"
 
-@interface ZXURIParsedResultTestCase ()
-
-- (void)doTestWithContents:(NSString *)contents uri:(NSString *)uri title:(NSString *)title;
-- (void)doTestNotUri:(NSString *)text;
-- (void)doTestIsPossiblyMalicious:(NSString *)uri expected:(BOOL)expected;
-
-@end
-
 @implementation ZXURIParsedResultTestCase
 
 - (void)testBookmarkDocomo {

@@ -52,33 +52,13 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 
 @property (nonatomic, strong) ZXBinaryBitmap *image;
 
-- (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix tryHarder:(BOOL)tryHarder;
-- (NSMutableArray *)findVertices180:(ZXBitMatrix *)matrix tryHarder:(BOOL)tryHarder;
-- (void)correctCodeWordVertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown;
-- (float)computeModuleWidth:(NSArray *)vertices;
-- (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
-- (int)computeYDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth;
-- (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int *)counters;
-- (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance;
-- (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)matrix
-                    topLeft:(ZXResultPoint *)topLeft
-                 bottomLeft:(ZXResultPoint *)bottomLeft
-                   topRight:(ZXResultPoint *)topRight
-                bottomRight:(ZXResultPoint *)bottomRight
-                 xdimension:(int)xdimension
-                 ydimension:(int)ydimension
-                      error:(NSError **)error;
-
 @end
-
 
 @implementation ZXPDF417Detector
 
-@synthesize image;
-
-- (id)initWithImage:(ZXBinaryBitmap *)anImage {
+- (id)initWithImage:(ZXBinaryBitmap *)image {
   if (self = [super init]) {
-    self.image = anImage;
+    _image = image;
   }
 
   return self;
@@ -156,9 +136,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     return nil;
   }
   return [[ZXDetectorResult alloc] initWithBits:bits
-                                          points:@[vertices[5], vertices[4], vertices[6], vertices[7]]];
+                                         points:@[vertices[5], vertices[4], vertices[6], vertices[7]]];
 }
-
 
 /**
  * Locate the vertices and the codewords area of a black blob using the Start
@@ -244,7 +223,6 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
   return found ? result : nil;
 }
-
 
 /**
  * Locate the vertices and the codewords area of a black blob using the Start
@@ -335,7 +313,6 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   return found ? result : nil;
 }
 
-
 /**
  * Because we scan horizontally to detect the start and stop patterns, the vertical component of
  * the codeword coordinates will be slightly wrong if there is any skew or rotation in the image.
@@ -363,7 +340,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v4x - v0x) * deltax / delta2;
     vertices[4] = [[ZXResultPoint alloc] initWithX:v0x + correction * deltax
-                                                                   y:v0y + correction * deltay];
+                                                 y:v0y + correction * deltay];
   } else if (-skew > SKEW_THRESHOLD) {
     // Fix v6
     float deltax = v2x - v4x;
@@ -371,7 +348,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v2x - v6x) * deltax / delta2;
     vertices[6] = [[ZXResultPoint alloc] initWithX:v2x - correction * deltax
-                                                                   y:v2y - correction * deltay];
+                                                 y:v2y - correction * deltay];
   }
   
   float v1x = [(ZXResultPoint *)vertices[1] x];
@@ -394,7 +371,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v5x - v1x) * deltax / delta2;
     vertices[5] = [[ZXResultPoint alloc] initWithX:v1x + correction * deltax
-                                                                   y:v1y + correction * deltay];
+                                                 y:v1y + correction * deltay];
   } else if (-skew > SKEW_THRESHOLD) {
     // Fix v7
     float deltax = v3x - v5x;
@@ -402,7 +379,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     float delta2 = deltax * deltax + deltay * deltay;
     float correction = (v3x - v7x) * deltax / delta2;
     vertices[7] = [[ZXResultPoint alloc] initWithX:v3x - correction * deltax
-                                                                   y:v3y - correction * deltay];
+                                                 y:v3y - correction * deltay];
   }
 }
 
@@ -515,7 +492,6 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
   return NSMakeRange(NSNotFound, 0);
 }
-
 
 /**
  * Determines how closely a set of observed counts of runs of black/white

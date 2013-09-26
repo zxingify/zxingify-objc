@@ -91,33 +91,14 @@ const int MAX_PAIRS = 11;
 @property (nonatomic, strong) NSMutableArray *pairs;
 @property (nonatomic, strong) NSMutableArray *rows;
 
-- (BOOL)adjustOddEvenCounts:(int)numModules;
-- (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;
-- (BOOL)checkChecksum;
-- (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
-- (BOOL)findNextPair:(ZXBitArray *)row previousPairs:(NSMutableArray *)previousPairs forcedOffset:(int)forcedOffset;
-- (int)nextSecondBar:(ZXBitArray *)row initialPos:(int)initialPos;
-- (BOOL)isNotA1left:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
-- (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber oddPattern:(BOOL)oddPattern;
-- (void)reverseCounters:(int *)counters length:(unsigned int)length;
-- (NSMutableArray *)checkRows:(BOOL)reversed;
-- (NSMutableArray *)checkRows:(NSMutableArray *)rows current:(int)currentRow;
-- (BOOL)isValidSequence:(NSArray *)pairs;
-- (void)storeRow:(int)rowNumber wasReversed:(BOOL)reversed;
-- (BOOL)isPartialRow:(NSArray *)pairs of:(NSArray *)rows;
-- (void)removePartialRows:(NSArray *)pairs from:(NSMutableArray *)rows;
-
 @end
 
 @implementation ZXRSSExpandedReader
 
-@synthesize pairs;
-@synthesize rows;
-
 - (id)init {
   if (self = [super init]) {
-    self.pairs = [NSMutableArray array];
-    self.rows = [NSMutableArray array];
+    _pairs = [NSMutableArray array];
+    _rows = [NSMutableArray array];
     startFromEven = NO;
     startEnd[0] = 0;
     startEnd[1] = 0;
@@ -131,9 +112,9 @@ const int MAX_PAIRS = 11;
   // So lets try twice
   [self.pairs removeAllObjects];
   startFromEven = NO;
-  NSMutableArray* _pairs = [self decodeRow2pairs:rowNumber row:row];
-  if (_pairs) {
-    ZXResult *result = [self constructResult:_pairs error:error];
+  NSMutableArray* pairs = [self decodeRow2pairs:rowNumber row:row];
+  if (pairs) {
+    ZXResult *result = [self constructResult:pairs error:error];
     if (result) {
       return result;
     }
@@ -141,13 +122,13 @@ const int MAX_PAIRS = 11;
 
   [self.pairs removeAllObjects];
   startFromEven = YES;
-  _pairs = [self decodeRow2pairs:rowNumber row:row];
-  if (!_pairs) {
+  pairs = [self decodeRow2pairs:rowNumber row:row];
+  if (!pairs) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
-  return [self constructResult:_pairs error:error];
+  return [self constructResult:pairs error:error];
 }
 
 - (void)reset {
@@ -302,16 +283,16 @@ const int MAX_PAIRS = 11;
 }
 
 // Remove all the rows that contains only specified pairs
-- (void)removePartialRows:(NSArray *)_pairs from:(NSMutableArray *)_rows {
+- (void)removePartialRows:(NSArray *)pairs from:(NSMutableArray *)rows {
   NSMutableArray *toRemove = [NSMutableArray array];
-  for (ZXExpandedRow *r in _rows) {
-    if ([r.pairs count] == [_pairs count]) {
+  for (ZXExpandedRow *r in rows) {
+    if ([r.pairs count] == [pairs count]) {
       continue;
     }
     BOOL allFound = YES;
     for (ZXExpandedPair *p in r.pairs) {
       BOOL found = NO;
-      for (ZXExpandedPair *pp in _pairs) {
+      for (ZXExpandedPair *pp in pairs) {
         if ([p isEqual:pp]) {
           found = YES;
           break;
@@ -328,14 +309,14 @@ const int MAX_PAIRS = 11;
   }
 
   for (ZXExpandedRow *r in toRemove) {
-    [_rows removeObject:r];
+    [rows removeObject:r];
   }
 }
 
-- (BOOL)isPartialRow:(NSArray *)_pairs of:(NSArray *)_rows {
-  for (ZXExpandedRow *r in _rows) {
+- (BOOL)isPartialRow:(NSArray *)pairs of:(NSArray *)rows {
+  for (ZXExpandedRow *r in rows) {
 		BOOL allFound = YES;
-    for (ZXExpandedPair *p in _pairs) {
+    for (ZXExpandedPair *p in pairs) {
       BOOL found = NO;
       for (ZXExpandedPair *pp in r.pairs) {
         if ([p isEqual:pp]) {
@@ -356,12 +337,8 @@ const int MAX_PAIRS = 11;
   return NO;
 }
 
-- (NSMutableArray *)rows {
-  return rows;
-}
-
-- (ZXResult *)constructResult:(NSMutableArray *)_pairs error:(NSError **)error {
-  ZXBitArray *binary = [ZXBitArrayBuilder buildBitArray:_pairs];
+- (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error {
+  ZXBitArray *binary = [ZXBitArrayBuilder buildBitArray:pairs];
 
   ZXAbstractExpandedDecoder *decoder = [ZXAbstractExpandedDecoder createDecoder:binary];
   NSString *resultingString = [decoder parseInformationWithError:error];

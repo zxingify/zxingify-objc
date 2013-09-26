@@ -18,20 +18,14 @@
 
 @implementation TestResult
 
-@synthesize mustPassCount;
-@synthesize tryHarderCount;
-@synthesize maxMisreads;
-@synthesize maxTryHarderMisreads;
-@synthesize rotation;
-
-- (id)initWithMustPassCount:(int)aMustPassCount tryHarderCount:(int)aTryHarderCount maxMisreads:(int)aMaxMisreads
-       maxTryHarderMisreads:(int)aMaxTryHarderMisreads rotation:(float)aRotation {
+- (id)initWithMustPassCount:(int)mustPassCount tryHarderCount:(int)tryHarderCount maxMisreads:(int)maxMisreads
+       maxTryHarderMisreads:(int)maxTryHarderMisreads rotation:(float)rotation {
   if (self = [super init]) {
-    mustPassCount = aMustPassCount;
-    tryHarderCount = aTryHarderCount;
-    maxMisreads = aMaxMisreads;
-    maxTryHarderMisreads = aMaxTryHarderMisreads;
-    rotation = aRotation;
+    _mustPassCount = mustPassCount;
+    _tryHarderCount = tryHarderCount;
+    _maxMisreads = maxMisreads;
+    _maxTryHarderMisreads = maxTryHarderMisreads;
+    _rotation = rotation;
   }
 
   return self;

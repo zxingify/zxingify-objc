@@ -22,19 +22,13 @@
 
 @property (nonatomic, strong) ZXModulusGF *field;
 
-- (NSArray *)runEuclideanAlgorithm:(ZXModulusPoly *)a b:(ZXModulusPoly *)b R:(int)R;
-- (NSArray *)findErrorLocations:(ZXModulusPoly *)errorLocator;
-- (NSArray *)findErrorMagnitudes:(ZXModulusPoly *)errorEvaluator errorLocator:(ZXModulusPoly *)errorLocator errorLocations:(NSArray *)errorLocations;
-
 @end
 
 @implementation ZXPDF417ECErrorCorrection
 
-@synthesize field;
-
 - (id)init {
   if (self = [super init]) {
-    self.field = [ZXModulusGF PDF417_GF];
+    _field = [ZXModulusGF PDF417_GF];
   }
 
   return self;
@@ -68,7 +62,7 @@
       int b = [self.field exp:received.count - 1 - [erasure intValue]];
       // Add (1 - bx) term:
       int termCoefficients[2] = { [self.field subtract:0 b:b], 1 };
-      ZXModulusPoly *term = [[ZXModulusPoly alloc] initWithField:field coefficients:termCoefficients coefficientsLen:2];
+      ZXModulusPoly *term = [[ZXModulusPoly alloc] initWithField:self.field coefficients:termCoefficients coefficientsLen:2];
       knownErrors = [knownErrors multiply:term];
     }
 
@@ -134,7 +128,7 @@
     while (r.degree >= rLast.degree && !r.zero) {
       int degreeDiff = r.degree - rLast.degree;
       int scale = [self.field multiply:[r coefficient:r.degree] b:dltInverse];
-      q = [q add:[field buildMonomial:degreeDiff coefficient:scale]];
+      q = [q add:[self.field buildMonomial:degreeDiff coefficient:scale]];
       r = [r subtract:[rLast multiplyByMonomial:degreeDiff coefficient:scale]];
     }
 
@@ -158,7 +152,7 @@
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:numErrors];
   for (int i = 1; i < self.field.size && result.count < numErrors; i++) {
     if ([errorLocator evaluateAt:i] == 0) {
-      [result addObject:@([field inverse:i])];
+      [result addObject:@([self.field inverse:i])];
     }
   }
   if (result.count != numErrors) {
