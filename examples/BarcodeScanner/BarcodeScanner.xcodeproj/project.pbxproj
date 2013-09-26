@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0137B384178EFE3F001EFE42 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B37F178EFE3F001EFE42 /* ZXAztecCode.m */; };
+		0137B385178EFE3F001EFE42 /* ZXAztecEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B381178EFE3F001EFE42 /* ZXAztecEncoder.m */; };
+		0137B386178EFE3F001EFE42 /* ZXAztecWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B383178EFE3F001EFE42 /* ZXAztecWriter.m */; };
 		0248362016CC1493001E03E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248361F16CC1493001E03E4 /* CoreGraphics.framework */; };
 		0248362216CC14B2001E03E4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362116CC14B2001E03E4 /* CoreMedia.framework */; };
 		0248362416CC14B9001E03E4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362316CC14B9001E03E4 /* CoreVideo.framework */; };
@@ -224,6 +227,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0137B37E178EFE3F001EFE42 /* ZXAztecCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecCode.h; sourceTree = "<group>"; };
+		0137B37F178EFE3F001EFE42 /* ZXAztecCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecCode.m; sourceTree = "<group>"; };
+		0137B380178EFE3F001EFE42 /* ZXAztecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecEncoder.h; sourceTree = "<group>"; };
+		0137B381178EFE3F001EFE42 /* ZXAztecEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecEncoder.m; sourceTree = "<group>"; };
+		0137B382178EFE3F001EFE42 /* ZXAztecWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecWriter.h; sourceTree = "<group>"; };
+		0137B383178EFE3F001EFE42 /* ZXAztecWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecWriter.m; sourceTree = "<group>"; };
 		0248361F16CC1493001E03E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		0248362116CC14B2001E03E4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		0248362316CC14B9001E03E4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -676,6 +685,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0137B37D178EFE3F001EFE42 /* encoder */ = {
+			isa = PBXGroup;
+			children = (
+				0137B37E178EFE3F001EFE42 /* ZXAztecCode.h */,
+				0137B37F178EFE3F001EFE42 /* ZXAztecCode.m */,
+				0137B380178EFE3F001EFE42 /* ZXAztecEncoder.h */,
+				0137B381178EFE3F001EFE42 /* ZXAztecEncoder.m */,
+				0137B382178EFE3F001EFE42 /* ZXAztecWriter.h */,
+				0137B383178EFE3F001EFE42 /* ZXAztecWriter.m */,
+			);
+			path = encoder;
+			sourceTree = "<group>";
+		};
 		024D10D0156EAB6E00FE6872 = {
 			isa = PBXGroup;
 			children = (
@@ -789,6 +811,7 @@
 		2504D74D16F8101100DF8882 /* aztec */ = {
 			isa = PBXGroup;
 			children = (
+				0137B37D178EFE3F001EFE42 /* encoder */,
 				2504D74E16F8101100DF8882 /* decoder */,
 				2504D75116F8101100DF8882 /* detector */,
 				2504D75416F8101100DF8882 /* ZXAztecDetectorResult.h */,
@@ -1659,6 +1682,9 @@
 				2504D9C916F8101200DF8882 /* ZXResult.m in Sources */,
 				2504D9CA16F8101200DF8882 /* ZXResultPoint.m in Sources */,
 				2504D9CB16F8101200DF8882 /* ZXRGBLuminanceSource.m in Sources */,
+				0137B384178EFE3F001EFE42 /* ZXAztecCode.m in Sources */,
+				0137B385178EFE3F001EFE42 /* ZXAztecEncoder.m in Sources */,
+				0137B386178EFE3F001EFE42 /* ZXAztecWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
