@@ -178,7 +178,7 @@ static int WORD_SIZE[33] = {
   int totalSizeInFullWords = totalSymbolBits / wordSize;
 
   int messageWords[totalSizeInFullWords];
-  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalSizeInFullWords message:(int **)&messageWords];
+  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalSizeInFullWords message:messageWords];
   [rs encode:messageWords toEncodeLen:totalSizeInFullWords ecBytes:totalSizeInFullWords - messageSizeInWords];
 
   // convert to bit array and pad in the beginning
@@ -336,7 +336,7 @@ static int WORD_SIZE[33] = {
   int totalSizeInFullWords = totalSymbolBits / wordSize;
 
   int messageWords[totalSizeInFullWords];
-  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalSizeInFullWords message:(int **)&messageWords];
+  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalSizeInFullWords message:messageWords];
 
   [rs encode:messageWords toEncodeLen:totalSizeInFullWords ecBytes:totalSizeInFullWords - messageSizeInWords];
   int startPad = totalSymbolBits % wordSize;
@@ -348,7 +348,7 @@ static int WORD_SIZE[33] = {
   return messageBits;
 }
 
-+ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int **)message {
++ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message {
   int i;
   int n;
   for (i = 0, n = stuffedBits.size / wordSize; i < n; i++) {

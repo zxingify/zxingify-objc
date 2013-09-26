@@ -43,13 +43,6 @@
   [self updatePressed:nil];
 }
 
-- (void)dealloc {
-  [imageView release];
-  [textView release];
-
-  [super dealloc];
-}
-
 #pragma mark - Events
 
 - (IBAction)updatePressed:(id)sender {

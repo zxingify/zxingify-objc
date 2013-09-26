@@ -18,8 +18,8 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UITextView *textView;
-@property (nonatomic, retain) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) IBOutlet UITextView *textView;
+@property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
 - (IBAction)updatePressed:(id)sender;
 

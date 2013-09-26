@@ -26,7 +26,7 @@ extern int ZX_DEFAULT_AZTEC_EC_PERCENT;
 + (ZXBitArray *)generateModeMessageCompact:(BOOL)compact layers:(int)layers messageSizeInWords:(int)messageSizeInWords;
 + (void)drawModeMessage:(ZXBitMatrix *)matrix compact:(BOOL)compact matrixSize:(int)matrixSize modeMessage:(ZXBitArray *)modeMessage;
 + (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalSymbolBits:(int)totalSymbolBits wordSize:(int)wordSize;
-+ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int **)message;
++ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message;
 + (ZXGenericGF *)getGF:(int)wordSize;
 + (ZXBitArray *)stuffBits:(ZXBitArray *)bits wordSize:(int)wordSize;
 + (ZXBitArray *)highLevelEncode:(unsigned char *)data len:(int)len;

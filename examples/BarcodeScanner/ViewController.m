@@ -20,8 +20,8 @@
 
 @interface ViewController ()
 
-@property (nonatomic, retain) ZXCapture* capture;
-@property (nonatomic, assign) IBOutlet UILabel* decodedLabel;
+@property (nonatomic, strong) ZXCapture* capture;
+@property (nonatomic, weak) IBOutlet UILabel* decodedLabel;
 
 - (NSString*)displayForResult:(ZXResult*)result;
 
@@ -35,19 +35,12 @@
 
 #pragma mark - Creation/Deletion Methods
 
-- (void)dealloc {
-  [capture release];
-  [decodedLabel release];
-
-  [super dealloc];
-}
-
 #pragma mark - View Controller Methods
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
 
-  self.capture = [[[ZXCapture alloc] init] autorelease];
+  self.capture = [[ZXCapture alloc] init];
   self.capture.delegate = self;
   self.capture.rotation = 90.0f;
 

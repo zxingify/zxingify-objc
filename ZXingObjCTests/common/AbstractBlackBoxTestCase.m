@@ -337,7 +337,7 @@
                                                CGImageGetBitsPerComponent(original.cgimage),
                                                0,
                                                colorSpace,
-                                               kCGImageAlphaPremultipliedFirst);
+                                               kCGBitmapAlphaInfoMask & kCGImageAlphaPremultipliedFirst);
   CGContextSetAllowsAntialiasing(context, FALSE);
   CGContextSetInterpolationQuality(context, kCGInterpolationNone);
   CGColorSpaceRelease(colorSpace);
