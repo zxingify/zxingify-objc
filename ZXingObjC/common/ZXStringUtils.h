@@ -22,6 +22,6 @@
 
 @interface ZXStringUtils : NSObject
 
-+ (NSStringEncoding)guessEncoding:(unsigned char *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints;
++ (NSStringEncoding)guessEncoding:(int8_t *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints;
 
 @end

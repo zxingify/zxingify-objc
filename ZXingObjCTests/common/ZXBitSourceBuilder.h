@@ -17,7 +17,7 @@
 @interface ZXBitSourceBuilder : NSObject
 
 - (void)write:(int)value numBits:(int)numBits;
-- (unsigned char *)toByteArray;
+- (int8_t *)toByteArray;
 - (int)byteArrayLength;
 
 @end

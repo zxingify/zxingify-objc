@@ -23,9 +23,9 @@
     _width = width;
     _height = height;
 
-    _array = (unsigned char **)malloc(height * sizeof(unsigned char *));
+    _array = (int8_t **)malloc(height * sizeof(int8_t *));
     for (int i = 0; i < height; i++) {
-      _array[i] = (unsigned char *)malloc(width * sizeof(unsigned char));
+      _array[i] = (int8_t *)malloc(width * sizeof(int8_t));
     }
     [self clear:0];
   }

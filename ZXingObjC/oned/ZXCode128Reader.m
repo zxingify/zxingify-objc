@@ -294,7 +294,7 @@ int const CODE_STOP = 106;
       return nil;
     }
 
-    [rawCodes addObject:[NSNumber numberWithChar:(unsigned char)code]];
+    [rawCodes addObject:[NSNumber numberWithChar:(int8_t)code]];
 
     // Remember whether the last code was printable or not (excluding CODE_STOP)
     if (code != CODE_STOP) {
@@ -460,7 +460,7 @@ int const CODE_STOP = 106;
   float right = (float)(nextStart + lastStart) / 2.0f;
 
   int rawCodesSize = [rawCodes count];
-  unsigned char rawBytes[rawCodesSize];
+  int8_t rawBytes[rawCodesSize];
   for (int i = 0; i < rawCodesSize; i++) {
     rawBytes[i] = [rawCodes[i] charValue];
   }

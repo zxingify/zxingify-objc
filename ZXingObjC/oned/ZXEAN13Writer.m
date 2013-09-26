@@ -52,7 +52,7 @@ const int EAN13_CODE_WIDTH = 3 + // start guard
   int parities = FIRST_DIGIT_ENCODINGS[firstDigit];
   if (pLength) *pLength = EAN13_CODE_WIDTH;
   BOOL *result = (BOOL *)malloc(EAN13_CODE_WIDTH * sizeof(BOOL));
-  memset(result, 0, EAN13_CODE_WIDTH * sizeof(unsigned char));
+  memset(result, 0, EAN13_CODE_WIDTH * sizeof(int8_t));
   int pos = 0;
 
   pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];

@@ -63,7 +63,7 @@ const unichar SETS[1][383] = {
 
 @implementation ZXMaxiCodeDecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length mode:(int)mode {
++ (ZXDecoderResult *)decode:(int8_t *)bytes length:(unsigned int)length mode:(int)mode {
   NSMutableString *result = [NSMutableString stringWithCapacity:144];
   switch (mode) {
     case 2:
@@ -99,12 +99,12 @@ const unichar SETS[1][383] = {
                                             ecLevel:[NSString stringWithFormat:@"%d", mode]];
 }
 
-+ (int)bit:(int)bit bytes:(unsigned char *)bytes length:(unsigned int)length {
++ (int)bit:(int)bit bytes:(int8_t *)bytes length:(unsigned int)length {
   bit--;
   return (bytes[bit / 6] & (1 << (5 - (bit % 6)))) == 0 ? 0 : 1;
 }
 
-+ (int)integer:(unsigned char *)bytes length:(unsigned int)length x:(unsigned char *)x xLength:(unsigned int)xLength {
++ (int)integer:(int8_t *)bytes length:(unsigned int)length x:(int8_t *)x xLength:(unsigned int)xLength {
   int val = 0;
   for (int i = 0; i < xLength; i++) {
     val += [self bit:x[i] bytes:bytes length:length] << (xLength - i - 1);
@@ -113,37 +113,37 @@ const unichar SETS[1][383] = {
 }
 
 #define COUNTRY_ARRAY_LEN 10
-+ (int)country:(unsigned char *)bytes length:(unsigned int)length {
-  unsigned char array[COUNTRY_ARRAY_LEN] = {53, 54, 43, 44, 45, 46, 47, 48, 37, 38};
++ (int)country:(int8_t *)bytes length:(unsigned int)length {
+  int8_t array[COUNTRY_ARRAY_LEN] = {53, 54, 43, 44, 45, 46, 47, 48, 37, 38};
 
   return [self integer:bytes length:length x:array xLength:COUNTRY_ARRAY_LEN];
 }
 
 #define SERVICE_ARRAY_LEN 10
-+ (int)serviceClass:(unsigned char *)bytes length:(unsigned int)length {
-  unsigned char array[SERVICE_ARRAY_LEN] = {55, 56, 57, 58, 59, 60, 49, 50, 51, 52};
++ (int)serviceClass:(int8_t *)bytes length:(unsigned int)length {
+  int8_t array[SERVICE_ARRAY_LEN] = {55, 56, 57, 58, 59, 60, 49, 50, 51, 52};
 
   return [self integer:bytes length:length x:array xLength:SERVICE_ARRAY_LEN];
 }
 
 #define POST_CODE2_LENGTH_LEN 10
-+ (int)postCode2Length:(unsigned char *)bytes length:(unsigned int)length {
-  unsigned char array[POST_CODE2_LENGTH_LEN] = {39, 40, 41, 42, 31, 32};
++ (int)postCode2Length:(int8_t *)bytes length:(unsigned int)length {
+  int8_t array[POST_CODE2_LENGTH_LEN] = {39, 40, 41, 42, 31, 32};
 
   return [self integer:bytes length:length x:array xLength:POST_CODE2_LENGTH_LEN];
 }
 
 #define POST_CODE2_LEN 30
-+ (int)postCode2:(unsigned char *)bytes length:(unsigned int)length {
-  unsigned char array[POST_CODE2_LEN] = {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
++ (int)postCode2:(int8_t *)bytes length:(unsigned int)length {
+  int8_t array[POST_CODE2_LEN] = {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
     20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2};
 
   return [self integer:bytes length:length x:array xLength:POST_CODE2_LEN];
 }
 
 #define POST_CODE3_LEN 6
-+ (NSString *)postCode3:(unsigned char *)bytes length:(unsigned int)length {
-  unsigned char array[POST_CODE3_LEN][POST_CODE3_LEN] = {
++ (NSString *)postCode3:(int8_t *)bytes length:(unsigned int)length {
+  int8_t array[POST_CODE3_LEN][POST_CODE3_LEN] = {
     {39, 40, 41, 42, 31, 32},
     {33, 34, 35, 36, 25, 26},
     {27, 28, 29, 30, 19, 20},
@@ -161,7 +161,7 @@ const unichar SETS[1][383] = {
           SETS[0][[self integer:bytes length:length x:array[5] xLength:POST_CODE3_LEN]]];
 }
 
-+ (NSString *)message:(unsigned char *)bytes length:(unsigned int)length start:(int)start len:(int)len {
++ (NSString *)message:(int8_t *)bytes length:(unsigned int)length start:(int)start len:(int)len {
   NSMutableString *sb = [NSMutableString string];
   int shift = -1;
   int set = 0;

@@ -27,7 +27,7 @@
 @property (nonatomic, assign, readonly) int bitOffset;
 @property (nonatomic, assign, readonly) int byteOffset;
 
-- (id)initWithBytes:(unsigned char *)bytes length:(unsigned int)length;
+- (id)initWithBytes:(int8_t *)bytes length:(unsigned int)length;
 - (int)readBits:(int)numBits;
 - (int)available;
 

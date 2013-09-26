@@ -71,17 +71,17 @@
   // from data bytes alone.  See also comments in qrcode_encoder.h.
 
   // AIUE in Hiragana in Shift_JIS
-  unsigned char hiraganaBytes[8] = {0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6};
+  int8_t hiraganaBytes[8] = {0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6};
   STAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:hiraganaBytes bytesLen:8]], [ZXMode byteMode],
                        @"Expected byte mode");
 
   // Nihon in Kanji in Shift_JIS.
-  unsigned char kanjiBytes[4] = {0x9, 0xf, 0x9, 0x7b};
+  int8_t kanjiBytes[4] = {0x9, 0xf, 0x9, 0x7b};
   STAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:kanjiBytes bytesLen:4]], [ZXMode byteMode],
                        @"Expected byte mode");
 
   // Sou-Utsu-Byou in Kanji in Shift_JIS.
-  unsigned char kanjiBytes2[6] = {0xe, 0x4, 0x9, 0x5, 0x9, 0x61};
+  int8_t kanjiBytes2[6] = {0xe, 0x4, 0x9, 0x5, 0x9, 0x61};
   STAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:kanjiBytes2 bytesLen:6]], [ZXMode byteMode],
                        @"Expected byte mode");
 }
@@ -244,7 +244,7 @@
     // Should use appendKanjiBytes.
     // 0x93, 0x5f
     ZXBitArray *bits = [[ZXBitArray alloc] init];
-    unsigned char bytes[2] = {0x93, 0x5f};
+    int8_t bytes[2] = {0x93, 0x5f};
     [ZXEncoder appendBytes:[self shiftJISString:bytes bytesLen:2] mode:[ZXMode kanjiMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
     NSString *expected = @" .XX.XX.. XXXXX";
     STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
@@ -346,14 +346,14 @@
 - (void)testInterleaveWithECBytes {
   {
     const int dataBytesLen = 9;
-    unsigned char dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
+    int8_t dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
     ZXBitArray *in = [[ZXBitArray alloc] init];
     for (int i = 0; i < dataBytesLen; i++) {
       [in appendBits:dataBytes[i] numBits:8];
     }
     ZXBitArray *out = [ZXEncoder interleaveWithECBytes:in numTotalBytes:26 numDataBytes:9 numRSBlocks:1 error:nil];
     const int expectedLen = 26;
-    unsigned char expected[expectedLen] = {
+    int8_t expected[expectedLen] = {
       // Data bytes.
       32, 65, 205, 69, 41, 220, 46, 128, 236,
       // Error correction bytes.
@@ -361,8 +361,8 @@
       237, 85, 224, 96, 74, 219, 61,
     };
     STAssertEquals(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
-    unsigned char outArray[expectedLen];
-    memset(outArray, 0, expectedLen * sizeof(unsigned char));
+    int8_t outArray[expectedLen];
+    memset(outArray, 0, expectedLen * sizeof(int8_t));
     [out toBytes:0 array:outArray offset:0 numBytes:expectedLen];
     for (int x = 0; x < expectedLen; x++) {
       STAssertEquals(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);
@@ -371,7 +371,7 @@
   // Numbers are from http://www.swetake.com/qr/qr8.html
   {
     const int dataBytesLen = 62;
-    unsigned char dataBytes[dataBytesLen] = {
+    int8_t dataBytes[dataBytesLen] = {
       67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
       198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
       151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
@@ -385,7 +385,7 @@
     }
     ZXBitArray *out = [ZXEncoder interleaveWithECBytes:in numTotalBytes:134 numDataBytes:62 numRSBlocks:4 error:nil];
     const int expectedLen = 134;
-    unsigned char expected[expectedLen] = {
+    int8_t expected[expectedLen] = {
       // Data bytes.
       67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
       118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
@@ -403,8 +403,8 @@
       187, 49, 156, 214,
     };
     STAssertEquals(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
-    unsigned char outArray[expectedLen];
-    memset(outArray, 0, expectedLen * sizeof(unsigned char));
+    int8_t outArray[expectedLen];
+    memset(outArray, 0, expectedLen * sizeof(int8_t));
     [out toBytes:0 array:outArray offset:0 numBytes:expectedLen];
     for (int x = 0; x < expectedLen; x++) {
       STAssertEquals(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);
@@ -505,11 +505,11 @@
 // Numbers are from page 21 of JISX0510:2004
 - (void)testAppendKanjiBytes {
   ZXBitArray *bits = [[ZXBitArray alloc] init];
-  unsigned char bytes[2] = {0x93,0x5f};
+  int8_t bytes[2] = {0x93,0x5f};
   [ZXEncoder appendKanjiBytes:[self shiftJISString:bytes bytesLen:2] bits:bits error:nil];
   NSString *expected = @" .XX.XX.. XXXXX";
   STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
-  unsigned char bytes2[2] = {0xe4,0xaa};
+  int8_t bytes2[2] = {0xe4,0xaa};
   [ZXEncoder appendKanjiBytes:[self shiftJISString:bytes2 bytesLen:2] bits:bits error:nil];
   expected = @" .XX.XX.. XXXXXXX. X.X.X.X. X.";
   STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
@@ -520,8 +520,8 @@
 - (void)testGenerateECBytes {
   {
     const int dataBytesLen = 9;
-    unsigned char dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
-    unsigned char *ecBytes = [ZXEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:17];
+    int8_t dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
+    int8_t *ecBytes = [ZXEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:17];
     const int expectedLen = 17;
     int expected[expectedLen] = {
       42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
@@ -533,9 +533,9 @@
   }
   {
     const int dataBytesLen = 15;
-    unsigned char dataBytes[dataBytesLen] = {67, 70, 22, 38, 54, 70, 86, 102, 118,
+    int8_t dataBytes[dataBytesLen] = {67, 70, 22, 38, 54, 70, 86, 102, 118,
       134, 150, 166, 182, 198, 214};
-    unsigned char *ecBytes = [ZXEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:18];
+    int8_t *ecBytes = [ZXEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:18];
     const int expectedLen = 18;
     int expected[expectedLen] = {
       175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
@@ -548,8 +548,8 @@
   {
     // High-order zero coefficient case.
     const int dataBytesLen = 9;
-    unsigned char dataBytes[dataBytesLen] = {32, 49, 205, 69, 42, 20, 0, 236, 17};
-    unsigned char *ecBytes = [ZXEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:17];
+    int8_t dataBytes[dataBytesLen] = {32, 49, 205, 69, 42, 20, 0, 236, 17};
+    int8_t *ecBytes = [ZXEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:17];
     const int expectedLen = 17;
     int expected[expectedLen] = {
       0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
@@ -598,7 +598,7 @@
   STAssertNotNil(qrCode, @"Excepted QR code");
 }
 
-- (NSString *)shiftJISString:(unsigned char *)bytes bytesLen:(int)bytesLen {
+- (NSString *)shiftJISString:(int8_t *)bytes bytesLen:(int)bytesLen {
   return [[NSString alloc] initWithBytes:bytes length:bytesLen encoding:NSShiftJISStringEncoding];
 }
 

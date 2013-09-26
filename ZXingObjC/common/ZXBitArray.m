@@ -258,7 +258,7 @@
 }
 
 
-- (void)toBytes:(int)bitOffset array:(unsigned char *)array offset:(int)offset numBytes:(int)numBytes {
+- (void)toBytes:(int)bitOffset array:(int8_t *)array offset:(int)offset numBytes:(int)numBytes {
   for (int i = 0; i < numBytes; i++) {
     int theByte = 0;
     for (int j = 0; j < 8; j++) {

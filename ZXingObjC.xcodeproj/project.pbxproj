@@ -57,7 +57,6 @@
 		25403CC6166A96FA00E13304 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CC5166A96FA00E13304 /* SenTestingKit.framework */; };
 		25403CC9166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
 		25403CCC166A96FA00E13304 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */; };
-		25403CD2166A96FA00E13304 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 25403CD0166A96FA00E13304 /* InfoPlist.strings */; };
 		25403CE3166A98C700E13304 /* ZXingObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CBB166A96FA00E13304 /* ZXingObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25403CF7166A999D00E13304 /* ZXAztecDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CEE166A999D00E13304 /* ZXAztecDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25403CF8166A999D00E13304 /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CEF166A999D00E13304 /* ZXAztecDecoder.m */; };
@@ -1465,7 +1464,6 @@
 		25403CC4166A96FA00E13304 /* ZXingObjCTests-iOS.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-iOS.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25403CC5166A96FA00E13304 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		25403CCF166A96FA00E13304 /* ZXingObjCTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZXingObjCTests-Info.plist"; sourceTree = "<group>"; };
-		25403CD1166A96FA00E13304 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		25403CE1166A979700E13304 /* ios-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		25403CEE166A999D00E13304 /* ZXAztecDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDecoder.h; sourceTree = "<group>"; };
 		25403CEF166A999D00E13304 /* ZXAztecDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDecoder.m; sourceTree = "<group>"; };
@@ -2313,8 +2311,8 @@
 				25404039166AA0F100E13304 /* oned */,
 				254040A5166AA0F100E13304 /* pdf417 */,
 				254040B0166AA0F100E13304 /* qrcode */,
-				25403CCE166A96FA00E13304 /* Supporting Files */,
 				25FE5D4416D1997C00826CDB /* Resources */,
+				25403CCE166A96FA00E13304 /* Supporting Files */,
 			);
 			path = ZXingObjCTests;
 			sourceTree = "<group>";
@@ -2322,7 +2320,6 @@
 		25403CCE166A96FA00E13304 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				25403CD0166A96FA00E13304 /* InfoPlist.strings */,
 				25403CCF166A96FA00E13304 /* ZXingObjCTests-Info.plist */,
 			);
 			name = "Supporting Files";
@@ -4010,7 +4007,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25403CD2166A96FA00E13304 /* InfoPlist.strings in Resources */,
 				25FE5D4516D1997C00826CDB /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4971,17 +4967,6 @@
 			targetProxy = 2540417B166AADAC00E13304 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		25403CD0166A96FA00E13304 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				25403CD1166A96FA00E13304 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		02AF346E1672527F003B9255 /* Distribution */ = {

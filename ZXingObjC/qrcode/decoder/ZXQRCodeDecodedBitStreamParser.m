@@ -39,7 +39,7 @@ int const GB2312_SUBSET = 1;
 
 @implementation ZXQRCodeDecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(unsigned char *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
++ (ZXDecoderResult *)decode:(int8_t *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
                     ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes length:length];
   NSMutableString *result = [NSMutableString stringWithCapacity:50];
@@ -189,7 +189,7 @@ int const GB2312_SUBSET = 1;
   if (count << 3 > bits.available) {
     return NO;
   }
-  unsigned char readBytes[count];
+  int8_t readBytes[count];
   NSMutableArray *readBytesArray = [NSMutableArray arrayWithCapacity:count];
 
   for (int i = 0; i < count; i++) {

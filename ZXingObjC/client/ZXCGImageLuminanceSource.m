@@ -46,11 +46,11 @@
 
   CVPixelBufferLockBaseAddress(buffer,0); 
 
-  unsigned char *baseAddress =
-  (unsigned char *)CVPixelBufferGetBaseAddress(buffer); 
+  int8_t *baseAddress =
+  (int8_t *)CVPixelBufferGetBaseAddress(buffer); 
 
   int size = newBytesPerRow*height;
-  unsigned char *bytes = (unsigned char*)malloc(size);
+  int8_t *bytes = (int8_t*)malloc(size);
   if (newBytesPerRow == bytesPerRow) {
     memcpy(bytes, baseAddress+top*bytesPerRow, size);
   } else {
@@ -139,23 +139,23 @@
   }
 }
 
-- (unsigned char *)row:(int)y {
+- (int8_t *)row:(int)y {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException format:@"Requested row is outside the image: %d", y];
   }
 
-  unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
+  int8_t *row = (int8_t *)malloc(self.width * sizeof(int8_t));
 
   int offset = y * self.width;
   memcpy(row, _data + offset, self.width);
   return row;
 }
 
-- (unsigned char *)matrix {
+- (int8_t *)matrix {
   int area = self.width * self.height;
 
-  unsigned char *result = (unsigned char *)malloc(area * sizeof(unsigned char));
-  memcpy(result, _data, area * sizeof(unsigned char));
+  int8_t *result = (int8_t *)malloc(area * sizeof(int8_t));
+  memcpy(result, _data, area * sizeof(int8_t));
   return result;
 }
 
@@ -190,7 +190,7 @@
   CGContextRelease(context);
   CGColorSpaceRelease(colorSpace);
 
-  _data = (unsigned char *)malloc(self.width * self.height * sizeof(unsigned char));
+  _data = (int8_t *)malloc(self.width * self.height * sizeof(int8_t));
 
   for (int i = 0; i < self.height * self.width; i++) {
     uint32_t rgbPixel=pixelData[i];

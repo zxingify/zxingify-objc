@@ -85,7 +85,7 @@
  * Converts the message to a byte array using the default encoding (cp437) as defined by the
  * specification
  */
-+ (unsigned char *)bytesForMessage:(NSString *)msg;
++ (int8_t *)bytesForMessage:(NSString *)msg;
 
 /**
  * Performs message encoding of a DataMatrix message using the algorithm described in annex P

@@ -16,8 +16,8 @@
 
 #import "ZXExpandedProductParsedResult.h"
 
-NSString *const KILOGRAM = @"KG";
-NSString *const POUND = @"LB";
+NSString * const ZX_KILOGRAM = @"KG";
+NSString * const ZX_POUND = @"LB";
 
 @implementation ZXExpandedProductParsedResult
 

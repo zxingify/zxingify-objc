@@ -16,8 +16,8 @@
 
 #import "ZXParsedResult.h"
 
-extern NSString *const KILOGRAM;
-extern NSString *const POUND;
+extern NSString * const ZX_KILOGRAM;
+extern NSString * const ZX_POUND;
 
 @interface ZXExpandedProductParsedResult : ZXParsedResult
 

@@ -21,7 +21,7 @@
 
 @interface ZXCGImageLuminanceSource : ZXLuminanceSource {
   CGImageRef _image;
-  unsigned char *_data;
+  int8_t *_data;
   int _left;
   int _top;
 }

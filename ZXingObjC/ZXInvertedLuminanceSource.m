@@ -33,20 +33,20 @@
   return self;
 }
 
-- (unsigned char *)row:(int)y {
-  unsigned char *row = [self.delegate row:y];
+- (int8_t *)row:(int)y {
+  int8_t *row = [self.delegate row:y];
   for (int i = 0; i < self.width; i++) {
-    row[i] = (unsigned char) (255 - (row[i] & 0xFF));
+    row[i] = (int8_t) (255 - (row[i] & 0xFF));
   }
   return row;
 }
 
-- (unsigned char *)matrix {
-  unsigned char *matrix = [self.delegate matrix];
+- (int8_t *)matrix {
+  int8_t *matrix = [self.delegate matrix];
   int length = self.width * self.height;
-  unsigned char *invertedMatrix = (unsigned char *)malloc(length * sizeof(unsigned char));
+  int8_t *invertedMatrix = (int8_t *)malloc(length * sizeof(int8_t));
   for (int i = 0; i < length; i++) {
-    invertedMatrix[i] = (unsigned char) (255 - (matrix[i] & 0xFF));
+    invertedMatrix[i] = (int8_t) (255 - (matrix[i] & 0xFF));
   }
   free(matrix);
   return invertedMatrix;

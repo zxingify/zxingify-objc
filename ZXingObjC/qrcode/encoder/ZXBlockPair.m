@@ -18,11 +18,11 @@
 
 @implementation ZXBlockPair
 
-- (id)initWithData:(unsigned char *)data length:(unsigned int)length errorCorrection:(unsigned char *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength {
+- (id)initWithData:(int8_t *)data length:(unsigned int)length errorCorrection:(int8_t *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength {
   if (self = [super init]) {
-    _dataBytes = (unsigned char *)malloc(length * sizeof(char));
-    memcpy(_dataBytes, data, length * sizeof(char));
-    _errorCorrectionBytes = (unsigned char *)malloc(errorCorrectionLength * sizeof(char));
+    _dataBytes = (int8_t *)malloc(length * sizeof(int8_t));
+    memcpy(_dataBytes, data, length * sizeof(int8_t));
+    _errorCorrectionBytes = (int8_t *)malloc(errorCorrectionLength * sizeof(int8_t));
     memcpy(_errorCorrectionBytes, errorCorrection, errorCorrectionLength);
     _length = length;
     _errorCorrectionLength = errorCorrectionLength;

@@ -20,9 +20,9 @@
 
 @interface ZXAztecDetectorResult : ZXDetectorResult
 
-@property (nonatomic, readonly) int nbLayers;
-@property (nonatomic, readonly) int nbDatablocks;
 @property (nonatomic, readonly) BOOL compact;
+@property (nonatomic, readonly) int nbDatablocks;
+@property (nonatomic, readonly) int nbLayers;
 
 - (id)initWithBits:(ZXBitMatrix *)bits
             points:(NSArray *)points

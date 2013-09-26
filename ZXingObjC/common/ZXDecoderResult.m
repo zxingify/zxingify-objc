@@ -18,7 +18,7 @@
 
 @implementation ZXDecoderResult
 
-- (id)initWithRawBytes:(unsigned char *)rawBytes
+- (id)initWithRawBytes:(int8_t *)rawBytes
                 length:(unsigned int)length
                   text:(NSString *)text
           byteSegments:(NSMutableArray *)byteSegments

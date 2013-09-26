@@ -20,7 +20,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 
 @interface ZXPlanarYUVLuminanceSource ()
 
-@property (nonatomic, assign) unsigned char *yuvData;
+@property (nonatomic, assign) int8_t *yuvData;
 @property (nonatomic, assign) int yuvDataLen;
 @property (nonatomic, assign) int dataWidth;
 @property (nonatomic, assign) int dataHeight;
@@ -31,7 +31,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 
 @implementation ZXPlanarYUVLuminanceSource
 
-- (id)initWithYuvData:(unsigned char *)yuvData yuvDataLen:(int)yuvDataLen dataWidth:(int)dataWidth
+- (id)initWithYuvData:(int8_t *)yuvData yuvDataLen:(int)yuvDataLen dataWidth:(int)dataWidth
            dataHeight:(int)dataHeight left:(int)left top:(int)top width:(int)width height:(int)height
     reverseHorizontal:(BOOL)reverseHorizontal {
   if (self = [super initWithWidth:width height:height]) {
@@ -40,7 +40,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
     }
 
     _yuvDataLen = yuvDataLen;
-    _yuvData = (unsigned char *)malloc(yuvDataLen * sizeof(unsigned char));
+    _yuvData = (int8_t *)malloc(yuvDataLen * sizeof(int8_t));
     memcpy(_yuvData, yuvData, yuvDataLen);
     _dataWidth = dataWidth;
     _dataHeight = dataHeight;
@@ -61,20 +61,20 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   }
 }
 
-- (unsigned char *)row:(int)y {
+- (int8_t *)row:(int)y {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException
                 format:@"Requested row is outside the image: %d", y];
   }
-  unsigned char *row = (unsigned char *)malloc(self.width * sizeof(unsigned char));
+  int8_t *row = (int8_t *)malloc(self.width * sizeof(int8_t));
   int offset = (y + self.top) * self.dataWidth + self.left;
   memcpy(row, self.yuvData + offset, self.width);
   return row;
 }
 
-- (unsigned char *)matrix {
+- (int8_t *)matrix {
   int area = self.width * self.height;
-  unsigned char *matrix = malloc(area * sizeof(unsigned char));
+  int8_t *matrix = malloc(area * sizeof(int8_t));
   int inputOffset = self.top * self.dataWidth + self.left;
 
   // If the width matches the full width of the underlying data, perform a single copy.
@@ -131,7 +131,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   for (int y = 0, rowStart = self.top * self.dataWidth + self.left; y < _height; y++, rowStart += self.dataWidth) {
     int middle = rowStart + _width / 2;
     for (int x1 = rowStart, x2 = rowStart + _width - 1; x1 < middle; x1++, x2--) {
-      unsigned char temp = self.yuvData[x1];
+      int8_t temp = self.yuvData[x1];
       self.yuvData[x1] = self.yuvData[x2];
       self.yuvData[x2] = temp;
     }

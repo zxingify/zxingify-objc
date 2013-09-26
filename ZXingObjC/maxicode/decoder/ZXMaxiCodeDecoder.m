@@ -86,7 +86,7 @@ const int ODD = 2;
       return nil;
   }
 
-  unsigned char *datawords = (unsigned char *)malloc(datawordsLen * sizeof(unsigned char));
+  int8_t *datawords = (int8_t *)malloc(datawordsLen * sizeof(int8_t));
   for (int i = 0; i < 10; i++) {
     datawords[i] = [codewords[i] charValue];
   }

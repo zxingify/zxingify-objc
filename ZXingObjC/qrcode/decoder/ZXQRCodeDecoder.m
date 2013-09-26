@@ -102,7 +102,7 @@
     return nil;
   }
 
-  unsigned char resultBytes[totalBytes];
+  int8_t resultBytes[totalBytes];
   int resultOffset = 0;
 
   for (ZXQRCodeDataBlock *dataBlock in dataBlocks) {

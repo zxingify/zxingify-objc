@@ -24,7 +24,7 @@
     _numcols = numcols;
     _numrows = numrows;
     _bitsLen = numcols * numrows;
-    _bits = (unsigned char *)malloc(_bitsLen * sizeof(unsigned char));
+    _bits = (int8_t *)malloc(_bitsLen * sizeof(int8_t));
     memset(_bits, -1, _bitsLen); //Initialize with "not set" value
   }
 
@@ -43,11 +43,11 @@
 }
 
 - (void)setBitAtCol:(int)col row:(int)row bit:(BOOL)bit {
-  self.bits[row * self.numcols + col] = bit ? (unsigned char) 1 : (unsigned char) 0;
+  self.bits[row * self.numcols + col] = bit ? (int8_t) 1 : (int8_t) 0;
 }
 
 - (BOOL)hasBitAtCol:(int)col row:(int)row {
-  return self.bits[row * self.numcols + col] != 0xFF;
+  return self.bits[row * self.numcols + col] >= 0;
 }
 
 - (void)place {

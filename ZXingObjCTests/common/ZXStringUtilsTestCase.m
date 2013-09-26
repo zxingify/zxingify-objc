@@ -21,23 +21,23 @@
 
 - (void)testShortShiftJIS_1 {
   // ÈáëÈ≠ö
-  unsigned char bytes[4] = { 0x8b, 0xe0, 0x8b, 0x9b };
+  int8_t bytes[4] = { 0x8b, 0xe0, 0x8b, 0x9b };
   [self doTestWithBytes:bytes length:4 encoding:NSShiftJISStringEncoding];
 }
 
 - (void)testShortISO88591_1 {
   // b√•d
-  unsigned char bytes[3] = { 0x62, 0xe5, 0x64 };
+  int8_t bytes[3] = { 0x62, 0xe5, 0x64 };
   [self doTestWithBytes:bytes length:3 encoding:NSISOLatin1StringEncoding];
 }
 
 - (void)testMixedShiftJIS_1 {
   // Hello Èáë!
-  unsigned char bytes[9] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21 };
+  int8_t bytes[9] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21 };
   [self doTestWithBytes:bytes length:9 encoding:NSShiftJISStringEncoding];
 }
 
-- (void)doTestWithBytes:(unsigned char *)bytes length:(int)length encoding:(NSStringEncoding)encoding {
+- (void)doTestWithBytes:(int8_t *)bytes length:(int)length encoding:(NSStringEncoding)encoding {
   STAssertEquals([ZXStringUtils guessEncoding:bytes length:length hints:nil], encoding, @"Encodings do not match");
 }
 

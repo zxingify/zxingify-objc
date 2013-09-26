@@ -41,12 +41,12 @@
   return self;
 }
 
-- (void)setX:(int)x y:(int)y value:(unsigned char)value {
+- (void)setX:(int)x y:(int)y value:(int8_t)value {
   [self.rowMatrix[y] setX:x value:value];
 }
 
 - (void)setMatrixX:(int)x y:(int)y black:(BOOL)black {
-  [self setX:x y:y value:(unsigned char)(black ? 1 : 0)];
+  [self setX:x y:y value:(int8_t)(black ? 1 : 0)];
 }
 
 - (void)startRow {
@@ -57,21 +57,21 @@
   return self.rowMatrix[self.currentRowIndex];
 }
 
-- (unsigned char **)matrixWithHeight:(int *)pHeight width:(int *)pWidth {
+- (int8_t **)matrixWithHeight:(int *)pHeight width:(int *)pWidth {
   return [self scaledMatrixWithHeight:pHeight width:pWidth xScale:1 yScale:1];
 }
 
-- (unsigned char **)scaledMatrixWithHeight:(int *)pHeight width:(int *)pWidth scale:(int)scale {
+- (int8_t **)scaledMatrixWithHeight:(int *)pHeight width:(int *)pWidth scale:(int)scale {
   return [self scaledMatrixWithHeight:pHeight width:pWidth xScale:scale yScale:scale];
 }
 
-- (unsigned char **)scaledMatrixWithHeight:(int *)pHeight width:(int *)pWidth xScale:(int)xScale yScale:(int)yScale {
+- (int8_t **)scaledMatrixWithHeight:(int *)pHeight width:(int *)pWidth xScale:(int)xScale yScale:(int)yScale {
   int matrixHeight = self.height * yScale;
 
   if (pHeight) *pHeight = matrixHeight;
   if (pWidth) *pWidth = (self.width + 69) * xScale;
 
-  unsigned char **matrixOut = (unsigned char **)malloc(matrixHeight * sizeof(unsigned char *));
+  int8_t **matrixOut = (int8_t **)malloc(matrixHeight * sizeof(int8_t *));
   int yMax = self.height * yScale;
   for (int ii = 0; ii < yMax; ii++) {
     matrixOut[yMax - ii - 1] = [self.rowMatrix[ii / yScale] scaledRow:xScale];

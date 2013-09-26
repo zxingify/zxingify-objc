@@ -74,11 +74,11 @@
       expirationDate = value;
     } else if ([@"3100" isEqualToString:ai] || [@"3101" isEqualToString:ai] || [@"3102" isEqualToString:ai] || [@"3103" isEqualToString:ai] || [@"3104" isEqualToString:ai] || [@"3105" isEqualToString:ai] || [@"3106" isEqualToString:ai] || [@"3107" isEqualToString:ai] || [@"3108" isEqualToString:ai] || [@"3109" isEqualToString:ai]) {
       weight = value;
-      weightType = KILOGRAM;
+      weightType = ZX_KILOGRAM;
       weightIncrement = [ai substringFromIndex:3];
     } else if ([@"3200" isEqualToString:ai] || [@"3201" isEqualToString:ai] || [@"3202" isEqualToString:ai] || [@"3203" isEqualToString:ai] || [@"3204" isEqualToString:ai] || [@"3205" isEqualToString:ai] || [@"3206" isEqualToString:ai] || [@"3207" isEqualToString:ai] || [@"3208" isEqualToString:ai] || [@"3209" isEqualToString:ai]) {
       weight = value;
-      weightType = POUND;
+      weightType = ZX_POUND;
       weightIncrement = [ai substringFromIndex:3];
     } else if ([@"3920" isEqualToString:ai] || [@"3921" isEqualToString:ai] || [@"3922" isEqualToString:ai] || [@"3923" isEqualToString:ai]) {
       price = value;

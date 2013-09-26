@@ -81,7 +81,7 @@ const int LATCH_TO_BYTE = 924;
  * Raw code table for text compaction Mixed sub-mode
  */
 const int TEXT_MIXED_RAW_LEN = 30;
-const unsigned char TEXT_MIXED_RAW[TEXT_MIXED_RAW_LEN] = {
+const int8_t TEXT_MIXED_RAW[TEXT_MIXED_RAW_LEN] = {
   48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58,
   35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0};
 
@@ -89,7 +89,7 @@ const unsigned char TEXT_MIXED_RAW[TEXT_MIXED_RAW_LEN] = {
  * Raw code table for text compaction: Punctuation sub-mode
  */
 const int TEXT_PUNCTUATION_RAW_LEN = 30;
-const unsigned char TEXT_PUNCTUATION_RAW[TEXT_PUNCTUATION_RAW_LEN] = {
+const int8_t TEXT_PUNCTUATION_RAW[TEXT_PUNCTUATION_RAW_LEN] = {
   59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58,
   10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0};
 
@@ -106,8 +106,8 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
   for (int i = 0; i < MIXED_TABLE_LEN; i++) {
     MIXED_TABLE[i] = 0xFF;
   }
-  for (unsigned char i = 0; i < TEXT_MIXED_RAW_LEN; i++) {
-    unsigned char b = TEXT_MIXED_RAW[i];
+  for (int8_t i = 0; i < TEXT_MIXED_RAW_LEN; i++) {
+    int8_t b = TEXT_MIXED_RAW[i];
     if (b > 0) {
       MIXED_TABLE[b] = i;
     }
@@ -115,8 +115,8 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
   for (int i = 0; i < PUNCTUATION_LEN; i++) {
     PUNCTUATION[i] = 0xFF;
   }
-  for (unsigned char i = 0; i < TEXT_PUNCTUATION_RAW_LEN; i++) {
-    unsigned char b = TEXT_PUNCTUATION_RAW[i];
+  for (int8_t i = 0; i < TEXT_PUNCTUATION_RAW_LEN; i++) {
+    int8_t b = TEXT_PUNCTUATION_RAW[i];
     if (b > 0) {
       PUNCTUATION[b] = i;
     }
@@ -127,8 +127,8 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * Converts the message to a byte array using the default encoding (cp437) as defined by the
  * specification
  */
-+ (unsigned char *)bytesForMessage:(NSString *)msg {
-  return (unsigned char *)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes];
++ (int8_t *)bytesForMessage:(NSString *)msg {
+  return (int8_t *)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes];
 }
 
 /**
@@ -137,7 +137,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * is used.
  */
 + (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction error:(NSError **)error {
-  unsigned char *bytes = NULL; //Fill later and only if needed
+  int8_t *bytes = NULL; //Fill later and only if needed
 
   //the codewords 0..928 are encoded as Unicode characters
   NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
@@ -323,7 +323,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * chapter 4.4.3. The Unicode characters will be converted to binary using the cp437
  * codepage.
  */
-+ (void)encodeBinary:(unsigned char *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb {
++ (void)encodeBinary:(int8_t *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb {
   if (count == 1 && startmode == TEXT_COMPACTION) {
     [sb appendFormat:@"%C", (unichar) SHIFT_TO_BYTE];
   }
@@ -468,7 +468,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 /**
  * Determines the number of consecutive characters that are encodable using binary compaction.
  */
-+ (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(unsigned char *)bytes startpos:(int)startpos error:(NSError **)error {
++ (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(int8_t *)bytes startpos:(int)startpos error:(NSError **)error {
   int len = msg.length;
   int idx = startpos;
   while (idx < len) {

@@ -72,8 +72,8 @@ const int BITNR[33][30] = {
 
 - (NSArray *)readCodewords {
   const int resultLength = 144;
-  unsigned char result[resultLength];
-  memset(result, 0, resultLength * sizeof(unsigned char));
+  int8_t result[resultLength];
+  memset(result, 0, resultLength * sizeof(int8_t));
 
   int height = self.bitMatrix.height;
   int width = self.bitMatrix.width;
@@ -82,7 +82,7 @@ const int BITNR[33][30] = {
     for (int x = 0; x < width; x++) {
       int bit = bitnrRow[x];
       if (bit >= 0 && [self.bitMatrix getX:x y:y]) {
-        result[bit / 6] |= (unsigned char) (1 << (5 - (bit % 6)));
+        result[bit / 6] |= (int8_t) (1 << (5 - (bit % 6)));
       }
     }
   }

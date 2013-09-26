@@ -23,7 +23,7 @@
 @property (nonatomic, copy, readonly) NSString *codewords;
 @property (nonatomic, assign, readonly) int numrows;
 @property (nonatomic, assign, readonly) int numcols;
-@property (nonatomic, assign, readonly) unsigned char *bits;
+@property (nonatomic, assign, readonly) int8_t *bits;
 @property (nonatomic, assign, readonly) int bitsLen;
 
 - (id)initWithCodewords:(NSString *)codewords numcols:(int)numcols numrows:(int)numrows;

@@ -20,7 +20,7 @@
 @implementation ZXBitSourceTestCase
 
 - (void)testSource {
-  unsigned char bytes[5] = {1, 2, 3, 4, 5};
+  int8_t bytes[5] = {1, 2, 3, 4, 5};
   ZXBitSource *source = [[ZXBitSource alloc] initWithBytes:bytes length:5];
   STAssertEquals(source.available, 40, @"Expected source.available to 40");
   STAssertEquals([source readBits:1], 0, @"Expected [source readBits:1] to 0");

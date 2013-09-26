@@ -286,7 +286,7 @@
 // Helper routines
 
 - (void)testEncode:(NSString *)data compact:(BOOL)compact layers:(int)layers expected:(NSString *)expected {
-  unsigned char bytes[4096];
+  int8_t bytes[4096];
   [data getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
   int bytesLen = [data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
@@ -298,7 +298,7 @@
 }
 
 - (void)testEncodeDecode:(NSString *)data compact:(BOOL)compact layers:(int)layers {
-  unsigned char bytes[4096];
+  int8_t bytes[4096];
   [data getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
   int bytesLen = [data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
@@ -347,7 +347,7 @@
 }
 
 - (void)testHighLevelEncodeString:(NSString *)s expectedBits:(NSString *)expectedBits {
-  unsigned char bytes[4096];
+  int8_t bytes[4096];
   [s getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
   int bytesLen = [s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 

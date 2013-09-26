@@ -38,7 +38,7 @@
 - (void)appendBits:(int)value numBits:(int)numBits;
 - (void)appendBitArray:(ZXBitArray *)other;
 - (void)xor:(ZXBitArray *)other;
-- (void)toBytes:(int)bitOffset array:(unsigned char *)array offset:(int)offset numBytes:(int)numBytes;
+- (void)toBytes:(int)bitOffset array:(int8_t *)array offset:(int)offset numBytes:(int)numBytes;
 - (void)reverse;
 
 @end

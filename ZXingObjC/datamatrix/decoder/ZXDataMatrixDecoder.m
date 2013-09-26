@@ -85,7 +85,7 @@
     return nil;
   }
 
-  unsigned char resultBytes[totalBytes];
+  int8_t resultBytes[totalBytes];
 
   for (int j = 0; j < dataBlocksCount; j++) {
     ZXDataMatrixDataBlock *dataBlock = dataBlocks[j];

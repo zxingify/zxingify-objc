@@ -217,7 +217,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 + (BOOL)isOnlyDoubleByteKanji:(NSString *)content {
   NSData *data = [content dataUsingEncoding:NSShiftJISStringEncoding];
-  unsigned char *bytes = (unsigned char *)[data bytes];
+  int8_t *bytes = (int8_t *)[data bytes];
   int length = [data length];
   if (length % 2 != 0) {
     return NO;
@@ -393,9 +393,9 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     }
 
     int size = numDataBytesInBlock[0];
-    unsigned char dataBytes[size];
+    int8_t dataBytes[size];
     [bits toBytes:8 * dataBytesOffset array:dataBytes offset:0 numBytes:size];
-    unsigned char *ecBytes = [self generateECBytes:dataBytes numDataBytes:size numEcBytesInBlock:numEcBytesInBlock[0]];
+    int8_t *ecBytes = [self generateECBytes:dataBytes numDataBytes:size numEcBytesInBlock:numEcBytesInBlock[0]];
     [blocks addObject:[[ZXBlockPair alloc] initWithData:dataBytes length:size errorCorrection:ecBytes errorCorrectionLength:numEcBytesInBlock[0]]];
 
     maxNumDataBytes = MAX(maxNumDataBytes, size);
@@ -415,7 +415,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   // First, place data blocks.
   for (int i = 0; i < maxNumDataBytes; ++i) {
     for (ZXBlockPair *block in blocks) {
-      unsigned char *dataBytes = block.dataBytes;
+      int8_t *dataBytes = block.dataBytes;
       int length = block.length;
       if (i < length) {
         [result appendBits:dataBytes[i] numBits:8];
@@ -425,7 +425,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   // Then, place error correction blocks.
   for (int i = 0; i < maxNumEcBytes; ++i) {
     for (ZXBlockPair *block in blocks) {
-      unsigned char *ecBytes = block.errorCorrectionBytes;
+      int8_t *ecBytes = block.errorCorrectionBytes;
       int length = block.errorCorrectionLength;
       if (i < length) {
         [result appendBits:ecBytes[i] numBits:8];
@@ -442,7 +442,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return result;
 }
 
-+ (unsigned char *)generateECBytes:(unsigned char[])dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
++ (int8_t *)generateECBytes:(int8_t[])dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
   int toEncodeLen = numDataBytes + numEcBytesInBlock;
   int toEncode[toEncodeLen];
   for (int i = 0; i < numDataBytes; i++) {
@@ -454,9 +454,9 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
   [[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] encode:toEncode toEncodeLen:toEncodeLen ecBytes:numEcBytesInBlock];
 
-  unsigned char *ecBytes = (unsigned char *)malloc(numEcBytesInBlock * sizeof(unsigned char));
+  int8_t *ecBytes = (int8_t *)malloc(numEcBytesInBlock * sizeof(int8_t));
   for (int i = 0; i < numEcBytesInBlock; i++) {
-    ecBytes[i] = (unsigned char)toEncode[numDataBytes + i];
+    ecBytes[i] = (int8_t)toEncode[numDataBytes + i];
   }
 
   return ecBytes;
@@ -558,7 +558,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 + (void)append8BitBytes:(NSString *)content bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding {
   NSData *data = [content dataUsingEncoding:encoding];
-  unsigned char *bytes = (unsigned char *)[data bytes];
+  int8_t *bytes = (int8_t *)[data bytes];
 
   for (int i = 0; i < [data length]; ++i) {
     [bits appendBits:bytes[i] numBits:8];
@@ -567,7 +567,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 + (BOOL)appendKanjiBytes:(NSString *)content bits:(ZXBitArray *)bits error:(NSError **)error {
   NSData *data = [content dataUsingEncoding:NSShiftJISStringEncoding];
-  unsigned char *bytes = (unsigned char *)[data bytes];
+  int8_t *bytes = (int8_t *)[data bytes];
   for (int i = 0; i < [data length]; i += 2) {
     int byte1 = bytes[i] & 0xFF;
     int byte2 = bytes[i + 1] & 0xFF;

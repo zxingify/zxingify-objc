@@ -19,7 +19,7 @@
 
 @implementation ZXStringUtils
 
-+ (NSStringEncoding)guessEncoding:(unsigned char *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints {
++ (NSStringEncoding)guessEncoding:(int8_t *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints {
   BOOL assumeShiftJIS = CFStringGetSystemEncoding() == NSShiftJISStringEncoding || CFStringGetSystemEncoding() == NSJapaneseEUCStringEncoding;
   
   if (hints != nil) {
@@ -51,9 +51,9 @@
   int isoHighOther = 0;
 
   BOOL utf8bom = length > 3 &&
-    bytes[0] == (unsigned char) 0xEF &&
-    bytes[1] == (unsigned char) 0xBB &&
-    bytes[2] == (unsigned char) 0xBF;
+    bytes[0] == (int8_t) 0xEF &&
+    bytes[1] == (int8_t) 0xBB &&
+    bytes[2] == (int8_t) 0xBF;
 
   for (int i = 0;
        i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);

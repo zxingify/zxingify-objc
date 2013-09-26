@@ -18,7 +18,7 @@
 
 @interface ZXBitSource ()
 
-@property (nonatomic, assign) unsigned char *bytes;
+@property (nonatomic, assign) int8_t *bytes;
 @property (nonatomic, assign) int byteOffset;
 @property (nonatomic, assign) int bitOffset;
 @property (nonatomic, assign) int length;
@@ -31,7 +31,7 @@
  * bytes is the bytes from which this will read bits. Bits will be read from the first byte first.
  * Bits are read within a byte from most-significant to least-significant bit.
  */
-- (id)initWithBytes:(unsigned char *)bytes length:(unsigned int)length {
+- (id)initWithBytes:(int8_t *)bytes length:(unsigned int)length {
   if (self = [super init]) {
     _bytes = bytes;
     _length = length;

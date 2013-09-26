@@ -60,11 +60,11 @@
   }
 }
 
-- (unsigned char *)toByteArray {
+- (int8_t *)toByteArray {
   if (self.bitsLeftInNextByte < 8) {
     [self write:0 numBits:self.bitsLeftInNextByte];
   }
-  return (unsigned char *)[self.output bytes];
+  return (int8_t *)[self.output bytes];
 }
 
 - (int)byteArrayLength {

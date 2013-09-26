@@ -39,7 +39,7 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
   if (pLength) *pLength = EAN8codeWidth;
   BOOL *result = (BOOL *)malloc(EAN8codeWidth * sizeof(BOOL));
-  memset(result, 0, EAN8codeWidth * sizeof(unsigned char));
+  memset(result, 0, EAN8codeWidth * sizeof(int8_t));
   int pos = 0;
 
   pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];

@@ -25,7 +25,7 @@
   [contents getCString:bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
   int bytesLen = [contents lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:(unsigned char *)bytes len:bytesLen minECCPercent:30];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:(int8_t *)bytes len:bytesLen minECCPercent:30];
   return aztec.matrix;
 }
 

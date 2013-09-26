@@ -41,7 +41,7 @@ const int N4 = 10;
  */
 + (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix {
   int penalty = 0;
-  unsigned char **array = matrix.array;
+  int8_t **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
@@ -64,7 +64,7 @@ const int N4 = 10;
  */
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
   int penalty = 0;
-  unsigned char **array = matrix.array;
+  int8_t **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
 
@@ -121,11 +121,11 @@ const int N4 = 10;
  */
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
   int numDarkCells = 0;
-  unsigned char **array = matrix.array;
+  int8_t **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
   for (int y = 0; y < height; y++) {
-    unsigned char *arrayY = array[y];
+    int8_t *arrayY = array[y];
     for (int x = 0; x < width; x++) {
       if (arrayY[x] == 1) {
         numDarkCells++;
@@ -188,7 +188,7 @@ const int N4 = 10;
   int penalty = 0;
   int iLimit = isHorizontal ? matrix.height : matrix.width;
   int jLimit = isHorizontal ? matrix.width : matrix.height;
-  unsigned char **array = matrix.array;
+  int8_t **array = matrix.array;
   for (int i = 0; i < iLimit; i++) {
     int numSameBitCells = 0;
     int prevBit = -1;

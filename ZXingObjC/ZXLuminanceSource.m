@@ -35,7 +35,7 @@
  * to only fetch this row rather than the whole image, since no 2D Readers may be installed and
  * getMatrix() may never be called.
  */
-- (unsigned char *)row:(int)y {
+- (int8_t *)row:(int)y {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -49,7 +49,7 @@
  * larger than width * height bytes on some platforms. Do not modify the contents
  * of the result.
  */
-- (unsigned char *)matrix {
+- (int8_t *)matrix {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
@@ -94,7 +94,7 @@
 }
 
 - (NSString *)description {
-  unsigned char *row = NULL;
+  int8_t *row = NULL;
   NSMutableString *result = [NSMutableString stringWithCapacity:self.height * (self.width + 1)];
   for (int y = 0; y < self.height; y++) {
     row = [self row:y];

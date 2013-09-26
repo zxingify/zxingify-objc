@@ -63,10 +63,10 @@
 
   int scaleHeight;
   int scaleWidth;
-  unsigned char **originalScale = [[encoder barcodeMatrix] scaledMatrixWithHeight:&scaleHeight width:&scaleWidth xScale:lineThickness yScale:aspectRatio * lineThickness];
+  int8_t **originalScale = [[encoder barcodeMatrix] scaledMatrixWithHeight:&scaleHeight width:&scaleWidth xScale:lineThickness yScale:aspectRatio * lineThickness];
   BOOL rotated = NO;
   if ((height > width) ^ (scaleWidth < scaleHeight)) {
-    unsigned char **oldOriginalScale = originalScale;
+    int8_t **oldOriginalScale = originalScale;
     originalScale = [self rotateArray:oldOriginalScale height:scaleHeight width:scaleWidth];
     free(oldOriginalScale);
     rotated = YES;
@@ -84,10 +84,10 @@
 
   ZXBitMatrix *result = nil;
   if (scale > 1) {
-    unsigned char **scaledMatrix =
+    int8_t **scaledMatrix =
       [[encoder barcodeMatrix] scaledMatrixWithHeight:&scaleHeight width:&scaleWidth xScale:scale * lineThickness yScale:scale * aspectRatio * lineThickness];
     if (rotated) {
-      unsigned char **oldScaledMatrix = scaledMatrix;
+      int8_t **oldScaledMatrix = scaledMatrix;
       scaledMatrix = [self rotateArray:scaledMatrix height:scaleHeight width:scaleWidth];
       free(oldScaledMatrix);
     }
@@ -103,7 +103,7 @@
 /**
  * This takes an array holding the values of the PDF 417
  */
-- (ZXBitMatrix *)bitMatrixFrombitArray:(unsigned char **)input height:(int)height width:(int)width {
+- (ZXBitMatrix *)bitMatrixFrombitArray:(int8_t **)input height:(int)height width:(int)width {
   // Creates a small whitespace boarder around the barcode
   int whiteSpace = 30;
 
@@ -124,8 +124,8 @@
 /**
  * Takes and rotates the it 90 degrees
  */
-- (unsigned char **)rotateArray:(unsigned char **)bitarray height:(int)height width:(int)width {
-  unsigned char **temp = (unsigned char **)malloc(width * sizeof(unsigned char *));
+- (int8_t **)rotateArray:(int8_t **)bitarray height:(int)height width:(int)width {
+  int8_t **temp = (int8_t **)malloc(width * sizeof(int8_t *));
   for (int ii = 0; ii < height; ii++) {
     // This makes the direction consistent on screen when rotating the
     // screen;

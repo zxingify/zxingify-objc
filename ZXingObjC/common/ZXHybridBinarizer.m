@@ -45,7 +45,7 @@ const int MIN_DYNAMIC_RANGE = 24;
   int width = source.width;
   int height = source.height;
   if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-    unsigned char *_luminances = source.matrix;
+    int8_t *_luminances = source.matrix;
     int subWidth = width >> BLOCK_SIZE_POWER;
     if ((width & BLOCK_SIZE_MASK) != 0) {
       subWidth++;
@@ -82,7 +82,7 @@ const int MIN_DYNAMIC_RANGE = 24;
  * of the blocks around it. Also handles the corner cases (fractional blocks are computed based
  * on the last pixels in the row/column which are also used in the previous block).
  */
-- (void)calculateThresholdForBlock:(unsigned char *)luminances
+- (void)calculateThresholdForBlock:(int8_t *)luminances
                           subWidth:(int)subWidth
                          subHeight:(int)subHeight
                              width:(int)width
@@ -121,7 +121,7 @@ const int MIN_DYNAMIC_RANGE = 24;
 /**
  * Applies a single threshold to a block of pixels.
  */
-- (void)thresholdBlock:(unsigned char *)luminances
+- (void)thresholdBlock:(int8_t *)luminances
                xoffset:(int)xoffset
                yoffset:(int)yoffset
              threshold:(int)threshold
@@ -142,7 +142,7 @@ const int MIN_DYNAMIC_RANGE = 24;
  * See the following thread for a discussion of this algorithm:
  *  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
  */
-- (int **)calculateBlackPoints:(unsigned char *)_luminances
+- (int **)calculateBlackPoints:(int8_t *)_luminances
                          subWidth:(int)subWidth
                         subHeight:(int)subHeight
                             width:(int)width

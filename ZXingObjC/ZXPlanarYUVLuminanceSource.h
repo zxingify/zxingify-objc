@@ -30,7 +30,7 @@
 @property (nonatomic, assign, readonly) int thumbnailWidth;
 @property (nonatomic, assign, readonly) int thumbnailHeight;
 
-- (id)initWithYuvData:(unsigned char *)yuvData yuvDataLen:(int)yuvDataLen dataWidth:(int)dataWidth
+- (id)initWithYuvData:(int8_t *)yuvData yuvDataLen:(int)yuvDataLen dataWidth:(int)dataWidth
            dataHeight:(int)dataHeight left:(int)left top:(int)top width:(int)width height:(int)height
     reverseHorizontal:(BOOL)reverseHorizontal;
 - (int *)renderThumbnail;

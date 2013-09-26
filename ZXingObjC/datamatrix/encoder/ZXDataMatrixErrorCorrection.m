@@ -144,7 +144,7 @@ static int LOG[256], ALOG[256];
     ecc[i] = 0;
   }
   for (int i = start; i < start + len; i++) {
-    int m = (unsigned char)ecc[numECWords - 1] ^ (unsigned char)[codewords characterAtIndex:i];
+    int m = ecc[numECWords - 1] ^ [codewords characterAtIndex:i];
     for (int k = numECWords - 1; k > 0; k--) {
       if (m != 0 && poly[k] != 0) {
         ecc[k] = (unichar) (ecc[k - 1] ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255]);

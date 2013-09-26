@@ -31,8 +31,8 @@
 - (id)initWithWidth:(int)width {
   if (self = [super init]) {
     _rowLength = width;
-    _row = (unsigned char *)malloc(_rowLength * sizeof(unsigned char));
-    memset(_row, 0, self.rowLength * sizeof(unsigned char));
+    _row = (int8_t *)malloc(_rowLength * sizeof(int8_t));
+    memset(_row, 0, self.rowLength * sizeof(int8_t));
     _currentLocation = 0;
   }
   return self;
@@ -45,12 +45,12 @@
   }
 }
 
-- (void)setX:(int)x value:(unsigned char)value {
+- (void)setX:(int)x value:(int8_t)value {
   self.row[x] = value;
 }
 
 - (void)setX:(int)x black:(BOOL)black {
-  self.row[x] = (unsigned char)(black ? 1 : 0);
+  self.row[x] = (int8_t)(black ? 1 : 0);
 }
 
 - (void)addBar:(BOOL)black width:(int)width {
@@ -59,8 +59,8 @@
   }
 }
 
-- (unsigned char *)scaledRow:(int)scale {
-  unsigned char *output = (unsigned char *)malloc(self.rowLength * scale);
+- (int8_t *)scaledRow:(int)scale {
+  int8_t *output = (int8_t *)malloc(self.rowLength * scale);
   for (int i = 0; i < self.rowLength * scale; i++) {
     output[i] = self.row[i / scale];
   }

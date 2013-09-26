@@ -117,8 +117,8 @@ static NSString *MACRO_TRAILER = nil;
   return 5;
 }
 
-+ (unsigned char *)bytesForMessage:(NSString *)msg {
-  return (unsigned char *)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes]; //See 4.4.3 and annex B of ISO/IEC 15438:2001(E)
++ (int8_t *)bytesForMessage:(NSString *)msg {
+  return (int8_t *)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes]; //See 4.4.3 and annex B of ISO/IEC 15438:2001(E)
 }
 
 + (unichar)randomize253State:(unichar)ch codewordPosition:(int)codewordPosition {
@@ -211,7 +211,7 @@ static NSString *MACRO_TRAILER = nil;
     //step K
     if ((startpos + charsProcessed) == msg.length) {
       int min = NSIntegerMax;
-      unsigned char mins[6];
+      int8_t mins[6];
       int intCharCounts[6];
       min = [self findMinimums:charCounts intCharCounts:intCharCounts min:min mins:mins];
       int minCount = [self minimumCount:mins];
@@ -294,7 +294,7 @@ static NSString *MACRO_TRAILER = nil;
     //step R
     if (charsProcessed >= 4) {
       int intCharCounts[6];
-      unsigned char mins[6];
+      int8_t mins[6];
       [self findMinimums:charCounts intCharCounts:intCharCounts min:NSIntegerMax mins:mins];
       int minCount = [self minimumCount:mins];
 
@@ -344,7 +344,7 @@ static NSString *MACRO_TRAILER = nil;
   }
 }
 
-+ (int)findMinimums:(float *)charCounts intCharCounts:(int *)intCharCounts min:(int)min mins:(unsigned char *)mins {
++ (int)findMinimums:(float *)charCounts intCharCounts:(int *)intCharCounts min:(int)min mins:(int8_t *)mins {
   memset(mins, 0, 6);
   for (int i = 0; i < 6; i++) {
     intCharCounts[i] = (int) ceil(charCounts[i]);
@@ -360,7 +360,7 @@ static NSString *MACRO_TRAILER = nil;
   return min;
 }
 
-+ (int)minimumCount:(unsigned char *)mins {
++ (int)minimumCount:(int8_t *)mins {
   int minCount = 0;
   for (int i = 0; i < 6; i++) {
     minCount += mins[i];
