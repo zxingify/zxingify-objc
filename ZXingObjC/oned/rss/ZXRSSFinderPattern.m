@@ -34,7 +34,7 @@
   if (self = [super init]) {
     self.value = aValue;
     self.startEnd = aStartEnd;
-    self.resultPoints = [NSArray arrayWithObjects:
+    self.resultPoints = [NSMutableArray arrayWithObjects:
                          [[ZXResultPoint alloc] initWithX:(float)aStart y:(float)aRowNumber],
                          [[ZXResultPoint alloc] initWithX:(float)anEnd y:(float)aRowNumber],
                          nil];

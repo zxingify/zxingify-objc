@@ -210,7 +210,12 @@ const unichar SETS[1][383] = {
         shift = 3;
         break;
       case NS: {
-        int nsval = (bytes[++i] << 24) + (bytes[++i] << 18) + (bytes[++i] << 12) + (bytes[++i] << 6) + bytes[++i];
+        int nsval1 = bytes[++i] << 24;
+        int nsval2 = bytes[++i] << 18;
+        int nsval3 = bytes[++i] << 12;
+        int nsval4 = bytes[++i] << 6;
+        int nsval5 = bytes[++i];
+        int nsval = nsval1 + nsval2 + nsval3 + nsval4 + nsval5;
         [sb appendFormat:@"%9d", nsval];
         break;
       }

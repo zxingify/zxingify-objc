@@ -354,7 +354,7 @@ static int WORD_SIZE[33] = {
   for (i = 0, n = stuffedBits.size / wordSize; i < n; i++) {
     int value = 0;
     for (int j = 0; j < wordSize; j++) {
-      value |= [stuffedBits get:i * wordSize + j] ? (1 << wordSize - j - 1) : 0;
+      value |= [stuffedBits get:i * wordSize + j] ? (1 << (wordSize - j - 1)) : 0;
     }
     message[i] = value;
   }

@@ -116,7 +116,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       return nil;
     }
     decodedChar = [self patternToChar:pattern];
-    if (decodedChar == -1) {
+    if (decodedChar == 0) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
@@ -264,7 +264,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       return CODE39_ALPHABET[i];
     }
   }
-  return -1;
+  return 0;
 }
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {

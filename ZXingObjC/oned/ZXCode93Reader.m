@@ -92,7 +92,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
       return nil;
     }
     decodedChar = [self patternToChar:pattern];
-    if (decodedChar == -1) {
+    if (decodedChar == 0) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }

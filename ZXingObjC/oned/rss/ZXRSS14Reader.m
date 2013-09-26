@@ -352,7 +352,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     end = [row size] - 1 - end;
   }
   return [[ZXRSSFinderPattern alloc] initWithValue:value
-                                           startEnd:[NSArray arrayWithObjects:[NSNumber numberWithInt:firstElementStart], [startEnd objectAtIndex:1], nil] 
+                                           startEnd:[NSMutableArray arrayWithObjects:[NSNumber numberWithInt:firstElementStart], [startEnd objectAtIndex:1], nil]
                                               start:start
                                                 end:end
                                           rowNumber:rowNumber];

@@ -163,7 +163,7 @@
     [sb appendString:@"\2"]; //Shift 3 Set
     [sb appendFormat:@"%C", (unichar) (c - 96)];
     return 2;
-  } else if (c >= (char)0x0080) {
+  } else if (c >= (unichar)0x0080) {
     [sb appendFormat:@"\1%C", (unichar)0x001e]; //Shift 2, Upper Shift
     int len = 2;
     len += [self encodeChar:(unichar) (c - 128) buffer:sb];

@@ -568,7 +568,7 @@ static float HEIGHT = 2.0f; //mm
 }
 
 - (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic {
-  int map = 1 << len - 1;
+  int map = 1 << (len - 1);
   BOOL last = (pattern & map) != 0; //Initialize to inverse of first bit
   int width = 0;
   for (int i = 0; i < len; i++) {

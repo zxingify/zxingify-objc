@@ -241,10 +241,7 @@ int const GB2312_SUBSET = 1;
     int nextTwoCharsBits = [bits readBits:11];
     unichar next1 = [self toAlphaNumericChar:nextTwoCharsBits / 45];
     unichar next2 = [self toAlphaNumericChar:nextTwoCharsBits % 45];
-    if (next1 == -1 || next2 == -1) {
-      return NO;
-    }
-    
+
     [result appendFormat:@"%C%C", next1, next2];
     count -= 2;
   }
@@ -254,9 +251,6 @@ int const GB2312_SUBSET = 1;
       return NO;
     }
     unichar next1 = [self toAlphaNumericChar:[bits readBits:6]];
-    if (next1 == -1) {
-      return NO;
-    }
     [result appendFormat:@"%C", next1];
   }
   if (fc1InEffect) {
@@ -288,9 +282,6 @@ int const GB2312_SUBSET = 1;
     unichar next1 = [self toAlphaNumericChar:threeDigitsBits / 100];
     unichar next2 = [self toAlphaNumericChar:(threeDigitsBits / 10) % 10];
     unichar next3 = [self toAlphaNumericChar:threeDigitsBits % 10];
-    if (next1 == -1 || next2 == -1 || next3 == -1) {
-      return NO;
-    }
 
     [result appendFormat:@"%C%C%C", next1, next2, next3];
     count -= 3;
@@ -318,9 +309,6 @@ int const GB2312_SUBSET = 1;
       return NO;
     }
     unichar next1 = [self toAlphaNumericChar:digitBits];
-    if (next1 == -1) {
-      return NO;
-    }
     [result appendFormat:@"%C", next1];
   }
   return YES;
