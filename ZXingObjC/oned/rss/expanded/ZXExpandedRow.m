@@ -18,7 +18,7 @@
 
 @interface ZXExpandedRow ()
 
-@property (nonatomic, retain) NSArray *pairs;
+@property (nonatomic, strong) NSArray *pairs;
 @property (nonatomic, assign) int rowNumber;
 @property (nonatomic, assign) BOOL wasReversed;
 

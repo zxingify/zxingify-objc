@@ -27,7 +27,7 @@
 
 @interface ZXBinarizer ()
 
-@property (nonatomic, retain) ZXLuminanceSource *luminanceSource;
+@property (nonatomic, strong) ZXLuminanceSource *luminanceSource;
 
 @end
 

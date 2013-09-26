@@ -26,7 +26,7 @@ int const MAX_EC_CODEWORDS = 512;
 
 @interface ZXPDF417Decoder ()
 
-@property (nonatomic, retain) ZXPDF417ECErrorCorrection *errorCorrection;
+@property (nonatomic, strong) ZXPDF417ECErrorCorrection *errorCorrection;
 
 - (BOOL)correctErrors:(NSMutableArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords;
 - (BOOL)verifyCodewordCount:(NSMutableArray *)codewords numECCodewords:(int)numECCodewords;

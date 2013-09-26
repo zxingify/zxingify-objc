@@ -77,7 +77,7 @@ static NSString *DIGIT_TABLE[] = {
 @interface ZXAztecDecoder ()
 
 @property (nonatomic, assign) int codewordSize;
-@property (nonatomic, retain) ZXAztecDetectorResult *ddata;
+@property (nonatomic, strong) ZXAztecDetectorResult *ddata;
 @property (nonatomic, assign) int invertedBitCount;
 @property (nonatomic, assign) int numCodewords;
 

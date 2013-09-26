@@ -50,7 +50,7 @@
 
 @interface AbstractNegativeBlackBoxTestCase ()
 
-@property (nonatomic, retain) NSMutableArray *testResults;
+@property (nonatomic, strong) NSMutableArray *testResults;
 
 - (NSString *)pathInBundle:(NSURL *)file;
 - (BOOL)checkForFalsePositives:(ZXImage *)image rotationInDegrees:(CGFloat)rotationInDegrees;

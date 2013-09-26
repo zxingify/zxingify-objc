@@ -28,7 +28,7 @@
 
 @interface ZXMultiFormatReader ()
 
-@property (nonatomic, retain) NSMutableArray *readers;
+@property (nonatomic, strong) NSMutableArray *readers;
 
 - (ZXResult *)decodeInternal:(ZXBinaryBitmap *)image error:(NSError **)error;
 

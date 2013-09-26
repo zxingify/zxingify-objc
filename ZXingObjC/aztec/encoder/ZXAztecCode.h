@@ -39,7 +39,7 @@
 /**
  * The symbol image
  */
-@property (nonatomic, retain) ZXBitMatrix *matrix;
+@property (nonatomic, strong) ZXBitMatrix *matrix;
 
 /**
  * Size in pixels (width and height)

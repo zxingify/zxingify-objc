@@ -24,6 +24,6 @@
 
 @interface ZXQRCodeReader : NSObject <ZXReader>
 
-@property (nonatomic, retain, readonly) ZXQRCodeDecoder *decoder;
+@property (nonatomic, strong, readonly) ZXQRCodeDecoder *decoder;
 
 @end

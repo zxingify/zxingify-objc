@@ -37,29 +37,29 @@
 /**
  * Specifies the matrix shape for Data Matrix .
  */
-@property (nonatomic, retain) ZXSymbolShapeHint *dataMatrixShape;
+@property (nonatomic, strong) ZXSymbolShapeHint *dataMatrixShape;
 
 /**
  * Specifies a minimum barcode size. Only applicable to Data Matrix now.
  */
-@property (nonatomic, retain) ZXDimension *minSize;
+@property (nonatomic, strong) ZXDimension *minSize;
 
 /**
  * Specifies a maximum barcode size. Only applicable to Data Matrix now.
  */
-@property (nonatomic, retain) ZXDimension *maxSize;
+@property (nonatomic, strong) ZXDimension *maxSize;
 
 /**
  * Specifies what degree of error correction to use, for example in QR Codes.
  */
-@property (nonatomic, retain) ZXErrorCorrectionLevel *errorCorrectionLevel;
+@property (nonatomic, strong) ZXErrorCorrectionLevel *errorCorrectionLevel;
 
 /**
  * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
  * by format; for example it controls margin before and after the barcode horizontally for
  * most 1D formats.
  */
-@property (nonatomic, retain) NSNumber *margin;
+@property (nonatomic, strong) NSNumber *margin;
 
 /**
  * Specifies whether to use compact mode for PDF417.
@@ -74,6 +74,6 @@
 /**
  * Specifies the minimum and maximum number of rows and columns for PDF417.
  */
-@property (nonatomic, retain) ZXDimensions *pdf417Dimensions;
+@property (nonatomic, strong) ZXDimensions *pdf417Dimensions;
 
 @end

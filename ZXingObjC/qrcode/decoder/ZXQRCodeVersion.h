@@ -28,7 +28,7 @@
 @property (nonatomic, assign, readonly) int ecCodewordsPerBlock;
 @property (nonatomic, assign, readonly) int numBlocks;
 @property (nonatomic, assign, readonly) int totalECCodewords;
-@property (nonatomic, retain, readonly) NSArray *ecBlocks;
+@property (nonatomic, strong, readonly) NSArray *ecBlocks;
 
 - (id)initWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)ecBlocks;
 - (id)initWithEcCodewordsPerBlock:(int)ecCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2;
@@ -62,8 +62,8 @@
 @interface ZXQRCodeVersion : NSObject
 
 @property (nonatomic, assign, readonly) int versionNumber;
-@property (nonatomic, retain, readonly) NSArray *alignmentPatternCenters;
-@property (nonatomic, retain, readonly) NSArray *ecBlocks;
+@property (nonatomic, strong, readonly) NSArray *alignmentPatternCenters;
+@property (nonatomic, strong, readonly) NSArray *ecBlocks;
 @property (nonatomic, assign, readonly) int totalCodewords;
 @property (nonatomic, assign, readonly) int dimensionForVersion;
 

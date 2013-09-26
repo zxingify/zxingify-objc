@@ -18,7 +18,7 @@
 
 @interface ZXBlockParsedResult : NSObject
 
-@property (nonatomic, retain, readonly) ZXDecodedInformation *decodedInformation;
+@property (nonatomic, strong, readonly) ZXDecodedInformation *decodedInformation;
 @property (nonatomic, assign, readonly) BOOL finished;
 
 - (id)initWithFinished:(BOOL)finished;

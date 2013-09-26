@@ -35,7 +35,7 @@ extern NSString *const POUND;
 @property (nonatomic, copy, readonly) NSString *price;
 @property (nonatomic, copy, readonly) NSString *priceIncrement;
 @property (nonatomic, copy, readonly) NSString *priceCurrency;
-@property (nonatomic, retain, readonly) NSMutableDictionary *uncommonAIs;
+@property (nonatomic, strong, readonly) NSMutableDictionary *uncommonAIs;
 
 - (id)initWithRawText:(NSString *)rawText productID:(NSString *)productID sscc:(NSString *)sscc lotNumber:(NSString *)lotNumber
        productionDate:(NSString *)productionDate packagingDate:(NSString *)packagingDate bestBeforeDate:(NSString *)bestBeforeDate

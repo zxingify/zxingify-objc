@@ -18,8 +18,8 @@
 
 @interface ZXSMSParsedResult : ZXParsedResult
 
-@property (nonatomic, retain, readonly) NSArray *numbers;
-@property (nonatomic, retain, readonly) NSArray *vias;
+@property (nonatomic, strong, readonly) NSArray *numbers;
+@property (nonatomic, strong, readonly) NSArray *vias;
 @property (nonatomic, copy, readonly) NSString *subject;
 @property (nonatomic, copy, readonly) NSString *body;
 

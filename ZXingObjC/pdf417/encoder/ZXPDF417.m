@@ -508,7 +508,7 @@ static float HEIGHT = 2.0f; //mm
 
 @interface ZXPDF417 ()
 
-@property (nonatomic, retain) ZXBarcodeMatrix *barcodeMatrix;
+@property (nonatomic, strong) ZXBarcodeMatrix *barcodeMatrix;
 @property (nonatomic, assign) int minCols;
 @property (nonatomic, assign) int maxCols;
 @property (nonatomic, assign) int minRows;

@@ -56,7 +56,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
 @interface ZXCodaBarReader ()
 
-@property (nonatomic, retain) NSMutableString *decodeRowResult;
+@property (nonatomic, strong) NSMutableString *decodeRowResult;
 @property (nonatomic, assign) int *counters;
 @property (nonatomic, assign) int countersLen;
 @property (nonatomic, assign) int counterLength;

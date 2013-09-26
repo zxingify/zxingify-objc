@@ -28,7 +28,7 @@
 
 @interface ZXPDF417Reader ()
 
-@property (nonatomic, retain) ZXPDF417Decoder *decoder;
+@property (nonatomic, strong) ZXPDF417Decoder *decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
 - (int)findPatternStart:(int)x y:(int)y image:(ZXBitMatrix *)image;

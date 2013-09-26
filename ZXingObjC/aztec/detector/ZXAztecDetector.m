@@ -55,7 +55,7 @@
 @interface ZXAztecDetector ()
 
 @property (nonatomic, assign) BOOL compact;
-@property (nonatomic, retain) ZXBitMatrix *image;
+@property (nonatomic, strong) ZXBitMatrix *image;
 @property (nonatomic, assign) int nbCenterLayers;
 @property (nonatomic, assign) int nbDataBlocks;
 @property (nonatomic, assign) int nbLayers;

@@ -18,8 +18,8 @@
 
 @interface ZXModulusGF : NSObject
 
-@property (nonatomic, retain) ZXModulusPoly *one;
-@property (nonatomic, retain) ZXModulusPoly *zero;
+@property (nonatomic, strong) ZXModulusPoly *one;
+@property (nonatomic, strong) ZXModulusPoly *zero;
 
 + (ZXModulusGF *)PDF417_GF;
 

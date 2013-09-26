@@ -21,7 +21,7 @@
 @interface ZXDataMatrixDataBlock ()
 
 @property (nonatomic, assign) int numDataCodewords;
-@property (nonatomic, retain) NSMutableArray *codewords;
+@property (nonatomic, strong) NSMutableArray *codewords;
 
 @end
 

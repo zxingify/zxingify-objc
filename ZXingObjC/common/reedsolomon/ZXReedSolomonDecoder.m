@@ -21,7 +21,7 @@
 
 @interface ZXReedSolomonDecoder ()
 
-@property (nonatomic, retain) ZXGenericGF *field;
+@property (nonatomic, strong) ZXGenericGF *field;
 
 - (NSArray *)runEuclideanAlgorithm:(ZXGenericGFPoly *)a b:(ZXGenericGFPoly *)b R:(int)R error:(NSError **)error;
 - (NSArray *)findErrorLocations:(ZXGenericGFPoly *)errorLocator error:(NSError **)error;

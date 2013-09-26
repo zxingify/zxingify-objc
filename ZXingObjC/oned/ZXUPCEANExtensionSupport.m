@@ -24,8 +24,8 @@ const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
 
 @interface ZXUPCEANExtensionSupport ()
 
-@property (nonatomic, retain) ZXUPCEANExtension2Support *twoSupport;
-@property (nonatomic, retain) ZXUPCEANExtension5Support *fiveSupport;
+@property (nonatomic, strong) ZXUPCEANExtension2Support *twoSupport;
+@property (nonatomic, strong) ZXUPCEANExtension5Support *fiveSupport;
 
 @end
 

@@ -23,9 +23,9 @@
 
 @interface ZXFinderPatternInfo : NSObject
 
-@property (nonatomic, retain, readonly) ZXQRCodeFinderPattern *bottomLeft;
-@property (nonatomic, retain, readonly) ZXQRCodeFinderPattern *topLeft;
-@property (nonatomic, retain, readonly) ZXQRCodeFinderPattern *topRight;
+@property (nonatomic, strong, readonly) ZXQRCodeFinderPattern *bottomLeft;
+@property (nonatomic, strong, readonly) ZXQRCodeFinderPattern *topLeft;
+@property (nonatomic, strong, readonly) ZXQRCodeFinderPattern *topRight;
 
 - (id)initWithPatternCenters:(NSArray *)patternCenters;
 

@@ -40,7 +40,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
-@property (nonatomic, retain) NSMutableString *decodeRowResult;
+@property (nonatomic, strong) NSMutableString *decodeRowResult;
 
 - (BOOL)checkChecksums:(NSMutableString *)result error:(NSError **)error ;
 - (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError **)error ;

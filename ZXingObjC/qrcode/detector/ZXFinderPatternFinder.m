@@ -33,10 +33,10 @@ int const FINDER_PATTERN_MAX_MODULES = 57;
 NSInteger centerCompare(id center1, id center2, void *context);
 NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
-@property (nonatomic, retain) ZXBitMatrix *image;
-@property (nonatomic, retain) NSMutableArray *possibleCenters;
+@property (nonatomic, strong) ZXBitMatrix *image;
+@property (nonatomic, strong) NSMutableArray *possibleCenters;
 @property (nonatomic, assign) BOOL hasSkipped;
-@property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
 
 - (float)centerFromEnd:(int *)stateCount end:(int)end;
 - (int)findRowSkip;

@@ -26,7 +26,7 @@
 
 @interface ZXMultiFormatUPCEANReader ()
 
-@property (nonatomic, retain) NSMutableArray *readers;
+@property (nonatomic, strong) NSMutableArray *readers;
 
 @end
 

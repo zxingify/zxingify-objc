@@ -18,22 +18,22 @@
 
 @interface ZXAddressBookParsedResult : ZXParsedResult
 
-@property (nonatomic, readonly, retain) NSArray *names;
-@property (nonatomic, readonly, retain) NSArray *nicknames;
+@property (nonatomic, readonly, strong) NSArray *names;
+@property (nonatomic, readonly, strong) NSArray *nicknames;
 @property (nonatomic, readonly, copy) NSString *pronunciation;
-@property (nonatomic, readonly, retain) NSArray *phoneNumbers;
-@property (nonatomic, readonly, retain) NSArray *phoneTypes;
-@property (nonatomic, readonly, retain) NSArray *emails;
-@property (nonatomic, readonly, retain) NSArray *emailTypes;
+@property (nonatomic, readonly, strong) NSArray *phoneNumbers;
+@property (nonatomic, readonly, strong) NSArray *phoneTypes;
+@property (nonatomic, readonly, strong) NSArray *emails;
+@property (nonatomic, readonly, strong) NSArray *emailTypes;
 @property (nonatomic, readonly, copy) NSString *instantMessenger;
 @property (nonatomic, readonly, copy) NSString *note;
-@property (nonatomic, readonly, retain) NSArray *addresses;
-@property (nonatomic, readonly, retain) NSArray *addressTypes;
+@property (nonatomic, readonly, strong) NSArray *addresses;
+@property (nonatomic, readonly, strong) NSArray *addressTypes;
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *org;
-@property (nonatomic, readonly, retain) NSArray *urls;
+@property (nonatomic, readonly, strong) NSArray *urls;
 @property (nonatomic, readonly, copy) NSString *birthday;
-@property (nonatomic, readonly, retain) NSArray *geo;
+@property (nonatomic, readonly, strong) NSArray *geo;
 
 - (id)initWithNames:(NSArray *)names phoneNumbers:(NSArray *)phoneNumbers
          phoneTypes:(NSArray *)phoneTypes emails:(NSArray *)emails emailTypes:(NSArray *)emailTypes

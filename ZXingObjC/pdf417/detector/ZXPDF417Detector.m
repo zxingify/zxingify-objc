@@ -50,7 +50,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 
 @interface ZXPDF417Detector ()
 
-@property (nonatomic, retain) ZXBinaryBitmap *image;
+@property (nonatomic, strong) ZXBinaryBitmap *image;
 
 - (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix tryHarder:(BOOL)tryHarder;
 - (NSMutableArray *)findVertices180:(ZXBitMatrix *)matrix tryHarder:(BOOL)tryHarder;

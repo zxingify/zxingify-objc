@@ -29,7 +29,7 @@
 
 @interface ZXQRCodeDecoder ()
 
-@property (nonatomic, retain) ZXReedSolomonDecoder *rsDecoder;
+@property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
 
 - (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error;
 

@@ -83,9 +83,9 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 
 @interface ZXUPCEANReader ()
 
-@property (nonatomic, retain) NSMutableString *decodeRowNSMutableString;
-@property (nonatomic, retain) ZXUPCEANExtensionSupport *extensionReader;
-@property (nonatomic, retain) ZXEANManufacturerOrgSupport *eanManSupport;
+@property (nonatomic, strong) NSMutableString *decodeRowNSMutableString;
+@property (nonatomic, strong) ZXUPCEANExtensionSupport *extensionReader;
+@property (nonatomic, strong) ZXEANManufacturerOrgSupport *eanManSupport;
 
 @end
 

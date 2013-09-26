@@ -18,7 +18,7 @@
 
 @interface ZXDataMatrixECBlocks ()
 
-@property (nonatomic, retain) NSArray *ecBlocks;
+@property (nonatomic, strong) NSArray *ecBlocks;
 @property (nonatomic, assign) int ecCodewords;
 
 @end
@@ -75,7 +75,7 @@ static NSArray *VERSIONS = nil;
 
 @interface ZXDataMatrixVersion ()
 
-@property (nonatomic, retain) ZXDataMatrixECBlocks *ecBlocks;
+@property (nonatomic, strong) ZXDataMatrixECBlocks *ecBlocks;
 @property (nonatomic, assign) int dataRegionSizeRows;
 @property (nonatomic, assign) int dataRegionSizeColumns;
 @property (nonatomic, assign) int symbolSizeColumns;

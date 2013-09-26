@@ -28,7 +28,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 @property (nonatomic, assign) unsigned char *luminances;
 @property (nonatomic, assign) int luminancesCount;
-@property (nonatomic, retain) NSMutableArray *buckets;
+@property (nonatomic, strong) NSMutableArray *buckets;
 
 - (void)initArrays:(int)luminanceSize;
 - (int)estimateBlackPoint:(NSArray *)buckets;

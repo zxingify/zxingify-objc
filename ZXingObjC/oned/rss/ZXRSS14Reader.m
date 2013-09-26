@@ -34,8 +34,8 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 @interface ZXRSS14Reader ()
 
-@property (nonatomic, retain) NSMutableArray *possibleLeftPairs;
-@property (nonatomic, retain) NSMutableArray *possibleRightPairs;
+@property (nonatomic, strong) NSMutableArray *possibleLeftPairs;
+@property (nonatomic, strong) NSMutableArray *possibleRightPairs;
 
 - (void)addOrTally:(NSMutableArray *)possiblePairs pair:(ZXPair *)pair;
 - (BOOL)adjustOddEvenCounts:(BOOL)outsideChar numModules:(int)numModules;

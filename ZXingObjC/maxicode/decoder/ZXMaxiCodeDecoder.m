@@ -30,7 +30,7 @@ const int ODD = 2;
 
 @interface ZXMaxiCodeDecoder ()
 
-@property (nonatomic, retain) ZXReedSolomonDecoder *rsDecoder;
+@property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
 
 - (BOOL)correctErrors:(NSMutableArray *)codewordBytes start:(int)start dataCodewords:(int)dataCodewords
           ecCodewords:(int)ecCodewords mode:(int)mode error:(NSError **)error;

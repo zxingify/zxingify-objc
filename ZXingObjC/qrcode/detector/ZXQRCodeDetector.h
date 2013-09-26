@@ -24,8 +24,8 @@
 
 @interface ZXQRCodeDetector : NSObject
 
-@property (nonatomic, retain, readonly) ZXBitMatrix *image;
-@property (nonatomic, assign, readonly) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, strong, readonly) ZXBitMatrix *image;
+@property (nonatomic, weak, readonly) id <ZXResultPointCallback> resultPointCallback;
 
 - (id)initWithImage:(ZXBitMatrix *)image;
 - (ZXDetectorResult *)detectWithError:(NSError **)error;

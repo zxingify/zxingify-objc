@@ -25,7 +25,7 @@
 @interface ZXDataMatrixDataBlock : NSObject
 
 @property (nonatomic, assign, readonly) int numDataCodewords;
-@property (nonatomic, retain, readonly) NSMutableArray *codewords;
+@property (nonatomic, strong, readonly) NSMutableArray *codewords;
 
 + (NSArray *)dataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version;
 

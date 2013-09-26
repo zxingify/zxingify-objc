@@ -23,7 +23,7 @@
 
 @interface ZXDataMatrixECBlocks : NSObject
 
-@property (nonatomic, retain, readonly) NSArray *ecBlocks;
+@property (nonatomic, strong, readonly) NSArray *ecBlocks;
 @property (nonatomic, assign, readonly) int ecCodewords;
 
 @end
@@ -48,7 +48,7 @@
 
 @interface ZXDataMatrixVersion : NSObject
 
-@property (nonatomic, retain, readonly) ZXDataMatrixECBlocks *ecBlocks;
+@property (nonatomic, strong, readonly) ZXDataMatrixECBlocks *ecBlocks;
 @property (nonatomic, assign, readonly) int dataRegionSizeColumns;
 @property (nonatomic, assign, readonly) int dataRegionSizeRows;
 @property (nonatomic, assign, readonly) int symbolSizeColumns;

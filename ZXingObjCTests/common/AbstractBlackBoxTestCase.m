@@ -24,10 +24,10 @@
 
 @interface AbstractBlackBoxTestCase ()
 
-@property (nonatomic, retain) id<ZXReader> barcodeReader;
+@property (nonatomic, strong) id<ZXReader> barcodeReader;
 @property (nonatomic, assign) ZXBarcodeFormat expectedFormat;
 @property (nonatomic, copy) NSString *testBase;
-@property (nonatomic, retain) NSMutableArray *testResults;
+@property (nonatomic, strong) NSMutableArray *testResults;
 
 - (void)runTests;
 - (NSString *)pathInBundle:(NSURL *)file;

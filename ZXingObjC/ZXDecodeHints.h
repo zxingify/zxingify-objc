@@ -35,7 +35,7 @@
 /**
  * Allowed lengths of encoded data -- reject anything else. Maps to an int[].
  */
-@property (nonatomic, retain) NSArray *allowedLengths;
+@property (nonatomic, strong) NSArray *allowedLengths;
 
 /**
  * Specifies what character encoding to use when decoding, where applicable (type String)
@@ -45,7 +45,7 @@
 /**
  * Unspecified, application-specific hint.
  */
-@property (nonatomic, retain) id other;
+@property (nonatomic, strong) id other;
 
 /**
  * Image is a pure monochrome image of a barcode.
@@ -56,7 +56,7 @@
  * The caller needs to be notified via callback when a possible {@link ResultPoint}
  * is found. Maps to a {@link ResultPointCallback}.
  */
-@property (nonatomic, retain) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, strong) id <ZXResultPointCallback> resultPointCallback;
 
 /**
  * Spend more time to try to find a barcode; optimize for accuracy, not speed.

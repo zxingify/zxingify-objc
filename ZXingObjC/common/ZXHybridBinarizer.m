@@ -26,7 +26,7 @@ const int MIN_DYNAMIC_RANGE = 24;
 
 @interface ZXHybridBinarizer ()
 
-@property (nonatomic, retain) ZXBitMatrix *matrix;
+@property (nonatomic, strong) ZXBitMatrix *matrix;
 
 - (int **)calculateBlackPoints:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height;
 - (void)calculateThresholdForBlock:(unsigned char *)luminances subWidth:(int)subWidth subHeight:(int)subHeight width:(int)width height:(int)height blackPoints:(int **)blackPoints matrix:(ZXBitMatrix *)matrix;

@@ -33,8 +33,8 @@
 
 @interface ZXQRCodeDetector ()
 
-@property (nonatomic, retain) ZXBitMatrix *image;
-@property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, strong) ZXBitMatrix *image;
+@property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
 
 - (float)calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern;
 + (ZXPerspectiveTransform *)createTransform:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft alignmentPattern:(ZXResultPoint *)alignmentPattern dimension:(int)dimension;

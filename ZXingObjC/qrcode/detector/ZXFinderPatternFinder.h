@@ -29,8 +29,8 @@ extern int const FINDER_PATTERN_MAX_MODULES;
 
 @interface ZXFinderPatternFinder : NSObject
 
-@property (nonatomic, retain, readonly) ZXBitMatrix *image;
-@property (nonatomic, retain, readonly) NSMutableArray *possibleCenters;
+@property (nonatomic, strong, readonly) ZXBitMatrix *image;
+@property (nonatomic, strong, readonly) NSMutableArray *possibleCenters;
 
 - (id)initWithImage:(ZXBitMatrix *)image;
 - (id)initWithImage:(ZXBitMatrix *)image resultPointCallback:(id <ZXResultPointCallback>)resultPointCallback;

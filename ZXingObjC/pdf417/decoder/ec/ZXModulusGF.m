@@ -19,8 +19,8 @@
 
 @interface ZXModulusGF ()
 
-@property (nonatomic, retain) NSMutableArray *expTable;
-@property (nonatomic, retain) NSMutableArray *logTable;
+@property (nonatomic, strong) NSMutableArray *expTable;
+@property (nonatomic, strong) NSMutableArray *logTable;
 @property (nonatomic, assign) int modulus;
 
 @end

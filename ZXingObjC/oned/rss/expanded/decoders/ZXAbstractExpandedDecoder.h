@@ -18,8 +18,8 @@
 
 @interface ZXAbstractExpandedDecoder : NSObject
 
-@property (nonatomic, retain, readonly) ZXGeneralAppIdDecoder *generalDecoder;
-@property (nonatomic, retain, readonly) ZXBitArray *information;
+@property (nonatomic, strong, readonly) ZXGeneralAppIdDecoder *generalDecoder;
+@property (nonatomic, strong, readonly) ZXBitArray *information;
 
 - (id)initWithInformation:(ZXBitArray *)information;
 - (NSString *)parseInformationWithError:(NSError **)error;

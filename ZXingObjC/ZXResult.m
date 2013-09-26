@@ -21,9 +21,9 @@
 @property (nonatomic, copy)   NSString *text;
 @property (nonatomic, assign) unsigned char *rawBytes;
 @property (nonatomic, assign) int length;
-@property (nonatomic, retain) NSMutableArray *resultPoints;
+@property (nonatomic, strong) NSMutableArray *resultPoints;
 @property (nonatomic, assign) ZXBarcodeFormat barcodeFormat;
-@property (nonatomic, retain) NSMutableDictionary *resultMetadata;
+@property (nonatomic, strong) NSMutableDictionary *resultMetadata;
 @property (nonatomic, assign) long timestamp;
 
 @end

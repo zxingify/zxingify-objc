@@ -20,11 +20,11 @@ extern int const NUM_MASK_PATTERNS;
 
 @interface ZXQRCode : NSObject
 
-@property (nonatomic, retain) ZXMode *mode;
-@property (nonatomic, retain) ZXErrorCorrectionLevel *ecLevel;
-@property (nonatomic, retain) ZXQRCodeVersion *version;
+@property (nonatomic, strong) ZXMode *mode;
+@property (nonatomic, strong) ZXErrorCorrectionLevel *ecLevel;
+@property (nonatomic, strong) ZXQRCodeVersion *version;
 @property (nonatomic, assign) int maskPattern;
-@property (nonatomic, retain) ZXByteMatrix *matrix;
+@property (nonatomic, strong) ZXByteMatrix *matrix;
 
 + (BOOL)isValidMaskPattern:(int)maskPattern;
 

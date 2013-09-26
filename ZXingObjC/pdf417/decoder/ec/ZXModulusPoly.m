@@ -21,7 +21,7 @@
 
 @property (nonatomic, assign) int *coefficients;
 @property (nonatomic, assign) int coefficientsLen;
-@property (nonatomic, retain) ZXModulusGF *field;
+@property (nonatomic, strong) ZXModulusGF *field;
 
 @end
 

@@ -22,15 +22,15 @@
 
 @interface ZXAlignmentPatternFinder ()
 
-@property (nonatomic, retain) ZXBitMatrix *image;
-@property (nonatomic, retain) NSMutableArray *possibleCenters;
+@property (nonatomic, strong) ZXBitMatrix *image;
+@property (nonatomic, strong) NSMutableArray *possibleCenters;
 @property (nonatomic, assign) int startX;
 @property (nonatomic, assign) int startY;
 @property (nonatomic, assign) int width;
 @property (nonatomic, assign) int height;
 @property (nonatomic, assign) float moduleSize;
 @property (nonatomic, assign) int *crossCheckStateCount;
-@property (nonatomic, assign) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
 
 - (float)centerFromEnd:(int *)stateCount end:(int)end;
 - (BOOL)foundPatternCross:(int *)stateCount;

@@ -27,7 +27,7 @@
 
 @interface ZXDataMatrixReader ()
 
-@property (nonatomic, retain) ZXDataMatrixDecoder *decoder;
+@property (nonatomic, strong) ZXDataMatrixDecoder *decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
 - (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;

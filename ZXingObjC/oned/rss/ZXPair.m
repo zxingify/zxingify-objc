@@ -20,7 +20,7 @@
 @interface ZXPair ()
 
 @property (nonatomic, assign) int count;
-@property (nonatomic, retain) ZXRSSFinderPattern *finderPattern;
+@property (nonatomic, strong) ZXRSSFinderPattern *finderPattern;
 
 @end
 

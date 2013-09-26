@@ -20,7 +20,7 @@
 
 @property (nonatomic, assign) int bitsLeftInNextByte;
 @property (nonatomic, assign) int nextByte;
-@property (nonatomic, retain) NSMutableData *output;
+@property (nonatomic, strong) NSMutableData *output;
 
 @end
 

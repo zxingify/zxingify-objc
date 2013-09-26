@@ -18,9 +18,9 @@
 
 @interface ZXExpandedPair : NSObject
 
-@property (nonatomic, retain, readonly) ZXDataCharacter *leftChar;
-@property (nonatomic, retain, readonly) ZXDataCharacter *rightChar;
-@property (nonatomic, retain, readonly) ZXRSSFinderPattern *finderPattern;
+@property (nonatomic, strong, readonly) ZXDataCharacter *leftChar;
+@property (nonatomic, strong, readonly) ZXDataCharacter *rightChar;
+@property (nonatomic, strong, readonly) ZXRSSFinderPattern *finderPattern;
 @property (nonatomic, assign, readonly) BOOL mayBeLast;
 @property (nonatomic, assign, readonly) BOOL mustBeLast;
 

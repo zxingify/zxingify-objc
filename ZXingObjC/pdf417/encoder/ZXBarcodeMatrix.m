@@ -21,7 +21,7 @@
 
 @property (nonatomic, assign) int currentRowIndex;
 @property (nonatomic, assign) int height;
-@property (nonatomic, retain) NSArray *rowMatrix;
+@property (nonatomic, strong) NSArray *rowMatrix;
 @property (nonatomic, assign) int width;
 
 @end

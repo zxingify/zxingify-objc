@@ -35,7 +35,7 @@ NSString *const POUND = @"LB";
 @property (nonatomic, copy) NSString *price;
 @property (nonatomic, copy) NSString *priceIncrement;
 @property (nonatomic, copy) NSString *priceCurrency;
-@property (nonatomic, retain) NSMutableDictionary *uncommonAIs;
+@property (nonatomic, strong) NSMutableDictionary *uncommonAIs;
 
 - (BOOL)equalsOrNil:(id)o1 o2:(id)o2;
 

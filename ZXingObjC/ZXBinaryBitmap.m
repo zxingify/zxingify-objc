@@ -21,8 +21,8 @@
 
 @interface ZXBinaryBitmap ()
 
-@property (nonatomic, retain) ZXBinarizer *binarizer;
-@property (nonatomic, retain) ZXBitMatrix *matrix;
+@property (nonatomic, strong) ZXBinarizer *binarizer;
+@property (nonatomic, strong) ZXBitMatrix *matrix;
 
 @end
 

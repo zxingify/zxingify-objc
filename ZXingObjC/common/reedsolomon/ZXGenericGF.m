@@ -19,8 +19,8 @@
 
 @interface ZXGenericGF ()
 
-@property (nonatomic, retain) ZXGenericGFPoly *zero;
-@property (nonatomic, retain) ZXGenericGFPoly *one;
+@property (nonatomic, strong) ZXGenericGFPoly *zero;
+@property (nonatomic, strong) ZXGenericGFPoly *one;
 @property (nonatomic, assign) int size;
 @property (nonatomic, assign) int *expTable;
 @property (nonatomic, assign) int *logTable;

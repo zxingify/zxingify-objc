@@ -20,8 +20,8 @@
 
 @interface ZXEncoderContext ()
 
-@property (nonatomic, retain) ZXDimension *maxSize;
-@property (nonatomic, retain) ZXDimension *minSize;
+@property (nonatomic, strong) ZXDimension *maxSize;
+@property (nonatomic, strong) ZXDimension *minSize;
 
 @end
 

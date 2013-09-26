@@ -28,7 +28,7 @@ const int MATRIX_HEIGHT = 33;
 
 @interface ZXMaxiCodeReader ()
 
-@property (nonatomic, retain) ZXMaxiCodeDecoder *decoder;
+@property (nonatomic, strong) ZXMaxiCodeDecoder *decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
 

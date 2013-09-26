@@ -23,8 +23,8 @@
 @property (nonatomic, assign) int newEncoding;
 @property (nonatomic, assign) int pos;
 @property (nonatomic, assign) int skipAtEnd;
-@property (nonatomic, retain) ZXSymbolShapeHint *symbolShape;
-@property (nonatomic, retain) ZXSymbolInfo *symbolInfo;
+@property (nonatomic, strong) ZXSymbolShapeHint *symbolShape;
+@property (nonatomic, strong) ZXSymbolInfo *symbolInfo;
 
 - (id)initWithMessage:(NSString *)msg;
 - (void)setSizeConstraints:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize;

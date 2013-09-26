@@ -22,7 +22,7 @@
 
 @interface AbstractBlackBoxTestCase : SenTestCase
 
-@property (nonatomic, retain, readonly) id<ZXReader> barcodeReader;
+@property (nonatomic, strong, readonly) id<ZXReader> barcodeReader;
 
 - (id)initWithInvocation:(NSInvocation *)anInvocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat;
 + (NSString *)barcodeFormatAsString:(ZXBarcodeFormat)format;

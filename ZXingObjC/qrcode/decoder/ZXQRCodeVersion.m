@@ -24,7 +24,7 @@
 @property (nonatomic, assign) int ecCodewordsPerBlock;
 @property (nonatomic, assign) int numBlocks;
 @property (nonatomic, assign) int totalECCodewords;
-@property (nonatomic, retain) NSArray *ecBlocks;
+@property (nonatomic, strong) NSArray *ecBlocks;
 
 @end
 
@@ -126,8 +126,8 @@ static NSArray *VERSIONS = nil;
 @interface ZXQRCodeVersion ()
 
 @property (nonatomic, assign) int versionNumber;
-@property (nonatomic, retain) NSArray *alignmentPatternCenters;
-@property (nonatomic, retain) NSArray *ecBlocks;
+@property (nonatomic, strong) NSArray *alignmentPatternCenters;
+@property (nonatomic, strong) NSArray *ecBlocks;
 @property (nonatomic, assign) int totalCodewords;
 
 @end

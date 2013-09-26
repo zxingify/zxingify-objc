@@ -33,7 +33,7 @@
 
 @interface ZXBinarizer : NSObject
 
-@property (nonatomic, retain, readonly) ZXLuminanceSource *luminanceSource;
+@property (nonatomic, strong, readonly) ZXLuminanceSource *luminanceSource;
 @property (nonatomic, assign, readonly) int width;
 @property (nonatomic, assign, readonly) int height;
 

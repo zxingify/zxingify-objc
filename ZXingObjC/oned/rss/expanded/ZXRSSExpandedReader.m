@@ -88,8 +88,8 @@ const int MAX_PAIRS = 11;
   BOOL startFromEven;
 }
 
-@property (nonatomic, retain) NSMutableArray *pairs;
-@property (nonatomic, retain) NSMutableArray *rows;
+@property (nonatomic, strong) NSMutableArray *pairs;
+@property (nonatomic, strong) NSMutableArray *rows;
 
 - (BOOL)adjustOddEvenCounts:(int)numModules;
 - (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;

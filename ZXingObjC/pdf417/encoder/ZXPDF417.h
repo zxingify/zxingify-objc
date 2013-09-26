@@ -23,7 +23,7 @@
  */
 @interface ZXPDF417 : NSObject
 
-@property (nonatomic, retain, readonly) ZXBarcodeMatrix *barcodeMatrix;
+@property (nonatomic, strong, readonly) ZXBarcodeMatrix *barcodeMatrix;
 @property (nonatomic, assign) BOOL compact;
 @property (nonatomic, assign) ZXCompaction compaction;
 

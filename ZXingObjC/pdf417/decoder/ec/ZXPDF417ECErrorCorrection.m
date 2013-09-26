@@ -20,7 +20,7 @@
 
 @interface ZXPDF417ECErrorCorrection ()
 
-@property (nonatomic, retain) ZXModulusGF *field;
+@property (nonatomic, strong) ZXModulusGF *field;
 
 - (NSArray *)runEuclideanAlgorithm:(ZXModulusPoly *)a b:(ZXModulusPoly *)b R:(int)R;
 - (NSArray *)findErrorLocations:(ZXModulusPoly *)errorLocator;

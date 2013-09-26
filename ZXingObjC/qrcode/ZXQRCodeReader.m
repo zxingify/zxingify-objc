@@ -28,7 +28,7 @@
 
 @interface ZXQRCodeReader ()
 
-@property (nonatomic, retain) ZXQRCodeDecoder *decoder;
+@property (nonatomic, strong) ZXQRCodeDecoder *decoder;
 
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image;
 - (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image;

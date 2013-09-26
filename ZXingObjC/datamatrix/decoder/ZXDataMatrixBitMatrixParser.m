@@ -21,9 +21,9 @@
 
 @interface ZXDataMatrixBitMatrixParser ()
 
-@property (nonatomic, retain) ZXBitMatrix *mappingBitMatrix;
-@property (nonatomic, retain) ZXBitMatrix *readMappingMatrix;
-@property (nonatomic, retain) ZXDataMatrixVersion *version;
+@property (nonatomic, strong) ZXBitMatrix *mappingBitMatrix;
+@property (nonatomic, strong) ZXBitMatrix *readMappingMatrix;
+@property (nonatomic, strong) ZXDataMatrixVersion *version;
 
 - (ZXDataMatrixVersion *) readVersion:(ZXBitMatrix *)bitMatrix;
 

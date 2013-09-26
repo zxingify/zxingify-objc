@@ -23,7 +23,7 @@
 
 @interface ZXFormatInformation : NSObject
 
-@property (nonatomic, retain, readonly) ZXErrorCorrectionLevel *errorCorrectionLevel;
+@property (nonatomic, strong, readonly) ZXErrorCorrectionLevel *errorCorrectionLevel;
 @property (nonatomic, assign, readonly) char dataMask;
 
 + (int)numBitsDiffering:(int)a b:(int)b;

@@ -116,13 +116,13 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 @interface ZXCapture : NSObject {
 }
 
-@property (nonatomic,assign) id<ZXCaptureDelegate> delegate;
+@property (nonatomic,weak) id<ZXCaptureDelegate> delegate;
 @property (nonatomic,copy) NSString *captureToFilename;
 @property (nonatomic) CGAffineTransform transform;
 @property (nonatomic, readonly) void *output;
-@property (nonatomic, readonly) CALayer *layer;
-@property (nonatomic, retain) id<ZXReader> reader;
-@property (nonatomic, retain) ZXDecodeHints *hints;
+@property (weak, nonatomic, readonly) CALayer *layer;
+@property (nonatomic, strong) id<ZXReader> reader;
+@property (nonatomic, strong) ZXDecodeHints *hints;
 @property (nonatomic, assign) CGFloat rotation;
 
 - (id)init;

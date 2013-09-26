@@ -28,8 +28,8 @@
 
 @interface ResultPointsAndTransitions : NSObject
 
-@property(nonatomic, retain) ZXResultPoint *from;
-@property(nonatomic, retain) ZXResultPoint *to;
+@property(nonatomic, strong) ZXResultPoint *from;
+@property(nonatomic, strong) ZXResultPoint *to;
 @property(nonatomic, assign) int transitions;
 
 - (id)initWithFrom:(ZXResultPoint *)from to:(ZXResultPoint *)to transitions:(int)transitions;
@@ -66,8 +66,8 @@
 
 @interface ZXDataMatrixDetector ()
 
-@property (nonatomic, retain) ZXBitMatrix *image;
-@property (nonatomic, retain) ZXWhiteRectangleDetector *rectangleDetector;
+@property (nonatomic, strong) ZXBitMatrix *image;
+@property (nonatomic, strong) ZXWhiteRectangleDetector *rectangleDetector;
 
 - (ZXResultPoint *)correctTopRight:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimension:(int)dimension;
 - (ZXResultPoint *)correctTopRightRectangular:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight;

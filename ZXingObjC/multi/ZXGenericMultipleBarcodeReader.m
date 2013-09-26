@@ -24,7 +24,7 @@ int const MAX_DEPTH = 4;
 
 @interface ZXGenericMultipleBarcodeReader ()
 
-@property (nonatomic, assign) id<ZXReader> delegate;
+@property (nonatomic, weak) id<ZXReader> delegate;
 
 - (BOOL)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
                  xOffset:(int)xOffset yOffset:(int)yOffset currentDepth:(int)currentDepth error:(NSError **)error;

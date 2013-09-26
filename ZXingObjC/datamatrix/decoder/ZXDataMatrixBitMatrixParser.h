@@ -18,7 +18,7 @@
 
 @interface ZXDataMatrixBitMatrixParser : NSObject
 
-@property (nonatomic, retain, readonly) ZXDataMatrixVersion *version;
+@property (nonatomic, strong, readonly) ZXDataMatrixVersion *version;
 
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error;
 - (NSArray *)readCodewords;

@@ -20,8 +20,8 @@
 
 @interface ZXReedSolomonEncoder ()
 
-@property (nonatomic, retain) NSMutableArray *cachedGenerators;
-@property (nonatomic, retain) ZXGenericGF *field;
+@property (nonatomic, strong) NSMutableArray *cachedGenerators;
+@property (nonatomic, strong) ZXGenericGF *field;
 
 @end
 
