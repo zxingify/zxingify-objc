@@ -43,12 +43,12 @@
   }
 
   STAssertEquals([[rssExpandedReader rows] count], (NSUInteger)1, @"the first row not recognized");
-  ZXExpandedRow *firstExpandedRow = [rssExpandedReader.rows objectAtIndex:0];
+  ZXExpandedRow *firstExpandedRow = rssExpandedReader.rows[0];
   STAssertEquals(firstExpandedRow.rowNumber, firstRowNumber, @"the first row number doesn't match");
 
   STAssertEquals([firstExpandedRow.pairs count], (NSUInteger)2, @"wrong number if pairs in the first row");
 
-  [[[firstExpandedRow.pairs objectAtIndex:1] finderPattern].startEnd replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:0]];
+  [firstExpandedRow.pairs[1] finderPattern].startEnd[1] = @0;
 
 	int secondRowNumber = 2 * [binaryMap height] / 3;
   error = nil;

@@ -54,10 +54,10 @@
                       body:(NSString *)body
                        via:(NSString *)via {
   [self doTestWithContents:contents
-                   numbers:[NSArray arrayWithObject:number ? number : [NSNull null]]
+                   numbers:@[number ? number : [NSNull null]]
                    subject:subject
                       body:body
-                      vias:[NSArray arrayWithObject:via ? via : [NSNull null]]];
+                      vias:@[via ? via : [NSNull null]]];
 }
 
 - (void)doTestWithContents:(NSString *)contents

@@ -314,7 +314,7 @@ static NSString *DIGIT_TABLE[] = {
     dataWords[i] = 0;
     int flag = 1;
     for (int j = 1; j <= self.codewordSize; j++) {
-      if ([[rawbits objectAtIndex:codewordSize * i + codewordSize - j + offset] boolValue]) {
+      if ([rawbits[codewordSize * i + codewordSize - j + offset] boolValue]) {
         dataWords[i] += flag;
       }
       flag <<= 1;
@@ -337,7 +337,7 @@ static NSString *DIGIT_TABLE[] = {
 
   NSMutableArray *correctedBits = [NSMutableArray array];
   for (int i = 0; i < numDataCodewords*codewordSize; i++) {
-    [correctedBits addObject:[NSNumber numberWithBool:NO]];
+    [correctedBits addObject:@NO];
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
@@ -365,7 +365,7 @@ static NSString *DIGIT_TABLE[] = {
           seriesColor = color;
         }
 
-        [correctedBits replaceObjectAtIndex:i * self.codewordSize + j - offset withObject:[NSNumber numberWithBool:color]];
+        correctedBits[i * self.codewordSize + j - offset] = @(color);
       }
 
       flag = (int)(((unsigned int)flag) >> 1);
@@ -398,7 +398,7 @@ static NSString *DIGIT_TABLE[] = {
 
   rawbits = [NSMutableArray arrayWithCapacity:capacity];
   for (int i = 0; i < capacity; i++) {
-    [rawbits addObject:[NSNumber numberWithBool:NO]];
+    [rawbits addObject:@NO];
   }
 
   int layer = [self.ddata nbLayers];
@@ -410,22 +410,18 @@ static NSString *DIGIT_TABLE[] = {
     int flip = 0;
 
     for (int i = 0; i < 2 * size - 4; i++) {
-      [rawbits replaceObjectAtIndex:rawbitsOffset + i
-                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + flip y:matrixOffset + i / 2]]];
+      rawbits[rawbitsOffset + i] = @([matrix getX:matrixOffset + flip y:matrixOffset + i / 2]);
 
-      [rawbits replaceObjectAtIndex:rawbitsOffset + 2 * size - 4 + i
-                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + i / 2 y:matrixOffset + size - 1 - flip]]];
+      rawbits[rawbitsOffset + 2 * size - 4 + i] = @([matrix getX:matrixOffset + i / 2 y:matrixOffset + size - 1 - flip]);
 
       flip = (flip + 1) % 2;
     }
 
     flip = 0;
     for (int i = 2 * size + 1; i > 5; i--) {
-      [rawbits replaceObjectAtIndex:rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1
-                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + size - 1 - flip y:matrixOffset + i / 2 - 1]]];
+      rawbits[rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1] = @([matrix getX:matrixOffset + size - 1 - flip y:matrixOffset + i / 2 - 1]);
 
-      [rawbits replaceObjectAtIndex:rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1
-                         withObject:[NSNumber numberWithBool:[matrix getX:matrixOffset + i / 2 - 1 y:matrixOffset + flip]]];
+      rawbits[rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1] = @([matrix getX:matrixOffset + i / 2 - 1 y:matrixOffset + flip]);
 
       flip = (flip + 1) % 2;
     }
@@ -479,7 +475,7 @@ static NSString *DIGIT_TABLE[] = {
 
   for (int i = startIndex; i < startIndex + length; i++) {
     res <<= 1;
-    if ([[rawbits objectAtIndex:i] boolValue]) {
+    if ([rawbits[i] boolValue]) {
       res++;
     }
   }

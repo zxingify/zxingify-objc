@@ -68,26 +68,25 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 @implementation ZXResultParser
 
 + (void)initialize {
-  PARSERS = [[NSArray alloc] initWithObjects:
-             [[ZXBookmarkDoCoMoResultParser alloc] init],
-             [[ZXAddressBookDoCoMoResultParser alloc] init],
-             [[ZXEmailDoCoMoResultParser alloc] init],
-             [[ZXAddressBookAUResultParser alloc] init],
-             [[ZXVCardResultParser alloc] init],
-             [[ZXBizcardResultParser alloc] init],
-             [[ZXVEventResultParser alloc] init],
-             [[ZXEmailAddressResultParser alloc] init],
-             [[ZXSMTPResultParser alloc] init],
-             [[ZXTelResultParser alloc] init],
-             [[ZXSMSMMSResultParser alloc] init],
-             [[ZXSMSTOMMSTOResultParser alloc] init],
-             [[ZXGeoResultParser alloc] init],
-             [[ZXWifiResultParser alloc] init],
-             [[ZXURLTOResultParser alloc] init],
-             [[ZXURIResultParser alloc] init],
-             [[ZXISBNResultParser alloc] init],
-             [[ZXProductResultParser alloc] init],
-             [[ZXExpandedProductResultParser alloc] init], nil];
+  PARSERS = @[[[ZXBookmarkDoCoMoResultParser alloc] init],
+              [[ZXAddressBookDoCoMoResultParser alloc] init],
+              [[ZXEmailDoCoMoResultParser alloc] init],
+              [[ZXAddressBookAUResultParser alloc] init],
+              [[ZXVCardResultParser alloc] init],
+              [[ZXBizcardResultParser alloc] init],
+              [[ZXVEventResultParser alloc] init],
+              [[ZXEmailAddressResultParser alloc] init],
+              [[ZXSMTPResultParser alloc] init],
+              [[ZXTelResultParser alloc] init],
+              [[ZXSMSMMSResultParser alloc] init],
+              [[ZXSMSTOMMSTOResultParser alloc] init],
+              [[ZXGeoResultParser alloc] init],
+              [[ZXWifiResultParser alloc] init],
+              [[ZXURLTOResultParser alloc] init],
+              [[ZXURIResultParser alloc] init],
+              [[ZXISBNResultParser alloc] init],
+              [[ZXProductResultParser alloc] init],
+              [[ZXExpandedProductResultParser alloc] init]];
   DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
   ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
 }
@@ -131,7 +130,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 - (NSArray *)maybeWrap:(NSString *)value {
-  return value == nil ? nil : [NSArray arrayWithObjects:value, nil];
+  return value == nil ? nil : @[value];
 }
 
 + (NSString *)unescapeBackslash:(NSString *)escaped {
@@ -259,7 +258,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     NSString *key = [keyValue substringToIndex:equalsRange.location];
     NSString *value = [keyValue substringFromIndex:equalsRange.location + 1];
     value = [self urlDecode:value];
-    [result setObject:value forKey:key];
+    result[key] = value;
   }
 }
 
@@ -312,7 +311,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 + (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
   NSArray *matches = [self matchPrefixedField:prefix rawText:rawText endChar:endChar trim:trim];
-  return matches == nil ? nil : [matches objectAtIndex:0];
+  return matches == nil ? nil : matches[0];
 }
 
 @end

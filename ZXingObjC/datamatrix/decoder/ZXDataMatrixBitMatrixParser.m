@@ -89,29 +89,29 @@
   
   do {
     if ((row == numRows) && (column == 0) && !corner1Read) {
-      [result addObject:[NSNumber numberWithInt:[self readCorner1:numRows numColumns:numColumns]]];
+      [result addObject:@([self readCorner1:numRows numColumns:numColumns])];
       row -= 2;
       column += 2;
       corner1Read = YES;
     } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
-      [result addObject:[NSNumber numberWithInt:[self readCorner2:numRows numColumns:numColumns]]];
+      [result addObject:@([self readCorner2:numRows numColumns:numColumns])];
       row -= 2;
       column += 2;
       corner2Read = YES;
     } else if ((row == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
-      [result addObject:[NSNumber numberWithInt:[self readCorner3:numRows numColumns:numColumns]]];
+      [result addObject:@([self readCorner3:numRows numColumns:numColumns])];
       row -= 2;
       column += 2;
       corner3Read = YES;
     } else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
-      [result addObject:[NSNumber numberWithInt:[self readCorner4:numRows numColumns:numColumns]]];
+      [result addObject:@([self readCorner4:numRows numColumns:numColumns])];
       row -= 2;
       column += 2;
       corner4Read = YES;
     } else {
       do {
         if ((row < numRows) && (column >= 0) && ![readMappingMatrix getX:column y:row]) {
-          [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
+          [result addObject:@([self readUtah:row column:column numRows:numRows numColumns:numColumns])];
         }
         row -= 2;
         column += 2;
@@ -121,7 +121,7 @@
       
       do {
         if ((row >= 0) && (column < numColumns) && ![readMappingMatrix getX:column y:row]) {
-          [result addObject:[NSNumber numberWithInt:[self readUtah:row column:column numRows:numRows numColumns:numColumns]]];
+          [result addObject:@([self readUtah:row column:column numRows:numRows numColumns:numColumns])];
         }
         row += 2;
         column -= 2;

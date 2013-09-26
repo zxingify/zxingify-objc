@@ -61,37 +61,34 @@
       int numBlockCodewords = ecBlocks.ecCodewords + numDataCodewords;
       NSMutableArray *tempCodewords = [NSMutableArray arrayWithCapacity:numBlockCodewords];
       for (int j = 0; j < numBlockCodewords; j++) {
-        [tempCodewords addObject:[NSNumber numberWithInt:0]];
+        [tempCodewords addObject:@0];
       }
       [result addObject:[[ZXDataMatrixDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:tempCodewords]];
       numResultBlocks++;
     }
   }
 
-  int longerBlocksTotalCodewords = [[[result objectAtIndex:0] codewords] count];
+  int longerBlocksTotalCodewords = [[result[0] codewords] count];
   int longerBlocksNumDataCodewords = longerBlocksTotalCodewords - ecBlocks.ecCodewords;
   int shorterBlocksNumDataCodewords = longerBlocksNumDataCodewords - 1;
   int rawCodewordsOffset = 0;
   for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
-      [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:i
-                                                      withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
+      [result[j] codewords][i] = rawCodewords[rawCodewordsOffset++];
     }
   }
 
   BOOL specialVersion = version.versionNumber == 24;
   int numLongerBlocks = specialVersion ? 8 : numResultBlocks;
   for (int j = 0; j < numLongerBlocks; j++) {
-    [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:longerBlocksNumDataCodewords - 1
-                                                    withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
+    [result[j] codewords][longerBlocksNumDataCodewords - 1] = rawCodewords[rawCodewordsOffset++];
   }
 
-  int max = [[[result objectAtIndex:0] codewords] count];
+  int max = [[result[0] codewords] count];
   for (int i = longerBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = specialVersion && j > 7 ? i - 1 : i;
-      [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:iOffset
-                                                      withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
+      [result[j] codewords][iOffset] = rawCodewords[rawCodewordsOffset++];
     }
   }
 

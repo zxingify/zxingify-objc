@@ -36,7 +36,7 @@ static NSRegularExpression *ATEXT_ALPHANUMERIC = nil;
   if (rawTo == nil) {
     return nil;
   }
-  NSString *to = [rawTo objectAtIndex:0];
+  NSString *to = rawTo[0];
   if (![[self class] isBasicallyValidEmailAddress:to]) {
     return nil;
   }

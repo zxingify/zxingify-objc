@@ -64,7 +64,7 @@
 }
 
 - (NSUInteger)hash {
-  return self.pairs.hash ^ [NSNumber numberWithBool:self.wasReversed].hash;
+  return self.pairs.hash ^ @(self.wasReversed).hash;
 }
 
 @end

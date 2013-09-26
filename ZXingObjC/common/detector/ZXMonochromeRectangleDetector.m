@@ -100,7 +100,7 @@ int const MONOCHROME_MAX_MODULES = 32;
     return nil;
   }
 
-  return [NSArray arrayWithObjects:pointA, pointB, pointC, pointD, nil];
+  return @[pointA, pointB, pointC, pointD];
 }
 
 
@@ -136,23 +136,23 @@ int const MONOCHROME_MAX_MODULES = 32;
       }
       if (deltaX == 0) {
         int lastY = y - deltaY;
-        if ([[lastRange objectAtIndex:0] intValue] < centerX) {
-          if ([[lastRange objectAtIndex:0] intValue] > centerX) {
-            return [[ZXResultPoint alloc] initWithX:deltaY > 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue] y:lastY];
+        if ([lastRange[0] intValue] < centerX) {
+          if ([lastRange[0] intValue] > centerX) {
+            return [[ZXResultPoint alloc] initWithX:deltaY > 0 ? [lastRange[0] intValue] : [lastRange[1] intValue] y:lastY];
           }
-          return [[ZXResultPoint alloc] initWithX:[[lastRange objectAtIndex:0] intValue] y:lastY];
+          return [[ZXResultPoint alloc] initWithX:[lastRange[0] intValue] y:lastY];
         } else {
-          return [[ZXResultPoint alloc] initWithX:[[lastRange objectAtIndex:1] intValue] y:lastY];
+          return [[ZXResultPoint alloc] initWithX:[lastRange[1] intValue] y:lastY];
         }
       } else {
         int lastX = x - deltaX;
-        if ([[lastRange objectAtIndex:0] intValue] < centerY) {
-          if ([[lastRange objectAtIndex:1] intValue] > centerY) {
-            return [[ZXResultPoint alloc] initWithX:lastX y:deltaX < 0 ? [[lastRange objectAtIndex:0] intValue] : [[lastRange objectAtIndex:1] intValue]];
+        if ([lastRange[0] intValue] < centerY) {
+          if ([lastRange[1] intValue] > centerY) {
+            return [[ZXResultPoint alloc] initWithX:lastX y:deltaX < 0 ? [lastRange[0] intValue] : [lastRange[1] intValue]];
           }
-          return [[ZXResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:0] intValue]];
+          return [[ZXResultPoint alloc] initWithX:lastX y:[lastRange[0] intValue]];
         } else {
-          return [[ZXResultPoint alloc] initWithX:lastX y:[[lastRange objectAtIndex:1] intValue]];
+          return [[ZXResultPoint alloc] initWithX:lastX y:[lastRange[1] intValue]];
         }
       }
     }
@@ -218,7 +218,7 @@ int const MONOCHROME_MAX_MODULES = 32;
   }
 
   end--;
-  return end > start ? [NSArray arrayWithObjects:[NSNumber numberWithInt:start], [NSNumber numberWithInt:end], nil] : nil;
+  return end > start ? @[@(start), @(end)] : nil;
 }
 
 @end

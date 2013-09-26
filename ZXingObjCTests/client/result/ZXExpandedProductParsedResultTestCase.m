@@ -23,7 +23,7 @@
 @implementation ZXExpandedProductParsedResultTestCase
 
 - (void)test_RSSExpanded {
-  NSDictionary *uncommonAIs = [NSDictionary dictionaryWithObject:@"544654" forKey:@"123"];
+  NSDictionary *uncommonAIs = @{@"123": @"544654"};
   ZXResult *result = [ZXResult resultWithText:@"(01)66546(13)001205(3932)4455(3102)6544(123)544654"
                                      rawBytes:NULL
                                        length:0

@@ -218,11 +218,11 @@ const int MAX_PAIRS = 11;
 // Recursion is used to implement backtracking
 - (NSMutableArray *)checkRows:(NSMutableArray *)collectedRows current:(int)currentRow {
   for (int i = currentRow; i < [self.rows count]; i++) {
-    ZXExpandedRow *row = [self.rows objectAtIndex:i];
+    ZXExpandedRow *row = self.rows[i];
     [self.pairs removeAllObjects];
     int size = [collectedRows count];
     for (int j = 0; j < size; j++) {
-      [self.pairs addObjectsFromArray:[[collectedRows objectAtIndex:j] pairs]];
+      [self.pairs addObjectsFromArray:[collectedRows[j] pairs]];
     }
     [self.pairs addObjectsFromArray:row.pairs];
 
@@ -255,7 +255,7 @@ const int MAX_PAIRS = 11;
 
     BOOL stop = YES;
     for (int j = 0; j < [self.pairs count]; j++) {
-      if ([[[self.pairs objectAtIndex:j] finderPattern] value] != FINDER_PATTERN_SEQUENCES[i][j]) {
+      if ([[self.pairs[j] finderPattern] value] != FINDER_PATTERN_SEQUENCES[i][j]) {
         stop = NO;
         break;
       }
@@ -275,7 +275,7 @@ const int MAX_PAIRS = 11;
   BOOL prevIsSame = NO;
   BOOL nextIsSame = NO;
   while (insertPos < [self.rows count]) {
-    ZXExpandedRow *erow = [self.rows objectAtIndex:insertPos];
+    ZXExpandedRow *erow = self.rows[insertPos];
     if (erow.rowNumber > rowNumber) {
       nextIsSame = [erow isEquivalent:self.pairs];
       break;
@@ -369,18 +369,18 @@ const int MAX_PAIRS = 11;
     return nil;
   }
 
-  NSArray *firstPoints = [[((ZXExpandedPair *)[_pairs objectAtIndex:0]) finderPattern] resultPoints];
+  NSArray *firstPoints = [[((ZXExpandedPair *)_pairs[0]) finderPattern] resultPoints];
   NSArray *lastPoints = [[((ZXExpandedPair *)[_pairs lastObject]) finderPattern] resultPoints];
 
   return [ZXResult resultWithText:resultingString
                          rawBytes:NULL
                            length:0
-                     resultPoints:[NSArray arrayWithObjects:[firstPoints objectAtIndex:0], [firstPoints objectAtIndex:1], [lastPoints objectAtIndex:0], [lastPoints objectAtIndex:1], nil]
+                     resultPoints:@[firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]]
                            format:kBarcodeFormatRSSExpanded];
 }
 
 - (BOOL)checkChecksum {
-  ZXExpandedPair *firstPair = [self.pairs objectAtIndex:0];
+  ZXExpandedPair *firstPair = self.pairs[0];
   ZXDataCharacter *checkCharacter = firstPair.leftChar;
   ZXDataCharacter *firstCharacter = firstPair.rightChar;
 
@@ -392,7 +392,7 @@ const int MAX_PAIRS = 11;
   int s = 2;
 
   for (int i = 1; i < self.pairs.count; ++i) {
-    ZXExpandedPair *currentPair = [self.pairs objectAtIndex:i];
+    ZXExpandedPair *currentPair = self.pairs[i];
     checksum += currentPair.leftChar.checksumPortion;
     s++;
     ZXDataCharacter *currentRightChar = currentPair.rightChar;
@@ -477,7 +477,7 @@ const int MAX_PAIRS = 11;
     rowOffset = 0;
   } else {
     ZXExpandedPair *lastPair = [previousPairs lastObject];
-    rowOffset = [[[[lastPair finderPattern] startEnd] objectAtIndex:1] intValue];
+    rowOffset = [[[lastPair finderPattern] startEnd][1] intValue];
   }
   BOOL searchingEvenPair = [previousPairs count] % 2 != 0;
   if (startFromEven) {
@@ -580,7 +580,7 @@ const int MAX_PAIRS = 11;
   if (value == -1) {
     return nil;
   }
-  return [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:[NSMutableArray arrayWithObjects:[NSNumber numberWithInt:start], [NSNumber numberWithInt:end], nil] start:start end:end rowNumber:rowNumber];
+  return [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:[@[@(start), @(end)] mutableCopy] start:start end:end rowNumber:rowNumber];
 }
 
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar {
@@ -596,11 +596,11 @@ const int MAX_PAIRS = 11;
   counters[7] = 0;
 
   if (leftChar) {
-    if (![ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters countersSize:countersLen]) {
+    if (![ZXOneDReader recordPatternInReverse:row start:[[pattern startEnd][0] intValue] counters:counters countersSize:countersLen]) {
       return nil;
     }
   } else {
-    if (![ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters countersSize:countersLen]) {
+    if (![ZXOneDReader recordPattern:row start:[[pattern startEnd][1] intValue] counters:counters countersSize:countersLen]) {
       return nil;
     }
     // reverse it
@@ -615,7 +615,7 @@ const int MAX_PAIRS = 11;
   float elementWidth = (float)[ZXAbstractRSSReader count:counters arrayLen:countersLen] / (float)numModules;
 
   // Sanity check: element width for pattern and the character should match
-  float expectedElementWidth = ([[pattern.startEnd objectAtIndex:1] intValue] - [[pattern.startEnd objectAtIndex:0] intValue]) / 15.0f;
+  float expectedElementWidth = ([pattern.startEnd[1] intValue] - [pattern.startEnd[0] intValue]) / 15.0f;
   if (fabsf(elementWidth - expectedElementWidth) / expectedElementWidth > 0.3f) {
     return nil;
   }

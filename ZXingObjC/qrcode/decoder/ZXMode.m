@@ -80,7 +80,7 @@
   } else {
     offset = 2;
   }
-  return [[self.characterCountBitsForVersions objectAtIndex:offset] intValue];
+  return [self.characterCountBitsForVersions[offset] intValue];
 }
 
 - (NSString *)description {
@@ -90,10 +90,7 @@
 + (ZXMode *)terminatorMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
                                                                 bits:0x00
                                                                 name:@"TERMINATOR"];
   }
@@ -103,10 +100,7 @@
 + (ZXMode *)numericMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:10],
-                                                                      [NSNumber numberWithInt:12],
-                                                                      [NSNumber numberWithInt:14], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@10, @12, @14]
                                                                 bits:0x01
                                                                 name:@"NUMERIC"];
   }
@@ -116,10 +110,7 @@
 + (ZXMode *)alphanumericMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:9],
-                                                                      [NSNumber numberWithInt:11],
-                                                                      [NSNumber numberWithInt:13], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@9, @11, @13]
                                                                 bits:0x02
                                                                 name:@"ALPHANUMERIC"];
   }
@@ -129,10 +120,7 @@
 + (ZXMode *)structuredAppendMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
                                                                 bits:0x03
                                                                 name:@"STRUCTURED_APPEND"];
   }
@@ -142,10 +130,7 @@
 + (ZXMode *)byteMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:8],
-                                                                      [NSNumber numberWithInt:16],
-                                                                      [NSNumber numberWithInt:16], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @16, @16]
                                                                 bits:0x04
                                                                 name:@"BYTE"];
   }
@@ -155,10 +140,7 @@
 + (ZXMode *)eciMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
                                                                 bits:0x07
                                                                 name:@"ECI"];
   }
@@ -168,10 +150,7 @@
 + (ZXMode *)kanjiMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:8],
-                                                                      [NSNumber numberWithInt:10],
-                                                                      [NSNumber numberWithInt:12], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12]
                                                                 bits:0x08
                                                                 name:@"KANJI"];
   }
@@ -181,10 +160,7 @@
 + (ZXMode *)fnc1FirstPositionMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
                                                                 bits:0x05
                                                                 name:@"FNC1_FIRST_POSITION"];
   }
@@ -194,10 +170,7 @@
 + (ZXMode *)fnc1SecondPositionMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0],
-                                                                      [NSNumber numberWithInt:0], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0]
                                                                 bits:0x09
                                                                 name:@"FNC1_SECOND_POSITION"];
   }
@@ -210,10 +183,7 @@
 + (ZXMode *)hanziMode {
   static ZXMode *thisMode = nil;
   if (!thisMode) {
-    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:[NSArray arrayWithObjects:
-                                                                      [NSNumber numberWithInt:8],
-                                                                      [NSNumber numberWithInt:10],
-                                                                      [NSNumber numberWithInt:12], nil]
+    thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12]
                                                                 bits:0x0D
                                                                 name:@"HANZI"];
   }

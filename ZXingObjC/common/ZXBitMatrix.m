@@ -204,9 +204,7 @@
     return nil;
   }
 
-  return [NSArray arrayWithObjects:[NSNumber numberWithInt:left],
-          [NSNumber numberWithInt:top], [NSNumber numberWithInt:_width],
-          [NSNumber numberWithInt:_height], nil];
+  return @[@(left), @(top), @(_width), @(_height)];
 }
 
 /**
@@ -231,7 +229,7 @@
     bit++;
   }
   x += bit;
-  return [NSArray arrayWithObjects:[NSNumber numberWithInt:x], [NSNumber numberWithInt:y], nil];
+  return @[@(x), @(y)];
 }
 
 - (NSArray *)bottomRightOnBit {
@@ -253,7 +251,7 @@
   }
   x += bit;
 
-  return [NSArray arrayWithObjects:[NSNumber numberWithInt:x], [NSNumber numberWithInt:y], nil];
+  return @[@(x), @(y)];
 }
 
 - (BOOL)isEqual:(NSObject *)o {

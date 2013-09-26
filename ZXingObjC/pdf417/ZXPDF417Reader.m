@@ -72,7 +72,7 @@
     if (!decoderResult) {
       return nil;
     }
-    points = [NSArray array];
+    points = @[];
   } else {
     ZXDetectorResult *detectorResult = [[[ZXPDF417Detector alloc] initWithImage:image] detectWithError:error];
     if (!detectorResult) {
@@ -114,13 +114,13 @@
     return nil;
   }
 
-  int top = [[leftTopBlack objectAtIndex:1] intValue];
-  int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
-  int left = [self findPatternStart:[[leftTopBlack objectAtIndex:0] intValue] y:top image:image];
+  int top = [leftTopBlack[1] intValue];
+  int bottom = [rightBottomBlack[1] intValue];
+  int left = [self findPatternStart:[leftTopBlack[0] intValue] y:top image:image];
   if (left == -1) {
     return nil;
   }
-  int right = [self findPatternEnd:[[leftTopBlack objectAtIndex:0] intValue] y:top image:image];
+  int right = [self findPatternEnd:[leftTopBlack[0] intValue] y:top image:image];
   if (right == -1) {
     return nil;
   }
@@ -149,8 +149,8 @@
 }
 
 - (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
-  int x = [[leftTopBlack objectAtIndex:0] intValue];
-  int y = [[leftTopBlack objectAtIndex:1] intValue];
+  int x = [leftTopBlack[0] intValue];
+  int y = [leftTopBlack[1] intValue];
   int width = [image width];
   while (x < width && [image getX:x y:y]) {
     x++;
@@ -159,7 +159,7 @@
     return -1;
   }
 
-  int moduleSize = (int)((unsigned int)(x - [[leftTopBlack objectAtIndex:0] intValue]) >> 3);
+  int moduleSize = (int)((unsigned int)(x - [leftTopBlack[0] intValue]) >> 3);
   if (moduleSize == 0) {
     return -1;
   }

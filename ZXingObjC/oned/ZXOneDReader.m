@@ -54,20 +54,18 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       // Record that we found it rotated 90 degrees CCW / 270 degrees CW
       NSMutableDictionary *metadata = [result resultMetadata];
       int orientation = 270;
-      if (metadata != nil && [metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) {
+      if (metadata != nil && metadata[@(kResultMetadataTypeOrientation)]) {
         // But if we found it reversed in doDecode(), add in that result here:
-        orientation = (orientation + [((NSNumber *)[metadata objectForKey:[NSNumber numberWithInt:kResultMetadataTypeOrientation]]) intValue]) % 360;
+        orientation = (orientation + [((NSNumber *)metadata[@(kResultMetadataTypeOrientation)]) intValue]) % 360;
       }
-      [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:orientation]];
+      [result putMetadata:kResultMetadataTypeOrientation value:@(orientation)];
       // Update result points
       NSMutableArray *points = [result resultPoints];
       if (points != nil) {
         int height = [rotatedImage height];
         for (int i = 0; i < [points count]; i++) {
-          [points replaceObjectAtIndex:i
-                            withObject:[[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint *)[points objectAtIndex:i] y]
-                                                                       y:[(ZXResultPoint *)[points objectAtIndex:i] x]]
-                                        ];
+          points[i] = [[ZXResultPoint alloc] initWithX:height - [(ZXResultPoint *)points[i] y]
+                                                     y:[(ZXResultPoint *)points[i] x]];
         }
       }
       return result;
@@ -135,17 +133,13 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
       ZXResult *result = [self decodeRow:rowNumber row:row hints:hints error:nil];
       if (result) {
         if (attempt == 1) {
-          [result putMetadata:kResultMetadataTypeOrientation value:[NSNumber numberWithInt:180]];
+          [result putMetadata:kResultMetadataTypeOrientation value:@180];
           NSMutableArray *points = [result resultPoints];
           if (points != nil) {
-            [points replaceObjectAtIndex:0
-                              withObject:[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:0] x]
-                                                                         y:[(ZXResultPoint *)[points objectAtIndex:0] y]]
-                                          ];
-            [points replaceObjectAtIndex:1
-                              withObject:[[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)[points objectAtIndex:1] x]
-                                                                         y:[(ZXResultPoint *)[points objectAtIndex:1] y]]
-                                          ];
+            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
+                                                       y:[(ZXResultPoint *)points[0] y]];
+            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
+                                                       y:[(ZXResultPoint *)points[1] y]];
           }
         }
         return result;

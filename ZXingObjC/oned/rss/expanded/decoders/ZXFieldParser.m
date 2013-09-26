@@ -38,153 +38,145 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   }
 
   if (TWO_DIGIT_DATA_LENGTH == nil) {
-    TWO_DIGIT_DATA_LENGTH = [[NSArray alloc] initWithObjects:
-                             [NSArray arrayWithObjects:@"00", [NSNumber numberWithInt:18], nil],
-                             [NSArray arrayWithObjects:@"01", [NSNumber numberWithInt:14], nil],
-                             [NSArray arrayWithObjects:@"02", [NSNumber numberWithInt:14], nil],
+    TWO_DIGIT_DATA_LENGTH = @[@[@"00", @18],
+                             @[@"01", @14],
+                             @[@"02", @14],
                              
-                             [NSArray arrayWithObjects:@"10", VARIABLE_LENGTH, [NSNumber numberWithInt:20], nil],
-                             [NSArray arrayWithObjects:@"11", [NSNumber numberWithInt:6], nil],
-                             [NSArray arrayWithObjects:@"12", [NSNumber numberWithInt:6], nil],
-                             [NSArray arrayWithObjects:@"13", [NSNumber numberWithInt:6], nil],
-                             [NSArray arrayWithObjects:@"15", [NSNumber numberWithInt:6], nil],
-                             [NSArray arrayWithObjects:@"17", [NSNumber numberWithInt:6], nil],
+                             @[@"10", VARIABLE_LENGTH, @20],
+                             @[@"11", @6],
+                             @[@"12", @6],
+                             @[@"13", @6],
+                             @[@"15", @6],
+                             @[@"17", @6],
                              
-                             [NSArray arrayWithObjects:@"20", [NSNumber numberWithInt:2], nil],
-                             [NSArray arrayWithObjects:@"21", VARIABLE_LENGTH, [NSNumber numberWithInt:20], nil],
-                             [NSArray arrayWithObjects:@"22", VARIABLE_LENGTH, [NSNumber numberWithInt:29], nil],
+                             @[@"20", @2],
+                             @[@"21", VARIABLE_LENGTH, @20],
+                             @[@"22", VARIABLE_LENGTH, @29],
                              
-                             [NSArray arrayWithObjects:@"30", VARIABLE_LENGTH, [NSNumber numberWithInt: 8], nil],
-                             [NSArray arrayWithObjects:@"37", VARIABLE_LENGTH, [NSNumber numberWithInt: 8], nil],
+                             @[@"30", VARIABLE_LENGTH, @8],
+                             @[@"37", VARIABLE_LENGTH, @8],
 
                              //internal company codes
-                             [NSArray arrayWithObjects:@"90", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"91", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"92", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"93", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"94", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"95", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"96", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"97", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"98", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             [NSArray arrayWithObjects:@"99", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                             nil];
+                             @[@"90", VARIABLE_LENGTH, @30],
+                             @[@"91", VARIABLE_LENGTH, @30],
+                             @[@"92", VARIABLE_LENGTH, @30],
+                             @[@"93", VARIABLE_LENGTH, @30],
+                             @[@"94", VARIABLE_LENGTH, @30],
+                             @[@"95", VARIABLE_LENGTH, @30],
+                             @[@"96", VARIABLE_LENGTH, @30],
+                             @[@"97", VARIABLE_LENGTH, @30],
+                             @[@"98", VARIABLE_LENGTH, @30],
+                             @[@"99", VARIABLE_LENGTH, @30]];
   }
 
   if (THREE_DIGIT_DATA_LENGTH == nil) {
-    THREE_DIGIT_DATA_LENGTH = [[NSArray alloc] initWithObjects:
-                               [NSArray arrayWithObjects:@"240", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"241", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"242", VARIABLE_LENGTH, [NSNumber numberWithInt: 6], nil],
-                               [NSArray arrayWithObjects:@"250", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"251", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"253", VARIABLE_LENGTH, [NSNumber numberWithInt:17], nil],
-                               [NSArray arrayWithObjects:@"254", VARIABLE_LENGTH, [NSNumber numberWithInt:20], nil],
+    THREE_DIGIT_DATA_LENGTH = @[@[@"240", VARIABLE_LENGTH, @30],
+                               @[@"241", VARIABLE_LENGTH, @30],
+                               @[@"242", VARIABLE_LENGTH, @6],
+                               @[@"250", VARIABLE_LENGTH, @30],
+                               @[@"251", VARIABLE_LENGTH, @30],
+                               @[@"253", VARIABLE_LENGTH, @17],
+                               @[@"254", VARIABLE_LENGTH, @20],
                                
-                               [NSArray arrayWithObjects:@"400", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"401", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"402", [NSNumber numberWithInt:17], nil],
-                               [NSArray arrayWithObjects:@"403", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                               [NSArray arrayWithObjects:@"410", [NSNumber numberWithInt:13], nil],
-                               [NSArray arrayWithObjects:@"411", [NSNumber numberWithInt:13], nil],
-                               [NSArray arrayWithObjects:@"412", [NSNumber numberWithInt:13], nil],
-                               [NSArray arrayWithObjects:@"413", [NSNumber numberWithInt:13], nil],
-                               [NSArray arrayWithObjects:@"414", [NSNumber numberWithInt:13], nil],
-                               [NSArray arrayWithObjects:@"420", VARIABLE_LENGTH, [NSNumber numberWithInt:20], nil],
-                               [NSArray arrayWithObjects:@"421", VARIABLE_LENGTH, [NSNumber numberWithInt:15], nil],
-                               [NSArray arrayWithObjects:@"422", [NSNumber numberWithInt:3], nil],
-                               [NSArray arrayWithObjects:@"423", VARIABLE_LENGTH, [NSNumber numberWithInt:15], nil],
-                               [NSArray arrayWithObjects:@"424", [NSNumber numberWithInt:3], nil],
-                               [NSArray arrayWithObjects:@"425", [NSNumber numberWithInt:3], nil],
-                               [NSArray arrayWithObjects:@"426", [NSNumber numberWithInt:3], nil],
-                               nil];
+                               @[@"400", VARIABLE_LENGTH, @30],
+                               @[@"401", VARIABLE_LENGTH, @30],
+                               @[@"402", @17],
+                               @[@"403", VARIABLE_LENGTH, @30],
+                               @[@"410", @13],
+                               @[@"411", @13],
+                               @[@"412", @13],
+                               @[@"413", @13],
+                               @[@"414", @13],
+                               @[@"420", VARIABLE_LENGTH, @20],
+                               @[@"421", VARIABLE_LENGTH, @15],
+                               @[@"422", @3],
+                               @[@"423", VARIABLE_LENGTH, @15],
+                               @[@"424", @3],
+                               @[@"425", @3],
+                               @[@"426", @3]];
 
   }
 
   if (THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH == nil) {
-    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = [[NSArray alloc] initWithObjects:
-                                          [NSArray arrayWithObjects:@"310", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"311", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"312", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"313", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"314", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"315", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"316", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"320", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"321", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"322", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"323", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"324", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"325", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"326", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"327", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"328", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"329", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"330", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"331", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"332", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"333", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"334", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"335", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"336", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"340", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"341", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"342", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"343", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"344", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"345", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"346", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"347", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"348", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"349", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"350", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"351", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"352", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"353", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"354", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"355", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"356", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"357", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"360", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"361", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"362", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"363", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"364", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"365", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"366", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"367", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"368", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"369", [NSNumber numberWithInt:6], nil],
-                                          [NSArray arrayWithObjects:@"390", VARIABLE_LENGTH, [NSNumber numberWithInt:15], nil],
-                                          [NSArray arrayWithObjects:@"391", VARIABLE_LENGTH, [NSNumber numberWithInt:18], nil],
-                                          [NSArray arrayWithObjects:@"392", VARIABLE_LENGTH, [NSNumber numberWithInt:15], nil],
-                                          [NSArray arrayWithObjects:@"393", VARIABLE_LENGTH, [NSNumber numberWithInt:18], nil],
-                                          [NSArray arrayWithObjects:@"703", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                                          nil];
+    THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = @[@[@"310", @6],
+                                          @[@"311", @6],
+                                          @[@"312", @6],
+                                          @[@"313", @6],
+                                          @[@"314", @6],
+                                          @[@"315", @6],
+                                          @[@"316", @6],
+                                          @[@"320", @6],
+                                          @[@"321", @6],
+                                          @[@"322", @6],
+                                          @[@"323", @6],
+                                          @[@"324", @6],
+                                          @[@"325", @6],
+                                          @[@"326", @6],
+                                          @[@"327", @6],
+                                          @[@"328", @6],
+                                          @[@"329", @6],
+                                          @[@"330", @6],
+                                          @[@"331", @6],
+                                          @[@"332", @6],
+                                          @[@"333", @6],
+                                          @[@"334", @6],
+                                          @[@"335", @6],
+                                          @[@"336", @6],
+                                          @[@"340", @6],
+                                          @[@"341", @6],
+                                          @[@"342", @6],
+                                          @[@"343", @6],
+                                          @[@"344", @6],
+                                          @[@"345", @6],
+                                          @[@"346", @6],
+                                          @[@"347", @6],
+                                          @[@"348", @6],
+                                          @[@"349", @6],
+                                          @[@"350", @6],
+                                          @[@"351", @6],
+                                          @[@"352", @6],
+                                          @[@"353", @6],
+                                          @[@"354", @6],
+                                          @[@"355", @6],
+                                          @[@"356", @6],
+                                          @[@"357", @6],
+                                          @[@"360", @6],
+                                          @[@"361", @6],
+                                          @[@"362", @6],
+                                          @[@"363", @6],
+                                          @[@"364", @6],
+                                          @[@"365", @6],
+                                          @[@"366", @6],
+                                          @[@"367", @6],
+                                          @[@"368", @6],
+                                          @[@"369", @6],
+                                          @[@"390", VARIABLE_LENGTH, @15],
+                                          @[@"391", VARIABLE_LENGTH, @18],
+                                          @[@"392", VARIABLE_LENGTH, @15],
+                                          @[@"393", VARIABLE_LENGTH, @18],
+                                          @[@"703", VARIABLE_LENGTH, @30]];
   }
 
   if (FOUR_DIGIT_DATA_LENGTH == nil) {
-    FOUR_DIGIT_DATA_LENGTH = [[NSArray alloc] initWithObjects:
-                              [NSArray arrayWithObjects:@"7001", [NSNumber numberWithInt:13], nil],
-                              [NSArray arrayWithObjects:@"7002", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                              [NSArray arrayWithObjects:@"7003", [NSNumber numberWithInt:10], nil],
+    FOUR_DIGIT_DATA_LENGTH = @[@[@"7001", @13],
+                              @[@"7002", VARIABLE_LENGTH, @30],
+                              @[@"7003", @10],
                               
-                              [NSArray arrayWithObjects:@"8001", [NSNumber numberWithInt:14], nil],
-                              [NSArray arrayWithObjects:@"8002", VARIABLE_LENGTH, [NSNumber numberWithInt:20], nil],
-                              [NSArray arrayWithObjects:@"8003", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                              [NSArray arrayWithObjects:@"8004", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                              [NSArray arrayWithObjects:@"8005", [NSNumber numberWithInt:6], nil],
-                              [NSArray arrayWithObjects:@"8006", [NSNumber numberWithInt:18], nil],
-                              [NSArray arrayWithObjects:@"8007", VARIABLE_LENGTH, [NSNumber numberWithInt:30], nil],
-                              [NSArray arrayWithObjects:@"8008", VARIABLE_LENGTH, [NSNumber numberWithInt:12], nil],
-                              [NSArray arrayWithObjects:@"8018", [NSNumber numberWithInt:18], nil],
-                              [NSArray arrayWithObjects:@"8020", VARIABLE_LENGTH, [NSNumber numberWithInt:25], nil],
-                              [NSArray arrayWithObjects:@"8100", [NSNumber numberWithInt:6], nil],
-                              [NSArray arrayWithObjects:@"8101", [NSNumber numberWithInt:10], nil],
-                              [NSArray arrayWithObjects:@"8102", [NSNumber numberWithInt:2], nil],
-                              [NSArray arrayWithObjects:@"8110", VARIABLE_LENGTH, [NSNumber numberWithInt:70], nil],
-                              [NSArray arrayWithObjects:@"8200", VARIABLE_LENGTH, [NSNumber numberWithInt:70], nil],
-                              nil];
+                              @[@"8001", @14],
+                              @[@"8002", VARIABLE_LENGTH, @20],
+                              @[@"8003", VARIABLE_LENGTH, @30],
+                              @[@"8004", VARIABLE_LENGTH, @30],
+                              @[@"8005", @6],
+                              @[@"8006", @18],
+                              @[@"8007", VARIABLE_LENGTH, @30],
+                              @[@"8008", VARIABLE_LENGTH, @12],
+                              @[@"8018", @18],
+                              @[@"8020", VARIABLE_LENGTH, @25],
+                              @[@"8100", @6],
+                              @[@"8101", @10],
+                              @[@"8102", @2],
+                              @[@"8110", VARIABLE_LENGTH, @70],
+                              @[@"8200", VARIABLE_LENGTH, @70]];
   }
 }
 
@@ -199,14 +191,14 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   NSString *firstTwoDigits = [rawInformation substringWithRange:NSMakeRange(0, 2)];
 
   for (int i = 0; i < [TWO_DIGIT_DATA_LENGTH count]; ++i) {
-    if ([[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstTwoDigits]) {
-      if ([[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] isEqual:VARIABLE_LENGTH]) {
+    if ([TWO_DIGIT_DATA_LENGTH[i][0] isEqualToString:firstTwoDigits]) {
+      if ([TWO_DIGIT_DATA_LENGTH[i][1] isEqual:VARIABLE_LENGTH]) {
         return [self processVariableAI:2
-                     variableFieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
+                     variableFieldSize:[TWO_DIGIT_DATA_LENGTH[i][2] intValue]
                         rawInformation:rawInformation];
       }
       NSString *result = [self processFixedAI:2
-                                    fieldSize:[[[TWO_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                                    fieldSize:[TWO_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
         if (error) *error = NotFoundErrorInstance();
@@ -223,14 +215,14 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   NSString *firstThreeDigits = [rawInformation substringWithRange:NSMakeRange(0, 3)];
 
   for (int i = 0; i < [THREE_DIGIT_DATA_LENGTH count]; ++i) {
-    if ([[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstThreeDigits]) {
-      if ([[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] isEqual:VARIABLE_LENGTH]) {
+    if ([THREE_DIGIT_DATA_LENGTH[i][0] isEqualToString:firstThreeDigits]) {
+      if ([THREE_DIGIT_DATA_LENGTH[i][1] isEqual:VARIABLE_LENGTH]) {
         return [self processVariableAI:3
-                     variableFieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
+                     variableFieldSize:[THREE_DIGIT_DATA_LENGTH[i][2] intValue]
                         rawInformation:rawInformation];
       }
       NSString *result = [self processFixedAI:3
-                                    fieldSize:[[[THREE_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                                    fieldSize:[THREE_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
         if (error) *error = NotFoundErrorInstance();
@@ -241,14 +233,14 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   }
 
   for (int i = 0; i < [THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH count]; ++i) {
-    if ([[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstThreeDigits]) {
-      if ([[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] isEqual:VARIABLE_LENGTH]) {
+    if ([THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[i][0] isEqualToString:firstThreeDigits]) {
+      if ([THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[i][1] isEqual:VARIABLE_LENGTH]) {
         return [self processVariableAI:4
-                     variableFieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
+                     variableFieldSize:[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[i][2] intValue]
                         rawInformation:rawInformation];
       }
       NSString *result = [self processFixedAI:4
-                                    fieldSize:[[[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                                    fieldSize:[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
         if (error) *error = NotFoundErrorInstance();
@@ -265,10 +257,10 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   NSString *firstFourDigits = [rawInformation substringWithRange:NSMakeRange(0, 4)];
 
   for (int i = 0; i < [FOUR_DIGIT_DATA_LENGTH count]; ++i) {
-    if ([[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:0] isEqualToString:firstFourDigits]) {
-      if ([[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] isEqual:VARIABLE_LENGTH]) {
+    if ([FOUR_DIGIT_DATA_LENGTH[i][0] isEqualToString:firstFourDigits]) {
+      if ([FOUR_DIGIT_DATA_LENGTH[i][1] isEqual:VARIABLE_LENGTH]) {
         NSString *result = [self processVariableAI:4
-                                 variableFieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:2] intValue]
+                                 variableFieldSize:[FOUR_DIGIT_DATA_LENGTH[i][2] intValue]
                                     rawInformation:rawInformation];
         if (!result) {
           if (error) *error = NotFoundErrorInstance();
@@ -277,7 +269,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
         return result;
       }
       NSString *result = [self processFixedAI:4
-                                    fieldSize:[[[FOUR_DIGIT_DATA_LENGTH objectAtIndex:i] objectAtIndex:1] intValue]
+                                    fieldSize:[FOUR_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
         if (error) *error = NotFoundErrorInstance();

@@ -61,7 +61,7 @@
   [ZXParsedResult maybeAppend:ssid result:result];
   [ZXParsedResult maybeAppend:networkEncryption result:result];
   [ZXParsedResult maybeAppend:password result:result];
-  [ZXParsedResult maybeAppend:[[NSNumber numberWithBool:hidden] stringValue] result:result];
+  [ZXParsedResult maybeAppend:[@(hidden) stringValue] result:result];
   return result;
 }
 

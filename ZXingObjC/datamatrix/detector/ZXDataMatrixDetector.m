@@ -58,7 +58,7 @@
 }
 
 - (NSComparisonResult)compare:(ResultPointsAndTransitions *)otherObject {
-  return [[NSNumber numberWithInt:transitions] compare:[NSNumber numberWithInt:otherObject.transitions]];
+  return [@(transitions) compare:@(otherObject.transitions)];
 }
 
 @end
@@ -111,10 +111,10 @@
   if (!cornerPoints) {
     return nil;
   }
-  ZXResultPoint *pointA = [cornerPoints objectAtIndex:0];
-  ZXResultPoint *pointB = [cornerPoints objectAtIndex:1];
-  ZXResultPoint *pointC = [cornerPoints objectAtIndex:2];
-  ZXResultPoint *pointD = [cornerPoints objectAtIndex:3];
+  ZXResultPoint *pointA = cornerPoints[0];
+  ZXResultPoint *pointB = cornerPoints[1];
+  ZXResultPoint *pointC = cornerPoints[2];
+  ZXResultPoint *pointD = cornerPoints[3];
 
   NSMutableArray *transitions = [NSMutableArray arrayWithCapacity:4];
   [transitions addObject:[self transitionsBetween:pointA to:pointB]];
@@ -123,8 +123,8 @@
   [transitions addObject:[self transitionsBetween:pointC to:pointD]];
   [transitions sortUsingSelector:@selector(compare:)];
 
-  ResultPointsAndTransitions *lSideOne = (ResultPointsAndTransitions *)[transitions objectAtIndex:0];
-  ResultPointsAndTransitions *lSideTwo = (ResultPointsAndTransitions *)[transitions objectAtIndex:1];
+  ResultPointsAndTransitions *lSideOne = (ResultPointsAndTransitions *)transitions[0];
+  ResultPointsAndTransitions *lSideTwo = (ResultPointsAndTransitions *)transitions[1];
 
   NSMutableDictionary *pointCount = [NSMutableDictionary dictionary];
   [self increment:pointCount key:[lSideOne from]];
@@ -136,7 +136,7 @@
   ZXResultPoint *bottomLeft = nil;
   ZXResultPoint *maybeBottomRight = nil;
   for (ZXResultPoint *point in [pointCount allKeys]) {
-    NSNumber *value = [pointCount objectForKey:point];
+    NSNumber *value = pointCount[point];
     if ([value intValue] == 2) {
       bottomLeft = point;
     } else {
@@ -156,16 +156,16 @@
   NSMutableArray *corners = [NSMutableArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
   [ZXResultPoint orderBestPatterns:corners];
 
-  ZXResultPoint *bottomRight = [corners objectAtIndex:0];
-  bottomLeft = [corners objectAtIndex:1];
-  ZXResultPoint *topLeft = [corners objectAtIndex:2];
+  ZXResultPoint *bottomRight = corners[0];
+  bottomLeft = corners[1];
+  ZXResultPoint *topLeft = corners[2];
 
   ZXResultPoint *topRight;
-  if (![pointCount objectForKey:pointA]) {
+  if (!pointCount[pointA]) {
     topRight = pointA;
-  } else if (![pointCount objectForKey:pointB]) {
+  } else if (!pointCount[pointB]) {
     topRight = pointB;
-  } else if (![pointCount objectForKey:pointC]) {
+  } else if (!pointCount[pointC]) {
     topRight = pointC;
   } else {
     topRight = pointD;
@@ -227,7 +227,7 @@
     }
   }
   return [[ZXDetectorResult alloc] initWithBits:bits
-                                          points:[NSArray arrayWithObjects:topLeft, bottomLeft, bottomRight, correctedTopRight, nil]];
+                                          points:@[topLeft, bottomLeft, bottomRight, correctedTopRight]];
 }
 
 
@@ -317,8 +317,8 @@
  * Increments the Integer associated with a key by one.
  */
 - (void)increment:(NSMutableDictionary *)table key:(ZXResultPoint *)key {
-  NSNumber *value = [table objectForKey:key];
-  [table setObject:value == nil ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:[value intValue] + 1] forKey:key];
+  NSNumber *value = table[key];
+  table[key] = value == nil ? @1 : @([value intValue] + 1);
 }
 
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage

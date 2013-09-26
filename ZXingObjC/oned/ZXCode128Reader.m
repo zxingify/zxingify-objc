@@ -200,7 +200,7 @@ int const CODE_STOP = 106;
         // Look for whitespace before start pattern, >= 50% of width of start pattern
         if (bestMatch >= 0 &&
             [row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
-          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:i], [NSNumber numberWithInt:bestMatch], nil];
+          return @[@(patternStart), @(i), @(bestMatch)];
         }
         patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {
@@ -250,7 +250,7 @@ int const CODE_STOP = 106;
     return nil;
   }
 
-  int startCode = [[startPatternInfo objectAtIndex:2] intValue];
+  int startCode = [startPatternInfo[2] intValue];
   int codeSet;
 
   switch (startCode) {
@@ -274,8 +274,8 @@ int const CODE_STOP = 106;
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
   NSMutableArray *rawCodes = [NSMutableArray arrayWithCapacity:20];
 
-  int lastStart = [[startPatternInfo objectAtIndex:0] intValue];
-  int nextStart = [[startPatternInfo objectAtIndex:1] intValue];
+  int lastStart = [startPatternInfo[0] intValue];
+  int nextStart = [startPatternInfo[1] intValue];
 
   const int countersLen = 6;
   int counters[countersLen];
@@ -463,20 +463,20 @@ int const CODE_STOP = 106;
     }
   }
 
-  float left = (float)([[startPatternInfo objectAtIndex:1] intValue] + [[startPatternInfo objectAtIndex:0] intValue]) / 2.0f;
+  float left = (float)([startPatternInfo[1] intValue] + [startPatternInfo[0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
 
   int rawCodesSize = [rawCodes count];
   unsigned char rawBytes[rawCodesSize];
   for (int i = 0; i < rawCodesSize; i++) {
-    rawBytes[i] = [[rawCodes objectAtIndex:i] charValue];
+    rawBytes[i] = [rawCodes[i] charValue];
   }
 
   return [ZXResult resultWithText:result
                          rawBytes:rawBytes
                            length:rawCodesSize
-                     resultPoints:[NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
-                                   [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber], nil]
+                     resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
+                                   [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                            format:kBarcodeFormatCode128];
 }
 

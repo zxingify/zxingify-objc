@@ -186,7 +186,7 @@
             currentByte |= 1;
           }
           if (bitsRead == 8) {
-            [result addObject:[NSNumber numberWithChar:(char)currentByte]];
+            [result addObject:@((char)currentByte)];
             resultOffset++;
             bitsRead = 0;
             currentByte = 0;

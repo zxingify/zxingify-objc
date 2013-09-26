@@ -218,7 +218,7 @@
     remainder = [remainder addOrSubtract:term];
   }
 
-  return [NSArray arrayWithObjects:quotient, remainder, nil];
+  return @[quotient, remainder];
 }
 
 - (NSString *) description {

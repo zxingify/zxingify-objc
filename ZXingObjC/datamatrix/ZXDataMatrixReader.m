@@ -70,7 +70,7 @@
     if (!decoderResult) {
       return nil;
     }
-    points = [NSArray array];
+    points = @[];
   } else {
     ZXBitMatrix *matrix = [image blackMatrixWithError:error];
     if (!matrix) {
@@ -127,10 +127,10 @@
     return nil;
   }
 
-  int top = [[leftTopBlack objectAtIndex:1] intValue];
-  int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
-  int left = [[leftTopBlack objectAtIndex:0] intValue];
-  int right = [[rightBottomBlack objectAtIndex:0] intValue];
+  int top = [leftTopBlack[1] intValue];
+  int bottom = [rightBottomBlack[1] intValue];
+  int left = [leftTopBlack[0] intValue];
+  int right = [rightBottomBlack[0] intValue];
 
   int matrixWidth = (right - left + 1) / moduleSize;
   int matrixHeight = (bottom - top + 1) / moduleSize;
@@ -157,8 +157,8 @@
 
 - (int)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
   int width = image.width;
-  int x = [[leftTopBlack objectAtIndex:0] intValue];
-  int y = [[leftTopBlack objectAtIndex:1] intValue];
+  int x = [leftTopBlack[0] intValue];
+  int y = [leftTopBlack[1] intValue];
   while (x < width && [image getX:x y:y]) {
     x++;
   }
@@ -166,7 +166,7 @@
     return -1;
   }
 
-  int moduleSize = x - [[leftTopBlack objectAtIndex:0] intValue];
+  int moduleSize = x - [leftTopBlack[0] intValue];
   if (moduleSize == 0) {
     return -1;
   }

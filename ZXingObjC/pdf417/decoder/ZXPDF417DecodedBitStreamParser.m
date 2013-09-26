@@ -79,7 +79,7 @@ static NSArray *EXP900 = nil;
   NSDecimalNumber *nineHundred = [NSDecimalNumber decimalNumberWithString:@"900"];
   [exponents addObject:nineHundred];
   for (int i = 2; i < 16; i++) {
-    [exponents addObject:[[exponents objectAtIndex:i - 1] decimalNumberByMultiplyingBy:nineHundred]];
+    [exponents addObject:[exponents[i - 1] decimalNumberByMultiplyingBy:nineHundred]];
   }
   EXP900 = [[NSArray alloc] initWithArray:exponents];
 }
@@ -91,8 +91,8 @@ static NSArray *EXP900 = nil;
   }
   NSMutableString *result = [NSMutableString stringWithCapacity:100];
   int codeIndex = 1;
-  int code = [[codewords objectAtIndex:codeIndex++] intValue];
-  while (codeIndex < [[codewords objectAtIndex:0] intValue]) {
+  int code = [codewords[codeIndex++] intValue];
+  while (codeIndex < [codewords[0] intValue]) {
     switch (code) {
     case TEXT_COMPACTION_MODE_LATCH:
       codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:result];
@@ -115,7 +115,7 @@ static NSArray *EXP900 = nil;
       break;
     }
     if (codeIndex < [codewords count]) {
-      code = [[codewords objectAtIndex:codeIndex++] intValue];
+      code = [codewords[codeIndex++] intValue];
     } else {
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -135,7 +135,7 @@ static NSArray *EXP900 = nil;
  * well as selected control characters.
  */
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
-  int count = [[codewords objectAtIndex:0] intValue] << 1;
+  int count = [codewords[0] intValue] << 1;
   // 2 character per codeword
   int textCompactionData[count];
   // Used to hold the byte compaction value if there is a mode shift
@@ -148,8 +148,8 @@ static NSArray *EXP900 = nil;
 
   int index = 0;
   BOOL end = NO;
-  while ((codeIndex < [[codewords objectAtIndex:0] intValue]) && !end) {
-    int code = [[codewords objectAtIndex:codeIndex++] intValue];
+  while ((codeIndex < [codewords[0] intValue]) && !end) {
+    int code = [codewords[codeIndex++] intValue];
     if (code < TEXT_COMPACTION_MODE_LATCH) {
       textCompactionData[index] = code / 30;
       textCompactionData[index + 1] = code % 30;
@@ -170,7 +170,7 @@ static NSArray *EXP900 = nil;
         break;
       case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
         textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
-        code = [[codewords objectAtIndex:codeIndex++] intValue];
+        code = [codewords[codeIndex++] intValue];
         byteCompactionData[index] = code;
         index++;
         break;
@@ -353,12 +353,12 @@ static NSArray *EXP900 = nil;
     char decodedData[6] = {0, 0, 0, 0, 0, 0};
     int byteCompactedCodewords[6] = {0, 0, 0, 0, 0, 0};
     BOOL end = NO;
-    int nextCode = [[codewords objectAtIndex:codeIndex++] intValue];
-    while ((codeIndex < [[codewords objectAtIndex:0] intValue]) && !end) {
+    int nextCode = [codewords[codeIndex++] intValue];
+    while ((codeIndex < [codewords[0] intValue]) && !end) {
       byteCompactedCodewords[count++] = nextCode;
       // Base 900
       value = 900 * value + nextCode;
-      nextCode = [[codewords objectAtIndex:codeIndex++] intValue];
+      nextCode = [codewords[codeIndex++] intValue];
       // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
       if (nextCode == TEXT_COMPACTION_MODE_LATCH ||
           nextCode == BYTE_COMPACTION_MODE_LATCH ||
@@ -384,7 +384,7 @@ static NSArray *EXP900 = nil;
     }
 
     // if the end of all codewords is reached the last codeword needs to be added
-    if (codeIndex == [[codewords objectAtIndex:0] intValue] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
+    if (codeIndex == [codewords[0] intValue] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
       byteCompactedCodewords[count++] = nextCode;
     }
 
@@ -400,8 +400,8 @@ static NSArray *EXP900 = nil;
     int count = 0;
     long value = 0;
     BOOL end = NO;
-    while (codeIndex < [[codewords objectAtIndex:0] intValue] && !end) {
-      int code = [[codewords objectAtIndex:codeIndex++] intValue];
+    while (codeIndex < [codewords[0] intValue] && !end) {
+      int code = [codewords[codeIndex++] intValue];
       if (code < TEXT_COMPACTION_MODE_LATCH) {
         count++;
         // Base 900
@@ -445,9 +445,9 @@ static NSArray *EXP900 = nil;
   int numericCodewords[MAX_NUMERIC_CODEWORDS];
   memset(numericCodewords, 0, MAX_NUMERIC_CODEWORDS * sizeof(int));
 
-  while (codeIndex < [[codewords objectAtIndex:0] intValue] && !end) {
-    int code = [[codewords objectAtIndex:codeIndex++] intValue];
-    if (codeIndex == [[codewords objectAtIndex:0] intValue]) {
+  while (codeIndex < [codewords[0] intValue] && !end) {
+    int code = [codewords[codeIndex++] intValue];
+    if (codeIndex == [codewords[0] intValue]) {
       end = YES;
     }
     if (code < TEXT_COMPACTION_MODE_LATCH) {
@@ -518,8 +518,8 @@ static NSArray *EXP900 = nil;
 + (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
   NSDecimalNumber *result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
-    result = [[result decimalNumberByAdding:[EXP900 objectAtIndex:count - i - 1]] decimalNumberByMultiplyingBy:
-              [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:codewords[i]] decimalValue]]];
+    result = [[result decimalNumberByAdding:EXP900[count - i - 1]] decimalNumberByMultiplyingBy:
+              [NSDecimalNumber decimalNumberWithDecimal:[@(codewords[i]) decimalValue]]];
   }
   NSString *resultString = [result stringValue];
   if (![resultString hasPrefix:@"1"]) {

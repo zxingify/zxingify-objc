@@ -23,7 +23,7 @@
 
 + (ZXBitArray *)buildBitArray:(NSArray *)pairs {
   int charNumber = ([pairs count] << 1) - 1;
-  if ([[pairs objectAtIndex:pairs.count - 1] rightChar] == nil) {
+  if ([pairs[pairs.count - 1] rightChar] == nil) {
     charNumber -= 1;
   }
 
@@ -32,7 +32,7 @@
   ZXBitArray *binary = [[ZXBitArray alloc] initWithSize:size];
   int accPos = 0;
 
-  ZXExpandedPair *firstPair = [pairs objectAtIndex:0];
+  ZXExpandedPair *firstPair = pairs[0];
   int firstValue = [[firstPair rightChar] value];
   for (int i = 11; i >= 0; --i) {
     if ((firstValue & (1 << i)) != 0) {
@@ -42,7 +42,7 @@
   }
 
   for (int i = 1; i < [pairs count]; ++i) {
-    ZXExpandedPair *currentPair = [pairs objectAtIndex:i];
+    ZXExpandedPair *currentPair = pairs[i];
     int leftValue = [[currentPair leftChar] value];
 
     for (int j = 11; j >= 0; --j) {

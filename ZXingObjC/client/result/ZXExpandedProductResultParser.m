@@ -98,7 +98,7 @@
       priceCurrency = [value substringToIndex:3];
       priceIncrement = [ai substringFromIndex:3];
     } else {
-      [uncommonAIs setObject:value forKey:ai];
+      uncommonAIs[ai] = value;
     }
   }
 

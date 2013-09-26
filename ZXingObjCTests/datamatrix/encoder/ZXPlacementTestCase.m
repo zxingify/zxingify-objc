@@ -29,22 +29,12 @@
   NSString *codewords = [self unvisualize:@"66 74 78 66 74 78 129 56 35 102 192 96 226 100 156 1 107 221"]; //"AIMAIM" encoded
   ZXDebugPlacement *placement = [[ZXDebugPlacement alloc] initWithCodewords:codewords numcols:12 numrows:12];
   [placement place];
-  NSArray *expected = [NSArray arrayWithObjects:
-    @"011100001111",
-    @"001010101000",
-    @"010001010100",
-    @"001010100010",
-    @"000111000100",
-    @"011000010100",
-    @"000100001101",
-    @"011000010000",
-    @"001100001101",
-    @"100010010111",
-    @"011101011010",
-    @"001011001010", nil];
+  NSArray *expected = @[@"011100001111", @"001010101000", @"010001010100", @"001010100010", @"000111000100",
+                        @"011000010100", @"000100001101", @"011000010000", @"001100001101", @"100010010111",
+                        @"011101011010", @"001011001010"];
   NSArray *actual = [placement toBitFieldStringArray];
   for (int i = 0; i < actual.count; i++) {
-    STAssertEqualObjects([actual objectAtIndex:i], [expected objectAtIndex:i], @"Row %d", i);
+    STAssertEqualObjects(actual[i], expected[i], @"Row %d", i);
   }
 }
 

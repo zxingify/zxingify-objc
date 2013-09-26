@@ -199,7 +199,7 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
                startString:@"20080504T123456Z"
                  endString:nil
                  organizer:nil
-                 attendees:[NSArray arrayWithObjects:@"bob@example.org", @"alice@example.org", nil]
+                 attendees:@[@"bob@example.org", @"alice@example.org"]
                   latitude:NAN
                  longitude:NAN];
 }

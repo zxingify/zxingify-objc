@@ -285,8 +285,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   }
   // All bits should be consumed.
   if (bitIndex != [dataBits size]) {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]
-                                                         forKey:NSLocalizedDescriptionKey];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Not all bits consumed: %d/%d", bitIndex, [dataBits size]]};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
@@ -352,8 +351,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 // JISX0510:2004 (p.45) for details.
 + (BOOL)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits error:(NSError **)error {
   if (![ZXQRCode isValidMaskPattern:maskPattern]) {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Invalid mask pattern"
-                                                         forKey:NSLocalizedDescriptionKey];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Invalid mask pattern"};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
@@ -369,8 +367,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   [bits xor:maskBits];
 
   if ([bits size] != 15) { // Just in case.
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
-                                                         forKey:NSLocalizedDescriptionKey];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;
@@ -387,8 +384,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   [bits appendBits:bchCode numBits:12];
 
   if ([bits size] != 18) { // Just in case.
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]
-                                                         forKey:NSLocalizedDescriptionKey];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"should not happen but we got: %d", [bits size]]};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return NO;

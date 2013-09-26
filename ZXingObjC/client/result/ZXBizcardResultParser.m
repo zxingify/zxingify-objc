@@ -78,7 +78,7 @@
   }
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:size];
   for (int i = 0; i < size; i++) {
-    [result addObject:[numbers objectAtIndex:i]];
+    [result addObject:numbers[i]];
   }
   return result;
 }

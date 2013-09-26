@@ -35,7 +35,7 @@
   if (rawName == nil) {
     return nil;
   }
-  NSString *name = [self parseName:[rawName objectAtIndex:0]];
+  NSString *name = [self parseName:rawName[0]];
   NSString *pronunciation = [[self class] matchSingleDoCoMoPrefixedField:@"SOUND:" rawText:rawText trim:YES];
   NSArray *phoneNumbers = [[self class] matchDoCoMoPrefixedField:@"TEL:" rawText:rawText trim:YES];
   NSArray *emails = [[self class] matchDoCoMoPrefixedField:@"EMAIL:" rawText:rawText trim:YES];

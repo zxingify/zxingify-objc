@@ -74,7 +74,7 @@
     }
 
     if ([info remaining]) {
-      remaining = [[NSNumber numberWithInt:[info remainingValue]] stringValue];
+      remaining = [@([info remainingValue]) stringValue];
     } else {
       remaining = nil;
     }

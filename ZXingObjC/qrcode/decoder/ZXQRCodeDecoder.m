@@ -117,7 +117,7 @@
       return nil;
     }
     for (int i = 0; i < numDataCodewords; i++) {
-      resultBytes[resultOffset++] = [[codewordBytes objectAtIndex:i] charValue];
+      resultBytes[resultOffset++] = [codewordBytes[i] charValue];
     }
   }
 
@@ -134,7 +134,7 @@
   int codewordsInts[numCodewords];
 
   for (int i = 0; i < numCodewords; i++) {
-    codewordsInts[i] = [[codewordBytes objectAtIndex:i] charValue] & 0xFF;
+    codewordsInts[i] = [codewordBytes[i] charValue] & 0xFF;
   }
 
   int numECCodewords = [codewordBytes count] - numDataCodewords;
@@ -150,7 +150,7 @@
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
-    [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:codewordsInts[i]]];
+    codewordBytes[i] = [NSNumber numberWithChar:codewordsInts[i]];
   }
   return YES;
 }

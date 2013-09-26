@@ -71,7 +71,7 @@
     if (!decoderResult) {
       return nil;
     }
-    points = [NSArray array];
+    points = @[];
   } else {
     ZXDetectorResult *detectorResult = [[[ZXQRCodeDetector alloc] initWithImage:matrix] detect:hints error:error];
     if (!detectorResult) {
@@ -123,10 +123,10 @@
     return nil;
   }
 
-  int top = [[leftTopBlack objectAtIndex:1] intValue];
-  int bottom = [[rightBottomBlack objectAtIndex:1] intValue];
-  int left = [[leftTopBlack objectAtIndex:0] intValue];
-  int right = [[rightBottomBlack objectAtIndex:0] intValue];
+  int top = [leftTopBlack[1] intValue];
+  int bottom = [rightBottomBlack[1] intValue];
+  int left = [leftTopBlack[0] intValue];
+  int right = [rightBottomBlack[0] intValue];
 
   if (bottom - top != right - left) {
     // Special case, where bottom-right module wasn't black so we found something else in the last row
@@ -162,8 +162,8 @@
 - (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
   int height = image.height;
   int width = image.width;
-  int x = [[leftTopBlack objectAtIndex:0] intValue];
-  int y = [[leftTopBlack objectAtIndex:1] intValue];
+  int x = [leftTopBlack[0] intValue];
+  int y = [leftTopBlack[1] intValue];
   BOOL inBlack = YES;
   int transitions = 0;
   while (x < width && y < height) {
@@ -179,7 +179,7 @@
     return -1;
   }
 
-  return (x - [[leftTopBlack objectAtIndex:0] intValue]) / 7.0f;
+  return (x - [leftTopBlack[0] intValue]) / 7.0f;
 }
 
 @end

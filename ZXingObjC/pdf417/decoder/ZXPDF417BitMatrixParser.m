@@ -714,7 +714,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 
   self.erasures = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
   for (int i = 0; i < MAX_CW_CAPACITY; i++) {
-    [self.erasures addObject:[NSNumber numberWithInt:0]];
+    [self.erasures addObject:@0];
   }
 
   // Get the number of pixels in a module across the X dimension
@@ -726,7 +726,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
   
   NSMutableArray *codewords = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
   for (int i = 0; i < MAX_CW_CAPACITY; i++) {
-    [codewords addObject:[NSNumber numberWithInt:0]];
+    [codewords addObject:@0];
   }
 
   int next = 0;
@@ -835,11 +835,11 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
         if (eraseCount >= erasures.count) {
           return -1;
         }
-        [self.erasures addObject:[NSNumber numberWithInt:next]];
+        [self.erasures addObject:@(next)];
         next++;
         self.eraseCount++;
       } else {
-        [codewords replaceObjectAtIndex:next++ withObject:[NSNumber numberWithInt:cw]];
+        codewords[next++] = @(cw);
       }
     } else {
       // Left row indicator column
@@ -858,12 +858,12 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     // Overwrite the last codeword i.e. Right Row Indicator
     --next;
     if (ecLevel < 0 && rowNumber % 3 == 2) {
-      self.rightColumnECData = [[codewords objectAtIndex:next] intValue];
+      self.rightColumnECData = [codewords[next] intValue];
       if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
         self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
       }
     }
-    [codewords replaceObjectAtIndex:next withObject:[NSNumber numberWithInt:0]];
+    codewords[next] = @0;
   }
   return next;
 }

@@ -129,10 +129,10 @@
 
   // 5. Sample the grid
   ZXBitMatrix *bits = [self sampleGrid:self.image
-                               topLeft:[corners objectAtIndex:self.shift % 4]
-                            bottomLeft:[corners objectAtIndex:(self.shift + 3) % 4]
-                           bottomRight:[corners objectAtIndex:(self.shift + 2) % 4]
-                              topRight:[corners objectAtIndex:(self.shift + 1) % 4]
+                               topLeft:corners[self.shift % 4]
+                            bottomLeft:corners[(self.shift + 3) % 4]
+                           bottomRight:corners[(self.shift + 2) % 4]
+                              topRight:corners[(self.shift + 1) % 4]
                                  error:error];
   if (!bits) {
     return nil;
@@ -150,10 +150,10 @@
  * Extracts the number of data layers and data blocks from the layer around the bull's eye
  */
 - (BOOL)extractParameters:(NSArray *)bullEyeCornerPoints error:(NSError **)error {
-  ZXAztecPoint *p0 = [bullEyeCornerPoints objectAtIndex:0];
-  ZXAztecPoint *p1 = [bullEyeCornerPoints objectAtIndex:1];
-  ZXAztecPoint *p2 = [bullEyeCornerPoints objectAtIndex:2];
-  ZXAztecPoint *p3 = [bullEyeCornerPoints objectAtIndex:3];
+  ZXAztecPoint *p0 = bullEyeCornerPoints[0];
+  ZXAztecPoint *p1 = bullEyeCornerPoints[1];
+  ZXAztecPoint *p2 = bullEyeCornerPoints[2];
+  ZXAztecPoint *p3 = bullEyeCornerPoints[3];
 
   int twoCenterLayers = 2 * self.nbCenterLayers;
 
@@ -164,13 +164,13 @@
   NSArray *resda = [self sampleLine:p3 p2:p0 size:twoCenterLayers + 1];
 
   // Determine the orientation of the matrix
-  if ([[resab objectAtIndex:0] boolValue] && [[resab objectAtIndex:twoCenterLayers] boolValue]) {
+  if ([resab[0] boolValue] && [resab[twoCenterLayers] boolValue]) {
     self.shift = 0;
-  } else if ([[resbc objectAtIndex:0] boolValue] && [[resbc objectAtIndex:twoCenterLayers] boolValue]) {
+  } else if ([resbc[0] boolValue] && [resbc[twoCenterLayers] boolValue]) {
     self.shift = 1;
-  } else if ([[rescd objectAtIndex:0] boolValue] && [[rescd objectAtIndex:twoCenterLayers] boolValue]) {
+  } else if ([rescd[0] boolValue] && [rescd[twoCenterLayers] boolValue]) {
     self.shift = 2;
-  } else if ([[resda objectAtIndex:0] boolValue] && [[resda objectAtIndex:twoCenterLayers] boolValue]) {
+  } else if ([resda[0] boolValue] && [resda[twoCenterLayers] boolValue]) {
     self.shift = 3;
   } else {
     if (error) *error = NotFoundErrorInstance();
@@ -181,41 +181,41 @@
   NSMutableArray *shiftedParameterData = [NSMutableArray array];
   if (self.compact) {
     for (int i = 0; i < 28; i++) {
-      [shiftedParameterData addObject:[NSNumber numberWithBool:NO]];
+      [shiftedParameterData addObject:@NO];
     }
 
     for (int i = 0; i < 7; i++) {
-      [shiftedParameterData replaceObjectAtIndex:i withObject:[resab objectAtIndex:2+i]];
-      [shiftedParameterData replaceObjectAtIndex:i + 7 withObject:[resbc objectAtIndex:2+i]];
-      [shiftedParameterData replaceObjectAtIndex:i + 14 withObject:[rescd objectAtIndex:2+i]];
-      [shiftedParameterData replaceObjectAtIndex:i + 21 withObject:[resda objectAtIndex:2+i]];
+      shiftedParameterData[i] = resab[2+i];
+      shiftedParameterData[i + 7] = resbc[2+i];
+      shiftedParameterData[i + 14] = rescd[2+i];
+      shiftedParameterData[i + 21] = resda[2+i];
     }
 
     for (int i = 0; i < 28; i++) {
-      [parameterData addObject:[shiftedParameterData objectAtIndex:(i + shift * 7) % 28]];
+      [parameterData addObject:shiftedParameterData[(i + shift * 7) % 28]];
     }
   } else {
     for (int i = 0; i < 40; i++) {
-      [shiftedParameterData addObject:[NSNumber numberWithBool:NO]];
+      [shiftedParameterData addObject:@NO];
     }
 
     for (int i = 0; i < 11; i++) {
       if (i < 5) {
-        [shiftedParameterData replaceObjectAtIndex:i withObject:[resab objectAtIndex:2 + i]];
-        [shiftedParameterData replaceObjectAtIndex:i + 10 withObject:[resbc objectAtIndex:2 + i]];
-        [shiftedParameterData replaceObjectAtIndex:i + 20 withObject:[rescd objectAtIndex:2 + i]];
-        [shiftedParameterData replaceObjectAtIndex:i + 30 withObject:[resda objectAtIndex:2 + i]];
+        shiftedParameterData[i] = resab[2 + i];
+        shiftedParameterData[i + 10] = resbc[2 + i];
+        shiftedParameterData[i + 20] = rescd[2 + i];
+        shiftedParameterData[i + 30] = resda[2 + i];
       }
       if (i > 5) {
-        [shiftedParameterData replaceObjectAtIndex:i - 1 withObject:[resab objectAtIndex:2 + i]];
-        [shiftedParameterData replaceObjectAtIndex:i + 9 withObject:[resbc objectAtIndex:2 + i]];
-        [shiftedParameterData replaceObjectAtIndex:i + 19 withObject:[rescd objectAtIndex:2 + i]];
-        [shiftedParameterData replaceObjectAtIndex:i + 29 withObject:[resda objectAtIndex:2 + i]];
+        shiftedParameterData[i - 1] = resab[2 + i];
+        shiftedParameterData[i + 9] = resbc[2 + i];
+        shiftedParameterData[i + 19] = rescd[2 + i];
+        shiftedParameterData[i + 29] = resda[2 + i];
       }
     }
 
     for (int i = 0; i < 40; i++) {
-      [parameterData addObject:[shiftedParameterData objectAtIndex:(i + shift * 10) % 40]];
+      [parameterData addObject:shiftedParameterData[(i + shift * 10) % 40]];
     }
   }
 
@@ -231,10 +231,10 @@
  * Gets the Aztec code corners from the bull's eye corners and the parameters
  */
 - (NSArray *)matrixCornerPoints:(NSArray *)bullEyeCornerPoints {
-  ZXAztecPoint *p0 = [bullEyeCornerPoints objectAtIndex:0];
-  ZXAztecPoint *p1 = [bullEyeCornerPoints objectAtIndex:1];
-  ZXAztecPoint *p2 = [bullEyeCornerPoints objectAtIndex:2];
-  ZXAztecPoint *p3 = [bullEyeCornerPoints objectAtIndex:3];
+  ZXAztecPoint *p0 = bullEyeCornerPoints[0];
+  ZXAztecPoint *p1 = bullEyeCornerPoints[1];
+  ZXAztecPoint *p2 = bullEyeCornerPoints[2];
+  ZXAztecPoint *p3 = bullEyeCornerPoints[3];
 
   float ratio = (2 * self.nbLayers + (self.nbLayers > 4 ? 1 : 0) + (self.nbLayers - 4) / 8) / (2.0f * self.nbCenterLayers);
 
@@ -266,11 +266,10 @@
     return nil;
   }
 
-  return [NSArray arrayWithObjects:
-          [[ZXResultPoint alloc] initWithX:targetax y:targetay],
+  return @[[[ZXResultPoint alloc] initWithX:targetax y:targetay],
           [[ZXResultPoint alloc] initWithX:targetbx y:targetby],
           [[ZXResultPoint alloc] initWithX:targetcx y:targetcy],
-          [[ZXResultPoint alloc] initWithX:targetdx y:targetdy], nil];
+          [[ZXResultPoint alloc] initWithX:targetdx y:targetdy]];
 }
 
 
@@ -298,7 +297,7 @@
     parameterWords[i] = 0;
     int flag = 1;
     for (int j = 1; j <= codewordSize; j++) {
-      if ([[parameterData objectAtIndex:codewordSize * i + codewordSize - j] boolValue]) {
+      if ([parameterData[codewordSize * i + codewordSize - j] boolValue]) {
         parameterWords[i] += flag;
       }
       flag <<= 1;
@@ -319,8 +318,7 @@
   for (int i = 0; i < numDataCodewords; i++) {
     int flag = 1;
     for (int j = 1; j <= codewordSize; j++) {
-      [parameterData replaceObjectAtIndex:i * codewordSize + codewordSize - j
-                               withObject:[NSNumber numberWithBool:(parameterWords[i] & flag) == flag]];
+      parameterData[i * codewordSize + codewordSize - j] = [NSNumber numberWithBool:(parameterWords[i] & flag) == flag];
       flag <<= 1;
     }
   }
@@ -395,7 +393,7 @@
   ZXAztecPoint *pc = [[ZXAztecPoint alloc] initWithX:targetcx y:targetcy];
   ZXAztecPoint *pd = [[ZXAztecPoint alloc] initWithX:targetdx y:targetdy];
 
-  return [NSArray arrayWithObjects:pa, pb, pc, pd, nil];
+  return @[pa, pb, pc, pd];
 }
 
 
@@ -426,10 +424,10 @@
     if (error) *error = detectorError;
     return nil;
   } else {
-    pointA = [cornerPoints objectAtIndex:0];
-    pointB = [cornerPoints objectAtIndex:1];
-    pointC = [cornerPoints objectAtIndex:2];
-    pointD = [cornerPoints objectAtIndex:3];
+    pointA = cornerPoints[0];
+    pointB = cornerPoints[1];
+    pointC = cornerPoints[2];
+    pointD = cornerPoints[3];
   }
 
   int cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4.0f];
@@ -450,10 +448,10 @@
     if (error) *error = detectorError;
     return nil;
   } else {
-    pointA = [cornerPoints objectAtIndex:0];
-    pointB = [cornerPoints objectAtIndex:1];
-    pointC = [cornerPoints objectAtIndex:2];
-    pointD = [cornerPoints objectAtIndex:3];
+    pointA = cornerPoints[0];
+    pointB = cornerPoints[1];
+    pointC = cornerPoints[2];
+    pointD = cornerPoints[3];
   }
 
   cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
@@ -525,14 +523,14 @@
 
   for (int i = 0; i < nbBitsForNbLayers; i++) {
     self.nbLayers <<= 1;
-    if ([[parameterData objectAtIndex:i] boolValue]) {
+    if ([parameterData[i] boolValue]) {
       self.nbLayers++;
     }
   }
 
   for (int i = nbBitsForNbLayers; i < nbBitsForNbLayers + nbBitsForNbDatablocks; i++) {
     self.nbDataBlocks <<= 1;
-    if ([[parameterData objectAtIndex:i] boolValue]) {
+    if ([parameterData[i] boolValue]) {
       self.nbDataBlocks++;
     }
   }
@@ -556,7 +554,7 @@
   float py = p1.y;
 
   for (int i = 0; i < size; i++) {
-    [res addObject:[NSNumber numberWithBool:[self.image getX:[ZXMathUtils round:px] y:[ZXMathUtils round:py]]]];
+    [res addObject:@([self.image getX:[ZXMathUtils round:px] y:[ZXMathUtils round:py]])];
     px += dx;
     py += dy;
   }

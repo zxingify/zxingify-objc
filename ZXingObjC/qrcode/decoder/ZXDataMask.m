@@ -185,21 +185,20 @@ static NSArray *DATA_MASKS = nil;
     /**
      * See ISO 18004:2006 6.8.1
      */
-    DATA_MASKS = [[NSArray alloc] initWithObjects:
-                  [[ZXDataMask000 alloc] init],
-                  [[ZXDataMask001 alloc] init],
-                  [[ZXDataMask010 alloc] init],
-                  [[ZXDataMask011 alloc] init],
-                  [[ZXDataMask100 alloc] init],
-                  [[ZXDataMask101 alloc] init],
-                  [[ZXDataMask110 alloc] init],
-                  [[ZXDataMask111 alloc] init], nil];
+    DATA_MASKS = @[[[ZXDataMask000 alloc] init],
+                   [[ZXDataMask001 alloc] init],
+                   [[ZXDataMask010 alloc] init],
+                   [[ZXDataMask011 alloc] init],
+                   [[ZXDataMask100 alloc] init],
+                   [[ZXDataMask101 alloc] init],
+                   [[ZXDataMask110 alloc] init],
+                   [[ZXDataMask111 alloc] init]];
   }
 
   if (reference < 0 || reference > 7) {
     [NSException raise:NSInvalidArgumentException  format:@"Invalid reference value"];
   }
-  return [DATA_MASKS objectAtIndex:reference];
+  return DATA_MASKS[reference];
 }
 
 @end

@@ -71,11 +71,11 @@
     }
   }
 
-  int shorterBlocksTotalCodewords = [[[result objectAtIndex:0] codewords] count];
+  int shorterBlocksTotalCodewords = [[result[0] codewords] count];
   int longerBlocksStartAt = [result count] - 1;
 
   while (longerBlocksStartAt >= 0) {
-    int numCodewords = [[[result objectAtIndex:longerBlocksStartAt] codewords] count];
+    int numCodewords = [[result[longerBlocksStartAt] codewords] count];
     if (numCodewords == shorterBlocksTotalCodewords) {
       break;
     }
@@ -89,19 +89,19 @@
 
   for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
-      [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:i withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
+      [result[j] codewords][i] = rawCodewords[rawCodewordsOffset++];
     }
   }
 
   for (int j = longerBlocksStartAt; j < numResultBlocks; j++) {
-    [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:shorterBlocksNumDataCodewords withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
+    [result[j] codewords][shorterBlocksNumDataCodewords] = rawCodewords[rawCodewordsOffset++];
   }
 
-  int max = [[[result objectAtIndex:0] codewords] count];
+  int max = [[result[0] codewords] count];
   for (int i = shorterBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = j < longerBlocksStartAt ? i : i + 1;
-      [[[result objectAtIndex:j] codewords] replaceObjectAtIndex:iOffset withObject:[rawCodewords objectAtIndex:rawCodewordsOffset++]];
+      [result[j] codewords][iOffset] = rawCodewords[rawCodewordsOffset++];
     }
   }
 

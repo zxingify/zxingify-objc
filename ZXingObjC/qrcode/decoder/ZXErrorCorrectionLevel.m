@@ -48,9 +48,8 @@ static NSArray *FOR_BITS = nil;
 
 + (ZXErrorCorrectionLevel *)forBits:(int)bits {
   if (!FOR_BITS) {
-    FOR_BITS = [[NSArray alloc] initWithObjects:[ZXErrorCorrectionLevel errorCorrectionLevelM],
-                [ZXErrorCorrectionLevel errorCorrectionLevelL], [ZXErrorCorrectionLevel errorCorrectionLevelH],
-                [ZXErrorCorrectionLevel errorCorrectionLevelQ], nil];
+    FOR_BITS = @[[ZXErrorCorrectionLevel errorCorrectionLevelM], [ZXErrorCorrectionLevel errorCorrectionLevelL],
+                 [ZXErrorCorrectionLevel errorCorrectionLevelH], [ZXErrorCorrectionLevel errorCorrectionLevelQ]];
   }
 
   if (bits < 0 || bits >= [FOR_BITS count]) {
@@ -58,7 +57,7 @@ static NSArray *FOR_BITS = nil;
                                    reason:@"Invalid bits"
                                  userInfo:nil];
   }
-  return [FOR_BITS objectAtIndex:bits];
+  return FOR_BITS[bits];
 }
 
 /**

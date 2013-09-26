@@ -285,15 +285,15 @@ int const CORR = 1;
   float tj = t.y;
 
   if (yi < self.width / 2.0f) {
-    return [NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:ti - CORR y:tj + CORR],
-            [[ZXResultPoint alloc] initWithX:zi + CORR y:zj + CORR],
-            [[ZXResultPoint alloc] initWithX:xi - CORR y:xj - CORR],
-            [[ZXResultPoint alloc] initWithX:yi + CORR y:yj - CORR], nil];
+    return @[[[ZXResultPoint alloc] initWithX:ti - CORR y:tj + CORR],
+             [[ZXResultPoint alloc] initWithX:zi + CORR y:zj + CORR],
+             [[ZXResultPoint alloc] initWithX:xi - CORR y:xj - CORR],
+             [[ZXResultPoint alloc] initWithX:yi + CORR y:yj - CORR]];
   } else {
-    return [NSArray arrayWithObjects:[[ZXResultPoint alloc] initWithX:ti + CORR y:tj + CORR],
-            [[ZXResultPoint alloc] initWithX:zi + CORR y:zj - CORR],
-            [[ZXResultPoint alloc] initWithX:xi - CORR y:xj + CORR],
-            [[ZXResultPoint alloc] initWithX:yi - CORR y:yj - CORR], nil];
+    return @[[[ZXResultPoint alloc] initWithX:ti + CORR y:tj + CORR],
+             [[ZXResultPoint alloc] initWithX:zi + CORR y:zj - CORR],
+             [[ZXResultPoint alloc] initWithX:xi - CORR y:xj + CORR],
+             [[ZXResultPoint alloc] initWithX:yi - CORR y:yj - CORR]];
   }
 }
 

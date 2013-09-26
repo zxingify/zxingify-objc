@@ -93,7 +93,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   }
 
   NSMutableString *resultString = [NSMutableString stringWithCapacity:20];
-  if (![self decodeMiddle:row payloadStart:[[startRange objectAtIndex:1] intValue] payloadEnd:[[endRange objectAtIndex:0] intValue] resultString:resultString]) {
+  if (![self decodeMiddle:row payloadStart:[startRange[1] intValue] payloadEnd:[endRange[0] intValue] resultString:resultString]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -105,7 +105,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   if (allowedLengths == nil) {
     NSMutableArray *temp = [NSMutableArray array];
     for (int i = 0; i < sizeof(DEFAULT_ALLOWED_LENGTHS) / sizeof(int); i++) {
-      [temp addObject:[NSNumber numberWithInt:DEFAULT_ALLOWED_LENGTHS[i]]];
+      [temp addObject:@(DEFAULT_ALLOWED_LENGTHS[i])];
     }
     allowedLengths = [NSArray arrayWithArray:temp];
   }
@@ -126,9 +126,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   return [ZXResult resultWithText:resultString
                          rawBytes:nil
                            length:0
-                     resultPoints:[NSArray arrayWithObjects:
-                                   [[ZXResultPoint alloc] initWithX:[[startRange objectAtIndex:1] floatValue] y:(float)rowNumber],
-                                   [[ZXResultPoint alloc] initWithX:[[endRange objectAtIndex:0] floatValue] y:(float)rowNumber], nil]
+                     resultPoints:@[[[ZXResultPoint alloc] initWithX:[startRange[1] floatValue] y:(float)rowNumber],
+                                    [[ZXResultPoint alloc] initWithX:[endRange[0] floatValue] y:(float)rowNumber]]
                            format:kBarcodeFormatITF];
 }
 
@@ -189,9 +188,9 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     return nil;
   }
 
-  self.narrowLineWidth = ([[startPattern objectAtIndex:1] intValue] - [[startPattern objectAtIndex:0] intValue]) >> 2;
+  self.narrowLineWidth = ([startPattern[1] intValue] - [startPattern[0] intValue]) >> 2;
 
-  if (![self validateQuietZone:row startPattern:[[startPattern objectAtIndex:0] intValue]]) {
+  if (![self validateQuietZone:row startPattern:[startPattern[0] intValue]]) {
     return nil;
   }
 
@@ -255,10 +254,10 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  [self validateQuietZone:row startPattern:[[endPattern objectAtIndex:0] intValue]];
-  int temp = [[endPattern objectAtIndex:0] intValue];
-  [endPattern replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[row size] - [[endPattern objectAtIndex:1] intValue]]];
-  [endPattern replaceObjectAtIndex:1 withObject:[NSNumber numberWithInt:[row size] - temp]];
+  [self validateQuietZone:row startPattern:[endPattern[0] intValue]];
+  int temp = [endPattern[0] intValue];
+  endPattern[0] = @([row size] - [endPattern[1] intValue]);
+  endPattern[1] = @([row size] - temp);
   [row reverse];
   return endPattern;
 }
@@ -278,7 +277,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     } else {
       if (counterPosition == patternLength - 1) {
         if ([ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
-          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
+          return @[@(patternStart), @(x)];
         }
         patternStart += counters[0] + counters[1];
         for (int y = 2; y < patternLength; y++) {

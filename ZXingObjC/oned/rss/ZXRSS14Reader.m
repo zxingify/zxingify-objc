@@ -111,7 +111,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 - (ZXResult *)constructResult:(ZXPair *)leftPair rightPair:(ZXPair *)rightPair {
   long long symbolValue = 4537077LL * leftPair.value + rightPair.value;
-  NSString *text = [[NSNumber numberWithLongLong:symbolValue] stringValue];
+  NSString *text = [@(symbolValue) stringValue];
   NSMutableString *buffer = [NSMutableString stringWithCapacity:14];
 
   for (int i = 13 - [text length]; i > 0; i--) {
@@ -136,7 +136,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   return [ZXResult resultWithText:buffer
                          rawBytes:NULL
                            length:0
-                     resultPoints:[NSArray arrayWithObjects:[leftPoints objectAtIndex:0], [leftPoints objectAtIndex:1], [rightPoints objectAtIndex:0], [rightPoints objectAtIndex:1], nil]
+                     resultPoints:@[leftPoints[0], leftPoints[1], rightPoints[0], rightPoints[1]]
                            format:kBarcodeFormatRSS14];
 }
 
@@ -167,7 +167,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   }
   id<ZXResultPointCallback> resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
   if (resultPointCallback != nil) {
-    float center = ([[startEnd objectAtIndex:0] intValue] + [[startEnd objectAtIndex:1] intValue]) / 2.0f;
+    float center = ([startEnd[0] intValue] + [startEnd[1] intValue]) / 2.0f;
     if (right) {
       center = [row size] - 1 - center;
     }
@@ -196,11 +196,11 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   counters[7] = 0;
 
   if (outsideChar) {
-    if (![ZXOneDReader recordPatternInReverse:row start:[[[pattern startEnd] objectAtIndex:0] intValue] counters:counters countersSize:countersLen]) {
+    if (![ZXOneDReader recordPatternInReverse:row start:[[pattern startEnd][0] intValue] counters:counters countersSize:countersLen]) {
       return nil;
     }
   } else {
-    if (![ZXOneDReader recordPattern:row start:[[[pattern startEnd] objectAtIndex:1] intValue] counters:counters countersSize:countersLen]) {
+    if (![ZXOneDReader recordPattern:row start:[[pattern startEnd][1] intValue] counters:counters countersSize:countersLen]) {
       return nil;
     }
 
@@ -305,7 +305,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     } else {
       if (counterPosition == 3) {
         if ([ZXAbstractRSSReader isFinderPattern:counters countersLen:countersLen]) {
-          return [NSArray arrayWithObjects:[NSNumber numberWithInt:patternStart], [NSNumber numberWithInt:x], nil];
+          return @[@(patternStart), @(x)];
         }
         patternStart += counters[0] + counters[1];
         counters[0] = counters[2];
@@ -325,15 +325,15 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 }
 
 - (ZXRSSFinderPattern *)parseFoundFinderPattern:(ZXBitArray *)row rowNumber:(int)rowNumber right:(BOOL)right startEnd:(NSArray *)startEnd {
-  BOOL firstIsBlack = [row get:[[startEnd objectAtIndex:0] intValue]];
-  int firstElementStart = [[startEnd objectAtIndex:0] intValue] - 1;
+  BOOL firstIsBlack = [row get:[startEnd[0] intValue]];
+  int firstElementStart = [startEnd[0] intValue] - 1;
 
   while (firstElementStart >= 0 && firstIsBlack ^ [row get:firstElementStart]) {
     firstElementStart--;
   }
 
   firstElementStart++;
-  int firstCounter = [[startEnd objectAtIndex:0] intValue] - firstElementStart;
+  int firstCounter = [startEnd[0] intValue] - firstElementStart;
 
   int countersLen = self.decodeFinderCountersLen;
   int *counters = self.decodeFinderCounters;
@@ -346,13 +346,13 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     return nil;
   }
   int start = firstElementStart;
-  int end = [[startEnd objectAtIndex:1] intValue];
+  int end = [startEnd[1] intValue];
   if (right) {
     start = [row size] - 1 - start;
     end = [row size] - 1 - end;
   }
   return [[ZXRSSFinderPattern alloc] initWithValue:value
-                                           startEnd:[NSMutableArray arrayWithObjects:[NSNumber numberWithInt:firstElementStart], [startEnd objectAtIndex:1], nil]
+                                           startEnd:[@[@(firstElementStart), startEnd[1]] mutableCopy]
                                               start:start
                                                 end:end
                                           rowNumber:rowNumber];

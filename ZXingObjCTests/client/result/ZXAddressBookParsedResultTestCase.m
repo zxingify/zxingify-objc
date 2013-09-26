@@ -41,7 +41,7 @@
 - (void)testAddressBookDocomo {
   [self doTestWithContents:@"MECARD:N:Sean Owen;;"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean Owen"]
+                     names:@[@"Sean Owen"]
              pronunciation:nil
                  addresses:nil
                     emails:nil
@@ -53,13 +53,13 @@
 
   [self doTestWithContents:@"MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean Owen"]
+                     names:@[@"Sean Owen"]
              pronunciation:nil
                  addresses:nil
-                    emails:[NSArray arrayWithObject:@"srowen@example.org"]
+                    emails:@[@"srowen@example.org"]
               phoneNumbers:nil
                        org:nil
-                      urls:[NSArray arrayWithObject:@"google.com"]
+                      urls:@[@"google.com"]
                   birthday:nil
                       note:@"ZXing Team"];
 }
@@ -67,11 +67,11 @@
 - (void)testAddressBookAU {
   [self doTestWithContents:@"MEMORY:foo\r\nNAME1:Sean\r\nTEL1:+12125551212\r\n"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean"]
+                     names:@[@"Sean"]
              pronunciation:nil
                  addresses:nil
                     emails:nil
-              phoneNumbers:[NSArray arrayWithObject:@"+12125551212"]
+              phoneNumbers:@[@"+12125551212"]
                        org:nil
                       urls:nil
                   birthday:nil
@@ -81,9 +81,9 @@
 - (void)testVCard {
   [self doTestWithContents:@"BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean Owen"]
+                     names:@[@"Sean Owen"]
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@"123 Main St"]
+                 addresses:@[@"123 Main St"]
                     emails:nil
               phoneNumbers:nil
                        org:nil
@@ -95,9 +95,9 @@
 - (void)testVCardCaseInsensitive {
   [self doTestWithContents:@"begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean Owen"]
+                     names:@[@"Sean Owen"]
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@"123 Main St"]
+                 addresses:@[@"123 Main St"]
                     emails:nil
               phoneNumbers:nil
                        org:nil
@@ -109,9 +109,9 @@
 - (void)testEscapedVCard {
   [self doTestWithContents:@"BEGIN:VCARD\r\nADR;HOME:123\\;\\\\ Main\\, St\\nHome\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean Owen"]
+                     names:@[@"Sean Owen"]
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@"123;\\ Main, St\nHome"]
+                 addresses:@[@"123;\\ Main, St\nHome"]
                     emails:nil
               phoneNumbers:nil
                        org:nil
@@ -123,11 +123,11 @@
 - (void)testBizcard {
   [self doTestWithContents:@"BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12125551212;E:srowen@example.org;"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Sean Owen"]
+                     names:@[@"Sean Owen"]
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@"123 Main St"]
-                    emails:[NSArray arrayWithObject:@"srowen@example.org"]
-              phoneNumbers:[NSArray arrayWithObject:@"+12125551212"]
+                 addresses:@[@"123 Main St"]
+                    emails:@[@"srowen@example.org"]
+              phoneNumbers:@[@"+12125551212"]
                        org:@"Google"
                       urls:nil
                   birthday:nil
@@ -138,11 +138,11 @@
   [self doTestWithContents:@"MECARD:N:Foo Bar;ORG:Company;TEL:5555555555;EMAIL:foo.bar@xyz.com;ADR:City, 10001;"
                            @"ADR:City, 10001;NOTE:This is the memo.;;"
                      title:nil
-                     names:[NSArray arrayWithObject:@"Foo Bar"]
+                     names:@[@"Foo Bar"]
              pronunciation:nil
-                 addresses:[NSArray arrayWithObjects:@"City, 10001", @"City, 10001", nil]
-                    emails:[NSArray arrayWithObject:@"foo.bar@xyz.com"]
-              phoneNumbers:[NSArray arrayWithObject:@"5555555555"]
+                 addresses:@[@"City, 10001", @"City, 10001"]
+                    emails:@[@"foo.bar@xyz.com"]
+              phoneNumbers:@[@"5555555555"]
                        org:@"Company"
                       urls:nil
                   birthday:nil
@@ -157,7 +157,7 @@
                      title:nil
                      names:nil
              pronunciation:nil
-                 addresses:[NSArray arrayWithObject:@"88 Lynbrook\r\nCO 69999"]
+                 addresses:@[@"88 Lynbrook\r\nCO 69999"]
                     emails:nil
               phoneNumbers:nil
                        org:nil

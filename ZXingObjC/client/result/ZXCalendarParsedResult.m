@@ -164,7 +164,7 @@ const long RFC2445_DURATION_FIELD_UNITS[RFC2445_DURATION_FIELD_UNITS_LEN] = {
     return -1;
   }
   long durationMS = 0;
-  NSTextCheckingResult *match = [m objectAtIndex:0];
+  NSTextCheckingResult *match = m[0];
   for (int i = 0; i < RFC2445_DURATION_FIELD_UNITS_LEN; i++) {
     if ([match rangeAtIndex:i + 1].location != NSNotFound) {
       NSString *fieldValue = [durationString substringWithRange:[match rangeAtIndex:i + 1]];

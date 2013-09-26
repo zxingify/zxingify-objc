@@ -50,9 +50,8 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   ZXResult *extensionResult = [[ZXResult alloc] initWithText:resultString
                                                      rawBytes:nil
                                                        length:0
-                                                 resultPoints:[NSArray arrayWithObjects:
-                                                               [[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:rowNumber],
-                                                               [[ZXResultPoint alloc] initWithX:end y:rowNumber], nil]
+                                                 resultPoints:@[[[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:rowNumber],
+                                                                [[ZXResultPoint alloc] initWithX:end y:rowNumber]]
                                                        format:kBarcodeFormatUPCEANExtension];
   if (extensionData != nil) {
     [extensionResult putAllMetadata:extensionData];
@@ -134,7 +133,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   }
   id value = [self parseExtension5String:raw];
   if (value) {
-    return [NSMutableDictionary dictionaryWithObject:value forKey:[NSNumber numberWithInt:kResultMetadataTypeSuggestedPrice]];
+    return [NSMutableDictionary dictionaryWithObject:value forKey:@(kResultMetadataTypeSuggestedPrice)];
   } else {
     return nil;
   }
@@ -166,10 +165,10 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
       break;
   }
   int rawAmount = [[raw substringFromIndex:1] intValue];
-  NSString *unitsString = [[NSNumber numberWithInt:rawAmount / 100] stringValue];
+  NSString *unitsString = [@(rawAmount / 100) stringValue];
   int hundredths = rawAmount % 100;
   NSString *hundredthsString = hundredths < 10 ?
-  [NSString stringWithFormat:@"0%d", hundredths] : [[NSNumber numberWithInt:hundredths] stringValue];
+  [NSString stringWithFormat:@"0%d", hundredths] : [@(hundredths) stringValue];
   return [NSString stringWithFormat:@"%@%@.%@", currency, unitsString, hundredthsString];
 }
 

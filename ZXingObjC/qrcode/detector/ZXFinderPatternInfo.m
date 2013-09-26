@@ -33,9 +33,9 @@
 
 - (id)initWithPatternCenters:(NSArray *)patternCenters {
   if (self = [super init]) {
-    self.bottomLeft = [patternCenters objectAtIndex:0];
-    self.topLeft = [patternCenters objectAtIndex:1];
-    self.topRight = [patternCenters objectAtIndex:2];
+    self.bottomLeft = patternCenters[0];
+    self.topLeft = patternCenters[1];
+    self.topRight = patternCenters[2];
   }
 
   return self;

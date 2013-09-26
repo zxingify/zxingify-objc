@@ -342,10 +342,9 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
       BOOL found = NO;
       int max = [self.possibleCenters count];
       for (int index = 0; index < max; index++) {
-        ZXQRCodeFinderPattern *center = [self.possibleCenters objectAtIndex:index];
+        ZXQRCodeFinderPattern *center = self.possibleCenters[index];
         if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
-          [possibleCenters replaceObjectAtIndex:index
-                                     withObject:[center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize]];
+          possibleCenters[index] = [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];
           found = YES;
           break;
         }
@@ -378,7 +377,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   }
   ZXQRCodeFinderPattern *firstConfirmedCenter = nil;
   for (int i = 0; i < max; i++) {
-    ZXQRCodeFinderPattern *center = [self.possibleCenters objectAtIndex:i];
+    ZXQRCodeFinderPattern *center = self.possibleCenters[i];
     if ([center count] >= CENTER_QUORUM) {
       if (firstConfirmedCenter == nil) {
         firstConfirmedCenter = center;
@@ -397,7 +396,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float totalModuleSize = 0.0f;
   int max = [self.possibleCenters count];
   for (int i = 0; i < max; i++) {
-    ZXQRCodeFinderPattern *pattern = [self.possibleCenters objectAtIndex:i];
+    ZXQRCodeFinderPattern *pattern = self.possibleCenters[i];
     if ([pattern count] >= CENTER_QUORUM) {
       confirmedCount++;
       totalModuleSize += [pattern estimatedModuleSize];
@@ -410,7 +409,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float average = totalModuleSize / (float)max;
   float totalDeviation = 0.0f;
   for (int i = 0; i < max; i++) {
-    ZXQRCodeFinderPattern *pattern = [self.possibleCenters objectAtIndex:i];
+    ZXQRCodeFinderPattern *pattern = self.possibleCenters[i];
     totalDeviation += fabsf([pattern estimatedModuleSize] - average);
   }
   return totalDeviation <= 0.05f * totalModuleSize;
@@ -458,19 +457,19 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
     float totalModuleSize = 0.0f;
     float square = 0.0f;
     for (int i = 0; i < startSize; i++) {
-      float size = [[self.possibleCenters objectAtIndex:i] estimatedModuleSize];
+      float size = [self.possibleCenters[i] estimatedModuleSize];
       totalModuleSize += size;
       square += size * size;
     }
     float average = totalModuleSize / (float)startSize;
     float stdDev = (float)sqrt(square / startSize - average * average);
 
-    [self.possibleCenters sortUsingFunction: furthestFromAverageCompare context: (__bridge void *)[NSNumber numberWithFloat:average]];
+    [self.possibleCenters sortUsingFunction: furthestFromAverageCompare context: (__bridge void *)@(average)];
 
     float limit = MAX(0.2f * average, stdDev);
 
     for (int i = 0; i < [self.possibleCenters count] && [self.possibleCenters count] > 3; i++) {
-      ZXQRCodeFinderPattern *pattern = [self.possibleCenters objectAtIndex:i];
+      ZXQRCodeFinderPattern *pattern = self.possibleCenters[i];
       if (fabsf([pattern estimatedModuleSize] - average) > limit) {
         [self.possibleCenters removeObjectAtIndex:i];
         i--;
@@ -481,17 +480,17 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
   if ([self.possibleCenters count] > 3) {
     float totalModuleSize = 0.0f;
     for (int i = 0; i < [self.possibleCenters count]; i++) {
-      totalModuleSize += [[self.possibleCenters objectAtIndex:i] estimatedModuleSize];
+      totalModuleSize += [self.possibleCenters[i] estimatedModuleSize];
     }
 
     float average = totalModuleSize / (float)[self.possibleCenters count];
 
-    [self.possibleCenters sortUsingFunction:centerCompare context:(__bridge void *)([NSNumber numberWithFloat:average])];
+    [self.possibleCenters sortUsingFunction:centerCompare context:(__bridge void *)(@(average))];
 
     self.possibleCenters = [[NSMutableArray alloc] initWithArray:[possibleCenters subarrayWithRange:NSMakeRange(0, 3)]];
   }
 
-  return [NSMutableArray arrayWithObjects:[self.possibleCenters objectAtIndex:0], [self.possibleCenters objectAtIndex:1], [self.possibleCenters objectAtIndex:2], nil];
+  return [@[self.possibleCenters[0], self.possibleCenters[1], self.possibleCenters[2]] mutableCopy];
 }
 
 @end

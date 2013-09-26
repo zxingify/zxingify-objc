@@ -35,12 +35,12 @@
 - (id)initWithNumber:(NSString *)aNumber via:(NSString *)aVia subject:(NSString *)aSubject body:(NSString *)aBody {
   NSArray *theNumbers = nil;
   if (aNumber) {
-    theNumbers = [NSArray arrayWithObject:aNumber];
+    theNumbers = @[aNumber];
   }
 
   NSArray *theVias = nil;
   if (aVia) {
-    theVias = [NSArray arrayWithObject:aVia];
+    theVias = @[aVia];
   }
   
   return [self initWithNumbers:theNumbers vias:theVias subject:aSubject body:aBody];
@@ -74,10 +74,10 @@
     } else {
       [result appendString:@","];
     }
-    [result appendString:[numbers objectAtIndex:i]];
-    if (vias != nil && [vias objectAtIndex:i] != nil) {
+    [result appendString:numbers[i]];
+    if (vias != nil && vias[i] != nil) {
       [result appendString:@";via="];
-      [result appendString:[vias objectAtIndex:i]];
+      [result appendString:vias[i]];
     }
   }
 

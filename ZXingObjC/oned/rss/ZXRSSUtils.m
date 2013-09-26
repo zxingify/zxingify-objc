@@ -55,10 +55,10 @@
     }
     val += subVal;
     n -= elmWidth;
-    [widths addObject:[NSNumber numberWithInt:elmWidth]];
+    [widths addObject:@(elmWidth)];
   }
 
-  [widths addObject:[NSNumber numberWithInt:n]];
+  [widths addObject:@(n)];
   return widths;
 }
 
@@ -128,31 +128,27 @@
 + (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K {
   NSMutableArray *widths = [NSMutableArray arrayWithCapacity:[eDist count] + 2];
   int twoK = K << 1;
-  [widths addObject:[NSNumber numberWithInt:1]];
+  [widths addObject:@1];
   int i;
   int minEven = 10;
   int barSum = 1;
   for (i = 1; i < twoK - 2; i += 2) {
-    [widths addObject:[NSNumber numberWithInt:
-                       [[eDist objectAtIndex:i - 1] intValue] - [[widths objectAtIndex:i - 1] intValue]]];
-    [widths addObject:[NSNumber numberWithInt:
-                       [[eDist objectAtIndex:i] intValue] - [[widths objectAtIndex:i] intValue]]];    
-    barSum += [[widths objectAtIndex:i] intValue] + [[widths objectAtIndex:i + 1] intValue];
-    if ([[widths objectAtIndex:i] intValue] < minEven) {
-      minEven = [[widths objectAtIndex:i] intValue];
+    [widths addObject:@([eDist[i - 1] intValue] - [widths[i - 1] intValue])];
+    [widths addObject:@([eDist[i] intValue] - [widths[i] intValue])];    
+    barSum += [widths[i] intValue] + [widths[i + 1] intValue];
+    if ([widths[i] intValue] < minEven) {
+      minEven = [widths[i] intValue];
     }
   }
 
-  [widths addObject:[NSNumber numberWithInt:N - barSum]];
-  if ([[widths objectAtIndex:twoK - 1] intValue] < minEven) {
-    minEven = [[widths objectAtIndex:twoK - 1] intValue];
+  [widths addObject:@(N - barSum)];
+  if ([widths[twoK - 1] intValue] < minEven) {
+    minEven = [widths[twoK - 1] intValue];
   }
   if (minEven > 1) {
     for (i = 0; i < twoK; i += 2) {
-      [widths replaceObjectAtIndex:i
-                        withObject:[NSNumber numberWithInt:[[widths objectAtIndex:i] intValue] + minEven - 1]];
-      [widths replaceObjectAtIndex:i + 1
-                        withObject:[NSNumber numberWithInt:[[widths objectAtIndex:i + 1] intValue] - minEven - 1]];
+      widths[i] = @([widths[i] intValue] + minEven - 1);
+      widths[i + 1] = @([widths[i + 1] intValue] - minEven - 1);
     }
   }
   return widths;

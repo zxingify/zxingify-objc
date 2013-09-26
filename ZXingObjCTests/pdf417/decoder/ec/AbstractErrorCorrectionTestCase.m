@@ -32,7 +32,7 @@
       j--;
     } else {
       corrupted[location] = YES;
-      [received replaceObjectAtIndex:location withObject:[NSNumber numberWithInt:arc4random() % 929]];
+      received[location] = [NSNumber numberWithInt:arc4random() % 929];
     }
   }
 }
@@ -50,8 +50,8 @@
       j--;
     } else {
       erased[location] = YES;
-      [received replaceObjectAtIndex:location withObject:[NSNumber numberWithInt:0]];
-      [erasures addObject:[NSNumber numberWithInt:location]];
+      received[location] = @0;
+      [erasures addObject:@(location)];
     }
   }
   return erasures;

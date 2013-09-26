@@ -43,7 +43,7 @@
 - (BOOL)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords erasures:(NSArray *)erasures {
   int coefficients[received.count];
   for (int i = 0; i < received.count; i++) {
-    coefficients[i] = [[received objectAtIndex:i] intValue];
+    coefficients[i] = [received[i] intValue];
   }
   ZXModulusPoly *poly = [[ZXModulusPoly alloc] initWithField:self.field coefficients:coefficients coefficientsLen:received.count];
 
@@ -80,8 +80,8 @@
       return NO;
     }
 
-    ZXModulusPoly *sigma = [sigmaOmega objectAtIndex:0];
-    ZXModulusPoly *omega = [sigmaOmega objectAtIndex:1];
+    ZXModulusPoly *sigma = sigmaOmega[0];
+    ZXModulusPoly *omega = sigmaOmega[1];
 
     //sigma = [sigma multiply:knownErrors];
 
@@ -90,13 +90,12 @@
     NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocator:sigma errorLocations:errorLocations];
 
     for (int i = 0; i < errorLocations.count; i++) {
-      int position = received.count - 1 - [self.field log:[[errorLocations objectAtIndex:i] intValue]];
+      int position = received.count - 1 - [self.field log:[errorLocations[i] intValue]];
       if (position < 0) {
         return NO;
       }
-      [received replaceObjectAtIndex:position
-                          withObject:[NSNumber numberWithInt:[self.field subtract:[[received objectAtIndex:position] intValue]
-                                                                                b:[[errorMagnitudes objectAtIndex:i] intValue]]]];
+      received[position] = @([self.field subtract:[received[position] intValue]
+                                                b:[errorMagnitudes[i] intValue]]);
     }
   }
 
@@ -150,7 +149,7 @@
   int inverse = [self.field inverse:sigmaTildeAtZero];
   ZXModulusPoly *sigma = [t multiplyScalar:inverse];
   ZXModulusPoly *omega = [r multiplyScalar:inverse];
-  return [NSArray arrayWithObjects:sigma, omega, nil];
+  return @[sigma, omega];
 }
 
 - (NSArray *)findErrorLocations:(ZXModulusPoly *)errorLocator {
@@ -159,7 +158,7 @@
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:numErrors];
   for (int i = 1; i < self.field.size && result.count < numErrors; i++) {
     if ([errorLocator evaluateAt:i] == 0) {
-      [result addObject:[NSNumber numberWithInt:[field inverse:i]]];
+      [result addObject:@([field inverse:i])];
     }
   }
   if (result.count != numErrors) {
@@ -185,10 +184,10 @@
   int s = errorLocations.count;
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:s];
   for (int i = 0; i < s; i++) {
-    int xiInverse = [self.field inverse:[[errorLocations objectAtIndex:i] intValue]];
+    int xiInverse = [self.field inverse:[errorLocations[i] intValue]];
     int numerator = [self.field subtract:0 b:[errorEvaluator evaluateAt:xiInverse]];
     int denominator = [self.field inverse:[formalDerivative evaluateAt:xiInverse]];
-    [result addObject:[NSNumber numberWithInt:[self.field multiply:numerator b:denominator]]];
+    [result addObject:@([self.field multiply:numerator b:denominator])];
   }
   return result;
 }

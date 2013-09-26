@@ -138,7 +138,7 @@
   }
 
   if ([self.possibleCenters count] > 0) {
-    return [self.possibleCenters objectAtIndex:0];
+    return self.possibleCenters[0];
   }
   if (error) *error = NotFoundErrorInstance();
   return nil;
@@ -235,7 +235,7 @@
     int max = self.possibleCenters.count;
 
     for (int index = 0; index < max; index++) {
-      ZXAlignmentPattern *center = [self.possibleCenters objectAtIndex:index];
+      ZXAlignmentPattern *center = self.possibleCenters[index];
       // Look for about the same center and module size:
       if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
         return [center combineEstimateI:centerI j:centerJ newModuleSize:estimatedModuleSize];

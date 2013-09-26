@@ -59,58 +59,18 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 //                         [NSNumber numberWithInt:657],
 //                         [NSNumber numberWithInt:619], nil];
 
-  PDF417_TEST = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithInt:48], [NSNumber numberWithInt:901],
-                 [NSNumber numberWithInt:56], [NSNumber numberWithInt:141], [NSNumber numberWithInt:627], [NSNumber numberWithInt:856],
-                 [NSNumber numberWithInt:330], [NSNumber numberWithInt:69], [NSNumber numberWithInt:244], [NSNumber numberWithInt:900],
-                 [NSNumber numberWithInt:852], [NSNumber numberWithInt:169], [NSNumber numberWithInt:843], [NSNumber numberWithInt:895],
-                 [NSNumber numberWithInt:852], [NSNumber numberWithInt:895], [NSNumber numberWithInt:913], [NSNumber numberWithInt:154],
-                 [NSNumber numberWithInt:845], [NSNumber numberWithInt:778], [NSNumber numberWithInt:387], [NSNumber numberWithInt:89],
-                 [NSNumber numberWithInt:869], [NSNumber numberWithInt:901], [NSNumber numberWithInt:219], [NSNumber numberWithInt:474],
-                 [NSNumber numberWithInt:543], [NSNumber numberWithInt:650], [NSNumber numberWithInt:169], [NSNumber numberWithInt:201],
-                 [NSNumber numberWithInt:9], [NSNumber numberWithInt:160], [NSNumber numberWithInt:35], [NSNumber numberWithInt:70],
-                 [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                 [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                 [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                 [NSNumber numberWithInt:900],  [NSNumber numberWithInt:900], nil];
+  PDF417_TEST = [@[@48, @901, @56, @141, @627, @856, @330, @69, @244, @900, @852, @169, @843, @895, @852, @895, @913,
+                   @154, @845, @778, @387, @89, @869, @901, @219, @474, @543, @650, @169, @201, @9, @160, @35, @70,
+                   @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900,  @900] mutableCopy];
 
-  PDF417_TEST_WITH_EC = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithInt:48], [NSNumber numberWithInt:901],
-                         [NSNumber numberWithInt:56], [NSNumber numberWithInt:141], [NSNumber numberWithInt:627],
-                         [NSNumber numberWithInt:856], [NSNumber numberWithInt:330], [NSNumber numberWithInt:69],
-                         [NSNumber numberWithInt:244], [NSNumber numberWithInt:900], [NSNumber numberWithInt:852],
-                         [NSNumber numberWithInt:169], [NSNumber numberWithInt:843], [NSNumber numberWithInt:895],
-                         [NSNumber numberWithInt:852], [NSNumber numberWithInt:895], [NSNumber numberWithInt:913],
-                         [NSNumber numberWithInt:154], [NSNumber numberWithInt:845], [NSNumber numberWithInt:778],
-                         [NSNumber numberWithInt:387], [NSNumber numberWithInt:89], [NSNumber numberWithInt:869],
-                         [NSNumber numberWithInt:901], [NSNumber numberWithInt:219], [NSNumber numberWithInt:474],
-                         [NSNumber numberWithInt:543], [NSNumber numberWithInt:650], [NSNumber numberWithInt:169],
-                         [NSNumber numberWithInt:201], [NSNumber numberWithInt:9], [NSNumber numberWithInt:160],
-                         [NSNumber numberWithInt:35], [NSNumber numberWithInt:70], [NSNumber numberWithInt:900],
-                         [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                         [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                         [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                         [NSNumber numberWithInt:900], [NSNumber numberWithInt:900], [NSNumber numberWithInt:900],
-                         [NSNumber numberWithInt:900], [NSNumber numberWithInt:769], [NSNumber numberWithInt:843],
-                         [NSNumber numberWithInt:591], [NSNumber numberWithInt:910], [NSNumber numberWithInt:605],
-                         [NSNumber numberWithInt:206], [NSNumber numberWithInt:706], [NSNumber numberWithInt:917],
-                         [NSNumber numberWithInt:371], [NSNumber numberWithInt:469], [NSNumber numberWithInt:79],
-                         [NSNumber numberWithInt:718], [NSNumber numberWithInt:47], [NSNumber numberWithInt:777],
-                         [NSNumber numberWithInt:249], [NSNumber numberWithInt:262], [NSNumber numberWithInt:193],
-                         [NSNumber numberWithInt:620], [NSNumber numberWithInt:597], [NSNumber numberWithInt:477],
-                         [NSNumber numberWithInt:450], [NSNumber numberWithInt:806], [NSNumber numberWithInt:908],
-                         [NSNumber numberWithInt:309], [NSNumber numberWithInt:153], [NSNumber numberWithInt:871],
-                         [NSNumber numberWithInt:686], [NSNumber numberWithInt:838], [NSNumber numberWithInt:185],
-                         [NSNumber numberWithInt:674], [NSNumber numberWithInt:68], [NSNumber numberWithInt:679],
-                         [NSNumber numberWithInt:691], [NSNumber numberWithInt:794], [NSNumber numberWithInt:497],
-                         [NSNumber numberWithInt:479], [NSNumber numberWithInt:234], [NSNumber numberWithInt:250],
-                         [NSNumber numberWithInt:496], [NSNumber numberWithInt:43], [NSNumber numberWithInt:347],
-                         [NSNumber numberWithInt:582], [NSNumber numberWithInt:882], [NSNumber numberWithInt:536],
-                         [NSNumber numberWithInt:322], [NSNumber numberWithInt:317], [NSNumber numberWithInt:273],
-                         [NSNumber numberWithInt:194], [NSNumber numberWithInt:917], [NSNumber numberWithInt:237],
-                         [NSNumber numberWithInt:420], [NSNumber numberWithInt:859], [NSNumber numberWithInt:340],
-                         [NSNumber numberWithInt:115], [NSNumber numberWithInt:222], [NSNumber numberWithInt:808],
-                         [NSNumber numberWithInt:866], [NSNumber numberWithInt:836], [NSNumber numberWithInt:417],
-                         [NSNumber numberWithInt:121], [NSNumber numberWithInt:833], [NSNumber numberWithInt:459],
-                         [NSNumber numberWithInt:64], [NSNumber numberWithInt:159], nil];
+  PDF417_TEST_WITH_EC = [@[@48, @901, @56, @141, @627, @856, @330, @69, @244, @900, @852, @169, @843, @895, @852, @895,
+                           @913, @154, @845, @778, @387, @89, @869, @901, @219, @474, @543, @650, @169, @201, @9, @160,
+                           @35, @70, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900,@900, @900, @900, @900,
+                           @769, @843, @591, @910, @605, @206, @706, @917, @371, @469, @79, @718, @47, @777, @249, @262,
+                           @193, @620, @597, @477, @450, @806, @908, @309, @153, @871, @686, @838, @185, @674, @68,
+                           @679, @691, @794, @497, @479, @234, @250, @496, @43, @347, @582, @882, @536, @322, @317,
+                           @273, @194, @917, @237, @420, @859, @340, @115, @222, @808, @866, @836, @417, @121, @833,
+                           @459, @64, @159] mutableCopy];
 
   ECC_BYTES = PDF417_TEST_WITH_EC.count - PDF417_TEST.count;
 }
@@ -132,7 +92,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 - (void)testOneError {
   for (int i = 0; i < PDF417_TEST_WITH_EC.count; i++) {
     NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
-    [received replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:arc4random() % 256]];
+    received[i] = [NSNumber numberWithInt:arc4random() % 256];
     [self checkDecode:received];
   }
 }
@@ -170,7 +130,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 */
 
 - (BOOL)checkDecode:(NSMutableArray *)received {
-  return [self checkDecode:received erasures:[NSArray array]];
+  return [self checkDecode:received erasures:@[]];
 }
 
 - (BOOL)checkDecode:(NSMutableArray *)received erasures:(NSArray *)erasures {
@@ -179,7 +139,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
   }
 
   for (int i = 0; i < PDF417_TEST.count; i++) {
-    STAssertEquals([[received objectAtIndex:i] intValue], [[PDF417_TEST objectAtIndex:i] intValue], @"Expected %@ to equal %@", [received objectAtIndex:i], [PDF417_TEST objectAtIndex:i]);
+    STAssertEquals([received[i] intValue], [PDF417_TEST[i] intValue], @"Expected %@ to equal %@", received[i], PDF417_TEST[i]);
   }
   return YES;
 }

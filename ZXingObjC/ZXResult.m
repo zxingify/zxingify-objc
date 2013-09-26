@@ -81,7 +81,7 @@
   if (self.resultMetadata == nil) {
     self.resultMetadata = [NSMutableDictionary dictionary];
   }
-  [self.resultMetadata setObject:[NSNumber numberWithInt:type] forKey:value];
+  self.resultMetadata[value] = [NSNumber numberWithInt:type];
 }
 
 - (void)putAllMetadata:(NSMutableDictionary *)metadata {

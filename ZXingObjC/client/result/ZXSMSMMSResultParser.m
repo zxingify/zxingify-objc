@@ -37,8 +37,8 @@
   NSString *body = nil;
   BOOL querySyntax = NO;
   if (nameValuePairs != nil && [nameValuePairs count] > 0) {
-    subject = [nameValuePairs objectForKey:@"subject"];
-    body = [nameValuePairs objectForKey:@"body"];
+    subject = nameValuePairs[@"subject"];
+    body = nameValuePairs[@"body"];
     querySyntax = YES;
   }
 

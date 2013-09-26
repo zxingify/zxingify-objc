@@ -38,7 +38,7 @@
 - (id)initWithEcCodewordsPerBlock:(int)anEcCodewordsPerBlock ecBlocks:(ZXQRCodeECB *)theEcBlocks {
   if (self = [super init]) {
     self.ecCodewordsPerBlock = anEcCodewordsPerBlock;
-    self.ecBlocks = [NSArray arrayWithObject:theEcBlocks];
+    self.ecBlocks = @[theEcBlocks];
   }
 
   return self;
@@ -47,7 +47,7 @@
 - (id)initWithEcCodewordsPerBlock:(int)anEcCodewordsPerBlock ecBlocks1:(ZXQRCodeECB *)ecBlocks1 ecBlocks2:(ZXQRCodeECB *)ecBlocks2 {
   if (self = [super init]) {
     self.ecCodewordsPerBlock = anEcCodewordsPerBlock;
-    self.ecBlocks = [NSArray arrayWithObjects:ecBlocks1, ecBlocks2, nil];
+    self.ecBlocks = @[ecBlocks1, ecBlocks2];
   }
 
   return self;
@@ -143,7 +143,7 @@ static NSArray *VERSIONS = nil;
   if (self = [super init]) {
     self.versionNumber = aVersionNumber;
     self.alignmentPatternCenters = anAlignmentPatternCenters;
-    self.ecBlocks = [NSArray arrayWithObjects:ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4, nil];
+    self.ecBlocks = @[ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4];
     int total = 0;
     int ecCodewords = ecBlocks1.ecCodewordsPerBlock;
 
@@ -166,7 +166,7 @@ static NSArray *VERSIONS = nil;
 }
 
 - (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXErrorCorrectionLevel *)ecLevel {
-  return [self.ecBlocks objectAtIndex:[ecLevel ordinal]];
+  return self.ecBlocks[[ecLevel ordinal]];
 }
 
 
@@ -185,7 +185,7 @@ static NSArray *VERSIONS = nil;
   if (versionNumber < 1 || versionNumber > 40) {
     return nil;
   }
-  return [VERSIONS objectAtIndex:versionNumber - 1];
+  return VERSIONS[versionNumber - 1];
 }
 
 + (ZXQRCodeVersion *)decodeVersionInformation:(int)versionBits {
@@ -223,13 +223,13 @@ static NSArray *VERSIONS = nil;
   int max = self.alignmentPatternCenters.count;
 
   for (int x = 0; x < max; x++) {
-    int i = [[self.alignmentPatternCenters objectAtIndex:x] intValue] - 2;
+    int i = [(self.alignmentPatternCenters)[x] intValue] - 2;
 
     for (int y = 0; y < max; y++) {
       if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0)) {
         continue;
       }
-      [bitMatrix setRegionAtLeft:[[self.alignmentPatternCenters objectAtIndex:y] intValue] - 2 top:i width:5 height:5];
+      [bitMatrix setRegionAtLeft:[(self.alignmentPatternCenters)[y] intValue] - 2 top:i width:5 height:5];
     }
   }
 
@@ -243,7 +243,7 @@ static NSArray *VERSIONS = nil;
 }
 
 - (NSString *)description {
-  return [[NSNumber numberWithInt:self.versionNumber] stringValue];
+  return [@(self.versionNumber) stringValue];
 }
 
 
@@ -251,288 +251,285 @@ static NSArray *VERSIONS = nil;
  * See ISO 18004:2006 6.5.1 Table 9
  */
 + (void)initialize {
-  VERSIONS = [[NSArray alloc] initWithObjects:
-           [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:1
-                                     alignmentPatternCenters:[NSArray array]
+  VERSIONS = @[[ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:1
+                                     alignmentPatternCenters:@[]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:7 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:19]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:10 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:16]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:13 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:13]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:17 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:9]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:2
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:18], nil]
+                                     alignmentPatternCenters:@[@6, @18]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:10 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:34]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:16 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:28]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:22]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:3
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:22], nil]
+                                     alignmentPatternCenters:@[@6, @22]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:15 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:55]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:44]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:17]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:4
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], nil]
+                                     alignmentPatternCenters:@[@6, @26]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:20 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:80]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:32]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:24]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:16 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:9]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:5
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], nil]
+                                     alignmentPatternCenters:@[@6, @30]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:108]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:43]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:16]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:11] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:12]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:6
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:34], nil]
+                                     alignmentPatternCenters:@[@6, @34]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:68]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:16 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:27]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:19]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:15]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:7
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:22], [NSNumber numberWithInt:38], nil]
+                                     alignmentPatternCenters:@[@6, @22, @38]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:20 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:78]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:31]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:14] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:15]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:13] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:14]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:8
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:24], [NSNumber numberWithInt:42], nil]
+                                     alignmentPatternCenters:@[@6, @24, @42]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:97]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:38] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:39]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:18] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:19]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:14] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:15]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:9
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:46], nil]
+                                     alignmentPatternCenters:@[@6, @26, @46]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks:[ZXQRCodeECB ecbWithCount:2 dataCodewords:116]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:36] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:37]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:20 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:16] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:17]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:12] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:10
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:28], [NSNumber numberWithInt:50], nil]
+                                     alignmentPatternCenters:@[@6, @28, @50]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:18 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:68] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:69]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:43] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:44]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:19] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:20]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:11
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:54], nil]
+                                     alignmentPatternCenters:@[@6, @30, @54]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:20 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:81]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:1 dataCodewords:50] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:51]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:22] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:23]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:12] ecBlocks2:[ZXQRCodeECB ecbWithCount:8 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:12
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:32], [NSNumber numberWithInt:58], nil]
+                                     alignmentPatternCenters:@[@6, @32, @58]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:92] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:93]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:36] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:37]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:20] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:21]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:7 dataCodewords:14] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:15]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:13
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:34], [NSNumber numberWithInt:62], nil]
+                                     alignmentPatternCenters:@[@6, @34, @62]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks:[ZXQRCodeECB ecbWithCount:4 dataCodewords:107]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:8 dataCodewords:37] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:38]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:8 dataCodewords:20] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:21]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:12 dataCodewords:11] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:12]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:14
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:46], [NSNumber numberWithInt:66], nil]
+                                     alignmentPatternCenters:@[@6, @26, @46, @66]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:115] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:116]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:40] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:41]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:20 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:16] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:17]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:12] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:15
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:48], [NSNumber numberWithInt:70], nil]
+                                     alignmentPatternCenters:@[@6, @26, @48, @70]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:22 ecBlocks1:[ZXQRCodeECB ecbWithCount:5 dataCodewords:87] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:88]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:5 dataCodewords:41] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:42]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:5 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:12] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:16
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:50], [NSNumber numberWithInt:74], nil]
+                                     alignmentPatternCenters:@[@6, @26, @50, @74]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:5 dataCodewords:98] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:99]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:7 dataCodewords:45] ecBlocks2:[ZXQRCodeECB ecbWithCount:3 dataCodewords:46]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks1:[ZXQRCodeECB ecbWithCount:15 dataCodewords:19] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:20]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:13 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:17
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:54], [NSNumber numberWithInt:78], nil]
+                                     alignmentPatternCenters:@[@6, @30, @54, @78]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:1 dataCodewords:107] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:108]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:10 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:1 dataCodewords:22] ecBlocks2:[ZXQRCodeECB ecbWithCount:15 dataCodewords:23]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:14] ecBlocks2:[ZXQRCodeECB ecbWithCount:17 dataCodewords:15]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:18
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:56], [NSNumber numberWithInt:82], nil]
+                                     alignmentPatternCenters:@[@6, @30, @56, @82]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:5 dataCodewords:120] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:121]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:9 dataCodewords:43] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:44]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:17 dataCodewords:22] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:23]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:14] ecBlocks2:[ZXQRCodeECB ecbWithCount:19 dataCodewords:15]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:19
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:58], [NSNumber numberWithInt:86], nil]
+                                     alignmentPatternCenters:@[@6, @30, @58, @86]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:113] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:114]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:44] ecBlocks2:[ZXQRCodeECB ecbWithCount:11 dataCodewords:45]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:17 dataCodewords:21] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:22]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:9 dataCodewords:13] ecBlocks2:[ZXQRCodeECB ecbWithCount:16 dataCodewords:14]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:20
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:34], [NSNumber numberWithInt:62], [NSNumber numberWithInt:90], nil]
+                                     alignmentPatternCenters:@[@6, @34, @62, @90]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:107] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:108]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:41] ecBlocks2:[ZXQRCodeECB ecbWithCount:13 dataCodewords:42]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:15 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:15 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:10 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:21
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:28], [NSNumber numberWithInt:50], [NSNumber numberWithInt:72], [NSNumber numberWithInt:94], nil]
+                                     alignmentPatternCenters:@[@6, @28, @50, @72, @94]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:116] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:117]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks:[ZXQRCodeECB ecbWithCount:17 dataCodewords:42]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:17 dataCodewords:22] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:23]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:16] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:17]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:22
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:50], [NSNumber numberWithInt:74], [NSNumber numberWithInt:98], nil]
+                                     alignmentPatternCenters:@[@6, @26, @50, @74, @98]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:111] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:112]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks:[ZXQRCodeECB ecbWithCount:17 dataCodewords:46]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:7 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:16 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:24 ecBlocks:[ZXQRCodeECB ecbWithCount:34 dataCodewords:13]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:23
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:54], [NSNumber numberWithInt:78], [NSNumber numberWithInt:102], nil]
+                                     alignmentPatternCenters:@[@6, @30, @54, @78, @102]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:121] ecBlocks2:[ZXQRCodeECB ecbWithCount:5 dataCodewords:122]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:16 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:24
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:28], [NSNumber numberWithInt:54], [NSNumber numberWithInt:80], [NSNumber numberWithInt:106], nil]
+                                     alignmentPatternCenters:@[@6, @28, @54, @80, @106]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:117] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:118]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:45] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:46]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:16 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:30 dataCodewords:16] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:17]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:25
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:32], [NSNumber numberWithInt:58], [NSNumber numberWithInt:84], [NSNumber numberWithInt:110], nil]
+                                     alignmentPatternCenters:@[@6, @32, @58, @84, @110]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:26 ecBlocks1:[ZXQRCodeECB ecbWithCount:8 dataCodewords:106] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:107]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:8 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:13 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:7 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:22 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:22 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:13 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:26
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:58], [NSNumber numberWithInt:86], [NSNumber numberWithInt:114], nil]
+                                     alignmentPatternCenters:@[@6, @30, @58, @86, @114]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:10 dataCodewords:114] ecBlocks2:[ZXQRCodeECB ecbWithCount:2 dataCodewords:115]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:28 dataCodewords:22] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:23]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:33 dataCodewords:16] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:17]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:27
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:34], [NSNumber numberWithInt:62], [NSNumber numberWithInt:90], [NSNumber numberWithInt:118], nil]
+                                     alignmentPatternCenters:@[@6, @34, @62, @90, @118]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:8 dataCodewords:122] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:123]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:22 dataCodewords:45] ecBlocks2:[ZXQRCodeECB ecbWithCount:3 dataCodewords:46]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:8 dataCodewords:23] ecBlocks2:[ZXQRCodeECB ecbWithCount:26 dataCodewords:24]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:12 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:28 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:28
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:50], [NSNumber numberWithInt:74], [NSNumber numberWithInt:98], [NSNumber numberWithInt:122], nil]
+                                     alignmentPatternCenters:@[@6, @26, @50, @74, @98, @122]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:117] ecBlocks2:[ZXQRCodeECB ecbWithCount:10 dataCodewords:118]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:3 dataCodewords:45] ecBlocks2:[ZXQRCodeECB ecbWithCount:23 dataCodewords:46]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:31 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:31 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:29
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:54], [NSNumber numberWithInt:78], [NSNumber numberWithInt:102], [NSNumber numberWithInt:126], nil]
+                                     alignmentPatternCenters:@[@6, @30, @54, @78, @102, @126]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:7 dataCodewords:116] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:117]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:21 dataCodewords:45] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:46]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:1 dataCodewords:23] ecBlocks2:[ZXQRCodeECB ecbWithCount:37 dataCodewords:24]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:26 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:30
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:52], [NSNumber numberWithInt:78], [NSNumber numberWithInt:104], [NSNumber numberWithInt:130], nil]
+                                     alignmentPatternCenters:@[@6, @26, @52, @78, @104, @130]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:5 dataCodewords:115] ecBlocks2:[ZXQRCodeECB ecbWithCount:10 dataCodewords:116]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:10 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:15 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:25 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:23 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:25 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:31
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:56], [NSNumber numberWithInt:82], [NSNumber numberWithInt:108], [NSNumber numberWithInt:134], nil]
+                                     alignmentPatternCenters:@[@6, @30, @56, @82, @108, @134]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:13 dataCodewords:115] ecBlocks2:[ZXQRCodeECB ecbWithCount:3 dataCodewords:116]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:29 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:42 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:23 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:28 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:32
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:34], [NSNumber numberWithInt:60], [NSNumber numberWithInt:86], [NSNumber numberWithInt:112], [NSNumber numberWithInt:138], nil]
+                                     alignmentPatternCenters:@[@6, @34, @60, @86, @112, @138]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks:[ZXQRCodeECB ecbWithCount:17 dataCodewords:115]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:10 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:23 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:10 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:35 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:35 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:33
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:58], [NSNumber numberWithInt:86], [NSNumber numberWithInt:114], [NSNumber numberWithInt:142], nil]
+                                     alignmentPatternCenters:@[@6, @30, @58, @86, @114, @142]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:17 dataCodewords:115] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:116]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:14 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:21 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:29 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:19 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:11 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:46 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:34
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:34], [NSNumber numberWithInt:62], [NSNumber numberWithInt:90], [NSNumber numberWithInt:118], [NSNumber numberWithInt:146], nil]
+                                     alignmentPatternCenters:@[@6, @34, @62, @90, @118, @146]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:13 dataCodewords:115] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:116]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:14 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:23 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:44 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:59 dataCodewords:16] ecBlocks2:[ZXQRCodeECB ecbWithCount:1 dataCodewords:17]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:35
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:54], [NSNumber numberWithInt:78], [NSNumber numberWithInt:102], [NSNumber numberWithInt:126], [NSNumber numberWithInt:150], nil]
+                                     alignmentPatternCenters:@[@6, @30, @54, @78, @102, @126, @150]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:12 dataCodewords:121] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:122]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:12 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:26 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:39 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:22 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:41 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:36
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:24], [NSNumber numberWithInt:50], [NSNumber numberWithInt:76], [NSNumber numberWithInt:102], [NSNumber numberWithInt:128], [NSNumber numberWithInt:154], nil]
+                                     alignmentPatternCenters:@[@6, @24, @50, @76, @102, @128, @154]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:121] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:122]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:6 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:34 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:46 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:10 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:2 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:64 dataCodewords:16]]],
 
           [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:37
-                                alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:28], [NSNumber numberWithInt:54], [NSNumber numberWithInt:80], [NSNumber numberWithInt:106], [NSNumber numberWithInt:132], [NSNumber numberWithInt:158], nil]
+                                alignmentPatternCenters:@[@6, @28, @54, @80, @106, @132, @158]
                                               ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:17 dataCodewords:122] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:123]]
                                               ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:29 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:47]]
                                               ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:49 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:10 dataCodewords:25]]
                                               ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:24 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:46 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:38
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:32], [NSNumber numberWithInt:58], [NSNumber numberWithInt:84], [NSNumber numberWithInt:110], [NSNumber numberWithInt:136], [NSNumber numberWithInt:162], nil]
+                                     alignmentPatternCenters:@[@6, @32, @58, @84, @110, @136, @162]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:4 dataCodewords:122] ecBlocks2:[ZXQRCodeECB ecbWithCount:18 dataCodewords:123]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:13 dataCodewords:46] ecBlocks2:[ZXQRCodeECB ecbWithCount:32 dataCodewords:47]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:48 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:14 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:42 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:32 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:39
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:26], [NSNumber numberWithInt:54], [NSNumber numberWithInt:82], [NSNumber numberWithInt:110], [NSNumber numberWithInt:138], [NSNumber numberWithInt:166], nil]
+                                     alignmentPatternCenters:@[@6, @26, @54, @82, @110, @138, @166]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:20 dataCodewords:117] ecBlocks2:[ZXQRCodeECB ecbWithCount:4 dataCodewords:118]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:40 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:43 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:22 dataCodewords:25]]
                                                    ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:10 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:67 dataCodewords:16]]],
 
            [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:40
-                                     alignmentPatternCenters:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:30], [NSNumber numberWithInt:58], [NSNumber numberWithInt:86], [NSNumber numberWithInt:114], [NSNumber numberWithInt:142], [NSNumber numberWithInt:170], nil]
+                                     alignmentPatternCenters:@[@6, @30, @58, @86, @114, @142, @170]
                                                    ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:118] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:119]]
                                                    ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:18 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:31 dataCodewords:48]]
                                                    ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:34 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:34 dataCodewords:25]]
-                                                   ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:20 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:61 dataCodewords:16]]],
-
-          nil];
+                                                   ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:20 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:61 dataCodewords:16]]]];
 }
 
 @end

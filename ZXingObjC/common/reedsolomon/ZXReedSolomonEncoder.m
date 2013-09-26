@@ -43,7 +43,7 @@
 
 - (ZXGenericGFPoly *)buildGenerator:(int)degree {
   if (degree >= self.cachedGenerators.count) {
-    ZXGenericGFPoly *lastGenerator = [self.cachedGenerators objectAtIndex:[cachedGenerators count] - 1];
+    ZXGenericGFPoly *lastGenerator = self.cachedGenerators[[cachedGenerators count] - 1];
     for (int d = [self.cachedGenerators count]; d <= degree; d++) {
       int next[2] = { 1, [field exp:d - 1 + field.generatorBase] };
       ZXGenericGFPoly *nextGenerator = [lastGenerator multiply:[[ZXGenericGFPoly alloc] initWithField:field coefficients:next coefficientsLen:2]];
@@ -52,7 +52,7 @@
     }
   }
 
-  return (ZXGenericGFPoly *)[self.cachedGenerators objectAtIndex:degree];
+  return (ZXGenericGFPoly *)self.cachedGenerators[degree];
 }
 
 - (void)encode:(int *)toEncode toEncodeLen:(int)toEncodeLen ecBytes:(int)ecBytes {
@@ -74,7 +74,7 @@
   }
   ZXGenericGFPoly *info = [[ZXGenericGFPoly alloc] initWithField:field coefficients:infoCoefficients coefficientsLen:dataBytes];
   info = [info multiplyByMonomial:ecBytes coefficient:1];
-  ZXGenericGFPoly *remainder = [[info divide:generator] objectAtIndex:1];
+  ZXGenericGFPoly *remainder = [info divide:generator][1];
   int *coefficients = remainder.coefficients;
   int coefficientsLen = remainder.coefficientsLen;
   int numZeroCoefficients = ecBytes - coefficientsLen;

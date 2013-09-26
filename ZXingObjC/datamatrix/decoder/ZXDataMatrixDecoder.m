@@ -82,7 +82,7 @@
 
   int totalBytes = 0;
   for (int i = 0; i < dataBlocksCount; i++) {
-    totalBytes += [[dataBlocks objectAtIndex:i] numDataCodewords];
+    totalBytes += [dataBlocks[i] numDataCodewords];
   }
 
   if (totalBytes == 0) {
@@ -92,14 +92,14 @@
   unsigned char resultBytes[totalBytes];
 
   for (int j = 0; j < dataBlocksCount; j++) {
-    ZXDataMatrixDataBlock *dataBlock = [dataBlocks objectAtIndex:j];
+    ZXDataMatrixDataBlock *dataBlock = dataBlocks[j];
     NSMutableArray *codewordBytes = dataBlock.codewords;
     int numDataCodewords = [dataBlock numDataCodewords];
     if (![self correctErrors:codewordBytes numDataCodewords:numDataCodewords error:error]) {
       return nil;
     }
     for (int i = 0; i < numDataCodewords; i++) {
-      resultBytes[i * dataBlocksCount + j] = [[codewordBytes objectAtIndex:i] charValue];
+      resultBytes[i * dataBlocksCount + j] = [codewordBytes[i] charValue];
     }
   }
 
@@ -115,7 +115,7 @@
   int numCodewords = [codewordBytes count];
   int codewordsInts[numCodewords];
   for (int i = 0; i < numCodewords; i++) {
-    codewordsInts[i] = [[codewordBytes objectAtIndex:i] charValue] & 0xFF;
+    codewordsInts[i] = [codewordBytes[i] charValue] & 0xFF;
   }
   int numECCodewords = [codewordBytes count] - numDataCodewords;
 
@@ -131,7 +131,7 @@
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
-    [codewordBytes replaceObjectAtIndex:i withObject:[NSNumber numberWithChar:codewordsInts[i]]];
+    codewordBytes[i] = [NSNumber numberWithChar:codewordsInts[i]];
   }
   return YES;
 }

@@ -35,7 +35,7 @@ const char END_CHARS[END_CHARS_LEN] = "TN*E";
   }
   if (![ZXCodaBarReader arrayContains:(char *)END_CHARS length:END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:contents.length - 1]]) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Codabar should end with one of the following: %@", [NSString stringWithCString:START_CHARS encoding:NSUTF8StringEncoding]]
+                                   reason:[NSString stringWithFormat:@"Codabar should end with one of the following: %@", [NSString stringWithCString:END_CHARS encoding:NSUTF8StringEncoding]]
                                  userInfo:nil];
   }
   // The start character and the end character are decoded to 10 length each.

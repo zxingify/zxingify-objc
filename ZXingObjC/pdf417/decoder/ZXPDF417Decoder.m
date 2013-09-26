@@ -101,13 +101,13 @@ int const MAX_EC_CODEWORDS = 512;
     return NO;
   }
 
-  int numberOfCodewords = [[codewords objectAtIndex:0] intValue];
+  int numberOfCodewords = [codewords[0] intValue];
   if (numberOfCodewords > [codewords count]) {
     return NO;
   }
   if (numberOfCodewords == 0) {
     if (numECCodewords < [codewords count]) {
-      [codewords replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:[codewords count] - numECCodewords]];
+      codewords[0] = [NSNumber numberWithInt:[codewords count] - numECCodewords];
     } else {
       return NO;
     }

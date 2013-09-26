@@ -74,7 +74,7 @@ const int MATRIX_HEIGHT = 33;
     return nil;
   }
 
-  NSArray *points = [NSArray array];
+  NSArray *points = @[];
   ZXResult *result = [ZXResult resultWithText:decoderResult.text
                                       rawBytes:decoderResult.rawBytes
                                         length:decoderResult.length
@@ -105,10 +105,10 @@ const int MATRIX_HEIGHT = 33;
     return nil;
   }
 
-  int left = [[enclosingRectangle objectAtIndex:0] intValue];
-  int top = [[enclosingRectangle objectAtIndex:1] intValue];
-  int width = [[enclosingRectangle objectAtIndex:2] intValue];
-  int height = [[enclosingRectangle objectAtIndex:3] intValue];
+  int left = [enclosingRectangle[0] intValue];
+  int top = [enclosingRectangle[1] intValue];
+  int width = [enclosingRectangle[2] intValue];
+  int height = [enclosingRectangle[3] intValue];
 
   // Now just read off the bits
   ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithWidth:MATRIX_WIDTH height:MATRIX_HEIGHT];

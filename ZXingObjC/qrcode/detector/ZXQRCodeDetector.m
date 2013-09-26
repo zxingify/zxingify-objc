@@ -129,9 +129,9 @@
   }
   NSArray *points;
   if (alignmentPattern == nil) {
-    points = [NSArray arrayWithObjects:bottomLeft, topLeft, topRight, nil];
+    points = @[bottomLeft, topLeft, topRight];
   } else {
-    points = [NSArray arrayWithObjects:bottomLeft, topLeft, topRight, alignmentPattern, nil];
+    points = @[bottomLeft, topLeft, topRight, alignmentPattern];
   }
   return [[ZXDetectorResult alloc] initWithBits:bits points:points];
 }

@@ -31,7 +31,7 @@
   if (rawUri == nil) {
     return nil;
   }
-  NSString *uri = [rawUri objectAtIndex:0];
+  NSString *uri = rawUri[0];
   if (![ZXURIResultParser isBasicallyValidURI:uri]) {
     return nil;
   }

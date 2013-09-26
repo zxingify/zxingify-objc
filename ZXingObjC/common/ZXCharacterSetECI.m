@@ -77,8 +77,8 @@ static NSMutableDictionary *ENCODING_TO_ECI = nil;
 
 + (void)addCharacterSet:(int)value encoding:(NSStringEncoding)encoding {
   ZXCharacterSetECI *eci = [[ZXCharacterSetECI alloc] initWithValue:value encoding:encoding];
-  [VALUE_TO_ECI setObject:eci forKey:[NSNumber numberWithInt:value]];
-  [ENCODING_TO_ECI setObject:eci forKey:[NSNumber numberWithUnsignedInteger:encoding]];
+  VALUE_TO_ECI[@(value)] = eci;
+  ENCODING_TO_ECI[@(encoding)] = eci;
 }
 
 + (ZXCharacterSetECI *)characterSetECIByValue:(int)value {
@@ -88,7 +88,7 @@ static NSMutableDictionary *ENCODING_TO_ECI = nil;
   if (value < 0 || value >= 900) {
     return nil;
   }
-  return [VALUE_TO_ECI objectForKey:[NSNumber numberWithInt:value]];
+  return VALUE_TO_ECI[@(value)];
 }
 
 
@@ -96,7 +96,7 @@ static NSMutableDictionary *ENCODING_TO_ECI = nil;
   if (ENCODING_TO_ECI == nil) {
     [self initialize];
   }
-  return [ENCODING_TO_ECI objectForKey:[NSNumber numberWithUnsignedInteger:encoding]];
+  return ENCODING_TO_ECI[@(encoding)];
 }
 
 @end

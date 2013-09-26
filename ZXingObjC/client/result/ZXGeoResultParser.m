@@ -38,7 +38,7 @@ static NSRegularExpression *GEO_URL_PATTERN = nil;
     return nil;
   }
 
-  NSTextCheckingResult *match = [matches objectAtIndex:0];
+  NSTextCheckingResult *match = matches[0];
   NSString *query = nil;
   if ([match rangeAtIndex:4].location != NSNotFound) {
     query = [rawText substringWithRange:[match rangeAtIndex:4]];

@@ -33,7 +33,7 @@
 
   NSMutableArray *result = [NSMutableArray array];
   for (int i = 0; i < [info count]; i++) {
-    ZXDetectorResult *patternInfo = [self processFinderPatternInfo:[info objectAtIndex:i] error:nil];
+    ZXDetectorResult *patternInfo = [self processFinderPatternInfo:info[i] error:nil];
     if (patternInfo) {
       [result addObject:patternInfo];
     }

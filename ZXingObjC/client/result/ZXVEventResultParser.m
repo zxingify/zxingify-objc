@@ -51,7 +51,7 @@
   NSMutableArray *attendees = [self matchVCardPrefixedField:@"ATTENDEE" rawText:rawText trim:YES];
   if (attendees != nil) {
     for (int i = 0; i < attendees.count; i++) {
-      [attendees replaceObjectAtIndex:i withObject:[self stripMailto:[attendees objectAtIndex:i]]];
+      attendees[i] = [self stripMailto:attendees[i]];
     }
   }
   NSString *description = [self matchSingleVCardPrefixedField:@"DESCRIPTION" rawText:rawText trim:YES];
@@ -86,7 +86,7 @@
 
 - (NSString *)matchSingleVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
   NSArray *values = [ZXVCardResultParser matchSingleVCardPrefixedField:prefix rawText:rawText trim:trim parseFieldDivider:NO];
-  return values == nil || values.count == 0 ? nil : [values objectAtIndex:0];
+  return values == nil || values.count == 0 ? nil : values[0];
 }
 
 - (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim {
@@ -97,7 +97,7 @@
   int size = values.count;
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:size];
   for (int i = 0; i < size; i++) {
-    [result addObject:[[values objectAtIndex:i] objectAtIndex:0]];
+    [result addObject:values[i][0]];
   }
   return result;
 }

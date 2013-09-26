@@ -38,9 +38,9 @@
     return nil;
   }
   for (int i = 0; i < [detectorResult count]; i++) {
-    ZXDecoderResult *decoderResult = [[self decoder] decodeMatrix:[(ZXDetectorResult *)[detectorResult objectAtIndex:i] bits] hints:hints error:nil];
+    ZXDecoderResult *decoderResult = [[self decoder] decodeMatrix:[(ZXDetectorResult *)detectorResult[i] bits] hints:hints error:nil];
     if (decoderResult) {
-      NSArray *points = [(ZXDetectorResult *)[detectorResult objectAtIndex:i] points];
+      NSArray *points = [(ZXDetectorResult *)detectorResult[i] points];
       ZXResult *result = [ZXResult resultWithText:decoderResult.text
                                           rawBytes:decoderResult.rawBytes
                                             length:decoderResult.length

@@ -148,8 +148,7 @@ const int EC_COEFFICIENTS[9][512] = {
   if (n <= 863) {
     return 5;
   }
-  NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"No recommendation possible"
-                                                       forKey:NSLocalizedDescriptionKey];
+  NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"No recommendation possible"};
 
   if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
   return -1;

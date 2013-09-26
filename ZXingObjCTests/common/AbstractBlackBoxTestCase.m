@@ -195,7 +195,7 @@
     }
 
     for (int x = 0; x < testCount; x++) {
-      float rotation = [[self.testResults objectAtIndex:x] rotation];
+      float rotation = [self.testResults[x] rotation];
       ZXImage *rotatedImage = [self rotateImage:image degrees:rotation];
       ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage];
       ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];
@@ -225,7 +225,7 @@
   int totalMaxMisread = 0;
 
   for (int x = 0; x < testCount; x++) {
-    TestResult *testResult = [self.testResults objectAtIndex:x];
+    TestResult *testResult = self.testResults[x];
     NSLog(@"Rotation %d degrees:", (int) testResult.rotation);
     NSLog(@"  %d of %d images passed (%d required)",
           passedCounts[x], imageFiles.count, testResult.mustPassCount);
@@ -261,7 +261,7 @@
   // Then run through again and assert if any failed
   if (assertOnFailure) {
     for (int x = 0; x < testCount; x++) {
-      TestResult *testResult = [self.testResults objectAtIndex:x];
+      TestResult *testResult = self.testResults[x];
       NSString *label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images failed", testResult.rotation];
       STAssertTrue(passedCounts[x] >= testResult.mustPassCount, label);
       STAssertTrue(tryHarderCounts[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
@@ -303,8 +303,8 @@
   NSMutableDictionary *resultMetadata = result.resultMetadata;
   for (id keyObj in [expectedMetadata allKeys]) {
     ZXResultMetadataType key = [keyObj intValue];
-    id expectedValue = [expectedMetadata objectForKey:keyObj];
-    id actualValue = [resultMetadata objectForKey:keyObj];
+    id expectedValue = expectedMetadata[keyObj];
+    id actualValue = resultMetadata[keyObj];
     if (![expectedValue isEqual:actualValue]) {
       NSLog(@"Metadata mismatch: for key '%d' expected '%@' but got '%@'", key, expectedValue, actualValue);
       *misread = YES;

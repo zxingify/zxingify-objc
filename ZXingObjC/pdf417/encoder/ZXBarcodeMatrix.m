@@ -49,7 +49,7 @@
 }
 
 - (void)setX:(int)x y:(int)y value:(unsigned char)value {
-  [[self.rowMatrix objectAtIndex:y] setX:x value:value];
+  [self.rowMatrix[y] setX:x value:value];
 }
 
 - (void)setMatrixX:(int)x y:(int)y black:(BOOL)black {
@@ -61,7 +61,7 @@
 }
 
 - (ZXBarcodeRow *)currentRow {
-  return [self.rowMatrix objectAtIndex:self.currentRowIndex];
+  return self.rowMatrix[self.currentRowIndex];
 }
 
 - (unsigned char **)matrixWithHeight:(int *)pHeight width:(int *)pWidth {
@@ -81,7 +81,7 @@
   unsigned char **matrixOut = (unsigned char **)malloc(matrixHeight * sizeof(unsigned char *));
   int yMax = self.height * yScale;
   for (int ii = 0; ii < yMax; ii++) {
-    matrixOut[yMax - ii - 1] = [[self.rowMatrix objectAtIndex:ii / yScale] scaledRow:xScale];
+    matrixOut[yMax - ii - 1] = [self.rowMatrix[ii / yScale] scaledRow:xScale];
   }
   return matrixOut;
 }

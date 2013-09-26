@@ -68,23 +68,22 @@
   if (!sigmaOmega) {
     return NO;
   }
-  ZXGenericGFPoly *sigma = [sigmaOmega objectAtIndex:0];
-  ZXGenericGFPoly *omega = [sigmaOmega objectAtIndex:1];
+  ZXGenericGFPoly *sigma = sigmaOmega[0];
+  ZXGenericGFPoly *omega = sigmaOmega[1];
   NSArray *errorLocations = [self findErrorLocations:sigma error:error];
   if (!errorLocations) {
     return NO;
   }
   NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations];
   for (int i = 0; i < [errorLocations count]; i++) {
-    int position = receivedLen - 1 - [field log:[[errorLocations objectAtIndex:i] intValue]];
+    int position = receivedLen - 1 - [field log:[errorLocations[i] intValue]];
     if (position < 0) {
-      NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Bad error location"
-                                                           forKey:NSLocalizedDescriptionKey];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Bad error location"};
       
       if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
       return NO;
     }
-    received[position] = [ZXGenericGF addOrSubtract:received[position] b:[[errorMagnitudes objectAtIndex:i] intValue]];
+    received[position] = [ZXGenericGF addOrSubtract:received[position] b:[errorMagnitudes[i] intValue]];
   }
   return YES;
 }
@@ -108,8 +107,7 @@
     tLast = t;
 
     if ([rLast zero]) {
-      NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"r_{i-1} was zero"
-                                                           forKey:NSLocalizedDescriptionKey];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"r_{i-1} was zero"};
 
       if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
       return NO;
@@ -131,8 +129,7 @@
 
   int sigmaTildeAtZero = [t coefficient:0];
   if (sigmaTildeAtZero == 0) {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"sigmaTilde(0) was zero"
-                                                         forKey:NSLocalizedDescriptionKey];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"sigmaTilde(0) was zero"};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
     return NO;
@@ -141,26 +138,25 @@
   int inverse = [field inverse:sigmaTildeAtZero];
   ZXGenericGFPoly *sigma = [t multiplyScalar:inverse];
   ZXGenericGFPoly *omega = [r multiplyScalar:inverse];
-  return [NSArray arrayWithObjects:sigma, omega, nil];
+  return @[sigma, omega];
 }
 
 - (NSArray *)findErrorLocations:(ZXGenericGFPoly *)errorLocator error:(NSError **)error {
   int numErrors = [errorLocator degree];
   if (numErrors == 1) {
-    return [NSArray arrayWithObject:[NSNumber numberWithInt:[errorLocator coefficient:1]]];
+    return @[@([errorLocator coefficient:1])];
   }
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:numErrors];
   int e = 0;
   for (int i = 1; i < [field size] && e < numErrors; i++) {
     if ([errorLocator evaluateAt:i] == 0) {
-      [result addObject:[NSNumber numberWithInt:[field inverse:i]]];
+      [result addObject:@([field inverse:i])];
       e++;
     }
   }
 
   if (e != numErrors) {
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Error locator degree does not match number of roots"
-                                                         forKey:NSLocalizedDescriptionKey];
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Error locator degree does not match number of roots"};
     
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
     return nil;
@@ -172,19 +168,19 @@
   int s = [errorLocations count];
   NSMutableArray *result = [NSMutableArray array];
   for (int i = 0; i < s; i++) {
-    int xiInverse = [self.field inverse:[[errorLocations objectAtIndex:i] intValue]];
+    int xiInverse = [self.field inverse:[errorLocations[i] intValue]];
     int denominator = 1;
     for (int j = 0; j < s; j++) {
       if (i != j) {
-        int term = [self.field multiply:[[errorLocations objectAtIndex:j] intValue] b:xiInverse];
+        int term = [self.field multiply:[errorLocations[j] intValue] b:xiInverse];
         int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
         denominator = [self.field multiply:denominator b:termPlus1];
       }
     }
 
-    [result addObject:[NSNumber numberWithInt:[self.field multiply:[errorEvaluator evaluateAt:xiInverse] b:[self.field inverse:denominator]]]];
+    [result addObject:@([self.field multiply:[errorEvaluator evaluateAt:xiInverse] b:[self.field inverse:denominator]])];
     if (self.field.generatorBase != 0) {
-      [result replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:[self.field multiply:[[result objectAtIndex:i] intValue] b:xiInverse]]];
+      result[i] = @([self.field multiply:[result[i] intValue] b:xiInverse]);
     }
   }
 

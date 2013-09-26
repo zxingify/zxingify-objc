@@ -44,16 +44,16 @@
     self.logTable = [NSMutableArray arrayWithCapacity:self.modulus];
     int x = 1;
     for (int i = 0; i < self.modulus; i++) {
-      [self.expTable addObject:[NSNumber numberWithInt:x]];
+      [self.expTable addObject:@(x)];
       x = (x * generator) % self.modulus;
     }
 
     for (int i = 0; i < self.size; i++) {
-      [self.logTable addObject:[NSNumber numberWithInt:0]];
+      [self.logTable addObject:@0];
     }
 
     for (int i = 0; i < self.size - 1; i++) {
-      [self.logTable replaceObjectAtIndex:[[self.expTable objectAtIndex:i] intValue] withObject:[NSNumber numberWithInt:i]];
+      self.logTable[[self.expTable[i] intValue]] = @(i);
     }
     // logTable[0] == 0 but this should never be used
     int zeroInt = 0;
@@ -92,21 +92,21 @@
 }
 
 - (int)exp:(int)a {
-  return [[self.expTable objectAtIndex:a] intValue];
+  return [self.expTable[a] intValue];
 }
 
 - (int)log:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [[self.logTable objectAtIndex:a] intValue];
+  return [self.logTable[a] intValue];
 }
 
 - (int)inverse:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [[self.expTable objectAtIndex:self.size - [[self.logTable objectAtIndex:a] intValue] - 1] intValue];
+  return [self.expTable[self.size - [self.logTable[a] intValue] - 1] intValue];
 }
 
 - (int)multiply:(int)a b:(int)b {
@@ -114,8 +114,8 @@
     return 0;
   }
 
-  int logSum = [[self.logTable objectAtIndex:a] intValue] + [[self.logTable objectAtIndex:b] intValue];
-  return [[self.expTable objectAtIndex:logSum % (self.modulus - 1)] intValue];
+  int logSum = [self.logTable[a] intValue] + [self.logTable[b] intValue];
+  return [self.expTable[logSum % (self.modulus - 1)] intValue];
 }
 
 - (int)size {

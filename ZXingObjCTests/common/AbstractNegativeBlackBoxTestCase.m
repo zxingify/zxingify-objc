@@ -98,7 +98,7 @@
 
     ZXImage *image = [[ZXImage alloc] initWithURL:testImage];
     for (int x = 0; x < self.testResults.count; x++) {
-      NegativeTestResult *testResult = [self.testResults objectAtIndex:x];
+      NegativeTestResult *testResult = self.testResults[x];
       if (![self checkForFalsePositives:image rotationInDegrees:testResult.rotation]) {
         falsePositives[x]++;
       }
@@ -109,7 +109,7 @@
   int totalAllowed = 0;
 
   for (int x = 0; x < testResults.count; x++) {
-    NegativeTestResult *testResult = [testResults objectAtIndex:x];
+    NegativeTestResult *testResult = testResults[x];
     totalFalsePositives += falsePositives[x];
     totalAllowed += testResult.falsePositivesAllowed;
   }
@@ -121,7 +121,7 @@
   }
 
   for (int x = 0; x < self.testResults.count; x++) {
-    NegativeTestResult *testResult = [self.testResults objectAtIndex:x];
+    NegativeTestResult *testResult = self.testResults[x];
     NSLog(@"Rotation %d degrees: %d of %d images were false positives (%d allowed)",
           (int) testResult.rotation, falsePositives[x], imageFiles.count,
           testResult.falsePositivesAllowed);
