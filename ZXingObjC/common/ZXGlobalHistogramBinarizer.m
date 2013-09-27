@@ -77,6 +77,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   free(localBuckets);
   localBuckets = NULL;
   if (blackPoint == -1) {
+    free(localLuminances);
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -93,6 +94,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     center = right;
   }
 
+  free(localLuminances);
   return row;
 }
 
