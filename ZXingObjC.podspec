@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.source                      = { :git => "https://github.com/TheLevelUp/ZXingObjC.git", :tag => "2.1.0" }
 
   s.source_files                = 'ZXingObjC/**/*.{h,m}'
-  s.requires_arc                = false
+  s.requires_arc                = true
 
   s.frameworks                  = 'ImageIO', 'CoreGraphics', 'CoreVideo', 'CoreMedia', 'QuartzCore', 'AVFoundation', 'AudioToolbox'
 
