@@ -226,7 +226,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   }
 
   if (total < patternLength) {
-    return NSIntegerMax;
+    return INT_MAX;
   }
   int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
   maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
@@ -237,7 +237,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
-      return NSIntegerMax;
+      return INT_MAX;
     }
     totalVariance += variance;
   }

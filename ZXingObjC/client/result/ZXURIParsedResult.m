@@ -62,7 +62,7 @@ static NSRegularExpression *USER_IN_HOST = nil;
  */
 - (NSString *)massageURI:(NSString *)uri {
   NSString *massagedUri = [uri stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  int protocolEnd = [massagedUri rangeOfString:@":"].location;
+  NSUInteger protocolEnd = [massagedUri rangeOfString:@":"].location;
   if (protocolEnd == NSNotFound) {
     // No protocol, assume http
     massagedUri = [NSString stringWithFormat:@"http://%@", massagedUri];
@@ -74,7 +74,7 @@ static NSRegularExpression *USER_IN_HOST = nil;
 }
 
 - (BOOL)isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {
-  int nextSlash = [aUri rangeOfString:@"/" options:0 range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
+  NSUInteger nextSlash = [aUri rangeOfString:@"/" options:0 range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
   if (nextSlash == NSNotFound) {
     nextSlash = [aUri length];
   }

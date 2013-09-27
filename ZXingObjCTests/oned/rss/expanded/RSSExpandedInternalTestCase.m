@@ -89,7 +89,7 @@
 
   NSMutableArray *startEnd = [@[@145, @243] mutableCopy];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
-  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[startEnd[0] intValue] end:[startEnd[1] intValue] rowNumber:image.height / 2];
+  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[startEnd[0] intValue] end:[startEnd[1] intValue] rowNumber:(int)image.height / 2];
   //{1, 8, 4, 1, 1};
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:YES];
@@ -105,7 +105,7 @@
 
   NSMutableArray *startEnd = [NSMutableArray arrayWithObjects:@145, @243, nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
-  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[startEnd[0] intValue] end:[startEnd[1] intValue] rowNumber:image.height / 2];
+  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[startEnd[0] intValue] end:[startEnd[1] intValue] rowNumber:(int)image.height / 2];
   //{1, 8, 4, 1, 1};
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:NO];

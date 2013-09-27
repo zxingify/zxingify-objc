@@ -36,7 +36,7 @@
     querySyntax = YES;
   }
 
-  int queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
+  NSUInteger queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
   NSString *smsURIWithoutQuery;
   if (queryStart == NSNotFound || !querySyntax) {
     smsURIWithoutQuery = [rawText substringFromIndex:4];
@@ -48,10 +48,10 @@
   int comma;
   NSMutableArray *numbers = [NSMutableArray arrayWithCapacity:1];
   NSMutableArray *vias = [NSMutableArray arrayWithCapacity:1];
-  while ((comma = [smsURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(lastComma + 1, [smsURIWithoutQuery length] - lastComma - 1)].location) > lastComma && comma != NSNotFound) {
+  while ((comma = [smsURIWithoutQuery rangeOfString:@"," options:NSLiteralSearch range:NSMakeRange(lastComma + 1, [smsURIWithoutQuery length] - lastComma - 1)].location) > lastComma && comma != (int)NSNotFound) {
     NSString *numberPart = [smsURIWithoutQuery substringWithRange:NSMakeRange(lastComma + 1, comma - lastComma - 1)];
     [self addNumberVia:numbers vias:vias numberPart:numberPart];
-    lastComma = comma;
+    lastComma = (int)comma;
   }
   [self addNumberVia:numbers vias:vias numberPart:[smsURIWithoutQuery substringFromIndex:lastComma + 1]];
 
@@ -62,7 +62,7 @@
 }
 
 - (void)addNumberVia:(NSMutableArray *)numbers vias:(NSMutableArray *)vias numberPart:(NSString *)numberPart {
-  int numberEnd = [numberPart rangeOfString:@";"].location;
+  NSUInteger numberEnd = [numberPart rangeOfString:@";"].location;
   if (numberEnd == NSNotFound) {
     [numbers addObject:numberPart];
     [vias addObject:[NSNull null]];

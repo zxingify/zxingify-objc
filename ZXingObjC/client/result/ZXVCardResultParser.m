@@ -126,7 +126,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
           metadata = [NSMutableArray array];
         }
         [metadata addObject:metadatum];
-        int equals = [metadatum rangeOfString:EQUALS].location;
+        NSUInteger equals = [metadatum rangeOfString:EQUALS].location;
         if (equals != NSNotFound) {
           NSString *key = [metadatum substringToIndex:equals];
           NSString *value = [metadatum substringFromIndex:equals + 1];
@@ -142,7 +142,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 
     int matchStart = i; // Found the start of a match here
 
-    while ((i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) != NSNotFound) { // Really, end in \r\n
+    while ((NSUInteger)(i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) != NSNotFound) { // Really, end in \r\n
       if (i < [rawText length] - 1 &&                   // But if followed by tab or space,
           ([rawText characterAtIndex:i + 1] == ' ' ||   // this is only a continuation
            [rawText characterAtIndex:i + 1] == '\t')) {
@@ -285,7 +285,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
     NSString *type = nil;
     for (int i = 1; i < list.count; i++) {
       NSString *metadatum = list[i];
-      int equals = [metadatum rangeOfString:@"=" options:NSCaseInsensitiveSearch].location;
+      NSUInteger equals = [metadatum rangeOfString:@"=" options:NSCaseInsensitiveSearch].location;
       if (equals == NSNotFound) {
         // take the whole thing as a usable label
         type = metadatum;
@@ -315,7 +315,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
       NSString *name = list[0];
       NSMutableArray *components = [NSMutableArray arrayWithCapacity:5];
       int start = 0;
-      int end;
+      NSUInteger end;
       while ((end = [name rangeOfString:@";" options:NSLiteralSearch range:NSMakeRange(start, [name length] - start)].location) != NSNotFound && end > 0) {
         [components addObject:[name substringWithRange:NSMakeRange(start, [name length] - end - 1)]];
         start = end + 1;

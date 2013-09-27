@@ -61,7 +61,7 @@
 }
 
 - (NSString *)parseName:(NSString *)name {
-  int comma = [name rangeOfString:@","].location;
+  NSUInteger comma = [name rangeOfString:@","].location;
   if (comma != NSNotFound) {
     return [NSString stringWithFormat:@"%@ %@", [name substringFromIndex:comma + 1], [name substringToIndex:comma]];
   }

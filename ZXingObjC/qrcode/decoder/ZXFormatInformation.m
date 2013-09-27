@@ -95,7 +95,7 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 }
 
 + (ZXFormatInformation *)doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
-  int bestDifference = NSIntegerMax;
+  int bestDifference = INT_MAX;
   int bestFormatInfo = 0;
 
   for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP_LEN; i++) {

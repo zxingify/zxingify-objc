@@ -288,7 +288,7 @@
 - (void)testEncode:(NSString *)data compact:(BOOL)compact layers:(int)layers expected:(NSString *)expected {
   int8_t bytes[4096];
   [data getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
-  int bytesLen = [data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
+  int bytesLen = (int)[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
   ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:33];
   STAssertEquals(aztec.compact, compact, @"Unexpected symbol format (compact)");
@@ -300,7 +300,7 @@
 - (void)testEncodeDecode:(NSString *)data compact:(BOOL)compact layers:(int)layers {
   int8_t bytes[4096];
   [data getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
-  int bytesLen = [data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
+  int bytesLen = (int)[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
   ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:25];
   STAssertEquals(aztec.compact, compact, @"Unexpected symbol format (compact)");
@@ -349,7 +349,7 @@
 - (void)testHighLevelEncodeString:(NSString *)s expectedBits:(NSString *)expectedBits {
   int8_t bytes[4096];
   [s getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
-  int bytesLen = [s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
+  int bytesLen = (int)[s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
   ZXBitArray *bits = [ZXAztecEncoder highLevelEncode:bytes len:bytesLen];
   NSString *receivedBits = [[bits description] stringByReplacingOccurrencesOfString:@" " withString:@""];

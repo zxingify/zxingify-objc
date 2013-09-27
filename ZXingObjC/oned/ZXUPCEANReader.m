@@ -112,7 +112,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
     if (startRange.location == NSNotFound) {
       return startRange;
     }
-    int start = startRange.location;
+    NSUInteger start = startRange.location;
     nextStart = NSMaxRange(startRange);
     // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
     // If this check would run off the left edge of the image, do not accept this barcode,

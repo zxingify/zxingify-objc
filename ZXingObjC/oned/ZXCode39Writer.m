@@ -43,7 +43,7 @@
 
   int codeWidth = 24 + 1 + length;
   for (int i = 0; i < length; i++) {
-    int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     for (int j = 0; j < widthsLengh; j++) {
       codeWidth += widths[j];
@@ -61,7 +61,7 @@
   pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:FALSE];
 
   for (int i = length - 1; i >= 0; i--) {
-    int indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:TRUE];
     pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:FALSE];

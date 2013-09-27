@@ -125,7 +125,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 + (NSString *)unescapeBackslash:(NSString *)escaped {
-  int backslash = [escaped rangeOfString:@"\\"].location;
+  NSUInteger backslash = [escaped rangeOfString:@"\\"].location;
   if (backslash == NSNotFound) {
     return escaped;
   }
@@ -168,7 +168,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
   }
 
   int first = [self findFirstEscape:escaped];
-  if (first == NSNotFound) {
+  if (first == -1) {
     return escaped;
   }
 
@@ -212,7 +212,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     }
   }
 
-  return NSNotFound;
+  return -1;
 }
 
 + (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length {
@@ -232,7 +232,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 - (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri {
-  int paramStart = [uri rangeOfString:@"?"].location;
+  NSUInteger paramStart = [uri rangeOfString:@"?"].location;
   if (paramStart == NSNotFound) {
     return nil;
   }
@@ -261,7 +261,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
   NSMutableArray *matches = nil;
-  int i = 0;
+  NSUInteger i = 0;
   int max = [rawText length];
   while (i < max) {
     i = [rawText rangeOfString:prefix options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i - 1)].location;

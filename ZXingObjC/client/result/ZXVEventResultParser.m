@@ -26,7 +26,7 @@
   if (rawText == nil) {
     return nil;
   }
-  int vEventStart = [rawText rangeOfString:@"BEGIN:VEVENT"].location;
+  NSUInteger vEventStart = [rawText rangeOfString:@"BEGIN:VEVENT"].location;
   if (vEventStart == NSNotFound) {
     return nil;
   }
@@ -56,7 +56,7 @@
     latitude = NAN;
     longitude = NAN;
   } else {
-    int semicolon = [geoString rangeOfString:@";"].location;
+    NSUInteger semicolon = [geoString rangeOfString:@";"].location;
     latitude = [[geoString substringToIndex:semicolon] doubleValue];
     longitude = [[geoString substringFromIndex:semicolon + 1] doubleValue];
   }

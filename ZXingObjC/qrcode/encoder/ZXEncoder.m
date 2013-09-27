@@ -232,7 +232,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 }
 
 + (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
-  int minPenalty = NSIntegerMax;
+  int minPenalty = INT_MAX;
   int bestMaskPattern = -1;
 
   for (int maskPattern = 0; maskPattern < NUM_MASK_PATTERNS; maskPattern++) {

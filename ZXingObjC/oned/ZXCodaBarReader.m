@@ -325,7 +325,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   }
 
   int maxBar = 0;
-  int minBar = NSIntegerMax;
+  int minBar = INT_MAX;
   for (int j = position; j < end; j += 2) {
     int currentCounter = self.counters[j];
     if (currentCounter < minBar) {
@@ -338,7 +338,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   int thresholdBar = (minBar + maxBar) / 2;
 
   int maxSpace = 0;
-  int minSpace = NSIntegerMax;
+  int minSpace = INT_MAX;
   for (int j = position + 1; j < end; j += 2) {
     int currentCounter = self.counters[j];
     if (currentCounter < minSpace) {

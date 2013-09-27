@@ -638,7 +638,7 @@ static float HEIGHT = 2.0f; //mm
 
   //2. step: construct data codewords
   if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Encoded message contains to many code words, message to big (%d bytes)", msg.length]};
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Encoded message contains to many code words, message to big (%d bytes)", (int)msg.length]};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
     return NO;

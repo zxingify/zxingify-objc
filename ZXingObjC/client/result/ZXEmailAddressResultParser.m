@@ -26,7 +26,7 @@
   NSString *emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
     emailAddress = [rawText substringFromIndex:7];
-    int queryStart = [emailAddress rangeOfString:@"?"].location;
+    NSUInteger queryStart = [emailAddress rangeOfString:@"?"].location;
     if (queryStart != NSNotFound) {
       emailAddress = [emailAddress substringToIndex:queryStart];
     }

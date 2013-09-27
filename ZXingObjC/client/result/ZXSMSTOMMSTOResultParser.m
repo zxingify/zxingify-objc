@@ -27,7 +27,7 @@
   }
   NSString *number = [rawText substringFromIndex:6];
   NSString *body = nil;
-  int bodyStart = [number rangeOfString:@":"].location;
+  NSUInteger bodyStart = [number rangeOfString:@":"].location;
   if (bodyStart != NSNotFound) {
     body = [number substringFromIndex:bodyStart + 1];
     number = [number substringToIndex:bodyStart];

@@ -215,7 +215,7 @@ static bool isIPad();
 
 - (void)replaceInput {
   if ([session respondsToSelector:@selector(beginConfiguration)]) {
-    [session beginConfiguration];
+    [session performSelector:@selector(beginConfiguration)];
   }
 
   if (session && input) {
@@ -254,7 +254,7 @@ static bool isIPad();
   }
 
   if ([session respondsToSelector:@selector(commitConfiguration)]) {
-    [session commitConfiguration];
+    [session performSelector:@selector(commitConfiguration)];
   }
 }
 
@@ -550,7 +550,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
         [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
       NSURL *url = [NSURL fileURLWithPath:captureToFilename];
       CGImageDestinationRef dest =
-        CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
+        CGImageDestinationCreateWithURL((__bridge CFURLRef)url, kUTTypePNG, 1, nil);
       CGImageDestinationAddImage(dest, image, nil);
       CGImageDestinationFinalize(dest);
       CGImageRelease(image);

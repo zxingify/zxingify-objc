@@ -28,7 +28,7 @@
   NSString *emailAddress = [rawText substringFromIndex:5];
   NSString *subject = nil;
   NSString *body = nil;
-  int colon = [emailAddress rangeOfString:@":"].location;
+  NSUInteger colon = [emailAddress rangeOfString:@":"].location;
   if (colon != NSNotFound) {
     subject = [emailAddress substringFromIndex:colon + 1];
     emailAddress = [emailAddress substringToIndex:colon];

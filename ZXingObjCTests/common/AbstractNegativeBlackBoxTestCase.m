@@ -113,7 +113,7 @@
   for (int x = 0; x < self.testResults.count; x++) {
     NegativeTestResult *testResult = self.testResults[x];
     NSLog(@"Rotation %d degrees: %d of %d images were false positives (%d allowed)",
-          (int) testResult.rotation, falsePositives[x], imageFiles.count,
+          (int)testResult.rotation, falsePositives[x], (int)imageFiles.count,
           testResult.falsePositivesAllowed);
     STAssertTrue(falsePositives[x] <= testResult.falsePositivesAllowed,
                  @"Rotation %f degrees: Too many false positives found", testResult.rotation);

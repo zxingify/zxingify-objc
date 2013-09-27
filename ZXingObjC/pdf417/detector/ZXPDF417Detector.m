@@ -509,7 +509,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
 
   if (total < patternLength) {
-    return NSIntegerMax;
+    return INT_MAX;
   }
   int unitBarWidth = (total << PDF417_INTEGER_MATH_SHIFT) / patternLength;
   maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
@@ -520,7 +520,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
-      return NSIntegerMax;
+      return INT_MAX;
     }
     totalVariance += variance;
   }

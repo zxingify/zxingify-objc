@@ -210,7 +210,7 @@ static NSString *MACRO_TRAILER = nil;
   while (YES) {
     //step K
     if ((startpos + charsProcessed) == msg.length) {
-      int min = NSIntegerMax;
+      int min = INT_MAX;
       int8_t mins[6];
       int intCharCounts[6];
       min = [self findMinimums:charCounts intCharCounts:intCharCounts min:min mins:mins];
@@ -295,7 +295,7 @@ static NSString *MACRO_TRAILER = nil;
     if (charsProcessed >= 4) {
       int intCharCounts[6];
       int8_t mins[6];
-      [self findMinimums:charCounts intCharCounts:intCharCounts min:NSIntegerMax mins:mins];
+      [self findMinimums:charCounts intCharCounts:intCharCounts min:INT_MAX mins:mins];
       int minCount = [self minimumCount:mins];
 
       if (intCharCounts[[self asciiEncodation]] < intCharCounts[[self base256Encodation]]

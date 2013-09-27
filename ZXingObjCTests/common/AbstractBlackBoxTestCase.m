@@ -146,7 +146,7 @@
 
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSArray *imageFiles = [self imageFiles];
-  int testCount = [self.testResults count];
+  int testCount = (int)[self.testResults count];
 
   int passedCounts[testCount];
   memset(passedCounts, 0, testCount * sizeof(int));
@@ -218,13 +218,13 @@
     TestResult *testResult = self.testResults[x];
     NSLog(@"Rotation %d degrees:", (int) testResult.rotation);
     NSLog(@"  %d of %d images passed (%d required)",
-          passedCounts[x], imageFiles.count, testResult.mustPassCount);
-    int failed = imageFiles.count - passedCounts[x];
+          passedCounts[x], (int)imageFiles.count, testResult.mustPassCount);
+    int failed = (int)imageFiles.count - passedCounts[x];
     NSLog(@"    %d failed due to misreads, %d not detected",
           misreadCounts[x], failed - misreadCounts[x]);
     NSLog(@"  %d of %d images passed with try harder (%d required)",
-          tryHarderCounts[x], imageFiles.count, testResult.tryHarderCount);
-    failed = imageFiles.count - tryHarderCounts[x];
+          tryHarderCounts[x], (int)imageFiles.count, testResult.tryHarderCount);
+    failed = (int)imageFiles.count - tryHarderCounts[x];
     NSLog(@"    %d failed due to misreads, %d not detected",
           tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]);
     totalFound += passedCounts[x] + tryHarderCounts[x];
@@ -233,7 +233,7 @@
     totalMaxMisread += testResult.maxMisreads + testResult.maxTryHarderMisreads;
   }
 
-  int totalTests = imageFiles.count * testCount * 2;
+  int totalTests = (int)imageFiles.count * testCount * 2;
   NSLog(@"TOTALS:\nDecoded %d images out of %d (%d%%, %d required)",
         totalFound, totalTests, totalFound * 100 / totalTests, totalMustPass);
   if (totalFound > totalMustPass) {

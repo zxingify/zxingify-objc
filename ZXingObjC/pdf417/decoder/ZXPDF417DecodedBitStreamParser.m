@@ -456,7 +456,7 @@ static NSArray *EXP900 = nil;
     if (count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) {
       NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
       if (s == nil) {
-        return NSIntegerMax;
+        return INT_MAX;
       }
       [result appendString:s];
       count = 0;

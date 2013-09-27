@@ -214,7 +214,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   int maxNarrowCounter = 0;
   int wideCounters;
   do {
-    int minCounter = NSIntegerMax;
+    int minCounter = INT_MAX;
     for (int i = 0; i < numCounters; i++) {
       int counter = counters[i];
       if (counter < minCounter && counter > maxNarrowCounter) {

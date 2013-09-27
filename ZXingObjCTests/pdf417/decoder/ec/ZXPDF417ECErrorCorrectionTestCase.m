@@ -67,7 +67,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
                            @273, @194, @917, @237, @420, @859, @340, @115, @222, @808, @866, @836, @417, @121, @833,
                            @459, @64, @159] mutableCopy];
 
-  ECC_BYTES = PDF417_TEST_WITH_EC.count - PDF417_TEST.count;
+  ECC_BYTES = (int)PDF417_TEST_WITH_EC.count - (int)PDF417_TEST.count;
 }
 
 - (id)initWithInvocation:(NSInvocation *)invocation {

@@ -34,7 +34,7 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
  */
 - (BOOL *)encode:(NSString *)contents length:(int *)pLength {
   if ([contents length] != 8) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", [contents length]];
+    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", (int)[contents length]];
   }
 
   if (pLength) *pLength = EAN8codeWidth;

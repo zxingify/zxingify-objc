@@ -57,7 +57,7 @@
     contents = [contents stringByAppendingFormat:@"%d", (1000 - sum) % 10];
   } else if (length != 12) {
      @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                    reason:[NSString stringWithFormat:@"Requested contents should be 11 or 12 digits long, but got %d", [contents length]]
+                                    reason:[NSString stringWithFormat:@"Requested contents should be 11 or 12 digits long, but got %d", (int)[contents length]]
                                   userInfo:nil];
   }
   return [NSString stringWithFormat:@"0%@", contents];

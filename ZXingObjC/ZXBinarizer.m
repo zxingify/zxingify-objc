@@ -35,8 +35,12 @@
   return self;
 }
 
+- (id)initWithLuminanceSource:(ZXLuminanceSource *)source {
+  return [self initWithSource:source];
+}
+
 + (id)binarizerWithSource:(ZXLuminanceSource *)source {
-  return [[self alloc] initWithSource:source];
+  return [[self alloc] initWithLuminanceSource:source];
 }
 
 /**

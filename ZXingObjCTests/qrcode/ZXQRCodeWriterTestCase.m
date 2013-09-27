@@ -33,8 +33,8 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 
 // In case the golden images are not monochromatic, convert the RGB values to greyscale.
 - (ZXBitMatrix *)createMatrixFromImage:(ZXImage *)image {
-  int width = image.width;
-  int height = image.height;
+  size_t width = image.width;
+  size_t height = image.height;
   uint32_t *data;
 
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -47,7 +47,7 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   data = (uint32_t *) malloc(width * height * sizeof(uint32_t));
   memcpy(data, CGBitmapContextGetData(context), width * height * sizeof(uint32_t));
 
-  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:(int)width height:(int)height];
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       int pixel = data[y * width + x];

@@ -68,7 +68,7 @@
 }
 
 - (int)byteArrayLength {
-  return [self.output length];
+  return (int)[self.output length];
 }
 
 @end

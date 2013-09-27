@@ -150,7 +150,7 @@ static NSArray *VERSIONS = nil;
 }
 
 + (ZXQRCodeVersion *)decodeVersionInformation:(int)versionBits {
-  int bestDifference = NSIntegerMax;
+  int bestDifference = INT_MAX;
   int bestVersion = 0;
 
   for (int i = 0; i < VERSION_DECODE_INFO_LEN; i++) {

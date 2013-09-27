@@ -180,8 +180,8 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   int sum = firstTwoSum + counters[2] + counters[3];
   float ratio = (float)firstTwoSum / (float)sum;
   if (ratio >= MIN_FINDER_PATTERN_RATIO && ratio <= MAX_FINDER_PATTERN_RATIO) {
-    int minCounter = NSIntegerMax;
-    int maxCounter = NSIntegerMin;
+    int minCounter = INT_MAX;
+    int maxCounter = INT_MIN;
     for (int i = 0; i < countersLen; i++) {
       int counter = counters[i];
       if (counter > maxCounter) {
