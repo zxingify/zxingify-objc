@@ -28,7 +28,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 @property (nonatomic, assign) int8_t *luminances;
 @property (nonatomic, assign) int luminancesCount;
-@property (nonatomic, strong) NSMutableArray *buckets;
+@property (nonatomic, assign) int *buckets;
 
 @end
 
@@ -36,9 +36,9 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 - (id)initWithSource:(ZXLuminanceSource *)source {
   if (self = [super initWithSource:source]) {
-    self.luminances = NULL;
-    self.luminancesCount = 0;
-    self.buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
+    _luminances = NULL;
+    _luminancesCount = 0;
+    _buckets = (int *)malloc(LUMINANCE_BUCKETS * sizeof(int));
   }
 
   return self;
@@ -48,6 +48,11 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   if (_luminances != NULL) {
     free(_luminances);
     _luminances = NULL;
+  }
+
+  if (_buckets != NULL) {
+    free(_buckets);
+    _buckets = NULL;
   }
 }
 
@@ -62,12 +67,15 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   [self initArrays:width];
   int8_t *localLuminances = [source row:y];
-  NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:self.buckets];
+  int *localBuckets = (int *)malloc(LUMINANCE_BUCKETS * sizeof(int));
+  memset(localBuckets, 0, LUMINANCE_BUCKETS * sizeof(int));
   for (int x = 0; x < width; x++) {
     int pixel = localLuminances[x] & 0xff;
-    localBuckets[pixel >> LUMINANCE_SHIFT] = @([localBuckets[pixel >> LUMINANCE_SHIFT] intValue] + 1);
+    localBuckets[pixel >> LUMINANCE_SHIFT]++;
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
+  free(localBuckets);
+  localBuckets = NULL;
   if (blackPoint == -1) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -95,17 +103,22 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
 
   [self initArrays:width];
-  NSMutableArray *localBuckets = [NSMutableArray arrayWithArray:self.buckets];
+
+  int *localBuckets = (int *)malloc(LUMINANCE_BUCKETS * sizeof(int));
+  memset(localBuckets, 0, LUMINANCE_BUCKETS * sizeof(int));
   for (int y = 1; y < 5; y++) {
     int row = height * y / 5;
     int8_t *localLuminances = [source row:row];
     int right = (width << 2) / 5;
     for (int x = width / 5; x < right; x++) {
       int pixel = localLuminances[x] & 0xff;
-      localBuckets[pixel >> LUMINANCE_SHIFT] = @([localBuckets[pixel >> LUMINANCE_SHIFT] intValue] + 1);
+      localBuckets[pixel >> LUMINANCE_SHIFT]++;
     }
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
+  free(localBuckets);
+  localBuckets = NULL;
+
   if (blackPoint == -1) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -138,25 +151,24 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     self.luminancesCount = luminanceSize;
   }
 
-  self.buckets = [NSMutableArray arrayWithCapacity:LUMINANCE_BUCKETS];
   for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-    [self.buckets addObject:@0];
+    self.buckets[x] = 0;
   }
 }
 
-- (int)estimateBlackPoint:(NSArray *)otherBuckets {
-  int numBuckets = [otherBuckets count];
+- (int)estimateBlackPoint:(int *)otherBuckets {
+  int numBuckets = LUMINANCE_BUCKETS;
   int maxBucketCount = 0;
   int firstPeak = 0;
   int firstPeakSize = 0;
 
   for (int x = 0; x < numBuckets; x++) {
-    if ([otherBuckets[x] intValue] > firstPeakSize) {
+    if (otherBuckets[x] > firstPeakSize) {
       firstPeak = x;
-      firstPeakSize = [otherBuckets[x] intValue];
+      firstPeakSize = otherBuckets[x];
     }
-    if ([otherBuckets[x] intValue] > maxBucketCount) {
-      maxBucketCount = [otherBuckets[x] intValue];
+    if (otherBuckets[x] > maxBucketCount) {
+      maxBucketCount = otherBuckets[x];
     }
   }
 
@@ -164,7 +176,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   int secondPeakScore = 0;
   for (int x = 0; x < numBuckets; x++) {
     int distanceToBiggest = x - firstPeak;
-    int score = [otherBuckets[x] intValue] * distanceToBiggest * distanceToBiggest;
+    int score = otherBuckets[x] * distanceToBiggest * distanceToBiggest;
     if (score > secondPeakScore) {
       secondPeak = x;
       secondPeakScore = score;
@@ -185,7 +197,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   int bestValleyScore = -1;
   for (int x = secondPeak - 1; x > firstPeak; x--) {
     int fromFirst = x - firstPeak;
-    int score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - [otherBuckets[x] intValue]);
+    int score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - otherBuckets[x]);
     if (score > bestValleyScore) {
       bestValley = x;
       bestValleyScore = score;
