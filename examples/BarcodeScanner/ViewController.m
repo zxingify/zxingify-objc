@@ -23,17 +23,9 @@
 @property (nonatomic, strong) ZXCapture* capture;
 @property (nonatomic, weak) IBOutlet UILabel* decodedLabel;
 
-- (NSString*)displayForResult:(ZXResult*)result;
-
 @end
 
-
 @implementation ViewController
-
-@synthesize capture;
-@synthesize decodedLabel;
-
-#pragma mark - Creation/Deletion Methods
 
 #pragma mark - View Controller Methods
 
