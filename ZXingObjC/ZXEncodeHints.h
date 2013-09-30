@@ -51,8 +51,17 @@
 
 /**
  * Specifies what degree of error correction to use, for example in QR Codes.
+ * For Aztec it represents the minimal percentage of error correction words.
+ * Note: an Aztec symbol should have a minimum of 25% EC words.
  */
 @property (nonatomic, strong) ZXErrorCorrectionLevel *errorCorrectionLevel;
+
+/**
+ * Specifies what percent of error correction to use.
+ * For Aztec it represents the minimal percentage of error correction words.
+ * Note: an Aztec symbol should have a minimum of 25% EC words.
+ */
+@property (nonatomic, strong) NSNumber *errorCorrectionPercent;
 
 /**
  * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary

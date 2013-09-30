@@ -19,9 +19,13 @@
 #import "ZXAztecDetectorResult.h"
 #import "ZXAztecEncoder.h"
 #import "ZXAztecEncoderTest.h"
+#import "ZXAztecWriter.h"
 #import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
 #import "ZXDecoderResult.h"
+#import "ZXEncodeHints.h"
+
+int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 
 @implementation ZXAztecEncoderTest
 
@@ -102,6 +106,26 @@
     "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \n"
     "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \n"
     "X       X           X   X   X     X X   X               X     X     X X X         \n"];
+}
+
+- (void)testAztecWriter {
+  NSString *sampleData = [NSString stringWithFormat:@"%c 1 sample data.", 0x20AC];
+  [self testWriter:sampleData encoding:NSISOLatin1StringEncoding eccPercent:25 compact:YES layers:2];
+  [self testWriter:sampleData encoding:(NSStringEncoding) 0x8000020F eccPercent:25 compact:YES layers:2];
+  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:25 compact:YES layers:2];
+  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:100 compact:YES layers:3];
+  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:300 compact:YES layers:4];
+  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:500 compact:NO layers:5];
+  // Test AztecWriter defaults
+  NSString *data = @"In ut magna vel mauris malesuada";
+  ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
+  ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 error:nil];
+  int8_t bytes[4096];
+  [data getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
+  NSUInteger bytesLen = (int)[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:ZX_DEFAULT_AZTEC_EC_PERCENT];
+  ZXBitMatrix *expectedMatrix = aztec.matrix;
+  STAssertEqualObjects(expectedMatrix, matrix, @"Expected matrices to be equal");
 }
 
 // synthetic tests (encode-decode round-trip)
@@ -310,7 +334,7 @@
   ZXDecoderResult *res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
   STAssertEqualObjects(res.text, data, @"Data did not match");
   // Check error correction by introducing a few minor errors
-  srand(3735928559);
+  srand(ZXAztecEncoderTest_RANDOM_SEED);
   [matrix flipX:rand() % matrix.width y:rand() % 2];
   [matrix flipX:rand() % matrix.width y:matrix.height - 2 + rand() % 2];
   [matrix flipX:rand() % 2 y:rand() % matrix.height];
@@ -318,6 +342,44 @@
   r = [[ZXAztecDetectorResult alloc] initWithBits:matrix points:@[] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers];
   res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
   STAssertEqualObjects(res.text, data, @"Data did not match");
+}
+
+- (void)testWriter:(NSString *)data encoding:(NSStringEncoding)encoding eccPercent:(int)eccPercent compact:(BOOL)compact layers:(int)layers {
+  // 1. Perform an encode-decode round-trip because it can be lossy.
+  // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
+  NSData *rawData = [data dataUsingEncoding:encoding];
+  int8_t *bytes = (int8_t *)[rawData bytes];
+  NSUInteger bytesLen = [rawData length];
+  NSString *expectedData = [[NSString alloc] initWithBytes:bytes length:bytesLen encoding:NSISOLatin1StringEncoding];
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.encoding = encoding;
+  hints.errorCorrectionPercent = @(eccPercent);
+  ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
+  ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 hints:hints error:nil];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:eccPercent];
+  STAssertEquals(aztec.compact, compact, @"Unexpected symbol format (compact)");
+  STAssertEquals(aztec.layers, layers, @"Unexpected nr. of layers");
+  ZXBitMatrix *matrix2 = aztec.matrix;
+  STAssertEqualObjects(matrix2, matrix, @"Expected matrices to be equal");
+  ZXAztecDetectorResult *r = [[ZXAztecDetectorResult alloc] initWithBits:matrix points:@[] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers];
+  ZXDecoderResult *res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
+  STAssertEqualObjects(res.text, expectedData, @"Data did not match");
+  // Check error correction by introducing up to eccPercent errors
+  srand(ZXAztecEncoderTest_RANDOM_SEED);
+  int ecWords = aztec.codeWords * eccPercent / 100;
+  for (int i = 0; i < ecWords; i++) {
+    // don't touch the core
+    int x = rand() % 2 > 0 ?
+      rand() % aztec.layers * 2
+      : matrix.width - 1 - (rand() % aztec.layers * 2);
+    int y = rand() % 2 > 0 ?
+      rand() % aztec.layers * 2
+      : matrix.height - 1 - (rand() % aztec.layers * 2);
+    [matrix flipX:x y:y];
+  }
+  r = [[ZXAztecDetectorResult alloc] initWithBits:matrix points:@[] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers];
+  res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
+  STAssertEqualObjects(res.text, expectedData, @"Data did not match");
 }
 
 - (void)testModeMessageCompact:(BOOL)compact layers:(int)layers words:(int)words expected:(NSString *)expected {

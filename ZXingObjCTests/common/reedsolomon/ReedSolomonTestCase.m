@@ -21,7 +21,7 @@
 
 const int DECODER_RANDOM_TEST_ITERATIONS = 3;
 const int DECODER_TEST_ITERATIONS = 10;
-const int RANDOM_SEED = 3735928559;
+const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
 
 @implementation ReedSolomonTestCase
 
@@ -430,7 +430,7 @@ const int RANDOM_SEED = 3735928559;
   int message[dataSize + ecSize];
   int dataWords[dataSize];
   int ecWords[ecSize];
-  srand(RANDOM_SEED);
+  srand(ReedSolomonTestCase_RANDOM_SEED);
   int iterations = field.size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
   for (int i = 0; i < iterations; i++) {
     // generate random data
@@ -470,7 +470,7 @@ const int RANDOM_SEED = 3735928559;
   int length = dataWordsLen + ecWordsLen;
   int message[length];
   int maxErrors = ecWordsLen / 2;
-  srand(RANDOM_SEED);
+  srand(ReedSolomonTestCase_RANDOM_SEED);
   int iterations = field.size > 256 ? 1 : DECODER_TEST_ITERATIONS;
   for (int j = 0; j < iterations; j++) {
     for (int i = 0; i < ecWordsLen; i++) {
