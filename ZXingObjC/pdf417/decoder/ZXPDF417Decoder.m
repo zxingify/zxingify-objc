@@ -21,8 +21,9 @@
 #import "ZXPDF417Decoder.h"
 #import "ZXPDF417ECErrorCorrection.h"
 
+int const ZX_PDF_MODULES_IN_SYMBOL = 17;
 int const ZX_PDF_MAX_ERRORS = 3;
-int const MAX_EC_CODEWORDS = 512;
+int const ZX_PDF_MAX_EC_CODEWORDS = 512;
 
 @interface ZXPDF417Decoder ()
 
@@ -114,7 +115,7 @@ int const MAX_EC_CODEWORDS = 512;
  */
 - (BOOL)correctErrors:(NSMutableArray *)codewords erasures:(NSArray *)erasures numECCodewords:(int)numECCodewords {
   if (erasures.count > numECCodewords / 2 + ZX_PDF_MAX_ERRORS ||
-      numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
+      numECCodewords < 0 || numECCodewords > ZX_PDF_MAX_EC_CODEWORDS) {
     // Too many errors or EC Codewords is corrupted
     return NO;
   }

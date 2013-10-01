@@ -16,19 +16,17 @@
 
 #import "ZXBitMatrix.h"
 #import "ZXPDF417BitMatrixParser.h"
+#import "ZXPDF417Decoder.h"
 
-int const *NO_ERRORS = nil;
-int const MAX_ROW_DIFFERENCE = 6;
 int const MAX_ROWS = 90;
 int const MAX_CW_CAPACITY = 929;
-int const MODULES_IN_SYMBOL = 17;
 
 /**
  * The sorted table of all possible symbols. Extracted from the PDF417
  * specification. The index of a symbol in this table corresponds to the
  * index into the codeword table.
  */
-const int SYMBOL_TABLE[2787] = {0x1025e, 0x1027a, 0x1029e,
+int SYMBOL_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN] = {0x1025e, 0x1027a, 0x1029e,
   0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e, 0x1035c, 0x10396,
   0x103a6, 0x103ac, 0x10422, 0x10428, 0x10436, 0x10442, 0x10444,
   0x10448, 0x10450, 0x1045e, 0x10466, 0x1046c, 0x1047a, 0x10482,
@@ -677,7 +675,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix {
   if (self = [super init]) {
-    _rows = 0;
+    //_rows = 0;
     _leftColumnECData = 0;
     _rightColumnECData = 0;
     _eraseCount = 0;
@@ -697,7 +695,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * them into a codeword array.
  */
 - (NSArray *)readCodewords {
-  int width = self.bitMatrix.width;
+  //int width = self.bitMatrix.width;
   int height = self.bitMatrix.height;
 
   self.erasures = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
@@ -705,91 +703,25 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     [self.erasures addObject:@0];
   }
 
-  // Get the number of pixels in a module across the X dimension
-  //float moduleWidth = bitMatrix.getModuleWidth();
-  float moduleWidth = 1.0f; // Image has been sampled and reduced
-
-  int rowCounters[width];
-  memset(rowCounters, 0, width * sizeof(int));
-  
   NSMutableArray *codewords = [NSMutableArray arrayWithCapacity:MAX_CW_CAPACITY];
   for (int i = 0; i < MAX_CW_CAPACITY; i++) {
     [codewords addObject:@0];
   }
 
   int next = 0;
-  int matchingConsecutiveScans = 0;
-  BOOL rowInProgress = NO;
   int rowNumber = 0;
-  int rowHeight = 0;
-  for (int i = 1; i < height; i++) {
+  for (int i = 0; i < height; i++) {
     if (rowNumber >= MAX_ROWS) {
       // Something is wrong, since we have exceeded
       // the maximum rows in the specification.
       return nil;
     }
-    int rowDifference = 0;
-    // Scan a line of modules and check the
-    // difference between this and the previous line
-    for (int j = 0; j < width; j++) {
-      // Accumulate differences between this line and the
-      // previous line.
-      if ([self.bitMatrix getX:j y:i] != [self.bitMatrix getX:j y:i - 1]) {
-        rowDifference++;
-      }
-    }
-    if (rowDifference <= moduleWidth * MAX_ROW_DIFFERENCE) {
-      for (int j = 0; j < width; j++) {
-        // Accumulate the black pixels on this line
-        if ([self.bitMatrix getX:j y:i]) {
-          rowCounters[j]++;
-        }
-      }
-      // Increment the number of consecutive rows of pixels
-      // that are more or less the same
-      matchingConsecutiveScans++;
-      // Height of a row is a multiple of the module size in pixels
-      // It's supposed to be >= 3x module width, but, accept anything >= 2x
-      if ((matchingConsecutiveScans + 1) >= 2.0f * moduleWidth) {
-        // We have some previous matches as well as a match here
-        // Set processing a unique row.
-        rowInProgress = YES;
-      }
-    } else {
-      if (rowInProgress) {
-        // Process Row
-        next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
-        if (next == -1) {
-          // Something is wrong, since we have exceeded
-          // the maximum columns in the specification.
-          return nil;
-        }
-        // Reinitialize the row counters.
-        for (int j = 0; j < width; j++) {
-          rowCounters[j] = 0;
-        }
-        rowNumber++;
-        rowHeight = 0;
-      }
-      matchingConsecutiveScans = 0;
-      rowInProgress = NO;
-    }
-    rowHeight++;
-  }
-  // Check for a row that was in progress before we exited above.
-  if (rowInProgress) {
     // Process Row
-    if (rowNumber >= MAX_ROWS) {
-      // Something is wrong, since we have exceeded
-      // the maximum rows in the specification.
-      return nil;
-    }
-    next = [self processRow:rowCounters rowCountersLen:width rowNumber:rowNumber rowHeight:rowHeight codewords:codewords next:next];
+    next = [self processRow:rowNumber codewords:codewords next:next];
     if (next == -1) {
       return nil;
     }
     rowNumber++;
-    self.rows = rowNumber;
   }
   self.erasures = [[self.erasures subarrayWithRange:NSMakeRange(0, self.eraseCount)] mutableCopy];
   return [codewords subarrayWithRange:NSMakeRange(0, next)];
@@ -802,23 +734,19 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
  * elements, each of which can be one to six modules wide. The four bar and
  * four space elements shall measure 17 modules in total.
  */
-- (int)processRow:(int *)rowCounters rowCountersLen:(unsigned int)rowCountersLen rowNumber:(int)rowNumber rowHeight:(int)rowHeight codewords:(NSMutableArray *)codewords next:(int)next {
+- (int)processRow:(int)rowNumber codewords:(NSMutableArray *)codewords next:(int)next {
   int width = self.bitMatrix.width;
   int columnNumber = 0;
   long symbol = 0;
-  for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
-    // This happens in real life and is almost surely a rare misdecode
-    if (i + MODULES_IN_SYMBOL > rowCountersLen) {
-      return -1;
-    }
-    for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
-      if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= (int)((unsigned int)rowHeight >> 1)) {
+  for (int i = 0; i < width; i += ZX_PDF_MODULES_IN_SYMBOL) {
+    for (int mask = ZX_PDF_MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
+      if ([self.bitMatrix getX:i + (ZX_PDF_MODULES_IN_SYMBOL - 1 - mask) y:rowNumber]) {
         symbol |= 1L << mask;
       }
     }
     if (columnNumber > 0) {
-      int cw = [self codeword:symbol];
-      if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
+      int cw = [[self class] codeword:symbol];
+      if (cw < 0 && i < width - ZX_PDF_MODULES_IN_SYMBOL) {
         // Skip errors on the Right row indicator column
         if (self.eraseCount >= self.erasures.count) {
           return -1;
@@ -831,7 +759,7 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
       }
     } else {
       // Left row indicator column
-      int cw = [self codeword:symbol];
+      int cw = [[self class] codeword:symbol];
       if (self.ecLevel < 0 && rowNumber % 3 == 1) {
         self.leftColumnECData = cw;
       }
@@ -847,8 +775,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
     --next;
     if (self.ecLevel < 0 && rowNumber % 3 == 2) {
       self.rightColumnECData = [codewords[next] intValue];
-      if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData != 0) {
-        self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
+      if (self.rightColumnECData == self.leftColumnECData && self.leftColumnECData > 0) {
+        //self.ecLevel = ((self.rightColumnECData % 30) - self.rows % 3) / 3;
+        self.ecLevel = (self.rightColumnECData % 30) / 3;
       }
     }
     codewords[next] = @0;
@@ -859,23 +788,20 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
 /**
  * Translate the symbol into a codeword.
  */
-- (int)codeword:(long)symbol {
++ (int)codeword:(long)symbol {
   long sym = symbol & 0x3FFFF;
   int i = [self findCodewordIndex:sym];
   if (i == -1) {
     return -1;
-  } else {
-    long cw = CODEWORD_TABLE[i] - 1;
-    cw %= 929;
-    return (int)cw;
   }
+  return (CODEWORD_TABLE[i] - 1) % 929;
 }
 
 /**
  * Use a binary search to find the index of the codeword corresponding to
  * this symbol.
  */
-- (int)findCodewordIndex:(long)symbol {
++ (int)findCodewordIndex:(long)symbol {
   int first = 0;
   int upto = sizeof(SYMBOL_TABLE) / sizeof(int);
   while (first < upto) {

@@ -19,6 +19,8 @@
  * opposed to locating and extracting the PDF417 Code from an image.
  */
 
+extern const int ZX_PDF_MODULES_IN_SYMBOL;
+
 @class ZXBitMatrix, ZXDecoderResult;
 
 @interface ZXPDF417Decoder : NSObject
