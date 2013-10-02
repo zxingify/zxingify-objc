@@ -137,6 +137,10 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
 
   ZXBitMatrix *linesGrid = [[[ZXLinesSampler alloc] initWithLinesMatrix:linesMatrix dimension:dimension] sample];
+  if (!linesGrid) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   //TODO: verify vertex indices.
   return [[ZXDetectorResult alloc] initWithBits:linesGrid

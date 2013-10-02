@@ -86,7 +86,9 @@ static float RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN * BARS_IN_SYMBOL];
 
   int **codewords = (int **)malloc(self.linesMatrix.height * sizeof(int *));
   int **clusterNumbers = (int **)malloc(self.linesMatrix.height * sizeof(int *));
-  [self linesMatrixToCodewords:codewords clusterNumbers:clusterNumbers symbolWidths:symbolWidths];
+  if (![self linesMatrixToCodewords:codewords clusterNumbers:clusterNumbers symbolWidths:symbolWidths]) {
+    return nil;
+  }
 
   NSArray *votes = [self distributeVotes:codewords clusterNumbers:clusterNumbers];
 
@@ -181,7 +183,12 @@ static float RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN * BARS_IN_SYMBOL];
   return symbolWidths;
 }
 
-- (void)linesMatrixToCodewords:(int **)codewords clusterNumbers:(int **)clusterNumbers symbolWidths:(NSArray *)symbolWidths {
+- (BOOL)linesMatrixToCodewords:(int **)codewords clusterNumbers:(int **)clusterNumbers symbolWidths:(NSArray *)symbolWidths {
+  // Not sure if this is the right way to handle this but avoids an error:
+  if (self.symbolsPerLine > symbolWidths.count) {
+    return NO;
+  }
+
   for (int y = 0; y < self.linesMatrix.height; y++) {
     codewords[y] = (int *)malloc(self.symbolsPerLine * sizeof(int));
     clusterNumbers[y] = (int *)malloc(self.symbolsPerLine * sizeof(int));
@@ -295,6 +302,8 @@ static float RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN * BARS_IN_SYMBOL];
     }
     free(cwRatios);
   }
+
+  return YES;
 }
 
 - (NSArray *)distributeVotes:(int **)codewords clusterNumbers:(int **)clusterNumbers {

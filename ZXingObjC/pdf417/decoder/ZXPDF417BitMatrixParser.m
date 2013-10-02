@@ -755,6 +755,9 @@ const int CODEWORD_TABLE[2787] = {2627, 1819, 2622, 2621, 1813,
         next++;
         self.eraseCount++;
       } else {
+        if (next >= codewords.count) {
+          return -1;
+        }
         codewords[next++] = @(cw);
       }
     } else {
