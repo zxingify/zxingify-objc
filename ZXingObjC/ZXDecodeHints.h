@@ -33,6 +33,12 @@
 @property (nonatomic, assign) BOOL assumeCode39CheckDigit;
 
 /**
+ * Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
+ * For example this affects FNC1 handling for Code 128 (aka GS1-128).
+ */
+@property (nonatomic, assign) BOOL assumeGS1;
+
+/**
  * Allowed lengths of encoded data -- reject anything else. Maps to an int[].
  */
 @property (nonatomic, strong) NSArray *allowedLengths;
