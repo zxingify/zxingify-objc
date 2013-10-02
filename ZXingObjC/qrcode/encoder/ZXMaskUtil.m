@@ -204,7 +204,7 @@ const int N4 = 10;
         prevBit = bit;
       }
     }
-    if (numSameBitCells > 5) {
+    if (numSameBitCells >= 5) {
       penalty += N1 + (numSameBitCells - 5);
     }
   }
