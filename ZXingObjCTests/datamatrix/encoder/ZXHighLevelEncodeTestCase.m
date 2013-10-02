@@ -201,20 +201,20 @@ static NSArray *TEST_SYMBOLS;
 - (void)testBase256Encodation {
   //231 shifts to Base256 encodation
 
-  NSString *visualized = [self encodeHighLevel:@"«äöüé»"];
+  NSString *visualized = [self encodeHighLevel:@"\u00ABäöüé\u00BB"];
   STAssertEqualObjects(visualized, @"231 44 108 59 226 126 1 104", @"");
-  visualized = [self encodeHighLevel:@"«äöüéà»"];
+  visualized = [self encodeHighLevel:@"\u00ABäöüéà\u00BB"];
   STAssertEqualObjects(visualized, @"231 51 108 59 226 126 1 141 254 129", @"");
-  visualized = [self encodeHighLevel:@"«äöüéàá»"];
+  visualized = [self encodeHighLevel:@"\u00ABäöüéàá\u00BB"];
   STAssertEqualObjects(visualized, @"231 44 108 59 226 126 1 141 36 147", @"");
 
   visualized = [self encodeHighLevel:@" 23£"]; //ASCII only (for reference)
   STAssertEqualObjects(visualized, @"33 153 235 36 129", @"");
 
-  visualized = [self encodeHighLevel:@"«äöüé» 234"]; //Mixed Base256 + ASCII
+  visualized = [self encodeHighLevel:@"\u00ABäöüé\u00BB 234"]; //Mixed Base256 + ASCII
   STAssertEqualObjects(visualized, @"231 51 108 59 226 126 1 104 99 153 53 129", @"");
 
-  visualized = [self encodeHighLevel:@"«äöüé» 23£ 1234567890123456789"];
+  visualized = [self encodeHighLevel:@"\u00ABäöüé\u00BB 23£ 1234567890123456789"];
   STAssertEqualObjects(visualized, @"231 55 108 59 226 126 1 104 99 10 161 167 185 142 164 186 208"
                @" 220 142 164 186 208 58 129 59 209 104 254 150 45", @"");
 
@@ -234,11 +234,11 @@ static NSArray *TEST_SYMBOLS;
 
 - (NSString *)createBinaryMessage:(int)len {
   NSMutableString *sb = [NSMutableString string];
-  [sb appendString:@"«äöüéàá-"];
+  [sb appendString:@"\u00ABäöüéàá-"];
   for (int i = 0; i < len - 9; i++) {
     [sb appendFormat:@"%C", (unichar)0x00B7];
   }
-  [sb appendString:@"»"];
+  [sb appendString:@"\u00BB"];
   return [NSString stringWithString:sb];
 }
 
