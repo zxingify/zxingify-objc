@@ -75,24 +75,18 @@
 }
 
 - (void)testAppendBits {
-  {
-    ZXBitArray *v = [[ZXBitArray alloc] init];
-    [v appendBits:0x1 numBits:1];
-    STAssertEquals(v.size, 1, @"Expected size to be 1");
-    STAssertEquals([self unsignedInt:v index:0], (unsigned long)0x80000000L, @"Expected unsigned int at index 0 to equal %d", 0x80000000L);
-  }
-  {
-    ZXBitArray *v = [[ZXBitArray alloc] init];
-    [v appendBits:0xff numBits:8];
-    STAssertEquals(v.size, 8, @"Expected size to be 8");
-    STAssertEquals([self unsignedInt:v index:0], (unsigned long)0xff000000L, @"Expected unsigned int at index 0 to equal %d", 0xff000000L);
-  }
-  {
-    ZXBitArray *v = [[ZXBitArray alloc] init];
-    [v appendBits:0xff7 numBits:12];
-    STAssertEquals(v.size, 12, @"Expected size to be 12");
-    STAssertEquals([self unsignedInt:v index:0], (unsigned long)0xff700000L, @"Expected unsigned int at index 0 to equal %d", 0xff700000L);
-  }
+  ZXBitArray *v = [[ZXBitArray alloc] init];
+  [v appendBits:0x1 numBits:1];
+  STAssertEquals(v.size, 1, @"Expected size to be 1");
+  STAssertEquals([self unsignedInt:v index:0], (unsigned long)0x80000000L, @"Expected unsigned int at index 0 to equal %d", 0x80000000L);
+  v = [[ZXBitArray alloc] init];
+  [v appendBits:0xff numBits:8];
+  STAssertEquals(v.size, 8, @"Expected size to be 8");
+  STAssertEquals([self unsignedInt:v index:0], (unsigned long)0xff000000L, @"Expected unsigned int at index 0 to equal %d", 0xff000000L);
+  v = [[ZXBitArray alloc] init];
+  [v appendBits:0xff7 numBits:12];
+  STAssertEquals(v.size, 12, @"Expected size to be 12");
+  STAssertEquals([self unsignedInt:v index:0], (unsigned long)0xff700000L, @"Expected unsigned int at index 0 to equal %d", 0xff700000L);
 }
 
 - (void)testNumBytes {
