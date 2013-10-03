@@ -118,6 +118,12 @@
     }
 
     t = [[q multiply:tLast] addOrSubtract:tLastLast];
+
+    if (r.degree >= rLast.degree) {
+      @throw [NSException exceptionWithName:@"IllegalStateException"
+                                     reason:@"Division algorithm failed to reduce polynomial?"
+                                   userInfo:nil];
+    }
   }
 
   int sigmaTildeAtZero = [t coefficient:0];
