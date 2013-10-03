@@ -111,7 +111,7 @@ int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 - (void)testAztecWriter {
   NSString *sampleData = [NSString stringWithFormat:@"%c 1 sample data.", 0x20AC];
   [self testWriter:sampleData encoding:NSISOLatin1StringEncoding eccPercent:25 compact:YES layers:2];
-  [self testWriter:sampleData encoding:(NSStringEncoding) 0x8000020F eccPercent:25 compact:YES layers:2];
+  [self testWriter:@"\u20AC 1 sample data." encoding:(NSStringEncoding) 0x8000020F eccPercent:25 compact:YES layers:2];
   [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:25 compact:YES layers:2];
   [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:100 compact:YES layers:3];
   [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:300 compact:YES layers:4];
