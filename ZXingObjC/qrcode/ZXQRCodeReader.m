@@ -116,6 +116,11 @@
   int left = [leftTopBlack[0] intValue];
   int right = [rightBottomBlack[0] intValue];
 
+  // Sanity check!
+  if (left >= right || top >= bottom) {
+    return nil;
+  }
+
   if (bottom - top != right - left) {
     // Special case, where bottom-right module wasn't black so we found something else in the last row
     // Assume it's a square, so use height as the width
