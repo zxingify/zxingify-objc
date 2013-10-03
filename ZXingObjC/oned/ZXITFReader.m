@@ -27,7 +27,7 @@ static int MAX_INDIVIDUAL_VARIANCE;
 static const int W = 3; // Pixel width of a wide line
 static const int N = 1; // Pixel width of a narrow line
 
-int const DEFAULT_ALLOWED_LENGTHS[10] = { 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+int const DEFAULT_ALLOWED_LENGTHS[11] = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
 
 /**
  * Start/end guard pattern.
