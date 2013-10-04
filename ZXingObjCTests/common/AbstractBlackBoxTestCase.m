@@ -171,11 +171,11 @@
 
     NSString *expectedText;
     if (expectedTextFile) {
-      expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSUTF8StringEncoding error:nil];
+      expectedText = [self readFileAsString:expectedTextFile encoding:NSUTF8StringEncoding];
     } else {
       NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:self.testBase];
       STAssertNotNil(expectedTextFile, @"Expected text does not exist");
-      expectedText = [NSString stringWithContentsOfFile:expectedTextFile encoding:NSISOLatin1StringEncoding error:nil];
+      expectedText = [self readFileAsString:expectedText encoding:NSISOLatin1StringEncoding];
     }
 
     NSURL *expectedMetadataFile = [NSURL URLWithString:[[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@".metadata.txt" inDirectory:self.testBase]];
@@ -303,6 +303,14 @@
   }
 
   return YES;
+}
+
+- (NSString *)readFileAsString:(NSString *)file encoding:(NSStringEncoding)encoding {
+   NSString *stringContents = [NSString stringWithContentsOfFile:file encoding:encoding error:nil];
+  if ([stringContents hasSuffix:@"\n"]) {
+    NSLog(@"String contents of file %@ end with a newline. This may not be intended and cause a test failure", file);
+  }
+  return stringContents;
 }
 
 // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
