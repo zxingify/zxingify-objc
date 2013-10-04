@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-@interface ZXLinesSampler : NSObject
+#import "ZXPDF417BarcodeMetadata.h"
 
-- (id)initWithLinesMatrix:(ZXBitMatrix *)linesMatrix dimension:(int)dimension;
-- (ZXBitMatrix *)sample;
+@implementation ZXPDF417BarcodeMetadata
+
+- (id)initWithColumnCount:(int)columnCount rowCountUpperPart:(int)rowCountUpperPart rowCountLowerPart:(int)rowCountLowerPart
+     errorCorrectionLevel:(int)errorCorrectionLevel {
+  self = [super init];
+  if (self) {
+    _columnCount = columnCount;
+    _errorCorrectionLevel = errorCorrectionLevel;
+    _rowCountUpperPart = rowCountUpperPart;
+    _rowCountLowerPart = rowCountLowerPart;
+    _rowCount = rowCountUpperPart + rowCountLowerPart;
+  }
+
+  return self;
+}
 
 @end

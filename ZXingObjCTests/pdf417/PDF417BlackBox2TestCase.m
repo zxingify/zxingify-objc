@@ -29,8 +29,9 @@
                     expectedFormat:kBarcodeFormatPDF417];
 
   if (self) {
-    [self addTest:23 tryHarderCount:23 maxMisreads:0 maxTryHarderMisreads:0 rotation:0.0f];
-    [self addTest:22 tryHarderCount:22 maxMisreads:0 maxTryHarderMisreads:0 rotation:180.0f];
+    // TODO this should be 25,25,0,0
+    [self addTest:23 tryHarderCount:23 maxMisreads:1 maxTryHarderMisreads:1 rotation:0.0f];
+    [self addTest:23 tryHarderCount:23 maxMisreads:1 maxTryHarderMisreads:1 rotation:180.0f];
   }
 
   return self;

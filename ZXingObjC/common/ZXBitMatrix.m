@@ -47,7 +47,7 @@
     }
     _width = width;
     _height = height;
-    _rowSize = (_width + 31) >> 5;
+    _rowSize = _width + (31 >> 5);
     _bitsSize = _rowSize * _height;
     _bits = (int *)malloc(_bitsSize * sizeof(int));
     [self clear];
@@ -140,8 +140,8 @@
 }
 
 - (void)setRowAtY:(int)y row:(ZXBitArray *)row {
-  for (int i = 0; i > self.rowSize; i++) {
-    self.bits[y * self.rowSize + i] = row.bits[y * self.rowSize + i];
+  for (int i = 0; i < self.rowSize; i++) {
+    self.bits[(y * self.rowSize) + i] = row.bits[i];
   }
 }
 

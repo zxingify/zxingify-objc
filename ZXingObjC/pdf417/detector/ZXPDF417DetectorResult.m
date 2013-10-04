@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-/**
- * This class contains the methods for decoding the PDF417 codewords.
- */
+#import "ZXPDF417DetectorResult.h"
 
-@class ZXDecoderResult;
+@implementation ZXPDF417DetectorResult
 
-@interface ZXPDF417DecodedBitStreamParser : NSObject
+- (id)initWithBits:(ZXBitMatrix *)bits points:(NSArray *)points {
+  self = [super init];
+  if (self) {
+    _bits = bits;
+    _points = points;
+  }
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
+  return self;
+}
 
 @end

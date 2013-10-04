@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-#import "PDF417BlackBox3TestCase.h"
-#import "ZXMultiFormatReader.h"
+@class ZXPDF417BoundingBox, ZXPDF417Codeword;
 
-@implementation PDF417BlackBox3TestCase
+@interface ZXPDF417DetectionResultColumn : NSObject
 
-- (id)initWithInvocation:(NSInvocation *)invocation {
-  self = [super initWithInvocation:invocation
-                testBasePathSuffix:@"Resources/blackbox/pdf417-3"
-                     barcodeReader:[[ZXMultiFormatReader alloc] init]
-                    expectedFormat:kBarcodeFormatPDF417];
+@property (nonatomic, strong, readonly) ZXPDF417BoundingBox *boundingBox;
+@property (nonatomic, strong, readonly) NSMutableArray *codewords;
 
-  if (self) {
-    [self addTest:18 tryHarderCount:18 rotation:0.0f];
-    [self addTest:18 tryHarderCount:18 rotation:180.0f];
-  }
-
-  return self;
-}
-
-- (void)testBlackBox {
-  [super runTests];
-}
+- (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox;
+- (ZXPDF417Codeword *)codewordNearby:(int)imageRow;
+- (int)codewordsIndex:(int)imageRow;
+- (int)imageRow:(int)codewordIndex;
+- (void)setCodeword:(int)imageRow codeword:(ZXPDF417Codeword *)codeword;
+- (ZXPDF417Codeword *)codeword:(int)imageRow;
+- (ZXPDF417BoundingBox *)boundingBox;
 
 @end

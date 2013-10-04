@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-/**
- * This class contains the methods for decoding the PDF417 codewords.
- */
+@interface ZXPDF417Codeword : NSObject
 
-@class ZXDecoderResult;
+@property (nonatomic, assign, readonly) int startX;
+@property (nonatomic, assign, readonly) int endX;
+@property (nonatomic, assign, readonly) int bucket;
+@property (nonatomic, assign, readonly) int value;
+@property (nonatomic, assign) int rowNumber;
 
-@interface ZXPDF417DecodedBitStreamParser : NSObject
-
-+ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
+- (id)initWithStartX:(int)startX endX:(int)endX bucket:(int)bucket value:(int)value;
+- (BOOL)hasValidRowNumber;
+- (BOOL)isValidRowNumber:(int)rowNumber;
+- (void)setRowNumberAsRowIndicatorColumn;
+- (int)width;
 
 @end

@@ -41,7 +41,7 @@
   if (self = [super init]) {
     _size = size;
     _bits = [self makeArray:size];
-    _bitsLength = (size + 31) >> 5;
+    _bitsLength = size + (31 >> 5);
   }
 
   return self;
@@ -72,7 +72,7 @@
       self.bits = NULL;
     }
     self.bits = newBits;
-    self.bitsLength = (aSize + 31) >> 5;
+    self.bitsLength = aSize + (31 >> 5);
   }
 }
 
@@ -290,7 +290,7 @@
 }
 
 - (int *)makeArray:(int)aSize {
-  int arraySize = (aSize + 31) >> 5;
+  int arraySize = aSize + (31 >> 5);
   int *newArray = (int *)malloc(arraySize * sizeof(int));
   memset(newArray, 0, arraySize * sizeof(int));
   return newArray;

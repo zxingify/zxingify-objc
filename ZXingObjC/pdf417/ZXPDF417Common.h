@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-#import "PDF417BlackBox3TestCase.h"
-#import "ZXMultiFormatReader.h"
+#define ZXPDF417_SYMBOL_TABLE_LEN 2787
+extern int ZXPDF417_SYMBOL_TABLE[ZXPDF417_SYMBOL_TABLE_LEN];
 
-@implementation PDF417BlackBox3TestCase
+#define ZXPDF417_CODEWORD_TABLE_LEN 2787
+extern int ZXPDF417_CODEWORD_TABLE[ZXPDF417_CODEWORD_TABLE_LEN];
 
-- (id)initWithInvocation:(NSInvocation *)invocation {
-  self = [super initWithInvocation:invocation
-                testBasePathSuffix:@"Resources/blackbox/pdf417-3"
-                     barcodeReader:[[ZXMultiFormatReader alloc] init]
-                    expectedFormat:kBarcodeFormatPDF417];
+extern int const ZXPDF417_NUMBER_OF_CODEWORDS;
+extern int const ZXPDF417_MAX_CODEWORDS_IN_BARCODE;
+extern int const ZXPDF417_MODULES_IN_CODEWORD;
+extern int const ZXPDF417_MODULES_IN_STOP_PATTERN;
+#define ZXPDF417_BARS_IN_MODULE 8
 
-  if (self) {
-    [self addTest:18 tryHarderCount:18 rotation:0.0f];
-    [self addTest:18 tryHarderCount:18 rotation:180.0f];
-  }
+@interface ZXPDF417Common : NSObject
 
-  return self;
-}
-
-- (void)testBlackBox {
-  [super runTests];
-}
++ (int)bitCountSum:(NSArray *)moduleBitCount;
++ (int)codeword:(long)symbol;
 
 @end

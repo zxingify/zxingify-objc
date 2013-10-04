@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-/**
- * This class parses the BitMatrix image into codewords.
- */
+@interface ZXPDF417BarcodeMatrix : NSObject
 
-@class ZXBitMatrix;
-
-#define ZX_PDF417_SYMBOL_TABLE_LEN 2787
-extern int SYMBOL_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN];
-
-@interface ZXPDF417BitMatrixParser : NSObject
-
-@property (nonatomic, strong, readonly) NSMutableArray *erasures;
-@property (nonatomic, assign, readonly) int ecLevel;
-
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix;
-- (NSArray *)readCodewords;
-+ (int)codeword:(long)symbol;
+- (NSNumber *)value:(int)row column:(int)column;
+- (void)setValue:(int)row column:(int)column value:(int)value;
 
 @end

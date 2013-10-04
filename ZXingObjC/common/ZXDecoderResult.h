@@ -27,6 +27,9 @@
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, strong, readonly) NSMutableArray *byteSegments;
 @property (nonatomic, copy, readonly) NSString *ecLevel;
+@property (nonatomic, copy) NSNumber *errorsCorrected;
+@property (nonatomic, copy) NSNumber *erasures;
+@property (nonatomic, strong) id other;
 
 - (id)initWithRawBytes:(int8_t *)rawBytes
                 length:(unsigned int)length

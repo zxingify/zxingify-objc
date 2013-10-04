@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-/**
- * This class contains the methods for decoding the PDF417 codewords.
- */
+#import "ZXPDF417DetectionResultColumn.h"
 
-@class ZXDecoderResult;
+@class ZXPDF417BarcodeMetadata, ZXPDF417BoundingBox;
 
-@interface ZXPDF417DecodedBitStreamParser : NSObject
+@interface ZXPDF417DetectionResultRowIndicatorColumn : ZXPDF417DetectionResultColumn
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
+@property (nonatomic, assign, readonly) BOOL isLeft;
+
+- (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox isLeft:(BOOL)isLeft;
+- (void)setRowNumbers;
+- (NSArray *)rowHeights;
+- (int)adjustIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata;
+- (ZXPDF417BarcodeMetadata *)barcodeMetadata;
 
 @end

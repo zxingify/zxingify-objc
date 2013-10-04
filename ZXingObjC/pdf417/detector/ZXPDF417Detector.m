@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
+#import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
 #import "ZXBinaryBitmap.h"
 #import "ZXDecodeHints.h"
-#import "ZXDetectorResult.h"
 #import "ZXErrors.h"
 #import "ZXGridSampler.h"
-#import "ZXLinesSampler.h"
 #import "ZXMathUtils.h"
 #import "ZXPDF417Detector.h"
+#import "ZXPDF417DetectorResult.h"
 #import "ZXPerspectiveTransform.h"
 #import "ZXResultPoint.h"
 
+const int INDEXES_PATTERN_LEN = 4;
+const int INDEXES_START_PATTERN[INDEXES_PATTERN_LEN] = { 0, 4, 1, 5 };
+const int INDEXES_STOP_PATTERN[INDEXES_PATTERN_LEN] = { 6, 2, 7, 3 };
 int const PDF417_INTEGER_MATH_SHIFT = 8;
 int const PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << PDF417_INTEGER_MATH_SHIFT;
 int const MAX_AVG_VARIANCE = (int) (PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
@@ -34,20 +37,20 @@ int const MAX_INDIVIDUAL_VARIANCE = (int) (PDF417_PATTERN_MATCH_RESULT_SCALE_FAC
 // B S B S B S B S Bar/Space pattern
 // 11111111 0 1 0 1 0 1 000
 int const PDF417_START_PATTERN_LEN = 8;
-int const PDF417_START_PATTERN[PDF417_START_PATTERN_LEN] = {8, 1, 1, 1, 1, 1, 1, 3};
-
-// 11111111 0 1 0 1 0 1 000
-int const START_PATTERN_REVERSE_LEN = 8;
-int const START_PATTERN_REVERSE[START_PATTERN_REVERSE_LEN] = {3, 1, 1, 1, 1, 1, 1, 8};
+int const PDF417_START_PATTERN[PDF417_START_PATTERN_LEN] = { 8, 1, 1, 1, 1, 1, 1, 3 };
 
 // 1111111 0 1 000 1 0 1 00 1
-int const STOP_PATTERN_LEN = 9;
-int const STOP_PATTERN[STOP_PATTERN_LEN] = {7, 1, 1, 3, 1, 1, 1, 2, 1};
-
-// B S B S B S B S B Bar/Space pattern
-// 1111111 0 1 000 1 0 1 00 1
-int const STOP_PATTERN_REVERSE_LEN = 9;
-int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1, 1, 7};
+int const PDF417_STOP_PATTERN_LEN = 9;
+int const PDF417_STOP_PATTERN[PDF417_STOP_PATTERN_LEN] = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
+int const MAX_PIXEL_DRIFT = 3;
+int const MAX_PATTERN_DRIFT = 5;
+// if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
+// if we set the value too high, then we might detect the start pattern from a neighbor barcode.
+int const SKIPPED_ROW_COUNT_MAX = 25;
+// A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
+// 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
+int const ROW_STEP = 5;
+int const BARCODE_MIN_HEIGHT = 10;
 
 @interface ZXPDF417Detector ()
 
@@ -68,173 +71,118 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
 /**
  * Detects a PDF417 Code in an image, simply.
  */
-- (ZXDetectorResult *)detectWithError:(NSError **)error {
-  return [self detect:nil error:error];
+- (ZXPDF417DetectorResult *)detect:(BOOL)multiple error:(NSError **)error {
+  return [self detect:nil multiple:multiple error:error];
 }
 
 /**
  * Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.
  */
-- (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
-  // Fetch the 1 bit matrix once up front.
-  ZXBitMatrix *matrix = [self.image blackMatrixWithError:error];
-  if (!matrix) {
+- (ZXPDF417DetectorResult *)detect:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error {
+  // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even
+  // different binarizers
+  //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+
+  ZXBitMatrix *bitMatrix = [self.image blackMatrixWithError:error];
+
+  NSArray *barcodeCoordinates = [self detect:multiple bitMatrix:bitMatrix error:error];
+  if (!barcodeCoordinates) {
     return nil;
   }
-
-  // Try to find the vertices assuming the image is upright.
-  int rowStep = 8;
-  NSMutableArray *vertices = [self findVertices:matrix rowStep:rowStep];
-  if (vertices == nil) {
-    // Maybe the image is rotated 180 degrees?
-    vertices = [self findVertices180:matrix rowStep:rowStep];
-    if (vertices != nil) {
-      if (![self correctVertices:matrix vertices:vertices upsideDown:YES]) {
-        if (error) *error = NotFoundErrorInstance();
-        return nil;
-      }
-    }
-  } else {
-    if (![self correctVertices:matrix vertices:vertices upsideDown:NO]) {
-      if (error) *error = NotFoundErrorInstance();
+  if ([barcodeCoordinates count] == 0) {
+    [[self class] rotate180:bitMatrix];
+    barcodeCoordinates = [self detect:multiple bitMatrix:bitMatrix error:error];
+    if (!barcodeCoordinates) {
       return nil;
     }
   }
+  return [[ZXPDF417DetectorResult alloc] initWithBits:bitMatrix points:barcodeCoordinates];
+}
 
-  if (vertices == nil) {
-    if (error) *error = NotFoundErrorInstance();
-    return nil;
+/**
+ * Detects PDF417 codes in an image. Only checks 0 degree rotation
+ */
+- (NSArray *)detect:(BOOL)multiple bitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
+  NSMutableArray *barcodeCoordinates = [NSMutableArray array];
+  int row = 0;
+  int column = 0;
+  BOOL foundBarcodeInRow = NO;
+  while (row < self.image.height) {
+    NSArray *vertices = [self findVertices:bitMatrix startRow:row startColumn:column];
+
+    if (vertices[0] == [NSNull null] && vertices[3] == [NSNull null]) {
+      if (!foundBarcodeInRow) {
+        // we didn't find any barcode so that's the end of searching
+        break;
+      }
+      // we didn't find a barcode starting at the given column and row. Try again from the first column and slightly
+      // below the lowest barcode we found so far.
+      foundBarcodeInRow = NO;
+      column = 0;
+      for (NSArray *barcodeCoordinate in barcodeCoordinates) {
+        if (barcodeCoordinate[1] != [NSNull null]) {
+          row = MAX(row, (int) [barcodeCoordinate[1] y]);
+        }
+        if (barcodeCoordinate[3] != [NSNull null]) {
+          row = MAX(row, (int) [barcodeCoordinate[3] y]);
+        }
+      }
+      row += ROW_STEP;
+      continue;
+    }
+    foundBarcodeInRow = YES;
+    [barcodeCoordinates addObject:vertices];
+    if (!multiple) {
+      break;
+    }
+    // if we didn't find a right row indicator column, then continue the search for the next barcode after the
+    // start pattern of the barcode just found.
+    if (vertices[2] != [NSNull null]) {
+      column = (int) [vertices[2] x];
+      row = (int) [vertices[2] y];
+    } else {
+      column = (int) [vertices[4] x];
+      row = (int) [vertices[4] y];
+    }
   }
+  return barcodeCoordinates;
+}
 
-  float moduleWidth = [self computeModuleWidth:vertices];
-  if (moduleWidth < 1.0f) {
-    if (error) *error = NotFoundErrorInstance();
-    return nil;
+// The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
+// data structures)
+/**
+ * Rotates a bit matrix by 180 degrees.
+ */
++ (void)rotate180:(ZXBitMatrix *)bitMatrix {
+  int width = bitMatrix.width;
+  int height = bitMatrix.height;
+  ZXBitArray *firstRowBitArray = [[ZXBitArray alloc] initWithSize:width];
+  ZXBitArray *secondRowBitArray = [[ZXBitArray alloc] initWithSize:width];
+  ZXBitArray *tmpBitArray = [[ZXBitArray alloc] initWithSize:width];
+  for (int y = 0; y < (height + 1) >> 1; y++) {
+    firstRowBitArray = [bitMatrix rowAtY:y row:firstRowBitArray];
+    [bitMatrix setRowAtY:y row:[self mirror:[bitMatrix rowAtY:height - 1 - y row:secondRowBitArray] result:tmpBitArray]];
+    [bitMatrix setRowAtY:height - 1 - y row:[self mirror:firstRowBitArray result:tmpBitArray]];
   }
+}
 
-  int dimension = [self computeDimension:vertices[12]
-                                topRight:vertices[14]
-                              bottomLeft:vertices[13]
-                             bottomRight:vertices[15]
-                             moduleWidth:moduleWidth];
-  if (dimension < 1) {
-    if (error) *error = NotFoundErrorInstance();
-    return nil;
+/**
+ * Copies the bits from the input to the result BitArray in reverse order
+ */
++ (ZXBitArray *)mirror:(ZXBitArray *)input result:(ZXBitArray *)result {
+  [result clear];
+  int size = input.size;
+  for (int i = 0; i < size; i++) {
+    if ([input get:i]) {
+      [result set:size - 1 - i];
+    }
   }
-
-  int yDimension = MAX([self computeYDimension:vertices[12]
-                                      topRight:vertices[14]
-                                    bottomLeft:vertices[13]
-                                   bottomRight:vertices[15]
-                                   moduleWidth:moduleWidth],
-                       dimension);
-
-  // Deskew and over-sample image.
-  ZXBitMatrix *linesMatrix = [self sampleLines:vertices dimension:dimension yDimension:yDimension];
-  if (!linesMatrix) {
-    if (error) *error = NotFoundErrorInstance();
-    return nil;
-  }
-
-  ZXBitMatrix *linesGrid = [[[ZXLinesSampler alloc] initWithLinesMatrix:linesMatrix dimension:dimension] sample];
-  if (!linesGrid) {
-    if (error) *error = NotFoundErrorInstance();
-    return nil;
-  }
-
-  //TODO: verify vertex indices.
-  return [[ZXDetectorResult alloc] initWithBits:linesGrid
-                                         points:@[vertices[5], vertices[4], vertices[6], vertices[7]]];
+  return result;
 }
 
 /**
  * Locate the vertices and the codewords area of a black blob using the Start
  * and Stop patterns as locators.
- * 
- * Returns an array containing the vertices:
- * vertices[0] x, y top left barcode
- * vertices[1] x, y bottom left barcode
- * vertices[2] x, y top right barcode
- * vertices[3] x, y bottom right barcode
- * vertices[4] x, y top left codeword area
- * vertices[5] x, y bottom left codeword area
- * vertices[6] x, y top right codeword area
- * vertices[7] x, y bottom right codeword area
- */
-- (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix rowStep:(int)rowStep {
-  int height = matrix.height;
-  int width = matrix.width;
-
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:16];
-  for (int i = 0; i < 8; i++) {
-    [result addObject:[NSNull null]];
-  }
-  BOOL found = NO;
-
-  int counters[START_PATTERN_REVERSE_LEN];
-  memset(counters, 0, START_PATTERN_REVERSE_LEN * sizeof(int));
-
-  // Top Left
-  for (int i = 0; i < height; i += rowStep) {
-    NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
-    if (loc.location != NSNotFound) {
-      result[0] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-      result[4] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-      found = YES;
-      break;
-    }
-  }
-  // Bottom left
-  if (found) { // Found the Top Left vertex
-    found = NO;
-    for (int i = height - 1; i > 0; i -= rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN counters:counters];
-      if (loc.location != NSNotFound) {
-        result[1] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-        result[5] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-        found = YES;
-        break;
-      }
-    }
-  }
-
-  int counters2[STOP_PATTERN_REVERSE_LEN];
-  memset(counters2, 0, STOP_PATTERN_REVERSE_LEN * sizeof(int));
-
-  // Top right
-  if (found) { // Found the Bottom Left vertex
-    found = NO;
-    for (int i = 0; i < height; i += rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
-      if (loc.location != NSNotFound) {
-        result[2] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-        result[6] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-        found = YES;
-        break;
-      }
-    }
-  }
-  // Bottom right
-  if (found) { // Found the Top right vertex
-    found = NO;
-    for (int i = height - 1; i > 0; i -= rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:width whiteFirst:NO pattern:(int *)STOP_PATTERN patternLen:STOP_PATTERN_LEN counters:counters2];
-      if (loc.location != NSNotFound) {
-        result[3] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-        result[7] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-        found = YES;
-        break;
-      }
-    }
-  }
-  return found ? result : nil;
-}
-
-/**
- * Locate the vertices and the codewords area of a black blob using the Start
- * and Stop patterns as locators. This assumes that the image is rotated 180
- * degrees and if it locates the start and stop patterns at it will re-map
- * the vertices for a 0 degree rotation.
  *
  * Returns an array containing the vertices:
  * vertices[0] x, y top left barcode
@@ -246,86 +194,106 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  * vertices[6] x, y top right codeword area
  * vertices[7] x, y bottom right codeword area
  */
-- (NSMutableArray *)findVertices180:(ZXBitMatrix *)matrix rowStep:(int)rowStep {
-  // TODO: Change assumption about barcode location.
-
+- (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix startRow:(int)startRow startColumn:(int)startColumn {
   int height = matrix.height;
   int width = matrix.width;
-  int halfWidth = width >> 1;
 
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:16];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:8];
   for (int i = 0; i < 8; i++) {
     [result addObject:[NSNull null]];
   }
+  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN] destinationIndexes:(int *)INDEXES_START_PATTERN];
+
+  if (result[4] != [NSNull null]) {
+    startColumn = (int) [result[4] x];
+    startRow = (int) [result[4] y];
+  }
+  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:(int *)PDF417_STOP_PATTERN patternLen:PDF417_STOP_PATTERN_LEN] destinationIndexes:(int *)INDEXES_STOP_PATTERN];
+  return result;
+}
+
+- (void)copyToResult:(NSMutableArray *)result tmpResult:(NSMutableArray *)tmpResult destinationIndexes:(int *)destinationIndexes {
+  for (int i = 0; i < INDEXES_PATTERN_LEN; i++) {
+    result[destinationIndexes[i]] = tmpResult[i];
+  }
+}
+
+- (NSMutableArray *)findRowsWithPattern:(ZXBitMatrix *)matrix height:(int)height width:(int)width startRow:(int)startRow
+                            startColumn:(int)startColumn pattern:(int *)pattern patternLen:(int)patternLen {
+  NSMutableArray *result = [NSMutableArray array];
+  for (int i = 0; i < 4; i++) {
+    [result addObject:[NSNull null]];
+  }
   BOOL found = NO;
-
-  int counters[PDF417_START_PATTERN_LEN];
-  memset(counters, 0, PDF417_START_PATTERN_LEN * sizeof(int));
-
-  // Top Left
-  for (int i = height - 1; i > 0; i -= rowStep) {
-    NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int *)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
+  int counters[patternLen];
+  memset(counters, 0, patternLen * sizeof(int));
+  for (; startRow < height; startRow += ROW_STEP) {
+    NSRange loc = [self findGuardPattern:matrix column:startColumn row:startRow width:width whiteFirst:false pattern:pattern patternLen:patternLen counters:counters];
     if (loc.location != NSNotFound) {
-      result[0] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-      result[4] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
+      while (startRow > 0) {
+        NSRange previousRowLoc = [self findGuardPattern:matrix column:startColumn row:--startRow width:width whiteFirst:false pattern:pattern patternLen:patternLen counters:counters];
+        if (previousRowLoc.location != NSNotFound) {
+          loc = previousRowLoc;
+        } else {
+          startRow++;
+          break;
+        }
+      }
+      result[0] = [[ZXResultPoint alloc] initWithX:loc.location y:startRow];
+      result[1] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:startRow];
       found = YES;
       break;
     }
   }
-  // Bottom Left
-  if (found) { // Found the Top Left vertex
-    found = NO;
-    for (int i = 0; i < height; i += rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:halfWidth row:i width:halfWidth whiteFirst:YES pattern:(int *)START_PATTERN_REVERSE patternLen:START_PATTERN_REVERSE_LEN counters:counters];
-      if (loc.location != NSNotFound) {
-        result[1] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-        result[5] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-        found = YES;
-        break;
+  int stopRow = startRow + 1;
+  // Last row of the current symbol that contains pattern
+  if (found) {
+    int skippedRowCount = 0;
+    NSRange previousRowLoc = NSMakeRange((NSUInteger) [result[0] x], ((NSUInteger)[result[1] x]) - ((NSUInteger)[result[0] x]));
+    for (; stopRow < height; stopRow++) {
+      NSRange loc = [self findGuardPattern:matrix column:previousRowLoc.location row:stopRow width:width whiteFirst:NO pattern:pattern patternLen:patternLen counters:counters];
+      // a found pattern is only considered to belong to the same barcode if the start and end positions
+      // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
+      // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
+      // larger drift and don't check for skipped rows.
+      if (loc.location != NSNotFound && ABS((int)previousRowLoc.location - (int)loc.location) < MAX_PATTERN_DRIFT &&
+          ABS((int)NSMaxRange(previousRowLoc) - (int)NSMaxRange(loc)) < MAX_PATTERN_DRIFT) {
+        previousRowLoc = loc;
+        skippedRowCount = 0;
+      } else {
+        if (skippedRowCount > SKIPPED_ROW_COUNT_MAX) {
+          break;
+        } else {
+          skippedRowCount++;
+        }
       }
     }
+    stopRow -= skippedRowCount;
+    result[2] = [[ZXResultPoint alloc] initWithX:previousRowLoc.location y:stopRow];
+    result[3] = [[ZXResultPoint alloc] initWithX:NSMaxRange(previousRowLoc) y:stopRow];
   }
-
-  int counters2[STOP_PATTERN_LEN];
-  memset(counters2, 0, STOP_PATTERN_LEN * sizeof(int));
-
-  // Top Right
-  if (found) { // Found the Bottom Left vertex
-    found = NO;
-    for (int i = height - 1; i > 0; i -= rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int *)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
-      if (loc.location != NSNotFound) {
-        result[2] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-        result[6] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-        found = YES;
-        break;
-      }
+  if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
+    for (int i = 0; i < 4; i++) {
+      result[i] = [NSNull null];
     }
   }
-  // Bottom Right
-  if (found) { // Found the Top Right vertex
-    found = NO;
-    for (int i = 0; i < height; i += rowStep) {
-      NSRange loc = [self findGuardPattern:matrix column:0 row:i width:halfWidth whiteFirst:NO pattern:(int *)STOP_PATTERN_REVERSE patternLen:STOP_PATTERN_REVERSE_LEN counters:counters2];
-      if (loc.location != NSNotFound) {
-        result[3] = [[ZXResultPoint alloc] initWithX:loc.location y:i];
-        result[7] = [[ZXResultPoint alloc] initWithX:NSMaxRange(loc) y:i];
-        found = YES;
-        break;
-      }
-    }
-  }
-  return found ? result : nil;
+  return result;
 }
 
 - (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int *)counters {
   int patternLength = patternLen;
   memset(counters, 0, patternLength * sizeof(int));
   BOOL isWhite = whiteFirst;
-
-  int counterPosition = 0;
   int patternStart = column;
-  for (int x = column; x < column + width; x++) {
+  int pixelDrift = 0;
+
+  // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels
+  while ([matrix getX:patternStart y:row] && patternStart > 0 && pixelDrift++ < MAX_PIXEL_DRIFT) {
+    patternStart--;
+  }
+  int x = patternStart;
+  int counterPosition = 0;
+  for (;x < width; x++) {
     BOOL pixel = [matrix getX:x y:row];
     if (pixel ^ isWhite) {
       counters[counterPosition] = counters[counterPosition] + 1;
@@ -346,6 +314,11 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
       }
       counters[counterPosition] = 1;
       isWhite = !isWhite;
+    }
+  }
+  if (counterPosition == patternLength - 1) {
+    if ([self patternMatchVariance:counters countersSize:patternLen pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+      return NSMakeRange(patternStart, x - patternStart - 1);
     }
   }
   return NSMakeRange(NSNotFound, 0);
@@ -370,7 +343,7 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
     return INT_MAX;
   }
   int unitBarWidth = (total << PDF417_INTEGER_MATH_SHIFT) / patternLength;
-  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
+  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> PDF417_INTEGER_MATH_SHIFT;
 
   int totalVariance = 0;
   for (int x = 0; x < numCounters; x++) {
@@ -384,224 +357,6 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
   }
 
   return totalVariance / total;
-}
-
-/**
- * Correct the vertices by searching for top and bottom vertices of wide
- * bars, then locate the intersections between the upper and lower horizontal
- * line and the inner vertices vertical lines.
- */
-- (BOOL)correctVertices:(ZXBitMatrix *)matrix vertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown {
-  BOOL isLowLeft = ABS([vertices[4] y] - [vertices[5] y]) < 20.0;
-  BOOL isLowRight = ABS([vertices[6] y] - [vertices[7] y]) < 20.0;
-  if (isLowLeft || isLowRight) {
-    return NO;
-  } else {
-    [self findWideBarTopBottom:matrix vertices:vertices offsetVertex:0 startWideBar:0  lenWideBar:8 lenPattern:17 rowStep:upsideDown ? 1 : -1];
-    [self findWideBarTopBottom:matrix vertices:vertices offsetVertex:1 startWideBar:0  lenWideBar:8 lenPattern:17 rowStep:upsideDown ? -1 : 1];
-    [self findWideBarTopBottom:matrix vertices:vertices offsetVertex:2 startWideBar:11 lenWideBar:7 lenPattern:18 rowStep:upsideDown ? 1 : -1];
-    [self findWideBarTopBottom:matrix vertices:vertices offsetVertex:3 startWideBar:11 lenWideBar:7 lenPattern:18 rowStep:upsideDown ? -1 : 1];
-    if (![self findCrossingPoint:vertices idxResult:12 idxLineA1:4 idxLineA2:5 idxLineB1:8 idxLineB2:10 matrix:matrix]) {
-      return NO;
-    }
-    if (![self findCrossingPoint:vertices idxResult:13 idxLineA1:4 idxLineA2:5 idxLineB1:9 idxLineB2:11 matrix:matrix]) {
-      return NO;
-    }
-    if (![self findCrossingPoint:vertices idxResult:14 idxLineA1:6 idxLineA2:7 idxLineB1:8 idxLineB2:10 matrix:matrix]) {
-      return NO;
-    }
-    if (![self findCrossingPoint:vertices idxResult:15 idxLineA1:6 idxLineA2:7 idxLineB1:9 idxLineB2:11 matrix:matrix]) {
-      return NO;
-    }
-    return YES;
-  }
-}
-
-/**
- * Locate the top or bottom of one of the two wide black bars of a guard pattern.
- *
- * Warning: it only searches along the y axis, so the return points would not be
- * right if the barcode is too curved.
- */
-- (void)findWideBarTopBottom:(ZXBitMatrix *)matrix
-                    vertices:(NSMutableArray *)vertices
-                offsetVertex:(int)offsetVertex
-                startWideBar:(int)startWideBar
-                  lenWideBar:(int)lenWideBar
-                  lenPattern:(int)lenPattern
-                     rowStep:(int)rowStep {
-  ZXResultPoint *verticeStart = vertices[offsetVertex];
-  ZXResultPoint *verticeEnd = vertices[offsetVertex + 4];
-
-  // Start horizontally at the middle of the bar.
-  int endWideBar = startWideBar + lenWideBar;
-  float barDiff = verticeEnd.x - verticeStart.x;
-  float barStart = verticeStart.x + (barDiff * startWideBar) / lenPattern;
-  float barEnd = verticeStart.x + (barDiff * endWideBar) / lenPattern;
-  int x = (int)roundf((barStart + barEnd) / 2.0f);
-
-  // Start vertically between the preliminary vertices.
-  int yStart = (int)roundf(verticeStart.y);
-  int y = yStart;
-
-  // Find offset of thin bar to the right as additional safeguard.
-  int nextBarX = (int)fmaxf(barStart, barEnd) + 1;
-  while (nextBarX < matrix.width) {
-    if (![matrix getX:nextBarX - 1 y:y] && [matrix getX:nextBarX y:y]) {
-      break;
-    }
-    nextBarX++;
-  }
-  nextBarX -= x;
-
-  BOOL isEnd = NO;
-  while (!isEnd) {
-    if ([matrix getX:x y:y]) {
-      // If the thin bar to the right ended, stop as well
-      isEnd = ![matrix getX:x + nextBarX y:y] && ![matrix getX:x + nextBarX + 1 y:y];
-      y += rowStep;
-      if (y <= 0 || y >= matrix.height - 1) {
-        // End of barcode image reached.
-        isEnd = YES;
-      }
-    } else {
-      // Look sidewise whether black bar continues? (in the case the image is skewed)
-      if (x > 0 && [matrix getX:x - 1 y:y]) {
-        x--;
-      } else if (x < matrix.width - 1 && [matrix getX:x + 1 y:y]) {
-        x++;
-      } else {
-        // End of pattern regarding big bar and big gap reached.
-        isEnd = YES;
-        if (y != yStart) {
-          // Turn back one step, because target has been exceeded.
-          y -= rowStep;
-        }
-      }
-    }
-  }
-
-  vertices[offsetVertex + 8] = [[ZXResultPoint alloc] initWithX:x y:y];
-}
-
-/**
- * Finds the intersection of two lines.
- */
-- (BOOL)findCrossingPoint:(NSMutableArray *)vertices
-                idxResult:(int)idxResult
-                idxLineA1:(int)idxLineA1
-                idxLineA2:(int)idxLineA2
-                idxLineB1:(int)idxLineB1
-                idxLineB2:(int)idxLineB2
-                   matrix:(ZXBitMatrix *)matrix {
-  ZXResultPoint *result = [self intersection:vertices[idxLineA1] a2:vertices[idxLineA2] b1:vertices[idxLineB1] b2:vertices[idxLineB2]];
-  if (!result) {
-    return NO;
-  }
-
-  int x = (int)roundf(result.x);
-  int y = (int)roundf(result.y);
-  if (x < 0 || x >= matrix.width || y < 0 || y >= matrix.height) {
-    return NO;
-  }
-
-  vertices[idxResult] = result;
-  return YES;
-}
-
-/**
- * Computes the intersection between two lines.
- */
-- (ZXResultPoint *)intersection:(ZXResultPoint *)a1 a2:(ZXResultPoint *)a2 b1:(ZXResultPoint *)b1 b2:(ZXResultPoint *)b2 {
-  float dxa = a1.x - a2.x;
-  float dxb = b1.x - b2.x;
-  float dya = a1.y - a2.y;
-  float dyb = b1.y - b2.y;
-
-  float p = a1.x * a2.y - a1.y * a2.x;
-  float q = b1.x * b2.y - b1.y * b2.x;
-  float denom = dxa * dyb - dya * dxb;
-  if (denom == 0) {
-    // Lines don't intersect
-    return nil;
-  }
-
-  float x = (p * dxb - dxa * q) / denom;
-  float y = (p * dyb - dya * q) / denom;
-
-  return [[ZXResultPoint alloc] initWithX:x y:y];
-}
-
-/**
- * Estimates module size (pixels in a module) based on the Start and End
- * finder patterns.
- *
- * Vertices is an array of vertices:
- * vertices[0] x, y top left barcode
- * vertices[1] x, y bottom left barcode
- * vertices[2] x, y top right barcode
- * vertices[3] x, y bottom right barcode
- * vertices[4] x, y top left codeword area
- * vertices[5] x, y bottom left codeword area
- * vertices[6] x, y top right codeword area
- * vertices[7] x, y bottom right codeword area
- */
-- (float)computeModuleWidth:(NSArray *)vertices {
-  float pixels1 = [ZXResultPoint distance:vertices[0] pattern2:vertices[4]];
-  float pixels2 = [ZXResultPoint distance:vertices[1] pattern2:vertices[5]];
-  float moduleWidth1 = (pixels1 + pixels2) / (17 * 2.0f);
-  float pixels3 = [ZXResultPoint distance:vertices[6] pattern2:vertices[2]];
-  float pixels4 = [ZXResultPoint distance:vertices[7] pattern2:vertices[3]];
-  float moduleWidth2 = (pixels3 + pixels4) / (18 * 2.0f);
-  return (moduleWidth1 + moduleWidth2) / 2.0f;
-}
-
-/**
- * Computes the dimension (number of modules in a row) of the PDF417 Code
- * based on vertices of the codeword area and estimated module size.
- */
-- (int)computeDimension:(ZXResultPoint *)topLeft
-               topRight:(ZXResultPoint *)topRight
-             bottomLeft:(ZXResultPoint *)bottomLeft
-            bottomRight:(ZXResultPoint *)bottomRight
-            moduleWidth:(float)moduleWidth {
-  int topRowDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleWidth];
-  int bottomRowDimension = [ZXMathUtils round:[ZXResultPoint distance:bottomLeft pattern2:bottomRight] / moduleWidth];
-  return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
-}
-
-/**
- * Computes the y dimension (number of modules in a column) of the PDF417 Code
- * based on vertices of the codeword area and estimated module size.
- */
-- (int)computeYDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight moduleWidth:(float)moduleWidth {
-  int leftColumnDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleWidth];
-  int rightColumnDimension = [ZXMathUtils round:[ZXResultPoint distance:topRight pattern2:bottomRight] / moduleWidth];
-  return (leftColumnDimension + rightColumnDimension) >> 1;
-}
-
-/**
- * Deskew and over-sample image.
- */
-- (ZXBitMatrix *)sampleLines:(NSMutableArray *)vertices dimension:(int)dimension yDimension:(int)yDimension {
-  int sampleDimensionX = dimension * 8;
-  int sampleDimensionY = yDimension * 4;
-
-  ZXPerspectiveTransform *transform = [ZXPerspectiveTransform quadrilateralToQuadrilateral:0.0f y0:0.0f
-                                                                                       x1:sampleDimensionX y1:0.0f
-                                                                                       x2:0.0f y2:sampleDimensionY
-                                                                                       x3:sampleDimensionX y3:sampleDimensionY
-                                                                                      x0p:[vertices[12] x] y0p:[vertices[12] y]
-                                                                                      x1p:[vertices[14] x] y1p:[vertices[14] y]
-                                                                                      x2p:[vertices[13] x] y2p:[vertices[13] y]
-                                                                                      x3p:[vertices[15] x] y3p:[vertices[15] y]];
-
-  ZXBitMatrix *blackMatrix = [self.image blackMatrixWithError:nil];
-  if (!blackMatrix) {
-    return nil;
-  }
-
-  return [[ZXGridSampler instance] sampleGrid:blackMatrix dimensionX:sampleDimensionX dimensionY:sampleDimensionY transform:transform error:nil];
 }
 
 @end

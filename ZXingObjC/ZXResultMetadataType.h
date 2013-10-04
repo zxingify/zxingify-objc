@@ -71,5 +71,10 @@ typedef enum {
   /**
    * For some products, the extension text
    */
-  kResultMetadataTypeUPCEANExtension
+  kResultMetadataTypeUPCEANExtension,
+
+  /**
+    * PDF417-specific metadata
+    */
+  kResultMetadataTypePDF417ExtraMetadata
 } ZXResultMetadataType;

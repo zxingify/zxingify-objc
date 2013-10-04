@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-/**
- * This class contains the methods for decoding the PDF417 codewords.
- */
+@class ZXBitMatrix, ZXDecoderResult, ZXResultPoint;
 
-@class ZXDecoderResult;
+extern const int ZXPDF417_CODEWORD_SKEW_SIZE;
 
-@interface ZXPDF417DecodedBitStreamParser : NSObject
+@interface ZXPDF417ScanningDecoder : NSObject
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
++ (ZXDecoderResult *)decode:(ZXBitMatrix *)image
+               imageTopLeft:(ZXResultPoint *)imageTopLeft
+            imageBottomLeft:(ZXResultPoint *)imageBottomLeft
+              imageTopRight:(ZXResultPoint *)imageTopRight
+           imageBottomRight:(ZXResultPoint *)imageBottomRight
+           minCodewordWidth:(int)minCodewordWidth
+           maxCodewordWidth:(int)maxCodewordWidth;
 
 @end

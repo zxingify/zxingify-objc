@@ -16,6 +16,7 @@
 
 #import "ZXModulusGF.h"
 #import "ZXModulusPoly.h"
+#import "ZXPDF417Common.h"
 
 @interface ZXModulusGF ()
 
@@ -28,7 +29,7 @@
 @implementation ZXModulusGF
 
 + (ZXModulusGF *)PDF417_GF {
-  return [[ZXModulusGF alloc] initWithModulus:929 generator:3];
+  return [[ZXModulusGF alloc] initWithModulus:ZXPDF417_NUMBER_OF_CODEWORDS generator:3];
 }
 
 - (id)initWithModulus:(int)modulus generator:(int)generator {

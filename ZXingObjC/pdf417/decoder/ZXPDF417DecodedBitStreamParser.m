@@ -17,6 +17,7 @@
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
+#import "ZXPDF417ResultMetadata.h"
 
 enum {
   ALPHA,
@@ -55,6 +56,8 @@ char const MIXED_CHARS[25] = {
   '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
   '=', '^'};
 
+int const NUMBER_OF_SEQUENCE_CODEWORDS = 2;
+
 /**
  * Table containing values for the exponent of 900.
  * This is used in the numeric compaction decode algorithm.
@@ -74,14 +77,16 @@ static NSArray *EXP900 = nil;
   EXP900 = [[NSArray alloc] initWithArray:exponents];
 }
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords error:(NSError **)error {
++ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
   if (!codewords) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSMutableString *result = [NSMutableString stringWithCapacity:100];
+  NSMutableString *result = [NSMutableString stringWithCapacity:codewords.count * 2];
+  // Get compaction mode
   int codeIndex = 1;
   int code = [codewords[codeIndex++] intValue];
+  ZXPDF417ResultMetadata *resultMetadata = [[ZXPDF417ResultMetadata alloc] init];
   while (codeIndex < [codewords[0] intValue]) {
     switch (code) {
     case TEXT_COMPACTION_MODE_LATCH:
@@ -99,7 +104,17 @@ static NSArray *EXP900 = nil;
     case BYTE_COMPACTION_MODE_LATCH_6:
       codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
       break;
+    case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+      codeIndex = [self decodeMacroBlock:codewords codeIndex:codeIndex resultMetadata:resultMetadata];
+      if (codeIndex < 0) {
+        if (error) *error = NotFoundErrorInstance();
+        return nil;
+      }
+      break;
     default:
+      // Default to text compaction. During testing numerous barcodes
+      // appeared to be missing the starting mode. In these cases defaulting
+      // to text compaction seems to work.
       codeIndex--;
       codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:result];
       break;
@@ -111,13 +126,61 @@ static NSArray *EXP900 = nil;
       return nil;
     }
   }
-  if (!result || result.length == 0) {
+  if ([result length] == 0) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  return [[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil];
+  ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:ecLevel];
+  decoderResult.other = resultMetadata;
+  return decoderResult;
 }
 
++ (int)decodeMacroBlock:(NSArray *)codewords codeIndex:(int)codeIndex resultMetadata:(ZXPDF417ResultMetadata *)resultMetadata {
+  if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > [codewords[0] intValue]) {
+    // we must have at least two bytes left for the segment index
+    return -1;
+  }
+  int segmentIndexArray[NUMBER_OF_SEQUENCE_CODEWORDS];
+  memset(segmentIndexArray, 0, NUMBER_OF_SEQUENCE_CODEWORDS * sizeof(int));
+  for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
+    segmentIndexArray[i] = [codewords[codeIndex] intValue];
+  }
+  resultMetadata.segmentIndex = [[self decodeBase900toBase10:segmentIndexArray count:NUMBER_OF_SEQUENCE_CODEWORDS] intValue];
+
+  NSMutableString *fileId = [NSMutableString string];
+  codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:fileId];
+  resultMetadata.fileId = [NSString stringWithString:fileId];
+
+  if ([codewords[codeIndex] intValue] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+    codeIndex++;
+    NSMutableArray *additionalOptionCodeWords = [NSMutableArray array];
+
+    BOOL end = NO;
+    while ((codeIndex < [codewords[0] intValue]) && !end) {
+      int code = [codewords[codeIndex++] intValue];
+      if (code < TEXT_COMPACTION_MODE_LATCH) {
+        [additionalOptionCodeWords addObject:@(code)];
+      } else {
+        switch (code) {
+          case MACRO_PDF417_TERMINATOR:
+            resultMetadata.lastSegment = YES;
+            codeIndex++;
+            end = YES;
+            break;
+          default:
+            return -1;
+        }
+      }
+    }
+
+    resultMetadata.optionalData = additionalOptionCodeWords;
+  } else if ([codewords[codeIndex] intValue] == MACRO_PDF417_TERMINATOR) {
+    resultMetadata.lastSegment = YES;
+    codeIndex++;
+  }
+
+  return codeIndex;
+}
 
 /**
  * Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
@@ -125,7 +188,7 @@ static NSArray *EXP900 = nil;
  * well as selected control characters.
  */
 + (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
-  int count = [codewords[0] intValue] << 1;
+  int count = ([codewords[0] intValue] - codeIndex) << 1;
   // 2 character per codeword
   int textCompactionData[count];
   // Used to hold the byte compaction value if there is a mode shift
@@ -158,7 +221,25 @@ static NSArray *EXP900 = nil;
         codeIndex--;
         end = YES;
         break;
+      case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+        codeIndex--;
+        end = YES;
+        break;
+      case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+        codeIndex--;
+        end = YES;
+        break;
+      case MACRO_PDF417_TERMINATOR:
+        codeIndex--;
+        end = YES;
+        break;
       case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+        // The Mode Shift codeword 913 shall cause a temporary
+        // switch from Text Compaction mode to Byte Compaction mode.
+        // This switch shall be in effect for only the next codeword,
+        // after which the mode shall revert to the prevailing sub-mode
+        // of the Text Compaction mode. Codeword 913 is only available
+        // in Text Compaction mode; its use is described in 5.4.2.4.
         textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
         code = [codewords[codeIndex++] intValue];
         byteCompactionData[index] = code;
@@ -388,7 +469,7 @@ static NSArray *EXP900 = nil;
     // Total number of Byte Compaction characters to be encoded
     // is an integer multiple of 6
     int count = 0;
-    long value = 0;
+    long long value = 0;
     BOOL end = NO;
     while (codeIndex < [codewords[0] intValue] && !end) {
       int code = [codewords[codeIndex++] intValue];
@@ -489,7 +570,7 @@ static NSArray *EXP900 = nil;
    d3 = 1 372 034 mod 900 = 434
    
    t = 1 372 034 div 900 = 1 524
-   Calculate codeword 4
+   Calculate codeword 4u
    d4 = 1 524 mod 900 = 624
    
    t = 1 524 div 900 = 1
@@ -507,8 +588,7 @@ static NSArray *EXP900 = nil;
 + (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
   NSDecimalNumber *result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
-    result = [[result decimalNumberByAdding:EXP900[count - i - 1]] decimalNumberByMultiplyingBy:
-              [NSDecimalNumber decimalNumberWithDecimal:[@(codewords[i]) decimalValue]]];
+    result = [result decimalNumberByAdding:[EXP900[count - i - 1] decimalNumberByMultiplyingBy:[NSDecimalNumber decimalNumberWithDecimal:[@(codewords[i]) decimalValue]]]];
   }
   NSString *resultString = [result stringValue];
   if (![resultString hasPrefix:@"1"]) {

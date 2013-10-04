@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXMultipleBarcodeReader.h"
 #import "ZXReader.h"
 
 /**
@@ -22,6 +23,6 @@
 
 @class ZXDecodeHints, ZXPDF417Decoder, ZXResult;
 
-@interface ZXPDF417Reader : NSObject <ZXReader>
+@interface ZXPDF417Reader : NSObject <ZXReader, ZXMultipleBarcodeReader>
 
 @end

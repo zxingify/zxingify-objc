@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * The main class which implements PDF417 Code decoding -- as
- * opposed to locating and extracting the PDF417 Code from an image.
- */
+@interface ZXPDF417BarcodeValue : NSObject
 
-extern const int ZX_PDF_MODULES_IN_SYMBOL;
-
-@class ZXBitMatrix, ZXDecoderResult;
-
-@interface ZXPDF417Decoder : NSObject
-
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error;
-- (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error;
+- (void)setValue:(int)value;
+- (NSNumber *)value;
+- (NSNumber *)confidence:(int)value;
 
 @end
