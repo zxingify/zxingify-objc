@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0137B37A178EFE2E001EFE42 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B375178EFE2E001EFE42 /* ZXAztecCode.m */; };
 		0137B37B178EFE2E001EFE42 /* ZXAztecEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B377178EFE2E001EFE42 /* ZXAztecEncoder.m */; };
-		0137B37C178EFE2E001EFE42 /* ZXAztecWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0137B379178EFE2E001EFE42 /* ZXAztecWriter.m */; };
 		022B185F14D1B5FE000503E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B185E14D1B5FE000503E2 /* UIKit.framework */; };
 		022B186114D1B5FE000503E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B186014D1B5FE000503E2 /* Foundation.framework */; };
 		022B186914D1B5FE000503E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 022B186714D1B5FE000503E2 /* InfoPlist.strings */; };
@@ -223,6 +222,8 @@
 		2540479F166AFCDC00E13304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540479E166AFCDC00E13304 /* CoreGraphics.framework */; };
 		254047A4166AFCF600E13304 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254047A2166AFCE400E13304 /* ImageIO.framework */; };
 		254047A5166AFD0200E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254047A0166AFCE100E13304 /* CoreVideo.framework */; };
+		D184AB68180112300029A304 /* ZXAztecWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = D184AB67180112300029A304 /* ZXAztecWriter.m */; };
+		D184AB6B1801126E0029A304 /* ZXPDF417Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = D184AB6A1801126E0029A304 /* ZXPDF417Writer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -230,8 +231,6 @@
 		0137B375178EFE2E001EFE42 /* ZXAztecCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecCode.m; sourceTree = "<group>"; };
 		0137B376178EFE2E001EFE42 /* ZXAztecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecEncoder.h; sourceTree = "<group>"; };
 		0137B377178EFE2E001EFE42 /* ZXAztecEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecEncoder.m; sourceTree = "<group>"; };
-		0137B378178EFE2E001EFE42 /* ZXAztecWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecWriter.h; sourceTree = "<group>"; };
-		0137B379178EFE2E001EFE42 /* ZXAztecWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecWriter.m; sourceTree = "<group>"; };
 		022B185A14D1B5FE000503E2 /* QrCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QrCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		022B185E14D1B5FE000503E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		022B186014D1B5FE000503E2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -661,6 +660,10 @@
 		2540479E166AFCDC00E13304 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		254047A0166AFCE100E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		254047A2166AFCE400E13304 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		D184AB66180112300029A304 /* ZXAztecWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecWriter.h; sourceTree = "<group>"; };
+		D184AB67180112300029A304 /* ZXAztecWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecWriter.m; sourceTree = "<group>"; };
+		D184AB691801126E0029A304 /* ZXPDF417Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417Writer.h; sourceTree = "<group>"; };
+		D184AB6A1801126E0029A304 /* ZXPDF417Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Writer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -689,8 +692,6 @@
 				0137B375178EFE2E001EFE42 /* ZXAztecCode.m */,
 				0137B376178EFE2E001EFE42 /* ZXAztecEncoder.h */,
 				0137B377178EFE2E001EFE42 /* ZXAztecEncoder.m */,
-				0137B378178EFE2E001EFE42 /* ZXAztecWriter.h */,
-				0137B379178EFE2E001EFE42 /* ZXAztecWriter.m */,
 			);
 			path = encoder;
 			sourceTree = "<group>";
@@ -807,6 +808,8 @@
 		2504D4CD16F80FF900DF8882 /* aztec */ = {
 			isa = PBXGroup;
 			children = (
+				D184AB66180112300029A304 /* ZXAztecWriter.h */,
+				D184AB67180112300029A304 /* ZXAztecWriter.m */,
 				0137B373178EFE2E001EFE42 /* encoder */,
 				2504D4CE16F80FF900DF8882 /* decoder */,
 				2504D4D116F80FF900DF8882 /* detector */,
@@ -1268,6 +1271,8 @@
 		2504D60D16F80FF900DF8882 /* pdf417 */ = {
 			isa = PBXGroup;
 			children = (
+				D184AB691801126E0029A304 /* ZXPDF417Writer.h */,
+				D184AB6A1801126E0029A304 /* ZXPDF417Writer.m */,
 				2504D60E16F80FF900DF8882 /* decoder */,
 				2504D61C16F80FF900DF8882 /* detector */,
 				2504D61F16F80FF900DF8882 /* encoder */,
@@ -1440,6 +1445,11 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Draconis Software";
+				TargetAttributes = {
+					022B185914D1B5FE000503E2 = {
+						DevelopmentTeam = 6N6S8VZUT9;
+					};
+				};
 			};
 			buildConfigurationList = 022B185414D1B5FE000503E2 /* Build configuration list for PBXProject "QrCodeTest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1574,7 +1584,9 @@
 				2504D6E116F80FFA00DF8882 /* ZXAbstractExpandedDecoder.m in Sources */,
 				2504D6E216F80FFA00DF8882 /* ZXAI013103decoder.m in Sources */,
 				2504D6E316F80FFA00DF8882 /* ZXAI01320xDecoder.m in Sources */,
+				D184AB68180112300029A304 /* ZXAztecWriter.m in Sources */,
 				2504D6E416F80FFA00DF8882 /* ZXAI01392xDecoder.m in Sources */,
+				D184AB6B1801126E0029A304 /* ZXPDF417Writer.m in Sources */,
 				2504D6E516F80FFA00DF8882 /* ZXAI01393xDecoder.m in Sources */,
 				2504D6E616F80FFA00DF8882 /* ZXAI013x0x1xDecoder.m in Sources */,
 				2504D6E716F80FFA00DF8882 /* ZXAI013x0xDecoder.m in Sources */,
@@ -1680,7 +1692,6 @@
 				2504D74B16F80FFA00DF8882 /* ZXRGBLuminanceSource.m in Sources */,
 				0137B37A178EFE2E001EFE42 /* ZXAztecCode.m in Sources */,
 				0137B37B178EFE2E001EFE42 /* ZXAztecEncoder.m in Sources */,
-				0137B37C178EFE2E001EFE42 /* ZXAztecWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

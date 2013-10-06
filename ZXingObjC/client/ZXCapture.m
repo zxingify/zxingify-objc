@@ -484,7 +484,6 @@ static bool isIPad();
     [session removeOutput:output];
   }
   if (_captureQueue) {
-    dispatch_release(_captureQueue);
     _captureQueue = nil;
   }
 }
