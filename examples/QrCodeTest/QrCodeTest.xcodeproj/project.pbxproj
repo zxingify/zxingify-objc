@@ -223,6 +223,7 @@
 		254047A5166AFD0200E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254047A0166AFCE100E13304 /* CoreVideo.framework */; };
 		D184AB68180112300029A304 /* ZXAztecWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = D184AB67180112300029A304 /* ZXAztecWriter.m */; };
 		D184AB6B1801126E0029A304 /* ZXPDF417Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = D184AB6A1801126E0029A304 /* ZXPDF417Writer.m */; };
+		D184AB6E180120CE0029A304 /* ZXLinesSampler.m in Sources */ = {isa = PBXBuildFile; fileRef = D184AB6D180120CE0029A304 /* ZXLinesSampler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -661,6 +662,8 @@
 		D184AB67180112300029A304 /* ZXAztecWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecWriter.m; sourceTree = "<group>"; };
 		D184AB691801126E0029A304 /* ZXPDF417Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417Writer.h; sourceTree = "<group>"; };
 		D184AB6A1801126E0029A304 /* ZXPDF417Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Writer.m; sourceTree = "<group>"; };
+		D184AB6C180120CE0029A304 /* ZXLinesSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXLinesSampler.h; sourceTree = "<group>"; };
+		D184AB6D180120CE0029A304 /* ZXLinesSampler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXLinesSampler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1309,6 +1312,8 @@
 		2504D61C16F80FF900DF8882 /* detector */ = {
 			isa = PBXGroup;
 			children = (
+				D184AB6C180120CE0029A304 /* ZXLinesSampler.h */,
+				D184AB6D180120CE0029A304 /* ZXLinesSampler.m */,
 				2504D61D16F80FF900DF8882 /* ZXPDF417Detector.h */,
 				2504D61E16F80FF900DF8882 /* ZXPDF417Detector.m */,
 			);
@@ -1627,6 +1632,7 @@
 				2504D70F16F80FFA00DF8882 /* ZXOneDReader.m in Sources */,
 				2504D71016F80FFA00DF8882 /* ZXUPCAReader.m in Sources */,
 				2504D71116F80FFA00DF8882 /* ZXUPCAWriter.m in Sources */,
+				D184AB6E180120CE0029A304 /* ZXLinesSampler.m in Sources */,
 				2504D71216F80FFA00DF8882 /* ZXUPCEANExtension2Support.m in Sources */,
 				2504D71316F80FFA00DF8882 /* ZXUPCEANExtension5Support.m in Sources */,
 				2504D71416F80FFA00DF8882 /* ZXUPCEANExtensionSupport.m in Sources */,
