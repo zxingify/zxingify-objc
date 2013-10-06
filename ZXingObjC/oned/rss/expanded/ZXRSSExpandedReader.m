@@ -637,13 +637,13 @@ const int MAX_PAIRS = 11;
     oddSum += self.oddCounts[i];
   }
   int evenChecksumPortion = 0;
-  int evenSum = 0;
+  //int evenSum = 0;
   for (int i = self.evenCountsLen - 1; i >= 0; i--) {
     if ([self isNotA1left:pattern isOddPattern:isOddPattern leftChar:leftChar]) {
       int weight = WEIGHTS[weightRowNumber][2 * i + 1];
       evenChecksumPortion += self.evenCounts[i] * weight;
     }
-    evenSum += self.evenCounts[i];
+    //evenSum += self.evenCounts[i];
   }
   int checksumPortion = oddChecksumPortion + evenChecksumPortion;
 
