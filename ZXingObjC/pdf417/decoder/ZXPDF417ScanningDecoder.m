@@ -180,12 +180,12 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 }
 
 + (ZXPDF417BarcodeMetadata *)barcodeMetadata:(ZXPDF417DetectionResultRowIndicatorColumn *)leftRowIndicatorColumn
-                                rightRowIndicatorColumn:(ZXPDF417DetectionResultRowIndicatorColumn *)rightRowIndicatorColumn {
+                     rightRowIndicatorColumn:(ZXPDF417DetectionResultRowIndicatorColumn *)rightRowIndicatorColumn {
   if (!leftRowIndicatorColumn || !leftRowIndicatorColumn.barcodeMetadata) {
-    return rightRowIndicatorColumn.barcodeMetadata;
+    return rightRowIndicatorColumn ? rightRowIndicatorColumn.barcodeMetadata : nil;
   }
   if (!rightRowIndicatorColumn || !rightRowIndicatorColumn.barcodeMetadata) {
-    return leftRowIndicatorColumn.barcodeMetadata;
+    return leftRowIndicatorColumn ? leftRowIndicatorColumn.barcodeMetadata : nil;
   }
   ZXPDF417BarcodeMetadata *leftBarcodeMetadata = leftRowIndicatorColumn.barcodeMetadata;
   ZXPDF417BarcodeMetadata *rightBarcodeMetadata = rightRowIndicatorColumn.barcodeMetadata;
