@@ -392,8 +392,8 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
  * line and the inner vertices vertical lines.
  */
 - (BOOL)correctVertices:(ZXBitMatrix *)matrix vertices:(NSMutableArray *)vertices upsideDown:(BOOL)upsideDown {
-  BOOL isLowLeft = ABS([vertices[4] y] - [vertices[5] y]) < 20.0;
-  BOOL isLowRight = ABS([vertices[6] y] - [vertices[7] y]) < 20.0;
+  BOOL isLowLeft = ABS([(ZXResultPoint*)vertices[4] y] - [(ZXResultPoint*)vertices[5] y]) < 20.0;
+  BOOL isLowRight = ABS([(ZXResultPoint*)vertices[6] y] - [(ZXResultPoint*)vertices[7] y]) < 20.0;
   if (isLowLeft || isLowRight) {
     return NO;
   } else {
@@ -591,10 +591,10 @@ int const STOP_PATTERN_REVERSE[STOP_PATTERN_REVERSE_LEN] = {1, 2, 1, 1, 1, 3, 1,
                                                                                        x1:sampleDimensionX y1:0.0f
                                                                                        x2:0.0f y2:sampleDimensionY
                                                                                        x3:sampleDimensionX y3:sampleDimensionY
-                                                                                      x0p:[vertices[12] x] y0p:[vertices[12] y]
-                                                                                      x1p:[vertices[14] x] y1p:[vertices[14] y]
-                                                                                      x2p:[vertices[13] x] y2p:[vertices[13] y]
-                                                                                      x3p:[vertices[15] x] y3p:[vertices[15] y]];
+                                                                                      x0p:[(ZXResultPoint*)vertices[12] x] y0p:[(ZXResultPoint*)vertices[12] y]
+                                                                                      x1p:[(ZXResultPoint*)vertices[14] x] y1p:[(ZXResultPoint*)vertices[14] y]
+                                                                                      x2p:[(ZXResultPoint*)vertices[13] x] y2p:[(ZXResultPoint*)vertices[13] y]
+                                                                                      x3p:[(ZXResultPoint*)vertices[15] x] y3p:[(ZXResultPoint*)vertices[15] y]];
 
   ZXBitMatrix *blackMatrix = [self.image blackMatrixWithError:nil];
   if (!blackMatrix) {
