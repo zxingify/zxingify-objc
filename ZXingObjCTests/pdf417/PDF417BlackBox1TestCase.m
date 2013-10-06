@@ -21,7 +21,7 @@
 
 - (id)initWithInvocation:(NSInvocation *)invocation {
   self = [super initWithInvocation:invocation
-                testBasePathSuffix:@"Resources/blackbox/pdf417"
+                testBasePathSuffix:@"Resources/blackbox/pdf417-1"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatPDF417];
 
