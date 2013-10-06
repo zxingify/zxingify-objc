@@ -140,6 +140,17 @@
   top += nudge;
   left += nudge;
 
+  // But careful that this does not sample off the edge
+  int nudgedTooFarRight = left + (int) ((matrixWidth - 1) * moduleSize) - (right - 1);
+  if (nudgedTooFarRight > 0) {
+    left -= nudgedTooFarRight;
+  }
+  int nudgedTooFarDown = top + (int) ((matrixHeight - 1) * moduleSize) - (bottom - 1);
+  if (nudgedTooFarDown > 0) {
+    top -= nudgedTooFarDown;
+  }
+
+  // Now just read off the bits
   ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithWidth:matrixWidth height:matrixHeight];
   for (int y = 0; y < matrixHeight; y++) {
     int iOffset = top + (int) (y * moduleSize);
