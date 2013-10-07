@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXFormatInformation.h"
 #import "ZXFormatInformationTestCase.h"
 
 const int MASKED_TEST_FORMAT_INFO = 0x2BED;

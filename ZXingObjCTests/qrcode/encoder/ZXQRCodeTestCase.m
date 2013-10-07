@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXByteMatrix.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXMode.h"
-#import "ZXQRCode.h"
 #import "ZXQRCodeTestCase.h"
-#import "ZXQRCodeVersion.h"
 
 @implementation ZXQRCodeTestCase
 

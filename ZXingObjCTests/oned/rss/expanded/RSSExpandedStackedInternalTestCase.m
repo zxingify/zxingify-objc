@@ -16,15 +16,6 @@
 
 #import "RSSExpandedStackedInternalTestCase.h"
 #import "TestCaseUtil.h"
-#import "ZXRSSExpandedReader.h"
-#import "ZXExpandedPair.h"
-#import "ZXExpandedRow.h"
-#import "ZXRSSFinderPattern.h"
-#import "ZXImage.h"
-#import "ZXGlobalHistogramBinarizer.h"
-#import "ZXCGImageLuminanceSource.h"
-#import "ZXBinaryBitmap.h"
-#import "ZXResult.h"
 
 @implementation RSSExpandedStackedInternalTestCase
 

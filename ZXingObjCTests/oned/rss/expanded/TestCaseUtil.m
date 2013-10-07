@@ -15,10 +15,6 @@
  */
 
 #import "TestCaseUtil.h"
-#import "ZXBinaryBitmap.h"
-#import "ZXCGImageLuminanceSource.h"
-#import "ZXGlobalHistogramBinarizer.h"
-#import "ZXImage.h"
 
 @implementation TestCaseUtil
 

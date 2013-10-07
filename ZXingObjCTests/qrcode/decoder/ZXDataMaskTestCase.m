@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitMatrix.h"
-#import "ZXDataMask.h"
 #import "ZXDataMaskTestCase.h"
 
 typedef BOOL (^MaskCondition)(int i, int j);

@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXEmailAddressParsedResult.h"
 #import "ZXEmailAddressParsedResultTestCase.h"
-#import "ZXParsedResult.h"
-#import "ZXResultParser.h"
 
 @implementation ZXEmailAddressParsedResultTestCase
 

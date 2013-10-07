@@ -15,7 +15,6 @@
  */
 
 #import "UnsupportedBlackBoxTestCase.h"
-#import "ZXMultiFormatReader.h"
 
 /**
  * This test ensures that unsupported barcodes do not decode.

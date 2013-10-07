@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXResultParser.h"
-#import "ZXSMSParsedResult.h"
 #import "ZXSMSMMSParsedResultTestCase.h"
 
 @implementation ZXSMSMMSParsedResultTestCase

@@ -15,8 +15,6 @@
  */
 
 #import "AbstractErrorCorrectionTestCase.h"
-#import "ZXGenericGF.h"
-#import "ZXReedSolomonEncoder.h"
 
 @implementation AbstractErrorCorrectionTestCase
 

@@ -15,7 +15,6 @@
  */
 
 #import "UPCEANExtensionBlackBox1TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation UPCEANExtensionBlackBox1TestCase
 

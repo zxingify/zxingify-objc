@@ -15,7 +15,6 @@
  */
 
 #import "PDF417BlackBox3TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation PDF417BlackBox3TestCase
 

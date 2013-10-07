@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXBitArray.h"
-#import "ZXByteMatrix.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXMatrixUtil.h"
 #import "ZXMatrixUtilTestCase.h"
-#import "ZXQRCodeVersion.h"
 
 @implementation ZXMatrixUtilTestCase
 

@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitMatrix.h"
-#import "ZXEncodeHints.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXImage.h"
-#import "ZXQRCodeWriter.h"
 #import "ZXQRCodeWriterTestCase.h"
 
 static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";

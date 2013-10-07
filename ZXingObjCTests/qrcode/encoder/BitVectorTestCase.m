@@ -15,7 +15,6 @@
  */
 
 #import "BitVectorTestCase.h"
-#import "ZXBitArray.h"
 
 @implementation BitVectorTestCase
 

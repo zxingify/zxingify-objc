@@ -21,7 +21,7 @@
  * This implementation can detect and decode PDF417 codes in an image.
  */
 
-@class ZXDecodeHints, ZXPDF417Decoder, ZXResult;
+@class ZXDecodeHints, ZXResult;
 
 @interface ZXPDF417Reader : NSObject <ZXReader, ZXMultipleBarcodeReader>
 

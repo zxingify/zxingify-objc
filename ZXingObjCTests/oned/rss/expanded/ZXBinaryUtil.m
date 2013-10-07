@@ -15,7 +15,6 @@
  */
 
 #import "ZXBinaryUtil.h"
-#import "ZXBitArray.h"
 
 @implementation ZXBinaryUtil
 

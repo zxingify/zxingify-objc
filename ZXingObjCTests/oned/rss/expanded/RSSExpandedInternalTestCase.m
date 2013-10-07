@@ -15,14 +15,6 @@
  */
 
 #import "RSSExpandedInternalTestCase.h"
-#import "ZXBinaryBitmap.h"
-#import "ZXCGImageLuminanceSource.h"
-#import "ZXDataCharacter.h"
-#import "ZXExpandedPair.h"
-#import "ZXGlobalHistogramBinarizer.h"
-#import "ZXImage.h"
-#import "ZXRSSExpandedReader.h"
-#import "ZXRSSFinderPattern.h"
 
 @implementation RSSExpandedInternalTestCase
 

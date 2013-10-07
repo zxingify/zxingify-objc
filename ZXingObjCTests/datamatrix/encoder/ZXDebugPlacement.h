@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXDefaultPlacement.h"
 
 @interface ZXDebugPlacement : ZXDefaultPlacement
 

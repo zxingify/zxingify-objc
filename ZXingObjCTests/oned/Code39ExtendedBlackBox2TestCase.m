@@ -15,7 +15,6 @@
  */
 
 #import "Code39ExtendedBlackBox2TestCase.h"
-#import "ZXCode39Reader.h"
 
 @implementation Code39ExtendedBlackBox2TestCase
 

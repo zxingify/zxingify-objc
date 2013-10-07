@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitMatrix.h"
-#import "ZXEAN8Writer.h"
 #import "ZXEAN8WriterTestCase.h"
 
 @implementation ZXEAN8WriterTestCase

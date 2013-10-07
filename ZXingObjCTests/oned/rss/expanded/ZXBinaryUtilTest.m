@@ -16,7 +16,6 @@
 
 #import "ZXBinaryUtil.h"
 #import "ZXBinaryUtilTest.h"
-#import "ZXBitArray.h"
 
 @implementation ZXBinaryUtilTest
 

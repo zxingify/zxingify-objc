@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXPerspectiveTransform.h"
 #import "ZXPerspectiveTransformTestCase.h"
 
 @implementation ZXPerspectiveTransformTestCase

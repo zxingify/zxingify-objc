@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXPDF417ECErrorCorrection.h"
 #import "ZXPDF417ECErrorCorrectionTestCase.h"
 
 @interface ZXPDF417ECErrorCorrectionTestCase ()

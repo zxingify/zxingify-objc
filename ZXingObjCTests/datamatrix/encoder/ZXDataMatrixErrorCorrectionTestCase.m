@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-#import "ZXDataMatrixErrorCorrection.h"
 #import "ZXDataMatrixErrorCorrectionTestCase.h"
-#import "ZXHighLevelEncoder.h"
 #import "ZXHighLevelEncodeTestCase.h"
-#import "ZXSymbolInfo.h"
 
 @implementation ZXDataMatrixErrorCorrectionTestCase
 

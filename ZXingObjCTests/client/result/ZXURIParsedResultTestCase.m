@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXResultParser.h"
-#import "ZXURIParsedResult.h"
 #import "ZXURIParsedResultTestCase.h"
 
 @implementation ZXURIParsedResultTestCase

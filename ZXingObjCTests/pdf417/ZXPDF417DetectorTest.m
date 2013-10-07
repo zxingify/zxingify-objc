@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitArray.h"
-#import "ZXBitMatrix.h"
-#import "ZXPDF417Detector.h"
 #import "ZXPDF417DetectorTest.h"
 
 const int BIT_SET_INDEX_LEN = 4;

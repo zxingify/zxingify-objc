@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXBitArray.h"
-#import "ZXEncodeHints.h"
-#import "ZXEncoder.h"
 #import "ZXEncoderTestCase.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXErrors.h"
-#import "ZXMode.h"
-#import "ZXQRCode.h"
-#import "ZXQRCodeVersion.h"
 
 @implementation ZXEncoderTestCase
 

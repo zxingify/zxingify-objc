@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXMode.h"
 #import "ZXModeTestCase.h"
-#import "ZXQRCodeVersion.h"
 
 @implementation ZXModeTestCase
 

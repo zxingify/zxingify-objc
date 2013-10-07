@@ -15,9 +15,6 @@
  */
 
 #import "ZXParsedReaderResultTestCase.h"
-#import "ZXEmailAddressParsedResult.h"
-#import "ZXParsedResult.h"
-#import "ZXResultParser.h"
 
 @implementation ZXParsedReaderResultTestCase
 

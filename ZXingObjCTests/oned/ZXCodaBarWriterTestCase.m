@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitMatrix.h"
-#import "ZXCodaBarWriter.h"
 #import "ZXCodaBarWriterTestCase.h"
 
 @implementation ZXCodaBarWriterTestCase

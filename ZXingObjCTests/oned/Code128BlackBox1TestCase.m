@@ -15,7 +15,6 @@
  */
 
 #import "Code128BlackBox1TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation Code128BlackBox1TestCase
 

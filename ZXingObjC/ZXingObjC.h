@@ -221,12 +221,21 @@
 #import "ZXPDF417ECErrorCorrection.h"
 
 // ZXingObjC/pdf417/decoder
-#import "ZXPDF417BitMatrixParser.h"
+#import "ZXPDF417BarcodeMatrix.h"
+#import "ZXPDF417BarcodeMetadata.h"
+#import "ZXPDF417BarcodeValue.h"
+#import "ZXPDF417BoundingBox.h"
+#import "ZXPDF417Codeword.h"
+#import "ZXPDF417CodewordDecoder.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
-#import "ZXPDF417Decoder.h"
+#import "ZXPDF417DetectionResult.h"
+#import "ZXPDF417DetectionResultColumn.h"
+#import "ZXPDF417DetectionResultRowIndicatorColumn.h"
+#import "ZXPDF417ScanningDecoder.h"
 
 // ZXingObjC/pdf417/detector
 #import "ZXPDF417Detector.h"
+#import "ZXPDF417DetectorResult.h"
 
 // ZXingObjC/pdf417/encoder
 #import "ZXBarcodeMatrix.h"
@@ -239,7 +248,10 @@
 #import "ZXPDF417Writer.h"
 
 // ZXingObjC/pdf417
+#import "ZXPDF417Common.h"
 #import "ZXPDF417Reader.h"
+#import "ZXPDF417ResultMetadata.h"
+#import "ZXPDF417Writer.h"
 
 // ZXingObjC/qrcode/decoder
 #import "ZXDataMask.h"

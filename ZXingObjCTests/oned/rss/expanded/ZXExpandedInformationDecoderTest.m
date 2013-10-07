@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXAbstractExpandedDecoder.h"
 #import "ZXBinaryUtil.h"
 #import "ZXExpandedInformationDecoderTest.h"
 

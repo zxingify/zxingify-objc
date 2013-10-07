@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXDataMatrixDecodedBitStreamParser.h"
 #import "ZXDataMatrixDecodedBitStreamParserTestCase.h"
-#import "ZXDecoderResult.h"
 
 @implementation ZXDataMatrixDecodedBitStreamParserTestCase
 

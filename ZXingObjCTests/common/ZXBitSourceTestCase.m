@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitSource.h"
 #import "ZXBitSourceTestCase.h"
 
 @implementation ZXBitSourceTestCase

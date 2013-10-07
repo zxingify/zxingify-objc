@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXErrorCorrectionLevel.h"
 #import "ZXErrorCorrectionLevelTestCase.h"
 
 @implementation ZXErrorCorrectionLevelTestCase

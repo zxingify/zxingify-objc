@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXBitArray.h"
-#import "ZXBitArrayBuilder.h"
 #import "ZXBitArrayBuilderTest.h"
-#import "ZXDataCharacter.h"
-#import "ZXExpandedPair.h"
 
 @implementation ZXBitArrayBuilderTest
 

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXGeoParsedResult.h"
 #import "ZXGeoParsedResultTestCase.h"
-#import "ZXResultParser.h"
 
 @implementation ZXGeoParsedResultTestCase
 

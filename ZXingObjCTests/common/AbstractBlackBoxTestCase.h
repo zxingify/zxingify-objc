@@ -15,10 +15,6 @@
  */
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "ZXBarcodeFormat.h"
-#import "ZXDecodeHints.h"
-#import "ZXImage.h"
-#import "ZXReader.h"
 
 @interface AbstractBlackBoxTestCase : SenTestCase
 

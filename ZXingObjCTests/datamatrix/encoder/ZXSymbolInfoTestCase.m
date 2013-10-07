@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXDimension.h"
-#import "ZXSymbolInfo.h"
 #import "ZXSymbolInfoTestCase.h"
-#import "ZXSymbolShapeHint.h"
 
 @implementation ZXSymbolInfoTestCase
 

@@ -15,9 +15,7 @@
  */
 
 #import "AbstractDecoderTest.h"
-#import "ZXAbstractExpandedDecoder.h"
 #import "ZXBinaryUtil.h"
-#import "ZXBitArray.h"
 
 const NSString *numeric_10                     = @"..X..XX";
 const NSString *numeric_12                     = @"..X.X.X";

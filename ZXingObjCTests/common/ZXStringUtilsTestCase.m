@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXStringUtils.h"
 #import "ZXStringUtilsTestCase.h"
 
 @implementation ZXStringUtilsTestCase

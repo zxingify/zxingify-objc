@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXFieldParser.h"
 #import "ZXFieldParserTest.h"
 
 @implementation ZXFieldParserTest

@@ -15,7 +15,6 @@
  */
 
 #import "AI01_3103_DecoderTest.h"
-#import "ZXErrors.h"
 
 static NSString *header = @"..X..";
 

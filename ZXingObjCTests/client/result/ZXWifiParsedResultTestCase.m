@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXResultParser.h"
-#import "ZXWifiParsedResult.h"
 #import "ZXWifiParsedResultTestCase.h"
 
 @implementation ZXWifiParsedResultTestCase

@@ -15,7 +15,6 @@
  */
 
 #import "UPCEBlackBox3ReflectiveTestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation UPCEBlackBox3ReflectiveTestCase
 

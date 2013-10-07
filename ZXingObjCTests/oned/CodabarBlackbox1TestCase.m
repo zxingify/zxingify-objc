@@ -15,7 +15,6 @@
  */
 
 #import "CodabarBlackBox1TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation CodabarBlackBox1TestCase
 

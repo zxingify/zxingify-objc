@@ -15,7 +15,6 @@
  */
 
 #import "DataMatrixBlackBox1TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation DataMatrixBlackBox1TestCase
 

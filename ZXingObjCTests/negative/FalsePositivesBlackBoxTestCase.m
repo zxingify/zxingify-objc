@@ -15,7 +15,6 @@
  */
 
 #import "FalsePositivesBlackBoxTestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation FalsePositivesBlackBoxTestCase
 

@@ -15,7 +15,6 @@
  */
 
 #import "AztecBlackBox2TestCase.h"
-#import "ZXAztecReader.h"
 
 @implementation AztecBlackBox2TestCase
 

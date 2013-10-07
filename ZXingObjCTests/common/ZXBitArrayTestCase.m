@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitArray.h"
 #import "ZXBitArrayTestCase.h"
 
 @implementation ZXBitArrayTestCase

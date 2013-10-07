@@ -15,7 +15,6 @@
  */
 
 #import "ITFBlackBox2TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation ITFBlackBox2TestCase
 

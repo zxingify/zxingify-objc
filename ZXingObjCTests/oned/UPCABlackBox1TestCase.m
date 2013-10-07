@@ -15,7 +15,6 @@
  */
 
 #import "UPCABlackBox1TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation UPCABlackBox1TestCase
 

@@ -15,9 +15,6 @@
  */
 
 #import "ReedSolomonTestCase.h"
-#import "ZXGenericGF.h"
-#import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonEncoder.h"
 
 const int DECODER_RANDOM_TEST_ITERATIONS = 3;
 const int DECODER_TEST_ITERATIONS = 10;

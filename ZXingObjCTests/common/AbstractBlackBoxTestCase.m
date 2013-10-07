@@ -16,11 +16,6 @@
 
 #import "AbstractBlackBoxTestCase.h"
 #import "TestResult.h"
-#import "ZXBinaryBitmap.h"
-#import "ZXCGImageLuminanceSource.h"
-#import "ZXDecodeHints.h"
-#import "ZXHybridBinarizer.h"
-#import "ZXResult.h"
 
 @interface AbstractBlackBoxTestCase ()
 
@@ -185,7 +180,7 @@
     }
 
     for (int x = 0; x < testCount; x++) {
-      float rotation = [self.testResults[x] rotation];
+      float rotation = [(TestResult *)self.testResults[x] rotation];
       ZXImage *rotatedImage = [self rotateImage:image degrees:rotation];
       ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage];
       ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];

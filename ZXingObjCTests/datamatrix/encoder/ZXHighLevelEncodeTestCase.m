@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXHighLevelEncoder.h"
 #import "ZXHighLevelEncodeTestCase.h"
-#import "ZXSymbolInfo.h"
 
 static NSArray *TEST_SYMBOLS;
 

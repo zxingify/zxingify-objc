@@ -15,13 +15,6 @@
  */
 
 #import "RSSExpandedImage2stringTestCase.h"
-#import "ZXBitArrayBuilder.h"
-#import "ZXBinaryBitmap.h"
-#import "ZXCGImageLuminanceSource.h"
-#import "ZXGlobalHistogramBinarizer.h"
-#import "ZXImage.h"
-#import "ZXResult.h"
-#import "ZXRSSExpandedReader.h"
 
 @implementation RSSExpandedImage2stringTestCase
 

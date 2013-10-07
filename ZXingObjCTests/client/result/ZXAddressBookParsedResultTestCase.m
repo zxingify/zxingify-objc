@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXAddressBookParsedResult.h"
 #import "ZXAddressBookParsedResultTestCase.h"
-#import "ZXBarcodeFormat.h"
-#import "ZXParsedResult.h"
-#import "ZXResultParser.h"
 
 @implementation ZXAddressBookParsedResultTestCase
 

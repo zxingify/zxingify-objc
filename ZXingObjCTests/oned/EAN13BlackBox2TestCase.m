@@ -15,7 +15,6 @@
  */
 
 #import "EAN13BlackBox2TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation EAN13BlackBox2TestCase
 

@@ -15,13 +15,6 @@
  */
 
 #import "AbstractNegativeBlackBoxTestCase.h"
-#import "ZXBarcodeFormat.h"
-#import "ZXBinaryBitmap.h"
-#import "ZXCGImageLuminanceSource.h"
-#import "ZXHybridBinarizer.h"
-#import "ZXLuminanceSource.h"
-#import "ZXMultiFormatReader.h"
-#import "ZXResult.h"
 
 @interface NegativeTestResult : NSObject
 

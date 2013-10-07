@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXISBNParsedResult.h"
 #import "ZXISBNParsedResultTestCase.h"
-#import "ZXResultParser.h"
 
 @implementation ZXISBNParsedResultTestCase
 

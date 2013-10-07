@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXBitMatrix.h"
-#import "ZXDataMatrixWriter.h"
 #import "ZXDataMatrixWriterTestCase.h"
-#import "ZXEncodeHints.h"
-#import "ZXSymbolShapeHint.h"
 
 @implementation ZXDataMatrixWriterTestCase
 

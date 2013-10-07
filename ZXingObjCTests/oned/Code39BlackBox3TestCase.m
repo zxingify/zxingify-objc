@@ -15,7 +15,6 @@
  */
 
 #import "Code39BlackBox3TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation Code39BlackBox3TestCase
 

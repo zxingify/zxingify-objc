@@ -15,7 +15,6 @@
  */
 
 #import "PDF417BlackBox2TestCase.h"
-#import "ZXMultiFormatReader.h"
 
 /**
  * This test contains 480x240 images captured from an Android device at preview resolution.

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXEANManufacturerOrgSupport.h"
 #import "ZXEANManufacturerOrgSupportTest.h"
 
 @implementation ZXEANManufacturerOrgSupportTest

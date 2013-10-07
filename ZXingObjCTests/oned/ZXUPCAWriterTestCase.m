@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXBitMatrix.h"
-#import "ZXUPCAWriter.h"
 #import "ZXUPCAWriterTestCase.h"
 
 @implementation ZXUPCAWriterTestCase

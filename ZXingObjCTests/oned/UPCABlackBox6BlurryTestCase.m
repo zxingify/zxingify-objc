@@ -15,7 +15,6 @@
  */
 
 #import "UPCABlackBox6BlurryTestCase.h"
-#import "ZXMultiFormatReader.h"
 
 @implementation UPCABlackBox6BlurryTestCase
 

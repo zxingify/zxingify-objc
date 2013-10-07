@@ -15,7 +15,6 @@
  */
 
 #import "PartialBlackBoxTestCase.h"
-#import "ZXMultiFormatReader.h"
 
 /**
  * This test ensures that partial barcodes do not decode.

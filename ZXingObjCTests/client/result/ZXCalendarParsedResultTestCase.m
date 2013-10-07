@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXCalendarParsedResult.h"
 #import "ZXCalendarParsedResultTestCase.h"
-#import "ZXParsedResult.h"
-#import "ZXResultParser.h"
 
 @implementation ZXCalendarParsedResultTestCase
 

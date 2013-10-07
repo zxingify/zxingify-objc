@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXAztecCode.h"
-#import "ZXAztecDecoder.h"
-#import "ZXAztecDetectorResult.h"
-#import "ZXAztecEncoder.h"
 #import "ZXAztecEncoderTest.h"
-#import "ZXAztecWriter.h"
-#import "ZXBitArray.h"
-#import "ZXBitMatrix.h"
-#import "ZXDecoderResult.h"
-#import "ZXEncodeHints.h"
 
 int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 
@@ -123,7 +114,7 @@ int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   int8_t bytes[4096];
   [data getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
   NSUInteger bytesLen = (int)[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:ZX_DEFAULT_AZTEC_EC_PERCENT];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:(int)bytesLen minECCPercent:ZX_DEFAULT_AZTEC_EC_PERCENT];
   ZXBitMatrix *expectedMatrix = aztec.matrix;
   STAssertEqualObjects(expectedMatrix, matrix, @"Expected matrices to be equal");
 }
@@ -356,7 +347,7 @@ int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   hints.errorCorrectionPercent = @(eccPercent);
   ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 hints:hints error:nil];
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:eccPercent];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:(int)bytesLen minECCPercent:eccPercent];
   STAssertEquals(aztec.compact, compact, @"Unexpected symbol format (compact)");
   STAssertEquals(aztec.layers, layers, @"Unexpected nr. of layers");
   ZXBitMatrix *matrix2 = aztec.matrix;

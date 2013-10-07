@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXByteMatrix.h"
-#import "ZXMaskUtil.h"
 #import "ZXMaskUtilTestCase.h"
 
 @implementation ZXMaskUtilTestCase

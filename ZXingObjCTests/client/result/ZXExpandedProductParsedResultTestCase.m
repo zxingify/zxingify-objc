@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXBarcodeFormat.h"
-#import "ZXExpandedProductParsedResult.h"
 #import "ZXExpandedProductParsedResultTestCase.h"
-#import "ZXExpandedProductResultParser.h"
-#import "ZXResult.h"
 
 @implementation ZXExpandedProductParsedResultTestCase
 
