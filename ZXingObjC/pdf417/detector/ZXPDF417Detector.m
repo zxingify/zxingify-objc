@@ -121,10 +121,10 @@ int const BARCODE_MIN_HEIGHT = 10;
       column = 0;
       for (NSArray *barcodeCoordinate in barcodeCoordinates) {
         if (barcodeCoordinate[1] != [NSNull null]) {
-          row = MAX(row, (int) [barcodeCoordinate[1] y]);
+          row = MAX(row, (int) [(ZXResultPoint *)barcodeCoordinate[1] y]);
         }
         if (barcodeCoordinate[3] != [NSNull null]) {
-          row = MAX(row, (int) [barcodeCoordinate[3] y]);
+          row = MAX(row, (int) [(ZXResultPoint *)barcodeCoordinate[3] y]);
         }
       }
       row += ROW_STEP;
@@ -138,11 +138,11 @@ int const BARCODE_MIN_HEIGHT = 10;
     // if we didn't find a right row indicator column, then continue the search for the next barcode after the
     // start pattern of the barcode just found.
     if (vertices[2] != [NSNull null]) {
-      column = (int) [vertices[2] x];
-      row = (int) [vertices[2] y];
+      column = (int) [(ZXResultPoint *)vertices[2] x];
+      row = (int) [(ZXResultPoint *)vertices[2] y];
     } else {
-      column = (int) [vertices[4] x];
-      row = (int) [vertices[4] y];
+      column = (int) [(ZXResultPoint *)vertices[4] x];
+      row = (int) [(ZXResultPoint *)vertices[4] y];
     }
   }
   return barcodeCoordinates;
@@ -205,8 +205,8 @@ int const BARCODE_MIN_HEIGHT = 10;
   [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN] destinationIndexes:(int *)INDEXES_START_PATTERN];
 
   if (result[4] != [NSNull null]) {
-    startColumn = (int) [result[4] x];
-    startRow = (int) [result[4] y];
+    startColumn = (int) [(ZXResultPoint *)result[4] x];
+    startRow = (int) [(ZXResultPoint *)result[4] y];
   }
   [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:(int *)PDF417_STOP_PATTERN patternLen:PDF417_STOP_PATTERN_LEN] destinationIndexes:(int *)INDEXES_STOP_PATTERN];
   return result;
@@ -249,7 +249,7 @@ int const BARCODE_MIN_HEIGHT = 10;
   // Last row of the current symbol that contains pattern
   if (found) {
     int skippedRowCount = 0;
-    NSRange previousRowLoc = NSMakeRange((NSUInteger) [result[0] x], ((NSUInteger)[result[1] x]) - ((NSUInteger)[result[0] x]));
+    NSRange previousRowLoc = NSMakeRange((NSUInteger) [(ZXResultPoint *)result[0] x], ((NSUInteger)[(ZXResultPoint *)result[1] x]) - ((NSUInteger)[(ZXResultPoint *)result[0] x]));
     for (; stopRow < height; stopRow++) {
       NSRange loc = [self findGuardPattern:matrix column:previousRowLoc.location row:stopRow width:width whiteFirst:NO pattern:pattern patternLen:patternLen counters:counters];
       // a found pattern is only considered to belong to the same barcode if the start and end positions
