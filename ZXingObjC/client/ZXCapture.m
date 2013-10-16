@@ -40,6 +40,19 @@
 static bool isIPad();
 #endif
 
+#if TARGET_OS_IPHONE
+#   if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+#       define KS_DISPATCH_RELEASE(q) (dispatch_release(q))
+#   endif
+#else
+#   if MAC_OS_X_VERSION_MIN_REQUIRED < 1080
+#       define KS_DISPATCH_RELEASE(q) (dispatch_release(q))
+#   endif
+#endif
+#ifndef KS_DISPATCH_RELEASE
+#   define KS_DISPATCH_RELEASE(q)
+#endif
+
 @interface ZXCapture ()
 
 @property (nonatomic, assign) dispatch_queue_t captureQueue;
@@ -484,6 +497,7 @@ static bool isIPad();
     [session removeOutput:output];
   }
   if (_captureQueue) {
+    KS_DISPATCH_RELEASE(_captureQueue);
     _captureQueue = nil;
   }
 }
