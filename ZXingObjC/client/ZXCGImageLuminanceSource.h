@@ -22,8 +22,8 @@
 @interface ZXCGImageLuminanceSource : ZXLuminanceSource {
   CGImageRef _image;
   int8_t *_data;
-  int _left;
-  int _top;
+  size_t _left;
+  size_t _top;
 }
 
 + (CGImageRef)createImageFromBuffer:(CVImageBufferRef)buffer CF_RETURNS_RETAINED;

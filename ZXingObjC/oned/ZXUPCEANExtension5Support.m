@@ -56,7 +56,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   memset(counters, 0, countersLen * sizeof(int));
 
   int end = [row size];
-  int rowOffset = NSMaxRange(startRange);
+  int rowOffset = (int)NSMaxRange(startRange);
 
   int lgPatternFound = 0;
 
@@ -96,7 +96,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 }
 
 - (int)extensionChecksum:(NSString *)s {
-  int length = [s length];
+  int length = (int)[s length];
   int sum = 0;
   for (int i = length - 2; i >= 0; i -= 2) {
     sum += (int)[s characterAtIndex:i] - (int)'0';

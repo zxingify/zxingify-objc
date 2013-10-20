@@ -38,7 +38,7 @@
   [self initIfNeeded];
   
   int prefix = [[productCode substringToIndex:3] intValue];
-  int max = self.ranges.count;
+  NSUInteger max = self.ranges.count;
 
   for (int i = 0; i < max; i++) {
     NSArray *range = self.ranges[i];

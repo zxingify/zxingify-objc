@@ -34,7 +34,7 @@
 
     [self encodeChar:c buffer:buffer];
 
-    int count = buffer.length;
+    NSUInteger count = buffer.length;
     if ((count % 3) == 0) {
       [self writeNextTriplet:context buffer:buffer];
 
@@ -70,7 +70,7 @@
 - (void)handleEOD:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer {
   [context updateSymbolInfo];
   int available = context.symbolInfo.dataCapacity - [context codewordCount];
-  int count = buffer.length;
+  NSUInteger count = buffer.length;
   if (count == 2) {
     [context writeCodeword:[ZXHighLevelEncoder x12Unlatch]];
     context.pos -= 2;

@@ -474,7 +474,7 @@ int const CODE_STOP = 106;
   }
 
   // Need to pull out the check digits from string
-  int resultLength = [result length];
+  NSUInteger resultLength = [result length];
   if (resultLength == 0) {
     // false positive
     if (error) *error = NotFoundErrorInstance();
@@ -494,7 +494,7 @@ int const CODE_STOP = 106;
   float left = (float)([startPatternInfo[1] intValue] + [startPatternInfo[0] intValue]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
 
-  int rawCodesSize = [rawCodes count];
+  NSUInteger rawCodesSize = [rawCodes count];
   int8_t rawBytes[rawCodesSize];
   for (int i = 0; i < rawCodesSize; i++) {
     rawBytes[i] = [rawCodes[i] charValue];
@@ -502,7 +502,7 @@ int const CODE_STOP = 106;
 
   return [ZXResult resultWithText:result
                          rawBytes:rawBytes
-                           length:rawCodesSize
+                           length:(int)rawCodesSize
                      resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
                                    [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                            format:kBarcodeFormatCode128];

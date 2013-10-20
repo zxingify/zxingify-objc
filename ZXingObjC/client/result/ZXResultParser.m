@@ -129,11 +129,11 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
   if (backslash == NSNotFound) {
     return escaped;
   }
-  int max = [escaped length];
+  NSUInteger max = [escaped length];
   NSMutableString *unescaped = [NSMutableString stringWithCapacity:max - 1];
   [unescaped appendString:[escaped substringToIndex:backslash]];
   BOOL nextIsEscaped = NO;
-  for (int i = backslash; i < max; i++) {
+  for (int i = (int)backslash; i < max; i++) {
     unichar c = [escaped characterAtIndex:i];
     if (nextIsEscaped || c != '\\') {
       [unescaped appendFormat:@"%C", c];
@@ -172,7 +172,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     return escaped;
   }
 
-  int max = [escaped length];
+  NSUInteger max = [escaped length];
   NSMutableString *unescaped = [NSMutableString stringWithCapacity:max - 2];
   [unescaped appendString:[escaped substringToIndex:first]];
 
@@ -204,7 +204,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 - (int)findFirstEscape:(NSString *)escaped {
-  int max = [escaped length];
+  NSUInteger max = [escaped length];
   for (int i = 0; i < max; i++) {
     unichar c = [escaped characterAtIndex:i];
     if (c == '+' || c == '%') {
@@ -262,14 +262,14 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 + (NSArray *)matchPrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {
   NSMutableArray *matches = nil;
   NSUInteger i = 0;
-  int max = [rawText length];
+  NSUInteger max = [rawText length];
   while (i < max) {
     i = [rawText rangeOfString:prefix options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i - 1)].location;
     if (i == NSNotFound) {
       break;
     }
     i += [prefix length];
-    int start = i;
+    NSUInteger start = i;
     BOOL more = YES;
     while (more) {
       i = [rawText rangeOfString:[NSString stringWithFormat:@"%C", endChar] options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;

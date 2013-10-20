@@ -68,7 +68,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
   memset(counters, 0, countersLen * sizeof(int));
 
   int end = [row size];
-  int rowOffset = NSMaxRange(startRange);
+  int rowOffset = (int)NSMaxRange(startRange);
   int lgPatternFound = 0;
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {

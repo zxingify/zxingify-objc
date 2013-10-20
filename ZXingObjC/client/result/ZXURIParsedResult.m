@@ -66,7 +66,7 @@ static NSRegularExpression *USER_IN_HOST = nil;
   if (protocolEnd == NSNotFound) {
     // No protocol, assume http
     massagedUri = [NSString stringWithFormat:@"http://%@", massagedUri];
-  } else if ([self isColonFollowedByPortNumber:massagedUri protocolEnd:protocolEnd]) {
+  } else if ([self isColonFollowedByPortNumber:massagedUri protocolEnd:(int)protocolEnd]) {
     // Found a colon, but it looks like it is after the host, so the protocol is still missing
     massagedUri = [NSString stringWithFormat:@"http://%@", massagedUri];
   }

@@ -201,7 +201,7 @@ const int MAX_PAIRS = 11;
   for (int i = currentRow; i < [self.rows count]; i++) {
     ZXExpandedRow *row = self.rows[i];
     [self.pairs removeAllObjects];
-    int size = [collectedRows count];
+    NSUInteger size = [collectedRows count];
     for (int j = 0; j < size; j++) {
       [self.pairs addObjectsFromArray:[collectedRows[j] pairs]];
     }

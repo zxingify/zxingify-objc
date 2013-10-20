@@ -40,7 +40,7 @@
       break;
     }
   }
-  int dataCount = buffer.length - 1;
+  int dataCount = (int)buffer.length - 1;
   int lengthFieldSize = 1;
   int currentSize = [context codewordCount] + dataCount + lengthFieldSize;
   [context updateSymbolInfoWithLength:currentSize];
@@ -60,7 +60,7 @@
                                    userInfo:nil];
     }
   }
-  for (int i = 0, c = buffer.length; i < c; i++) {
+  for (int i = 0, c = (int)buffer.length; i < c; i++) {
     [context writeCodeword:[self randomize255State:[buffer characterAtIndex:i] codewordPosition:context.codewordCount + 1]];
   }
 }

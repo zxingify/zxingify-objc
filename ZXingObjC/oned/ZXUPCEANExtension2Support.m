@@ -52,7 +52,7 @@
   memset(counters, 0, countersLen * sizeof(int));
 
   int end = [row size];
-  int rowOffset = NSMaxRange(startRange);
+  int rowOffset = (int)NSMaxRange(startRange);
 
   int checkParity = 0;
 

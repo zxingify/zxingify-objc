@@ -132,7 +132,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   if (self.usingCheckDigit) {
-    int max = [result length] - 1;
+    int max = (int)[result length] - 1;
     int total = 0;
     for (int i = 0; i < max; i++) {
       total += [CODE39_ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
@@ -259,7 +259,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 }
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {
-  int length = [encoded length];
+  NSUInteger length = [encoded length];
   NSMutableString *decoded = [NSMutableString stringWithCapacity:length];
 
   for (int i = 0; i < length; i++) {

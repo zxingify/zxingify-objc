@@ -39,7 +39,7 @@
   for (int i = 0; i < received.count; i++) {
     coefficients[i] = [received[i] intValue];
   }
-  ZXModulusPoly *poly = [[ZXModulusPoly alloc] initWithField:self.field coefficients:coefficients coefficientsLen:received.count];
+  ZXModulusPoly *poly = [[ZXModulusPoly alloc] initWithField:self.field coefficients:coefficients coefficientsLen:(int)received.count];
 
   int S[numECCodewords];
   for (int i = 0; i < numECCodewords; i++) {
@@ -61,7 +61,7 @@
 
   ZXModulusPoly *knownErrors = self.field.one;
   for (NSNumber *erasure in erasures) {
-    int b = [self.field exp:received.count - 1 - [erasure intValue]];
+    int b = [self.field exp:(int)received.count - 1 - [erasure intValue]];
     // Add (1 - bx) term:
     int termCoefficients[2] = { [self.field subtract:0 b:b], 1 };
     ZXModulusPoly *term = [[ZXModulusPoly alloc] initWithField:self.field coefficients:termCoefficients coefficientsLen:2];
@@ -86,7 +86,7 @@
   NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocator:sigma errorLocations:errorLocations];
 
   for (int i = 0; i < [errorLocations count]; i++) {
-    int position = received.count - 1 - [self.field log:[errorLocations[i] intValue]];
+    int position = (int)received.count - 1 - [self.field log:[errorLocations[i] intValue]];
     if (position < 0) {
       return -1;
     }
@@ -94,7 +94,7 @@
                                               b:[errorMagnitudes[i] intValue]]);
   }
 
-  return [errorLocations count];
+  return (int)[errorLocations count];
 }
 
 - (NSArray *)runEuclideanAlgorithm:(ZXModulusPoly *)a b:(ZXModulusPoly *)b R:(int)R {
@@ -176,7 +176,7 @@
   ZXModulusPoly *formalDerivative = [[ZXModulusPoly alloc] initWithField:self.field coefficients:formalDerivativeCoefficients coefficientsLen:errorLocatorDegree];
 
   // This is directly applying Forney's Formula
-  int s = errorLocations.count;
+  int s = (int)errorLocations.count;
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:s];
   for (int i = 0; i < s; i++) {
     int xiInverse = [self.field inverse:[errorLocations[i] intValue]];

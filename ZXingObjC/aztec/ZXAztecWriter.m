@@ -47,7 +47,7 @@ const NSStringEncoding ZX_DEFAULT_AZTEC_ENCODING = NSISOLatin1StringEncoding;
   int8_t *bytes = (int8_t *)[contentsData bytes];
   NSUInteger bytesLen = [contentsData length];
 
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:eccPercent];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:(int)bytesLen minECCPercent:eccPercent];
   return aztec.matrix;
 }
 

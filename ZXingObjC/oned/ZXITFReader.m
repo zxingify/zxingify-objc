@@ -102,7 +102,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     allowedLengths = [NSArray arrayWithArray:temp];
   }
 
-  int length = [resultString length];
+  NSUInteger length = [resultString length];
   BOOL lengthOK = NO;
   for (NSNumber *i in allowedLengths) {
     if (length == [i intValue]) {

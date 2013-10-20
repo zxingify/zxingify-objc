@@ -20,10 +20,10 @@
  * The origin is at the top-left.
  * 
  * Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
- * with a new int. This is done intentionally so that we can copy out a row into a BitArray very
+ * with a new NSInteger. This is done intentionally so that we can copy out a row into a BitArray very
  * efficiently.
  * 
- * The ordering of bits is row-major. Within each int, the least significant bits are used first,
+ * The ordering of bits is row-major. Within each NSInteger, the least significant bits are used first,
  * meaning they represent lower x values. This is compatible with BitArray's implementation.
  */
 
@@ -33,7 +33,7 @@
 
 @property (nonatomic, readonly) int width;
 @property (nonatomic, readonly) int height;
-@property (nonatomic, readonly) int *bits;
+@property (nonatomic, readonly) int32_t *bits;
 
 + (ZXBitMatrix *)bitMatrixWithDimension:(int)dimension;
 + (ZXBitMatrix *)bitMatrixWithWidth:(int)width height:(int)height;

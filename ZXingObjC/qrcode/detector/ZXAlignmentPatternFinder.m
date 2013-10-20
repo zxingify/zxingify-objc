@@ -214,7 +214,7 @@
   float centerI = [self crossCheckVertical:i centerJ:(int)centerJ maxCount:2 * stateCount[1] originalStateCountTotal:stateCountTotal];
   if (!isnan(centerI)) {
     float estimatedModuleSize = (float)(stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
-    int max = self.possibleCenters.count;
+    int max = (int)self.possibleCenters.count;
 
     for (int index = 0; index < max; index++) {
       ZXAlignmentPattern *center = self.possibleCenters[index];

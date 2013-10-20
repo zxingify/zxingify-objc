@@ -31,17 +31,17 @@
 }
 
 - (BOOL *)encode:(NSString *)contents length:(int *)pLength {
-  int length = [contents length];
+  NSUInteger length = [contents length];
   if (length > 80) {
     [NSException raise:NSInvalidArgumentException 
-                format:@"Requested contents should be less than 80 digits long, but got %d", length];
+                format:@"Requested contents should be less than 80 digits long, but got %ld", (unsigned long)length];
   }
 
   const int widthsLengh = 9;
   int widths[widthsLengh];
   memset(widths, 0, widthsLengh * sizeof(int));
 
-  int codeWidth = 24 + 1 + length;
+  int codeWidth = 24 + 1 + (int)length;
   for (int i = 0; i < length; i++) {
     NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
@@ -60,7 +60,7 @@
 
   pos += [super appendPattern:result pos:pos pattern:narrowWhite patternLen:narrowWhiteLen startColor:FALSE];
 
-  for (int i = length - 1; i >= 0; i--) {
+  for (int i = (int)length - 1; i >= 0; i--) {
     NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:TRUE];

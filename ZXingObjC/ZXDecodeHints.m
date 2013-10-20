@@ -66,7 +66,7 @@
 }
 
 - (int)numberOfPossibleFormats {
-  return self.barcodeFormats.count;
+  return (int)self.barcodeFormats.count;
 }
 
 - (void)removePossibleFormat:(ZXBarcodeFormat)format {

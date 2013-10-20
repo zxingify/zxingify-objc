@@ -164,7 +164,7 @@
 }
 
 - (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations {
-  int s = [errorLocations count];
+  NSUInteger s = [errorLocations count];
   NSMutableArray *result = [NSMutableArray array];
   for (int i = 0; i < s; i++) {
     int xiInverse = [self.field inverse:[errorLocations[i] intValue]];

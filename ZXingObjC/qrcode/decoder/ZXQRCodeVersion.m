@@ -180,7 +180,7 @@ static NSArray *VERSIONS = nil;
   [bitMatrix setRegionAtLeft:0 top:0 width:9 height:9];
   [bitMatrix setRegionAtLeft:dimension - 8 top:0 width:8 height:9];
   [bitMatrix setRegionAtLeft:0 top:dimension - 8 width:9 height:8];
-  int max = self.alignmentPatternCenters.count;
+  int max = (int)self.alignmentPatternCenters.count;
 
   for (int x = 0; x < max; x++) {
     int i = [(self.alignmentPatternCenters)[x] intValue] - 2;

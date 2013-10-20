@@ -34,7 +34,7 @@
 
     int lastCharSize = [self encodeChar:c buffer:buffer];
 
-    int unwritten = (buffer.length / 3) * 2;
+    int unwritten = ((int)buffer.length / 3) * 2;
 
     int curCodewordCount = context.codewordCount + unwritten;
     [context updateSymbolInfoWithLength:curCodewordCount];
@@ -55,7 +55,7 @@
       break;
     }
 
-    int count = buffer.length;
+    NSUInteger count = buffer.length;
     if ((count % 3) == 0) {
       int newMode = [ZXHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
       if (newMode != [self encodingMode]) {
@@ -69,7 +69,7 @@
 
 - (int)backtrackOneCharacter:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer
                      removed:(NSMutableString *)removed lastCharSize:(int)lastCharSize {
-  int count = buffer.length;
+  NSUInteger count = buffer.length;
   [buffer deleteCharactersInRange:NSMakeRange(count - lastCharSize, lastCharSize)];
   context.pos--;
   unichar c = context.currentChar;
@@ -87,7 +87,7 @@
  * Handle "end of data" situations
  */
 - (void)handleEOD:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer {
-  int unwritten = (buffer.length / 3) * 2;
+  int unwritten = ((int)buffer.length / 3) * 2;
   int rest = buffer.length % 3;
 
   int curCodewordCount = context.codewordCount + unwritten;

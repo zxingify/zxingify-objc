@@ -624,7 +624,7 @@ static float HEIGHT = 2.0f; //mm
   if (!highLevel) {
     return NO;
   }
-  int sourceCodeWords = highLevel.length;
+  int sourceCodeWords = (int)highLevel.length;
 
   int dimension[2] = {0};
   if (![self determineDimensions:dimension sourceCodeWords:sourceCodeWords errorCorrectionCodeWords:errorCorrectionCodeWords error:error]) {

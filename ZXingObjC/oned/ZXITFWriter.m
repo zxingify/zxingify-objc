@@ -34,16 +34,16 @@ const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
 }
 
 - (BOOL *)encode:(NSString *)contents length:(int *)pLength {
-  int length = [contents length];
+  NSUInteger length = [contents length];
   if (length % 2 != 0) {
     [NSException raise:NSInvalidArgumentException format:@"The length of the input should be even"];
   }
   if (length > 80) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d", length];
+    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %ld", (unsigned long)length];
   }
 
-  int resultLen = 9 + 9 * length;
-  if (pLength) *pLength = resultLen;
+  NSUInteger resultLen = 9 + 9 * length;
+  if (pLength) *pLength = (int)resultLen;
   BOOL *result = (BOOL *)malloc(resultLen * sizeof(BOOL));
   int pos = [super appendPattern:result pos:0 pattern:(int *)ITF_WRITER_START_PATTERN patternLen:ITF_WRITER_START_PATTERN_LEN startColor:TRUE];
   for (int i = 0; i < length; i += 2) {

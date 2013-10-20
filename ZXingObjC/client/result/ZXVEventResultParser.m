@@ -87,7 +87,7 @@
   if (values == nil || values.count == 0) {
     return nil;
   }
-  int size = values.count;
+  NSUInteger size = values.count;
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:size];
   for (int i = 0; i < size; i++) {
     [result addObject:values[i][0]];

@@ -125,7 +125,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   ZXBitArray *headerAndDataBits = [[ZXBitArray alloc] init];
   [headerAndDataBits appendBitArray:headerBits];
   // Find "length" of main segment and write it
-  int numLetters = [mode isEqual:[ZXMode byteMode]] ? [dataBits sizeInBytes] : [content length];
+  int numLetters = [mode isEqual:[ZXMode byteMode]] ? [dataBits sizeInBytes] : (int)[content length];
   if (![self appendLengthInfo:numLetters version:version mode:mode bits:headerAndDataBits error:error]) {
     return nil;
   }
@@ -218,7 +218,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 + (BOOL)isOnlyDoubleByteKanji:(NSString *)content {
   NSData *data = [content dataUsingEncoding:NSShiftJISStringEncoding];
   int8_t *bytes = (int8_t *)[data bytes];
-  int length = [data length];
+  NSUInteger length = [data length];
   if (length % 2 != 0) {
     return NO;
   }
@@ -510,7 +510,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 }
 
 + (void)appendNumericBytes:(NSString *)content bits:(ZXBitArray *)bits {
-  int length = [content length];
+  NSUInteger length = [content length];
   int i = 0;
   while (i < length) {
     int num1 = [content characterAtIndex:i] - '0';
@@ -531,7 +531,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 }
 
 + (BOOL)appendAlphanumericBytes:(NSString *)content bits:(ZXBitArray *)bits error:(NSError **)error {
-  int length = [content length];
+  NSUInteger length = [content length];
   int i = 0;
 
   while (i < length) {

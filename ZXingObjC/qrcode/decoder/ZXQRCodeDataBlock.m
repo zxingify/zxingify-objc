@@ -61,11 +61,11 @@
     }
   }
 
-  int shorterBlocksTotalCodewords = [[result[0] codewords] count];
-  int longerBlocksStartAt = [result count] - 1;
+  int shorterBlocksTotalCodewords = (int)[[result[0] codewords] count];
+  int longerBlocksStartAt = (int)[result count] - 1;
 
   while (longerBlocksStartAt >= 0) {
-    int numCodewords = [[result[longerBlocksStartAt] codewords] count];
+    int numCodewords = (int)[[result[longerBlocksStartAt] codewords] count];
     if (numCodewords == shorterBlocksTotalCodewords) {
       break;
     }
@@ -75,7 +75,7 @@
   longerBlocksStartAt++;
   int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - ecBlocks.ecCodewordsPerBlock;
   int rawCodewordsOffset = 0;
-  int numResultBlocks = [result count];
+  int numResultBlocks = (int)[result count];
 
   for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
@@ -87,7 +87,7 @@
     [result[j] codewords][shorterBlocksNumDataCodewords] = rawCodewords[rawCodewordsOffset++];
   }
 
-  int max = [[result[0] codewords] count];
+  int max = (int)[[result[0] codewords] count];
   for (int i = shorterBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = j < longerBlocksStartAt ? i : i + 1;

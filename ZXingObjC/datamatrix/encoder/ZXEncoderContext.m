@@ -36,7 +36,7 @@
     }
     const char *msgBinary = [msgData bytes];
     NSMutableString *sb = [NSMutableString string];
-    for (int i = 0, c = msg.length; i < c; i++) {
+    for (int i = 0, c = (int)msg.length; i < c; i++) {
       unichar ch = (unichar) (msgBinary[i] & 0xff);
       [sb appendFormat:@"%C", ch];
     }
@@ -72,7 +72,7 @@
 }
 
 - (int)codewordCount {
-  return self.codewords.length;
+  return (int)self.codewords.length;
 }
 
 - (void)signalEncoderChange:(int)encoding {
@@ -88,7 +88,7 @@
 }
 
 - (int)totalMessageCharCount {
-  return self.message.length - self.skipAtEnd;
+  return (int)self.message.length - self.skipAtEnd;
 }
 
 - (int)remainingCharacters {

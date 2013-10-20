@@ -208,7 +208,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 }
 
 - (NSString *)decodeExtended:(NSMutableString *)encoded {
-  int length = [encoded length];
+  NSUInteger length = [encoded length];
   NSMutableString *decoded = [NSMutableString stringWithCapacity:length];
   for (int i = 0; i < length; i++) {
     unichar c = [encoded characterAtIndex:i];
@@ -263,11 +263,11 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 }
 
 - (BOOL)checkChecksums:(NSMutableString *)result error:(NSError **)error {
-  int length = [result length];
-  if (![self checkOneChecksum:result checkPosition:length - 2 weightMax:20 error:error]) {
+  NSUInteger length = [result length];
+  if (![self checkOneChecksum:result checkPosition:(int)length - 2 weightMax:20 error:error]) {
     return NO;
   }
-  return [self checkOneChecksum:result checkPosition:length - 1 weightMax:15 error:error];
+  return [self checkOneChecksum:result checkPosition:(int)length - 1 weightMax:15 error:error];
 }
 
 - (BOOL)checkOneChecksum:(NSMutableString *)result checkPosition:(int)checkPosition weightMax:(int)weightMax error:(NSError **)error {

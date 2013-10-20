@@ -152,13 +152,13 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
     missingStartRows--;
   }
   int missingEndRows = 0;
-  for (int row = [rowHeights count] - 1; row >= 0; row--) {
+  for (int row = (int)[rowHeights count] - 1; row >= 0; row--) {
     missingEndRows += maxRowHeight - [rowHeights[row] intValue];
     if ([rowHeights[row] intValue] > 0) {
       break;
     }
   }
-  for (int row = [codewords count] - 1; missingEndRows > 0 && codewords[row] == [NSNull null]; row--) {
+  for (int row = (int)[codewords count] - 1; missingEndRows > 0 && codewords[row] == [NSNull null]; row--) {
     missingEndRows--;
   }
   return [rowIndicatorColumn.boundingBox addMissingRows:missingStartRows missingEndRows:missingEndRows
@@ -574,7 +574,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   }
 
   int previousValue = 0;
-  int i = [result count] - 1;
+  int i = (int)[result count] - 1;
   while (YES) {
     if ((codeword & 0x1) != previousValue) {
       previousValue = codeword & 0x1;

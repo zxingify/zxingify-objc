@@ -95,8 +95,8 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 
 + (NSMutableArray *)matchVCardPrefixedField:(NSString *)prefix rawText:(NSString *)rawText trim:(BOOL)trim parseFieldDivider:(BOOL)parseFieldDivider {
   NSMutableArray *matches = nil;
-  int i = 0;
-  int max = [rawText length];
+  NSUInteger i = 0;
+  NSUInteger max = [rawText length];
 
   while (i < max) {
     // At start or after newling, match prefix, followed by optional metadata 
@@ -140,7 +140,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
       }
     }
 
-    int matchStart = i; // Found the start of a match here
+    NSUInteger matchStart = i; // Found the start of a match here
 
     while ((NSUInteger)(i = [rawText rangeOfString:@"\n" options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location) != NSNotFound) { // Really, end in \r\n
       if (i < [rawText length] - 1 &&                   // But if followed by tab or space,
@@ -156,7 +156,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
       }
     }
 
-    if (i < 0) {
+    if (i == NSNotFound) {
       // No terminating end character? uh, done. Set i such that loop terminates and break
       i = max;
     } else if (i > matchStart) {
@@ -204,7 +204,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 }
 
 + (NSString *)decodeQuotedPrintable:(NSString *)value charset:(NSString *)charset {
-  int length = [value length];
+  NSUInteger length = [value length];
   NSMutableString *result = [NSMutableString stringWithCapacity:length];
   NSMutableData *fragmentBuffer = [NSMutableData data];
 
@@ -319,7 +319,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
     for (NSMutableArray *list in names) {
       NSString *name = list[0];
       NSMutableArray *components = [NSMutableArray arrayWithCapacity:5];
-      int start = 0;
+      NSUInteger start = 0;
       NSUInteger end;
       while ((end = [name rangeOfString:@";" options:NSLiteralSearch range:NSMakeRange(start, [name length] - start)].location) != NSNotFound && end > 0) {
         [components addObject:[name substringWithRange:NSMakeRange(start, [name length] - end - 1)]];

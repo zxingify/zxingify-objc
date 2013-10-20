@@ -142,19 +142,19 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
   //the codewords 0..928 are encoded as Unicode characters
   NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
 
-  int len = msg.length;
+  NSUInteger len = msg.length;
   int p = 0;
   int textSubMode = SUBMODE_ALPHA;
 
   // User selected encoding mode
   if (compaction == ZX_COMPACTION_TEXT) {
-    [self encodeText:msg startpos:p count:len buffer:sb initialSubmode:textSubMode];
+    [self encodeText:msg startpos:p count:(int)len buffer:sb initialSubmode:textSubMode];
   } else if (compaction == ZX_COMPACTION_BYTE) {
     bytes = [self bytesForMessage:msg];
-    [self encodeBinary:bytes startpos:p count:msg.length startmode:BYTE_COMPACTION buffer:sb];
+    [self encodeBinary:bytes startpos:p count:(int)msg.length startmode:BYTE_COMPACTION buffer:sb];
   } else if (compaction == ZX_COMPACTION_NUMERIC) {
     [sb appendFormat:@"%C", (unichar) LATCH_TO_NUMERIC];
-    [self encodeNumeric:msg startpos:p count:len buffer:sb];
+    [self encodeNumeric:msg startpos:p count:(int)len buffer:sb];
   } else {
     int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
     while (p < len) {
@@ -302,7 +302,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     }
   }
   unichar h = 0;
-  int len = tmp.length;
+  NSUInteger len = tmp.length;
   for (int i = 0; i < len; i++) {
     BOOL odd = (i % 2) != 0;
     if (odd) {
@@ -376,7 +376,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
     } while (bigint != 0);
 
     //Reverse temporary string
-    for (int i = tmp.length - 1; i >= 0; i--) {
+    for (int i = (int)tmp.length - 1; i >= 0; i--) {
       [tmp appendFormat:@"%C", [tmp characterAtIndex:i]];
     }
     idx += len;
@@ -412,7 +412,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  */
 + (int)determineConsecutiveDigitCount:(NSString *)msg startpos:(int)startpos {
   int count = 0;
-  int len = msg.length;
+  NSUInteger len = msg.length;
   int idx = startpos;
   if (idx < len) {
     char ch = [msg characterAtIndex:idx];
@@ -435,7 +435,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * @return the requested character count
  */
 + (int)determineConsecutiveTextCount:(NSString *)msg startpos:(int)startpos {
-  int len = msg.length;
+  NSUInteger len = msg.length;
   int idx = startpos;
   while (idx < len) {
     char ch = [msg characterAtIndex:idx];
@@ -469,7 +469,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
  * Determines the number of consecutive characters that are encodable using binary compaction.
  */
 + (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(int8_t *)bytes startpos:(int)startpos error:(NSError **)error {
-  int len = msg.length;
+  NSUInteger len = msg.length;
   int idx = startpos;
   while (idx < len) {
     char ch = [msg characterAtIndex:idx];

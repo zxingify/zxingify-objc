@@ -85,7 +85,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   counters[3] = 0;
   const int countersLen = 4;
   int end = row.size;
-  int rowOffset = NSMaxRange(startRange);
+  int rowOffset = (int)NSMaxRange(startRange);
 
   int lgPatternFound = 0;
 
@@ -112,7 +112,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   if (middleRange.location == NSNotFound) {
     return -1;
   }
-  rowOffset = NSMaxRange(middleRange);
+  rowOffset = (int)NSMaxRange(middleRange);
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];

@@ -102,7 +102,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   NSString *text = [@(symbolValue) stringValue];
   NSMutableString *buffer = [NSMutableString stringWithCapacity:14];
 
-  for (int i = 13 - [text length]; i > 0; i--) {
+  for (int i = 13 - (int)[text length]; i > 0; i--) {
     [buffer appendString:@"0"];
   }
 

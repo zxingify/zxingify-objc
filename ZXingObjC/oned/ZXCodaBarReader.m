@@ -188,7 +188,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   // First, sum up the total size of our four categories of stripe sizes;
   int sizes[4] = {0, 0, 0, 0};
   int counts[4] = {0, 0, 0, 0};
-  int end = self.decodeRowResult.length - 1;
+  int end = (int)self.decodeRowResult.length - 1;
 
   // We break out of this loop in the middle, in order to handle
   // inter-character spaces properly.

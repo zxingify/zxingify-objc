@@ -160,7 +160,7 @@ const int EC_COEFFICIENTS[9][512] = {
   unichar e[k];
   memset(e, 0, k * sizeof(unichar));
 
-  int sld = dataCodewords.length;
+  int sld = (int)dataCodewords.length;
   for (int i = 0; i < sld; i++) {
     int t1 = ([dataCodewords characterAtIndex:i] + e[k - 1]) % 929;
     int t2;

@@ -328,7 +328,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     if (!isnan(centerJ)) {
       float estimatedModuleSize = (float)stateCountTotal / 7.0f;
       BOOL found = NO;
-      int max = [self.possibleCenters count];
+      int max = (int)[self.possibleCenters count];
       for (int index = 0; index < max; index++) {
         ZXQRCodeFinderPattern *center = self.possibleCenters[index];
         if ([center aboutEquals:estimatedModuleSize i:centerI j:centerJ]) {
@@ -359,7 +359,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  * down in the image.
  */
 - (int) findRowSkip {
-  int max = [self.possibleCenters count];
+  int max = (int)[self.possibleCenters count];
   if (max <= 1) {
     return 0;
   }
@@ -382,7 +382,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 - (BOOL)haveMultiplyConfirmedCenters {
   int confirmedCount = 0;
   float totalModuleSize = 0.0f;
-  int max = [self.possibleCenters count];
+  int max = (int)[self.possibleCenters count];
   for (int i = 0; i < max; i++) {
     ZXQRCodeFinderPattern *pattern = self.possibleCenters[i];
     if ([pattern count] >= CENTER_QUORUM) {
@@ -436,7 +436,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context) {
  * size differs from the average among those patterns the least
  */
 - (NSMutableArray *)selectBestPatterns {
-  int startSize = [self.possibleCenters count];
+  int startSize = (int)[self.possibleCenters count];
   if (startSize < 3) {
     return nil;
   }

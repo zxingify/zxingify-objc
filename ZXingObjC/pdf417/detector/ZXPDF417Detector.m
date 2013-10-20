@@ -230,7 +230,7 @@ int const BARCODE_MIN_HEIGHT = 10;
     int skippedRowCount = 0;
     NSRange previousRowLoc = NSMakeRange((NSUInteger) [(ZXResultPoint *)result[0] x], ((NSUInteger)[(ZXResultPoint *)result[1] x]) - ((NSUInteger)[(ZXResultPoint *)result[0] x]));
     for (; stopRow < height; stopRow++) {
-      NSRange loc = [self findGuardPattern:matrix column:previousRowLoc.location row:stopRow width:width whiteFirst:NO pattern:pattern patternLen:patternLen counters:counters];
+      NSRange loc = [self findGuardPattern:matrix column:(int)previousRowLoc.location row:stopRow width:width whiteFirst:NO pattern:pattern patternLen:patternLen counters:counters];
       // a found pattern is only considered to belong to the same barcode if the start and end positions
       // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
       // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly

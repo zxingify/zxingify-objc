@@ -50,7 +50,7 @@
   memset(counters, 0, countersLen * sizeof(int));
 
   int end = row.size;
-  int rowOffset = NSMaxRange(startRange);
+  int rowOffset = (int)NSMaxRange(startRange);
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
@@ -67,7 +67,7 @@
   if (middleRange.location == NSNotFound) {
     return -1;
   }
-  rowOffset = NSMaxRange(middleRange);
+  rowOffset = (int)NSMaxRange(middleRange);
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
     int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];

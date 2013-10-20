@@ -47,9 +47,9 @@
     }
     _width = width;
     _height = height;
-    _rowSize = _width + (31 >> 5);
+    _rowSize = (_width + 31) >> 5;
     _bitsSize = _rowSize * _height;
-    _bits = (int *)malloc(_bitsSize * sizeof(int));
+    _bits = (int32_t *)malloc(_bitsSize * sizeof(int32_t));
     [self clear];
   }
 
@@ -67,15 +67,15 @@
  * Gets the requested bit, where true means black.
  */
 - (BOOL)getX:(int)x y:(int)y {
-  int offset = y * self.rowSize + (x >> 5);
-  return ((int)((unsigned int)self.bits[offset] >> (x & 0x1f)) & 1) != 0;
+  NSInteger offset = y * self.rowSize + (x >> 5);
+  return ((self.bits[offset] >> (x & 0x1f)) & 1) != 0;
 }
 
 /**
  * Sets the given bit to true.
  */
 - (void)setX:(int)x y:(int)y {
-  int offset = y * self.rowSize + (x >> 5);
+  NSInteger offset = y * self.rowSize + (x >> 5);
   self.bits[offset] |= 1 << (x & 0x1f);
 }
 
@@ -83,7 +83,7 @@
  * Flips the given bit.
  */
 - (void)flipX:(int)x y:(int)y {
-  int offset = y * self.rowSize + (x >> 5);
+  NSUInteger offset = y * self.rowSize + (x >> 5);
   self.bits[offset] ^= 1 << (x & 0x1f);
 }
 
@@ -91,34 +91,29 @@
  * Clears all bits (sets to false).
  */
 - (void)clear {
-  int max = self.bitsSize;
-  memset(self.bits, 0, max * sizeof(int));
+  NSInteger max = self.bitsSize;
+  memset(self.bits, 0, max * sizeof(int32_t));
 }
 
 /**
  * Sets a square region of the bit matrix to true.
  */
 - (void)setRegionAtLeft:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
-  if (top < 0 || left < 0) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:@"Left and top must be nonnegative"
-                                 userInfo:nil];
-  }
   if (aHeight < 1 || aWidth < 1) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Height and width must be at least 1"
                                  userInfo:nil];
   }
-  int right = left + aWidth;
-  int bottom = top + aHeight;
+  NSUInteger right = left + aWidth;
+  NSUInteger bottom = top + aHeight;
   if (bottom > self.height || right > self.width) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"The region must fit inside the matrix"
                                  userInfo:nil];
   }
-  for (int y = top; y < bottom; y++) {
-    int offset = y * self.rowSize;
-    for (int x = left; x < right; x++) {
+  for (NSUInteger y = top; y < bottom; y++) {
+    NSUInteger offset = y * self.rowSize;
+    for (NSInteger x = left; x < right; x++) {
       self.bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
     }
   }
@@ -140,7 +135,7 @@
 }
 
 - (void)setRowAtY:(int)y row:(ZXBitArray *)row {
-  for (int i = 0; i < self.rowSize; i++) {
+  for (NSUInteger i = 0; i < self.rowSize; i++) {
     self.bits[(y * self.rowSize) + i] = row.bits[i];
   }
 }
@@ -158,7 +153,7 @@
 
   for (int y = 0; y < self.height; y++) {
     for (int x32 = 0; x32 < self.rowSize; x32++) {
-      int theBits = self.bits[y * self.rowSize + x32];
+      int32_t theBits = self.bits[y * self.rowSize + x32];
       if (theBits != 0) {
         if (y < top) {
           top = y;
@@ -167,7 +162,7 @@
           bottom = y;
         }
         if (x32 * 32 < left) {
-          int bit = 0;
+          int32_t bit = 0;
           while ((theBits << (31 - bit)) == 0) {
             bit++;
           }
@@ -177,7 +172,7 @@
         }
         if (x32 * 32 + 31 > right) {
           int bit = 31;
-          while ((int)((unsigned int)theBits >> bit) == 0) {
+          while ((theBits >> bit) == 0) {
             bit--;
           }
           if ((x32 * 32 + bit) > right) {
@@ -188,8 +183,8 @@
     }
   }
 
-  int width = right - left;
-  int height = bottom - top;
+  NSInteger width = right - left;
+  NSInteger height = bottom - top;
 
   if (width < 0 || height < 0) {
     return nil;
@@ -214,8 +209,8 @@
   int y = bitsOffset / self.rowSize;
   int x = (bitsOffset % self.rowSize) << 5;
 
-  int theBits = self.bits[bitsOffset];
-  int bit = 0;
+  int32_t theBits = self.bits[bitsOffset];
+  int32_t bit = 0;
   while ((theBits << (31 - bit)) == 0) {
     bit++;
   }
@@ -235,9 +230,9 @@
   int y = bitsOffset / self.rowSize;
   int x = (bitsOffset % self.rowSize) << 5;
 
-  int theBits = self.bits[bitsOffset];
-  int bit = 31;
-  while ((int)((unsigned int)theBits >> bit) == 0) {
+  int32_t theBits = self.bits[bitsOffset];
+  int32_t bit = 31;
+  while ((theBits >> bit) == 0) {
     bit--;
   }
   x += bit;
@@ -262,11 +257,11 @@
 }
 
 - (NSUInteger)hash {
-  int hash = self.width;
+  NSInteger hash = self.width;
   hash = 31 * hash + self.width;
   hash = 31 * hash + self.height;
   hash = 31 * hash + self.rowSize;
-  for (int i = 0; i < self.bitsSize; i++) {
+  for (NSUInteger i = 0; i < self.bitsSize; i++) {
     hash = 31 * hash + self.bits[i];
   }
   return hash;

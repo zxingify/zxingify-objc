@@ -303,7 +303,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   NSString *ai = [rawInformation substringWithRange:NSMakeRange(0, aiSize)];
   int maxSize;
   if ([rawInformation length] < aiSize + variableFieldSize) {
-    maxSize = [rawInformation length];
+    maxSize = (int)[rawInformation length];
   } else {
     maxSize = aiSize + variableFieldSize;
   }

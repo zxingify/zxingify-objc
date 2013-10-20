@@ -112,8 +112,8 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
     if (startRange.location == NSNotFound) {
       return startRange;
     }
-    NSUInteger start = startRange.location;
-    nextStart = NSMaxRange(startRange);
+    int start = (int)startRange.location;
+    nextStart = (int)NSMaxRange(startRange);
     // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
     // If this check would run off the left edge of the image, do not accept this barcode,
     // as it is very likely to be a false positive.
@@ -161,8 +161,8 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 
   // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
   // spec might want more whitespace, but in practice this is the maximum we can count on.
-  int end = NSMaxRange(endRange);
-  int quietEnd = end + (end - endRange.location);
+  int end = (int)NSMaxRange(endRange);
+  int quietEnd = end + (end - (int)endRange.location);
   if (quietEnd >= [row size] || ![row isRange:end end:quietEnd value:NO]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -184,7 +184,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
                                        resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber], [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                                              format:format];
 
-  ZXResult *extensionResult = [self.extensionReader decodeRow:rowNumber row:row rowOffset:NSMaxRange(endRange) error:error];
+  ZXResult *extensionResult = [self.extensionReader decodeRow:rowNumber row:row rowOffset:(int)NSMaxRange(endRange) error:error];
   if (extensionResult) {
     [decodeResult putMetadata:kResultMetadataTypeUPCEANExtension value:extensionResult.text];
     [decodeResult putAllMetadata:[extensionResult resultMetadata]];
@@ -215,7 +215,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
  * whether the checksum is correct or not.
  */
 + (BOOL)checkStandardUPCEANChecksum:(NSString *)s {
-  int length = [s length];
+  int length = (int)[s length];
   if (length == 0) {
     return NO;
   }

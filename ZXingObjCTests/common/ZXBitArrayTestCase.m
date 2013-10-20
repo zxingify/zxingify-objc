@@ -135,9 +135,9 @@
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:64];
   [array set:0];
   [array set:63];
-  int *ints = array.bits;
+  int32_t *ints = array.bits;
   STAssertEquals(ints[0], 1, @"Expected ints[0] to equal 1");
-  STAssertEquals(ints[1], (int)NSIntegerMin, @"Expected ints[1] to equal NSIntegerMin");
+  STAssertEquals(ints[1], INT_MIN, @"Expected ints[1] to equal INT_MIN");
 }
 
 - (void)testIsRange {

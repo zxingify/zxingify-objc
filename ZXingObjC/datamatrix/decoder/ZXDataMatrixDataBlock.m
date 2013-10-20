@@ -58,7 +58,7 @@
     }
   }
 
-  int longerBlocksTotalCodewords = [[result[0] codewords] count];
+  int longerBlocksTotalCodewords = (int)[[result[0] codewords] count];
   int longerBlocksNumDataCodewords = longerBlocksTotalCodewords - ecBlocks.ecCodewords;
   int shorterBlocksNumDataCodewords = longerBlocksNumDataCodewords - 1;
   int rawCodewordsOffset = 0;
@@ -74,7 +74,7 @@
     [result[j] codewords][longerBlocksNumDataCodewords - 1] = rawCodewords[rawCodewordsOffset++];
   }
 
-  int max = [[result[0] codewords] count];
+  NSUInteger max = [[result[0] codewords] count];
   for (int i = longerBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = specialVersion && j > 7 ? i - 1 : i;

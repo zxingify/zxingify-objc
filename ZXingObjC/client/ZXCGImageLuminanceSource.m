@@ -42,22 +42,22 @@
     [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
   }
 
-  int newBytesPerRow = ((width*4+0xf)>>4)<<4;
+  size_t newBytesPerRow = ((width*4+0xf)>>4)<<4;
 
   CVPixelBufferLockBaseAddress(buffer,0); 
 
   int8_t *baseAddress =
   (int8_t *)CVPixelBufferGetBaseAddress(buffer); 
 
-  int size = newBytesPerRow*height;
-  int8_t *bytes = (int8_t*)malloc(size);
+  size_t size = newBytesPerRow*height;
+  int8_t *bytes = (int8_t *)malloc(size * sizeof(int8_t));
   if (newBytesPerRow == bytesPerRow) {
-    memcpy(bytes, baseAddress+top*bytesPerRow, size);
+    memcpy(bytes, baseAddress+top*bytesPerRow, size * sizeof(int8_t));
   } else {
     for(int y=0; y<height; y++) {
       memcpy(bytes+y*newBytesPerRow,
              baseAddress+left*4+(top+y)*bytesPerRow,
-             newBytesPerRow);
+             newBytesPerRow * sizeof(int8_t));
     }
   }
   CVPixelBufferUnlockBaseAddress(buffer, 0);
@@ -99,7 +99,7 @@
                   top:(size_t)top
                 width:(size_t)width
                height:(size_t)height {
-  if (self = [super initWithWidth:width height:height]) {
+  if (self = [super initWithWidth:(int)width height:(int)height]) {
     [self initializeWithImage:image left:left top:top width:width height:height];
   }
 
@@ -172,8 +172,8 @@
   _image = CGImageRetain(cgimage);
   _left = left;
   _top = top;
-  int sourceWidth = (int)CGImageGetWidth(cgimage);
-  int sourceHeight = (int)CGImageGetHeight(cgimage);
+  size_t sourceWidth = CGImageGetWidth(cgimage);
+  size_t sourceHeight = CGImageGetHeight(cgimage);
 
   if (left + self.width > sourceWidth ||
       top + self.height > sourceHeight) {

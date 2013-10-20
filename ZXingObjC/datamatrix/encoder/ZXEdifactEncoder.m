@@ -33,7 +33,7 @@
     [self encodeChar:c buffer:buffer];
     context.pos++;
 
-    int count = buffer.length;
+    NSUInteger count = buffer.length;
     if (count >= 4) {
       [context writeCodewords:[self encodeToCodewords:buffer startpos:0]];
       [buffer deleteCharactersInRange:NSMakeRange(0, 4)];
@@ -54,7 +54,7 @@
  */
 - (void)handleEOD:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer {
   @try {
-    int count = buffer.length;
+    NSUInteger count = buffer.length;
     if (count == 0) {
       return; //Already finished
     }
@@ -73,7 +73,7 @@
                                      reason:@"Count must not exceed 4"
                                    userInfo:nil];
     }
-    int restChars = count - 1;
+    int restChars = (int)count - 1;
     NSString *encoded = [self encodeToCodewords:buffer startpos:0];
     BOOL endOfSymbolReached = ![context hasMoreCharacters];
     BOOL restInAscii = endOfSymbolReached && restChars <= 2;
@@ -83,7 +83,7 @@
       int available = context.symbolInfo.dataCapacity - context.codewordCount;
       if (available >= 3) {
         restInAscii = NO;
-        [context updateSymbolInfoWithLength:context.codewordCount + encoded.length];
+        [context updateSymbolInfoWithLength:context.codewordCount + (int)encoded.length];
         //available = context.symbolInfo.dataCapacity - context.codewordCount;
       }
     }
@@ -110,7 +110,7 @@
 }
 
 - (NSString *)encodeToCodewords:(NSMutableString *)sb startpos:(int)startPos {
-  int len = sb.length - startPos;
+  int len = (int)sb.length - startPos;
   if (len == 0) {
     @throw [NSException exceptionWithName:@"IllegalStateException"
                                    reason:@"Buffer must not be empty"

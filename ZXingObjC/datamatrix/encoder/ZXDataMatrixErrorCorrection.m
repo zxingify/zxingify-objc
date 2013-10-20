@@ -124,7 +124,7 @@ static int LOG[256], ALOG[256];
 }
 
 + (NSString *)createECCBlock:(NSString *)codewords numECWords:(int)numECWords {
-  return [self createECCBlock:codewords start:0 len:codewords.length numECWords:numECWords];
+  return [self createECCBlock:codewords start:0 len:(int)codewords.length numECWords:numECWords];
 }
 
 + (NSString *)createECCBlock:(NSString *)codewords start:(int)start len:(int)len numECWords:(int)numECWords {

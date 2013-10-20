@@ -163,7 +163,7 @@ static NSString *MACRO_TRAILER = nil;
       [context resetEncoderSignal];
     }
   }
-  int len = context.codewords.length;
+  NSUInteger len = context.codewords.length;
   [context updateSymbolInfo];
   int capacity = context.symbolInfo.dataCapacity;
   if (len < capacity) {
@@ -177,7 +177,7 @@ static NSString *MACRO_TRAILER = nil;
     [codewords appendFormat:@"%C", PAD_CHAR];
   }
   while (codewords.length < capacity) {
-    [codewords appendFormat:@"%C", [self randomize253State:PAD_CHAR codewordPosition:codewords.length + 1]];
+    [codewords appendFormat:@"%C", [self randomize253State:PAD_CHAR codewordPosition:(int)codewords.length + 1]];
   }
 
   return [NSString stringWithString:context.codewords];
@@ -404,7 +404,7 @@ static NSString *MACRO_TRAILER = nil;
 
 + (int)determineConsecutiveDigitCount:(NSString *)msg startpos:(int)startpos {
   int count = 0;
-  int len = msg.length;
+  NSUInteger len = msg.length;
   int idx = startpos;
   if (idx < len) {
     unichar ch = [msg characterAtIndex:idx];

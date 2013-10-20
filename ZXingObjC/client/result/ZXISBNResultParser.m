@@ -25,7 +25,7 @@
     return nil;
   }
   NSString *rawText = [ZXResultParser massagedText:result];
-  int length = [rawText length];
+  NSUInteger length = [rawText length];
   if (length != 13) {
     return nil;
   }

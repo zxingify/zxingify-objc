@@ -74,7 +74,7 @@
   NSArray *codewords = [parser readCodewords];
   NSArray *dataBlocks = [ZXDataMatrixDataBlock dataBlocks:codewords version:version];
 
-  int dataBlocksCount = [dataBlocks count];
+  NSUInteger dataBlocksCount = [dataBlocks count];
 
   int totalBytes = 0;
   for (int i = 0; i < dataBlocksCount; i++) {
@@ -108,12 +108,12 @@
  * correct the errors in-place using Reed-Solomon error correction.
  */
 - (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error {
-  int numCodewords = [codewordBytes count];
+  int numCodewords = (int)[codewordBytes count];
   int codewordsInts[numCodewords];
   for (int i = 0; i < numCodewords; i++) {
     codewordsInts[i] = [codewordBytes[i] charValue] & 0xFF;
   }
-  int numECCodewords = [codewordBytes count] - numDataCodewords;
+  int numECCodewords = (int)[codewordBytes count] - numDataCodewords;
 
   NSError *decodeError = nil;
   if (![self.rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {

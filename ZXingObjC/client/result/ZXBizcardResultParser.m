@@ -65,7 +65,7 @@
   if (number3 != nil) {
     [numbers addObject:number3];
   }
-  int size = [numbers count];
+  NSUInteger size = [numbers count];
   if (size == 0) {
     return nil;
   }

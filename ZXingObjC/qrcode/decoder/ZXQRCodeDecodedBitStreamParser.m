@@ -221,7 +221,7 @@ int const GB2312_SUBSET = 1;
 }
 
 + (BOOL)decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect {
-  int start = result.length;
+  int start = (int)result.length;
 
   while (count > 1) {
     if ([bits available] < 11) {
