@@ -41,7 +41,7 @@
 }
 
 + (void)maybeAppend:(NSString *)value result:(NSMutableString *)result {
-  if (value != nil && [value length] > 0) {
+  if (value != nil && (id)value != [NSNull null] && [value length] > 0) {
     if ([result length] > 0) {
       [result appendString:@"\n"];
     }

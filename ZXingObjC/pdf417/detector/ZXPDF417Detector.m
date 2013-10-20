@@ -339,7 +339,7 @@ int const BARCODE_MIN_HEIGHT = 10;
     patternLength += pattern[i];
   }
 
-  if (total < patternLength) {
+  if (total < patternLength || patternLength == 0) {
     return INT_MAX;
   }
   int unitBarWidth = (total << PDF417_INTEGER_MATH_SHIFT) / patternLength;

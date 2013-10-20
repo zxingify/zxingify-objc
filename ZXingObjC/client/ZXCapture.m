@@ -68,8 +68,9 @@ static bool isIPad();
 @synthesize hints;
 
 // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
-- (CGImageRef)createRotatedImage:(CGImageRef)original degrees:(float)degrees {
+- (CGImageRef)createRotatedImage:(CGImageRef)original degrees:(float)degrees CF_RETURNS_RETAINED {
   if (degrees == 0.0f) {
+    CGImageRetain(original);
     return original;
   } else {
     double radians = degrees * M_PI / 180;
@@ -576,10 +577,10 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
     CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
     CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:rotation];
-    CFRelease(videoFrameImage);
+    CGImageRelease(videoFrameImage);
 
     ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
-    CFRelease(rotatedImage);
+    CGImageRelease(rotatedImage);
 
     if (luminance) {
       CGImageRef image = source.image;
@@ -594,7 +595,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
       ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
 
       if (binary) {
-        CGImageRef image = binarizer.createImage;
+        CGImageRef image = [binarizer createImage];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
           binary.contents = (__bridge id)image;
           CGImageRelease(image);

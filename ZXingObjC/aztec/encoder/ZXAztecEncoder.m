@@ -163,7 +163,7 @@ static int WORD_SIZE[33] = {
       }
     }
   }
-  if (layers == NB_BITS_LEN) {
+  if (layers == NB_BITS_LEN || wordSize == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Data too large for an Aztec code"];
   }
 

@@ -225,7 +225,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     patternLength += pattern[i];
   }
 
-  if (total < patternLength) {
+  if (total < patternLength || patternLength == 0) {
     return INT_MAX;
   }
   int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;

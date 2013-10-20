@@ -126,6 +126,10 @@
  */
 - (int8_t **)rotateArray:(int8_t **)bitarray height:(int)height width:(int)width {
   int8_t **temp = (int8_t **)malloc(width * sizeof(int8_t *));
+  for (int i = 0; i < width; i++) {
+    temp[i] = (int8_t *)malloc(height * sizeof(int8_t));
+  }
+
   for (int ii = 0; ii < height; ii++) {
     // This makes the direction consistent on screen when rotating the
     // screen;

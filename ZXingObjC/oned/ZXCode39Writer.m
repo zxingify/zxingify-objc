@@ -68,7 +68,7 @@
   }
 
   [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
-  pos += [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:TRUE];
+  [super appendPattern:result pos:pos pattern:widths patternLen:widthsLengh startColor:TRUE];
   return result;
 }
 

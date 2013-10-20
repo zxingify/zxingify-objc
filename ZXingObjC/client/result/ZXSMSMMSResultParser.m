@@ -69,13 +69,11 @@
   } else {
     [numbers addObject:[numberPart substringToIndex:numberEnd]];
     NSString *maybeVia = [numberPart substringFromIndex:numberEnd + 1];
-    NSString *via;
     if ([maybeVia hasPrefix:@"via="]) {
-      via = [maybeVia substringFromIndex:4];
+      [vias addObject:[maybeVia substringFromIndex:4]];
     } else {
-      via = nil;
+      [vias addObject:[NSNull null]];
     }
-    [vias addObject:via];
   }
 }
 

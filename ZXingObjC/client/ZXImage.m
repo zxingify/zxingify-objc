@@ -45,8 +45,7 @@
       CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, 0);
 
       if (source) {
-        self.cgimage = CGImageSourceCreateImageAtIndex(source, 0, 0);
-
+        _cgimage = CGImageSourceCreateImageAtIndex(source, 0, 0);
         CFRelease(source);
       }
 

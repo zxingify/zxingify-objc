@@ -42,6 +42,6 @@
 - (ZXBitMatrix *)blackMatrixWithError:(NSError **)error;
 - (ZXBitArray *)blackRow:(int)y row:(ZXBitArray *)row error:(NSError **)error;
 - (ZXBinarizer *)createBinarizer:(ZXLuminanceSource *)source;
-- (CGImageRef)createImage;
+- (CGImageRef)createImage CF_RETURNS_RETAINED;
 
 @end

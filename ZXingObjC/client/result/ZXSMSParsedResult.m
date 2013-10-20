@@ -61,7 +61,7 @@
       [result appendString:@","];
     }
     [result appendString:self.numbers[i]];
-    if (self.vias != nil && self.vias[i] != nil) {
+    if (self.vias != nil && self.vias[i] != [NSNull null]) {
       [result appendString:@";via="];
       [result appendString:self.vias[i]];
     }

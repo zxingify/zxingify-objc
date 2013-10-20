@@ -117,6 +117,7 @@
     largerCoefficientsLen = tempLen;
   }
   int sumDiff[largerCoefficientsLen];
+  memset(sumDiff, 0, largerCoefficientsLen * sizeof(int));
   int lengthDiff = largerCoefficientsLen - smallerCoefficientsLen;
   for (int i = 0; i < lengthDiff; i++) {
     sumDiff[i] = largerCoefficients[i];

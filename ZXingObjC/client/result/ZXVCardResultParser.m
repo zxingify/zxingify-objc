@@ -296,7 +296,12 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
         break;
       }
     }
-    [result addObject:type];
+
+    if (type) {
+      [result addObject:type];
+    } else {
+      [result addObject:[NSNull null]];
+    }
   }
   return result;
 }

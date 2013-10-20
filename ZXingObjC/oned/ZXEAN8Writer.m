@@ -56,7 +56,7 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
     pos += [super appendPattern:result pos:pos pattern:(int *)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:TRUE];
   }
 
-  pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
 
   return result;
 }

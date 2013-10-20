@@ -236,9 +236,6 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
       return nil;
     }
     [barcodeMatrix setValue:0 column:1 value:calculatedNumberOfCodewords];
-  } else if ([numberOfCodewords intValue] != calculatedNumberOfCodewords) {
-    // The calculated one is more reliable as it is derived from the row indicator column
-    numberOfCodewords = @(calculatedNumberOfCodewords);
   }
   NSMutableArray *erasures = [NSMutableArray array];
   NSMutableArray *codewords = [NSMutableArray array];

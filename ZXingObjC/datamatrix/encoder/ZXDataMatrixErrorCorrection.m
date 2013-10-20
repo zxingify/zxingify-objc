@@ -140,9 +140,7 @@ static int LOG[256], ALOG[256];
   }
   int *poly = (int *)FACTORS[table];
   unichar ecc[numECWords];
-  for (int i = 0; i < numECWords; i++) {
-    ecc[i] = 0;
-  }
+  memset(ecc, 0, numECWords * sizeof(unichar));
   for (int i = start; i < start + len; i++) {
     int m = ecc[numECWords - 1] ^ [codewords characterAtIndex:i];
     for (int k = numECWords - 1; k > 0; k--) {

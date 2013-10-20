@@ -82,7 +82,7 @@
                                userInfo:nil];
 }
 
-- (CGImageRef)createImage {
+- (CGImageRef)createImage CF_RETURNS_RETAINED {
   ZXBitMatrix *matrix = [self blackMatrixWithError:nil];
   if (!matrix) {
     return nil;
