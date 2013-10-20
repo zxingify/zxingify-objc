@@ -12,5 +12,5 @@
   #import <UIKit/UIKit.h>
   #import <Foundation/Foundation.h>
 
-  #import "ZXingObjC.h"
+  #import <ZXingObjC/ZXingObjC.h>
 #endif
