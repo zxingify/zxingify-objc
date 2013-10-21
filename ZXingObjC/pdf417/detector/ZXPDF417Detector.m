@@ -27,8 +27,8 @@
 #import "ZXResultPoint.h"
 
 const int INDEXES_PATTERN_LEN = 4;
-const int INDEXES_START_PATTERN[INDEXES_PATTERN_LEN] = { 0, 4, 1, 5 };
-const int INDEXES_STOP_PATTERN[INDEXES_PATTERN_LEN] = { 6, 2, 7, 3 };
+const int INDEXES_START_PATTERN[INDEXES_PATTERN_LEN] = {0, 4, 1, 5};
+const int INDEXES_STOP_PATTERN[INDEXES_PATTERN_LEN] = {6, 2, 7, 3};
 int const PDF417_INTEGER_MATH_SHIFT = 8;
 int const PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << PDF417_INTEGER_MATH_SHIFT;
 int const MAX_AVG_VARIANCE = (int) (PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
@@ -37,11 +37,11 @@ int const MAX_INDIVIDUAL_VARIANCE = (int) (PDF417_PATTERN_MATCH_RESULT_SCALE_FAC
 // B S B S B S B S Bar/Space pattern
 // 11111111 0 1 0 1 0 1 000
 int const PDF417_START_PATTERN_LEN = 8;
-int const PDF417_START_PATTERN[PDF417_START_PATTERN_LEN] = { 8, 1, 1, 1, 1, 1, 1, 3 };
+int const PDF417_START_PATTERN[PDF417_START_PATTERN_LEN] = {8, 1, 1, 1, 1, 1, 1, 3};
 
 // 1111111 0 1 000 1 0 1 00 1
 int const PDF417_STOP_PATTERN_LEN = 9;
-int const PDF417_STOP_PATTERN[PDF417_STOP_PATTERN_LEN] = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
+int const PDF417_STOP_PATTERN[PDF417_STOP_PATTERN_LEN] = {7, 1, 1, 3, 1, 1, 1, 2, 1};
 int const MAX_PIXEL_DRIFT = 3;
 int const MAX_PATTERN_DRIFT = 5;
 // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
@@ -52,38 +52,17 @@ int const SKIPPED_ROW_COUNT_MAX = 25;
 int const ROW_STEP = 5;
 int const BARCODE_MIN_HEIGHT = 10;
 
-@interface ZXPDF417Detector ()
-
-@property (nonatomic, strong) ZXBinaryBitmap *image;
-
-@end
-
 @implementation ZXPDF417Detector
-
-- (id)initWithImage:(ZXBinaryBitmap *)image {
-  if (self = [super init]) {
-    _image = image;
-  }
-
-  return self;
-}
-
-/**
- * Detects a PDF417 Code in an image, simply.
- */
-- (ZXPDF417DetectorResult *)detect:(BOOL)multiple error:(NSError **)error {
-  return [self detect:nil multiple:multiple error:error];
-}
 
 /**
  * Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.
  */
-- (ZXPDF417DetectorResult *)detect:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error {
++ (ZXPDF417DetectorResult *)detect:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error {
   // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even
   // different binarizers
   //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
-  ZXBitMatrix *bitMatrix = [self.image blackMatrixWithError:error];
+  ZXBitMatrix *bitMatrix = [image blackMatrixWithError:error];
 
   NSArray *barcodeCoordinates = [self detect:multiple bitMatrix:bitMatrix error:error];
   if (!barcodeCoordinates) {
@@ -102,12 +81,12 @@ int const BARCODE_MIN_HEIGHT = 10;
 /**
  * Detects PDF417 codes in an image. Only checks 0 degree rotation
  */
-- (NSArray *)detect:(BOOL)multiple bitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
++ (NSArray *)detect:(BOOL)multiple bitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
   NSMutableArray *barcodeCoordinates = [NSMutableArray array];
   int row = 0;
   int column = 0;
   BOOL foundBarcodeInRow = NO;
-  while (row < self.image.height) {
+  while (row < bitMatrix.height) {
     NSArray *vertices = [self findVertices:bitMatrix startRow:row startColumn:column];
 
     if (vertices[0] == [NSNull null] && vertices[3] == [NSNull null]) {
@@ -194,7 +173,7 @@ int const BARCODE_MIN_HEIGHT = 10;
  * vertices[6] x, y top right codeword area
  * vertices[7] x, y bottom right codeword area
  */
-- (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix startRow:(int)startRow startColumn:(int)startColumn {
++ (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix startRow:(int)startRow startColumn:(int)startColumn {
   int height = matrix.height;
   int width = matrix.width;
 
@@ -212,13 +191,13 @@ int const BARCODE_MIN_HEIGHT = 10;
   return result;
 }
 
-- (void)copyToResult:(NSMutableArray *)result tmpResult:(NSMutableArray *)tmpResult destinationIndexes:(int *)destinationIndexes {
++ (void)copyToResult:(NSMutableArray *)result tmpResult:(NSMutableArray *)tmpResult destinationIndexes:(int *)destinationIndexes {
   for (int i = 0; i < INDEXES_PATTERN_LEN; i++) {
     result[destinationIndexes[i]] = tmpResult[i];
   }
 }
 
-- (NSMutableArray *)findRowsWithPattern:(ZXBitMatrix *)matrix height:(int)height width:(int)width startRow:(int)startRow
++ (NSMutableArray *)findRowsWithPattern:(ZXBitMatrix *)matrix height:(int)height width:(int)width startRow:(int)startRow
                             startColumn:(int)startColumn pattern:(int *)pattern patternLen:(int)patternLen {
   NSMutableArray *result = [NSMutableArray array];
   for (int i = 0; i < 4; i++) {
@@ -256,7 +235,8 @@ int const BARCODE_MIN_HEIGHT = 10;
       // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
       // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
       // larger drift and don't check for skipped rows.
-      if (loc.location != NSNotFound && ABS((int)previousRowLoc.location - (int)loc.location) < MAX_PATTERN_DRIFT &&
+      if (loc.location != NSNotFound &&
+          ABS((int)previousRowLoc.location - (int)loc.location) < MAX_PATTERN_DRIFT &&
           ABS((int)NSMaxRange(previousRowLoc) - (int)NSMaxRange(loc)) < MAX_PATTERN_DRIFT) {
         previousRowLoc = loc;
         skippedRowCount = 0;
@@ -268,7 +248,7 @@ int const BARCODE_MIN_HEIGHT = 10;
         }
       }
     }
-    stopRow -= skippedRowCount;
+    stopRow -= skippedRowCount + 1;
     result[2] = [[ZXResultPoint alloc] initWithX:previousRowLoc.location y:stopRow];
     result[3] = [[ZXResultPoint alloc] initWithX:NSMaxRange(previousRowLoc) y:stopRow];
   }
@@ -280,7 +260,14 @@ int const BARCODE_MIN_HEIGHT = 10;
   return result;
 }
 
-- (NSRange)findGuardPattern:(ZXBitMatrix *)matrix column:(int)column row:(int)row width:(int)width whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int *)counters {
++ (NSRange)findGuardPattern:(ZXBitMatrix *)matrix
+                     column:(int)column
+                        row:(int)row
+                      width:(int)width
+                 whiteFirst:(BOOL)whiteFirst
+                    pattern:(int *)pattern
+                 patternLen:(int)patternLen
+                   counters:(int *)counters {
   int patternLength = patternLen;
   memset(counters, 0, patternLength * sizeof(int));
   BOOL isWhite = whiteFirst;
@@ -330,7 +317,7 @@ int const BARCODE_MIN_HEIGHT = 10;
  * the total variance from the expected pattern proportions across all
  * pattern elements, to the length of the pattern.
  */
-- (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;

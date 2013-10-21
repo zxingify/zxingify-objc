@@ -27,5 +27,6 @@ extern const int ZXPDF417_CODEWORD_SKEW_SIZE;
            imageBottomRight:(ZXResultPoint *)imageBottomRight
            minCodewordWidth:(int)minCodewordWidth
            maxCodewordWidth:(int)maxCodewordWidth;
+- (NSString *)description:(NSArray *)barcodeMatrix;
 
 @end

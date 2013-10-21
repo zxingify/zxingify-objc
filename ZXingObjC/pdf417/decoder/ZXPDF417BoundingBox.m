@@ -66,7 +66,12 @@
                             topRight:rightBox.topRight bottomRight:rightBox.bottomRight];
 }
 
-- (void)addMissingRows:(int)missingStartRows missingEndRows:(int)missingEndRows isLeft:(BOOL)isLeft {
+- (ZXPDF417BoundingBox *)addMissingRows:(int)missingStartRows missingEndRows:(int)missingEndRows isLeft:(BOOL)isLeft {
+  ZXResultPoint *newTopLeft = self.topLeft;
+  ZXResultPoint *newBottomLeft = self.bottomLeft;
+  ZXResultPoint *newTopRight = self.topRight;
+  ZXResultPoint *newBottomRight = self.bottomRight;
+
   if (missingStartRows > 0) {
     ZXResultPoint *top = isLeft ? self.topLeft : self.topRight;
     int newMinY = (int) top.y - missingStartRows;
@@ -76,27 +81,28 @@
     // TODO use existing points to better interpolate the new x positions
     ZXResultPoint *newTop = [[ZXResultPoint alloc] initWithX:top.x y:newMinY];
     if (isLeft) {
-      _topLeft = newTop;
+      newTopLeft = newTop;
     } else {
-      _topRight = newTop;
+      newTopRight = newTop;
     }
   }
 
   if (missingEndRows > 0) {
     ZXResultPoint *bottom = isLeft ? self.bottomLeft : self.bottomRight;
-    int newMaxY = (int) bottom.y - missingStartRows;
+    int newMaxY = (int) bottom.y + missingEndRows;
     if (newMaxY >= self.image.height) {
       newMaxY = self.image.height - 1;
     }
     // TODO use existing points to better interpolate the new x positions
     ZXResultPoint *newBottom = [[ZXResultPoint alloc] initWithX:bottom.x y:newMaxY];
     if (isLeft) {
-      _bottomLeft = newBottom;
+      newBottomLeft = newBottom;
     } else {
-      _bottomRight = newBottom;
+      newBottomRight = newBottom;
     }
   }
   [self calculateMinMaxValues];
+  return [[ZXPDF417BoundingBox alloc] initWithImage:self.image topLeft:newTopLeft bottomLeft:newBottomLeft topRight:newTopRight bottomRight:newBottomRight];
 }
 
 - (void)calculateMinMaxValues {

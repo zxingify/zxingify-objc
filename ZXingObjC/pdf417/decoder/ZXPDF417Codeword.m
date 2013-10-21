@@ -49,4 +49,8 @@ const int BARCODE_ROW_UNKNOWN = -1;
   return self.endX - self.startX;
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat:@"%d|%d", self.rowNumber, self.value];
+}
+
 @end

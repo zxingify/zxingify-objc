@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-@interface ZXPDF417BarcodeMatrix : NSObject
+#import "AbstractBlackBoxTestCase.h"
 
-- (NSNumber *)value:(int)row column:(int)column;
-- (void)setValue:(int)row column:(int)column value:(int)value;
+@interface PDF417BlackBox4TestCase : AbstractBlackBoxTestCase
 
 @end

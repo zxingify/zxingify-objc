@@ -47,11 +47,6 @@
 		2519AB4D17FE5C3100A71C45 /* ZXPDF417Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 2519AB4317FE554D00A71C45 /* ZXPDF417Common.m */; };
 		2519AB5017FE5C4500A71C45 /* ZXPDF417Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB4217FE554D00A71C45 /* ZXPDF417Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2519AB5217FE5C5400A71C45 /* ZXPDF417ResultMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB4617FE5C1F00A71C45 /* ZXPDF417ResultMetadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2519AB5617FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB5417FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2519AB5717FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB5417FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2519AB5917FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 2519AB5517FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m */; };
-		2519AB5A17FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 2519AB5517FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m */; };
-		2519AB5B17FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 2519AB5517FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m */; };
 		2519AB5E17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB5C17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2519AB5F17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB5C17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2519AB6117FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 2519AB5D17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.m */; };
@@ -1448,7 +1443,6 @@
 		255E48BC18143A8800A03A28 /* ZXModulusGF.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403F1B166A9EB500E13304 /* ZXModulusGF.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E48BD18143A8800A03A28 /* ZXModulusPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403F1D166A9EB500E13304 /* ZXModulusPoly.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E48BE18143A8800A03A28 /* ZXPDF417ECErrorCorrection.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403F1F166A9EB500E13304 /* ZXPDF417ECErrorCorrection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		255E48BF18143A8800A03A28 /* ZXPDF417BarcodeMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB5417FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E48C018143A8800A03A28 /* ZXPDF417BarcodeMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB5C17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E48C118143A8800A03A28 /* ZXPDF417BarcodeValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB6417FE5F2E00A71C45 /* ZXPDF417BarcodeValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E48C218143A8800A03A28 /* ZXPDF417BoundingBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 2519AB6C17FE60E700A71C45 /* ZXPDF417BoundingBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1574,6 +1568,8 @@
 		255E493A18143AC600A03A28 /* ZXModulusPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403F1D166A9EB500E13304 /* ZXModulusPoly.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E493B18143AC600A03A28 /* ZXPDF417ECErrorCorrection.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403F1F166A9EB500E13304 /* ZXPDF417ECErrorCorrection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		255E493C18143AC600A03A28 /* ZXBarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403FBB166A9FFC00E13304 /* ZXBarcodeFormat.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		25B582991816F7B00013634A /* PDF417BlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B582981816F7B00013634A /* PDF417BlackBox4TestCase.m */; };
+		25B5829A1816F7B00013634A /* PDF417BlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B582981816F7B00013634A /* PDF417BlackBox4TestCase.m */; };
 		25E9E91917FA555400364861 /* PDF417BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E9E91817FA555400364861 /* PDF417BlackBox3TestCase.m */; };
 		25E9E91A17FA555400364861 /* PDF417BlackBox3TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E9E91817FA555400364861 /* PDF417BlackBox3TestCase.m */; };
 		25FE5D3316D0AFED00826CDB /* ZXExpandedRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1626,8 +1622,6 @@
 		2519AB4317FE554D00A71C45 /* ZXPDF417Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417Common.m; sourceTree = "<group>"; };
 		2519AB4617FE5C1F00A71C45 /* ZXPDF417ResultMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417ResultMetadata.h; sourceTree = "<group>"; };
 		2519AB4717FE5C1F00A71C45 /* ZXPDF417ResultMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417ResultMetadata.m; sourceTree = "<group>"; };
-		2519AB5417FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417BarcodeMatrix.h; sourceTree = "<group>"; };
-		2519AB5517FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417BarcodeMatrix.m; sourceTree = "<group>"; };
 		2519AB5C17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417BarcodeMetadata.h; sourceTree = "<group>"; };
 		2519AB5D17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417BarcodeMetadata.m; sourceTree = "<group>"; };
 		2519AB6417FE5F2E00A71C45 /* ZXPDF417BarcodeValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417BarcodeValue.h; sourceTree = "<group>"; };
@@ -2285,6 +2279,8 @@
 		25429A0B16D5F4E000D4C045 /* ZXPlacementTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXPlacementTestCase.m; path = encoder/ZXPlacementTestCase.m; sourceTree = "<group>"; };
 		25429A0E16D5F66D00D4C045 /* ZXSymbolInfoTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXSymbolInfoTestCase.h; path = encoder/ZXSymbolInfoTestCase.h; sourceTree = "<group>"; };
 		25429A0F16D5F66D00D4C045 /* ZXSymbolInfoTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXSymbolInfoTestCase.m; path = encoder/ZXSymbolInfoTestCase.m; sourceTree = "<group>"; };
+		25B582971816F7B00013634A /* PDF417BlackBox4TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDF417BlackBox4TestCase.h; sourceTree = "<group>"; };
+		25B582981816F7B00013634A /* PDF417BlackBox4TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDF417BlackBox4TestCase.m; sourceTree = "<group>"; };
 		25E9E91717FA555400364861 /* PDF417BlackBox3TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDF417BlackBox3TestCase.h; sourceTree = "<group>"; };
 		25E9E91817FA555400364861 /* PDF417BlackBox3TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDF417BlackBox3TestCase.m; sourceTree = "<group>"; };
 		25FE5D3116D0AFED00826CDB /* ZXExpandedRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXExpandedRow.h; sourceTree = "<group>"; };
@@ -2975,8 +2971,6 @@
 			isa = PBXGroup;
 			children = (
 				25403F1A166A9EB500E13304 /* ec */,
-				2519AB5417FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h */,
-				2519AB5517FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m */,
 				2519AB5C17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h */,
 				2519AB5D17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.m */,
 				2519AB6417FE5F2E00A71C45 /* ZXPDF417BarcodeValue.h */,
@@ -3397,6 +3391,8 @@
 				254040AF166AA0F100E13304 /* PDF417BlackBox2TestCase.m */,
 				25E9E91717FA555400364861 /* PDF417BlackBox3TestCase.h */,
 				25E9E91817FA555400364861 /* PDF417BlackBox3TestCase.m */,
+				25B582971816F7B00013634A /* PDF417BlackBox4TestCase.h */,
+				25B582981816F7B00013634A /* PDF417BlackBox4TestCase.m */,
 			);
 			path = pdf417;
 			sourceTree = "<group>";
@@ -3656,7 +3652,6 @@
 				25403ECC166A9DF400E13304 /* ZXDecodedObject.h in Headers */,
 				25403ECE166A9DF400E13304 /* ZXFieldParser.h in Headers */,
 				25403ED0166A9DF400E13304 /* ZXGeneralAppIdDecoder.h in Headers */,
-				2519AB5617FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h in Headers */,
 				25403ED2166A9DF400E13304 /* ZXBitArrayBuilder.h in Headers */,
 				25403ED4166A9DF400E13304 /* ZXExpandedPair.h in Headers */,
 				25403ED6166A9DF400E13304 /* ZXRSSExpandedReader.h in Headers */,
@@ -3862,7 +3857,6 @@
 				25404575166ABAF000E13304 /* ZXMaxiCodeDecoder.h in Headers */,
 				2519AB3D17FD1EE400A71C45 /* ZXPDF417Writer.h in Headers */,
 				25404576166ABAF000E13304 /* ZXMaxiCodeReader.h in Headers */,
-				2519AB5717FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.h in Headers */,
 				25404577166ABAF000E13304 /* ZXMultiDetector.h in Headers */,
 				25404578166ABAF000E13304 /* ZXMultiFinderPatternFinder.h in Headers */,
 				25404579166ABAF000E13304 /* ZXQRCodeMultiReader.h in Headers */,
@@ -4171,7 +4165,6 @@
 				255E48BC18143A8800A03A28 /* ZXModulusGF.h in Headers */,
 				255E48BD18143A8800A03A28 /* ZXModulusPoly.h in Headers */,
 				255E48BE18143A8800A03A28 /* ZXPDF417ECErrorCorrection.h in Headers */,
-				255E48BF18143A8800A03A28 /* ZXPDF417BarcodeMatrix.h in Headers */,
 				255E48C018143A8800A03A28 /* ZXPDF417BarcodeMetadata.h in Headers */,
 				255E48C118143A8800A03A28 /* ZXPDF417BarcodeValue.h in Headers */,
 				255E48C218143A8800A03A28 /* ZXPDF417BoundingBox.h in Headers */,
@@ -4588,7 +4581,6 @@
 				25403F9C166A9F2D00E13304 /* ZXQRCodeDecoder.m in Sources */,
 				25403F9E166A9F2D00E13304 /* ZXQRCodeVersion.m in Sources */,
 				25403FA0166A9F2D00E13304 /* ZXAlignmentPattern.m in Sources */,
-				2519AB5917FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m in Sources */,
 				25403FA2166A9F2D00E13304 /* ZXAlignmentPatternFinder.m in Sources */,
 				25403FA4166A9F2D00E13304 /* ZXFinderPatternFinder.m in Sources */,
 				25403FA6166A9F2D00E13304 /* ZXFinderPatternInfo.m in Sources */,
@@ -4652,6 +4644,7 @@
 				254040DC166AA0F100E13304 /* ZXExpandedProductParsedResultTestCase.m in Sources */,
 				254040DD166AA0F100E13304 /* ZXGeoParsedResultTestCase.m in Sources */,
 				254040DE166AA0F100E13304 /* ZXISBNParsedResultTestCase.m in Sources */,
+				25B582991816F7B00013634A /* PDF417BlackBox4TestCase.m in Sources */,
 				254040DF166AA0F100E13304 /* ZXParsedReaderResultTestCase.m in Sources */,
 				254040E0166AA0F100E13304 /* ZXProductParsedResultTestCase.m in Sources */,
 				254040E1166AA0F100E13304 /* ZXSMSMMSParsedResultTestCase.m in Sources */,
@@ -4931,7 +4924,6 @@
 				25404228166AAE6000E13304 /* ZXQRCodeDecodedBitStreamParser.m in Sources */,
 				25404229166AAE6000E13304 /* ZXQRCodeDecoder.m in Sources */,
 				2540422A166AAE6000E13304 /* ZXQRCodeVersion.m in Sources */,
-				2519AB5A17FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m in Sources */,
 				2540422B166AAE6000E13304 /* ZXAlignmentPattern.m in Sources */,
 				2540422C166AAE6000E13304 /* ZXAlignmentPatternFinder.m in Sources */,
 				2540422D166AAE6000E13304 /* ZXFinderPatternFinder.m in Sources */,
@@ -4995,6 +4987,7 @@
 				2540431C166AB8B800E13304 /* AztecBlackBox2TestCase.m in Sources */,
 				2540431D166AB8B800E13304 /* ZXAddressBookParsedResultTestCase.m in Sources */,
 				2540431E166AB8B800E13304 /* ZXCalendarParsedResultTestCase.m in Sources */,
+				25B5829A1816F7B00013634A /* PDF417BlackBox4TestCase.m in Sources */,
 				2540431F166AB8B800E13304 /* ZXEmailAddressParsedResultTestCase.m in Sources */,
 				25404320166AB8B800E13304 /* ZXExpandedProductParsedResultTestCase.m in Sources */,
 				25404321166AB8B800E13304 /* ZXGeoParsedResultTestCase.m in Sources */,
@@ -5114,7 +5107,6 @@
 				25404648166ABBED00E13304 /* ZXAztecDecoder.m in Sources */,
 				25404649166ABBED00E13304 /* ZXAztecDetector.m in Sources */,
 				2540464A166ABBED00E13304 /* ZXAztecDetectorResult.m in Sources */,
-				2519AB5B17FE5CEF00A71C45 /* ZXPDF417BarcodeMatrix.m in Sources */,
 				2540464B166ABBED00E13304 /* ZXAztecReader.m in Sources */,
 				2540464C166ABBED00E13304 /* ZXAbstractDoCoMoResultParser.m in Sources */,
 				2540464D166ABBED00E13304 /* ZXAddressBookAUResultParser.m in Sources */,

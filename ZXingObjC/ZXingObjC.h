@@ -221,7 +221,6 @@
 #import "ZXPDF417ECErrorCorrection.h"
 
 // ZXingObjC/pdf417/decoder
-#import "ZXPDF417BarcodeMatrix.h"
 #import "ZXPDF417BarcodeMetadata.h"
 #import "ZXPDF417BarcodeValue.h"
 #import "ZXPDF417BoundingBox.h"

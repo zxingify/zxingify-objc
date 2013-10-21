@@ -18,14 +18,14 @@
 
 @interface ZXPDF417DetectionResult : NSObject
 
+@property (nonatomic, strong) ZXPDF417BoundingBox *boundingBox;
+
 - (id)initWithBarcodeMetadata:(ZXPDF417BarcodeMetadata *)barcodeMetadata boundingBox:(ZXPDF417BoundingBox *)boundingBox;
-- (int)imageStartRow:(int)barcodeColumn;
-- (void)setDetectionResultColumn:(int)barcodeColumn detectionResultColumn:(ZXPDF417DetectionResultColumn *)detectionResultColumn;
-- (ZXPDF417DetectionResultColumn *)detectionResultColumn:(int)barcodeColumn;
 - (NSArray *)detectionResultColumns;
 - (int)barcodeColumnCount;
 - (int)barcodeRowCount;
 - (int)barcodeECLevel;
-- (ZXPDF417BoundingBox *)boundingBox;
+- (void)setDetectionResultColumn:(int)barcodeColumn detectionResultColumn:(ZXPDF417DetectionResultColumn *)detectionResultColumn;
+- (ZXPDF417DetectionResultColumn *)detectionResultColumn:(int)barcodeColumn;
 
 @end

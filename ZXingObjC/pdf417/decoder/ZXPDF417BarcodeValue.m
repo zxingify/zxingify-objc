@@ -42,25 +42,24 @@
   self.values[@(value)] = confidence;
 }
 
-- (NSNumber *)value {
+/**
+ * Determines the maximum occurrence of a set value and returns all values which were set with this occurrence.
+ * Returns an array of int, containing the values with the highest occurrence, or null, if no value was set
+ */
+- (NSArray *)value {
   int maxConfidence = -1;
-  NSNumber *result;
-  BOOL ambiguous = NO;
+  NSMutableArray *result = [NSMutableArray array];
   for (NSNumber *key in [self.values allKeys]) {
     NSNumber *value = self.values[key];
     if ([value intValue] > maxConfidence) {
       maxConfidence = [value intValue];
-      result = key;
-      ambiguous = NO;
-      // TODO fix this clause?
-      //} else if ([value intValue] > maxConfidence) {
-      //  ambigous = YES;
+      [result removeAllObjects];
+      [result addObject:key];
+    } else if ([value intValue] == maxConfidence) {
+      [result addObject:key];
     }
   }
-  if (ambiguous) {
-    return nil;
-  }
-  return result;
+  return [[[result sortedArrayUsingSelector:@selector(compare:)] reverseObjectEnumerator] allObjects];
 }
 
 - (NSNumber *)confidence:(int)value {

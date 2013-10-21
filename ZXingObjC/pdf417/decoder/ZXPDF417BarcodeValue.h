@@ -17,7 +17,7 @@
 @interface ZXPDF417BarcodeValue : NSObject
 
 - (void)setValue:(int)value;
-- (NSNumber *)value;
+- (NSArray *)value;
 - (NSNumber *)confidence:(int)value;
 
 @end

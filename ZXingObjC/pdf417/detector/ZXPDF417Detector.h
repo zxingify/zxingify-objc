@@ -23,9 +23,7 @@
 
 @interface ZXPDF417Detector : NSObject
 
-- (id)initWithImage:(ZXBinaryBitmap *)image;
-- (ZXPDF417DetectorResult *)detect:(BOOL)multiple error:(NSError **)error;
-- (ZXPDF417DetectorResult *)detect:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error;
++ (ZXPDF417DetectorResult *)detect:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error;
 + (void)rotate180:(ZXBitMatrix *)bitMatrix;
 + (ZXBitArray *)mirror:(ZXBitArray *)input result:(ZXBitArray *)result;
 

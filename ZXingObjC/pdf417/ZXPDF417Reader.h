@@ -25,4 +25,7 @@
 
 @interface ZXPDF417Reader : NSObject <ZXReader, ZXMultipleBarcodeReader>
 
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image error:(NSError **)error;
+- (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
+
 @end

@@ -36,18 +36,12 @@
 
 @end
 
-@interface AbstractNegativeBlackBoxTestCase ()
-
-@property (nonatomic, strong) NSMutableArray *testResults;
-
-@end
-
 @implementation AbstractNegativeBlackBoxTestCase
 
 // Use the multiformat reader to evaluate all decoders in the system.
 - (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix {
   if (self = [super initWithInvocation:invocation testBasePathSuffix:testBasePathSuffix barcodeReader:[[ZXMultiFormatReader alloc] init] expectedFormat:0]) {
-    _testResults = [NSMutableArray array];
+    self.testResults = [NSMutableArray array];
   }
 
   return self;

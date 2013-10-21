@@ -23,10 +23,9 @@
 
 - (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox;
 - (ZXPDF417Codeword *)codewordNearby:(int)imageRow;
-- (int)codewordsIndex:(int)imageRow;
-- (int)imageRow:(int)codewordIndex;
+- (int)imageRowToCodewordIndex:(int)imageRow;
+- (int)codewordIndexToImageRow:(int)codewordIndex;
 - (void)setCodeword:(int)imageRow codeword:(ZXPDF417Codeword *)codeword;
 - (ZXPDF417Codeword *)codeword:(int)imageRow;
-- (ZXPDF417BoundingBox *)boundingBox;
 
 @end

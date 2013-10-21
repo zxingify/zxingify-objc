@@ -74,7 +74,7 @@ typedef enum {
   kResultMetadataTypeUPCEANExtension,
 
   /**
-    * PDF417-specific metadata
-    */
+   * PDF417-specific metadata
+   */
   kResultMetadataTypePDF417ExtraMetadata
 } ZXResultMetadataType;

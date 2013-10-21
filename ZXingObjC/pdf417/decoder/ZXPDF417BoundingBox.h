@@ -32,6 +32,6 @@
 - (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox;
 
 + (ZXPDF417BoundingBox *)mergeLeftBox:(ZXPDF417BoundingBox *)leftBox rightBox:(ZXPDF417BoundingBox *)rightBox;
-- (void)addMissingRows:(int)missingStartRows missingEndRows:(int)missingEndRows isLeft:(BOOL)isLeft;
+- (ZXPDF417BoundingBox *)addMissingRows:(int)missingStartRows missingEndRows:(int)missingEndRows isLeft:(BOOL)isLeft;
 
 @end

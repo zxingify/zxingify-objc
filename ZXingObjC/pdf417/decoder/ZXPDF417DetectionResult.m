@@ -17,6 +17,7 @@
 #import "ZXPDF417BarcodeMetadata.h"
 #import "ZXPDF417BoundingBox.h"
 #import "ZXPDF417Codeword.h"
+#import "ZXPDF417Common.h"
 #import "ZXPDF417DetectionResult.h"
 #import "ZXPDF417DetectionResultColumn.h"
 #import "ZXPDF417DetectionResultRowIndicatorColumn.h"
@@ -27,7 +28,6 @@ int const ADJUST_ROW_NUMBER_SKIP = 2;
 
 @property (nonatomic, strong) ZXPDF417BarcodeMetadata *barcodeMetadata;
 @property (nonatomic, strong) NSMutableArray *detectionResultColumnsInternal;
-@property (nonatomic, strong) ZXPDF417BoundingBox *boundingBox;
 @property (nonatomic, assign) int barcodeColumnCount;
 
 @end
@@ -49,55 +49,22 @@ int const ADJUST_ROW_NUMBER_SKIP = 2;
   return self;
 }
 
-- (int)imageStartRow:(int)barcodeColumn {
-  while (barcodeColumn > 0) {
-    ZXPDF417DetectionResultColumn *detectionResultColumn = self.detectionResultColumnsInternal[--barcodeColumn];
-    // TODO compare start row with previous result columns
-    // Could try detecting codewords from right to left
-    // if all else fails, could calculate estimate
-    NSArray *codewords = detectionResultColumn.codewords;
-    for (int rowNumber = 0; rowNumber < [codewords count]; rowNumber++) {
-      if (codewords[rowNumber]) {
-        // next column might start earlier if barcode is not aligned with image
-        if (rowNumber > 0) {
-          rowNumber--;
-        }
-        return [detectionResultColumn imageRow:rowNumber];
-      }
-    }
-  }
-  return -1;
-}
-
-- (void)setDetectionResultColumn:(int)barcodeColumn detectionResultColumn:(ZXPDF417DetectionResultColumn *)detectionResultColumn {
-  if (!detectionResultColumn) {
-    self.detectionResultColumnsInternal[barcodeColumn] = [NSNull null];
-  } else {
-    self.detectionResultColumnsInternal[barcodeColumn] = detectionResultColumn;
-  }
-}
-
-- (ZXPDF417DetectionResultColumn *)detectionResultColumn:(int)barcodeColumn {
-  ZXPDF417DetectionResultColumn *result = self.detectionResultColumnsInternal[barcodeColumn];
-  return (id)result == [NSNull null] ? nil : result;
-}
-
-- (void)adjustIndicatorColumnRowNumbers:(ZXPDF417DetectionResultColumn *)detectionResultColumn {
-  if (detectionResultColumn && (id)detectionResultColumn != [NSNull null]) {
-    [(ZXPDF417DetectionResultRowIndicatorColumn *) detectionResultColumn adjustIndicatorColumnRowNumbers:self.barcodeMetadata];
-  }
-}
-
 - (NSArray *)detectionResultColumns {
   [self adjustIndicatorColumnRowNumbers:self.detectionResultColumnsInternal[0]];
   [self adjustIndicatorColumnRowNumbers:self.detectionResultColumnsInternal[self.barcodeColumnCount + 1]];
-  int unadjustedCodewordCount = 900;
+  int unadjustedCodewordCount = ZXPDF417_MAX_CODEWORDS_IN_BARCODE;
   int previousUnadjustedCount;
   do {
     previousUnadjustedCount = unadjustedCodewordCount;
     unadjustedCodewordCount = [self adjustRowNumbers];
   } while (unadjustedCodewordCount > 0 && unadjustedCodewordCount < previousUnadjustedCount);
   return self.detectionResultColumnsInternal;
+}
+
+- (void)adjustIndicatorColumnRowNumbers:(ZXPDF417DetectionResultColumn *)detectionResultColumn {
+  if (detectionResultColumn && (id)detectionResultColumn != [NSNull null]) {
+    [(ZXPDF417DetectionResultRowIndicatorColumn *)detectionResultColumn adjustCompleteIndicatorColumnRowNumbers:self.barcodeMetadata];
+  }
 }
 
 // TODO ensure that no detected codewords with unknown row number are left
@@ -127,12 +94,38 @@ int const ADJUST_ROW_NUMBER_SKIP = 2;
 }
 
 - (int)adjustRowNumbersByRow {
+  [self adjustRowNumbersFromBothRI];
   // TODO we should only do full row adjustments if row numbers of left and right row indicator column match.
   // Maybe it's even better to calculated the height (in codeword rows) and divide it by the number of barcode
   // rows. This, together with the LRI and RRI row numbers should allow us to get a good estimate where a row
   // number starts and ends.
   int unadjustedCount = [self adjustRowNumbersFromLRI];
   return unadjustedCount + [self adjustRowNumbersFromRRI];
+}
+
+- (int)adjustRowNumbersFromBothRI {
+  if (self.detectionResultColumnsInternal[0] == [NSNull null] || self.detectionResultColumnsInternal[self.barcodeColumnCount + 1] == [NSNull null]) {
+    return 0;
+  }
+  NSArray *LRIcodewords = [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[0] codewords];
+  NSArray *RRIcodewords = [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[self.barcodeColumnCount + 1] codewords];
+  for (int codewordsRow = 0; codewordsRow < [LRIcodewords count]; codewordsRow++) {
+    if (LRIcodewords[codewordsRow] != [NSNull null] &&
+        RRIcodewords[codewordsRow] != [NSNull null] &&
+        [(ZXPDF417Codeword *)LRIcodewords[codewordsRow] rowNumber] == [(ZXPDF417Codeword *)RRIcodewords[codewordsRow] rowNumber]) {
+      for (int barcodeColumn = 1; barcodeColumn <= self.barcodeColumnCount; barcodeColumn++) {
+        ZXPDF417Codeword *codeword = [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[barcodeColumn] codewords][codewordsRow];
+        if ((id)codeword == [NSNull null]) {
+          continue;
+        }
+        codeword.rowNumber = [(ZXPDF417Codeword *)LRIcodewords[codewordsRow] rowNumber];
+        if (![codeword hasValidRowNumber]) {
+          [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[barcodeColumn] codewords][codewordsRow] = [NSNull null];
+        }
+      }
+    }
+  }
+  return 0;
 }
 
 - (int)adjustRowNumbersFromRRI {
@@ -147,9 +140,7 @@ int const ADJUST_ROW_NUMBER_SKIP = 2;
     }
     int rowIndicatorRowNumber = [codewords[codewordsRow] rowNumber];
     int invalidRowCounts = 0;
-    for (int barcodeColumn = self.barcodeColumnCount + 1;
-         barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP;
-         barcodeColumn--) {
+    for (int barcodeColumn = self.barcodeColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
       if (self.detectionResultColumnsInternal[barcodeColumn] != [NSNull null]) {
         ZXPDF417Codeword *codeword = [self.detectionResultColumnsInternal[barcodeColumn] codewords][codewordsRow];
         if ((id)codeword != [NSNull null]) {
@@ -176,9 +167,7 @@ int const ADJUST_ROW_NUMBER_SKIP = 2;
     }
     int rowIndicatorRowNumber = [codewords[codewordsRow] rowNumber];
     int invalidRowCounts = 0;
-    for (int barcodeColumn = 1;
-         barcodeColumn < self.barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP;
-         barcodeColumn++) {
+    for (int barcodeColumn = 1; barcodeColumn < self.barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
       if (self.detectionResultColumnsInternal[barcodeColumn] != [NSNull null]) {
         ZXPDF417Codeword *codeword = [self.detectionResultColumnsInternal[barcodeColumn] codewords][codewordsRow];
         if ((id)codeword != [NSNull null]) {
@@ -277,8 +266,43 @@ int const ADJUST_ROW_NUMBER_SKIP = 2;
   return self.barcodeMetadata.errorCorrectionLevel;
 }
 
-- (ZXPDF417BoundingBox *)boundingBox {
-  return _boundingBox;
+- (void)setDetectionResultColumn:(int)barcodeColumn detectionResultColumn:(ZXPDF417DetectionResultColumn *)detectionResultColumn {
+  if (!detectionResultColumn) {
+    self.detectionResultColumnsInternal[barcodeColumn] = [NSNull null];
+  } else {
+    self.detectionResultColumnsInternal[barcodeColumn] = detectionResultColumn;
+  }
+}
+
+- (ZXPDF417DetectionResultColumn *)detectionResultColumn:(int)barcodeColumn {
+  ZXPDF417DetectionResultColumn *result = self.detectionResultColumnsInternal[barcodeColumn];
+  return (id)result == [NSNull null] ? nil : result;
+}
+
+- (NSString *)description {
+  ZXPDF417DetectionResultColumn *rowIndicatorColumn = self.detectionResultColumnsInternal[0];
+  if ((id)rowIndicatorColumn == [NSNull null]) {
+    rowIndicatorColumn = self.detectionResultColumnsInternal[self.barcodeColumnCount + 1];
+  }
+  NSMutableString *result = [NSMutableString string];
+  for (int codewordsRow = 0; codewordsRow < [rowIndicatorColumn.codewords count]; codewordsRow++) {
+    [result appendFormat:@"CW %3d:", codewordsRow];
+    for (int barcodeColumn = 0; barcodeColumn < self.barcodeColumnCount + 2; barcodeColumn++) {
+      if (self.detectionResultColumnsInternal[barcodeColumn] == [NSNull null]) {
+        [result appendString:@"    |   "];
+        continue;
+      }
+      ZXPDF417Codeword *codeword = [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[barcodeColumn] codewords][codewordsRow];
+      if ((id)codeword == [NSNull null]) {
+        [result appendString:@"    |   "];
+        continue;
+      }
+      [result appendFormat:@" %3d|%3d", codeword.rowNumber, codeword.value];
+    }
+    [result appendString:@"\n"];
+  }
+
+  return [NSString stringWithString:result];
 }
 
 @end

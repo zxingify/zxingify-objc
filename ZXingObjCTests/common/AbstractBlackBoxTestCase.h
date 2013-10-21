@@ -19,6 +19,9 @@
 @interface AbstractBlackBoxTestCase : SenTestCase
 
 @property (nonatomic, strong, readonly) id<ZXReader> barcodeReader;
+@property (nonatomic, assign) ZXBarcodeFormat expectedFormat;
+@property (nonatomic, copy) NSString *testBase;
+@property (nonatomic, strong) NSMutableArray *testResults;
 
 - (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat;
 + (NSString *)barcodeFormatAsString:(ZXBarcodeFormat)format;
@@ -27,6 +30,7 @@
 - (void)runTests;
 
 - (NSArray *)imageFiles;
+- (NSString *)readFileAsString:(NSString *)file encoding:(NSStringEncoding)encoding;
 - (ZXImage *)rotateImage:(ZXImage *)original degrees:(float)degrees;
 
 @end

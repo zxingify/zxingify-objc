@@ -48,14 +48,14 @@ int const MAX_NEARBY_DISTANCE = 5;
     return codeword;
   }
   for (int i = 1; i < MAX_NEARBY_DISTANCE; i++) {
-    int nearImageRow = [self codewordsIndex:imageRow] - i;
+    int nearImageRow = [self imageRowToCodewordIndex:imageRow] - i;
     if (nearImageRow >= 0) {
       codeword = self.codewords[nearImageRow];
       if ((id)codeword != [NSNull null]) {
         return codeword;
       }
     }
-    nearImageRow = [self codewordsIndex:imageRow] + i;
+    nearImageRow = [self imageRowToCodewordIndex:imageRow] + i;
     if (nearImageRow < [self.codewords count]) {
       codeword = self.codewords[nearImageRow];
       if ((id)codeword != [NSNull null]) {
@@ -66,24 +66,37 @@ int const MAX_NEARBY_DISTANCE = 5;
   return nil;
 }
 
-- (int)codewordsIndex:(int)imageRow {
+- (int)imageRowToCodewordIndex:(int)imageRow {
   return imageRow - self.boundingBox.minY;
 }
 
-- (int)imageRow:(int)codewordIndex {
+- (int)codewordIndexToImageRow:(int)codewordIndex {
   return self.boundingBox.minY + codewordIndex;
 }
 
 - (void)setCodeword:(int)imageRow codeword:(ZXPDF417Codeword *)codeword {
-  _codewords[[self codewordsIndex:imageRow]] = codeword;
+  _codewords[[self imageRowToCodewordIndex:imageRow]] = codeword;
 }
 
 - (ZXPDF417Codeword *)codeword:(int)imageRow {
-  NSUInteger index = [self codewordsIndex:imageRow];
+  NSUInteger index = [self imageRowToCodewordIndex:imageRow];
   if (_codewords[index] == [NSNull null]) {
     return nil;
   }
   return _codewords[index];
+}
+
+- (NSString *)description {
+  NSMutableString *result = [NSMutableString string];
+  int row = 0;
+  for (ZXPDF417Codeword *codeword in self.codewords) {
+    if ((id)codeword == [NSNull null]) {
+      [result appendFormat:@"%3d:    |   \n", row++];
+      continue;
+    }
+    [result appendFormat:@"%3d: %3d|%3d\n", row++, codeword.rowNumber, codeword.value];
+  }
+  return [NSString stringWithString:result];
 }
 
 @end

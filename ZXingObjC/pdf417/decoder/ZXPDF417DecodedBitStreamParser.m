@@ -448,7 +448,7 @@ static NSArray *EXP900 = nil;
             decodedData[5 - j] = (char) (value % 256);
             value >>= 8;
           }
-          [result appendString:[NSString stringWithCString:decodedData encoding:NSASCIIStringEncoding]];
+          [result appendString:[[NSString alloc] initWithBytes:decodedData length:6 encoding:NSISOLatin1StringEncoding]];
           count = 0;
         }
       }

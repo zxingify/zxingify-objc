@@ -17,14 +17,6 @@
 #import "AbstractBlackBoxTestCase.h"
 #import "TestResult.h"
 
-@interface AbstractBlackBoxTestCase ()
-
-@property (nonatomic, assign) ZXBarcodeFormat expectedFormat;
-@property (nonatomic, copy) NSString *testBase;
-@property (nonatomic, strong) NSMutableArray *testResults;
-
-@end
-
 @implementation AbstractBlackBoxTestCase
 
 - (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat {
@@ -313,11 +305,7 @@
   if (degrees == 0.0f) {
     return original;
   }
-  double radians = degrees * (M_PI / 180);
-
-#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
-  radians = -1 * radians;
-#endif
+  double radians = -1 * degrees * (M_PI / 180);
 
   CGRect imgRect = CGRectMake(0, 0, original.width, original.height);
   CGAffineTransform transform = CGAffineTransformMakeRotation(radians);

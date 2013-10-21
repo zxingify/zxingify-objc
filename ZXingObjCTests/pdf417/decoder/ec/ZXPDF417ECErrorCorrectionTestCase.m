@@ -35,36 +35,23 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 //const int MAX_ERASURES = ERROR_LIMIT;
 
 + (void)initialize {
-//  PDF417_TEST = [[NSMutableArray alloc] initWithObjects:
-//                 [NSNumber numberWithInt:5],
-//                 [NSNumber numberWithInt:453],
-//                 [NSNumber numberWithInt:178],
-//                 [NSNumber numberWithInt:121],
-//                 [NSNumber numberWithInt:239], nil];
-//
-//  PDF417_TEST_WITH_EC = [[NSMutableArray alloc] initWithObjects:
-//                         [NSNumber numberWithInt:5],
-//                         [NSNumber numberWithInt:453],
-//                         [NSNumber numberWithInt:178],
-//                         [NSNumber numberWithInt:121],
-//                         [NSNumber numberWithInt:239],
-//                         [NSNumber numberWithInt:452],
-//                         [NSNumber numberWithInt:327],
-//                         [NSNumber numberWithInt:657],
-//                         [NSNumber numberWithInt:619], nil];
+  /** See ISO 15438, Annex Q */
+  //PDF417_TEST =
+  //  [@[ @5, @453, @178, @121, @239 ] mutableCopy];
+  //PDF417_TEST_WITH_EC =
+  //  [@[ @5, @453, @178, @121, @239, @452, @327, @657, @619 ] mutableCopy];
 
-  PDF417_TEST = [@[@48, @901, @56, @141, @627, @856, @330, @69, @244, @900, @852, @169, @843, @895, @852, @895, @913,
-                   @154, @845, @778, @387, @89, @869, @901, @219, @474, @543, @650, @169, @201, @9, @160, @35, @70,
-                   @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900,  @900] mutableCopy];
+  PDF417_TEST = [@[
+    @48, @901, @56, @141, @627, @856, @330, @69, @244, @900, @852, @169, @843, @895, @852, @895, @913, @154, @845, @778, @387, @89, @869,
+    @901, @219, @474, @543, @650, @169, @201, @9, @160, @35, @70, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900,
+    @900, @900] mutableCopy];
 
-  PDF417_TEST_WITH_EC = [@[@48, @901, @56, @141, @627, @856, @330, @69, @244, @900, @852, @169, @843, @895, @852, @895,
-                           @913, @154, @845, @778, @387, @89, @869, @901, @219, @474, @543, @650, @169, @201, @9, @160,
-                           @35, @70, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900,@900, @900, @900, @900,
-                           @769, @843, @591, @910, @605, @206, @706, @917, @371, @469, @79, @718, @47, @777, @249, @262,
-                           @193, @620, @597, @477, @450, @806, @908, @309, @153, @871, @686, @838, @185, @674, @68,
-                           @679, @691, @794, @497, @479, @234, @250, @496, @43, @347, @582, @882, @536, @322, @317,
-                           @273, @194, @917, @237, @420, @859, @340, @115, @222, @808, @866, @836, @417, @121, @833,
-                           @459, @64, @159] mutableCopy];
+  PDF417_TEST_WITH_EC = [@[
+    @48, @901, @56, @141, @627, @856, @330, @69, @244, @900, @852, @169, @843, @895, @852, @895, @913, @154, @845, @778, @387, @89, @869,
+    @901, @219, @474, @543, @650, @169, @201, @9, @160, @35, @70, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900, @900,
+    @900, @900, @769, @843, @591, @910, @605, @206, @706, @917, @371, @469, @79, @718, @47, @777, @249, @262, @193, @620, @597, @477, @450,
+    @806, @908, @309, @153, @871, @686, @838, @185, @674, @68, @679, @691, @794, @497, @479, @234, @250, @496, @43, @347, @582, @882, @536,
+    @322, @317, @273, @194, @917, @237, @420, @859, @340, @115, @222, @808, @866, @836, @417, @121, @833, @459, @64, @159] mutableCopy];
 
   ECC_BYTES = (int)PDF417_TEST_WITH_EC.count - (int)PDF417_TEST.count;
 }
@@ -92,7 +79,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 }
 
 - (void)testMaxErrors {
-  for (int i = 0; i < PDF417_TEST.count; i++) { // # iterations is kind of arbitrary
+  for (int testIterations = 0; testIterations < 100; testIterations++) { // # iterations is kind of arbitrary
     NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
     [self corrupt:received howMany:MAX_ERRORS];
     [self checkDecode:received];

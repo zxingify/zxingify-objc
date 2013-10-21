@@ -18,12 +18,10 @@
 #import "ZXPDF417BarcodeValue.h"
 #import "ZXPDF417BoundingBox.h"
 #import "ZXPDF417Codeword.h"
+#import "ZXPDF417Common.h"
 #import "ZXPDF417DetectionResult.h"
 #import "ZXPDF417DetectionResultRowIndicatorColumn.h"
 #import "ZXResultPoint.h"
-
-const int MIN_BARCODE_ROWS = 3;
-const int MAX_BARCODE_ROWS = 90;
 
 @interface ZXPDF417DetectionResultRowIndicatorColumn ()
 
@@ -50,34 +48,19 @@ const int MAX_BARCODE_ROWS = 90;
   }
 }
 
-- (NSArray *)rowHeights {
-  ZXPDF417BarcodeMetadata *barcodeMetadata = [self barcodeMetadata];
-  if (!barcodeMetadata) {
-    return nil;
-  }
-  [self adjustIndicatorColumnRowNumbers:barcodeMetadata];
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:barcodeMetadata.rowCount];
-  for (int i = 0; i < barcodeMetadata.rowCount; i++) {
-    [result addObject:@0];
-  }
-
-  for (ZXPDF417Codeword *codeword in [self codewords]) {
-    if ((id)codeword != [NSNull null]) {
-      result[codeword.rowNumber] = @([result[codeword.rowNumber] intValue] + 1);
-    }
-  }
-  return result;
-
-}
-
+// TODO implement properly
 // TODO maybe we should add missing codewords to store the correct row number to make
 // finding row numbers for other columns easier
 // use row height count to make detection of invalid row numbers more reliable
-- (int)adjustIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata {
+- (int)adjustCompleteIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata {
+  [self setRowNumbers];
+  [self removeIncorrectCodewords:barcodeMetadata];
   ZXResultPoint *top = self.isLeft ? self.boundingBox.topLeft : self.boundingBox.topRight;
   ZXResultPoint *bottom = self.isLeft ? self.boundingBox.bottomLeft : self.boundingBox.bottomRight;
-  int firstRow = [self codewordsIndex:(int) top.y];
-  int lastRow = [self codewordsIndex:(int) bottom.y];
+  int firstRow = [self imageRowToCodewordIndex:(int) top.y];
+  int lastRow = [self imageRowToCodewordIndex:(int) bottom.y];
+  // We need to be careful using the average row height. Barcode could be skewed so that we have smaller and
+  // taller rows
   float averageRowHeight = (lastRow - firstRow) / (float) barcodeMetadata.rowCount;
   int barcodeRow = -1;
   int maxRowHeight = 1;
@@ -88,11 +71,6 @@ const int MAX_BARCODE_ROWS = 90;
     }
     ZXPDF417Codeword *codeword = self.codewords[codewordsRow];
 
-    [codeword setRowNumberAsRowIndicatorColumn];
-
-    // This only works if we have a complete RI column. If the RI column is cut off at the top or bottom, it
-    // will calculate the wrong numbers and delete correct codewords. Could be used once the barcode height has
-    // been calculated properly.
     //      float expectedRowNumber = (codewordsRow - firstRow) / averageRowHeight;
     //      if (Math.abs(codeword.getRowNumber() - expectedRowNumber) > 2) {
     //        SimpleLog.log(LEVEL.WARNING,
@@ -141,6 +119,65 @@ const int MAX_BARCODE_ROWS = 90;
   return (int) (averageRowHeight + 0.5);
 }
 
+- (NSArray *)rowHeights {
+  ZXPDF417BarcodeMetadata *barcodeMetadata = [self barcodeMetadata];
+  if (!barcodeMetadata) {
+    return nil;
+  }
+  [self adjustIncompleteIndicatorColumnRowNumbers:barcodeMetadata];
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:barcodeMetadata.rowCount];
+  for (int i = 0; i < barcodeMetadata.rowCount; i++) {
+    [result addObject:@0];
+  }
+
+  for (ZXPDF417Codeword *codeword in [self codewords]) {
+    if ((id)codeword != [NSNull null]) {
+      result[codeword.rowNumber] = @([result[codeword.rowNumber] intValue] + 1);
+    }
+  }
+  return result;
+}
+
+// TODO maybe we should add missing codewords to store the correct row number to make
+// finding row numbers for other columns easier
+// use row height count to make detection of invalid row numbers more reliable
+- (int)adjustIncompleteIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata {
+  ZXResultPoint *top = self.isLeft ? self.boundingBox.topLeft : self.boundingBox.topRight;
+  ZXResultPoint *bottom = self.isLeft ? self.boundingBox.bottomLeft : self.boundingBox.bottomRight;
+  int firstRow = [self imageRowToCodewordIndex:(int) top.y];
+  int lastRow = [self imageRowToCodewordIndex:(int) bottom.y];
+  float averageRowHeight = (lastRow - firstRow) / (float) barcodeMetadata.rowCount;
+  int barcodeRow = -1;
+  int maxRowHeight = 1;
+  int currentRowHeight = 0;
+  for (int codewordsRow = firstRow; codewordsRow < lastRow; codewordsRow++) {
+    if (self.codewords[codewordsRow] == [NSNull null]) {
+      continue;
+    }
+    ZXPDF417Codeword *codeword = self.codewords[codewordsRow];
+
+    [codeword setRowNumberAsRowIndicatorColumn];
+
+    int rowDifference = codeword.rowNumber - barcodeRow;
+
+    // TODO improve handling with case where first row indicator doesn't start with 0
+
+    if (rowDifference == 0) {
+      currentRowHeight++;
+    } else if (rowDifference == 1) {
+      maxRowHeight = MAX(maxRowHeight, currentRowHeight);
+      currentRowHeight = 1;
+      barcodeRow = codeword.rowNumber;
+    } else if (codeword.rowNumber >= barcodeMetadata.rowCount) {
+      self.codewords[codewordsRow] = [NSNull null];
+    } else {
+      barcodeRow = codeword.rowNumber;
+      currentRowHeight = 1;
+    }
+  }
+  return (int) (averageRowHeight + 0.5);
+}
+
 - (ZXPDF417BarcodeMetadata *)barcodeMetadata {
   ZXPDF417BarcodeValue *barcodeColumnCount = [[ZXPDF417BarcodeValue alloc] init];
   ZXPDF417BarcodeValue *barcodeRowCountUpperPart = [[ZXPDF417BarcodeValue alloc] init];
@@ -169,17 +206,20 @@ const int MAX_BARCODE_ROWS = 90;
         break;
     }
   }
-  if (![barcodeColumnCount value] || ![barcodeRowCountUpperPart value] ||
-      ![barcodeRowCountLowerPart value] || ![barcodeECLevel value] ||
-      [[barcodeColumnCount value] intValue] < 1 ||
-      [[barcodeRowCountUpperPart value] intValue] + [[barcodeRowCountLowerPart value] intValue] < MIN_BARCODE_ROWS ||
-      [[barcodeRowCountUpperPart value] intValue] + [[barcodeRowCountLowerPart value] intValue] > MAX_BARCODE_ROWS) {
+  // Maybe we should check if we have ambiguous values?
+  if (([[barcodeColumnCount value] count] == 0) ||
+      ([[barcodeRowCountUpperPart value] count] == 0) ||
+      ([[barcodeRowCountLowerPart value] count] == 0) ||
+      ([[barcodeECLevel value] count] == 0) ||
+      [[barcodeColumnCount value][0] intValue] < 1 ||
+      [[barcodeRowCountUpperPart value][0] intValue] + [[barcodeRowCountLowerPart value][0] intValue] < ZXPDF417_MIN_ROWS_IN_BARCODE ||
+      [[barcodeRowCountUpperPart value][0] intValue] + [[barcodeRowCountLowerPart value][0] intValue] > ZXPDF417_MAX_ROWS_IN_BARCODE) {
     return nil;
   }
-  ZXPDF417BarcodeMetadata *barcodeMetadata = [[ZXPDF417BarcodeMetadata alloc] initWithColumnCount:[[barcodeColumnCount value] intValue]
-                                                                                rowCountUpperPart:[[barcodeRowCountUpperPart value] intValue]
-                                                                                rowCountLowerPart:[[barcodeRowCountLowerPart value] intValue]
-                                                                             errorCorrectionLevel:[[barcodeECLevel value] intValue]];
+  ZXPDF417BarcodeMetadata *barcodeMetadata = [[ZXPDF417BarcodeMetadata alloc] initWithColumnCount:[[barcodeColumnCount value][0] intValue]
+                                                                                rowCountUpperPart:[[barcodeRowCountUpperPart value][0] intValue]
+                                                                                rowCountLowerPart:[[barcodeRowCountLowerPart value][0] intValue]
+                                                                             errorCorrectionLevel:[[barcodeECLevel value][0] intValue]];
   [self removeIncorrectCodewords:barcodeMetadata];
   return barcodeMetadata;
 }
@@ -220,6 +260,10 @@ const int MAX_BARCODE_ROWS = 90;
         break;
     }
   }
+}
+
+- (NSString *)description {
+  return [NSString stringWithFormat:@"IsLeft: %@\n%@", @(self.isLeft), [super description]];
 }
 
 @end
