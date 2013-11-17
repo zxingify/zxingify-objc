@@ -92,7 +92,10 @@
   CFRelease(c);
   free(bytes);
 
-  return [[ZXImage alloc] initWithCGImageRef:image];
+  ZXImage *zxImage = [[ZXImage alloc] initWithCGImageRef:image];
+
+  CFRelease(image);
+  return zxImage;
 }
 
 @end
