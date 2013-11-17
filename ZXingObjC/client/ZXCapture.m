@@ -289,7 +289,11 @@ static bool isIPad();
 
   if (true ZXAV(&& self.session.running)) {
     // NSLog(@"stop running");
-    [self.session stopRunning];
+    [self.layer removeFromSuperlayer];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      [self.session stopRunning];
+    });
   } else {
     // NSLog(@"already stopped");
   }
@@ -348,7 +352,9 @@ static bool isIPad();
     }
 
     // NSLog(@"start running");
-    [self.session startRunning];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      [self.session startRunning];
+    });
   }
   running = true;
 }
