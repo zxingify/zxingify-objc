@@ -22,6 +22,7 @@
 #import "ZXDataMatrixWriter.h"
 #import "ZXEAN8Writer.h"
 #import "ZXEAN13Writer.h"
+#import "ZXErrors.h"
 #import "ZXITFWriter.h"
 #import "ZXMultiFormatWriter.h"
 #import "ZXPDF417Writer.h"
@@ -86,7 +87,8 @@
       break;
 
     default:
-      [NSException raise:NSInvalidArgumentException  format:@"No encoder available for format"];
+      if (error) *error = [NSError errorWithDomain:ZXErrorDomain code:ZXWriterError userInfo:@{NSLocalizedDescriptionKey: @"No encoder available for format"}];
+      return nil;
   }
   return [writer encode:contents format:format width:width height:height hints:hints error:error];
 }
