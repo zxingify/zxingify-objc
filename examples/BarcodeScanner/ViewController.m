@@ -29,11 +29,10 @@
 
 #pragma mark - View Controller Methods
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+- (void)viewDidLoad {
+  [super viewDidLoad];
 
   self.capture = [[ZXCapture alloc] init];
-  self.capture.delegate = self;
   self.capture.rotation = 90.0f;
 
   // Use the back camera
@@ -42,6 +41,18 @@
   self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];
   [self.view bringSubviewToFront:self.decodedLabel];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+
+  self.capture.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+  [super viewWillDisappear:animated];
+
+  self.capture.delegate = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
