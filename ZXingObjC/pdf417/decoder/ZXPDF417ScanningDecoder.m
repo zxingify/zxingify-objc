@@ -289,7 +289,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   int tries = 100;
   while (tries-- > 0) {
     for (int i = 0; i < [ambiguousIndexes count]; i++) {
-      codewords[[ambiguousIndexes[i] intValue]] = ambiguousIndexValues[i][ambiguousIndexCount[i] + 1 % [ambiguousIndexValues[i] count]];
+      codewords[[ambiguousIndexes[i] intValue]] = ambiguousIndexValues[i][(ambiguousIndexCount[i] + 1) % [ambiguousIndexValues[i] count]];
     }
     ZXDecoderResult *result = [self decodeCodewords:codewords ecLevel:ecLevel erasures:erasureArray];
     if (result) {
