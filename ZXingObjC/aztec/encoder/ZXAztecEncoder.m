@@ -169,9 +169,12 @@ static int WORD_SIZE[33] = {
 
   // pad the end
   int messageSizeInWords = (stuffedBits.size + wordSize - 1) / wordSize;
+  // This seems to be redundant?
+  /*
   for (int i = messageSizeInWords * wordSize - stuffedBits.size; i > 0; i--) {
     [stuffedBits appendBit:YES];
   }
+  */
 
   // generate check words
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
@@ -402,6 +405,8 @@ static int WORD_SIZE[33] = {
   }
 
   // 2. pad last word to wordSize
+  // This seems to be redundant?
+  /*
   n = arrayOut.size;
   int remainder = n % wordSize;
   if (remainder != 0) {
@@ -416,6 +421,7 @@ static int WORD_SIZE[33] = {
     }
     [arrayOut appendBit:j == 0];
   }
+  */
   return arrayOut;
 }
 
