@@ -323,7 +323,7 @@ static bool isIPad();
                 ZXAV(setAlwaysDiscardsLateVideoFrames:)YES];
 
     [output ZXQT(setDelegate:)ZXAV(setSampleBufferDelegate:)self
-                  ZXAV(queue:self.captureQueue)];
+                  ZXAV(queue:_captureQueue)];
 
     [self.session addOutput:output ZXQT(error:nil)];
   }
@@ -494,19 +494,6 @@ static bool isIPad();
     NSLog(@"afl %@ %@", _layer, event);
   }
   return nil;
-}
-
-- (void)dealloc {
-  if (input && session) {
-    [session removeInput:input];
-  }
-  if (output && session) {
-    [session removeOutput:output];
-  }
-  if (_captureQueue) {
-    KS_DISPATCH_RELEASE(_captureQueue);
-    _captureQueue = nil;
-  }
 }
 
 - (void)captureOutput:(ZXCaptureOutput *)captureOutput
