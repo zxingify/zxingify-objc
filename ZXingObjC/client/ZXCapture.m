@@ -55,7 +55,7 @@ static bool isIPad();
 
 @interface ZXCapture ()
 
-@property (nonatomic, assign) dispatch_queue_t captureQueue;
+@property (nonatomic, strong) __attribute__((NSObject)) dispatch_queue_t captureQueue;
 
 @end
 
