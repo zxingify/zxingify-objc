@@ -1642,12 +1642,10 @@
 
 /* Begin PBXFileReference section */
 		024958781898641B003D4E6A /* ZXingObjCTests-iOS copy.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-iOS copy.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		024958791898641C003D4E6A /* ZXingObjCTests-iOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ZXingObjCTests-iOS copy-Info.plist"; path = "/Users/costa/Development/ZXingObjC/ZXingObjCTests-iOS copy-Info.plist"; sourceTree = "<absolute>"; };
 		02BDA2EE1803109E0039B326 /* Tests-iOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-iOS-Prefix.pch"; sourceTree = "<group>"; };
 		02BDA2EF1803109E0039B326 /* Tests-OSX-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-OSX-Prefix.pch"; sourceTree = "<group>"; };
 		02BDA2F01803109E0039B326 /* ZXingObjCTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ZXingObjCTests-Info.plist"; sourceTree = "<group>"; };
 		02D813F6189864C70081721D /* ZXingObjCTests-osx copy.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx copy.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		02D813F7189864C80081721D /* ZXingObjCTests-osx copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ZXingObjCTests-osx copy-Info.plist"; path = "/Users/costa/Development/ZXingObjC/ZXingObjCTests-osx copy-Info.plist"; sourceTree = "<absolute>"; };
 		2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXInvertedLuminanceSource.h; sourceTree = "<group>"; };
 		2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXInvertedLuminanceSource.m; sourceTree = "<group>"; };
 		2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecCode.h; path = encoder/ZXAztecCode.h; sourceTree = "<group>"; };
@@ -2269,7 +2267,7 @@
 		2540415B166AA86900E13304 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2540415E166AAA2F00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		25404166166AADAC00E13304 /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		25404178166AADAC00E13304 /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZXingObjCTests-osx.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25404178166AADAC00E13304 /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "ZXingObjCTests-osx.octest"; path = "Unit Tests OS X.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2540418D166AADEF00E13304 /* osx-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		25404387166AB8CF00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		2540438F166AB91700E13304 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -2485,8 +2483,6 @@
 				25403CB5166A96FA00E13304 /* iOS Frameworks */,
 				2540438A166AB8EA00E13304 /* OS X Frameworks */,
 				25403CB4166A96FA00E13304 /* Products */,
-				024958791898641C003D4E6A /* ZXingObjCTests-iOS copy-Info.plist */,
-				02D813F7189864C80081721D /* ZXingObjCTests-osx copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
