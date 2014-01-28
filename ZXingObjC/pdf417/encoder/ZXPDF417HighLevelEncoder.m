@@ -377,7 +377,7 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
 
     //Reverse temporary string
     for (int i = (int)tmp.length - 1; i >= 0; i--) {
-      [tmp appendFormat:@"%C", [tmp characterAtIndex:i]];
+      [sb appendFormat:@"%C", [tmp characterAtIndex:i]];
     }
     idx += len;
   }
