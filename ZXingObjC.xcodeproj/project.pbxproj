@@ -2268,6 +2268,7 @@
 		2540415E166AAA2F00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		25404166166AADAC00E13304 /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25404178166AADAC00E13304 /* ZXingObjCTests-osx.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "ZXingObjCTests-osx.octest"; path = "Unit Tests OS X.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25404178166AADAC00E13304 /* Unit Tests OS X.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests OS X.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2540418D166AADEF00E13304 /* osx-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		25404387166AB8CF00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		2540438F166AB91700E13304 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -2492,7 +2493,7 @@
 				25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */,
 				25403CC4166A96FA00E13304 /* Unit Tests iOS.octest */,
 				25404166166AADAC00E13304 /* libZXingObjC-osx.a */,
-				25404178166AADAC00E13304 /* ZXingObjCTests-osx.octest */,
+				25404178166AADAC00E13304 /* Unit Tests OS X.octest */,
 				2540439E166ABA0A00E13304 /* ZXingObjC.framework */,
 				024958781898641B003D4E6A /* ZXingObjCTests-iOS copy.octest */,
 				02D813F6189864C70081721D /* ZXingObjCTests-osx copy.octest */,
@@ -4416,7 +4417,7 @@
 			);
 			name = "Unit Tests OS X";
 			productName = ZXingObjCTests;
-			productReference = 25404178166AADAC00E13304 /* ZXingObjCTests-osx.octest */;
+			productReference = 25404178166AADAC00E13304 /* Unit Tests OS X.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		2540439D166ABA0A00E13304 /* OS X Framework */ = {
