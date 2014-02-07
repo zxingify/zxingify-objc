@@ -181,7 +181,7 @@
   }
 
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(0, self.width, self.height, 8, self.width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
+  CGContextRef context = CGBitmapContextCreate(NULL, self.width, self.height, 8, self.width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
   CGContextSetAllowsAntialiasing(context, FALSE);
   CGContextSetInterpolationQuality(context, kCGInterpolationNone);
 
@@ -191,38 +191,42 @@
 
   CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), self.image);
 
-  uint32_t *pixelData = (uint32_t *) malloc(self.width * self.height * sizeof(uint32_t));
-  memcpy(pixelData, CGBitmapContextGetData(context), self.width * self.height * sizeof(uint32_t));
-  CGContextRelease(context);
-  CGColorSpaceRelease(colorSpace);
+  uint32_t *pixelData__ = CGBitmapContextGetData(context);
+  size_t width__ = self.width;
+  size_t height__ = self.height;
 
-  _data = (int8_t *)malloc(self.width * self.height * sizeof(int8_t));
+  _data = (int8_t *)malloc(width__ * height__ * sizeof(int8_t));
 
-  for (int i = 0; i < self.height * self.width; i++) {
-    uint32_t rgbPixel=pixelData[i];
+  dispatch_apply(height__, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(size_t idx) {
+    size_t stripe_start = idx * width__;
+    size_t stripe_stop = stripe_start + width__;
 
-    float red = (rgbPixel>>24)&0xFF;
-    float green = (rgbPixel>>16)&0xFF;
-    float blue = (rgbPixel>>8)&0xFF;
-    float alpha = (float)(rgbPixel & 0xFF) / 255.0f;
+    for (size_t i = stripe_start; i < stripe_stop; i++) {
+      uint32_t rgbPixel = pixelData__[i];
 
-    // ImageIO premultiplies all PNGs, so we have to "un-premultiply them":
-    // http://code.google.com/p/cocos2d-iphone/issues/detail?id=697#c26
-    red = round((red / alpha) - 0.001f);
-    green = round((green / alpha) - 0.001f);
-    blue = round((blue / alpha) - 0.001f);
+      uint32_t red = (rgbPixel >> 24) & 0xFF;
+      uint32_t green = (rgbPixel >> 16) & 0xFF;
+      uint32_t blue = (rgbPixel >> 8) & 0xFF;
+      uint32_t alpha = (rgbPixel & 0xFF);
 
-    if (red == green && green == blue) {
-      _data[i] = red;
-    } else {
-      _data[i] = (306 * (int)red +
-                 601 * (int)green +
-                 117 * (int)blue +
-                (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
+      // ImageIO premultiplies all PNGs, so we have to "un-premultiply them":
+      // http://code.google.com/p/cocos2d-iphone/issues/detail?id=697#c26
+      red   =   red > 0 ? ((red   << 20) / ((alpha + 1) << 2) - 1) >> 10 : 0;
+      green = green > 0 ? ((green << 20) / ((alpha + 1) << 2) - 1) >> 10 : 0;
+      blue  =  blue > 0 ? ((blue  << 20) / ((alpha + 1) << 2) - 1) >> 10 : 0;
+
+      if (red == green && green == blue) {
+        _data[i] = red;
+      } else {
+        _data[i] = (306 * red +
+                    601 * green +
+                    117 * blue +
+                    (0x200)) >> 10;	// 0x200 = 1<<9, half an lsb of the result to force rounding
+      }
     }
-  }
+  });
 
-  free(pixelData);
+  CGContextRelease(context);
 
   _top = top;
   _left = left;
