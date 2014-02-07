@@ -26,7 +26,7 @@
 
   if (self) {
     [self addTest:20 tryHarderCount:23 maxMisreads:0 maxTryHarderMisreads:0 rotation:0.0f];
-    [self addTest:22 tryHarderCount:23 maxMisreads:0 maxTryHarderMisreads:0 rotation:180.0f];
+    [self addTest:21 tryHarderCount:23 maxMisreads:0 maxTryHarderMisreads:0 rotation:180.0f];
   }
 
   return self;

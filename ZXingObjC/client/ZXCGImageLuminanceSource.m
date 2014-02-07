@@ -174,55 +174,62 @@
   _top = top;
   size_t sourceWidth = CGImageGetWidth(cgimage);
   size_t sourceHeight = CGImageGetHeight(cgimage);
+  size_t selfWidth = self.width;
+  size_t selfHeight= self.height;
 
-  if (left + self.width > sourceWidth ||
-      top + self.height > sourceHeight) {
+  if (left + selfWidth > sourceWidth ||
+      top + selfHeight > sourceHeight) {
     [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
   }
 
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(NULL, self.width, self.height, 8, self.width * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
+  CGContextRef context = CGBitmapContextCreate(NULL, selfWidth, selfHeight, 8, selfWidth * 4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
   CGContextSetAllowsAntialiasing(context, FALSE);
   CGContextSetInterpolationQuality(context, kCGInterpolationNone);
 
   if (top || left) {
-    CGContextClipToRect(context, CGRectMake(0, 0, self.width, self.height));
+    CGContextClipToRect(context, CGRectMake(0, 0, selfWidth, selfHeight));
   }
 
-  CGContextDrawImage(context, CGRectMake(-left, -top, self.width, self.height), self.image);
+  CGContextDrawImage(context, CGRectMake(-left, -top, selfWidth, selfHeight), self.image);
 
-  uint32_t *pixelData__ = CGBitmapContextGetData(context);
-  size_t width__ = self.width;
-  size_t height__ = self.height;
+  uint32_t *pixelData = CGBitmapContextGetData(context);
 
-  _data = (int8_t *)malloc(width__ * height__ * sizeof(int8_t));
+  _data = (int8_t *)malloc(selfWidth * selfHeight * sizeof(int8_t));
 
-  dispatch_apply(height__, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(size_t idx) {
-    size_t stripe_start = idx * width__;
-    size_t stripe_stop = stripe_start + width__;
+  dispatch_apply(selfHeight, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(size_t idx) {
+    size_t stripe_start = idx * selfWidth;
+    size_t stripe_stop = stripe_start + selfWidth;
 
     for (size_t i = stripe_start; i < stripe_stop; i++) {
-      uint32_t rgbPixel = pixelData__[i];
+      uint32_t rgbPixelIn = pixelData[i];
+      uint32_t rgbPixelOut = 0;
 
-      float red = (rgbPixel>>24)&0xFF;
-      float green = (rgbPixel>>16)&0xFF;
-      float blue = (rgbPixel>>8)&0xFF;
-      float alpha = (float)(rgbPixel & 0xFF) / 255.0f;
+      uint32_t red = (rgbPixelIn >> 24) & 0xFF;
+      uint32_t green = (rgbPixelIn >> 16) & 0xFF;
+      uint32_t blue = (rgbPixelIn >> 8) & 0xFF;
+      uint32_t alpha = (rgbPixelIn & 0xFF);
 
       // ImageIO premultiplies all PNGs, so we have to "un-premultiply them":
       // http://code.google.com/p/cocos2d-iphone/issues/detail?id=697#c26
-      red = round((red / alpha) - 0.001f);
-      green = round((green / alpha) - 0.001f);
-      blue = round((blue / alpha) - 0.001f);
+      red   =   red > 0 ? ((red   << 20) / (alpha << 2)) >> 10 : 0;
+      green = green > 0 ? ((green << 20) / (alpha << 2)) >> 10 : 0;
+      blue  =  blue > 0 ? ((blue  << 20) / (alpha << 2)) >> 10 : 0;
 
       if (red == green && green == blue) {
-        _data[i] = red;
+        rgbPixelOut = red;
       } else {
-        _data[i] = (306 * (int)red +
-                    601 * (int)green +
-                    117 * (int)blue +
-                    (0x200)) >> 10;	// 0x200 = 1<<9, half an lsb of the result to force rounding
+        rgbPixelOut = (306 * red +
+                       601 * green +
+                       117 * blue +
+                       (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
       }
+
+      if (rgbPixelOut > 255) {
+        rgbPixelOut = 255;
+      }
+
+      _data[i] = rgbPixelOut;
     }
   });
 
