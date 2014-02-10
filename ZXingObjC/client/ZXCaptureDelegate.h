@@ -25,6 +25,8 @@
 - (void)captureSize:(ZXCapture *)capture
               width:(NSNumber *)width
              height:(NSNumber *)height;
+             
+- (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result frameImage:(UIImage *)image;
 
 - (void)captureCameraIsReady:(ZXCapture *)capture;
 
