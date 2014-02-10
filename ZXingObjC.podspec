@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
 
   s.license                     = { :type => 'Apache License 2.0', :file => 'COPYING' }
 
-  s.source                      = { :git => "https://github.com/TheLevelUp/ZXingObjC.git", :tag => "2.2.3" }
+  s.source                      = { :git => "https://github.com/stephenzl/ZXingObjC.git", :tag => "2.2.3" }
   s.ios.deployment_target 	= '5.0'
   s.osx.deployment_target 	= '10.7'
 
