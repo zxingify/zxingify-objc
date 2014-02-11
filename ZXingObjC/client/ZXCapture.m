@@ -601,16 +601,10 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
         NSError *error;
         ZXResult *result = [self.reader decode:bitmap hints:hints error:&error];
+        result.captureImage = frameImage;
         if (result) {
           dispatch_async(dispatch_get_main_queue(), ^{
-              if ([delegate respondsToSelector:@selector(captureResult:result:)]) {
-                  
-                  [delegate captureResult:self result:result];
-                  
-              } else if ([delegate respondsToSelector:@selector(captureResult:result:frameImage:)]) {
-                  
-                  [delegate captureResult:self result:result frameImage:frameImage];
-              }
+              [delegate captureResult:self result:result];
           });
         }
       }
