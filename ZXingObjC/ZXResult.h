@@ -30,6 +30,7 @@
 @property (nonatomic, assign, readonly) ZXBarcodeFormat barcodeFormat;
 @property (nonatomic, strong, readonly) NSMutableDictionary *resultMetadata;
 @property (nonatomic, assign, readonly) long timestamp;
+@property (nonatomic, strong) UIImage *captureImage;
 
 - (id)initWithText:(NSString *)text rawBytes:(int8_t *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format;
 - (id)initWithText:(NSString *)text rawBytes:(int8_t *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp;
