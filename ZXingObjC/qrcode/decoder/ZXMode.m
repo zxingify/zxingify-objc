@@ -81,73 +81,82 @@
 
 + (ZXMode *)terminatorMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x00 name:@"TERMINATOR"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)numericMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@10, @12, @14] bits:0x01 name:@"NUMERIC"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)alphanumericMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@9, @11, @13] bits:0x02 name:@"ALPHANUMERIC"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)structuredAppendMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x03 name:@"STRUCTURED_APPEND"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)byteMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @16, @16] bits:0x04 name:@"BYTE"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)eciMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x07 name:@"ECI"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)kanjiMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12] bits:0x08 name:@"KANJI"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)fnc1FirstPositionMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x05 name:@"FNC1_FIRST_POSITION"];
-  }
+  });
   return thisMode;
 }
 
 + (ZXMode *)fnc1SecondPositionMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@0, @0, @0] bits:0x09 name:@"FNC1_SECOND_POSITION"];
-  }
+  });
   return thisMode;
 }
 
@@ -156,9 +165,10 @@
  */
 + (ZXMode *)hanziMode {
   static ZXMode *thisMode = nil;
-  if (!thisMode) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisMode = [[ZXMode alloc] initWithCharacterCountBitsForVersions:@[@8, @10, @12] bits:0x0D name:@"HANZI"];
-  }
+  });
   return thisMode;
 }
 
