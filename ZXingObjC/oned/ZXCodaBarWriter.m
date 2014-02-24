@@ -17,24 +17,32 @@
 #import "ZXCodaBarReader.h"
 #import "ZXCodaBarWriter.h"
 
-const int START_CHARS_LEN = 4;
-const char START_CHARS[START_CHARS_LEN] = "ABCD";
+const int START_END_CHARS_LEN = 4;
+const char START_END_CHARS[START_END_CHARS_LEN] = "ABCD";
 
-const int END_CHARS_LEN = 4;
-const char END_CHARS[END_CHARS_LEN] = "TN*E";
+const int ALT_START_END_CHARS_LEN = 4;
+const char ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = "TN*E";
 
 @implementation ZXCodaBarWriter
 
 - (BOOL *)encode:(NSString *)contents length:(int *)pLength {
   // Verify input and calculate decoded length.
-  if (![ZXCodaBarReader arrayContains:(char *)START_CHARS length:START_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:0]]) {
+  if (!([ZXCodaBarReader arrayContains:(char *)START_END_CHARS length:START_END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:0]]
+        || [ZXCodaBarReader arrayContains:(char *)ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:0]])) {
+    NSString *reason = [NSString stringWithFormat:@"Codabar should start with one of the following: %@%@",
+                        [NSString stringWithCString:START_END_CHARS encoding:NSUTF8StringEncoding],
+                        [NSString stringWithCString:ALT_START_END_CHARS encoding:NSUTF8StringEncoding]];
     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Codabar should start with one of the following: %@", [NSString stringWithCString:START_CHARS encoding:NSUTF8StringEncoding]]
+                                   reason:reason
                                  userInfo:nil];
   }
-  if (![ZXCodaBarReader arrayContains:(char *)END_CHARS length:END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:contents.length - 1]]) {
+  if (!([ZXCodaBarReader arrayContains:(char *)START_END_CHARS length:START_END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:contents.length - 1]]
+      || [ZXCodaBarReader arrayContains:(char *)ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:[[contents uppercaseString] characterAtIndex:contents.length - 1]])) {
+    NSString *reason = [NSString stringWithFormat:@"Codabar should end with one of the following: %@%@",
+                          [NSString stringWithCString:START_END_CHARS encoding:NSUTF8StringEncoding],
+                          [NSString stringWithCString:ALT_START_END_CHARS encoding:NSUTF8StringEncoding]];
     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Codabar should end with one of the following: %@", [NSString stringWithCString:END_CHARS encoding:NSUTF8StringEncoding]]
+                                   reason:reason
                                  userInfo:nil];
   }
   // The start character and the end character are decoded to 10 length each.
