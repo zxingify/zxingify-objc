@@ -78,7 +78,6 @@
 		02B4884A17F5F10000E6285D /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25FE5D4416D1997C00826CDB /* Resources */; };
 		02D81373189864C70081721D /* RSSExpandedStackedBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3916D0B82F00826CDB /* RSSExpandedStackedBlackBox1TestCase.m */; };
 		02D81374189864C70081721D /* RSSExpandedStackedBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3B16D0B83000826CDB /* RSSExpandedStackedBlackBox2TestCase.m */; };
-		02D81375189864C70081721D /* RSSExpandedStackedInternalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25FE5D3F16D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m */; };
 		02D81377189864C70081721D /* AztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FEF166AA0F100E13304 /* AztecBlackBox1TestCase.m */; };
 		02D81378189864C70081721D /* AztecBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FF1166AA0F100E13304 /* AztecBlackBox2TestCase.m */; };
 		02D8137B189864C70081721D /* PDF417BlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B582981816F7B00013634A /* PDF417BlackBox4TestCase.m */; };
@@ -4639,7 +4638,6 @@
 			files = (
 				02D81373189864C70081721D /* RSSExpandedStackedBlackBox1TestCase.m in Sources */,
 				02D81374189864C70081721D /* RSSExpandedStackedBlackBox2TestCase.m in Sources */,
-				02D81375189864C70081721D /* RSSExpandedStackedInternalTestCase.m in Sources */,
 				02D81377189864C70081721D /* AztecBlackBox1TestCase.m in Sources */,
 				02D81378189864C70081721D /* AztecBlackBox2TestCase.m in Sources */,
 				02D8137B189864C70081721D /* PDF417BlackBox4TestCase.m in Sources */,
