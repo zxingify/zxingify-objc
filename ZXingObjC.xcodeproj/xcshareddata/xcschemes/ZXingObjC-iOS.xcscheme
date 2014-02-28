@@ -38,16 +38,6 @@
                ReferencedContainer = "container:ZXingObjC.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "024957EF1898641B003D4E6A"
-               BuildableName = "ZXingObjCTests-iOS copy.octest"
-               BlueprintName = "Blackbox Tests iOS"
-               ReferencedContainer = "container:ZXingObjC.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
