@@ -204,23 +204,23 @@
     for (size_t i = stripe_start; i < stripe_stop; i++) {
       uint32_t rgbPixel = pixelData__[i];
 
-      uint32_t red = (rgbPixel >> 24) & 0xFF;
-      uint32_t green = (rgbPixel >> 16) & 0xFF;
-      uint32_t blue = (rgbPixel >> 8) & 0xFF;
-      uint32_t alpha = (rgbPixel & 0xFF);
+      float red = (rgbPixel>>24)&0xFF;
+      float green = (rgbPixel>>16)&0xFF;
+      float blue = (rgbPixel>>8)&0xFF;
+      float alpha = (float)(rgbPixel & 0xFF) / 255.0f;
 
       // ImageIO premultiplies all PNGs, so we have to "un-premultiply them":
       // http://code.google.com/p/cocos2d-iphone/issues/detail?id=697#c26
-      red   =   red > 0 ? ((red   << 20) / ((alpha + 1) << 2) - 1) >> 10 : 0;
-      green = green > 0 ? ((green << 20) / ((alpha + 1) << 2) - 1) >> 10 : 0;
-      blue  =  blue > 0 ? ((blue  << 20) / ((alpha + 1) << 2) - 1) >> 10 : 0;
+      red = round((red / alpha) - 0.001f);
+      green = round((green / alpha) - 0.001f);
+      blue = round((blue / alpha) - 0.001f);
 
       if (red == green && green == blue) {
         _data[i] = red;
       } else {
-        _data[i] = (306 * red +
-                    601 * green +
-                    117 * blue +
+        _data[i] = (306 * (int)red +
+                    601 * (int)green +
+                    117 * (int)blue +
                     (0x200)) >> 10;	// 0x200 = 1<<9, half an lsb of the result to force rounding
       }
     }
