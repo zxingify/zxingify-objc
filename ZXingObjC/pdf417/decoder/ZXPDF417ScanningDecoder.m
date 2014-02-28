@@ -289,7 +289,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   int tries = 100;
   while (tries-- > 0) {
     for (int i = 0; i < [ambiguousIndexes count]; i++) {
-      codewords[[ambiguousIndexes[i] intValue]] = ambiguousIndexValues[i][(ambiguousIndexCount[i] + 1) % [ambiguousIndexValues[i] count]];
+      codewords[[ambiguousIndexes[i] intValue]] = ambiguousIndexValues[i][(ambiguousIndexCount[i] + 1) % [(NSArray *)ambiguousIndexValues[i] count]];
     }
     ZXDecoderResult *result = [self decodeCodewords:codewords ecLevel:ecLevel erasures:erasureArray];
     if (result) {
@@ -300,7 +300,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
       return nil;
     }
     for (int i = 0; i < [ambiguousIndexes count]; i++) {
-      if (ambiguousIndexCount[i] < [ambiguousIndexValues[i] count] - 1) {
+      if (ambiguousIndexCount[i] < [(NSArray *)ambiguousIndexValues[i] count] - 1) {
         ambiguousIndexCount[i]++;
         break;
       } else {
@@ -601,7 +601,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   NSMutableString *result = [NSMutableString string];
   for (int row = 0; row < [barcodeMatrix count]; row++) {
     [result appendFormat:@"Row %2d: ", row];
-    for (int column = 0; column < [barcodeMatrix[row] count]; column++) {
+    for (int column = 0; column < [(NSArray *)barcodeMatrix[row] count]; column++) {
       ZXPDF417BarcodeValue *barcodeValue = barcodeMatrix[row][column];
       if ([[barcodeValue value] count] == 0) {
         [result appendString:@"        "];

@@ -53,9 +53,10 @@ static NSArray *FOR_BITS = nil;
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelL {
   static ZXErrorCorrectionLevel *thisLevel = nil;
-  if (!thisLevel) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:0 bits:0x01 name:@"L"];
-  }
+  });
   return thisLevel;
 }
 
@@ -64,9 +65,10 @@ static NSArray *FOR_BITS = nil;
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelM {
   static ZXErrorCorrectionLevel *thisLevel = nil;
-  if (!thisLevel) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:1 bits:0x00 name:@"M"];
-  }
+  });
   return thisLevel;
 }
 
@@ -75,9 +77,10 @@ static NSArray *FOR_BITS = nil;
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelQ {
   static ZXErrorCorrectionLevel *thisLevel = nil;
-  if (!thisLevel) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:2 bits:0x03 name:@"Q"];
-  }
+  });
   return thisLevel;
 }
 
@@ -86,9 +89,10 @@ static NSArray *FOR_BITS = nil;
  */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelH {
   static ZXErrorCorrectionLevel *thisLevel = nil;
-  if (!thisLevel) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     thisLevel = [[ZXErrorCorrectionLevel alloc] initWithOrdinal:3 bits:0x02 name:@"H"];
-  }
+  });
   return thisLevel;
 }
 

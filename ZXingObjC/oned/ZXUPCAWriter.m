@@ -21,9 +21,10 @@
 
 - (ZXEAN13Writer *)subWriter {
   static ZXEAN13Writer *subWriter = nil;
-  if (!subWriter) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     subWriter = [[ZXEAN13Writer alloc] init];
-  }
+  });
 
   return subWriter;
 }

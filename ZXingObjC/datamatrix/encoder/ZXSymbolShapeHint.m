@@ -20,30 +20,30 @@
 
 + (ZXSymbolShapeHint *)forceNone {
   static ZXSymbolShapeHint *_forceNone = nil;
-
-  if (!_forceNone) {
+  static dispatch_once_t _onceToken;
+  dispatch_once(&_onceToken, ^{
     _forceNone = [[ZXSymbolShapeHint alloc] init];
-  }
+  });
 
   return _forceNone;
 }
 
 + (ZXSymbolShapeHint *)forceSquare {
   static ZXSymbolShapeHint *_forceSquare = nil;
-
-  if (!_forceSquare) {
+  static dispatch_once_t _onceToken;
+  dispatch_once(&_onceToken, ^{
     _forceSquare = [[ZXSymbolShapeHint alloc] init];
-  }
+  });
 
   return _forceSquare;
 }
 
 + (ZXSymbolShapeHint *)forceRectangle {
   static ZXSymbolShapeHint *_forceRectangle = nil;
-
-  if (!_forceRectangle) {
+  static dispatch_once_t _onceToken;
+  dispatch_once(&_onceToken, ^{
     _forceRectangle = [[ZXSymbolShapeHint alloc] init];
-  }
+  });
 
   return _forceRectangle;
 }

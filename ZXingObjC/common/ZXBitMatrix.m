@@ -190,7 +190,7 @@
     return nil;
   }
 
-  return @[@(left), @(top), @(_width), @(_height)];
+  return @[@(left), @(top), @(width), @(height)];
 }
 
 /**

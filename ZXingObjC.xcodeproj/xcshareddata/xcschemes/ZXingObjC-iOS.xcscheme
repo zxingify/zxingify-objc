@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0460"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -35,16 +35,6 @@
                BlueprintIdentifier = "25403CC3166A96FA00E13304"
                BuildableName = "Unit Tests iOS.octest"
                BlueprintName = "Unit Tests iOS"
-               ReferencedContainer = "container:ZXingObjC.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "024957EF1898641B003D4E6A"
-               BuildableName = "ZXingObjCTests-iOS copy.octest"
-               BlueprintName = "Blackbox Tests iOS"
                ReferencedContainer = "container:ZXingObjC.xcodeproj">
             </BuildableReference>
          </TestableReference>
