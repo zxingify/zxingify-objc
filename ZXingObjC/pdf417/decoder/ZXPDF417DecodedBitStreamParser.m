@@ -111,6 +111,11 @@ static NSArray *EXP900 = nil;
         return nil;
       }
       break;
+    case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+    case MACRO_PDF417_TERMINATOR:
+      // Should not see these outside a macro block
+      if (error) *error = NotFoundErrorInstance();
+      return nil;
     default:
       // Default to text compaction. During testing numerous barcodes
       // appeared to be missing the starting mode. In these cases defaulting
