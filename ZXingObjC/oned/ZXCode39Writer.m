@@ -44,6 +44,9 @@
   int codeWidth = 24 + 1 + (int)length;
   for (int i = 0; i < length; i++) {
     NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    if (indexInString == NSNotFound) {
+      [NSException raise:NSInvalidArgumentException format:@"Bad contents: %@", contents];
+    }
     [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     for (int j = 0; j < widthsLengh; j++) {
       codeWidth += widths[j];
