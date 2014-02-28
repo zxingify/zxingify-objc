@@ -683,20 +683,11 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 // in the includes ...
 
 #if ZXAV(1)+0
-#import <sys/types.h>
-#import <sys/sysctl.h>
-// Gross, I know, but ...
 static bool isIPad() {
   static dispatch_once_t onceToken;
   static int is_ipad = -1;
   dispatch_once(&onceToken, ^{
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
-    char *name = (char *)malloc(size);
-    sysctlbyname("hw.machine", name, &size, NULL, 0);
-    NSString *machine = [NSString stringWithCString:name encoding:NSASCIIStringEncoding];
-    free(name);
-    is_ipad = [machine hasPrefix:@"iPad"];
+    is_ipad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
   });
   return !!is_ipad;
 }
