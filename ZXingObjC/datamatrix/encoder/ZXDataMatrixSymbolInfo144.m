@@ -19,12 +19,7 @@
 @implementation ZXDataMatrixSymbolInfo144
 
 - (id)init {
-  if (self = [super initWithRectangular:NO dataCapacity:1558 errorCodewords:620 matrixWidth:22 matrixHeight:22 dataRegions:36]) {
-    self.rsBlockData = -1; //special! see below
-    self.rsBlockError = 62;
-  }
-
-  return self;
+  return [super initWithRectangular:NO dataCapacity:1558 errorCodewords:620 matrixWidth:22 matrixHeight:22 dataRegions:36 rsBlockData:-1 rsBlockError:62];
 }
 
 - (int)interleavedBlockCount {
