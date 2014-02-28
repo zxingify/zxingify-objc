@@ -69,9 +69,9 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
     if (!detectionResult) {
       return nil;
     }
-    if (i == 0 &&
-        ([detectionResult boundingBox].minY < boundingBox.minY ||
-         [detectionResult boundingBox].maxY > boundingBox.maxY)) {
+    if (i == 0 && detectionResult.boundingBox &&
+        (detectionResult.boundingBox.minY < boundingBox.minY ||
+         detectionResult.boundingBox.maxY > boundingBox.maxY)) {
       boundingBox = [detectionResult boundingBox];
     } else {
       detectionResult.boundingBox = boundingBox;
