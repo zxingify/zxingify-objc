@@ -14,138 +14,43 @@
  * limitations under the License.
  */
 
+#import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
-#import "ZXCaptureDelegate.h"
 
-@protocol ZXReader;
+@protocol ZXCaptureDelegate, ZXReader;
 @class ZXDecodeHints;
 
-#if !TARGET_IPHONE_SIMULATOR
-#if TARGET_OS_EMBEDDED
-#import <AVFoundation/AVFoundation.h>
-#define ZX(x) x
-#define ZXAV(x) x
-#define ZXAVC(x) ,x
-#define ZXQT(x)
-#define ZXCaptureSession AVCaptureSession
-#define ZXCaptureVideoPreviewLayer AVCaptureVideoPreviewLayer
-#define ZXCaptureDevice AVCaptureDevice
-#define ZXCaptureDeviceInput AVCaptureDeviceInput
-#define ZXCaptureVideoOutput AVCaptureVideoDataOutput
-#else
-#import <QTKit/QTKit.h>
-#define ZX(x) x
-#define ZXAV(x)
-#define ZXAVC(x)
-#define ZXQT(x) x
-#define ZXCaptureSession QTCaptureSession
-#define ZXCaptureVideoPreviewLayer QTCaptureLayer
-#define ZXCaptureDevice QTCaptureDevice
-#define ZXCaptureDeviceInput QTCaptureDeviceInput
-#define ZXCaptureVideoOutput QTCaptureDecompressedVideoOutput
-#endif
+@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction>
 
-@interface ZXCapture
-  : NSObject
-ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
-  ZX(
-    ZXCaptureSession *session;
-    ZXCaptureVideoPreviewLayer *layer;
-    ZXCaptureDevice *capture_device;
-    ZXCaptureDeviceInput *input;
-    ZXCaptureVideoOutput *output;
-    )
-    
-  int order_in_skip;
-  int order_out_skip;
-  BOOL running;
-  BOOL on_screen;
-  CALayer *luminance;
-  CALayer *binary;
-  size_t width;
-  size_t height;
-  size_t reported_width;
-  size_t reported_height;
-  NSString *captureToFilename;
-  BOOL hard_stop;
-  int camera;
-  BOOL torch;
-  BOOL mirror;
-  int capture_device_index;
-  CGAffineTransform transform;
-  BOOL cameraIsReady;
-}
-
-@property (nonatomic, weak) id<ZXCaptureDelegate> delegate;
+@property (nonatomic, assign) int camera;
+@property (nonatomic, strong) AVCaptureDevice *captureDevice;
 @property (nonatomic, copy) NSString *captureToFilename;
-@property (nonatomic) CGAffineTransform transform;
-@property (nonatomic, readonly) ZXCaptureVideoOutput *output;
-@property (nonatomic, readonly) CALayer *layer;
-@property (nonatomic, retain) ZXCaptureDevice *captureDevice;
-@property (nonatomic, assign) BOOL mirror;
-@property (nonatomic, readonly) BOOL running;
-@property (nonatomic, retain) id<ZXReader> reader;
-@property (nonatomic, retain) ZXDecodeHints *hints;
-@property (nonatomic, assign) CGFloat rotation;
-
-- (id)init;
-- (CALayer *)luminance;
-- (void)setLuminance:(BOOL)on_off;
-- (CALayer *)binary;
-- (void)setBinary:(BOOL)on_off;
-- (void)start;
-- (void)stop;
-- (void)hard_stop;
-- (void)order_skip;
-
-@property (nonatomic, readonly) BOOL hasFront;
-@property (nonatomic, readonly) BOOL hasBack;
-@property (nonatomic, readonly) BOOL hasTorch;
-
-@property (nonatomic, readonly) int front;
-@property (nonatomic, readonly) int back;
-
-@property (nonatomic) int camera;
-@property (nonatomic) BOOL torch;
-
-@end
-
-#else
-
-@interface ZXCapture : NSObject {
-}
-
-@property (nonatomic,weak) id<ZXCaptureDelegate> delegate;
-@property (nonatomic,copy) NSString *captureToFilename;
-@property (nonatomic) CGAffineTransform transform;
-@property (nonatomic, readonly) void *output;
-@property (weak, nonatomic, readonly) CALayer *layer;
-@property (nonatomic, strong) id<ZXReader> reader;
+@property (nonatomic, weak) id<ZXCaptureDelegate> delegate;
 @property (nonatomic, strong) ZXDecodeHints *hints;
+@property (nonatomic, strong, readonly) CALayer *layer;
+@property (nonatomic, assign) BOOL mirror;
+@property (nonatomic, strong, readonly) AVCaptureVideoDataOutput *output;
+@property (nonatomic, strong) id<ZXReader> reader;
 @property (nonatomic, assign) CGFloat rotation;
+@property (nonatomic, assign, readonly) BOOL running;
+@property (nonatomic, assign) BOOL torch;
+@property (nonatomic, assign) CGAffineTransform transform;
 
-- (id)init;
-- (CALayer *)luminance;
-- (void)setLuminance:(BOOL)on_off;
+- (int)back;
+- (int)front;
+- (BOOL)hasBack;
+- (BOOL)hasFront;
+- (BOOL)hasTorch;
+
 - (CALayer *)binary;
 - (void)setBinary:(BOOL)on_off;
-- (void)start;
-- (void)stop;
+
+- (CALayer *)luminance;
+- (void)setLuminance:(BOOL)on_off;
+
 - (void)hard_stop;
 - (void)order_skip;
-
-@property (nonatomic,readonly) BOOL hasFront;
-@property (nonatomic,readonly) BOOL hasBack;
-@property (nonatomic,readonly) BOOL hasTorch;
-
-@property (nonatomic,readonly) int front;
-@property (nonatomic,readonly) int back;
-
-@property (nonatomic) int camera;
-@property (nonatomic) BOOL torch;
-
-@property (nonatomic, assign) BOOL mirror;
+- (void)start;
+- (void)stop;
 
 @end
-
-#endif
