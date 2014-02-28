@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include <QuartzCore/QuartzCore.h>
+#import <QuartzCore/QuartzCore.h>
 #import "ZXCaptureDelegate.h"
 
 @protocol ZXReader;
@@ -22,7 +22,7 @@
 
 #if !TARGET_IPHONE_SIMULATOR
 #if TARGET_OS_EMBEDDED
-#include <AVFoundation/AVFoundation.h>
+#import <AVFoundation/AVFoundation.h>
 #define ZX(x) x
 #define ZXAV(x) x
 #define ZXAVC(x) ,x

@@ -15,7 +15,7 @@
  */
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
-#include <ImageIO/ImageIO.h>
+#import <ImageIO/ImageIO.h>
 #else
 #import <QuartzCore/QuartzCore.h>
 #endif

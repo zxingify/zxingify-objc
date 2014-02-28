@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "ZXView.h"
+#import "ZXView.h"
 
 @interface ZXCaptureView : ZXView
 

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#include "ZXCapture.h"
+#import "ZXCapture.h"
 
 #if !TARGET_IPHONE_SIMULATOR
-#include "ZXCGImageLuminanceSource.h"
-#include "ZXBinaryBitmap.h"
-#include "ZXDecodeHints.h"
-#include "ZXHybridBinarizer.h"
-#include "ZXMultiFormatReader.h"
-#include "ZXReader.h"
-#include "ZXResult.h"
+#import "ZXCGImageLuminanceSource.h"
+#import "ZXBinaryBitmap.h"
+#import "ZXDecodeHints.h"
+#import "ZXHybridBinarizer.h"
+#import "ZXMultiFormatReader.h"
+#import "ZXReader.h"
+#import "ZXResult.h"
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
 #import <UIKit/UIKit.h>
@@ -683,8 +683,8 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 // in the includes ...
 
 #if ZXAV(1)+0
-#include <sys/types.h>
-#include <sys/sysctl.h>
+#import <sys/types.h>
+#import <sys/sysctl.h>
 // Gross, I know, but ...
 static bool isIPad() {
   static dispatch_once_t onceToken;
