@@ -29,7 +29,14 @@
 @implementation ZXModulusGF
 
 + (ZXModulusGF *)PDF417_GF {
-  return [[ZXModulusGF alloc] initWithModulus:ZXPDF417_NUMBER_OF_CODEWORDS generator:3];
+  static dispatch_once_t pred = 0;
+  __strong static id _mod = nil;
+  dispatch_once(&pred, ^{
+    @autoreleasepool {
+      _mod = [[ZXModulusGF alloc] initWithModulus:ZXPDF417_NUMBER_OF_CODEWORDS generator:3];
+    }
+  });
+  return _mod;
 }
 
 - (id)initWithModulus:(int)modulus generator:(int)generator {
