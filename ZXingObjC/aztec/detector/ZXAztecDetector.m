@@ -127,6 +127,10 @@
   ZXResultPoint *p2 = bullsEyeCorners[2];
   ZXResultPoint *p3 = bullsEyeCorners[3];
 
+  if (![self isValid:p0] || ![self isValid:p1] ||
+      ![self isValid:p2] || ![self isValid:p3]) {
+    return NO;
+  }
   int twoCenterLayers = 2 * self.nbCenterLayers;
 
   // Get the bits around the bull's eye
@@ -591,9 +595,6 @@
   ZXResultPoint *result1 = [[ZXResultPoint alloc] initWithX:centerx + ratio * dx y:centery + ratio * dy];
   ZXResultPoint *result3 = [[ZXResultPoint alloc] initWithX:centerx - ratio * dx y:centery - ratio * dy];
 
-  if (![self isValid:result0] || ![self isValid:result1] || ![self isValid:result2] || ![self isValid:result3]) {
-    return nil;
-  }
   return @[result0, result1, result2, result3];
 }
 
