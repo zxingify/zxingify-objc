@@ -234,6 +234,7 @@
   });
 
   CGContextRelease(context);
+  CGColorSpaceRelease(colorSpace);
 
   _top = top;
   _left = left;
