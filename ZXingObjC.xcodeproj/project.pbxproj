@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0206966618CE5A1A00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
+		0206966818CE5A2300132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
+		0206966918CE5A2A00132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
+		0206966A18CE5A2A00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
+		0206966D18CE5A2C00132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
+		0206966E18CE5A2C00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
 		023E696B18C0EF26001FF123 /* AztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FEF166AA0F100E13304 /* AztecBlackBox1TestCase.m */; };
 		023E696C18C0EF26001FF123 /* AztecBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FF1166AA0F100E13304 /* AztecBlackBox2TestCase.m */; };
 		023E696D18C0EF26001FF123 /* AbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540400E166AA0F100E13304 /* AbstractBlackBoxTestCase.m */; };
@@ -1601,6 +1607,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0206966518CE5A1A00132957 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		0206966718CE5A2300132957 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		02BDA2EE1803109E0039B326 /* Tests-iOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-iOS-Prefix.pch"; sourceTree = "<group>"; };
 		02BDA2EF1803109E0039B326 /* Tests-OSX-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-OSX-Prefix.pch"; sourceTree = "<group>"; };
 		02BDA2F01803109E0039B326 /* ZXingObjCTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ZXingObjCTests-Info.plist"; sourceTree = "<group>"; };
@@ -2329,10 +2337,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0206966D18CE5A2C00132957 /* CoreMedia.framework in Frameworks */,
 				25404395166AB95700E13304 /* ApplicationServices.framework in Frameworks */,
 				25404390166AB91700E13304 /* Cocoa.framework in Frameworks */,
 				25404701166ABC3F00E13304 /* QTKit.framework in Frameworks */,
 				254046FF166ABC2600E13304 /* QuartzCore.framework in Frameworks */,
+				0206966E18CE5A2C00132957 /* AVFoundation.framework in Frameworks */,
 				25404388166AB8CF00E13304 /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2341,12 +2351,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0206966A18CE5A2A00132957 /* AVFoundation.framework in Frameworks */,
 				25404702166ABC4600E13304 /* QTKit.framework in Frameworks */,
 				254046FE166ABC2100E13304 /* QuartzCore.framework in Frameworks */,
 				25404397166AB96000E13304 /* ApplicationServices.framework in Frameworks */,
 				25404389166AB8D600E13304 /* CoreVideo.framework in Frameworks */,
 				25404179166AADAC00E13304 /* SenTestingKit.framework in Frameworks */,
 				2540417D166AADAC00E13304 /* libZXingObjC-osx.a in Frameworks */,
+				0206966918CE5A2A00132957 /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2354,6 +2366,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0206966818CE5A2300132957 /* CoreMedia.framework in Frameworks */,
+				0206966618CE5A1A00132957 /* AVFoundation.framework in Frameworks */,
 				25404703166ABC4B00E13304 /* QTKit.framework in Frameworks */,
 				254046FD166ABC1600E13304 /* QuartzCore.framework in Frameworks */,
 				254043B7166ABA7800E13304 /* CoreVideo.framework in Frameworks */,
@@ -3479,7 +3493,9 @@
 			isa = PBXGroup;
 			children = (
 				25404394166AB95700E13304 /* ApplicationServices.framework */,
+				0206966518CE5A1A00132957 /* AVFoundation.framework */,
 				2540438F166AB91700E13304 /* Cocoa.framework */,
+				0206966718CE5A2300132957 /* CoreMedia.framework */,
 				25404387166AB8CF00E13304 /* CoreVideo.framework */,
 				25404700166ABC3F00E13304 /* QTKit.framework */,
 				254046FC166ABC1600E13304 /* QuartzCore.framework */,
@@ -5380,8 +5396,9 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\\\"$(SDKROOT)/Developer/Library/Frameworks\\\"",
+					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
@@ -5545,8 +5562,9 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\\\"$(SDKROOT)/Developer/Library/Frameworks\\\"",
+					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
@@ -5563,8 +5581,9 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\\\"$(SDKROOT)/Developer/Library/Frameworks\\\"",
+					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
