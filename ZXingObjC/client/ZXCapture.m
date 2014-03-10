@@ -57,6 +57,7 @@
     _reader = [ZXMultiFormatReader reader];
     _rotation = 0.0f;
     _running = NO;
+    _sessionPreset = AVCaptureSessionPresetMedium;
     _transform = CGAffineTransformIdentity;
   }
 
@@ -112,6 +113,16 @@
     self.hardStop = NO;
   }
   [self startStop];
+}
+
+- (void)setFocusMode:(AVCaptureFocusMode)focusMode {
+  if ([self.input.device isFocusModeSupported:focusMode] && self.input.device.focusMode != focusMode) {
+    _focusMode = focusMode;
+
+    [self.input.device lockForConfiguration:nil];
+    self.input.device.focusMode = focusMode;
+    [self.input.device unlockForConfiguration];
+  }
 }
 
 - (void)setMirror:(BOOL)mirror {
@@ -301,20 +312,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
     CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
 
-    if (self.captureToFilename) {
-      CGImageRef image =  [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-      NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
-      CGImageDestinationRef dest = CGImageDestinationCreateWithURL((__bridge CFURLRef)url, (__bridge CFStringRef)@"public.png", 1, nil);
-      CGImageDestinationAddImage(dest, image, nil);
-      CGImageDestinationFinalize(dest);
-      CGImageRelease(image);
-      CFRelease(dest);
-      self.captureToFilename = nil;
-    }
-
     CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
     CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:self.rotation];
     CGImageRelease(videoFrameImage);
+
+    if (self.captureToFilename) {
+      NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
+      CGImageDestinationRef dest = CGImageDestinationCreateWithURL((__bridge CFURLRef)url, (__bridge CFStringRef)@"public.png", 1, nil);
+      CGImageDestinationAddImage(dest, rotatedImage, nil);
+      CGImageDestinationFinalize(dest);
+      CFRelease(dest);
+      self.captureToFilename = nil;
+    }
 
     ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
     CGImageRelease(rotatedImage);
@@ -329,7 +338,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
 
     if (self.binaryLayer || self.delegate) {
-      ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
+      ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:self.invert ? [source invert] : source];
 
       if (self.binaryLayer) {
         CGImageRef image = [binarizer createImage];
@@ -421,7 +430,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         position = AVCaptureDevicePositionFront;
       }
 
-      for(unsigned int i = 0; i < [devices count]; ++i) {
+      for (unsigned int i = 0; i < [devices count]; ++i) {
         AVCaptureDevice *dev = [devices objectAtIndex:i];
         if (dev.position == position) {
           self.captureDeviceIndex = i;
@@ -437,7 +446,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   }
 
   if (!zxd) {
-    zxd =  [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    zxd = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   }
 
   self.captureDevice = zxd;
@@ -457,10 +466,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
   if (zxd) {
     self.input = [AVCaptureDeviceInput deviceInputWithDevice:zxd error:nil];
+    self.focusMode = self.focusMode;
   }
 
   if (self.input) {
-    self.session.sessionPreset = AVCaptureSessionPresetMedium;
+    self.session.sessionPreset = self.sessionPreset;
     [self.session addInput:self.input];
   }
 

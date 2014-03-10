@@ -20,8 +20,8 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) ZXCapture* capture;
-@property (nonatomic, weak) IBOutlet UILabel* decodedLabel;
+@property (nonatomic, strong) ZXCapture *capture;
+@property (nonatomic, weak) IBOutlet UILabel *decodedLabel;
 
 @end
 
@@ -33,10 +33,9 @@
   [super viewDidLoad];
 
   self.capture = [[ZXCapture alloc] init];
-  self.capture.rotation = 90.0f;
-
-  // Use the back camera
   self.capture.camera = self.capture.back;
+  self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+  self.capture.rotation = 90.0f;
 
   self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];

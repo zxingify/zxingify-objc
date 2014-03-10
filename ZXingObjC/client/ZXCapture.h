@@ -26,13 +26,16 @@
 @property (nonatomic, strong) AVCaptureDevice *captureDevice;
 @property (nonatomic, copy) NSString *captureToFilename;
 @property (nonatomic, weak) id<ZXCaptureDelegate> delegate;
+@property (nonatomic, assign) AVCaptureFocusMode focusMode;
 @property (nonatomic, strong) ZXDecodeHints *hints;
+@property (nonatomic, assign) BOOL invert;
 @property (nonatomic, strong, readonly) CALayer *layer;
 @property (nonatomic, assign) BOOL mirror;
 @property (nonatomic, strong, readonly) AVCaptureVideoDataOutput *output;
 @property (nonatomic, strong) id<ZXReader> reader;
 @property (nonatomic, assign) CGFloat rotation;
 @property (nonatomic, assign, readonly) BOOL running;
+@property (nonatomic, copy) NSString *sessionPreset;
 @property (nonatomic, assign) BOOL torch;
 @property (nonatomic, assign) CGAffineTransform transform;
 
