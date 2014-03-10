@@ -49,6 +49,7 @@
   if (self = [super init]) {
     _captureDeviceIndex = -1;
     _captureQueue = dispatch_queue_create("com.zxing.captureQueue", NULL);
+    _focusMode = AVCaptureFocusModeContinuousAutoFocus;
     _hardStop = NO;
     _hints = [ZXDecodeHints hints];
     _onScreen = NO;
