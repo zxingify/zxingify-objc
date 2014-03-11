@@ -166,20 +166,21 @@
 - (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations {
   NSUInteger s = [errorLocations count];
   NSMutableArray *result = [NSMutableArray array];
+  ZXGenericGF *field = self.field;
   for (int i = 0; i < s; i++) {
-    int xiInverse = [self.field inverse:[errorLocations[i] intValue]];
+    int xiInverse = [field inverse:[errorLocations[i] intValue]];
     int denominator = 1;
     for (int j = 0; j < s; j++) {
       if (i != j) {
-        int term = [self.field multiply:[errorLocations[j] intValue] b:xiInverse];
+        int term = [field multiply:[errorLocations[j] intValue] b:xiInverse];
         int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
-        denominator = [self.field multiply:denominator b:termPlus1];
+        denominator = [field multiply:denominator b:termPlus1];
       }
     }
 
-    [result addObject:@([self.field multiply:[errorEvaluator evaluateAt:xiInverse] b:[self.field inverse:denominator]])];
-    if (self.field.generatorBase != 0) {
-      result[i] = @([self.field multiply:[result[i] intValue] b:xiInverse]);
+    [result addObject:@([field multiply:[errorEvaluator evaluateAt:xiInverse] b:[self.field inverse:denominator]])];
+    if (field.generatorBase != 0) {
+      result[i] = @([field multiply:[result[i] intValue] b:xiInverse]);
     }
   }
 

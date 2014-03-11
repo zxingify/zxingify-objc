@@ -22,7 +22,6 @@
 @property (nonatomic, assign) int *expTable;
 @property (nonatomic, assign) int *logTable;
 @property (nonatomic, assign) int primitive;
-@property (nonatomic, assign) BOOL initialized;
 
 @end
 
@@ -39,53 +38,31 @@
     _primitive = primitive;
     _size = size;
     _generatorBase = b;
+
+    _expTable = (int *)malloc(self.size * sizeof(int));
+    _logTable = (int *)malloc(self.size * sizeof(int));
+    int x = 1;
+    for (int i = 0; i < self.size; i++) {
+      _expTable[i] = x;
+      x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
+      if (x >= self.size) {
+        x ^= self.primitive;
+        x &= self.size - 1;
+      }
+    }
+
+    for (int i = 0; i < self.size-1; i++) {
+      _logTable[_expTable[i]] = i;
+    }
+    // logTable[0] == 0 but this should never be used
+    int zeroInt = 0;
+    _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
+
+    int oneInt = 1;
+    _one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
   }
 
   return self;
-}
-
-- (void)initialize {
-  _expTable = (int *)malloc(self.size * sizeof(int));
-  _logTable = (int *)malloc(self.size * sizeof(int));
-  int x = 1;
-  for (int i = 0; i < self.size; i++) {
-    _expTable[i] = x;
-    x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
-    if (x >= self.size) {
-      x ^= self.primitive;
-      x &= self.size - 1;
-    }
-  }
-
-  for (int i = 0; i < self.size-1; i++) {
-    _logTable[_expTable[i]] = i;
-  }
-  // logTable[0] == 0 but this should never be used
-  int zeroInt = 0;
-  _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
-
-  int oneInt = 1;
-  _one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
-
-  self.initialized = YES;
-}
-
-- (void)checkInit {
-  if (!self.initialized) {
-    [self initialize];
-  }
-}
-
-- (ZXGenericGFPoly *)zero {
-  [self checkInit];
-
-  return _zero;
-}
-
-- (ZXGenericGFPoly *)one {
-  [self checkInit];
-
-  return _one;
 }
 
 + (ZXGenericGF *)AztecData12 {
@@ -151,8 +128,6 @@
 }
 
 - (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int)coefficient {
-  [self checkInit];
-
   if (degree < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
@@ -177,37 +152,31 @@
 }
 
 - (int)exp:(int)a {
-  [self checkInit];
-
-  return self.expTable[a];
+  return _expTable[a];
 }
 
 - (int)log:(int)a {
-  [self checkInit];
-
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return self.logTable[a];
+
+  return _logTable[a];
 }
 
 - (int)inverse:(int)a {
-  [self checkInit];
-
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return self.expTable[self.size - self.logTable[a] - 1];
+
+  return _expTable[_size - _logTable[a] - 1];
 }
 
 - (int)multiply:(int)a b:(int)b {
-  [self checkInit];
-
   if (a == 0 || b == 0) {
     return 0;
   }
 
-  return self.expTable[(self.logTable[a] + self.logTable[b]) % (self.size - 1)];
+  return _expTable[(_logTable[a] + _logTable[b]) % (_size - 1)];
 }
 
 - (BOOL)isEqual:(ZXGenericGF *)object {

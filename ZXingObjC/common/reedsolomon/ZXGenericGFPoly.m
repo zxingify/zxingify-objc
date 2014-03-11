@@ -79,16 +79,18 @@
     return [self coefficient:0];
   }
   int size = self.coefficientsLen;
+  int *coefficients = self.coefficients;
+  ZXGenericGF *field = self.field;
   if (a == 1) {
     int result = 0;
     for (int i = 0; i < size; i++) {
-      result = [ZXGenericGF addOrSubtract:result b:self.coefficients[i]];
+      result = [ZXGenericGF addOrSubtract:result b:coefficients[i]];
     }
     return result;
   }
-  int result = self.coefficients[0];
+  int result = coefficients[0];
   for (int i = 1; i < size; i++) {
-    result = [ZXGenericGF addOrSubtract:[self.field multiply:a b:result] b:self.coefficients[i]];
+    result = [ZXGenericGF addOrSubtract:[field multiply:a b:result] b:coefficients[i]];
   }
   return result;
 }
@@ -130,11 +132,12 @@
 }
 
 - (ZXGenericGFPoly *) multiply:(ZXGenericGFPoly *)other {
-  if (![self.field isEqual:other.field]) {
+  ZXGenericGF *field = self.field;
+  if (![field isEqual:other.field]) {
     [NSException raise:NSInvalidArgumentException format:@"ZXGenericGFPolys do not have same GenericGF field"];
   }
   if (self.zero || other.zero) {
-    return self.field.zero;
+    return field.zero;
   }
   int *aCoefficients = self.coefficients;
   int aLength = self.coefficientsLen;
@@ -148,10 +151,10 @@
     int aCoeff = aCoefficients[i];
     for (int j = 0; j < bLength; j++) {
       product[i + j] = [ZXGenericGF addOrSubtract:product[i + j]
-                                                b:[self.field multiply:aCoeff b:bCoefficients[j]]];
+                                                b:[field multiply:aCoeff b:bCoefficients[j]]];
     }
   }
-  return [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product coefficientsLen:productLen];
+  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:productLen];
 }
 
 - (ZXGenericGFPoly *)multiplyScalar:(int)scalar {
@@ -162,11 +165,13 @@
     return self;
   }
   int size = self.coefficientsLen;
+  int *coefficients = self.coefficients;
+  ZXGenericGF *field = self.field;
   int product[size];
   for (int i = 0; i < size; i++) {
-    product[i] = [self.field multiply:self.coefficients[i] b:scalar];
+    product[i] = [field multiply:coefficients[i] b:scalar];
   }
-  return [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size];
+  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:size];
 }
 
 - (ZXGenericGFPoly *)multiplyByMonomial:(int)degree coefficient:(int)coefficient {
@@ -177,16 +182,18 @@
     return self.field.zero;
   }
   int size = self.coefficientsLen;
+  int *coefficients = self.coefficients;
+  ZXGenericGF *field = self.field;
   int product[size + degree];
   for (int i = 0; i < size + degree; i++) {
     if (i < size) {
-      product[i] = [self.field multiply:self.coefficients[i] b:coefficient];
+      product[i] = [field multiply:coefficients[i] b:coefficient];
     } else {
       product[i] = 0;
     }
   }
 
-  return [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size + degree];
+  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:size + degree];
 }
 
 - (NSArray *)divide:(ZXGenericGFPoly *)other {
@@ -203,11 +210,12 @@
   int denominatorLeadingTerm = [other coefficient:other.degree];
   int inverseDenominatorLeadingTerm = [self.field inverse:denominatorLeadingTerm];
 
+  ZXGenericGF *field = self.field;
   while ([remainder degree] >= other.degree && !remainder.zero) {
     int degreeDifference = remainder.degree - other.degree;
-    int scale = [self.field multiply:[remainder coefficient:remainder.degree] b:inverseDenominatorLeadingTerm];
+    int scale = [field multiply:[remainder coefficient:remainder.degree] b:inverseDenominatorLeadingTerm];
     ZXGenericGFPoly *term = [other multiplyByMonomial:degreeDifference coefficient:scale];
-    ZXGenericGFPoly *iterationQuotient = [self.field buildMonomial:degreeDifference coefficient:scale];
+    ZXGenericGFPoly *iterationQuotient = [field buildMonomial:degreeDifference coefficient:scale];
     quotient = [quotient addOrSubtract:iterationQuotient];
     remainder = [remainder addOrSubtract:term];
   }
