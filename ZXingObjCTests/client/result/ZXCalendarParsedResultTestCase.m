@@ -241,24 +241,24 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
                  longitude:(double)longitude {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  STAssertEquals(result.type, kParsedResultTypeCalendar, @"Types do not match");
+  XCTAssertEqual(result.type, kParsedResultTypeCalendar, @"Types do not match");
   ZXCalendarParsedResult *calResult = (ZXCalendarParsedResult *)result;
-  STAssertEqualObjects(calResult.description, description, @"Descriptions do not match");
-  STAssertEqualObjects(calResult.summary, summary, @"Summaries do not match");
-  STAssertEqualObjects(calResult.location, location, @"Locations do not match");
-  STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.start], startString, @"Starts do not match");
-  STAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.end], endString, @"Ends do not match");
-  STAssertEqualObjects(organizer, calResult.organizer, @"Organizers do not match");
-  STAssertEqualObjects(attendees, calResult.attendees, @"Attendees do not match");
+  XCTAssertEqualObjects(calResult.description, description, @"Descriptions do not match");
+  XCTAssertEqualObjects(calResult.summary, summary, @"Summaries do not match");
+  XCTAssertEqualObjects(calResult.location, location, @"Locations do not match");
+  XCTAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.start], startString, @"Starts do not match");
+  XCTAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.end], endString, @"Ends do not match");
+  XCTAssertEqualObjects(organizer, calResult.organizer, @"Organizers do not match");
+  XCTAssertEqualObjects(attendees, calResult.attendees, @"Attendees do not match");
   [self assertEqualOrNAN:latitude actual:calResult.latitude];
   [self assertEqualOrNAN:longitude actual:calResult.longitude];
 }
 
 - (void)assertEqualOrNAN:(double)expected actual:(double)actual {
   if (isnan(expected)) {
-    STAssertTrue(isnan(actual), @"Expected %f to be NAN", actual);
+    XCTAssertTrue(isnan(actual), @"Expected %f to be NAN", actual);
   } else {
-    STAssertEqualsWithAccuracy(actual, expected, EPSILON, @"Expected %f to equal %f", actual, expected);
+    XCTAssertEqualWithAccuracy(actual, expected, EPSILON, @"Expected %f to equal %f", actual, expected);
   }
 }
 

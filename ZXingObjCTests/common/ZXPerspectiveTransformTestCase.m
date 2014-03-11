@@ -57,8 +57,8 @@ static float EPSILON = 0.0001f;
                                 pt:(ZXPerspectiveTransform *)pt {
   float points[2] = {sourceX, sourceY};
   [pt transformPoints:points pointsLen:2];
-  STAssertEqualsWithAccuracy(points[0], expectedX, EPSILON, @"Expected %f to equal %f", points[0], expectedX);
-  STAssertEqualsWithAccuracy(points[1], expectedY, EPSILON, @"Expected %f to equal %f", points[1], expectedY);
+  XCTAssertEqualWithAccuracy(points[0], expectedX, EPSILON, @"Expected %f to equal %f", points[0], expectedX);
+  XCTAssertEqualWithAccuracy(points[1], expectedY, EPSILON, @"Expected %f to equal %f", points[1], expectedY);
 }
 
 @end

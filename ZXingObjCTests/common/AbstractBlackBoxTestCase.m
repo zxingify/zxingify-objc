@@ -128,7 +128,7 @@
 
 - (void)testBlackBoxCountingResults:(BOOL)assertOnFailure {
   if (self.testResults.count == 0) {
-    STFail(@"No test results");
+    XCTFail(@"No test results");
   }
 
   NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -161,7 +161,7 @@
       expectedText = [self readFileAsString:expectedTextFile encoding:NSUTF8StringEncoding];
     } else {
       NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:self.testBase];
-      STAssertNotNil(expectedTextFile, @"Expected text does not exist");
+      XCTAssertNotNil(expectedTextFile, @"Expected text does not exist");
       expectedText = [self readFileAsString:expectedTextFile encoding:NSISOLatin1StringEncoding];
     }
 
@@ -240,11 +240,11 @@
     for (int x = 0; x < testCount; x++) {
       TestResult *testResult = self.testResults[x];
       NSString *label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images failed", testResult.rotation];
-      STAssertTrue(passedCounts[x] >= testResult.mustPassCount, label);
-      STAssertTrue(tryHarderCounts[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
+      XCTAssertTrue(passedCounts[x] >= testResult.mustPassCount, @"%@", label);
+      XCTAssertTrue(tryHarderCounts[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
       label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images misread", testResult.rotation];
-      STAssertTrue(misreadCounts[x] <= testResult.maxMisreads, label);
-      STAssertTrue(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads, @"Try harder, %@", label);
+      XCTAssertTrue(misreadCounts[x] <= testResult.maxMisreads, @"%@", label);
+      XCTAssertTrue(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads, @"Try harder, %@", label);
     }
   }
 }

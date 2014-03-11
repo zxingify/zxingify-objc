@@ -182,11 +182,11 @@
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   NSArray *pairs = [rssExpandedReader decodeRow2pairs:rowNumber row:row];
   if (!pairs) {
-    STFail(@"Unable to decode pairs");
+    XCTFail(@"Unable to decode pairs");
     return;
   }
   ZXBitArray *binary = [ZXBitArrayBuilder buildBitArray:pairs];
-  STAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
+  XCTAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
 }
 
 @end

@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-/**
- * Tests for the ECC200 error correction.
- */
-
-@interface ZXDataMatrixErrorCorrectionTestCase : SenTestCase
+@interface ZXDataMatrixErrorCorrectionTestCase : XCTestCase
 
 @end

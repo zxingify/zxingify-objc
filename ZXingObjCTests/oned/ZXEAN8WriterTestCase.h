@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXEAN8WriterTestCase : SenTestCase
+@interface ZXEAN8WriterTestCase : XCTestCase
 
 @end

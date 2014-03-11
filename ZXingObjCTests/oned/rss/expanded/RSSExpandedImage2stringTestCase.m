@@ -218,12 +218,12 @@
   NSError *error = nil;
   ZXResult *result = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:&error];
   if (!result) {
-    STFail([error description]);
+    XCTFail(@"%@", [error description]);
     return;
   }
 
-  STAssertEquals(result.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected barcode format to be kBarcodeFormatRSSExpanded");
-  STAssertEqualObjects(result.text, expected, @"Expected %@ to equal %@", result.text, expected);
+  XCTAssertEqual(result.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected barcode format to be kBarcodeFormatRSSExpanded");
+  XCTAssertEqualObjects(result.text, expected, @"Expected %@ to equal %@", result.text, expected);
 }
 
 @end

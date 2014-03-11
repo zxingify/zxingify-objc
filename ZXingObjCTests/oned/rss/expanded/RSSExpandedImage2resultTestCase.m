@@ -40,15 +40,15 @@
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXResult *theResult = [rssExpandedReader decodeRow:rowNumber row:row hints:nil error:&error];
   if (!theResult) {
-    STFail([error description]);
+    XCTFail(@"%@", [error description]);
     return;
   }
 
-  STAssertEquals(theResult.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected format to be kBarcodeFormatRSSExpanded");
+  XCTAssertEqual(theResult.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected format to be kBarcodeFormatRSSExpanded");
 
   ZXParsedResult *result = [ZXResultParser parseResult:theResult];
 
-  STAssertEqualObjects(result, expected, @"Result does not match expected");
+  XCTAssertEqualObjects(result, expected, @"Result does not match expected");
 }
 
 @end

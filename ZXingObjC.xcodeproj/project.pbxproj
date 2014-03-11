@@ -121,6 +121,7 @@
 		023E69D418C0EF55001FF123 /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D0166AA0F100E13304 /* QRCodeBlackBox4TestCase.m */; };
 		023E69D518C0EF55001FF123 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D2166AA0F100E13304 /* QRCodeBlackBox5TestCase.m */; };
 		023E69D618C0EF55001FF123 /* QRCodeBlackBox6TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D4166AA0F100E13304 /* QRCodeBlackBox6TestCase.m */; };
+		0262578018CFA49800E2395E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0262576918CFA12000E2395E /* XCTest.framework */; };
 		02B4884A17F5F10000E6285D /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25FE5D4416D1997C00826CDB /* Resources */; };
 		2504D4C616F698AA00DF8882 /* ZXInvertedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2504D4C716F698AA00DF8882 /* ZXInvertedLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D4C516F698AA00DF8882 /* ZXInvertedLuminanceSource.m */; };
@@ -220,7 +221,6 @@
 		25389B9818010DCB00772392 /* ZXPDF417DetectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B9118010D9B00772392 /* ZXPDF417DetectorTest.m */; };
 		25389B9918010DCB00772392 /* ZXPDF417DetectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B9118010D9B00772392 /* ZXPDF417DetectorTest.m */; };
 		25403CB7166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
-		25403CC6166A96FA00E13304 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CC5166A96FA00E13304 /* SenTestingKit.framework */; };
 		25403CC9166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
 		25403CCC166A96FA00E13304 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */; };
 		25403CE3166A98C700E13304 /* ZXingObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CBB166A96FA00E13304 /* ZXingObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -648,7 +648,6 @@
 		2540415F166AAA2F00E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540415E166AAA2F00E13304 /* CoreVideo.framework */; };
 		25404160166AAAAB00E13304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404145166AA16200E13304 /* UIKit.framework */; };
 		25404161166AAAD900E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540415E166AAA2F00E13304 /* CoreVideo.framework */; };
-		25404179166AADAC00E13304 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CC5166A96FA00E13304 /* SenTestingKit.framework */; };
 		2540417D166AADAC00E13304 /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404166166AADAC00E13304 /* libZXingObjC-osx.a */; };
 		2540418F166AAE6000E13304 /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CEF166A999D00E13304 /* ZXAztecDecoder.m */; };
 		25404190166AAE6000E13304 /* ZXAztecDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CF2166A999D00E13304 /* ZXAztecDetector.m */; };
@@ -1609,6 +1608,10 @@
 /* Begin PBXFileReference section */
 		0206966518CE5A1A00132957 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		0206966718CE5A2300132957 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		0262575418CFA03200E2395E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		0262575618CFA03200E2395E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		0262575818CFA03200E2395E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		0262576918CFA12000E2395E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		02BDA2EE1803109E0039B326 /* Tests-iOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-iOS-Prefix.pch"; sourceTree = "<group>"; };
 		02BDA2EF1803109E0039B326 /* Tests-OSX-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-OSX-Prefix.pch"; sourceTree = "<group>"; };
 		02BDA2F01803109E0039B326 /* ZXingObjCTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ZXingObjCTests-Info.plist"; sourceTree = "<group>"; };
@@ -1657,8 +1660,7 @@
 		25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25403CB6166A96FA00E13304 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		25403CBB166A96FA00E13304 /* ZXingObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXingObjC.h; sourceTree = "<group>"; };
-		25403CC4166A96FA00E13304 /* Unit Tests iOS.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests iOS.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		25403CC5166A96FA00E13304 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		25403CC4166A96FA00E13304 /* Unit Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25403CE1166A979700E13304 /* ios-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		25403CEE166A999D00E13304 /* ZXAztecDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDecoder.h; sourceTree = "<group>"; };
 		25403CEF166A999D00E13304 /* ZXAztecDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDecoder.m; sourceTree = "<group>"; };
@@ -2233,7 +2235,7 @@
 		2540415B166AA86900E13304 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		2540415E166AAA2F00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		25404166166AADAC00E13304 /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		25404178166AADAC00E13304 /* Unit Tests OS X.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests OS X.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25404178166AADAC00E13304 /* Unit Tests OS X.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests OS X.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2540418D166AADEF00E13304 /* osx-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		25404387166AB8CF00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		2540438F166AB91700E13304 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -2327,7 +2329,6 @@
 				2540415F166AAA2F00E13304 /* CoreVideo.framework in Frameworks */,
 				25403CC9166A96FA00E13304 /* Foundation.framework in Frameworks */,
 				2540415D166AA87000E13304 /* ImageIO.framework in Frameworks */,
-				25403CC6166A96FA00E13304 /* SenTestingKit.framework in Frameworks */,
 				25404160166AAAAB00E13304 /* UIKit.framework in Frameworks */,
 				25403CCC166A96FA00E13304 /* libZXingObjC-iOS.a in Frameworks */,
 			);
@@ -2351,12 +2352,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0262578018CFA49800E2395E /* XCTest.framework in Frameworks */,
 				0206966A18CE5A2A00132957 /* AVFoundation.framework in Frameworks */,
 				25404702166ABC4600E13304 /* QTKit.framework in Frameworks */,
 				254046FE166ABC2100E13304 /* QuartzCore.framework in Frameworks */,
 				25404397166AB96000E13304 /* ApplicationServices.framework in Frameworks */,
 				25404389166AB8D600E13304 /* CoreVideo.framework in Frameworks */,
-				25404179166AADAC00E13304 /* SenTestingKit.framework in Frameworks */,
 				2540417D166AADAC00E13304 /* libZXingObjC-osx.a in Frameworks */,
 				0206966918CE5A2A00132957 /* CoreMedia.framework in Frameworks */,
 			);
@@ -2379,6 +2380,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0262575318CFA03200E2395E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0262576918CFA12000E2395E /* XCTest.framework */,
+				0262575418CFA03200E2395E /* XCTest.framework */,
+				0262575618CFA03200E2395E /* Foundation.framework */,
+				0262575818CFA03200E2395E /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		02BDA2ED1803109E0039B326 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2426,6 +2438,7 @@
 				25403CB9166A96FA00E13304 /* Supporting Files */,
 				25403CB5166A96FA00E13304 /* iOS Frameworks */,
 				2540438A166AB8EA00E13304 /* OS X Frameworks */,
+				0262575318CFA03200E2395E /* Frameworks */,
 				25403CB4166A96FA00E13304 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -2434,9 +2447,9 @@
 			isa = PBXGroup;
 			children = (
 				25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */,
-				25403CC4166A96FA00E13304 /* Unit Tests iOS.octest */,
+				25403CC4166A96FA00E13304 /* Unit Tests iOS.xctest */,
 				25404166166AADAC00E13304 /* libZXingObjC-osx.a */,
-				25404178166AADAC00E13304 /* Unit Tests OS X.octest */,
+				25404178166AADAC00E13304 /* Unit Tests OS X.xctest */,
 				2540439E166ABA0A00E13304 /* ZXingObjC.framework */,
 			);
 			name = Products;
@@ -2450,7 +2463,6 @@
 				2540415E166AAA2F00E13304 /* CoreVideo.framework */,
 				25403CB6166A96FA00E13304 /* Foundation.framework */,
 				2540415B166AA86900E13304 /* ImageIO.framework */,
-				25403CC5166A96FA00E13304 /* SenTestingKit.framework */,
 				25404145166AA16200E13304 /* UIKit.framework */,
 			);
 			name = "iOS Frameworks";
@@ -4277,7 +4289,6 @@
 				25403CBF166A96FA00E13304 /* Sources */,
 				25403CC0166A96FA00E13304 /* Frameworks */,
 				25403CC1166A96FA00E13304 /* Resources */,
-				25403CC2166A96FA00E13304 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -4286,8 +4297,8 @@
 			);
 			name = "Unit Tests iOS";
 			productName = ZXingObjCTests;
-			productReference = 25403CC4166A96FA00E13304 /* Unit Tests iOS.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 25403CC4166A96FA00E13304 /* Unit Tests iOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		25404165166AADAC00E13304 /* ZXingObjC-osx */ = {
 			isa = PBXNativeTarget;
@@ -4313,7 +4324,6 @@
 				25404173166AADAC00E13304 /* Sources */,
 				25404174166AADAC00E13304 /* Frameworks */,
 				25404175166AADAC00E13304 /* Resources */,
-				25404176166AADAC00E13304 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -4322,7 +4332,7 @@
 			);
 			name = "Unit Tests OS X";
 			productName = ZXingObjCTests;
-			productReference = 25404178166AADAC00E13304 /* Unit Tests OS X.octest */;
+			productReference = 25404178166AADAC00E13304 /* Unit Tests OS X.xctest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		2540439D166ABA0A00E13304 /* OS X Framework */ = {
@@ -4349,8 +4359,14 @@
 		25403CAA166A96F900E13304 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = zxing;
+				TargetAttributes = {
+					25404177166AADAC00E13304 = {
+						TestTargetID = 25404165166AADAC00E13304;
+					};
+				};
 			};
 			buildConfigurationList = 25403CAD166A96F900E13304 /* Build configuration list for PBXProject "ZXingObjC" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -4398,35 +4414,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		25403CC2166A96FA00E13304 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-		25404176166AADAC00E13304 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		25403CAF166A96FA00E13304 /* Sources */ = {
@@ -5396,15 +5383,15 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Distribution;
 		};
@@ -5433,16 +5420,24 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Distribution;
 		};
@@ -5561,15 +5556,15 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -5579,15 +5574,15 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -5633,16 +5628,24 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -5652,16 +5655,24 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};

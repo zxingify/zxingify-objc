@@ -27,32 +27,32 @@
 	int firstRowNumber = [binaryMap height] / 3;
   NSError *error = nil;
   ZXBitArray *firstRow = [binaryMap blackRow:firstRowNumber row:nil error:&error];
-  STAssertNil(error, [error description]);
+  XCTAssertNil(error, @"%@", [error description]);
 
   if ([rssExpandedReader decodeRow2pairs:firstRowNumber row:firstRow]) {
-    STFail(@"Not found error expected");
+    XCTFail(@"Not found error expected");
   }
 
-  STAssertEquals([[rssExpandedReader rows] count], (NSUInteger)1, @"the first row not recognized");
+  XCTAssertEqual([[rssExpandedReader rows] count], (NSUInteger)1, @"the first row not recognized");
   ZXExpandedRow *firstExpandedRow = rssExpandedReader.rows[0];
-  STAssertEquals(firstExpandedRow.rowNumber, firstRowNumber, @"the first row number doesn't match");
+  XCTAssertEqual(firstExpandedRow.rowNumber, firstRowNumber, @"the first row number doesn't match");
 
-  STAssertEquals([firstExpandedRow.pairs count], (NSUInteger)2, @"wrong number if pairs in the first row");
+  XCTAssertEqual([firstExpandedRow.pairs count], (NSUInteger)2, @"wrong number if pairs in the first row");
 
   [firstExpandedRow.pairs[1] finderPattern].startEnd[1] = @0;
 
 	int secondRowNumber = 2 * [binaryMap height] / 3;
   error = nil;
   ZXBitArray *secondRow = [binaryMap blackRow:secondRowNumber row:nil error:&error];
-  STAssertNil(error, [error description]);
+  XCTAssertNil(error, @"%@", [error description]);
   [secondRow reverse];
 
   NSMutableArray* totalPairs = [rssExpandedReader decodeRow2pairs:secondRowNumber row:secondRow];
   error = nil;
 
   ZXResult *result = [rssExpandedReader constructResult:totalPairs error:&error];
-  STAssertNil(error, [error description]);
-  STAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
+  XCTAssertNil(error, @"%@", [error description]);
+  XCTAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
 }
 
 - (void)testCompleteDecoding {
@@ -62,8 +62,8 @@
 
   NSError *error = nil;
   ZXResult *result = [rssExpandedReader decode:binaryMap error:&error];
-  STAssertNil(error, [error description]);
-  STAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
+  XCTAssertNil(error, @"%@", [error description]);
+  XCTAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
 }
 
 @end

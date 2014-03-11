@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXPerspectiveTransformTestCase : SenTestCase
+@interface ZXPerspectiveTransformTestCase : XCTestCase
 
 @end

@@ -29,7 +29,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
                                                      version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\u00f1\u00f2\u00f3";
-  STAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
 
 - (void)testSimpleSJIS {
@@ -43,7 +43,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
                                                      version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\uff61\uff62\uff63\uff90";
-  STAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
 
 - (void)testECI {
@@ -58,7 +58,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
                                                      version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\u00ed\u00f3\u00fa";
-  STAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
 
 - (void)testHanzi {
@@ -70,7 +70,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
                                                      version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\u963f";
-  STAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
 
 @end

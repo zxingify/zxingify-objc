@@ -34,7 +34,7 @@ const int BIT_MATRIX_POINTS[BIT_MATRIX_POINTS_LEN] = { 1, 2, 2, 0, 3, 1 };
   [ZXPDF417Detector mirror:[self input:size] result:result];
 
   ZXBitArray *expected = [self expected:size];
-  STAssertEqualObjects([result description], [expected description], @"Expected %@, got %@", expected, result);
+  XCTAssertEqualObjects([result description], [expected description], @"Expected %@, got %@", expected, result);
 }
 
 - (void)testRotate180 {
@@ -51,7 +51,7 @@ const int BIT_MATRIX_POINTS[BIT_MATRIX_POINTS_LEN] = { 1, 2, 2, 0, 3, 1 };
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      STAssertEquals([input getX:x y:y], [expected getX:x y:y], @"(%d,%d)", x, y);
+      XCTAssertEqual([input getX:x y:y], [expected getX:x y:y], @"(%d,%d)", x, y);
     }
   }
 }

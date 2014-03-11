@@ -39,7 +39,7 @@ static NSString *header = @"..X..";
 
   NSError *error;
   if([self assertCorrectBinaryString:data expectedNumber:@"" error:&error] || error.code != ZXNotFoundError) {
-    STFail(@"NotFoundError expected");
+    XCTFail(@"NotFoundError expected");
   }
 }
 

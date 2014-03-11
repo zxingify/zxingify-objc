@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "25403CC3166A96FA00E13304"
-               BuildableName = "Unit Tests iOS.octest"
+               BuildableName = "Unit Tests iOS.xctest"
                BlueprintName = "Unit Tests iOS"
                ReferencedContainer = "container:ZXingObjC.xcodeproj">
             </BuildableReference>

@@ -35,12 +35,12 @@ static double EPSILON = 0.0000000001;
                      query:(NSString *)query {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  STAssertEquals(result.type, kParsedResultTypeGeo, @"Types don't match");
+  XCTAssertEqual(result.type, kParsedResultTypeGeo, @"Types don't match");
   ZXGeoParsedResult *geoResult = (ZXGeoParsedResult *)result;
-  STAssertEqualsWithAccuracy(geoResult.latitude, latitude, EPSILON, @"Latitudes don't match");
-  STAssertEqualsWithAccuracy(geoResult.longitude, longitude, EPSILON, @"Longitudes don't match");
-  STAssertEqualsWithAccuracy(geoResult.altitude, altitude, EPSILON, @"Altitudes don't match");
-  STAssertEqualObjects(geoResult.query, query, @"Queries don't match");
+  XCTAssertEqualWithAccuracy(geoResult.latitude, latitude, EPSILON, @"Latitudes don't match");
+  XCTAssertEqualWithAccuracy(geoResult.longitude, longitude, EPSILON, @"Longitudes don't match");
+  XCTAssertEqualWithAccuracy(geoResult.altitude, altitude, EPSILON, @"Altitudes don't match");
+  XCTAssertEqualObjects(geoResult.query, query, @"Queries don't match");
 }
 
 @end

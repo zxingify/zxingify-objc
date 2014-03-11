@@ -30,24 +30,24 @@
   ZXExpandedPair *pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair1];
   ZXRSSFinderPattern *finderPattern = pair1.finderPattern;
-  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
-  STAssertEquals(finderPattern.value, 0, @"Expected finderPattern to equal 0");
+  XCTAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  XCTAssertEqual(finderPattern.value, 0, @"Expected finderPattern to equal 0");
 
   ZXExpandedPair *pair2 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair2];
   finderPattern = pair2.finderPattern;
-  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
-  STAssertEquals(finderPattern.value, 1, @"Expected finderPattern to equal 1");
+  XCTAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  XCTAssertEqual(finderPattern.value, 1, @"Expected finderPattern to equal 1");
 
   ZXExpandedPair *pair3 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair3];
   finderPattern = pair3.finderPattern;
-  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
-  STAssertEquals(finderPattern.value, 1, @"Expected finderPattern to equal 1");
+  XCTAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  XCTAssertEqual(finderPattern.value, 1, @"Expected finderPattern to equal 1");
 
   if ([rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber]) {
     //   the previous was the last pair
-    STFail(@"Error expected");
+    XCTFail(@"Error expected");
   }
 }
 
@@ -63,14 +63,14 @@
   ZXExpandedPair *pair1 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair1];
   ZXRSSFinderPattern *finderPattern = pair1.finderPattern;
-  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
-  STAssertEquals(finderPattern.value, 0, @"Expected finderPattern to equal 0");
+  XCTAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  XCTAssertEqual(finderPattern.value, 0, @"Expected finderPattern to equal 0");
 
   ZXExpandedPair *pair2 = [rssExpandedReader retrieveNextPair:row previousPairs:previousPairs rowNumber:rowNumber];
   [previousPairs addObject:pair2];
   finderPattern = pair2.finderPattern;
-  STAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
-  STAssertEquals(finderPattern.value, 0, @"Expected finderPattern to equal 0");
+  XCTAssertNotNil(finderPattern, @"Expected finderPattern to be non-nil");
+  XCTAssertEqual(finderPattern.value, 0, @"Expected finderPattern to equal 0");
 }
 
 - (void)testDecodeCheckCharacter {
@@ -86,7 +86,7 @@
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:YES];
 
-  STAssertEquals(dataCharacter.value, 98, @"Expected dataCharacter.value to equal 98");
+  XCTAssertEqual(dataCharacter.value, 98, @"Expected dataCharacter.value to equal 98");
 }
 
 - (void)testDecodeDataCharacter {
@@ -102,8 +102,8 @@
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:NO];
 
-  STAssertEquals(dataCharacter.value, 19, @"Expected dataCharacter.value to equal 19");
-  STAssertEquals(dataCharacter.checksumPortion, 1007, @"Expected dataCharacter.checksumPortion to equal 1007");
+  XCTAssertEqual(dataCharacter.value, 19, @"Expected dataCharacter.value to equal 19");
+  XCTAssertEqual(dataCharacter.checksumPortion, 1007, @"Expected dataCharacter.checksumPortion to equal 1007");
 }
 
 @end

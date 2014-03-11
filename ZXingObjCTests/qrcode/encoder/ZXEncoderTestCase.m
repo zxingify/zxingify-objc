@@ -21,60 +21,60 @@
 - (void)testGetAlphanumericCode {
   // The first ten code points are numbers.
   for (int i = 0; i < 10; ++i) {
-    STAssertEquals([ZXEncoder alphanumericCode:'0' + i], i, @"Expected %d", i);
+    XCTAssertEqual([ZXEncoder alphanumericCode:'0' + i], i, @"Expected %d", i);
   }
 
   // The next 26 code points are capital alphabet letters.
   for (int i = 10; i < 36; ++i) {
-    STAssertEquals([ZXEncoder alphanumericCode:'A' + i - 10], i, @"Expected %d", i);
+    XCTAssertEqual([ZXEncoder alphanumericCode:'A' + i - 10], i, @"Expected %d", i);
   }
 
   // Others are symbol letters
-  STAssertEquals([ZXEncoder alphanumericCode:' '], 36, @"Expected %d", 36);
-  STAssertEquals([ZXEncoder alphanumericCode:'$'], 37, @"Expected %d", 37);
-  STAssertEquals([ZXEncoder alphanumericCode:'%'], 38, @"Expected %d", 38);
-  STAssertEquals([ZXEncoder alphanumericCode:'*'], 39, @"Expected %d", 39);
-  STAssertEquals([ZXEncoder alphanumericCode:'+'], 40, @"Expected %d", 40);
-  STAssertEquals([ZXEncoder alphanumericCode:'-'], 41, @"Expected %d", 41);
-  STAssertEquals([ZXEncoder alphanumericCode:'.'], 42, @"Expected %d", 42);
-  STAssertEquals([ZXEncoder alphanumericCode:'/'], 43, @"Expected %d", 43);
-  STAssertEquals([ZXEncoder alphanumericCode:':'], 44, @"Expected %d", 44);
+  XCTAssertEqual([ZXEncoder alphanumericCode:' '], 36, @"Expected %d", 36);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'$'], 37, @"Expected %d", 37);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'%'], 38, @"Expected %d", 38);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'*'], 39, @"Expected %d", 39);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'+'], 40, @"Expected %d", 40);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'-'], 41, @"Expected %d", 41);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'.'], 42, @"Expected %d", 42);
+  XCTAssertEqual([ZXEncoder alphanumericCode:'/'], 43, @"Expected %d", 43);
+  XCTAssertEqual([ZXEncoder alphanumericCode:':'], 44, @"Expected %d", 44);
 
   // Should return -1 for other letters;
-  STAssertEquals([ZXEncoder alphanumericCode:'a'], -1, @"Expected -1");
-  STAssertEquals([ZXEncoder alphanumericCode:'#'], -1, @"Expected -1");
-  STAssertEquals([ZXEncoder alphanumericCode:'\0'], -1, @"Expected -1");
+  XCTAssertEqual([ZXEncoder alphanumericCode:'a'], -1, @"Expected -1");
+  XCTAssertEqual([ZXEncoder alphanumericCode:'#'], -1, @"Expected -1");
+  XCTAssertEqual([ZXEncoder alphanumericCode:'\0'], -1, @"Expected -1");
 }
 
 - (void)testChooseMode {
   // Numeric mode.
-  STAssertEqualObjects([ZXEncoder chooseMode:@"0"], [ZXMode numericMode], @"Expected numeric mode");
-  STAssertEqualObjects([ZXEncoder chooseMode:@"0123456789"], [ZXMode numericMode], @"Expected numeric mode");
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@"0"], [ZXMode numericMode], @"Expected numeric mode");
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@"0123456789"], [ZXMode numericMode], @"Expected numeric mode");
   // Alphanumeric mode.
-  STAssertEqualObjects([ZXEncoder chooseMode:@"A"], [ZXMode alphanumericMode], @"Expected alphanumeric mode");
-  STAssertEqualObjects([ZXEncoder chooseMode:@"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"],
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@"A"], [ZXMode alphanumericMode], @"Expected alphanumeric mode");
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"],
                        [ZXMode alphanumericMode], @"Expected alphanumeric mode");
   // 8-bit byte mode.
-  STAssertEqualObjects([ZXEncoder chooseMode:@"a"], [ZXMode byteMode], @"Expected byte mode");
-  STAssertEqualObjects([ZXEncoder chooseMode:@"#"], [ZXMode byteMode], @"Expected byte mode");
-  STAssertEqualObjects([ZXEncoder chooseMode:@""], [ZXMode byteMode], @"Expected byte mode");
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@"a"], [ZXMode byteMode], @"Expected byte mode");
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@"#"], [ZXMode byteMode], @"Expected byte mode");
+  XCTAssertEqualObjects([ZXEncoder chooseMode:@""], [ZXMode byteMode], @"Expected byte mode");
   // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
   // doing that as we cannot distinguish Shift_JIS from other encodings
   // from data bytes alone.  See also comments in qrcode_encoder.h.
 
   // AIUE in Hiragana in Shift_JIS
   int8_t hiraganaBytes[8] = {0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6};
-  STAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:hiraganaBytes bytesLen:8]], [ZXMode byteMode],
+  XCTAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:hiraganaBytes bytesLen:8]], [ZXMode byteMode],
                        @"Expected byte mode");
 
   // Nihon in Kanji in Shift_JIS.
   int8_t kanjiBytes[4] = {0x9, 0xf, 0x9, 0x7b};
-  STAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:kanjiBytes bytesLen:4]], [ZXMode byteMode],
+  XCTAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:kanjiBytes bytesLen:4]], [ZXMode byteMode],
                        @"Expected byte mode");
 
   // Sou-Utsu-Byou in Kanji in Shift_JIS.
   int8_t kanjiBytes2[6] = {0xe, 0x4, 0x9, 0x5, 0x9, 0x61};
-  STAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:kanjiBytes2 bytesLen:6]], [ZXMode byteMode],
+  XCTAssertEqualObjects([ZXEncoder chooseMode:[self shiftJISString:kanjiBytes2 bytesLen:6]], [ZXMode byteMode],
                        @"Expected byte mode");
 }
 
@@ -110,7 +110,7 @@
     " 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n"
     " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n"
     ">>\n";
-  STAssertEqualObjects([qrCode description], expected, @"Expected qr code to equal %@", expected);
+  XCTAssertEqualObjects([qrCode description], expected, @"Expected qr code to equal %@", expected);
 }
 
 - (void)testSimpleUTF8ECI {
@@ -146,14 +146,14 @@
     " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n"
     " 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n"
     ">>\n";
-  STAssertEqualObjects([qrCode description], expected, @"Expected qr code to equal %@", expected);
+  XCTAssertEqualObjects([qrCode description], expected, @"Expected qr code to equal %@", expected);
 }
 
 - (void)testAppendModeInfo {
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendModeInfo:[ZXMode numericMode] bits:bits];
   NSString *expected = @" ...X";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
 
 - (void)testAppendLengthInfo {
@@ -164,7 +164,7 @@
                          bits:bits
                         error:nil];
   NSString *expected = @" ........ .X";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 10 bits.
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 10 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendLengthInfo:2  // 2 letter (2/1).
                       version:[ZXQRCodeVersion versionForNumber:10]
@@ -172,7 +172,7 @@
                          bits:bits
                         error:nil];
   expected = @" ........ .X.";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 11 bits.
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 11 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendLengthInfo:255  // 255 letter (255/1).
                       version:[ZXQRCodeVersion versionForNumber:27]
@@ -180,7 +180,7 @@
                          bits:bits
                         error:nil];
   expected = @" ........ XXXXXXXX";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 16 bits.
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 16 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendLengthInfo:512  // 512 letter (1024/2).
                       version:[ZXQRCodeVersion versionForNumber:40]
@@ -188,7 +188,7 @@
                          bits:bits
                         error:nil];
   expected = @" ..X..... ....";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 12 bits.
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);  // 12 bits.
 }
 
 - (void)testAppendBytes {
@@ -197,25 +197,25 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendBytes:@"1" mode:[ZXMode numericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
   NSString *expected = @" ...X";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Should use appendAlphanumericBytes.
   // A = 10 = 0xa = 001010 in 6 bits
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendBytes:@"A" mode:[ZXMode alphanumericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" ..X.X.";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
   NSError *error;
   if ([ZXEncoder appendBytes:@"a" mode:[ZXMode alphanumericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:&error] ||
       error.code != ZXWriterError) {
-    STFail(@"Expected ZXWriterError");
+    XCTFail(@"Expected ZXWriterError");
   }
   // Should use append8BitBytes.
   // 0x61, 0x62, 0x63
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendBytes:@"abc" mode:[ZXMode byteMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" .XX....X .XX...X. .XX...XX";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
   [ZXEncoder appendBytes:@"\0" mode:[ZXMode byteMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
   // Should use appendKanjiBytes.
@@ -224,41 +224,41 @@
   int8_t bytes[2] = {0x93, 0x5f};
   [ZXEncoder appendBytes:[self shiftJISString:bytes bytesLen:2] mode:[ZXMode kanjiMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" .XX.XX.. XXXXX";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
 
 - (void)testTerminateBits {
   ZXBitArray *v = [[ZXBitArray alloc] init];
   [ZXEncoder terminateBits:0 bits:v error:nil];
-  STAssertEqualObjects([v description], @"", @"Expected v to equal \"\"");
+  XCTAssertEqualObjects([v description], @"", @"Expected v to equal \"\"");
   v = [[ZXBitArray alloc] init];
   [ZXEncoder terminateBits:1 bits:v error:nil];
   NSString *expected = @" ........";
-  STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
+  XCTAssertEqualObjects([v description], expected, @"Expected v to equal %@", expected);
   v = [[ZXBitArray alloc] init];
   [v appendBits:0 numBits:3];  // Append 000
   [ZXEncoder terminateBits:1 bits:v error:nil];
   expected = @" ........";
-  STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
+  XCTAssertEqualObjects([v description], expected, @"Expected v to equal %@", expected);
   v = [[ZXBitArray alloc] init];
   [v appendBits:0 numBits:5];  // Append 00000
   [ZXEncoder terminateBits:1 bits:v error:nil];
   expected = @" ........";
-  STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
+  XCTAssertEqualObjects([v description], expected, @"Expected v to equal %@", expected);
   v = [[ZXBitArray alloc] init];
   [v appendBits:0 numBits:8];  // Append 00000000
   [ZXEncoder terminateBits:1 bits:v error:nil];
   expected = @" ........";
-  STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
+  XCTAssertEqualObjects([v description], expected, @"Expected v to equal %@", expected);
   v = [[ZXBitArray alloc] init];
   [ZXEncoder terminateBits:2 bits:v error:nil];
   expected = @" ........ XXX.XX..";
-  STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
+  XCTAssertEqualObjects([v description], expected, @"Expected v to equal %@", expected);
   v = [[ZXBitArray alloc] init];
   [v appendBits:0 numBits:1];  // Append 0
   [ZXEncoder terminateBits:3 bits:v error:nil];
   expected = @" ........ XXX.XX.. ...X...X";
-  STAssertEqualObjects([v description], expected, @"Expected v to equal %@");
+  XCTAssertEqualObjects([v description], expected, @"Expected v to equal %@", expected);
 }
 
 - (void)testGetNumDataBytesAndNumECBytesForBlockID {
@@ -267,42 +267,42 @@
   // Version 1-H.
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:26 numDataBytes:9 numRSBlocks:1 blockID:0
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 9, @"Expected numDataBytes[0] to equal %d", 9);
-  STAssertEquals(numEcBytes[0], 17, @"Expected numEcBytes[0] to equal %d", 17);
+  XCTAssertEqual(numDataBytes[0], 9, @"Expected numDataBytes[0] to equal %d", 9);
+  XCTAssertEqual(numEcBytes[0], 17, @"Expected numEcBytes[0] to equal %d", 17);
 
   // Version 3-H.  2 blocks.
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:70 numDataBytes:26 numRSBlocks:2 blockID:0
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 13, @"Expected numDataBytes[0] to equal %d", 13);
-  STAssertEquals(numEcBytes[0], 22, @"Expected numEcBytes[0] to equal %d", 22);
+  XCTAssertEqual(numDataBytes[0], 13, @"Expected numDataBytes[0] to equal %d", 13);
+  XCTAssertEqual(numEcBytes[0], 22, @"Expected numEcBytes[0] to equal %d", 22);
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:70 numDataBytes:26 numRSBlocks:2 blockID:1
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 13, @"Expected numDataBytes[0] to equal %d", 13);
-  STAssertEquals(numEcBytes[0], 22, @"Expected numEcBytes[0] to equal %d", 22);
+  XCTAssertEqual(numDataBytes[0], 13, @"Expected numDataBytes[0] to equal %d", 13);
+  XCTAssertEqual(numEcBytes[0], 22, @"Expected numEcBytes[0] to equal %d", 22);
 
   // Version 7-H. (4 + 1) blocks.
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:196 numDataBytes:66 numRSBlocks:5 blockID:0
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 13, @"Expected numDataBytes[0] to equal %d", 13);
-  STAssertEquals(numEcBytes[0], 26, @"Expected numEcBytes[0] to equal %d", 26);
+  XCTAssertEqual(numDataBytes[0], 13, @"Expected numDataBytes[0] to equal %d", 13);
+  XCTAssertEqual(numEcBytes[0], 26, @"Expected numEcBytes[0] to equal %d", 26);
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:196 numDataBytes:66 numRSBlocks:5 blockID:4
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 14, @"Expected numDataBytes[0] to equal %d", 14);
-  STAssertEquals(numEcBytes[0], 26, @"Expected numEcBytes[0] to equal %d", 22);
+  XCTAssertEqual(numDataBytes[0], 14, @"Expected numDataBytes[0] to equal %d", 14);
+  XCTAssertEqual(numEcBytes[0], 26, @"Expected numEcBytes[0] to equal %d", 22);
 
   // Version 40-H. (20 + 61) blocks.
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:3706 numDataBytes:1276 numRSBlocks:81 blockID:0
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 15, @"Expected numDataBytes[0] to equal %d", 15);
-  STAssertEquals(numEcBytes[0], 30, @"Expected numEcBytes[0] to equal %d", 30);
+  XCTAssertEqual(numDataBytes[0], 15, @"Expected numDataBytes[0] to equal %d", 15);
+  XCTAssertEqual(numEcBytes[0], 30, @"Expected numEcBytes[0] to equal %d", 30);
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:3706 numDataBytes:1276 numRSBlocks:81 blockID:20
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 16, @"Expected numDataBytes[0] to equal %d", 16);
-  STAssertEquals(numEcBytes[0], 30, @"Expected numEcBytes[0] to equal %d", 30);
+  XCTAssertEqual(numDataBytes[0], 16, @"Expected numDataBytes[0] to equal %d", 16);
+  XCTAssertEqual(numEcBytes[0], 30, @"Expected numEcBytes[0] to equal %d", 30);
   [ZXEncoder numDataBytesAndNumECBytesForBlockID:3706 numDataBytes:1276 numRSBlocks:81 blockID:80
                              numDataBytesInBlock:numDataBytes numECBytesInBlock:numEcBytes error:nil];
-  STAssertEquals(numDataBytes[0], 16, @"Expected numDataBytes[0] to equal %d", 16);
-  STAssertEquals(numEcBytes[0], 30, @"Expected numEcBytes[0] to equal %d", 30);
+  XCTAssertEqual(numDataBytes[0], 16, @"Expected numDataBytes[0] to equal %d", 16);
+  XCTAssertEqual(numEcBytes[0], 30, @"Expected numEcBytes[0] to equal %d", 30);
 }
 
 - (void)testInterleaveWithECBytes {
@@ -321,12 +321,12 @@
     42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
     237, 85, 224, 96, 74, 219, 61,
   };
-  STAssertEquals(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
+  XCTAssertEqual(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
   int8_t outArray[expectedLen];
   memset(outArray, 0, expectedLen * sizeof(int8_t));
   [out toBytes:0 array:outArray offset:0 numBytes:expectedLen];
   for (int x = 0; x < expectedLen; x++) {
-    STAssertEquals(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);
+    XCTAssertEqual(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);
   }
   const int dataBytesLen2 = 62;
   int8_t dataBytes2[dataBytesLen2] = {
@@ -360,12 +360,12 @@
     140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
     187, 49, 156, 214,
   };
-  STAssertEquals(out.sizeInBytes, expectedLen2, @"Expected out sizeInBytes to equal %d", expectedLen2);
+  XCTAssertEqual(out.sizeInBytes, expectedLen2, @"Expected out sizeInBytes to equal %d", expectedLen2);
   int8_t outArray2[expectedLen2];
   memset(outArray2, 0, expectedLen2 * sizeof(int8_t));
   [out toBytes:0 array:outArray2 offset:0 numBytes:expectedLen2];
   for (int x = 0; x < expectedLen2; x++) {
-    STAssertEquals(outArray2[x], expected2[x], @"Expected outArray[%d] to equal %d", x, expected2[x]);
+    XCTAssertEqual(outArray2[x], expected2[x], @"Expected outArray[%d] to equal %d", x, expected2[x]);
   }
 }
 
@@ -374,26 +374,26 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendNumericBytes:@"1" bits:bits];
   NSString *expected = @" ...X";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // 12 = 0xc = 0001100 in 7 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendNumericBytes:@"12" bits:bits];
   expected = @" ...XX..";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // 123 = 0x7b = 0001111011 in 10 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendNumericBytes:@"123" bits:bits];
   expected = @" ...XXXX. XX";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // 1234 = "123" + "4" = 0001111011 + 0100
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendNumericBytes:@"1234" bits:bits];
   expected = @" ...XXXX. XX.X..";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Empty.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendNumericBytes:@"" bits:bits];
-  STAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
+  XCTAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
 }
 
 - (void)testAppendAlphanumericBytes {
@@ -401,25 +401,25 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendAlphanumericBytes:@"A" bits:bits error:nil];
   NSString *expected = @" ..X.X.";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendAlphanumericBytes:@"AB" bits:bits error:nil];
   expected = @" ..XXX..X X.X";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // ABC = "AB" + "C" = 00111001101 + 001100
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendAlphanumericBytes:@"ABC" bits:bits error:nil];
   expected = @" ..XXX..X X.X..XX. .";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Empty.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder appendAlphanumericBytes:@"" bits:bits error:nil];
-  STAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
+  XCTAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
   // Invalid data.
   NSError *error;
   if ([ZXEncoder appendAlphanumericBytes:@"abc" bits:[[ZXBitArray alloc] init] error:&error] || error.code != ZXWriterError) {
-    STFail(@"Expected ZXWriterError");
+    XCTFail(@"Expected ZXWriterError");
   }
 }
 
@@ -428,11 +428,11 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXEncoder append8BitBytes:@"abc" bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING];
   NSString *expected = @" .XX....X .XX...X. .XX...XX";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Empty.
   bits = [[ZXBitArray alloc] init];
   [ZXEncoder append8BitBytes:@"" bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING];
-  STAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
+  XCTAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
 }
 
 // Numbers are from page 21 of JISX0510:2004
@@ -441,11 +441,11 @@
   int8_t bytes[2] = {0x93,0x5f};
   [ZXEncoder appendKanjiBytes:[self shiftJISString:bytes bytesLen:2] bits:bits error:nil];
   NSString *expected = @" .XX.XX.. XXXXX";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   int8_t bytes2[2] = {0xe4,0xaa};
   [ZXEncoder appendKanjiBytes:[self shiftJISString:bytes2 bytesLen:2] bits:bits error:nil];
   expected = @" .XX.XX.. XXXXXXX. X.X.X.X. X.";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
 
 // Numbers are from http://www.swetake.com/qr/qr3.html and
@@ -459,7 +459,7 @@
     42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
   };
   for (int x = 0; x < expectedLen; x++) {
-    STAssertEquals(ecBytes[x] & 0xFF, expected[x], @"Expected exBytes[%d] to equal %d", x, expected[x]);
+    XCTAssertEqual(ecBytes[x] & 0xFF, expected[x], @"Expected exBytes[%d] to equal %d", x, expected[x]);
   }
   free(ecBytes);
   const int dataBytesLen2 = 15;
@@ -471,7 +471,7 @@
     175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
   };
   for (int x = 0; x < expectedLen2; x++) {
-    STAssertEquals(ecBytes2[x] & 0xFF, expected2[x], @"Expected exBytes[%d] to equal %d", x, expected2[x]);
+    XCTAssertEqual(ecBytes2[x] & 0xFF, expected2[x], @"Expected exBytes[%d] to equal %d", x, expected2[x]);
   }
   free(ecBytes2);
   // High-order zero coefficient case.
@@ -483,7 +483,7 @@
     0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
   };
   for (int x = 0; x < expectedLen3; x++) {
-    STAssertEquals(ecBytes3[x] & 0xFF, expected3[x], @"Expected exBytes[%d] to equal %d", x, expected3[x]);
+    XCTAssertEqual(ecBytes3[x] & 0xFF, expected3[x], @"Expected exBytes[%d] to equal %d", x, expected3[x]);
   }
   free(ecBytes3);
 }
@@ -522,7 +522,7 @@
     [builder appendString:@"0"];
   }
   ZXQRCode *qrCode = [ZXEncoder encode:builder ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL] error:nil];
-  STAssertNotNil(qrCode, @"Excepted QR code");
+  XCTAssertNotNil(qrCode, @"Excepted QR code");
 }
 
 - (NSString *)shiftJISString:(int8_t *)bytes bytesLen:(int)bytesLen {

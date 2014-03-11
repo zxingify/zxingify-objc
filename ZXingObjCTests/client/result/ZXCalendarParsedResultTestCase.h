@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXCalendarParsedResultTestCase : SenTestCase
+@interface ZXCalendarParsedResultTestCase : XCTestCase
 
 @end

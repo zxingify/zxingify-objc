@@ -55,7 +55,7 @@ const NSString *compressedDate_End             = @"X..X.XX.........";
   if (!result) {
     return NO;
   }
-  STAssertEqualObjects(result, expectedNumber, @"Expected %@ to equal %@", result, expectedNumber);
+  XCTAssertEqualObjects(result, expectedNumber, @"Expected %@ to equal %@", result, expectedNumber);
   return YES;
 }
 

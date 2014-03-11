@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface RSSExpandedImage2binaryTestCase : SenTestCase
+@interface RSSExpandedImage2binaryTestCase : XCTestCase
 
 @end

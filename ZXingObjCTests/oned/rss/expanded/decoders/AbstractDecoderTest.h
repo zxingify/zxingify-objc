@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
 extern const NSString *numeric_10;
 extern const NSString *numeric_12;
 extern const NSString *numeric_1FNC1;
@@ -45,7 +43,7 @@ extern const NSString *compressed20bitWeight_1750;
 extern const NSString *compressedDate_March_12th_2010;
 extern const NSString *compressedDate_End;
 
-@interface AbstractDecoderTest : SenTestCase
+@interface AbstractDecoderTest : XCTestCase
 
 - (BOOL)assertCorrectBinaryString:(NSString *)binaryString expectedNumber:(NSString *)expectedNumber error:(NSError **)error;
 

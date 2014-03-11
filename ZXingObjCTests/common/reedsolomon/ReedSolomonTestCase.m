@@ -421,8 +421,8 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
 }
 
 - (void)testEncodeDecodeRandom:(ZXGenericGF *)field dataSize:(int)dataSize ecSize:(int)ecSize {
-  STAssertTrue(dataSize > 0 && dataSize <= field.size - 3, @"Invalid data size for %@", field);
-  STAssertTrue(ecSize > 0 && ecSize + dataSize <= field.size, @"Invalid ECC size for %@", field);
+  XCTAssertTrue(dataSize > 0 && dataSize <= field.size - 3, @"Invalid data size for %@", field);
+  XCTAssertTrue(ecSize > 0 && ecSize + dataSize <= field.size, @"Invalid ECC size for %@", field);
   ZXReedSolomonEncoder *encoder = [[ZXReedSolomonEncoder alloc] initWithField:field];
   int message[dataSize + ecSize];
   int dataWords[dataSize];
@@ -482,7 +482,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
       NSError *error;
       if (![decoder decode:message receivedLen:length twoS:ecWordsLen error:&error]) {
         // fail only if maxErrors exceeded
-        STAssertTrue(i > maxErrors, @"Decode in %@ (%d,%d) failed at %d errors: %@",
+        XCTAssertTrue(i > maxErrors, @"Decode in %@ (%d,%d) failed at %d errors: %@",
                      field, dataWordsLen, ecWordsLen, i, error);
         // else stop
         break;
@@ -498,7 +498,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
 - (void)assertDataEqualsExpected:(int *)expected received:(int *)received length:(int)length message:(NSString *)message {
   for (int i = 0; i < length; i++) {
     if (expected[i] != received[i]) {
-      STFail(@"%@. Mismatch at %d. Expected %@, got %@", message, i, [self arrayToString:expected length:length], [self arrayToString:received length:length]);
+      XCTFail(@"%@. Mismatch at %d. Expected %@, got %@", message, i, [self arrayToString:expected length:length], [self arrayToString:received length:length]);
     }
   }
 }

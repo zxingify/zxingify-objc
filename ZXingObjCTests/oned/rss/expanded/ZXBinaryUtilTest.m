@@ -39,13 +39,13 @@
 
 - (void)check:(NSString *)data {
   ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromString:data];
-  STAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
+  XCTAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
 }
 
 - (void)checkWithoutSpaces:(NSString *)data {
   NSString *dataWithoutSpaces = [data stringByReplacingOccurrencesOfString:@" " withString:@""];
   ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromStringWithoutSpaces:dataWithoutSpaces];
-  STAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
+  XCTAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
 }
 
 @end

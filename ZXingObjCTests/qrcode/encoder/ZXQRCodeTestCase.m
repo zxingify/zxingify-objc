@@ -28,11 +28,11 @@
   qrCode.version = [ZXQRCodeVersion versionForNumber:7];
   qrCode.maskPattern = 3;
 
-  STAssertEqualObjects(qrCode.mode, [ZXMode byteMode], @"Expected qrCode mode to be byteMode");
-  STAssertEqualObjects(qrCode.ecLevel, [ZXErrorCorrectionLevel errorCorrectionLevelH],
+  XCTAssertEqualObjects(qrCode.mode, [ZXMode byteMode], @"Expected qrCode mode to be byteMode");
+  XCTAssertEqualObjects(qrCode.ecLevel, [ZXErrorCorrectionLevel errorCorrectionLevelH],
                        @"Expected qrCode error correction level to be H");
-  STAssertEquals(qrCode.version.versionNumber, 7, @"Expected qrCode version to be 7");
-  STAssertEquals(qrCode.maskPattern, 3, @"Expected qrCode maskPattern to be 3");
+  XCTAssertEqual(qrCode.version.versionNumber, 7, @"Expected qrCode version to be 7");
+  XCTAssertEqual(qrCode.maskPattern, 3, @"Expected qrCode maskPattern to be 3");
 
   // Prepare the matrix.
   ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:45 height:45];
@@ -45,7 +45,7 @@
 
   // Set the matrix.
   qrCode.matrix = matrix;
-  STAssertEqualObjects(qrCode.matrix, matrix, @"Expected matrices to be equal");
+  XCTAssertEqualObjects(qrCode.matrix, matrix, @"Expected matrices to be equal");
 }
 
 - (void)testToString1 {
@@ -58,7 +58,7 @@
      " maskPattern: -1\n"
      " matrix: (null)\n"
      ">>\n";
-  STAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
+  XCTAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
 }
 
 - (void)testToString2 {
@@ -103,14 +103,14 @@
      " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n"
      " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n"
      ">>\n";
-  STAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
+  XCTAssertEqualObjects([qrCode description], expected, @"Expected qrCode to equal %@", expected);
 }
 
 - (void)testIsValidMaskPattern {
-  STAssertFalse([ZXQRCode isValidMaskPattern:-1], @"Expected -1 not to be a valid mask pattern");
-  STAssertTrue([ZXQRCode isValidMaskPattern:0], @"Expected 0 to be a valid mask pattern");
-  STAssertTrue([ZXQRCode isValidMaskPattern:7], @"Expected 7 to be a valid mask pattern");
-  STAssertFalse([ZXQRCode isValidMaskPattern:8], @"Expected 8 not to be a valid mask pattern");
+  XCTAssertFalse([ZXQRCode isValidMaskPattern:-1], @"Expected -1 not to be a valid mask pattern");
+  XCTAssertTrue([ZXQRCode isValidMaskPattern:0], @"Expected 0 to be a valid mask pattern");
+  XCTAssertTrue([ZXQRCode isValidMaskPattern:7], @"Expected 7 to be a valid mask pattern");
+  XCTAssertFalse([ZXQRCode isValidMaskPattern:8], @"Expected 8 not to be a valid mask pattern");
 }
 
 @end

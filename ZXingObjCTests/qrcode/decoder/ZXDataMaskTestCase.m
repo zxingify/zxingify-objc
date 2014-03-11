@@ -82,7 +82,7 @@ typedef BOOL (^MaskCondition)(int i, int j);
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
       BOOL expected = condition(i, j);
-      STAssertEquals([bits getX:j y:i], expected, @"Expected (%d,%d) to equal %d", j, i, expected);
+      XCTAssertEqual([bits getX:j y:i], expected, @"Expected (%d,%d) to equal %d", j, i, expected);
     }
   }
 }

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface AbstractBlackBoxTestCase : SenTestCase
+@interface AbstractBlackBoxTestCase : XCTestCase
 
 @property (nonatomic, strong, readonly) id<ZXReader> barcodeReader;
 @property (nonatomic, assign) ZXBarcodeFormat expectedFormat;

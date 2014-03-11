@@ -63,34 +63,34 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   ZXQRCodeWriter *writer = [[ZXQRCodeWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:bigEnough
                                 height:bigEnough hints:nil error:nil];
-  STAssertNotNil(matrix, @"Matrix should not be nil");
-  STAssertEquals(matrix.width, bigEnough, @"Width should be %d", bigEnough);
-  STAssertEquals(matrix.height, bigEnough, @"Height should be %d", bigEnough);
+  XCTAssertNotNil(matrix, @"Matrix should not be nil");
+  XCTAssertEqual(matrix.width, bigEnough, @"Width should be %d", bigEnough);
+  XCTAssertEqual(matrix.height, bigEnough, @"Height should be %d", bigEnough);
 
   // The QR will not fit in this size, so the matrix should come back bigger
   int tooSmall = 20;
   matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:tooSmall
                    height:tooSmall hints:nil error:nil];
-  STAssertNotNil(matrix, @"Matrix should not be nil");
-  STAssertTrue(tooSmall < matrix.width, @"Matrix width should be greater than %d", tooSmall);
-  STAssertTrue(tooSmall < matrix.height, @"Matrix height should be greater than %d", tooSmall);
+  XCTAssertNotNil(matrix, @"Matrix should not be nil");
+  XCTAssertTrue(tooSmall < matrix.width, @"Matrix width should be greater than %d", tooSmall);
+  XCTAssertTrue(tooSmall < matrix.height, @"Matrix height should be greater than %d", tooSmall);
 
   // We should also be able to handle non-square requests by padding them
   int strangeWidth = 500;
   int strangeHeight = 100;
   matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatQRCode width:strangeWidth
                    height:strangeHeight hints:nil error:nil];
-  STAssertNotNil(matrix, @"Matrix should not be nil");
-  STAssertEquals(matrix.width, strangeWidth, @"Width should be %d", strangeWidth);
-  STAssertEquals(matrix.height, strangeHeight, @"Height should be %d", strangeHeight);
+  XCTAssertNotNil(matrix, @"Matrix should not be nil");
+  XCTAssertEqual(matrix.width, strangeWidth, @"Width should be %d", strangeWidth);
+  XCTAssertEqual(matrix.height, strangeHeight, @"Height should be %d", strangeHeight);
 }
 
 - (void)compareToGoldenFile:(NSString *)contents ecLevel:(ZXErrorCorrectionLevel *)ecLevel
                  resolution:(int)resolution fileName:(NSString *)fileName {
   ZXImage *image = [self loadImage:fileName];
-  STAssertNotNil(image, @"Image should not be nil");
+  XCTAssertNotNil(image, @"Image should not be nil");
   ZXBitMatrix *goldenResult = [self createMatrixFromImage:image];
-  STAssertNotNil(goldenResult, @"Golden result should not be nil");
+  XCTAssertNotNil(goldenResult, @"Golden result should not be nil");
 
   ZXEncodeHints *hints = [[ZXEncodeHints alloc] init];
   hints.errorCorrectionLevel = ecLevel;
@@ -98,9 +98,9 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   ZXBitMatrix *generatedResult = [writer encode:contents format:kBarcodeFormatQRCode width:resolution
                                          height:resolution hints:hints error:nil];
 
-  STAssertEquals(generatedResult.width, resolution, @"Expected generatedResult width to be %d", resolution);
-  STAssertEquals(generatedResult.height, resolution, @"Expected generatedResult height to be %d", resolution);
-  STAssertEqualObjects(generatedResult, goldenResult, @"Expected generatedResult to equal goldenResult");
+  XCTAssertEqual(generatedResult.width, resolution, @"Expected generatedResult width to be %d", resolution);
+  XCTAssertEqual(generatedResult.height, resolution, @"Expected generatedResult height to be %d", resolution);
+  XCTAssertEqualObjects(generatedResult, goldenResult, @"Expected generatedResult to equal goldenResult");
 }
 
 // Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls

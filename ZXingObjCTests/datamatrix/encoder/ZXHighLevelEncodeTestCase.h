@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXHighLevelEncodeTestCase : SenTestCase
+@interface ZXHighLevelEncodeTestCase : XCTestCase
 
 /**
  * Convert a string of char codewords into a different string which lists each character

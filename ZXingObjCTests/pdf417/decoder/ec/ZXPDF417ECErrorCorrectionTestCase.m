@@ -90,7 +90,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
   NSMutableArray *received = [NSMutableArray arrayWithArray:PDF417_TEST_WITH_EC];
   [self corrupt:received howMany:MAX_ERRORS + 3]; // +3 since the algo can actually correct 2 more than it should here
 
-  STAssertFalse([self checkDecode:received], @"Should not have decoded");
+  XCTAssertFalse([self checkDecode:received], @"Should not have decoded");
 }
 
 /*
@@ -120,7 +120,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
   }
 
   for (int i = 0; i < PDF417_TEST.count; i++) {
-    STAssertEquals([received[i] intValue], [PDF417_TEST[i] intValue], @"Expected %@ to equal %@", received[i], PDF417_TEST[i]);
+    XCTAssertEqual([received[i] intValue], [PDF417_TEST[i] intValue], @"Expected %@ to equal %@", received[i], PDF417_TEST[i]);
   }
   return YES;
 }

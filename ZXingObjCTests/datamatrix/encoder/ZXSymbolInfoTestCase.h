@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-/**
- * Tests the SymbolInfo class.
- */
-
-@interface ZXSymbolInfoTestCase : SenTestCase
+@interface ZXSymbolInfoTestCase : XCTestCase
 
 @end

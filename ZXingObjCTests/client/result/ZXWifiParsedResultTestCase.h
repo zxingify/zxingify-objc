@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXWifiParsedResultTestCase : SenTestCase
+@interface ZXWifiParsedResultTestCase : XCTestCase
 
 @end

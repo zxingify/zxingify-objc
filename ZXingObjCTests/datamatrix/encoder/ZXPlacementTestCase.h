@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-/**
- * Tests the DataMatrix placement algorithm.
- */
-
-@interface ZXPlacementTestCase : SenTestCase
+@interface ZXPlacementTestCase : XCTestCase
 
 @end

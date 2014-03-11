@@ -62,7 +62,7 @@
 
 - (void)runTests {
   if (self.testResults.count == 0) {
-    STFail(@"No test results");
+    XCTFail(@"No test results");
   }
 
   NSArray *imageFiles = [self imageFiles];
@@ -102,7 +102,7 @@
     NSLog(@"Rotation %d degrees: %d of %d images were false positives (%d allowed)",
           (int)testResult.rotation, falsePositives[x], (int)imageFiles.count,
           testResult.falsePositivesAllowed);
-    STAssertTrue(falsePositives[x] <= testResult.falsePositivesAllowed,
+    XCTAssertTrue(falsePositives[x] <= testResult.falsePositivesAllowed,
                  @"Rotation %f degrees: Too many false positives found", testResult.rotation);
   }
 }

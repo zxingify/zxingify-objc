@@ -30,16 +30,16 @@
   [array setX:1 y:2 intValue:-1];
   [array setX:2 y:2 intValue:-1];
   NSString *expected = @" 0 1 0\n 1 0 1\n      \n";
-  STAssertEqualObjects([array description], expected, @"Expected array to equal %@", expected);
+  XCTAssertEqualObjects([array description], expected, @"Expected array to equal %@", expected);
 }
 
 - (void)testClearMatrix {
   ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:2 height:2];
   [ZXMatrixUtil clearMatrix:matrix];
-  STAssertEquals([matrix getX:0 y:0], (char)-1, @"Expected (0, 0) to equal -1");
-  STAssertEquals([matrix getX:1 y:0], (char)-1, @"Expected (1, 0) to equal -1");
-  STAssertEquals([matrix getX:0 y:1], (char)-1, @"Expected (0, 1) to equal -1");
-  STAssertEquals([matrix getX:1 y:1], (char)-1, @"Expected (1, 1) to equal -1");
+  XCTAssertEqual([matrix getX:0 y:0], (char)-1, @"Expected (0, 0) to equal -1");
+  XCTAssertEqual([matrix getX:1 y:0], (char)-1, @"Expected (1, 0) to equal -1");
+  XCTAssertEqual([matrix getX:0 y:1], (char)-1, @"Expected (0, 1) to equal -1");
+  XCTAssertEqual([matrix getX:1 y:1], (char)-1, @"Expected (1, 1) to equal -1");
 }
 
 - (void)testEmbedBasicPatterns1 {
@@ -69,7 +69,7 @@
      " 1 0 1 1 1 0 1 0                          \n"
      " 1 0 0 0 0 0 1 0                          \n"
      " 1 1 1 1 1 1 1 0                          \n";
-  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+  XCTAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedBasicPatterns2 {
@@ -104,7 +104,7 @@
      " 1 0 1 1 1 0 1 0                                  \n"
      " 1 0 0 0 0 0 1 0                                  \n"
      " 1 1 1 1 1 1 1 0                                  \n";
-  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+  XCTAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedTypeInfo {
@@ -134,7 +134,7 @@
      "                 0                        \n"
      "                 0                        \n"
      "                 1                        \n";
-  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+  XCTAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedVersionInfo {
@@ -166,7 +166,7 @@
      "                                          \n"
      "                                          \n"
      "                                          \n";
-  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+  XCTAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testEmbedDataBits {
@@ -198,7 +198,7 @@
      " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
      " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
      " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+  XCTAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testBuildMatrix {
@@ -240,34 +240,34 @@
      " 1 0 1 1 1 0 1 0 1 1 1 1 0 0 0 0 1 1 1 0 0\n"
      " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0\n"
      " 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 0 1 0 0 1 0\n";
-  STAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
+  XCTAssertEqualObjects([matrix description], expected, @"Expected matrix to equal %@", expected);
 }
 
 - (void)testFindMSBSet {
-  STAssertEquals([ZXMatrixUtil findMSBSet:0], 0, @"Expected findMSBSet to equal 0");
-  STAssertEquals([ZXMatrixUtil findMSBSet:1], 1, @"Expected findMSBSet to equal 1");
-  STAssertEquals([ZXMatrixUtil findMSBSet:0x80], 8, @"Expected findMSBSet to equal 8");
-  STAssertEquals([ZXMatrixUtil findMSBSet:0x80000000], 32, @"Expected findMSBSet to equal 32");
+  XCTAssertEqual([ZXMatrixUtil findMSBSet:0], 0, @"Expected findMSBSet to equal 0");
+  XCTAssertEqual([ZXMatrixUtil findMSBSet:1], 1, @"Expected findMSBSet to equal 1");
+  XCTAssertEqual([ZXMatrixUtil findMSBSet:0x80], 8, @"Expected findMSBSet to equal 8");
+  XCTAssertEqual([ZXMatrixUtil findMSBSet:0x80000000], 32, @"Expected findMSBSet to equal 32");
 }
 
 - (void)testCalculateBCHCode {
   // Encoding of type information.
   // From Appendix C in JISX0510:2004 (p 65)
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:5 poly:0x537], 0xdc, @"Expected calculateBCHCode to equal 0xdc");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:5 poly:0x537], 0xdc, @"Expected calculateBCHCode to equal 0xdc");
   // From http://www.swetake.com/qr/qr6.html
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:0x13 poly:0x537], 0x1c2, @"Expected calculateBCHCode to equal 0x1c2");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:0x13 poly:0x537], 0x1c2, @"Expected calculateBCHCode to equal 0x1c2");
   // From http://www.swetake.com/qr/qr11.html
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:0x1b poly:0x537], 0x214, @"Expected calculateBCHCode to equal 0x214");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:0x1b poly:0x537], 0x214, @"Expected calculateBCHCode to equal 0x214");
 
   // Encofing of version information.
   // From Appendix D in JISX0510:2004 (p 68)
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:7 poly:0x1f25], 0xc94, @"Expected calculateBCHCode to equal 0xc94");
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:8 poly:0x1f25], 0x5bc, @"Expected calculateBCHCode to equal 0x5bc");
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:9 poly:0x1f25], 0xa99, @"Expected calculateBCHCode to equal 0xa99");
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:10 poly:0x1f25], 0x4d3, @"Expected calculateBCHCode to equal 0x4d3");
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:20 poly:0x1f25], 0x9a6, @"Expected calculateBCHCode to equal 0x9a6");
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:30 poly:0x1f25], 0xd75, @"Expected calculateBCHCode to equal 0xd75");
-  STAssertEquals([ZXMatrixUtil calculateBCHCode:40 poly:0x1f25], 0xc69, @"Expected calculateBCHCode to equal 0xc69");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:7 poly:0x1f25], 0xc94, @"Expected calculateBCHCode to equal 0xc94");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:8 poly:0x1f25], 0x5bc, @"Expected calculateBCHCode to equal 0x5bc");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:9 poly:0x1f25], 0xa99, @"Expected calculateBCHCode to equal 0xa99");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:10 poly:0x1f25], 0x4d3, @"Expected calculateBCHCode to equal 0x4d3");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:20 poly:0x1f25], 0x9a6, @"Expected calculateBCHCode to equal 0x9a6");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:30 poly:0x1f25], 0xd75, @"Expected calculateBCHCode to equal 0xd75");
+  XCTAssertEqual([ZXMatrixUtil calculateBCHCode:40 poly:0x1f25], 0xc69, @"Expected calculateBCHCode to equal 0xc69");
 }
 
 // We don't test a lot of cases in this function since we've already
@@ -277,7 +277,7 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXMatrixUtil makeVersionInfoBits:[ZXQRCodeVersion versionForNumber:7] bits:bits error:nil];
   NSString *expected = @" ...XXXXX ..X..X.X ..";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
 
 // We don't test a lot of cases in this function since we've already
@@ -287,7 +287,7 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXMatrixUtil makeTypeInfoBits:[ZXErrorCorrectionLevel errorCorrectionLevelM] maskPattern:5 bits:bits error:nil];
   NSString *expected = @" X......X X..XXX.";
-  STAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
+  XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
 
 @end

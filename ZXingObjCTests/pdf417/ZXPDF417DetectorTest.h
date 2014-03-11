@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXPDF417DetectorTest : SenTestCase
+@interface ZXPDF417DetectorTest : XCTestCase
 
 @end

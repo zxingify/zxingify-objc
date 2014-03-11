@@ -34,7 +34,7 @@
 
 - (void)checkBinaryValues:(int **)pairValues pairValuesLen:(int)pairValuesLen lengths:(int *)lengths expected:(NSString *)expected {
   ZXBitArray *binary = [self buildBitArrayPairValues:pairValues pairValuesLen:pairValuesLen lengths:lengths];
-  STAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
+  XCTAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
 }
 
 - (ZXBitArray *)buildBitArrayPairValues:(int **)pairValues pairValuesLen:(int)pairValuesLen lengths:(int *)lengths {

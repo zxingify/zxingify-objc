@@ -25,9 +25,9 @@
   int bigEnough = 64;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"Hello Google" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
-  STAssertNotNil(matrix, @"Matrix should not be nil");
-  STAssertTrue(bigEnough >= matrix.width, @"Matrix width should be less than %d", bigEnough);
-  STAssertTrue(bigEnough >= matrix.height, @"Matrix height should be less than %d", bigEnough);
+  XCTAssertNotNil(matrix, @"Matrix should not be nil");
+  XCTAssertTrue(bigEnough >= matrix.width, @"Matrix width should be less than %d", bigEnough);
+  XCTAssertTrue(bigEnough >= matrix.height, @"Matrix height should be less than %d", bigEnough);
 }
 
 - (void)testDataMatrixWriter {
@@ -37,9 +37,9 @@
   int bigEnough = 14;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"Hello Me" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
-  STAssertNotNil(matrix, @"Matrix should not be nil");
-  STAssertEquals(matrix.width, bigEnough, @"Expected matrix width to equal %d", bigEnough);
-  STAssertEquals(matrix.height, bigEnough, @"Expected matrix height to equal %d", bigEnough);
+  XCTAssertNotNil(matrix, @"Matrix should not be nil");
+  XCTAssertEqual(matrix.width, bigEnough, @"Expected matrix width to equal %d", bigEnough);
+  XCTAssertEqual(matrix.height, bigEnough, @"Expected matrix height to equal %d", bigEnough);
 }
 
 - (void)testDataMatrixTooSmall {
@@ -48,9 +48,9 @@
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatDataMatrix width:tooSmall height:tooSmall hints:nil error:nil];
 
-  STAssertNotNil(matrix, @"Matrix should not be nil");
-  STAssertTrue(tooSmall < matrix.width, @"Expected matrix width to be less than %d", tooSmall);
-  STAssertTrue(tooSmall < matrix.height, @"Expected matrix height to be less than %d", tooSmall);
+  XCTAssertNotNil(matrix, @"Matrix should not be nil");
+  XCTAssertTrue(tooSmall < matrix.width, @"Expected matrix width to be less than %d", tooSmall);
+  XCTAssertTrue(tooSmall < matrix.height, @"Expected matrix height to be less than %d", tooSmall);
 }
 
 @end

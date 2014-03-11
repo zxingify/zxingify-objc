@@ -26,21 +26,21 @@
                                  resultPoints:nil
                                        format:kBarcodeFormatRSSExpanded];
   ZXExpandedProductParsedResult *o = (ZXExpandedProductParsedResult *)[[[ZXExpandedProductResultParser alloc] init] parse:result];
-  STAssertNotNil(o, @"Expected result to be non-nil");
-  STAssertEqualObjects(o.productID, @"66546", @"Product IDs don't match");
-  STAssertNil(o.sscc, @"Expected sscc to be nil");
-  STAssertNil(o.lotNumber, @"Expected lot number to be nil");
-  STAssertNil(o.productionDate, @"Expected production dates to be nil");
-  STAssertEqualObjects(o.packagingDate, @"001205", @"Packaging dates don't match");
-  STAssertNil(o.bestBeforeDate, @"Expected best before date to be nil");
-  STAssertNil(o.expirationDate, @"Expected expiration date to be nil");
-  STAssertEqualObjects(o.weight, @"6544", @"Weights don't match");
-  STAssertEqualObjects(o.weightType, @"KG", @"Weight types don't match");
-  STAssertEqualObjects(o.weightIncrement, @"2", @"Weight increments don't match");
-  STAssertEqualObjects(o.price, @"5", @"Prices don't match");
-  STAssertEqualObjects(o.priceIncrement, @"2", @"Price increments don't match");
-  STAssertEqualObjects(o.priceCurrency, @"445", @"Price currencies don't match");
-  STAssertEqualObjects(o.uncommonAIs, uncommonAIs, @"Uncommon AIs don't match");
+  XCTAssertNotNil(o, @"Expected result to be non-nil");
+  XCTAssertEqualObjects(o.productID, @"66546", @"Product IDs don't match");
+  XCTAssertNil(o.sscc, @"Expected sscc to be nil");
+  XCTAssertNil(o.lotNumber, @"Expected lot number to be nil");
+  XCTAssertNil(o.productionDate, @"Expected production dates to be nil");
+  XCTAssertEqualObjects(o.packagingDate, @"001205", @"Packaging dates don't match");
+  XCTAssertNil(o.bestBeforeDate, @"Expected best before date to be nil");
+  XCTAssertNil(o.expirationDate, @"Expected expiration date to be nil");
+  XCTAssertEqualObjects(o.weight, @"6544", @"Weights don't match");
+  XCTAssertEqualObjects(o.weightType, @"KG", @"Weight types don't match");
+  XCTAssertEqualObjects(o.weightIncrement, @"2", @"Weight increments don't match");
+  XCTAssertEqualObjects(o.price, @"5", @"Prices don't match");
+  XCTAssertEqualObjects(o.priceIncrement, @"2", @"Price increments don't match");
+  XCTAssertEqualObjects(o.priceCurrency, @"445", @"Price currencies don't match");
+  XCTAssertEqualObjects(o.uncommonAIs, uncommonAIs, @"Uncommon AIs don't match");
 }
 
 @end

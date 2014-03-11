@@ -25,7 +25,7 @@
     (int8_t) ('A' + 1), (int8_t) ('B' + 1), (int8_t) ('C' + 1) };
   NSString *decodedString = [ZXDataMatrixDecodedBitStreamParser decode:bytes length:6 error:nil].text;
   NSString *expected = @"abcABC";
-  STAssertEqualObjects(decodedString, expected, @"Expected \"%@\" to equal \"%@\"", decodedString, expected);
+  XCTAssertEqualObjects(decodedString, expected, @"Expected \"%@\" to equal \"%@\"", decodedString, expected);
 }
 
 @end

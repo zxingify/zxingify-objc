@@ -206,18 +206,18 @@
                       note:(NSString *)note {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  STAssertEquals(kParsedResultTypeAddressBook, result.type, @"Result type mismatch");
+  XCTAssertEqual(kParsedResultTypeAddressBook, result.type, @"Result type mismatch");
   ZXAddressBookParsedResult *addressResult = (ZXAddressBookParsedResult *)result;
-  STAssertEqualObjects(addressResult.title, title, @"Titles do not match");
-  STAssertEqualObjects(addressResult.names, names, @"Names do not match");
-  STAssertEqualObjects(addressResult.pronunciation, pronunciation, @"Pronunciation does not match");
-  STAssertEqualObjects(addressResult.addresses, addresses, @"Addresses do not match");
-  STAssertEqualObjects(addressResult.emails, emails, @"Emails do not match");
-  STAssertEqualObjects(addressResult.phoneNumbers, phoneNumbers, @"Phone numbers do not match");
-  STAssertEqualObjects(addressResult.org, org, @"Org does not match");
-  STAssertEqualObjects(addressResult.urls, urls, @"URLs do not match");
-  STAssertEqualObjects(addressResult.birthday, birthday, @"Birthday does not match");
-  STAssertEqualObjects(addressResult.note, note, @"Note does not match");
+  XCTAssertEqualObjects(addressResult.title, title, @"Titles do not match");
+  XCTAssertEqualObjects(addressResult.names, names, @"Names do not match");
+  XCTAssertEqualObjects(addressResult.pronunciation, pronunciation, @"Pronunciation does not match");
+  XCTAssertEqualObjects(addressResult.addresses, addresses, @"Addresses do not match");
+  XCTAssertEqualObjects(addressResult.emails, emails, @"Emails do not match");
+  XCTAssertEqualObjects(addressResult.phoneNumbers, phoneNumbers, @"Phone numbers do not match");
+  XCTAssertEqualObjects(addressResult.org, org, @"Org does not match");
+  XCTAssertEqualObjects(addressResult.urls, urls, @"URLs do not match");
+  XCTAssertEqualObjects(addressResult.birthday, birthday, @"Birthday does not match");
+  XCTAssertEqualObjects(addressResult.note, note, @"Note does not match");
 }
 
 @end

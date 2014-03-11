@@ -24,12 +24,12 @@
   const char cw1[4] = {142, 164, 186, (char)NULL};
   ZXSymbolInfo *symbolInfo = [ZXSymbolInfo lookup:3];
   NSString *s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCString:cw1 encoding:NSISOLatin1StringEncoding] symbolInfo:symbolInfo];
-  STAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"142 164 186 114 25 5 88 102", @"");
+  XCTAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"142 164 186 114 25 5 88 102", @"");
 
   //"A" encoded (ASCII encoding + 2 padding characters)
   const char cw2[4] = {66, 129, 70, (char)NULL};
   s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCString:cw2 encoding:NSISOLatin1StringEncoding] symbolInfo:symbolInfo];
-  STAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"66 129 70 138 234 82 82 95", @"");
+  XCTAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"66 129 70 138 234 82 82 95", @"");
 }
 
 @end

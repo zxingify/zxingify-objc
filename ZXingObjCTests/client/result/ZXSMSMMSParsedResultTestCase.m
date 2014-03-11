@@ -49,12 +49,12 @@
                       vias:(NSArray *)vias {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  STAssertEquals(result.type, kParsedResultTypeSMS, @"Types don't match");
+  XCTAssertEqual(result.type, kParsedResultTypeSMS, @"Types don't match");
   ZXSMSParsedResult *smsResult = (ZXSMSParsedResult *)result;
-  STAssertEqualObjects(smsResult.numbers, numbers, @"Numbers don't match");
-  STAssertEqualObjects(smsResult.subject, subject, @"Subjects don't match");
-  STAssertEqualObjects(smsResult.body, body, @"Bodies don't match");
-  STAssertEqualObjects(smsResult.vias, vias, @"Vias don't match");
+  XCTAssertEqualObjects(smsResult.numbers, numbers, @"Numbers don't match");
+  XCTAssertEqualObjects(smsResult.subject, subject, @"Subjects don't match");
+  XCTAssertEqualObjects(smsResult.body, body, @"Bodies don't match");
+  XCTAssertEqualObjects(smsResult.vias, vias, @"Vias don't match");
 }
 
 @end

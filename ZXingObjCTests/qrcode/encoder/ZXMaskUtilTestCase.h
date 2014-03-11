@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXMaskUtilTestCase : SenTestCase
+@interface ZXMaskUtilTestCase : XCTestCase
 
 @end

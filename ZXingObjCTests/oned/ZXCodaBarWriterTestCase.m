@@ -26,7 +26,7 @@
     @"0000000000";
   ZXBitMatrix *result = [[[ZXCodaBarWriter alloc] init] encode:@"B515-3/B" format:kBarcodeFormatCodabar width:(int)resultStr.length height:0 error:nil];
   for (int i = 0; i < resultStr.length; i++) {
-    STAssertEquals([result getX:i y:0], (BOOL)([resultStr characterAtIndex:i] == '1'), @"Element %d", i);
+    XCTAssertEqual([result getX:i y:0], (BOOL)([resultStr characterAtIndex:i] == '1'), @"Element %d", i);
   }
 }
 

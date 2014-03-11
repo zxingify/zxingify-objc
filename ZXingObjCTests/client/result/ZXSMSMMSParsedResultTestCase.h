@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface ZXSMSMMSParsedResultTestCase : SenTestCase
+@interface ZXSMSMMSParsedResultTestCase : XCTestCase
 
 @end

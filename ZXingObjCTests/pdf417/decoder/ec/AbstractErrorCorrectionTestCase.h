@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
-
-@interface AbstractErrorCorrectionTestCase : SenTestCase
+@interface AbstractErrorCorrectionTestCase : XCTestCase
 
 - (void)corrupt:(NSMutableArray *)received howMany:(int)howMany;
 - (NSArray *)erase:(NSMutableArray *)received howMany:(int)howMany;
