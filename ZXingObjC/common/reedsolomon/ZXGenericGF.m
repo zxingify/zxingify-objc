@@ -61,9 +61,12 @@
     _logTable[_expTable[i]] = i;
   }
   // logTable[0] == 0 but this should never be used
-  _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:NULL coefficientsLen:0];
+  int zeroInt = 0;
+  _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
+
   int oneInt = 1;
   _one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
+
   self.initialized = YES;
 }
 
