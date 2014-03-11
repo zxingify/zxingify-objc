@@ -148,11 +148,11 @@ static NSString *MACRO_TRAILER = nil;
   if ([msg hasPrefix:MACRO_05_HEADER] && [msg hasSuffix:MACRO_TRAILER]) {
     [context writeCodeword:[self macro05]];
     [context setSkipAtEnd:2];
-    context.pos += MACRO_05_HEADER.length;
+    context.pos += (int)MACRO_05_HEADER.length;
   } else if ([msg hasPrefix:MACRO_06_HEADER] && [msg hasSuffix:MACRO_TRAILER]) {
     [context writeCodeword:[self macro06]];
     [context setSkipAtEnd:2];
-    context.pos += MACRO_06_HEADER.length;
+    context.pos += (int)MACRO_06_HEADER.length;
   }
 
   int encodingMode = [self asciiEncodation]; //Default mode
