@@ -39,6 +39,15 @@
 
   self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];
+  
+  // Setting the scanRect area
+  CGRect scanRect = CGRectMake(30, 150, 250, 150);
+  self.capture.scanRect = scanRect;
+
+  UIView *v = [[UIView alloc] initWithFrame:scanRect];
+  v.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+  [self.view addSubview:v];
+    
   [self.view bringSubviewToFront:self.decodedLabel];
 }
 
