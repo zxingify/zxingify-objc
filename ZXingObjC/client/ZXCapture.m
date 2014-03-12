@@ -319,7 +319,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CGImageRelease(videoFrameImage);
       
     // If scanRect is set, crop the current image to include only the desired rect
-    if(CGRectIsEmpty(self.scanRect)) {
+    if(!CGRectIsEmpty(self.scanRect)) {
       CGImageRef croppedImage = CGImageCreateWithImageInRect(rotatedImage, self.scanRect);
       CFRelease(rotatedImage);
       rotatedImage = croppedImage;
