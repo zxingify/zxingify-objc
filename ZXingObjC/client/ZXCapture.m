@@ -60,6 +60,7 @@
     _running = NO;
     _sessionPreset = AVCaptureSessionPresetMedium;
     _transform = CGAffineTransformIdentity;
+    _scanRect = CGRectZero;
   }
 
   return self;
@@ -316,6 +317,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
     CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:self.rotation];
     CGImageRelease(videoFrameImage);
+      
+    // If scanRect is set, crop the current image to include only the desired rect
+    if(!CGRectIsEmpty(self.scanRect)) {
+      CGImageRef croppedImage = CGImageCreateWithImageInRect(rotatedImage, self.scanRect);
+      CFRelease(rotatedImage);
+      rotatedImage = croppedImage;
+    }
 
     if (self.captureToFilename) {
       NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
