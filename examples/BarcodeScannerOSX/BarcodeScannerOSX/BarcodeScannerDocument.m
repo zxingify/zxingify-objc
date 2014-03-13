@@ -46,85 +46,66 @@
 
 - (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result {
   if (result) {
-    NSLog(@"%@", [self displayForResult:result]);
+    NSString *formatString = [self barcodeFormatToString:result.barcodeFormat];
+    NSLog(@"Scanned!\n\nFormat: %@\n\nContents:\n%@", formatString, result.text);
   }
 }
 
 #pragma mark - Private Methods
 
-- (NSString*)displayForResult:(ZXResult*)result {
-  NSString *formatString;
-  switch (result.barcodeFormat) {
+- (NSString *)barcodeFormatToString:(ZXBarcodeFormat)format {
+  switch (format) {
     case kBarcodeFormatAztec:
-      formatString = @"Aztec";
-      break;
+      return @"Aztec";
 
     case kBarcodeFormatCodabar:
-      formatString = @"CODABAR";
-      break;
+      return @"CODABAR";
 
     case kBarcodeFormatCode39:
-      formatString = @"Code 39";
-      break;
+      return @"Code 39";
 
     case kBarcodeFormatCode93:
-      formatString = @"Code 93";
-      break;
+      return @"Code 93";
 
     case kBarcodeFormatCode128:
-      formatString = @"Code 128";
-      break;
+      return @"Code 128";
 
     case kBarcodeFormatDataMatrix:
-      formatString = @"Data Matrix";
-      break;
+      return @"Data Matrix";
 
     case kBarcodeFormatEan8:
-      formatString = @"EAN-8";
-      break;
+      return @"EAN-8";
 
     case kBarcodeFormatEan13:
-      formatString = @"EAN-13";
-      break;
+      return @"EAN-13";
 
     case kBarcodeFormatITF:
-      formatString = @"ITF";
-      break;
+      return @"ITF";
 
     case kBarcodeFormatPDF417:
-      formatString = @"PDF417";
-      break;
+      return @"PDF417";
 
     case kBarcodeFormatQRCode:
-      formatString = @"QR Code";
-      break;
+      return @"QR Code";
 
     case kBarcodeFormatRSS14:
-      formatString = @"RSS 14";
-      break;
+      return @"RSS 14";
 
     case kBarcodeFormatRSSExpanded:
-      formatString = @"RSS Expanded";
-      break;
+      return @"RSS Expanded";
 
     case kBarcodeFormatUPCA:
-      formatString = @"UPCA";
-      break;
+      return @"UPCA";
 
     case kBarcodeFormatUPCE:
-      formatString = @"UPCE";
-      break;
+      return @"UPCE";
 
     case kBarcodeFormatUPCEANExtension:
-      formatString = @"UPC/EAN extension";
-      break;
-
+      return @"UPC/EAN extension";
+      
     default:
-      formatString = @"Unknown";
-      break;
+      return @"Unknown";
   }
-
-  return [NSString stringWithFormat:@"Scanned!\n\nFormat: %@\n\nContents:\n%@", formatString, result.text];
 }
 
 @end

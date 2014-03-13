@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <ZXingObjC/ZXingObjC.h>
+
 @interface ViewController : UIViewController <ZXCaptureDelegate>
 
 @end

@@ -15,12 +15,12 @@
  */
 
 #import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVFoundation.h>
 #import "ViewController.h"
 
 @interface ViewController ()
 
 @property (nonatomic, strong) ZXCapture *capture;
+@property (nonatomic, weak) IBOutlet UIView *scanRectView;
 @property (nonatomic, weak) IBOutlet UILabel *decodedLabel;
 
 @end
@@ -40,14 +40,7 @@
   self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];
 
-  // Set a scanRect area
-  UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 250)];
-  v.center = self.view.center;
-  v.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-  [self.view addSubview:v];
-
-  self.capture.scanRect = v.frame;
-
+  [self.view bringSubviewToFront:self.scanRectView];
   [self.view bringSubviewToFront:self.decodedLabel];
 }
 
@@ -55,6 +48,8 @@
   [super viewWillAppear:animated];
 
   self.capture.delegate = self;
+  self.capture.layer.frame = self.view.bounds;
+  self.capture.scanRect = self.scanRectView.frame;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
@@ -63,94 +58,73 @@
 
 #pragma mark - Private Methods
 
-- (NSString*)displayForResult:(ZXResult*)result {
-  NSString *formatString;
-  switch (result.barcodeFormat) {
+- (NSString *)barcodeFormatToString:(ZXBarcodeFormat)format {
+  switch (format) {
     case kBarcodeFormatAztec:
-      formatString = @"Aztec";
-      break;
+      return @"Aztec";
 
     case kBarcodeFormatCodabar:
-      formatString = @"CODABAR";
-      break;
+      return @"CODABAR";
 
     case kBarcodeFormatCode39:
-      formatString = @"Code 39";
-      break;
+      return @"Code 39";
 
     case kBarcodeFormatCode93:
-      formatString = @"Code 93";
-      break;
+      return @"Code 93";
 
     case kBarcodeFormatCode128:
-      formatString = @"Code 128";
-      break;
+      return @"Code 128";
 
     case kBarcodeFormatDataMatrix:
-      formatString = @"Data Matrix";
-      break;
+      return @"Data Matrix";
 
     case kBarcodeFormatEan8:
-      formatString = @"EAN-8";
-      break;
+      return @"EAN-8";
 
     case kBarcodeFormatEan13:
-      formatString = @"EAN-13";
-      break;
+      return @"EAN-13";
 
     case kBarcodeFormatITF:
-      formatString = @"ITF";
-      break;
+      return @"ITF";
 
     case kBarcodeFormatPDF417:
-      formatString = @"PDF417";
-      break;
+      return @"PDF417";
 
     case kBarcodeFormatQRCode:
-      formatString = @"QR Code";
-      break;
+      return @"QR Code";
 
     case kBarcodeFormatRSS14:
-      formatString = @"RSS 14";
-      break;
+      return @"RSS 14";
 
     case kBarcodeFormatRSSExpanded:
-      formatString = @"RSS Expanded";
-      break;
+      return @"RSS Expanded";
 
     case kBarcodeFormatUPCA:
-      formatString = @"UPCA";
-      break;
+      return @"UPCA";
 
     case kBarcodeFormatUPCE:
-      formatString = @"UPCE";
-      break;
+      return @"UPCE";
 
     case kBarcodeFormatUPCEANExtension:
-      formatString = @"UPC/EAN extension";
-      break;
+      return @"UPC/EAN extension";
 
     default:
-      formatString = @"Unknown";
-      break;
+      return @"Unknown";
   }
-
-  return [NSString stringWithFormat:@"Scanned!\n\nFormat: %@\n\nContents:\n%@", formatString, result.text];
 }
 
 #pragma mark - ZXCaptureDelegate Methods
 
-- (void)captureResult:(ZXCapture*)capture result:(ZXResult*)result {
-  if (result) {
-    // We got a result. Display information about the result onscreen.
-    [self.decodedLabel performSelectorOnMainThread:@selector(setText:) withObject:[self displayForResult:result] waitUntilDone:YES];
+- (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result {
+  if (!result) return;
 
-    // Vibrate
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-  }
-}
+  // We got a result. Display information about the result onscreen.
+  NSString *formatString = [self barcodeFormatToString:result.barcodeFormat];
+  NSString *display = [NSString stringWithFormat:@"Scanned!\n\nFormat: %@\n\nContents:\n%@", formatString, result.text];
+  [self.decodedLabel performSelectorOnMainThread:@selector(setText:) withObject:display waitUntilDone:YES];
 
-- (void)captureSize:(ZXCapture*)capture width:(NSNumber*)width height:(NSNumber*)height {
+  // Vibrate
+  AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 @end
