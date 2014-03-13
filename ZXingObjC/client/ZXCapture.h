@@ -28,6 +28,7 @@
 @property (nonatomic, weak) id<ZXCaptureDelegate> delegate;
 @property (nonatomic, assign) AVCaptureFocusMode focusMode;
 @property (nonatomic, strong) ZXDecodeHints *hints;
+@property (nonatomic, assign) CGImageRef lastScannedImage;
 @property (nonatomic, assign) BOOL invert;
 @property (nonatomic, strong, readonly) CALayer *layer;
 @property (nonatomic, assign) BOOL mirror;

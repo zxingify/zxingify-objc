@@ -52,6 +52,7 @@
     _focusMode = AVCaptureFocusModeContinuousAutoFocus;
     _hardStop = NO;
     _hints = [ZXDecodeHints hints];
+    _lastScannedImage = NULL;
     _onScreen = NO;
     _orderInSkip = 0;
     _orderOutSkip = 0;
@@ -64,6 +65,12 @@
   }
 
   return self;
+}
+
+- (void)dealloc {
+  if (_lastScannedImage) {
+    CGImageRelease(_lastScannedImage);
+  }
 }
 
 #pragma mark - Property Getters
@@ -125,6 +132,18 @@
     self.input.device.focusMode = focusMode;
     [self.input.device unlockForConfiguration];
   }
+}
+
+- (void)setLastScannedImage:(CGImageRef)lastScannedImage {
+  if (_lastScannedImage) {
+    CGImageRelease(_lastScannedImage);
+  }
+
+  if (lastScannedImage) {
+    CGImageRetain(lastScannedImage);
+  }
+
+  _lastScannedImage = lastScannedImage;
 }
 
 - (void)setMirror:(BOOL)mirror {
@@ -324,6 +343,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       CFRelease(rotatedImage);
       rotatedImage = croppedImage;
     }
+
+    self.lastScannedImage = rotatedImage;
 
     if (self.captureToFilename) {
       NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
