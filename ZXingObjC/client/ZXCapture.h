@@ -35,10 +35,10 @@
 @property (nonatomic, strong) id<ZXReader> reader;
 @property (nonatomic, assign) CGFloat rotation;
 @property (nonatomic, assign, readonly) BOOL running;
+@property (nonatomic, assign) CGRect scanRect;
 @property (nonatomic, copy) NSString *sessionPreset;
 @property (nonatomic, assign) BOOL torch;
 @property (nonatomic, assign) CGAffineTransform transform;
-@property (nonatomic, assign) CGRect scanRect;
 
 - (int)back;
 - (int)front;
