@@ -25,7 +25,7 @@
 
 @implementation ZXGenericGFPoly
 
-- (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(int)coefficientsLen {
+- (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(NSUInteger)coefficientsLen {
   if (self = [super init]) {
     _field = field;
     if (coefficientsLen > 1 && coefficients[0] == 0) {
@@ -39,7 +39,7 @@
         memcpy(_coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
         _coefficientsLen = zero.coefficientsLen;
       } else {
-        _coefficientsLen = (coefficientsLen - firstNonZero);
+        _coefficientsLen = (int)coefficientsLen - firstNonZero;
         _coefficients = (int *)malloc(_coefficientsLen * sizeof(int));
         for (int i = 0; i < _coefficientsLen; i++) {
           _coefficients[i] = coefficients[firstNonZero + i];
@@ -48,7 +48,7 @@
     } else {
       _coefficients = (int *)malloc(coefficientsLen * sizeof(int));
       memcpy(_coefficients, coefficients, coefficientsLen * sizeof(int));
-      _coefficientsLen = coefficientsLen;
+      _coefficientsLen = (int)coefficientsLen;
     }
   }
 

@@ -24,13 +24,6 @@
 #import "ZXResultPoint.h"
 #import "ZXWhiteRectangleDetector.h"
 
-@interface ZXAztecPoint : NSObject
-
-@property (nonatomic, assign) int x;
-@property (nonatomic, assign) int y;
-
-@end
-
 @implementation ZXAztecPoint
 
 - (id)initWithX:(int)x y:(int)y {
@@ -53,7 +46,7 @@
 
 @interface ZXAztecDetector ()
 
-@property (nonatomic, assign) BOOL compact;
+@property (nonatomic, assign, getter = isCompact) BOOL compact;
 @property (nonatomic, strong) ZXBitMatrix *image;
 @property (nonatomic, assign) int nbCenterLayers;
 @property (nonatomic, assign) int nbDataBlocks;
@@ -71,13 +64,11 @@
   return self;
 }
 
-/**
- * Detects an Aztec Code in an image.
- */
 - (ZXAztecDetectorResult *)detectWithError:(NSError **)error {
   // 1. Get the center of the aztec matrix
-  ZXAztecPoint *pCenter = [self matrixCenterWithError:error];
+  ZXAztecPoint *pCenter = [self matrixCenter];
   if (!pCenter) {
+    if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
@@ -90,7 +81,7 @@
   }
 
   // 3. Get the size of the matrix and other parameters from the bull's eye
-  if (![self extractParameters:bullsEyeCorners error:error]) {
+  if (![self extractParameters:bullsEyeCorners]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -100,8 +91,11 @@
                                topLeft:bullsEyeCorners[self.shift % 4]
                               topRight:bullsEyeCorners[(self.shift + 1) % 4]
                            bottomRight:bullsEyeCorners[(self.shift + 2) % 4]
-                            bottomLeft:bullsEyeCorners[(self.shift + 3) % 4]
-                                 error:error];
+                            bottomLeft:bullsEyeCorners[(self.shift + 3) % 4]];
+  if (!bits) {
+    if (error) *error = NotFoundErrorInstance();
+    return nil;
+  }
 
   // 5. Get the corners of the matrix.
   NSArray *corners = [self matrixCornerPoints:bullsEyeCorners];
@@ -121,7 +115,7 @@
 /**
  * Extracts the number of data layers and data blocks from the layer around the bull's eye
  */
-- (BOOL)extractParameters:(NSArray *)bullsEyeCorners error:(NSError **)error {
+- (BOOL)extractParameters:(NSArray *)bullsEyeCorners {
   ZXResultPoint *p0 = bullsEyeCorners[0];
   ZXResultPoint *p1 = bullsEyeCorners[1];
   ZXResultPoint *p2 = bullsEyeCorners[2];
@@ -131,100 +125,117 @@
       ![self isValid:p2] || ![self isValid:p3]) {
     return NO;
   }
-  int twoCenterLayers = 2 * self.nbCenterLayers;
-
+  int length = 2 * self.nbCenterLayers;
   // Get the bits around the bull's eye
-  NSArray *resab = [self sampleLine:p0 p2:p1 size:twoCenterLayers + 1];
-  NSArray *resbc = [self sampleLine:p1 p2:p2 size:twoCenterLayers + 1];
-  NSArray *rescd = [self sampleLine:p2 p2:p3 size:twoCenterLayers + 1];
-  NSArray *resda = [self sampleLine:p3 p2:p0 size:twoCenterLayers + 1];
+  int sides[] = {
+    [self sampleLine:p0 p2:p1 size:length], // Right side
+    [self sampleLine:p1 p2:p2 size:length], // Bottom
+    [self sampleLine:p2 p2:p3 size:length], // Left side
+    [self sampleLine:p3 p2:p0 size:length] // Top
+  };
 
-  // Determine the orientation of the matrix
-  if ([resab[0] boolValue] && [resab[twoCenterLayers] boolValue]) {
-    self.shift = 0;
-  } else if ([resbc[0] boolValue] && [resbc[twoCenterLayers] boolValue]) {
-    self.shift = 1;
-  } else if ([rescd[0] boolValue] && [rescd[twoCenterLayers] boolValue]) {
-    self.shift = 2;
-  } else if ([resda[0] boolValue] && [resda[twoCenterLayers] boolValue]) {
-    self.shift = 3;
-  } else {
-    if (error) *error = NotFoundErrorInstance();
+  // bullsEyeCorners[shift] is the corner of the bulls'eye that has three
+  // orientation marks.
+  // sides[shift] is the row/column that goes from the corner with three
+  // orientation marks to the corner with two.
+  int shift = [self rotationForSides:sides length:length];
+  if (shift == -1) {
+    return NO;
+  }
+  self.shift = shift;
+
+  // Flatten the parameter bits into a single 28- or 40-bit long
+  long parameterData = 0;
+  for (int i = 0; i < 4; i++) {
+    int side = sides[(self.shift + i) % 4];
+    if (self.isCompact) {
+      // Each side of the form ..XXXXXXX. where Xs are parameter data
+      parameterData <<= 7;
+      parameterData += (side >> 1) & 0x7F;
+    } else {
+      // Each side of the form ..XXXXX.XXXXX. where Xs are parameter data
+      parameterData <<= 10;
+      parameterData += ((side >> 2) & (0x1f << 5)) + ((side >> 1) & 0x1F);
+    }
+  }
+
+  // Corrects parameter data using RS.  Returns just the data portion
+  // without the error correction.
+  int correctedData = [self correctedParameterData:parameterData compact:self.isCompact];
+  if (correctedData == -1) {
     return NO;
   }
 
-  //d      a
-  //
-  //c      b
-
-  // Flatten the bits in a single array
-  NSMutableArray *parameterData = [NSMutableArray array];
-  NSMutableArray *shiftedParameterData = [NSMutableArray array];
-  if (self.compact) {
-    for (int i = 0; i < 28; i++) {
-      [shiftedParameterData addObject:@NO];
-    }
-
-    for (int i = 0; i < 7; i++) {
-      shiftedParameterData[i] = resab[2+i];
-      shiftedParameterData[i + 7] = resbc[2+i];
-      shiftedParameterData[i + 14] = rescd[2+i];
-      shiftedParameterData[i + 21] = resda[2+i];
-    }
-
-    for (int i = 0; i < 28; i++) {
-      [parameterData addObject:shiftedParameterData[(i + self.shift * 7) % 28]];
-    }
+  if (self.isCompact) {
+    // 8 bits:  2 bits layers and 6 bits data blocks
+    self.nbLayers = (correctedData >> 6) + 1;
+    self.nbDataBlocks = (correctedData & 0x3F) + 1;
   } else {
-    for (int i = 0; i < 40; i++) {
-      [shiftedParameterData addObject:@NO];
-    }
-
-    for (int i = 0; i < 11; i++) {
-      if (i < 5) {
-        shiftedParameterData[i] = resab[2 + i];
-        shiftedParameterData[i + 10] = resbc[2 + i];
-        shiftedParameterData[i + 20] = rescd[2 + i];
-        shiftedParameterData[i + 30] = resda[2 + i];
-      }
-      if (i > 5) {
-        shiftedParameterData[i - 1] = resab[2 + i];
-        shiftedParameterData[i + 9] = resbc[2 + i];
-        shiftedParameterData[i + 19] = rescd[2 + i];
-        shiftedParameterData[i + 29] = resda[2 + i];
-      }
-    }
-
-    for (int i = 0; i < 40; i++) {
-      [parameterData addObject:shiftedParameterData[(i + self.shift * 10) % 40]];
-    }
+    // 16 bits:  5 bits layers and 11 bits data blocks
+    self.nbLayers = (correctedData >> 11) + 1;
+    self.nbDataBlocks = (correctedData & 0x7FF) + 1;
   }
 
-  // corrects the error using RS algorithm
-  if (![self correctParameterData:parameterData compact:self.compact error:error]) {
-    return NO;
-  }
-
-  // gets the parameters from the bit array
-  [self parameters:parameterData];
   return YES;
 }
 
-/**
- * Gets the Aztec code corners from the bull's eye corners and the parameters
- */
-- (NSArray *)matrixCornerPoints:(NSArray *)bullsEyeCorners {
-  return [self expandSquare:bullsEyeCorners oldSide:2 * self.nbCenterLayers newSide:[self dimension]];
+int expectedCornerBits[] = {
+  0xee0,  // 07340  XXX .XX X.. ...
+  0x1dc,  // 00734  ... XXX .XX X..
+  0x83b,  // 04073  X.. ... XXX .XX
+  0x707,  // 03407 .XX X.. ... XXX
+};
+
+int bitCount(uint32_t i) {
+  i = i - ((i >> 1) & 0x55555555);
+  i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+  return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+}
+
+- (int)rotationForSides:(const int[])sides length:(int)length {
+  // In a normal pattern, we expect to See
+  //   **    .*             D       A
+  //   *      *
+  //
+  //   .      *
+  //   ..    ..             C       B
+  //
+  // Grab the 3 bits from each of the sides the form the locator pattern and concatenate
+  // into a 12-bit integer.  Start with the bit at A
+  int cornerBits = 0;
+  for (int i = 0; i < 4; i++) {
+    int side = sides[i];
+    // XX......X where X's are orientation marks
+    int t = ((side >> (length - 2)) << 1) + (side & 1);
+    cornerBits = (cornerBits << 3) + t;
+  }
+  // Mov the bottom bit to the top, so that the three bits of the locator pattern at A are
+  // together.  cornerBits is now:
+  //  3 orientation bits at A || 3 orientation bits at B || ... || 3 orientation bits at D
+  cornerBits = ((cornerBits & 1) << 11) + (cornerBits >> 1);
+  // The result shift indicates which element of BullsEyeCorners[] goes into the top-left
+  // corner. Since the four rotation values have a Hamming distance of 8, we
+  // can easily tolerate two errors.
+  for (int shift = 0; shift < 4; shift++) {
+    if (bitCount(cornerBits ^ expectedCornerBits[shift]) <= 2) {
+      return shift;
+    }
+  }
+  return -1;
 }
 
 /**
  * Corrects the parameter bits using Reed-Solomon algorithm.
+ *
+ * @param parameterData parameter bits
+ * @param compact true if this is a compact Aztec code
+ * @return -1 if the array contains too many errors
  */
-- (BOOL)correctParameterData:(NSMutableArray *)parameterData compact:(BOOL)isCompact error:(NSError **)error {
+- (int)correctedParameterData:(long)parameterData compact:(BOOL)compact {
   int numCodewords;
   int numDataCodewords;
 
-  if (isCompact) {
+  if (compact) {
     numCodewords = 7;
     numDataCodewords = 2;
   } else {
@@ -233,46 +244,32 @@
   }
 
   int numECCodewords = numCodewords - numDataCodewords;
-  int parameterWordsLen = numCodewords;
-  int parameterWords[parameterWordsLen];
-
-  int codewordSize = 4;
-  for (int i = 0; i < parameterWordsLen; i++) {
-    parameterWords[i] = 0;
-    int flag = 1;
-    for (int j = 1; j <= codewordSize; j++) {
-      if ([parameterData[codewordSize * i + codewordSize - j] boolValue]) {
-        parameterWords[i] += flag;
-      }
-      flag <<= 1;
-    }
+  int parameterWords[numCodewords];
+  memset(parameterWords, 0, sizeof(parameterWords)/sizeof(int));
+  for (int i = numCodewords - 1; i >= 0; --i) {
+    parameterWords[i] = (int) parameterData & 0xF;
+    parameterData >>= 4;
   }
 
   ZXReedSolomonDecoder *rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF AztecParam]];
-  NSError *decodeError = nil;
-  if (![rsDecoder decode:parameterWords receivedLen:parameterWordsLen twoS:numECCodewords error:error]) {
-    if (decodeError.code == ZXReedSolomonError) {
-      if (error) *error = NotFoundErrorInstance();
-      return NO;
-    } else {
-      return NO;
-    }
+  if (![rsDecoder decode:parameterWords receivedLen:sizeof(parameterWords)/sizeof(int) twoS:numECCodewords error:nil]) {
+    return NO;
   }
-
+  // Toss the error correction.  Just return the data as an integer
+  int result = 0;
   for (int i = 0; i < numDataCodewords; i++) {
-    int flag = 1;
-    for (int j = 1; j <= codewordSize; j++) {
-      parameterData[i * codewordSize + codewordSize - j] = [NSNumber numberWithBool:(parameterWords[i] & flag) == flag];
-      flag <<= 1;
-    }
+    result = (result << 4) + parameterWords[i];
   }
-  return YES;
+  return result;
 }
 
 /**
  * Finds the corners of a bull-eye centered on the passed point.
  * This returns the centers of the diagonal points just outside the bull's eye
  * Returns [topRight, bottomRight, bottomLeft, topLeft]
+ *
+ * @param pCenter Center point
+ * @return The corners of the bull-eye, or nil if no valid bull-eye can be found
  */
 - (NSArray *)bullsEyeCorners:(ZXAztecPoint *)pCenter {
   ZXAztecPoint *pina = pCenter;
@@ -330,80 +327,87 @@
 /**
  * Finds a candidate center point of an Aztec code from an image
  */
-- (ZXAztecPoint *)matrixCenterWithError:(NSError **)error {
+- (ZXAztecPoint *)matrixCenter {
   ZXResultPoint *pointA;
   ZXResultPoint *pointB;
   ZXResultPoint *pointC;
   ZXResultPoint *pointD;
 
-  NSError *detectorError = nil;
-  ZXWhiteRectangleDetector *detector = [[ZXWhiteRectangleDetector alloc] initWithImage:self.image error:&detectorError];
-  NSArray *cornerPoints = nil;
-  if (detector) {
-    cornerPoints = [detector detectWithError:&detectorError];
-  }
+  ZXWhiteRectangleDetector *detector = [[ZXWhiteRectangleDetector alloc] initWithImage:self.image error:nil];
+  NSArray *cornerPoints = [detector detectWithError:nil];
 
-  if (detectorError && detectorError.code == ZXNotFoundError) {
+  if (cornerPoints) {
+    pointA = cornerPoints[0];
+    pointB = cornerPoints[1];
+    pointC = cornerPoints[2];
+    pointD = cornerPoints[3];
+  } else {
+    // This exception can be in case the initial rectangle is white
+    // In that case, surely in the bull's eye, we try to expand the rectangle.
     int cx = self.image.width / 2;
     int cy = self.image.height / 2;
     pointA = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx + 7 y:cy - 7] color:NO dx:1 dy:-1] toResultPoint];
     pointB = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx + 7 y:cy + 7]  color:NO dx:1 dy:1] toResultPoint];
     pointC = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx - 7 y:cy + 7]  color:NO dx:-1 dy:1] toResultPoint];
     pointD = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx - 7 y:cy - 7]  color:NO dx:-1 dy:-1] toResultPoint];
-  } else if (detectorError) {
-    if (error) *error = detectorError;
-    return nil;
-  } else {
+  }
+
+  //Compute the center of the rectangle
+  int cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4.0f];
+  int cy = [ZXMathUtils round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4.0f];
+
+  // Redetermine the white rectangle starting from previously computed center.
+  // This will ensure that we end up with a white rectangle in center bull's eye
+  // in order to compute a more accurate center.
+  detector = [[ZXWhiteRectangleDetector alloc] initWithImage:self.image initSize:15 x:cx y:cy error:nil];
+  cornerPoints = [detector detectWithError:nil];
+
+  if (cornerPoints) {
     pointA = cornerPoints[0];
     pointB = cornerPoints[1];
     pointC = cornerPoints[2];
     pointD = cornerPoints[3];
-  }
-
-  int cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4.0f];
-  int cy = [ZXMathUtils round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4.0f];
-
-  detectorError = nil;
-  detector = [[ZXWhiteRectangleDetector alloc] initWithImage:self.image initSize:15 x:cx y:cy error:&detectorError];
-  if (detector) {
-    cornerPoints = [detector detectWithError:&detectorError];
-  }
-
-  if (detectorError && detectorError.code == ZXNotFoundError) {
+  } else {
+    // This exception can be in case the initial rectangle is white
+    // In that case we try to expand the rectangle.
     pointA = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx + 7 y:cy - 7]  color:NO dx:1 dy:-1] toResultPoint];
     pointB = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx + 7 y:cy + 7]  color:NO dx:1 dy:1] toResultPoint];
     pointC = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx - 7 y:cy + 7]  color:NO dx:-1 dy:1] toResultPoint];
     pointD = [[self firstDifferent:[[ZXAztecPoint alloc] initWithX:cx - 7 y:cy - 7] color:NO dx:-1 dy:-1] toResultPoint];
-  } else if (detectorError) {
-    if (error) *error = detectorError;
-    return nil;
-  } else {
-    pointA = cornerPoints[0];
-    pointB = cornerPoints[1];
-    pointC = cornerPoints[2];
-    pointD = cornerPoints[3];
   }
 
   cx = [ZXMathUtils round:([pointA x] + [pointD x] + [pointB x] + [pointC x]) / 4];
   cy = [ZXMathUtils round:([pointA y] + [pointD y] + [pointB y] + [pointC y]) / 4];
 
+  // Recompute the center of the rectangle
   return [[ZXAztecPoint alloc] initWithX:cx y:cy];
 }
 
 /**
- * Samples an Aztec matrix from an image
+ * Gets the Aztec code corners from the bull's eye corners and the parameters.
+ *
+ * @param bullsEyeCorners the array of bull's eye corners
+ * @return the array of aztec code corners, or nil if the corner points do not fit in the image
+ */
+- (NSArray *)matrixCornerPoints:(NSArray *)bullsEyeCorners {
+  return [self expandSquare:bullsEyeCorners oldSide:2 * self.nbCenterLayers newSide:[self dimension]];
+}
+
+/**
+ * Creates a BitMatrix by sampling the provided image.
+ * topLeft, topRight, bottomRight, and bottomLeft are the centers of the squares on the
+ * diagonal just outside the bull's eye.
  */
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)anImage
                     topLeft:(ZXResultPoint *)topLeft
                    topRight:(ZXResultPoint *)topRight
                 bottomRight:(ZXResultPoint *)bottomRight
-                 bottomLeft:(ZXResultPoint *)bottomLeft
-                      error:(NSError **)error {
+                 bottomLeft:(ZXResultPoint *)bottomLeft {
   ZXGridSampler *sampler = [ZXGridSampler instance];
   int dimension = [self dimension];
 
-  float low = dimension/2.0f - self.nbCenterLayers;
-  float high = dimension/2.0f + self.nbCenterLayers;
+  float low = dimension / 2.0f - self.nbCenterLayers;
+  float high = dimension / 2.0f + self.nbCenterLayers;
 
   return [sampler sampleGrid:anImage
                   dimensionX:dimension
@@ -416,68 +420,38 @@
                      p2FromX:topRight.x p2FromY:topRight.y
                      p3FromX:bottomRight.x p3FromY:bottomRight.y
                      p4FromX:bottomLeft.x p4FromY:bottomLeft.y
-                       error:error];
+                       error:nil];
 }
 
 /**
- * Sets number of layers and number of data blocks from parameter bits
+ * Samples a line.
+ *
+ * @param p1   start point (inclusive)
+ * @param p2   end point (exclusive)
+ * @param size number of bits
+ * @return the array of bits as an int (first bit is high-order bit of result)
  */
-- (void)parameters:(NSArray *)parameterData {
-  int nbBitsForNbLayers;
-  int nbBitsForNbDatablocks;
+- (int)sampleLine:(ZXResultPoint *)p1 p2:(ZXResultPoint *)p2 size:(int)size {
+  int result = 0;
 
-  if (self.compact) {
-    nbBitsForNbLayers = 2;
-    nbBitsForNbDatablocks = 6;
-  } else {
-    nbBitsForNbLayers = 5;
-    nbBitsForNbDatablocks = 11;
-  }
-
-  for (int i = 0; i < nbBitsForNbLayers; i++) {
-    self.nbLayers <<= 1;
-    if ([parameterData[i] boolValue]) {
-      self.nbLayers++;
-    }
-  }
-
-  for (int i = nbBitsForNbLayers; i < nbBitsForNbLayers + nbBitsForNbDatablocks; i++) {
-    self.nbDataBlocks <<= 1;
-    if ([parameterData[i] boolValue]) {
-      self.nbDataBlocks++;
-    }
-  }
-
-  self.nbLayers++;
-  self.nbDataBlocks++;
-}
-
-/**
- * Samples a line
- */
-- (NSArray *)sampleLine:(ZXResultPoint *)p1 p2:(ZXResultPoint *)p2 size:(int)size {
-  NSMutableArray *res = [NSMutableArray arrayWithCapacity:size];
   float d = [self resultDistance:p1 b:p2];
-  float moduleSize = d / (size - 1);
-  float dx = moduleSize * (p2.x - p1.x) / d;
-  float dy = moduleSize * (p2.y - p1.y) / d;
-
+  float moduleSize = d / size;
   float px = p1.x;
   float py = p1.y;
-
+  float dx = moduleSize * (p2.x - p1.x) / d;
+  float dy = moduleSize * (p2.y - p1.y) / d;
   for (int i = 0; i < size; i++) {
-    [res addObject:@([self.image getX:[ZXMathUtils round:px] y:[ZXMathUtils round:py]])];
-    px += dx;
-    py += dy;
+    if ([self.image getX:[ZXMathUtils round:px + i * dx] y:[ZXMathUtils round:py + i * dy]]) {
+      result |= 1 << (size - i - 1);
+    }
   }
 
-  return res;
+  return result;
 }
 
-
 /**
- * return true if the border of the rectangle passed in parameter is compound of white points only
- * or black points only
+ * @return true if the border of the rectangle passed in parameter is compound of white points only
+ *         or black points only
  */
 - (BOOL)isWhiteOrBlackRectangle:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 p3:(ZXAztecPoint *)p3 p4:(ZXAztecPoint *)p4 {
   int corr = 3;
@@ -512,7 +486,8 @@
 
 /**
  * Gets the color of a segment
- * return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
+ *
+ * @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
  */
 - (int)color:(ZXAztecPoint *)p1 p2:(ZXAztecPoint *)p2 {
   float d = [self distance:p1 b:p2];
@@ -572,6 +547,11 @@
 
 /**
  * Expand the square represented by the corner points by pushing out equally in all directions
+ *
+ * @param cornerPoints the corners of the square, which has the bull's eye at its center
+ * @param oldSide the original length of the side of the square in the target bit matrix
+ * @param newSide the new length of the size of the square in the target bit matrix
+ * @return the corners of the expanded square
  */
 - (NSArray *)expandSquare:(NSArray *)cornerPoints oldSide:(float)oldSide newSide:(float)newSide {
   ZXResultPoint *cornerPoints0 = (ZXResultPoint *)cornerPoints[0];

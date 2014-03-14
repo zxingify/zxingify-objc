@@ -18,6 +18,17 @@
 
 unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 
+@interface ZXAztecEncoder (PrivateMethods)
+
++ (ZXBitArray *)generateModeMessageCompact:(BOOL)compact layers:(int)layers messageSizeInWords:(int)messageSizeInWords;
++ (void)drawModeMessage:(ZXBitMatrix *)matrix compact:(BOOL)compact matrixSize:(int)matrixSize modeMessage:(ZXBitArray *)modeMessage;
++ (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalSymbolBits:(int)totalSymbolBits wordSize:(int)wordSize;
++ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message;
++ (ZXGenericGF *)getGF:(int)wordSize;
++ (ZXBitArray *)stuffBits:(ZXBitArray *)bits wordSize:(int)wordSize;
+
+@end
+
 @implementation ZXAztecEncoderTest
 
 // real life tests
@@ -111,7 +122,7 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   NSString *data = @"In ut magna vel mauris malesuada";
   ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 error:nil];
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes] len:[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding] minECCPercent:ZX_DEFAULT_AZTEC_EC_PERCENT];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes] len:[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding] minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
   ZXBitMatrix *expectedMatrix = aztec.matrix;
   XCTAssertEqualObjects(expectedMatrix, matrix, @"Expected matrices to be equal");
 }
@@ -444,7 +455,7 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   for (int i = 0; i < resultSize; i++) {
     result[i] = [bitArray get:i];
   }
-  return [ZXAztecDecoder highLevelDecode:result length:resultSize error:nil];
+  return [ZXAztecDecoder highLevelDecode:result length:resultSize];
 }
 
 - (void)testHighLevelEncodeString:(NSString *)s expectedBits:(NSString *)expectedBits {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2014 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,8 @@
  */
 
 /**
- * The main class which implements Aztec Code decoding -- as opposed to locating and extracting
- * the Aztec Code from an image.
+ * Tests for the Detector
  */
-
-@class ZXAztecDetectorResult, ZXDecoderResult;
-
-@interface ZXAztecDecoder : NSObject
-
-- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError **)error;
-
-// This method is used for testing the high-level encoder
-+ (NSString *)highLevelDecode:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength;
+@interface ZXAztecDetectorTest : XCTestCase
 
 @end

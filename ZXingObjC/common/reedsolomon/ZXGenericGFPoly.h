@@ -29,7 +29,7 @@
 @property (nonatomic, assign, readonly) int *coefficients;
 @property (nonatomic, assign, readonly) int coefficientsLen;
 
-- (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(int)coefficientsLen;
+- (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(NSUInteger)coefficientsLen;
 - (int)degree;
 - (BOOL)zero;
 - (int)coefficient:(int)degree;

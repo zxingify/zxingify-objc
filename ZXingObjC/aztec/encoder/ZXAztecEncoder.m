@@ -22,40 +22,20 @@
 #import "ZXGenericGF.h"
 #import "ZXReedSolomonEncoder.h"
 
-int ZX_DEFAULT_AZTEC_EC_PERCENT = 33;
+const int ZX_AZTEC_DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
+const int ZX_AZTEC_MAX_NB_BITS = 32;
 
-const int NB_BITS_LEN = 33;
-static int NB_BITS[NB_BITS_LEN]; // total bits per compact symbol for a given number of layers
-
-const int NB_BITS_COMPACT_LEN = 5;
-static int NB_BITS_COMPACT[NB_BITS_COMPACT_LEN]; // total bits per full symbol for a given number of layers
-
-static int WORD_SIZE[33] = {
+const int ZX_AZTEC_WORD_SIZE[] = {
   4, 6, 6, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
   12, 12, 12, 12, 12, 12, 12, 12, 12, 12
 };
 
 @implementation ZXAztecEncoder
 
-+ (void)initialize {
-  for (int i = 1; i < NB_BITS_COMPACT_LEN; i++) {
-    NB_BITS_COMPACT[i] = (88 + 16 * i) * i;
-  }
-  for (int i = 1; i < NB_BITS_LEN; i++) {
-    NB_BITS[i] = (112 + 16 * i) * i;
-  }
-}
-
-/**
- * Encodes the given binary content as an Aztec symbol
- */
 + (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len {
-  return [self encode:data len:len minECCPercent:ZX_DEFAULT_AZTEC_EC_PERCENT];
+  return [self encode:data len:len minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
 }
 
-/**
- * Encodes the given binary content as an Aztec symbol
- */
 + (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len minECCPercent:(int)minECCPercent {
   // High-level encode
   ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:data textLength:len] encode];
@@ -63,62 +43,54 @@ static int WORD_SIZE[33] = {
   // stuff bits and choose symbol size
   int eccBits = bits.size * minECCPercent / 100 + 11;
   int totalSizeBits = bits.size + eccBits;
+  BOOL compact;
   int layers;
+  int totalBitsInLayer;
   int wordSize = 0;
-  int totalSymbolBits = 0;
   ZXBitArray *stuffedBits = nil;
-  for (layers = 1; layers < NB_BITS_COMPACT_LEN; layers++) {
-    if (NB_BITS_COMPACT[layers] >= totalSizeBits) {
-      if (wordSize != WORD_SIZE[layers]) {
-        wordSize = WORD_SIZE[layers];
-        stuffedBits = [self stuffBits:bits wordSize:wordSize];
-      }
-      totalSymbolBits = NB_BITS_COMPACT[layers];
-      if (stuffedBits.size + eccBits <= NB_BITS_COMPACT[layers]) {
-        break;
-      }
+  // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
+  // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
+  // is the same size, but has more data.
+  for (int i = 0; ; i++) {
+    if (i > ZX_AZTEC_MAX_NB_BITS) {
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:@"Data too large for an Aztec code"
+                                   userInfo:nil];
     }
-  }
-  BOOL compact = YES;
-  if (layers == NB_BITS_COMPACT_LEN) {
-    compact = false;
-    for (layers = 1; layers < NB_BITS_LEN; layers++) {
-      if (NB_BITS[layers] >= totalSizeBits) {
-        if (wordSize != WORD_SIZE[layers]) {
-          wordSize = WORD_SIZE[layers];
-          stuffedBits = [self stuffBits:bits wordSize:wordSize];
-        }
-        totalSymbolBits = NB_BITS[layers];
-        if (stuffedBits.size + eccBits <= NB_BITS[layers]) {
-          break;
-        }
-      }
+    compact = i <= 3;
+    layers = compact ? i + 1 : i;
+    totalBitsInLayer = [self totalBitsInLayer:layers compact:compact];
+    if (totalSizeBits > totalBitsInLayer) {
+      continue;
     }
-  }
-  if (layers == NB_BITS_LEN || wordSize == 0) {
-    [NSException raise:NSInvalidArgumentException format:@"Data too large for an Aztec code"];
+    // [Re]stuff the bits if this is the first opportunity, or if the
+    // wordSize has changed
+    if (wordSize != ZX_AZTEC_WORD_SIZE[layers]) {
+      wordSize = ZX_AZTEC_WORD_SIZE[layers];
+      stuffedBits = [self stuffBits:bits wordSize:wordSize];
+    }
+    int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
+    if (stuffedBits.size + eccBits <= usableBitsInLayers) {
+      break;
+    }
   }
 
-  // pad the end
-  int messageSizeInWords = (stuffedBits.size + wordSize - 1) / wordSize;
-  for (int i = messageSizeInWords * wordSize - stuffedBits.size; i > 0; i--) {
-    [stuffedBits appendBit:YES];
-  }
+  int messageSizeInWords = stuffedBits.size / wordSize;
 
   // generate check words
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
-  int totalSizeInFullWords = totalSymbolBits / wordSize;
+  int totalWordsInLayer = totalBitsInLayer / wordSize;
 
-  int messageWords[totalSizeInFullWords];
-  memset(messageWords, 0, totalSizeInFullWords * sizeof(int));
-  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalSizeInFullWords message:messageWords];
-  [rs encode:messageWords toEncodeLen:totalSizeInFullWords ecBytes:totalSizeInFullWords - messageSizeInWords];
+  int messageWords[totalWordsInLayer];
+  memset(messageWords, 0, totalWordsInLayer * sizeof(int));
+  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWordsInLayer message:messageWords];
+  [rs encode:messageWords toEncodeLen:totalWordsInLayer ecBytes:totalWordsInLayer - messageSizeInWords];
 
   // convert to bit array and pad in the beginning
-  int startPad = totalSymbolBits % wordSize;
+  int startPad = totalBitsInLayer % wordSize;
   ZXBitArray *messageBits = [[ZXBitArray alloc] init];
   [messageBits appendBits:0 numBits:startPad];
-  for (int i = 0; i < totalSizeInFullWords; i++) {
+  for (int i = 0; i < totalWordsInLayer; i++) {
     [messageBits appendBits:messageWords[i] numBits:wordSize];
   }
 
@@ -147,7 +119,7 @@ static int WORD_SIZE[33] = {
   }
   ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:matrixSize];
 
-  // draw mode and data bits
+  // draw data bits
   for (int i = 0, rowOffset = 0; i < layers; i++) {
     int rowSize = compact ? (layers - i) * 4 + 9 : (layers - i) * 4 + 12;
     for (int j = 0; j < rowSize; j++) {
@@ -169,6 +141,8 @@ static int WORD_SIZE[33] = {
     }
     rowOffset += rowSize * 8;
   }
+
+  // draw mode message
   [self drawModeMessage:matrix compact:compact matrixSize:matrixSize modeMessage:modeMessage];
 
   // draw alignment marks
@@ -217,71 +191,73 @@ static int WORD_SIZE[33] = {
   if (compact) {
     [modeMessage appendBits:layers - 1 numBits:2];
     [modeMessage appendBits:messageSizeInWords - 1 numBits:6];
-    modeMessage = [self generateCheckWords:modeMessage totalSymbolBits:28 wordSize:4];
+    modeMessage = [self generateCheckWords:modeMessage totalBits:28 wordSize:4];
   } else {
     [modeMessage appendBits:layers - 1 numBits:5];
     [modeMessage appendBits:messageSizeInWords - 1 numBits:11];
-    modeMessage = [self generateCheckWords:modeMessage totalSymbolBits:40 wordSize:4];
+    modeMessage = [self generateCheckWords:modeMessage totalBits:40 wordSize:4];
   }
   return modeMessage;
 }
 
 + (void)drawModeMessage:(ZXBitMatrix *)matrix compact:(BOOL)compact matrixSize:(int)matrixSize modeMessage:(ZXBitArray *)modeMessage {
+  int center = matrixSize / 2;
   if (compact) {
     for (int i = 0; i < 7; i++) {
+      int offset = center - 3 + i;
       if ([modeMessage get:i]) {
-        [matrix setX:matrixSize / 2 - 3 + i y:matrixSize / 2 - 5];
+        [matrix setX:offset y:center - 5];
       }
       if ([modeMessage get:i + 7]) {
-        [matrix setX:matrixSize / 2 + 5 y:matrixSize / 2 - 3 + i];
+        [matrix setX:center + 5 y:offset];
       }
       if ([modeMessage get:20 - i]) {
-        [matrix setX:matrixSize / 2 - 3 + i y:matrixSize / 2 + 5];
+        [matrix setX:offset y:center + 5];
       }
       if ([modeMessage get:27 - i]) {
-        [matrix setX:matrixSize / 2 - 5 y:matrixSize / 2 - 3 + i];
+        [matrix setX:center - 5 y:offset];
       }
     }
   } else {
     for (int i = 0; i < 10; i++) {
+      int offset = center - 5 + i + i / 5;
       if ([modeMessage get:i]) {
-        [matrix setX:matrixSize / 2 - 5 + i + i / 5 y:matrixSize / 2 - 7];
+        [matrix setX:offset y:center - 7];
       }
       if ([modeMessage get:i + 10]) {
-        [matrix setX:matrixSize / 2 + 7 y:matrixSize / 2 - 5 + i + i / 5];
+        [matrix setX:center + 7 y:offset];
       }
       if ([modeMessage get:29 - i]) {
-        [matrix setX:matrixSize / 2 - 5 + i + i / 5 y:matrixSize / 2 + 7];
+        [matrix setX:offset y:center + 7];
       }
       if ([modeMessage get:39 - i]) {
-        [matrix setX:matrixSize / 2 - 7 y:matrixSize / 2 - 5 + i + i / 5];
+        [matrix setX:center - 7 y:offset];
       }
     }
   }
 }
 
-+ (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalSymbolBits:(int)totalSymbolBits wordSize:(int)wordSize {
-  int messageSizeInWords = (stuffedBits.size + wordSize - 1) / wordSize;
-  for (int i = messageSizeInWords * wordSize - stuffedBits.size; i > 0; i--) {
-    [stuffedBits appendBit:YES];
-  }
++ (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalBits:(int)totalBits wordSize:(int)wordSize {
+  // stuffedBits is guaranteed to be a multiple of the wordSize, so no padding needed
+  int messageSizeInWords = stuffedBits.size / wordSize;
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
-  int totalSizeInFullWords = totalSymbolBits / wordSize;
+  int totalWords = totalBits / wordSize;
 
-  int messageWords[totalSizeInFullWords];
-  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalSizeInFullWords message:messageWords];
+  int messageWords[totalWords];
+  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWords message:messageWords];
 
-  [rs encode:messageWords toEncodeLen:totalSizeInFullWords ecBytes:totalSizeInFullWords - messageSizeInWords];
-  int startPad = totalSymbolBits % wordSize;
+  [rs encode:messageWords toEncodeLen:totalWords ecBytes:totalWords - messageSizeInWords];
+  int startPad = totalBits % wordSize;
   ZXBitArray *messageBits = [[ZXBitArray alloc] init];
   [messageBits appendBits:0 numBits:startPad];
-  for (int i = 0; i < totalSizeInFullWords; i++) {
+  for (int i = 0; i < totalWords; i++) {
     [messageBits appendBits:messageWords[i] numBits:wordSize];
   }
   return messageBits;
 }
 
 + (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message {
+  memset(message, 0, totalWords * sizeof(int));
   int i;
   int n;
   for (i = 0, n = stuffedBits.size / wordSize; i < n; i++) {
@@ -334,22 +310,11 @@ static int WORD_SIZE[33] = {
     }
   }
 
-  // 2. pad last word to wordSize
-  n = arrayOut.size;
-  int remainder = n % wordSize;
-  if (remainder != 0) {
-    int j = 1;
-    for (int i = 0; i < remainder; i++) {
-      if (![arrayOut get:n - 1 - i]) {
-        j = 0;
-      }
-    }
-    for (int i = remainder; i < wordSize - 1; i++) {
-      [arrayOut appendBit:YES];
-    }
-    [arrayOut appendBit:j == 0];
-  }
   return arrayOut;
+}
+
++ (int)totalBitsInLayer:(int)layers compact:(BOOL)compact {
+  return ((compact ? 88 : 112) + 16 * layers) * layers;
 }
 
 @end

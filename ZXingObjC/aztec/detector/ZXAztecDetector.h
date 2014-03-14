@@ -14,16 +14,30 @@
  * limitations under the License.
  */
 
+@interface ZXAztecPoint : NSObject
+
+@property (nonatomic, assign) int x;
+@property (nonatomic, assign) int y;
+
+- (id)initWithX:(int)x y:(int)y;
+
+@end
+
+@class ZXAztecDetectorResult, ZXBitMatrix;
+
 /**
  * Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
  * is rotated or skewed, or partially obscured.
  */
-
-@class ZXAztecDetectorResult, ZXBitMatrix;
-
 @interface ZXAztecDetector : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image;
+
+/**
+ * Detects an Aztec Code in an image.
+ *
+ * @return ZXAztecDetectorResult encapsulating results of detecting an Aztec Code, or nil if no Aztec Code can be found
+ */
 - (ZXAztecDetectorResult *)detectWithError:(NSError **)error;
 
 @end

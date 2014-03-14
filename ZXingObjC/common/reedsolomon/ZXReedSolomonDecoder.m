@@ -40,7 +40,7 @@
  * codewords. Really, this means it uses Reed-Solomon to detect and correct errors, in-place,
  * in the input.
  */
-- (BOOL)decode:(int *)received receivedLen:(int)receivedLen twoS:(int)twoS error:(NSError **)error {
+- (BOOL)decode:(int *)received receivedLen:(NSUInteger)receivedLen twoS:(int)twoS error:(NSError **)error {
   ZXGenericGFPoly *poly = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:received coefficientsLen:receivedLen];
   int syndromeCoefficientsLen = twoS;
   int syndromeCoefficients[syndromeCoefficientsLen];
@@ -69,7 +69,7 @@
   }
   NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations];
   for (int i = 0; i < [errorLocations count]; i++) {
-    int position = receivedLen - 1 - [self.field log:[errorLocations[i] intValue]];
+    int position = (int)receivedLen - 1 - [self.field log:[errorLocations[i] intValue]];
     if (position < 0) {
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Bad error location"};
       

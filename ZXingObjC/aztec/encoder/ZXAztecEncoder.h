@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-extern int ZX_DEFAULT_AZTEC_EC_PERCENT;
+extern const int ZX_AZTEC_DEFAULT_EC_PERCENT;
 
 @class ZXAztecCode, ZXBitArray, ZXGenericGF;
 
+/**
+ * Generates Aztec 2D barcodes.
+ */
 @interface ZXAztecEncoder : NSObject
 
+/**
+ * Encodes the given binary content as an Aztec symbol
+ *
+ * @param data input data string
+ * @return Aztec symbol matrix with metadata
+ */
 + (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len;
+
+/**
+ * Encodes the given binary content as an Aztec symbol
+ *
+ * @param data input data string
+ * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+ *                      a minimum of 23% + 3 words is recommended)
+ * @return Aztec symbol matrix with metadata
+ */
 + (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len minECCPercent:(int)minECCPercent;
-+ (ZXBitArray *)generateModeMessageCompact:(BOOL)compact layers:(int)layers messageSizeInWords:(int)messageSizeInWords;
-+ (void)drawModeMessage:(ZXBitMatrix *)matrix compact:(BOOL)compact matrixSize:(int)matrixSize modeMessage:(ZXBitArray *)modeMessage;
-+ (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalSymbolBits:(int)totalSymbolBits wordSize:(int)wordSize;
-+ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message;
-+ (ZXGenericGF *)getGF:(int)wordSize;
-+ (ZXBitArray *)stuffBits:(ZXBitArray *)bits wordSize:(int)wordSize;
 
 @end
