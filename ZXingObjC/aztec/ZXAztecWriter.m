@@ -34,7 +34,7 @@ const NSStringEncoding ZX_DEFAULT_AZTEC_ENCODING = NSISOLatin1StringEncoding;
 
   return [self encode:contents
                format:format
-               width:width
+                width:width
                height:height
              encoding:encoding == 0 ? ZX_DEFAULT_AZTEC_ENCODING : encoding
            eccPercent:eccPercent == nil ? ZX_DEFAULT_AZTEC_EC_PERCENT : [eccPercent intValue]];

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2014 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-/**
- * The main class which implements Aztec Code decoding -- as opposed to locating and extracting
- * the Aztec Code from an image.
- */
+@class ZXBitArray;
 
-@class ZXAztecDetectorResult, ZXDecoderResult;
+@interface ZXToken : NSObject
 
-@interface ZXAztecDecoder : NSObject
+@property (nonatomic, strong, readonly) ZXToken *previous;
+@property (nonatomic, assign, readonly) int totalBitCount;
 
-- (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError **)error;
-
-// This method is used for testing the high-level encoder
-+ (NSString *)highLevelDecode:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength error:(NSError **)error;
+- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount;
++ (ZXToken *)empty;
+- (ZXToken *)add:(int)value bitCount:(int)bitCount;
+- (ZXToken *)addBinaryShift:(int)start byteCount:(int)byteCount;
+- (void)appendTo:(ZXBitArray *)bitArray text:(int8_t *)text length:(int)length;
 
 @end

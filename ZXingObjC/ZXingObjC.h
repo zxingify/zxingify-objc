@@ -25,6 +25,7 @@
 // ZXingObjC/aztec/encoder
 #import "ZXAztecCode.h"
 #import "ZXAztecEncoder.h"
+#import "ZXAztecHighLevelEncoder.h"
 #import "ZXAztecWriter.h"
 
 // ZXingObjC/aztec

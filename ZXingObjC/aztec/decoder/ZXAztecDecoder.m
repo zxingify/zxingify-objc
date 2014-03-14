@@ -118,7 +118,6 @@ static NSString *DIGIT_TABLE[] = {
   return [[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil];
 }
 
-
 /**
  * 
  * Gets the string encoded in the aztec code bits
@@ -129,6 +128,14 @@ static NSString *DIGIT_TABLE[] = {
     if (error) *error = FormatErrorInstance();
     return nil;
   }
+  return [[self class] encodedData:correctedBits length:correctedBitsLength endIndex:endIndex error:error];
+}
+
++ (NSString *)highLevelDecode:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength error:(NSError **)error {
+  return [self encodedData:correctedBits length:correctedBitsLength endIndex:(int)correctedBitsLength error:error];
+}
+
++ (NSString *)encodedData:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength endIndex:(int)endIndex error:(NSError **)error {
   int lastTable = UPPER;
   int table = UPPER;
   int startIndex = 0;
@@ -228,7 +235,7 @@ static NSString *DIGIT_TABLE[] = {
 /**
  * gets the table corresponding to the char passed
  */
-- (int)table:(unichar)t {
++ (int)table:(unichar)t {
   int table = UPPER;
 
   switch (t) {
@@ -258,7 +265,7 @@ static NSString *DIGIT_TABLE[] = {
 /**
  * Gets the character (or string) corresponding to the passed code in the given table
  */
-- (NSString *)character:(int)table code:(int)code {
++ (NSString *)character:(int)table code:(int)code {
   switch (table) {
   case UPPER:
     return UPPER_TABLE[code];
@@ -467,7 +474,7 @@ static NSString *DIGIT_TABLE[] = {
 /**
  * Reads a code of given length and at given index in an array of bits
  */
-- (int)readCode:(BOOL *)rawbits startIndex:(int)startIndex length:(int)length {
++ (int)readCode:(BOOL *)rawbits startIndex:(int)startIndex length:(int)length {
   int res = 0;
 
   for (int i = startIndex; i < startIndex + length; i++) {

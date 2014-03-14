@@ -22,14 +22,11 @@ extern int ZX_DEFAULT_AZTEC_EC_PERCENT;
 
 + (ZXAztecCode *)encode:(int8_t *)data len:(int)len;
 + (ZXAztecCode *)encode:(int8_t *)data len:(int)len minECCPercent:(int)minECCPercent;
-+ (void)drawBullsEye:(ZXBitMatrix *)matrix center:(int)center size:(int)size;
 + (ZXBitArray *)generateModeMessageCompact:(BOOL)compact layers:(int)layers messageSizeInWords:(int)messageSizeInWords;
 + (void)drawModeMessage:(ZXBitMatrix *)matrix compact:(BOOL)compact matrixSize:(int)matrixSize modeMessage:(ZXBitArray *)modeMessage;
 + (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalSymbolBits:(int)totalSymbolBits wordSize:(int)wordSize;
 + (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message;
 + (ZXGenericGF *)getGF:(int)wordSize;
 + (ZXBitArray *)stuffBits:(ZXBitArray *)bits wordSize:(int)wordSize;
-+ (ZXBitArray *)highLevelEncode:(int8_t *)data len:(int)len;
-+ (void)outputWord:(ZXBitArray *)bits mode:(int)mode value:(int)value;
 
 @end

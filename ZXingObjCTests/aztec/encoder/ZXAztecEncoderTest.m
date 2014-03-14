@@ -63,34 +63,34 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
     "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n"
     "    X X   X   X   X X X               X       X       X X     X X   X X       X   \n"
     "X X     X       X       X X X X   X   X X       X   X X   X       X X   X X   X   \n"
-    "  X       X   X         X     X   X         X X       X         X     X   X   X X \n"
-    "X X   X X   X   X   X X       X X     X X     X X X   X X   X X   X X   X X X     \n"
-    "  X       X   X   X X     X X   X X         X X X   X     X     X X   X     X X X \n"
-    "  X   X X X   X X X   X   X X   X   X   X X   X X   X X X X X   X X X   X X     X \n"
-    "    X     X   X X   X   X X X X       X       X       X X X         X X     X   X \n"
-    "X X X   X           X X X X     X X X X X X X X   X       X X X     X   X   X   X \n"
-    "          X       X   X X X X     X   X           X   X X       X                 \n"
-    "  X     X X   X   X X   X X X X X X X X X X X X X X X X   X X       X   X X X     \n"
-    "    X X           X X       X                       X X X X X X             X X X \n"
-    "        X   X X   X X X   X X   X X X X X X X X X   X   X               X X X X   \n"
-    "          X X X       X     X   X               X   X X   X       X X X           \n"
-    "X X     X     X   X     X X X   X   X X X X X   X   X X       X         X   X X X \n"
-    "X X X X       X     X   X X X   X   X       X   X   X       X X X   X X       X X \n"
+    "  X       X   X     X X   X   X X   X X   X X X X X X   X X           X   X   X X \n"
+    "X X   X X   X   X X X X   X X X X X X X X   X   X       X X   X X X X   X X X     \n"
+    "  X       X   X     X       X X     X X   X   X   X     X X   X X X   X     X X X \n"
+    "  X   X X X   X X       X X X         X X           X   X   X   X X X   X X     X \n"
+    "    X     X   X X     X X X X     X   X     X X X X   X X   X X   X X X     X   X \n"
+    "X X X   X             X         X X X X X   X   X X   X   X   X X   X   X   X   X \n"
+    "          X       X X X   X X     X   X           X   X X X X   X X               \n"
+    "  X     X X   X   X       X X X X X X X X X X X X X X X   X   X X   X   X X X     \n"
+    "    X X                 X   X                       X X   X       X         X X X \n"
+    "        X   X X   X X X X X X   X X X X X X X X X   X     X X           X X X X   \n"
+    "          X X X   X     X   X   X               X   X X     X X X   X X           \n"
+    "X X     X     X   X   X   X X   X   X X X X X   X   X X X X X X X       X   X X X \n"
+    "X X X X       X       X   X X   X   X       X   X   X     X X X     X X       X X \n"
     "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n"
-    "    X     X       X     X   X   X   X       X   X   X       X                     \n"
-    "        X X     X X X X X   X   X   X X X X X   X   X X X     X     X   X         \n"
-    "X     X   X   X   X X X X   X   X               X   X X X   X X     X     X   X   \n"
-    "  X   X X X   X     X X X X X   X X X X X X X X X   X X X X X           X X X X   \n"
-    "    X X   X   X     X X     X                       X X X X       X   X     X     \n"
-    "    X X X X   X       X     X X X X X X X X X X X X X X       X     X   X X   X X \n"
-    "            X   X X     X     X X X X X     X X X       X X X X X   X         X   \n"
-    "X       X         X           X X   X X X X   X X   X X X     X X   X   X       X \n"
-    "X     X       X X     X     X X     X             X X   X       X     X   X X     \n"
-    "  X X X X X       X   X     X           X     X   X X X X   X X X X     X X   X X \n"
-    "X             X   X X X     X X       X       X X   X   X X     X X X         X X \n"
-    "    X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X X   \n"
-    "    X         X X   X       X     X   X   X       X     X X X     X       X X     \n"
-    "X     X X     X X X X X X             X X X   X               X   X     X       X \n"
+    "    X     X       X         X   X   X       X   X   X     X   X X                 \n"
+    "        X X     X X X X X   X   X   X X X X X   X   X X X     X X X X   X         \n"
+    "X     X   X   X         X   X   X               X   X X   X X   X X X     X   X   \n"
+    "  X   X X X   X   X X   X X X   X X X X X X X X X   X X         X X     X X X X   \n"
+    "    X X   X   X   X X X     X                       X X X   X X   X   X     X     \n"
+    "    X X X X   X         X   X X X X X X X X X X X X X X   X       X X   X X   X X \n"
+    "            X   X   X X       X X X X X     X X X       X       X X X         X   \n"
+    "X       X         X   X X X X   X     X X     X X     X X           X   X       X \n"
+    "X     X       X X X X X     X   X X X X   X X X     X       X X X X   X   X X   X \n"
+    "  X X X X X               X     X X X   X       X X   X X   X X X X     X X       \n"
+    "X             X         X   X X   X X     X     X     X   X   X X X X             \n"
+    "    X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X   X \n"
+    "    X         X X   X       X     X   X   X       X     X X X     X       X X X X \n"
+    "X     X X     X X X X X X             X X X   X               X   X     X     X X \n"
     "X   X X     X               X X X X X     X X     X X X X X X X X     X   X   X X \n"
     "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \n"
     "X           X     X X X X     X     X         X         X   X       X X   X X X   \n"
@@ -138,7 +138,8 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 }
 
 - (void)testEncodeDecode5 {
-  [self testEncodeDecode:@"http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc" compact:NO layers:5];
+  [self testEncodeDecode:@"http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc"
+                   "Four score and seven our forefathers brought forth" compact:NO layers:5];
 }
 
 - (void)testEncodeDecode10 {
@@ -247,56 +248,105 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 
 - (void)testHighLevelEncode {
   [self testHighLevelEncodeString:@"A. b."
+                                   // 'A'  P/S   '. ' L/L    b    D/L    '.'
                      expectedBits:@"...X. ..... ...XX XXX.. ...XX XXXX. XX.X"];
   [self testHighLevelEncodeString:@"Lorem ipsum."
+                                   // 'L'  L/L   'o'   'r'   'e'   'm'   ' '   'i'   'p'   's'   'u'   'm'   D/L   '.'
                      expectedBits:@".XX.X XXX.. X.... X..XX ..XX. .XXX. ....X .X.X. X...X X.X.. X.XX. .XXX. XXXX. XX.X"];
   [self testHighLevelEncodeString:@"Lo. Test 123."
-                     expectedBits:@".XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X ....X XXXX. ..XX .X.. .X.X XX.X"];
+                                   // 'L'  L/L   'o'   P/S   '. '  U/S   'T'   'e'   's'   't'    D/L   ' '  '1'  '2'  '3'  '.'
+                     expectedBits:@".XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X  XXXX. ...X ..XX .X.. .X.X XX.X"];
   [self testHighLevelEncodeString:@"Lo...x"
+                                   // 'L'  L/L   'o'   D/L   '.'  '.'  '.'  U/L  L/L   'x'
                      expectedBits:@".XX.X XXX.. X.... XXXX. XX.X XX.X XX.X XXX. XXX.. XX..X"];
   [self testHighLevelEncodeString:@". x://abc/."
+                                  //P/S   '. '  L/L   'x'   P/S   ':'   P/S   '/'   P/S   '/'   'a'   'b'   'c'   P/S   '/'   D/L   '.'
                      expectedBits:@"..... ...XX XXX.. XX..X ..... X.X.X ..... X.X.. ..... X.X.. ...X. ...XX ..X.. ..... X.X.. XXXX. XX.X"];
+  // Uses Binary/Shift rather than Lower/Shift to save two bits.
+  [self testHighLevelEncodeString:@"ABCdEFG"
+                                   //'A'   'B'   'C'   B/S    =1    'd'     'E'   'F'   'G'
+                     expectedBits:@"...X. ...XX ..X.. XXXXX ....X .XX..X.. ..XX. ..XXX .X..."];
+
+  [self testHighLevelEncodeString:
+   // Found on an airline boarding pass.  Several stretches of Binary shift are
+   // necessary to keep the bitcount so low.
+   @"09  UAG    ^160MEUCIQC0sYS/HpKxnBELR1uB85R20OoqqwFGa0q2uEi"
+   "Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U="
+                  receivedBits:823];
 }
 
 - (void)testHighLevelEncodeBinary {
   // binary short form single byte
   [self testHighLevelEncodeString:@"N\0N"
-                     expectedBits:@".XXXX XXXXX ...X. ........ .X..XXX."];
+                                   // 'N'  B/S    =1   '\0'      N
+                     expectedBits:@".XXXX XXXXX ....X ........ .XXXX"];   // Encode "N" in UPPER
+
+  [self testHighLevelEncodeString:@"N\0n"
+                                   // 'N'  B/S    =2   '\0'       'n'
+                     expectedBits:@".XXXX XXXXX ...X. ........ .XX.XXX."];   // Encode "n" in BINARY
+
   // binary short form consecutive bytes
   [self testHighLevelEncodeString:[NSString stringWithFormat:@"N\0%C A", 0x0080]
+                                   // 'N'  B/S    =2    '\0'    \u0080   ' '  'A'
                      expectedBits:@".XXXX XXXXX ...X. ........ X....... ....X ...X."];
+
   // binary skipping over single character
   [self testHighLevelEncodeString:[NSString stringWithFormat:@"\0a%C%C A", 0x00FF, 0x0080]
+                                   // B/S  =4    '\0'      'a'     '\3ff'   '\200'   ' '   'A'
                      expectedBits:@"XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X."];
-  // binary long form optimization into 2 short forms (saves 1 bit)
-  [self testHighLevelEncodeString:[NSString stringWithFormat:@"\0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 %C%C%C\0 \0\0\0\0 \0\0\0\0 ", 0x0082, 0x0084, 0x0088]
-                            expectedBits:
-   @"XXXXX XXXXX ........ ........ ........ ........ ..X....."
-    " ........ ........ ........ ........ ..X....."
-    " ........ ........ ........ ........ ..X....."
-    " ........ ........ ........ ........ ..X....."
-    " ........ ........ ........ ........ ..X....."
-    " ........ ........ ........ ........ ..X....."
-    " X.....X. XXXXX .XXX. X....X.. X...X... ........ ..X....."
-    " ........ ........ ........ ........ ..X....."
-    " ........ ........ ........ ........ ..X....."];
-  // binary long form
-  [self testHighLevelEncodeString:[NSString stringWithFormat:@"\0\0\0\0 \0\0\1\0 \0\0\2\0 \0\0\3\0 \0\0\4\0 \0\0\5\0 \0\0\6\0 \0\0\7\0 \0\0%C\0 \0\0%C\0 \0\0\u00F0\0 \0\0\u00F1\0 \0\0\u00F2\0A", 0x0008, 0x0009]
-                     expectedBits:
-   @"XXXXX ..... .....X...X. ........ ........ ........ ........ ..X....."
-    " ........ ........ .......X ........ ..X....."
-    " ........ ........ ......X. ........ ..X....."
-    " ........ ........ ......XX ........ ..X....."
-    " ........ ........ .....X.. ........ ..X....."
-    " ........ ........ .....X.X ........ ..X....."
-    " ........ ........ .....XX. ........ ..X....."
-    " ........ ........ .....XXX ........ ..X....."
-    " ........ ........ ....X... ........ ..X....."
-    " ........ ........ ....X..X ........ ..X....."
-    " ........ ........ XXXX.... ........ ..X....."
-    " ........ ........ XXXX...X ........ ..X....."
-    " ........ ........ XXXX..X. ........ .X.....X"];
+
+  // getting into binary mode from digit mode
+  [self testHighLevelEncodeString:@"1234\0"
+                                   //D/L   '1'  '2'  '3'  '4'  U/L  B/S    =1    \0
+                     expectedBits:@"XXXX. ..XX .X.. .X.X .XX. XXX. XXXXX ....X ........"];
+
+  // Create a string in which every character requires binary
+  NSMutableString *sb = [NSMutableString string];
+  for (int i = 0; i <= 3000; i++) {
+    [sb appendFormat:@"%c", (char)(128 + (i % 30))];
+  }
+  // Test the output generated by Binary/Switch, particularly near the
+  // places where the encoding changes: 31, 62, and 2047+31=2078
+  for (NSNumber *n in @[ @1, @2, @3, @10, @29, @30, @31, @32, @33,
+                         @60, @61, @62, @63, @64, @2076, @2077, @2078, @2079, @2080, @3000 ]) {
+    int i = [n intValue];
+    // This is the expected length of a binary string of length "i"
+    int expectedLength = (8 * i) +
+      ( (i <= 31) ? 10 : (i <= 62) ? 20 : (i <= 2078) ? 21 : 31);
+    // Verify that we are correct about the length.
+    [self testHighLevelEncodeString:[sb substringToIndex:i] receivedBits:expectedLength];
+    // A lower case letter at the beginning will be merged into binary mode
+    [self testHighLevelEncodeString:[@"a" stringByAppendingString:[sb substringToIndex:i - 1]] receivedBits:expectedLength];
+    // A lower case letter at the end will also be merged into binary mode
+    [self testHighLevelEncodeString:[[sb substringToIndex:i - 1] stringByAppendingString:@"a"] receivedBits:expectedLength];
+    // A lower case letter at both ends will enough to latch us into LOWER.
+    [self testHighLevelEncodeString:[NSString stringWithFormat:@"a%@b", [sb substringToIndex:i]]
+                       receivedBits:expectedLength + 15];
+  }
 }
+
+- (void)testHighLevelEncodePairs {
+  // Typical usage
+  [self testHighLevelEncodeString:@"ABC. DEF\r\n"
+                                   //  A     B    C    P/S   .<sp>   D    E     F    P/S   \r\n
+                     expectedBits:@"...X. ...XX ..X.. ..... ...XX ..X.X ..XX. ..XXX ..... ...X."];
+
+  // We should latch to PUNCT mode, rather than shift.  Also check all pairs
+  [self testHighLevelEncodeString:@"A. : , \r\n"
+                                   // 'A'    M/L   P/L   ". "  ": "   ", " "\r\n"
+                     expectedBits:@"...X. XXX.X XXXX. ...XX ..X.X  ..X.. ...X."];
+
+  // Latch to DIGIT rather than shift to PUNCT
+  [self testHighLevelEncodeString:@"A. 1234"
+                                   // 'A'  D/L   '.'  ' '  '1' '2'   '3'  '4'
+                     expectedBits:@"...X. XXXX. XX.X ...X ..XX .X.. .X.X .X X."];
+
+  // Don't bother leaving Binary Shift.
+  [self testHighLevelEncodeString:[NSString stringWithFormat:@"A%c. %c", '\200', '\200']
+                                   // 'A'  B/S    =2    \200      "."     " "     \200
+                     expectedBits:@"...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X......."];
+}
+
 
 // Helper routines
 
@@ -399,14 +449,35 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   return inArray;
 }
 
+- (NSString *)highLevelDecode:(ZXBitArray *)bitArray {
+  int resultSize = bitArray.size;
+  BOOL result[resultSize];
+  for (int i = 0; i < resultSize; i++) {
+    result[i] = [bitArray get:i];
+  }
+  return [ZXAztecDecoder highLevelDecode:result length:resultSize error:nil];
+}
+
 - (void)testHighLevelEncodeString:(NSString *)s expectedBits:(NSString *)expectedBits {
   int8_t bytes[4096];
   [s getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
   int bytesLen = (int)[s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
 
-  ZXBitArray *bits = [ZXAztecEncoder highLevelEncode:bytes len:bytesLen];
+  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:bytes textLength:bytesLen] encode];
   NSString *receivedBits = [[bits description] stringByReplacingOccurrencesOfString:@" " withString:@""];
   XCTAssertEqualObjects(receivedBits, [expectedBits stringByReplacingOccurrencesOfString:@" " withString:@""], @"highLevelEncode() failed for input string: %@", s);
+  XCTAssertEqualObjects(s, [self highLevelDecode:bits]);
+}
+
+- (void)testHighLevelEncodeString:(NSString *)s receivedBits:(int)receivedBits {
+  int8_t bytes[4096];
+  [s getCString:(char *)bytes maxLength:4096 encoding:NSISOLatin1StringEncoding];
+  int bytesLen = (int)[s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding];
+
+  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:bytes textLength:bytesLen] encode];
+  NSUInteger receivedBitCount = [[[bits description] stringByReplacingOccurrencesOfString:@" " withString:@""] length];
+  XCTAssertEqual(receivedBitCount, receivedBitCount, @"highLevelEncode() failed for input string: %@", s);
+  XCTAssertEqualObjects(s, [self highLevelDecode:bits]);
 }
 
 @end

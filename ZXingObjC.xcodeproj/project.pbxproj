@@ -13,6 +13,36 @@
 		0206966A18CE5A2A00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
 		0206966D18CE5A2C00132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
 		0206966E18CE5A2C00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
+		0218B84D18D230B70005E7EC /* ZXToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B84B18D230B70005E7EC /* ZXToken.h */; };
+		0218B84E18D230B70005E7EC /* ZXToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B84B18D230B70005E7EC /* ZXToken.h */; };
+		0218B84F18D230B70005E7EC /* ZXToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B84B18D230B70005E7EC /* ZXToken.h */; };
+		0218B85018D230B70005E7EC /* ZXToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B84C18D230B70005E7EC /* ZXToken.m */; };
+		0218B85118D230B70005E7EC /* ZXToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B84C18D230B70005E7EC /* ZXToken.m */; };
+		0218B85218D230B70005E7EC /* ZXToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B84C18D230B70005E7EC /* ZXToken.m */; };
+		0218B85518D230CC0005E7EC /* ZXBinaryShiftToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85318D230CC0005E7EC /* ZXBinaryShiftToken.h */; };
+		0218B85618D230CC0005E7EC /* ZXBinaryShiftToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85318D230CC0005E7EC /* ZXBinaryShiftToken.h */; };
+		0218B85718D230CC0005E7EC /* ZXBinaryShiftToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85318D230CC0005E7EC /* ZXBinaryShiftToken.h */; };
+		0218B85818D230CC0005E7EC /* ZXBinaryShiftToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B85418D230CC0005E7EC /* ZXBinaryShiftToken.m */; };
+		0218B85918D230CC0005E7EC /* ZXBinaryShiftToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B85418D230CC0005E7EC /* ZXBinaryShiftToken.m */; };
+		0218B85A18D230CC0005E7EC /* ZXBinaryShiftToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B85418D230CC0005E7EC /* ZXBinaryShiftToken.m */; };
+		0218B85D18D232340005E7EC /* ZXSimpleToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85B18D232340005E7EC /* ZXSimpleToken.h */; };
+		0218B85E18D232340005E7EC /* ZXSimpleToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85B18D232340005E7EC /* ZXSimpleToken.h */; };
+		0218B85F18D232340005E7EC /* ZXSimpleToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85B18D232340005E7EC /* ZXSimpleToken.h */; };
+		0218B86018D232340005E7EC /* ZXSimpleToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B85C18D232340005E7EC /* ZXSimpleToken.m */; };
+		0218B86118D232340005E7EC /* ZXSimpleToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B85C18D232340005E7EC /* ZXSimpleToken.m */; };
+		0218B86218D232340005E7EC /* ZXSimpleToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B85C18D232340005E7EC /* ZXSimpleToken.m */; };
+		0218B86D18D23A090005E7EC /* ZXState.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B86B18D23A090005E7EC /* ZXState.h */; };
+		0218B86E18D23A090005E7EC /* ZXState.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B86B18D23A090005E7EC /* ZXState.h */; };
+		0218B86F18D23A090005E7EC /* ZXState.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B86B18D23A090005E7EC /* ZXState.h */; };
+		0218B87018D23A090005E7EC /* ZXState.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B86C18D23A090005E7EC /* ZXState.m */; };
+		0218B87118D23A090005E7EC /* ZXState.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B86C18D23A090005E7EC /* ZXState.m */; };
+		0218B87218D23A090005E7EC /* ZXState.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B86C18D23A090005E7EC /* ZXState.m */; };
+		0218B87518D23A170005E7EC /* ZXAztecHighLevelEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */; };
+		0218B87618D23A170005E7EC /* ZXAztecHighLevelEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */; };
+		0218B87718D23A170005E7EC /* ZXAztecHighLevelEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */; };
+		0218B87818D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */; };
+		0218B87918D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */; };
+		0218B87A18D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */; };
 		023E696B18C0EF26001FF123 /* AztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FEF166AA0F100E13304 /* AztecBlackBox1TestCase.m */; };
 		023E696C18C0EF26001FF123 /* AztecBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FF1166AA0F100E13304 /* AztecBlackBox2TestCase.m */; };
 		023E696D18C0EF26001FF123 /* AbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540400E166AA0F100E13304 /* AbstractBlackBoxTestCase.m */; };
@@ -1608,6 +1638,16 @@
 /* Begin PBXFileReference section */
 		0206966518CE5A1A00132957 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		0206966718CE5A2300132957 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		0218B84B18D230B70005E7EC /* ZXToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXToken.h; path = encoder/ZXToken.h; sourceTree = "<group>"; };
+		0218B84C18D230B70005E7EC /* ZXToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXToken.m; path = encoder/ZXToken.m; sourceTree = "<group>"; };
+		0218B85318D230CC0005E7EC /* ZXBinaryShiftToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXBinaryShiftToken.h; path = encoder/ZXBinaryShiftToken.h; sourceTree = "<group>"; };
+		0218B85418D230CC0005E7EC /* ZXBinaryShiftToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXBinaryShiftToken.m; path = encoder/ZXBinaryShiftToken.m; sourceTree = "<group>"; };
+		0218B85B18D232340005E7EC /* ZXSimpleToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXSimpleToken.h; path = encoder/ZXSimpleToken.h; sourceTree = "<group>"; };
+		0218B85C18D232340005E7EC /* ZXSimpleToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXSimpleToken.m; path = encoder/ZXSimpleToken.m; sourceTree = "<group>"; };
+		0218B86B18D23A090005E7EC /* ZXState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXState.h; path = encoder/ZXState.h; sourceTree = "<group>"; };
+		0218B86C18D23A090005E7EC /* ZXState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXState.m; path = encoder/ZXState.m; sourceTree = "<group>"; };
+		0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecHighLevelEncoder.h; path = encoder/ZXAztecHighLevelEncoder.h; sourceTree = "<group>"; };
+		0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecHighLevelEncoder.m; path = encoder/ZXAztecHighLevelEncoder.m; sourceTree = "<group>"; };
 		0262575418CFA03200E2395E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0262575618CFA03200E2395E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		0262575818CFA03200E2395E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -2408,6 +2448,16 @@
 				2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */,
 				2504D9DA16FFD4CD00DF8882 /* ZXAztecEncoder.h */,
 				2504D9DB16FFD4CD00DF8882 /* ZXAztecEncoder.m */,
+				0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */,
+				0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */,
+				0218B85318D230CC0005E7EC /* ZXBinaryShiftToken.h */,
+				0218B85418D230CC0005E7EC /* ZXBinaryShiftToken.m */,
+				0218B85B18D232340005E7EC /* ZXSimpleToken.h */,
+				0218B85C18D232340005E7EC /* ZXSimpleToken.m */,
+				0218B86B18D23A090005E7EC /* ZXState.h */,
+				0218B86C18D23A090005E7EC /* ZXState.m */,
+				0218B84B18D230B70005E7EC /* ZXToken.h */,
+				0218B84C18D230B70005E7EC /* ZXToken.m */,
 			);
 			name = encoder;
 			sourceTree = "<group>";
@@ -3599,6 +3649,7 @@
 				25403D70166A9A0800E13304 /* ZXParsedResult.h in Headers */,
 				25403D72166A9A0800E13304 /* ZXParsedResultType.h in Headers */,
 				25403D73166A9A0800E13304 /* ZXProductParsedResult.h in Headers */,
+				0218B85D18D232340005E7EC /* ZXSimpleToken.h in Headers */,
 				25403D75166A9A0800E13304 /* ZXProductResultParser.h in Headers */,
 				25403D77166A9A0800E13304 /* ZXResultParser.h in Headers */,
 				25403D79166A9A0800E13304 /* ZXSMSMMSResultParser.h in Headers */,
@@ -3674,6 +3725,8 @@
 				25403EC2166A9DF400E13304 /* ZXBlockParsedResult.h in Headers */,
 				2519AB5E17FE5E4F00A71C45 /* ZXPDF417BarcodeMetadata.h in Headers */,
 				25403EC4166A9DF400E13304 /* ZXCurrentParsingState.h in Headers */,
+				0218B86D18D23A090005E7EC /* ZXState.h in Headers */,
+				0218B87518D23A170005E7EC /* ZXAztecHighLevelEncoder.h in Headers */,
 				25403EC6166A9DF400E13304 /* ZXDecodedChar.h in Headers */,
 				25403EC8166A9DF400E13304 /* ZXDecodedInformation.h in Headers */,
 				25403ECA166A9DF400E13304 /* ZXDecodedNumeric.h in Headers */,
@@ -3762,8 +3815,10 @@
 				25403FE1166AA00800E13304 /* ZXMultiFormatReader.h in Headers */,
 				25403FE3166AA00800E13304 /* ZXMultiFormatWriter.h in Headers */,
 				25403FE5166AA00800E13304 /* ZXReader.h in Headers */,
+				0218B84D18D230B70005E7EC /* ZXToken.h in Headers */,
 				25403FE6166AA00800E13304 /* ZXResult.h in Headers */,
 				25403FE8166AA00800E13304 /* ZXResultMetadataType.h in Headers */,
+				0218B85518D230CC0005E7EC /* ZXBinaryShiftToken.h in Headers */,
 				25403FE9166AA00800E13304 /* ZXResultPoint.h in Headers */,
 				25403FEB166AA00800E13304 /* ZXResultPointCallback.h in Headers */,
 				25403FEC166AA00800E13304 /* ZXWriter.h in Headers */,
@@ -3830,6 +3885,7 @@
 				25404542166ABAF000E13304 /* ZXProductResultParser.h in Headers */,
 				25404543166ABAF000E13304 /* ZXResultParser.h in Headers */,
 				25404544166ABAF000E13304 /* ZXSMSMMSResultParser.h in Headers */,
+				0218B85E18D232340005E7EC /* ZXSimpleToken.h in Headers */,
 				25404545166ABAF000E13304 /* ZXSMSParsedResult.h in Headers */,
 				25404546166ABAF000E13304 /* ZXSMSTOMMSTOResultParser.h in Headers */,
 				25404547166ABAF000E13304 /* ZXSMTPResultParser.h in Headers */,
@@ -3905,6 +3961,8 @@
 				25404589166ABAF000E13304 /* ZXFormatInformation.h in Headers */,
 				2540458A166ABAF000E13304 /* ZXMode.h in Headers */,
 				2540458B166ABAF000E13304 /* ZXQRCodeBitMatrixParser.h in Headers */,
+				0218B86E18D23A090005E7EC /* ZXState.h in Headers */,
+				0218B87618D23A170005E7EC /* ZXAztecHighLevelEncoder.h in Headers */,
 				2540458C166ABAF000E13304 /* ZXQRCodeDataBlock.h in Headers */,
 				2540458D166ABAF000E13304 /* ZXQRCodeDecodedBitStreamParser.h in Headers */,
 				2540458E166ABAF000E13304 /* ZXQRCodeDecoder.h in Headers */,
@@ -3993,8 +4051,10 @@
 				255E491718143AC600A03A28 /* ZXExpandedRow.h in Headers */,
 				255E491818143AC600A03A28 /* ZXRSSExpandedReader.h in Headers */,
 				255E491918143AC600A03A28 /* ZXAbstractRSSReader.h in Headers */,
+				0218B84E18D230B70005E7EC /* ZXToken.h in Headers */,
 				255E491A18143AC600A03A28 /* ZXDataCharacter.h in Headers */,
 				255E491B18143AC600A03A28 /* ZXPair.h in Headers */,
+				0218B85618D230CC0005E7EC /* ZXBinaryShiftToken.h in Headers */,
 				255E491C18143AC600A03A28 /* ZXRSS14Reader.h in Headers */,
 				255E491D18143AC600A03A28 /* ZXRSSFinderPattern.h in Headers */,
 				255E491E18143AC600A03A28 /* ZXRSSUtils.h in Headers */,
@@ -4061,6 +4121,7 @@
 				255E483818143A8800A03A28 /* ZXParsedResult.h in Headers */,
 				255E483918143A8800A03A28 /* ZXParsedResultType.h in Headers */,
 				255E483A18143A8800A03A28 /* ZXProductParsedResult.h in Headers */,
+				0218B85F18D232340005E7EC /* ZXSimpleToken.h in Headers */,
 				255E483B18143A8800A03A28 /* ZXProductResultParser.h in Headers */,
 				255E483C18143A8800A03A28 /* ZXResultParser.h in Headers */,
 				255E483D18143A8800A03A28 /* ZXSMSMMSResultParser.h in Headers */,
@@ -4136,6 +4197,8 @@
 				255E488318143A8800A03A28 /* ZXGenericMultipleBarcodeReader.h in Headers */,
 				255E488418143A8800A03A28 /* ZXMultipleBarcodeReader.h in Headers */,
 				255E488518143A8800A03A28 /* ZXAbstractExpandedDecoder.h in Headers */,
+				0218B86F18D23A090005E7EC /* ZXState.h in Headers */,
+				0218B87718D23A170005E7EC /* ZXAztecHighLevelEncoder.h in Headers */,
 				255E488618143A8800A03A28 /* ZXAI013103decoder.h in Headers */,
 				255E488718143A8800A03A28 /* ZXAI01320xDecoder.h in Headers */,
 				255E488818143A8800A03A28 /* ZXAI01392xDecoder.h in Headers */,
@@ -4224,8 +4287,10 @@
 				255E48DC18143A8800A03A28 /* ZXQRCodeDataBlock.h in Headers */,
 				255E48DD18143A8800A03A28 /* ZXQRCodeDecodedBitStreamParser.h in Headers */,
 				255E48DE18143A8800A03A28 /* ZXQRCodeDecoder.h in Headers */,
+				0218B84F18D230B70005E7EC /* ZXToken.h in Headers */,
 				255E48DF18143A8800A03A28 /* ZXQRCodeVersion.h in Headers */,
 				255E48E018143A8800A03A28 /* ZXAlignmentPattern.h in Headers */,
+				0218B85718D230CC0005E7EC /* ZXBinaryShiftToken.h in Headers */,
 				255E48E118143A8800A03A28 /* ZXAlignmentPatternFinder.h in Headers */,
 				255E48E218143A8800A03A28 /* ZXFinderPatternFinder.h in Headers */,
 				255E48E318143A8800A03A28 /* ZXFinderPatternInfo.h in Headers */,
@@ -4359,6 +4424,7 @@
 		25403CAA166A96F900E13304 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ZX;
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = zxing;
@@ -4430,9 +4496,11 @@
 				25403D55166A9A0800E13304 /* ZXAddressBookDoCoMoResultParser.m in Sources */,
 				25403D57166A9A0800E13304 /* ZXAddressBookParsedResult.m in Sources */,
 				25403D59166A9A0800E13304 /* ZXBizcardResultParser.m in Sources */,
+				0218B87018D23A090005E7EC /* ZXState.m in Sources */,
 				25403D5B166A9A0800E13304 /* ZXBookmarkDoCoMoResultParser.m in Sources */,
 				25403D5D166A9A0800E13304 /* ZXCalendarParsedResult.m in Sources */,
 				25403D5F166A9A0800E13304 /* ZXEmailAddressParsedResult.m in Sources */,
+				0218B86018D232340005E7EC /* ZXSimpleToken.m in Sources */,
 				25403D61166A9A0800E13304 /* ZXEmailAddressResultParser.m in Sources */,
 				25403D63166A9A0800E13304 /* ZXEmailDoCoMoResultParser.m in Sources */,
 				25403D65166A9A0800E13304 /* ZXExpandedProductParsedResult.m in Sources */,
@@ -4449,6 +4517,7 @@
 				25403D7C166A9A0800E13304 /* ZXSMSParsedResult.m in Sources */,
 				25403D7E166A9A0800E13304 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				25403D80166A9A0800E13304 /* ZXSMTPResultParser.m in Sources */,
+				0218B85018D230B70005E7EC /* ZXToken.m in Sources */,
 				25403D82166A9A0800E13304 /* ZXTelParsedResult.m in Sources */,
 				25403D84166A9A0800E13304 /* ZXTelResultParser.m in Sources */,
 				25403D86166A9A0800E13304 /* ZXTextParsedResult.m in Sources */,
@@ -4481,6 +4550,7 @@
 				25403DE9166A9C0E00E13304 /* ZXGlobalHistogramBinarizer.m in Sources */,
 				25403DEB166A9C0E00E13304 /* ZXGridSampler.m in Sources */,
 				25403DED166A9C0E00E13304 /* ZXHybridBinarizer.m in Sources */,
+				0218B87818D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */,
 				25403DEF166A9C0E00E13304 /* ZXPerspectiveTransform.m in Sources */,
 				25403DF1166A9C0E00E13304 /* ZXStringUtils.m in Sources */,
 				25403E04166A9CCB00E13304 /* ZXDataMatrixBitMatrixParser.m in Sources */,
@@ -4498,6 +4568,7 @@
 				25403E32166A9D8B00E13304 /* ZXMultiDetector.m in Sources */,
 				25403E34166A9D8B00E13304 /* ZXMultiFinderPatternFinder.m in Sources */,
 				25389B6C17FFC98100772392 /* ZXPDF417DetectionResultColumn.m in Sources */,
+				0218B85818D230CC0005E7EC /* ZXBinaryShiftToken.m in Sources */,
 				25403E36166A9D8B00E13304 /* ZXQRCodeMultiReader.m in Sources */,
 				25403E38166A9D8B00E13304 /* ZXByQuadrantReader.m in Sources */,
 				25403E3A166A9D8B00E13304 /* ZXGenericMultipleBarcodeReader.m in Sources */,
@@ -4773,9 +4844,11 @@
 				25404195166AAE6000E13304 /* ZXAddressBookDoCoMoResultParser.m in Sources */,
 				25404196166AAE6000E13304 /* ZXAddressBookParsedResult.m in Sources */,
 				25404197166AAE6000E13304 /* ZXBizcardResultParser.m in Sources */,
+				0218B87118D23A090005E7EC /* ZXState.m in Sources */,
 				25404198166AAE6000E13304 /* ZXBookmarkDoCoMoResultParser.m in Sources */,
 				25404199166AAE6000E13304 /* ZXCalendarParsedResult.m in Sources */,
 				2540419A166AAE6000E13304 /* ZXEmailAddressParsedResult.m in Sources */,
+				0218B86118D232340005E7EC /* ZXSimpleToken.m in Sources */,
 				2540419B166AAE6000E13304 /* ZXEmailAddressResultParser.m in Sources */,
 				2540419C166AAE6000E13304 /* ZXEmailDoCoMoResultParser.m in Sources */,
 				2540419D166AAE6000E13304 /* ZXExpandedProductParsedResult.m in Sources */,
@@ -4792,6 +4865,7 @@
 				254041A8166AAE6000E13304 /* ZXSMSParsedResult.m in Sources */,
 				254041A9166AAE6000E13304 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				254041AA166AAE6000E13304 /* ZXSMTPResultParser.m in Sources */,
+				0218B85118D230B70005E7EC /* ZXToken.m in Sources */,
 				254041AB166AAE6000E13304 /* ZXTelParsedResult.m in Sources */,
 				254041AC166AAE6000E13304 /* ZXTelResultParser.m in Sources */,
 				254041AD166AAE6000E13304 /* ZXTextParsedResult.m in Sources */,
@@ -4824,6 +4898,7 @@
 				254041C7166AAE6000E13304 /* ZXECI.m in Sources */,
 				254041C8166AAE6000E13304 /* ZXGlobalHistogramBinarizer.m in Sources */,
 				254041C9166AAE6000E13304 /* ZXGridSampler.m in Sources */,
+				0218B87918D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */,
 				254041CA166AAE6000E13304 /* ZXHybridBinarizer.m in Sources */,
 				254041CB166AAE6000E13304 /* ZXPerspectiveTransform.m in Sources */,
 				25389B851800E35B00772392 /* ZXPDF417ScanningDecoder.m in Sources */,
@@ -4841,6 +4916,7 @@
 				254041D7166AAE6000E13304 /* ZXMaxiCodeReader.m in Sources */,
 				25389B6D17FFC98100772392 /* ZXPDF417DetectionResultColumn.m in Sources */,
 				254041D8166AAE6000E13304 /* ZXMultiDetector.m in Sources */,
+				0218B85918D230CC0005E7EC /* ZXBinaryShiftToken.m in Sources */,
 				254041D9166AAE6000E13304 /* ZXMultiFinderPatternFinder.m in Sources */,
 				254041DA166AAE6000E13304 /* ZXQRCodeMultiReader.m in Sources */,
 				254041DB166AAE6000E13304 /* ZXByQuadrantReader.m in Sources */,
@@ -5116,9 +5192,11 @@
 				2540464E166ABBED00E13304 /* ZXAddressBookDoCoMoResultParser.m in Sources */,
 				2540464F166ABBED00E13304 /* ZXAddressBookParsedResult.m in Sources */,
 				25404650166ABBED00E13304 /* ZXBizcardResultParser.m in Sources */,
+				0218B87218D23A090005E7EC /* ZXState.m in Sources */,
 				25404651166ABBED00E13304 /* ZXBookmarkDoCoMoResultParser.m in Sources */,
 				25404652166ABBED00E13304 /* ZXCalendarParsedResult.m in Sources */,
 				25404653166ABBED00E13304 /* ZXEmailAddressParsedResult.m in Sources */,
+				0218B86218D232340005E7EC /* ZXSimpleToken.m in Sources */,
 				25404654166ABBED00E13304 /* ZXEmailAddressResultParser.m in Sources */,
 				25404655166ABBED00E13304 /* ZXEmailDoCoMoResultParser.m in Sources */,
 				25404656166ABBED00E13304 /* ZXExpandedProductParsedResult.m in Sources */,
@@ -5135,6 +5213,7 @@
 				25404661166ABBED00E13304 /* ZXSMSParsedResult.m in Sources */,
 				25404662166ABBED00E13304 /* ZXSMSTOMMSTOResultParser.m in Sources */,
 				25404663166ABBED00E13304 /* ZXSMTPResultParser.m in Sources */,
+				0218B85218D230B70005E7EC /* ZXToken.m in Sources */,
 				25404664166ABBED00E13304 /* ZXTelParsedResult.m in Sources */,
 				25404665166ABBED00E13304 /* ZXTelResultParser.m in Sources */,
 				25404666166ABBED00E13304 /* ZXTextParsedResult.m in Sources */,
@@ -5167,6 +5246,7 @@
 				25404680166ABBED00E13304 /* ZXECI.m in Sources */,
 				25404681166ABBED00E13304 /* ZXGlobalHistogramBinarizer.m in Sources */,
 				25404682166ABBED00E13304 /* ZXGridSampler.m in Sources */,
+				0218B87A18D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */,
 				25404683166ABBED00E13304 /* ZXHybridBinarizer.m in Sources */,
 				25404684166ABBED00E13304 /* ZXPerspectiveTransform.m in Sources */,
 				25404685166ABBED00E13304 /* ZXStringUtils.m in Sources */,
@@ -5184,6 +5264,7 @@
 				25404690166ABBED00E13304 /* ZXMaxiCodeReader.m in Sources */,
 				25404691166ABBED00E13304 /* ZXMultiDetector.m in Sources */,
 				25404692166ABBED00E13304 /* ZXMultiFinderPatternFinder.m in Sources */,
+				0218B85A18D230CC0005E7EC /* ZXBinaryShiftToken.m in Sources */,
 				25404693166ABBED00E13304 /* ZXQRCodeMultiReader.m in Sources */,
 				25404694166ABBED00E13304 /* ZXByQuadrantReader.m in Sources */,
 				25404695166ABBED00E13304 /* ZXGenericMultipleBarcodeReader.m in Sources */,
