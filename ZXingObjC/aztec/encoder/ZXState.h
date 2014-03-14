@@ -45,6 +45,6 @@
 - (ZXState *)addBinaryShiftChar:(int)index;
 - (ZXState *)endBinaryShift:(int)index;
 - (BOOL)isBetterThanOrEqualTo:(ZXState *)other;
-- (ZXBitArray *)toBitArray:(int8_t *)text textLength:(int)textLength;
+- (ZXBitArray *)toBitArray:(const int8_t *)text textLength:(NSUInteger)textLength;
 
 @end

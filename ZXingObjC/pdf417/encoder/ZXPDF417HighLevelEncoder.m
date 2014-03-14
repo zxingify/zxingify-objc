@@ -383,27 +383,27 @@ unichar PUNCTUATION[PUNCTUATION_LEN];
   }
 }
 
-+ (BOOL)isDigit:(char)ch {
++ (BOOL)isDigit:(unichar)ch {
   return ch >= '0' && ch <= '9';
 }
 
-+ (BOOL)isAlphaUpper:(char)ch {
++ (BOOL)isAlphaUpper:(unichar)ch {
   return ch == ' ' || (ch >= 'A' && ch <= 'Z');
 }
 
-+ (BOOL)isAlphaLower:(char)ch {
++ (BOOL)isAlphaLower:(unichar)ch {
   return ch == ' ' || (ch >= 'a' && ch <= 'z');
 }
 
-+ (BOOL)isMixed:(char)ch {
++ (BOOL)isMixed:(unichar)ch {
   return MIXED_TABLE[ch] != 0xFF;
 }
 
-+ (BOOL)isPunctuation:(char)ch {
++ (BOOL)isPunctuation:(unichar)ch {
   return PUNCTUATION[ch] != 0xFF;
 }
 
-+ (BOOL)isText:(char)ch {
++ (BOOL)isText:(unichar)ch {
   return ch == '\t' || ch == '\n' || ch == '\r' || (ch >= 32 && ch <= 126);
 }
 

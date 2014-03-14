@@ -43,23 +43,23 @@
   }
 }
 
-- (char)getX:(int)x y:(int)y {
+- (int8_t)getX:(int)x y:(int)y {
   return self.array[y][x];
 }
 
-- (void)setX:(int)x y:(int)y charValue:(char)value {
+- (void)setX:(int)x y:(int)y byteValue:(int8_t)value {
   self.array[y][x] = value;
 }
 
 - (void)setX:(int)x y:(int)y intValue:(int)value {
-  self.array[y][x] = (char)value;
+  self.array[y][x] = (int8_t)value;
 }
 
 - (void)setX:(int)x y:(int)y boolValue:(BOOL)value {
-  self.array[y][x] = (char)value;
+  self.array[y][x] = (int8_t)value;
 }
 
-- (void)clear:(char)value {
+- (void)clear:(int8_t)value {
   for (int y = 0; y < self.height; ++y) {
     for (int x = 0; x < self.width; ++x) {
       self.array[y][x] = value;

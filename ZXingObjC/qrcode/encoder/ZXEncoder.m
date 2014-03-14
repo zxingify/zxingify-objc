@@ -416,7 +416,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   for (int i = 0; i < maxNumDataBytes; ++i) {
     for (ZXBlockPair *block in blocks) {
       int8_t *dataBytes = block.dataBytes;
-      int length = block.length;
+      NSUInteger length = block.length;
       if (i < length) {
         [result appendBits:dataBytes[i] numBits:8];
       }

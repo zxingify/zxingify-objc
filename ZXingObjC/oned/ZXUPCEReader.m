@@ -95,7 +95,7 @@ const int NUMSYS_AND_CHECK_DIGIT_PATTERNS[2][10] = {
 }
 
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error {
-  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:(int *)MIDDLE_END_PATTERN patternLen:MIDDLE_END_PATTERN_LEN error:error];
+  return [ZXUPCEANReader findGuardPattern:row rowOffset:endStart whiteFirst:YES pattern:MIDDLE_END_PATTERN patternLen:MIDDLE_END_PATTERN_LEN error:error];
 }
 
 - (BOOL)checkChecksum:(NSString *)s error:(NSError **)error {

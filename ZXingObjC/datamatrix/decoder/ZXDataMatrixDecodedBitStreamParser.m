@@ -23,13 +23,13 @@
  * See ISO 16022:2006, Annex C Table C.1
  * The C40 Basic Character Set (*'s used for placeholders for the shift values)
  */
-const char C40_BASIC_SET_CHARS[40] = {
+const unichar C40_BASIC_SET_CHARS[40] = {
   '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
   'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 };
 
-const char C40_SHIFT2_SET_CHARS[40] = {
+const unichar C40_SHIFT2_SET_CHARS[40] = {
   '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',  '+', ',', '-', '.',
   '/', ':', ';', '<', '=', '>', '?',  '@', '[', '\\', ']', '^', '_'
 };
@@ -38,15 +38,15 @@ const char C40_SHIFT2_SET_CHARS[40] = {
  * See ISO 16022:2006, Annex C Table C.2
  * The Text Basic Character Set (*'s used for placeholders for the shift values)
  */
-const char TEXT_BASIC_SET_CHARS[40] = {
+const unichar TEXT_BASIC_SET_CHARS[40] = {
   '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
   'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
   'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
 };
 
-const char TEXT_SHIFT3_SET_CHARS[32] = {
+const unichar TEXT_SHIFT3_SET_CHARS[32] = {
   '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-  'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
+  'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (unichar) 127
 };
 
 enum {

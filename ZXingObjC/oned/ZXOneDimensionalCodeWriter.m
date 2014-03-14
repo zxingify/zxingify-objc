@@ -70,7 +70,7 @@
 /**
  * Appends the given pattern to the target array starting at pos.
  */
-- (int)appendPattern:(BOOL *)target pos:(int)pos pattern:(int *)pattern patternLen:(int)patternLen startColor:(BOOL)startColor {
+- (int)appendPattern:(BOOL *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor {
   BOOL color = startColor;
   int numAdded = 0;
   for (int i = 0; i < patternLen; i++) {

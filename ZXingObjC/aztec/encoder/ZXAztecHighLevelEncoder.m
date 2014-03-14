@@ -82,7 +82,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 @interface ZXAztecHighLevelEncoder ()
 
 @property (nonatomic, assign, readonly) int8_t *text;
-@property (nonatomic, assign, readonly) int textLength;
+@property (nonatomic, assign, readonly) NSUInteger textLength;
 
 @end
 
@@ -141,7 +141,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
   ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_MODE_DIGIT][ZX_AZTEC_MODE_UPPER] = 15;
 }
 
-- (id)initWithData:(int8_t *)text textLength:(int)textLength {
+- (id)initWithData:(const int8_t *)text textLength:(NSUInteger)textLength {
   if (self = [super init]) {
     _text = (int8_t *)malloc(textLength * sizeof(int8_t));
     memcpy(_text, text, textLength * sizeof(int8_t));

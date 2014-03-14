@@ -18,10 +18,10 @@
 #import "ZXCodaBarWriter.h"
 
 const int START_END_CHARS_LEN = 4;
-const char START_END_CHARS[START_END_CHARS_LEN] = "ABCD";
+const unichar START_END_CHARS[START_END_CHARS_LEN] = {'A', 'B', 'C', 'D'};
 
 const int ALT_START_END_CHARS_LEN = 4;
-const char ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = "TN*E";
+const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'};
 
 @implementation ZXCodaBarWriter
 
@@ -36,15 +36,15 @@ const char ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = "TN*E";
   unichar firstChar = [[contents uppercaseString] characterAtIndex:0];
   unichar lastChar = [[contents uppercaseString] characterAtIndex:contents.length - 1];
   BOOL startsEndsNormal =
-    [ZXCodaBarReader arrayContains:(char *)START_END_CHARS length:START_END_CHARS_LEN key:firstChar] &&
-    [ZXCodaBarReader arrayContains:(char *)START_END_CHARS length:START_END_CHARS_LEN key:lastChar];
+    [ZXCodaBarReader arrayContains:START_END_CHARS length:START_END_CHARS_LEN key:firstChar] &&
+    [ZXCodaBarReader arrayContains:START_END_CHARS length:START_END_CHARS_LEN key:lastChar];
   BOOL startsEndsAlt =
-    [ZXCodaBarReader arrayContains:(char *)ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:firstChar] &&
-    [ZXCodaBarReader arrayContains:(char *)ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:lastChar];
+    [ZXCodaBarReader arrayContains:ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:firstChar] &&
+    [ZXCodaBarReader arrayContains:ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:lastChar];
   if (!(startsEndsNormal || startsEndsAlt)) {
     NSString *reason = [NSString stringWithFormat:@"Codabar should start/end with %@, or start/end with %@",
-                        [NSString stringWithCString:START_END_CHARS encoding:NSUTF8StringEncoding],
-                        [NSString stringWithCString:ALT_START_END_CHARS encoding:NSUTF8StringEncoding]];
+                        [NSString stringWithCharacters:START_END_CHARS length:START_END_CHARS_LEN],
+                        [NSString stringWithCharacters:ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN]];
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:reason
                                  userInfo:nil];
@@ -52,7 +52,7 @@ const char ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = "TN*E";
 
   // The start character and the end character are decoded to 10 length each.
   int resultLength = 20;
-  char charsWhichAreTenLengthEachAfterDecoded[4] = {'/', ':', '+', '.'};
+  unichar charsWhichAreTenLengthEachAfterDecoded[4] = {'/', ':', '+', '.'};
   for (int i = 1; i < contents.length - 1; i++) {
     if (([contents characterAtIndex:i] >= '0' && [contents characterAtIndex:i] <= '9') ||
         [contents characterAtIndex:i] == '-' || [contents characterAtIndex:i] == '$') {

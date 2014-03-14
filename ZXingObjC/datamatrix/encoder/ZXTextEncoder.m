@@ -36,7 +36,7 @@
     [sb appendFormat:@"%C", (unichar) (c - 97 + 14)];
     return 1;
   }
-  if (c >= '\0' && c <= (char)0x001f) {
+  if (c >= '\0' && c <= (unichar)0x001f) {
     [sb appendString:@"\0"]; //Shift 1 Set
     [sb appendFormat:@"%C", c];
     return 2;
@@ -66,7 +66,7 @@
     [sb appendFormat:@"%C", (unichar) (c - 65 + 1)];
     return 2;
   }
-  if (c >= '{' && c <= (char)0x007f) {
+  if (c >= '{' && c <= (unichar)0x007f) {
     [sb appendString:@"\2"]; //Shift 3 Set
     [sb appendFormat:@"%C", (unichar) (c - 123 + 27)];
     return 2;

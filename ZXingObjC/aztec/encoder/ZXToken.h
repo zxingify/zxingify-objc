@@ -25,6 +25,6 @@
 + (ZXToken *)empty;
 - (ZXToken *)add:(int)value bitCount:(int)bitCount;
 - (ZXToken *)addBinaryShift:(int)start byteCount:(int)byteCount;
-- (void)appendTo:(ZXBitArray *)bitArray text:(int8_t *)text length:(int)length;
+- (void)appendTo:(ZXBitArray *)bitArray text:(const int8_t *)text length:(NSUInteger)length;
 
 @end

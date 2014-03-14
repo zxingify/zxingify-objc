@@ -115,7 +115,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 
 // Set all cells to -1.  -1 means that the cell is empty (not set yet).
 + (void)clearMatrix:(ZXByteMatrix *)matrix {
-  [matrix clear:(char) -1];
+  [matrix clear:-1];
 }
 
 // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On

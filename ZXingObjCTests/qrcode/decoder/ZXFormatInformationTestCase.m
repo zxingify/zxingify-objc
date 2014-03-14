@@ -33,7 +33,7 @@ const int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
   ZXFormatInformation *expected =
     [ZXFormatInformation decodeFormatInformation:MASKED_TEST_FORMAT_INFO maskedFormatInfo2:MASKED_TEST_FORMAT_INFO];
   XCTAssertNotNil(expected, @"Expected expected to be non-nil");
-  XCTAssertEqual(expected.dataMask, (char) 0x07, @"Expected data mask to equal 0x07");
+  XCTAssertEqual(expected.dataMask, 0x07, @"Expected data mask to equal 0x07");
   XCTAssertEqualObjects(expected.errorCorrectionLevel, [ZXErrorCorrectionLevel errorCorrectionLevelQ],
                        @"Expected error correction level to be Q");
   // where the code forgot the mask!

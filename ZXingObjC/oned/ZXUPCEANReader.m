@@ -113,7 +113,7 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
   int counters[START_END_PATTERN_LEN];
 
   while (!foundStart) {
-    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN counters:counters error:error];
+    startRange = [self findGuardPattern:row rowOffset:nextStart whiteFirst:NO pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN counters:counters error:error];
     if (startRange.location == NSNotFound) {
       return startRange;
     }
@@ -248,15 +248,15 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 }
 
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error {
-  return [[self class] findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN error:error];
+  return [[self class] findGuardPattern:row rowOffset:endStart whiteFirst:NO pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN error:error];
 }
 
-+ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen error:(NSError **)error {
++ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(const int[])pattern patternLen:(int)patternLen error:(NSError **)error {
   int counters[patternLen];
   return [self findGuardPattern:row rowOffset:rowOffset whiteFirst:whiteFirst pattern:pattern patternLen:patternLen counters:counters error:error];
 }
 
-+ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(int *)pattern patternLen:(int)patternLen counters:(int *)counters error:(NSError **)error {
++ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(const int[])pattern patternLen:(int)patternLen counters:(int *)counters error:(NSError **)error {
   int patternLength = patternLen;
   memset(counters, 0, patternLength * sizeof(int));
   int width = row.size;

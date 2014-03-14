@@ -120,7 +120,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   switch (finderPatternType) {
     case RSS_PATTERNS_RSS14_PATTERNS:
       for (int value = 0; value < RSS14_FINDER_PATTERNS_LEN; value++) {
-        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int *)RSS14_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:countersSize pattern:RSS14_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return value;
         }
       }
@@ -128,7 +128,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 
     case RSS_PATTERNS_RSS_EXPANDED_PATTERNS:
       for (int value = 0; value < RSS_EXPANDED_FINDER_PATTERNS_LEN; value++) {
-        if ([self patternMatchVariance:counters countersSize:countersSize pattern:(int *)RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:countersSize pattern:RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
           return value;
         }
       }

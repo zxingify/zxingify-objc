@@ -46,11 +46,8 @@ const NSStringEncoding ZX_DEFAULT_AZTEC_ENCODING = NSISOLatin1StringEncoding;
                                    reason:[NSString stringWithFormat:@"Can only encode kBarcodeFormatAztec (%d), but got %d", kBarcodeFormatAztec, format]
                                  userInfo:nil];
   }
-  NSData *contentsData = [contents dataUsingEncoding:encoding];
-  int8_t *bytes = (int8_t *)[contentsData bytes];
-  NSUInteger bytesLen = [contentsData length];
 
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:(int)bytesLen minECCPercent:eccPercent];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[contents dataUsingEncoding:encoding] bytes] len:[contents lengthOfBytesUsingEncoding:encoding] minECCPercent:eccPercent];
   return [self renderResult:aztec width:width height:height];
 }
 

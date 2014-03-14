@@ -215,7 +215,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * the total variance between counters and patterns equals the pattern length, higher values mean
  * even more variance
  */
-+ (int)patternMatchVariance:(int[])counters countersSize:(int)countersSize pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (int)patternMatchVariance:(const int[])counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;

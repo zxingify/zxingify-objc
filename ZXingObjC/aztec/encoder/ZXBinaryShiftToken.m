@@ -36,7 +36,7 @@
   return self;
 }
 
-- (void)appendTo:(ZXBitArray *)bitArray text:(int8_t *)text length:(int)length {
+- (void)appendTo:(ZXBitArray *)bitArray text:(const int8_t *)text length:(NSUInteger)length {
   for (int i = 0; i < self.binaryShiftByteCount; i++) {
     if (i == 0 || (i == 31 && self.binaryShiftByteCount <= 62))  {
       // We need a header before the first character, and before

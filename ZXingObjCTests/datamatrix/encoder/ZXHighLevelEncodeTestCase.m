@@ -141,7 +141,7 @@ static NSArray *TEST_SYMBOLS;
   visualized = [self encodeHighLevel:@"aimaimaimB"];
   XCTAssertEqualObjects(visualized, @"239 91 11 91 11 91 11 254 67 129", @"");
 
-  visualized = [self encodeHighLevel:[NSString stringWithFormat:@"aimaimaim{txt}%c", (char)0x0004]];
+  visualized = [self encodeHighLevel:[NSString stringWithFormat:@"aimaimaim{txt}%C", (unichar)0x0004]];
   XCTAssertEqualObjects(visualized, @"239 91 11 91 11 91 11 16 218 236 107 181 69 254 129 237", @"");
 }
 

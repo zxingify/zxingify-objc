@@ -36,10 +36,10 @@
 - (void)testClearMatrix {
   ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:2 height:2];
   [ZXMatrixUtil clearMatrix:matrix];
-  XCTAssertEqual([matrix getX:0 y:0], (char)-1, @"Expected (0, 0) to equal -1");
-  XCTAssertEqual([matrix getX:1 y:0], (char)-1, @"Expected (1, 0) to equal -1");
-  XCTAssertEqual([matrix getX:0 y:1], (char)-1, @"Expected (0, 1) to equal -1");
-  XCTAssertEqual([matrix getX:1 y:1], (char)-1, @"Expected (1, 1) to equal -1");
+  XCTAssertEqual([matrix getX:0 y:0], -1, @"Expected (0, 0) to equal -1");
+  XCTAssertEqual([matrix getX:1 y:0], -1, @"Expected (1, 0) to equal -1");
+  XCTAssertEqual([matrix getX:0 y:1], -1, @"Expected (0, 1) to equal -1");
+  XCTAssertEqual([matrix getX:1 y:1], -1, @"Expected (1, 1) to equal -1");
 }
 
 - (void)testEmbedBasicPatterns1 {

@@ -30,7 +30,7 @@ extern int const PATTERN_MATCH_RESULT_SCALE_FACTOR;
 
 + (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize;
 + (BOOL)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize;
-+ (int)patternMatchVariance:(int[])counters countersSize:(int)countersSize pattern:(int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
++ (int)patternMatchVariance:(const int[])counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end

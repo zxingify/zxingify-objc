@@ -42,21 +42,21 @@ int const EAN8codeWidth = 3 + (7 * 4) + 5 + (7 * 4) + 3;
   memset(result, 0, EAN8codeWidth * sizeof(int8_t));
   int pos = 0;
 
-  pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  pos += [super appendPattern:result pos:pos pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
 
   for (int i = 0; i <= 3; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [super appendPattern:result pos:pos pattern:(int *)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:FALSE];
+    pos += [super appendPattern:result pos:pos pattern:L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:FALSE];
   }
 
-  pos += [super appendPattern:result pos:pos pattern:(int *)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:FALSE];
+  pos += [super appendPattern:result pos:pos pattern:MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:FALSE];
 
   for (int i = 4; i <= 7; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [super appendPattern:result pos:pos pattern:(int *)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:TRUE];
+    pos += [super appendPattern:result pos:pos pattern:L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:TRUE];
   }
 
-  [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  [super appendPattern:result pos:pos pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
 
   return result;
 }

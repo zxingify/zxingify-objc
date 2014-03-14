@@ -40,7 +40,7 @@ extern int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_
  */
 @interface ZXAztecHighLevelEncoder : NSObject
 
-- (id)initWithData:(int8_t *)text textLength:(int)textLength;
+- (id)initWithData:(const int8_t *)text textLength:(NSUInteger)textLength;
 - (ZXBitArray *)encode;
 
 @end

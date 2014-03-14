@@ -108,11 +108,11 @@
   return mySize <= other.bitCount;
 }
 
-- (ZXBitArray *)toBitArray:(int8_t *)text textLength:(int)textLength {
+- (ZXBitArray *)toBitArray:(const int8_t *)text textLength:(NSUInteger)textLength {
   // Reverse the tokens, so that they are in the order that they should
   // be output
   NSMutableArray *symbols = [NSMutableArray array];
-  for (ZXToken *token = [self endBinaryShift:textLength].token; token != nil; token = token.previous) {
+  for (ZXToken *token = [self endBinaryShift:(int)textLength].token; token != nil; token = token.previous) {
     [symbols insertObject:token atIndex:0];
   }
   ZXBitArray *bitArray = [[ZXBitArray alloc] init];

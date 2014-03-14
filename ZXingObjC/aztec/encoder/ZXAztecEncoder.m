@@ -49,14 +49,14 @@ static int WORD_SIZE[33] = {
 /**
  * Encodes the given binary content as an Aztec symbol
  */
-+ (ZXAztecCode *)encode:(int8_t *)data len:(int)len {
++ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len {
   return [self encode:data len:len minECCPercent:ZX_DEFAULT_AZTEC_EC_PERCENT];
 }
 
 /**
  * Encodes the given binary content as an Aztec symbol
  */
-+ (ZXAztecCode *)encode:(int8_t *)data len:(int)len minECCPercent:(int)minECCPercent {
++ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len minECCPercent:(int)minECCPercent {
   // High-level encode
   ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:data textLength:len] encode];
 

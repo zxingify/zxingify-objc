@@ -180,7 +180,7 @@
             currentByte |= 1;
           }
           if (bitsRead == 8) {
-            [result addObject:@((char)currentByte)];
+            [result addObject:@((int8_t)currentByte)];
             resultOffset++;
             bitsRead = 0;
             currentByte = 0;

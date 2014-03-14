@@ -49,10 +49,10 @@
         int b = pixel & 0xff;
         if (r == g && g == b) {
           // Image is already greyscale, so pick any channel.
-          _luminances[offset + x] = (char) r;
+          _luminances[offset + x] = (int8_t) r;
         } else {
           // Calculate luminance cheaply, favoring green.
-          _luminances[offset + x] = (char) ((r + g + g + b) >> 2);
+          _luminances[offset + x] = (int8_t) ((r + g + g + b) >> 2);
         }
       }
     }

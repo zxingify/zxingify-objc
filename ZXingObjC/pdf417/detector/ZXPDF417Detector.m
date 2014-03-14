@@ -181,13 +181,13 @@ int const BARCODE_MIN_HEIGHT = 10;
   for (int i = 0; i < 8; i++) {
     [result addObject:[NSNull null]];
   }
-  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:(int *)PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN] destinationIndexes:(int *)INDEXES_START_PATTERN];
+  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN] destinationIndexes:(int *)INDEXES_START_PATTERN];
 
   if (result[4] != [NSNull null]) {
     startColumn = (int) [(ZXResultPoint *)result[4] x];
     startRow = (int) [(ZXResultPoint *)result[4] y];
   }
-  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:(int *)PDF417_STOP_PATTERN patternLen:PDF417_STOP_PATTERN_LEN] destinationIndexes:(int *)INDEXES_STOP_PATTERN];
+  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:PDF417_STOP_PATTERN patternLen:PDF417_STOP_PATTERN_LEN] destinationIndexes:(int *)INDEXES_STOP_PATTERN];
   return result;
 }
 
@@ -198,7 +198,7 @@ int const BARCODE_MIN_HEIGHT = 10;
 }
 
 + (NSMutableArray *)findRowsWithPattern:(ZXBitMatrix *)matrix height:(int)height width:(int)width startRow:(int)startRow
-                            startColumn:(int)startColumn pattern:(int *)pattern patternLen:(int)patternLen {
+                            startColumn:(int)startColumn pattern:(const int[])pattern patternLen:(int)patternLen {
   NSMutableArray *result = [NSMutableArray array];
   for (int i = 0; i < 4; i++) {
     [result addObject:[NSNull null]];
@@ -265,7 +265,7 @@ int const BARCODE_MIN_HEIGHT = 10;
                         row:(int)row
                       width:(int)width
                  whiteFirst:(BOOL)whiteFirst
-                    pattern:(int *)pattern
+                    pattern:(const int[])pattern
                  patternLen:(int)patternLen
                    counters:(int *)counters {
   int patternLength = patternLen;
@@ -317,7 +317,7 @@ int const BARCODE_MIN_HEIGHT = 10;
  * the total variance from the expected pattern proportions across all
  * pattern elements, to the length of the pattern.
  */
-+ (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(int *)pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;

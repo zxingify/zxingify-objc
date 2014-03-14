@@ -108,7 +108,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
     return -1;
   }
 
-  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:(int *)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
+  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
   if (middleRange.location == NSNotFound) {
     return -1;
   }

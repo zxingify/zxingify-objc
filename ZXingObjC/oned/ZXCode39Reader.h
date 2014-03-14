@@ -20,7 +20,7 @@
  * Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.
  */
 
-extern char CODE39_ALPHABET[];
+extern unichar CODE39_ALPHABET[];
 extern NSString *CODE39_ALPHABET_STRING;
 extern int CODE39_CHARACTER_ENCODINGS[];
 

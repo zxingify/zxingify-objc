@@ -175,7 +175,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   if (endStart == -1) {
     return nil;
   }
-  NSArray *startPattern = [self findGuardPattern:row rowOffset:endStart pattern:(int *)ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
+  NSArray *startPattern = [self findGuardPattern:row rowOffset:endStart pattern:ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
   if (!startPattern) {
     return nil;
   }
@@ -241,7 +241,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  NSMutableArray *endPattern = [[self findGuardPattern:row rowOffset:endStart pattern:(int *)END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy];
+  NSMutableArray *endPattern = [[self findGuardPattern:row rowOffset:endStart pattern:END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)] mutableCopy];
   if (!endPattern) {
     [row reverse];
     return nil;
@@ -254,7 +254,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   return endPattern;
 }
 
-- (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(int[])pattern patternLen:(int)patternLen {
+- (NSArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(const int[])pattern patternLen:(int)patternLen {
   int patternLength = patternLen;
   int counters[patternLength];
   memset(counters, 0, patternLength * sizeof(int));

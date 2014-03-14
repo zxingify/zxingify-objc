@@ -18,7 +18,7 @@
 
 @implementation ZXBlockPair
 
-- (id)initWithData:(int8_t *)data length:(unsigned int)length errorCorrection:(int8_t *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength {
+- (id)initWithData:(int8_t *)data length:(NSUInteger)length errorCorrection:(int8_t *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength {
   if (self = [super init]) {
     _dataBytes = (int8_t *)malloc(length * sizeof(int8_t));
     memcpy(_dataBytes, data, length * sizeof(int8_t));

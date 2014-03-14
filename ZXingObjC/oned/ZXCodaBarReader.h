@@ -17,7 +17,7 @@
 #import "ZXOneDReader.h"
 
 extern const int CODA_ALPHABET_LEN;
-extern const char CODA_ALPHABET[];
+extern const unichar CODA_ALPHABET[];
 extern const int CODA_CHARACTER_ENCODINGS[];
 
 @class ZXBitArray, ZXDecodeHints, ZXResult;
@@ -27,6 +27,6 @@ extern const int CODA_CHARACTER_ENCODINGS[];
  */
 @interface ZXCodaBarReader : ZXOneDReader
 
-+ (BOOL)arrayContains:(char *)array length:(unsigned int)length key:(unichar)key;
++ (BOOL)arrayContains:(const unichar *)array length:(unsigned int)length key:(unichar)key;
 
 @end

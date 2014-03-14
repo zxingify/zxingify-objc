@@ -41,7 +41,7 @@ const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError **)error {
-  NSRange extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:(int *)EXTENSION_START_PATTERN patternLen:EXTENSION_START_PATTERN_LEN error:error];
+  NSRange extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:EXTENSION_START_PATTERN patternLen:EXTENSION_START_PATTERN_LEN error:error];
 
   if (extensionStartRange.location == NSNotFound) {
     return nil;

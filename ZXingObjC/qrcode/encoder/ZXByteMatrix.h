@@ -16,15 +16,15 @@
 
 @interface ZXByteMatrix : NSObject
 
+@property (nonatomic, assign, readonly) int8_t **array;
 @property (nonatomic, assign, readonly) int height;
 @property (nonatomic, assign, readonly) int width;
-@property (nonatomic, assign, readonly) int8_t **array;
 
 - (id)initWithWidth:(int)width height:(int)height;
-- (char)getX:(int)x y:(int)y;
-- (void)setX:(int)x y:(int)y charValue:(char)value;
-- (void)setX:(int)x y:(int)y intValue:(int)value;
+- (int8_t)getX:(int)x y:(int)y;
+- (void)setX:(int)x y:(int)y byteValue:(int8_t)value;
+- (void)setX:(int)x y:(int)y intValue:(int32_t)value;
 - (void)setX:(int)x y:(int)y boolValue:(BOOL)value;
-- (void)clear:(char)value;
+- (void)clear:(int8_t)value;
 
 @end

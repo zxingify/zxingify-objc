@@ -139,9 +139,9 @@ int const GB2312_SUBSET = 1;
     } else {
       assembledTwoBytes += 0x0A6A1;
     }
-    char bytes[2];
-    bytes[0] = (char)((assembledTwoBytes >> 8) & 0xFF);
-    bytes[1] = (char)(assembledTwoBytes & 0xFF);
+    int8_t bytes[2];
+    bytes[0] = (int8_t)((assembledTwoBytes >> 8) & 0xFF);
+    bytes[1] = (int8_t)(assembledTwoBytes & 0xFF);
 
     [buffer appendBytes:bytes length:2];
 
@@ -169,9 +169,9 @@ int const GB2312_SUBSET = 1;
     } else {
       assembledTwoBytes += 0x0C140;
     }
-    char bytes[2];
-    bytes[0] = (char)(assembledTwoBytes >> 8);
-    bytes[1] = (char)assembledTwoBytes;
+    int8_t bytes[2];
+    bytes[0] = (int8_t)(assembledTwoBytes >> 8);
+    bytes[1] = (int8_t)assembledTwoBytes;
     
     [buffer appendBytes:bytes length:2];
 
@@ -193,7 +193,7 @@ int const GB2312_SUBSET = 1;
   NSMutableArray *readBytesArray = [NSMutableArray arrayWithCapacity:count];
 
   for (int i = 0; i < count; i++) {
-    readBytes[i] = (char)[bits readBits:8];
+    readBytes[i] = (int8_t)[bits readBits:8];
     [readBytesArray addObject:[NSNumber numberWithChar:readBytes[i]]];
   }
 

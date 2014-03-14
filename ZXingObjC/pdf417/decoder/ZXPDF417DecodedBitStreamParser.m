@@ -426,7 +426,7 @@ static NSArray *EXP900 = nil;
     // is not a multiple of 6
     int count = 0;
     long long value = 0;
-    char decodedData[6] = {0, 0, 0, 0, 0, 0};
+    int8_t decodedData[6] = {0, 0, 0, 0, 0, 0};
     int byteCompactedCodewords[6] = {0, 0, 0, 0, 0, 0};
     BOOL end = NO;
     int nextCode = [codewords[codeIndex++] intValue];
@@ -450,7 +450,7 @@ static NSArray *EXP900 = nil;
           // Decode every 5 codewords
           // Convert to Base 256
           for (int j = 0; j < 6; ++j) {
-            decodedData[5 - j] = (char) (value % 256);
+            decodedData[5 - j] = (int8_t) (value % 256);
             value >>= 8;
           }
           [result appendString:[[NSString alloc] initWithBytes:decodedData length:6 encoding:NSISOLatin1StringEncoding]];

@@ -152,7 +152,7 @@
     [sb appendString:@"\1"]; //Shift 2 Set
     [sb appendFormat:@"%C", (unichar) (c - 91 + 22)];
     return 2;
-  } else if (c >= '\u0060' && c <= (char)0x007f) {
+  } else if (c >= '\u0060' && c <= (unichar)0x007f) {
     [sb appendString:@"\2"]; //Shift 3 Set
     [sb appendFormat:@"%C", (unichar) (c - 96)];
     return 2;

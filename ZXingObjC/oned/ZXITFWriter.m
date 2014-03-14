@@ -45,7 +45,7 @@ const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
   NSUInteger resultLen = 9 + 9 * length;
   if (pLength) *pLength = (int)resultLen;
   BOOL *result = (BOOL *)malloc(resultLen * sizeof(BOOL));
-  int pos = [super appendPattern:result pos:0 pattern:(int *)ITF_WRITER_START_PATTERN patternLen:ITF_WRITER_START_PATTERN_LEN startColor:TRUE];
+  int pos = [super appendPattern:result pos:0 pattern:ITF_WRITER_START_PATTERN patternLen:ITF_WRITER_START_PATTERN_LEN startColor:TRUE];
   for (int i = 0; i < length; i += 2) {
     int one = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     int two = [[contents substringWithRange:NSMakeRange(i + 1, 1)] intValue];
@@ -58,7 +58,7 @@ const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
     }
     pos += [super appendPattern:result pos:pos pattern:encoding patternLen:encodingLen startColor:TRUE];
   }
-  [super appendPattern:result pos:pos pattern:(int *)ITF_WRITER_END_PATTERN patternLen:ITF_WRITER_END_PATTERN_LEN startColor:TRUE];
+  [super appendPattern:result pos:pos pattern:ITF_WRITER_END_PATTERN patternLen:ITF_WRITER_END_PATTERN_LEN startColor:TRUE];
 
   return result;
 }

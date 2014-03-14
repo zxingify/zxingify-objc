@@ -20,8 +20,8 @@ extern int ZX_DEFAULT_AZTEC_EC_PERCENT;
 
 @interface ZXAztecEncoder : NSObject
 
-+ (ZXAztecCode *)encode:(int8_t *)data len:(int)len;
-+ (ZXAztecCode *)encode:(int8_t *)data len:(int)len minECCPercent:(int)minECCPercent;
++ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len;
++ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len minECCPercent:(int)minECCPercent;
 + (ZXBitArray *)generateModeMessageCompact:(BOOL)compact layers:(int)layers messageSizeInWords:(int)messageSizeInWords;
 + (void)drawModeMessage:(ZXBitMatrix *)matrix compact:(BOOL)compact matrixSize:(int)matrixSize modeMessage:(ZXBitArray *)modeMessage;
 + (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalSymbolBits:(int)totalSymbolBits wordSize:(int)wordSize;

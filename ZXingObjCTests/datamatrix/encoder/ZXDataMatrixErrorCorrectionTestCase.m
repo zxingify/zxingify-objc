@@ -21,14 +21,14 @@
 
 - (void)testRS {
   //Sample from Annexe R in ISO/IEC 16022:2000(E)
-  const char cw1[4] = {142, 164, 186, (char)NULL};
+  const unichar cw1[3] = {142, 164, 186};
   ZXSymbolInfo *symbolInfo = [ZXSymbolInfo lookup:3];
-  NSString *s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCString:cw1 encoding:NSISOLatin1StringEncoding] symbolInfo:symbolInfo];
+  NSString *s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCharacters:cw1 length:3] symbolInfo:symbolInfo];
   XCTAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"142 164 186 114 25 5 88 102", @"");
 
   //"A" encoded (ASCII encoding + 2 padding characters)
-  const char cw2[4] = {66, 129, 70, (char)NULL};
-  s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCString:cw2 encoding:NSISOLatin1StringEncoding] symbolInfo:symbolInfo];
+  const unichar cw2[3] = {66, 129, 70};
+  s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCharacters:cw2 length:3] symbolInfo:symbolInfo];
   XCTAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"66 129 70 138 234 82 82 95", @"");
 }
 

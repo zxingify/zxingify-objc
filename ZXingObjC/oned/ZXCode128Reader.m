@@ -185,7 +185,7 @@ int const CODE_STOP = 106;
         int bestVariance = MAX_AVG_VARIANCE;
         int bestMatch = -1;
         for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:(int *)CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+          int variance = [ZXOneDReader patternMatchVariance:counters countersSize:patternLength pattern:CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -347,7 +347,7 @@ int const CODE_STOP = 106;
                 [result appendString:@"]C1"];
               } else {
                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                [result appendFormat:@"%c", (char) 29];
+                [result appendFormat:@"%C", (unichar) 29];
               }
             }
             break;
@@ -388,7 +388,7 @@ int const CODE_STOP = 106;
                 [result appendString:@"]C1"];
               } else {
                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                [result appendFormat:@"%c", (char) 29];
+                [result appendFormat:@"%C", (unichar) 29];
               }
             }
             break;
@@ -432,7 +432,7 @@ int const CODE_STOP = 106;
                 [result appendString:@"]C1"];
               } else {
                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                [result appendFormat:@"%c", (char) 29];
+                [result appendFormat:@"%C", (unichar) 29];
               }
             }
             break;

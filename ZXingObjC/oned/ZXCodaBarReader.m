@@ -27,7 +27,8 @@ static int MAX_ACCEPTABLE;
 static int PADDING;
 
 const int CODA_ALPHABET_LEN = 22;
-const char CODA_ALPHABET[CODA_ALPHABET_LEN] = "0123456789-$:/.+ABCDTN";
+const unichar CODA_ALPHABET[CODA_ALPHABET_LEN] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  '-', '$', ':', '/', '.', '+', 'A', 'B', 'C', 'D', 'T', 'N'};
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
@@ -46,7 +47,7 @@ const int MIN_CHARACTER_LENGTH = 3;
 
 // official start and end patterns
 const int STARTEND_ENCODING_LEN = 4;
-const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
+const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
 // some codabar generator allow the codabar string to be closed by every
 // character. This will cause lots of false positives!
@@ -117,7 +118,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
     nextStart += 8;
     // Stop as soon as we see the end character.
     if (self.decodeRowResult.length > 1 &&
-        [ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+        [ZXCodaBarReader arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
       break;
     }
   } while (nextStart < self.counterLength); // no fixed end pattern so keep on reading while data is available
@@ -148,12 +149,12 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   }
   // Ensure a valid start and end character
   unichar startchar = [self.decodeRowResult characterAtIndex:0];
-  if (![ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:startchar]) {
+  if (![ZXCodaBarReader arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:startchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   unichar endchar = [self.decodeRowResult characterAtIndex:self.decodeRowResult.length - 1];
-  if (![ZXCodaBarReader arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:endchar]) {
+  if (![ZXCodaBarReader arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:endchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -291,7 +292,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 - (int)findStartPattern {
   for (int i = 1; i < self.counterLength; i += 2) {
     int charOffset = [self toNarrowWidePattern:i];
-    if (charOffset != -1 && [[self class] arrayContains:(char *)STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+    if (charOffset != -1 && [[self class] arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
       // Look for whitespace before start pattern, >= 50% of width of start pattern
       // We make an exception if the whitespace is the first element.
       int patternSize = 0;
@@ -307,7 +308,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   return -1;
 }
 
-+ (BOOL)arrayContains:(char *)array length:(unsigned int)length key:(unichar)key {
++ (BOOL)arrayContains:(const unichar *)array length:(unsigned int)length key:(unichar)key {
   if (array != nil) {
     for (int i = 0; i < length; i++) {
       if (array[i] == key) {

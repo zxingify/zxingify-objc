@@ -55,23 +55,23 @@ const int EAN13_CODE_WIDTH = 3 + // start guard
   memset(result, 0, EAN13_CODE_WIDTH * sizeof(int8_t));
   int pos = 0;
 
-  pos += [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  pos += [super appendPattern:result pos:pos pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
 
   for (int i = 1; i <= 6; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     if ((parities >> (6 - i) & 1) == 1) {
       digit += 10;
     }
-    pos += [super appendPattern:result pos:pos pattern:(int *)L_AND_G_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:FALSE];
+    pos += [super appendPattern:result pos:pos pattern:L_AND_G_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:FALSE];
   }
 
-  pos += [super appendPattern:result pos:pos pattern:(int *)MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:FALSE];
+  pos += [super appendPattern:result pos:pos pattern:MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:FALSE];
 
   for (int i = 7; i <= 12; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [super appendPattern:result pos:pos pattern:(int *)L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:TRUE];
+    pos += [super appendPattern:result pos:pos pattern:L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:TRUE];
   }
-  [super appendPattern:result pos:pos pattern:(int *)START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  [super appendPattern:result pos:pos pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
 
   return result;
 }

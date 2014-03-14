@@ -45,7 +45,7 @@
                                      binaryShiftStart:start binaryShiftByteCount:byteCount];
 }
 
-- (void)appendTo:(ZXBitArray *)bitArray text:(int8_t *)text length:(int)length {
+- (void)appendTo:(ZXBitArray *)bitArray text:(const int8_t *)text length:(NSUInteger)length {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
