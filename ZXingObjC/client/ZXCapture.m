@@ -29,7 +29,7 @@
 @property (nonatomic, strong) CALayer *binaryLayer;
 @property (nonatomic, assign) BOOL cameraIsReady;
 @property (nonatomic, assign) int captureDeviceIndex;
-@property (nonatomic, strong) dispatch_queue_t captureQueue;
+@property (nonatomic, strong) __attribute__((NSObject)) dispatch_queue_t captureQueue;
 @property (nonatomic, assign) BOOL hardStop;
 @property (nonatomic, strong) AVCaptureDeviceInput *input;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *layer;
