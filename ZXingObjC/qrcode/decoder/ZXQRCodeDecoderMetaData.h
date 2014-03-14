@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2014 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-@class ZXBitMatrix, ZXFormatInformation, ZXQRCodeVersion;
+/**
+ * Meta-data container for QR Code decoding. Instances of this class may be used to convey information back to the
+ * decoding caller. Callers are expected to process this.
+ */
+@interface ZXQRCodeDecoderMetaData : NSObject
 
-@interface ZXQRCodeBitMatrixParser : NSObject
+@property (nonatomic, assign, readonly) BOOL mirrored;
 
-- (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error;
-- (ZXFormatInformation *)readFormatInformationWithError:(NSError **)error;
-- (ZXQRCodeVersion *)readVersionWithError:(NSError **)error;
-- (NSArray *)readCodewordsWithError:(NSError **)error;
-- (void)remask;
-- (void)setMirror:(BOOL)mirror;
-- (void)mirror;
+- (id)initWithMirrored:(BOOL)mirrored;
+- (void)applyMirroredCorrection:(NSMutableArray *)points;
 
 @end

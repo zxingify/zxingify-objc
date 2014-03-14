@@ -24,6 +24,7 @@
 @interface ZXQRCodeBitMatrixParser ()
 
 @property (nonatomic, strong) ZXBitMatrix *bitMatrix;
+@property (nonatomic, assign) BOOL shouldMirror;
 @property (nonatomic, strong) ZXFormatInformation *parsedFormatInfo;
 @property (nonatomic, strong) ZXQRCodeVersion *parsedVersion;
 
@@ -134,13 +135,14 @@
 }
 
 - (int)copyBit:(int)i j:(int)j versionBits:(int)versionBits {
-  return [self.bitMatrix getX:i y:j] ? (versionBits << 1) | 0x1 : versionBits << 1;
+  BOOL bit = self.shouldMirror ? [self.bitMatrix getX:j y:i] : [self.bitMatrix getX:i y:j];
+  return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
 }
 
 
 /**
  * Reads the bits in the {@link BitMatrix} representing the finder pattern in the
- * correct order in order to reconstitute the codewords bytes contained within the
+ * correct order in order to reconstruct the codewords bytes contained within the
  * QR Code.
  */
 - (NSArray *)readCodewordsWithError:(NSError **)error {
@@ -154,7 +156,7 @@
     return nil;
   }
 
-  ZXDataMask *dataMask = [ZXDataMask forReference:(int)[formatInfo dataMask]];
+  ZXDataMask *dataMask = [ZXDataMask forReference:[formatInfo dataMask]];
   int dimension = self.bitMatrix.height;
   [dataMask unmaskBitMatrix:self.bitMatrix dimension:dimension];
   ZXBitMatrix *functionPattern = [version buildFunctionPattern];
@@ -197,6 +199,42 @@
     return nil;
   }
   return result;
+}
+
+/**
+ * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
+ */
+- (void)remask {
+  if (!self.parsedFormatInfo) {
+    return; // We have no format information, and have no data mask
+  }
+  ZXDataMask *dataMask = [ZXDataMask forReference:self.parsedFormatInfo.dataMask];
+  int dimension = self.bitMatrix.height;
+  [dataMask unmaskBitMatrix:self.bitMatrix dimension:dimension];
+}
+
+/**
+ * Prepare the parser for a mirrored operation.
+ * This flag has effect only on the {@link #readFormatInformation()} and the
+ * {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
+ * {@link #mirror()} method should be called.
+ */
+- (void)setMirror:(BOOL)mirror {
+  self.parsedVersion = nil;
+  self.parsedFormatInfo = nil;
+  self.shouldMirror = mirror;
+}
+
+/** Mirror the bit matrix in order to attempt a second reading. */
+- (void)mirror {
+  for (int x = 0; x < self.bitMatrix.width; x++) {
+    for (int y = x + 1; y < self.bitMatrix.height; y++) {
+      if ([self.bitMatrix getX:x y:y] != [self.bitMatrix getX:y y:x]) {
+        [self.bitMatrix flipX:y y:x];
+        [self.bitMatrix flipX:x y:y];
+      }
+    }
+  }
 }
 
 @end

@@ -24,6 +24,7 @@
 #import "ZXQRCodeDataBlock.h"
 #import "ZXQRCodeDecodedBitStreamParser.h"
 #import "ZXQRCodeDecoder.h"
+#import "ZXQRCodeDecoderMetaData.h"
 #import "ZXQRCodeVersion.h"
 #import "ZXReedSolomonDecoder.h"
 
@@ -77,6 +78,43 @@
   if (!parser) {
     return nil;
   }
+  ZXDecoderResult *result = [self decodeParser:parser hints:hints error:error];
+  if (result) {
+    return result;
+  }
+
+  // Revert the bit matrix
+  [parser remask];
+
+  // Will be attempting a mirrored reading of the version and format info.
+  [parser setMirror:YES];
+
+  // Preemptively read the version.
+  if (![parser readVersionWithError:error]) {
+    return nil;
+  }
+
+  /*
+   * Since we're here, this means we have successfully detected some kind
+   * of version and format information when mirrored. This is a good sign,
+   * that the QR code may be mirrored, and we should try once more with a
+   * mirrored content.
+   */
+  // Prepare for a mirrored reading.
+  [parser mirror];
+
+  result = [self decodeParser:parser hints:hints error:error];
+  if (!result) {
+    return nil;
+  }
+
+  // Success! Notify the caller that the code was mirrored.
+  result.other = [[ZXQRCodeDecoderMetaData alloc] initWithMirrored:YES];
+
+  return result;
+}
+
+- (ZXDecoderResult *)decodeParser:(ZXQRCodeBitMatrixParser *)parser hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXQRCodeVersion *version = [parser readVersionWithError:error];
   if (!version) {
     return nil;

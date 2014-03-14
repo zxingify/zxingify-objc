@@ -151,6 +151,12 @@
 		023E69D418C0EF55001FF123 /* QRCodeBlackBox4TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D0166AA0F100E13304 /* QRCodeBlackBox4TestCase.m */; };
 		023E69D518C0EF55001FF123 /* QRCodeBlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D2166AA0F100E13304 /* QRCodeBlackBox5TestCase.m */; };
 		023E69D618C0EF55001FF123 /* QRCodeBlackBox6TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D4166AA0F100E13304 /* QRCodeBlackBox6TestCase.m */; };
+		024A231318D3747C006AE14A /* ZXQRCodeDecoderMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 024A231118D3747C006AE14A /* ZXQRCodeDecoderMetaData.h */; };
+		024A231418D3747C006AE14A /* ZXQRCodeDecoderMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 024A231118D3747C006AE14A /* ZXQRCodeDecoderMetaData.h */; };
+		024A231518D3747C006AE14A /* ZXQRCodeDecoderMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 024A231118D3747C006AE14A /* ZXQRCodeDecoderMetaData.h */; };
+		024A231618D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */; };
+		024A231718D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */; };
+		024A231818D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */; };
 		0262578018CFA49800E2395E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0262576918CFA12000E2395E /* XCTest.framework */; };
 		02B4884A17F5F10000E6285D /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25FE5D4416D1997C00826CDB /* Resources */; };
 		2504D4C616F698AA00DF8882 /* ZXInvertedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D4C416F698AA00DF8882 /* ZXInvertedLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1648,6 +1654,8 @@
 		0218B86C18D23A090005E7EC /* ZXState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXState.m; path = encoder/ZXState.m; sourceTree = "<group>"; };
 		0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecHighLevelEncoder.h; path = encoder/ZXAztecHighLevelEncoder.h; sourceTree = "<group>"; };
 		0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecHighLevelEncoder.m; path = encoder/ZXAztecHighLevelEncoder.m; sourceTree = "<group>"; };
+		024A231118D3747C006AE14A /* ZXQRCodeDecoderMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeDecoderMetaData.h; sourceTree = "<group>"; };
+		024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDecoderMetaData.m; sourceTree = "<group>"; };
 		0262575418CFA03200E2395E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0262575618CFA03200E2395E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		0262575818CFA03200E2395E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -3148,6 +3156,8 @@
 				25403F6A166A9F2D00E13304 /* ZXQRCodeDecodedBitStreamParser.m */,
 				25403F6B166A9F2D00E13304 /* ZXQRCodeDecoder.h */,
 				25403F6C166A9F2D00E13304 /* ZXQRCodeDecoder.m */,
+				024A231118D3747C006AE14A /* ZXQRCodeDecoderMetaData.h */,
+				024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */,
 				25403F6D166A9F2D00E13304 /* ZXQRCodeVersion.h */,
 				25403F6E166A9F2D00E13304 /* ZXQRCodeVersion.m */,
 			);
@@ -3703,6 +3713,7 @@
 				25403E0F166A9CCB00E13304 /* ZXDataMatrixReader.h in Headers */,
 				25403E1B166A9D4B00E13304 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
 				25403E1D166A9D4B00E13304 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
+				024A231318D3747C006AE14A /* ZXQRCodeDecoderMetaData.h in Headers */,
 				25403E1F166A9D4B00E13304 /* ZXMaxiCodeDecoder.h in Headers */,
 				25403E21166A9D4B00E13304 /* ZXMaxiCodeReader.h in Headers */,
 				25403E31166A9D8B00E13304 /* ZXMultiDetector.h in Headers */,
@@ -3939,6 +3950,7 @@
 				25404573166ABAF000E13304 /* ZXMaxiCodeBitMatrixParser.h in Headers */,
 				25404574166ABAF000E13304 /* ZXMaxiCodeDecodedBitStreamParser.h in Headers */,
 				25404575166ABAF000E13304 /* ZXMaxiCodeDecoder.h in Headers */,
+				024A231418D3747C006AE14A /* ZXQRCodeDecoderMetaData.h in Headers */,
 				2519AB3D17FD1EE400A71C45 /* ZXPDF417Writer.h in Headers */,
 				25404576166ABAF000E13304 /* ZXMaxiCodeReader.h in Headers */,
 				25404577166ABAF000E13304 /* ZXMultiDetector.h in Headers */,
@@ -4175,6 +4187,7 @@
 				255E486D18143A8800A03A28 /* ZXC40Encoder.h in Headers */,
 				255E486E18143A8800A03A28 /* ZXDataMatrixEncoder.h in Headers */,
 				255E486F18143A8800A03A28 /* ZXDataMatrixErrorCorrection.h in Headers */,
+				024A231518D3747C006AE14A /* ZXQRCodeDecoderMetaData.h in Headers */,
 				255E487018143A8800A03A28 /* ZXDataMatrixSymbolInfo144.h in Headers */,
 				255E487118143A8800A03A28 /* ZXDefaultPlacement.h in Headers */,
 				255E487218143A8800A03A28 /* ZXEdifactEncoder.h in Headers */,
@@ -4627,6 +4640,7 @@
 				25403F09166A9DF400E13304 /* ZXUPCAReader.m in Sources */,
 				25403F0B166A9DF400E13304 /* ZXUPCAWriter.m in Sources */,
 				25403F0D166A9DF400E13304 /* ZXUPCEANExtension2Support.m in Sources */,
+				024A231618D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */,
 				25403F0F166A9DF400E13304 /* ZXUPCEANExtension5Support.m in Sources */,
 				25403F11166A9DF400E13304 /* ZXUPCEANExtensionSupport.m in Sources */,
 				25403F13166A9DF400E13304 /* ZXUPCEANReader.m in Sources */,
@@ -4975,6 +4989,7 @@
 				2540420B166AAE6000E13304 /* ZXUPCAReader.m in Sources */,
 				2540420C166AAE6000E13304 /* ZXUPCAWriter.m in Sources */,
 				2540420D166AAE6000E13304 /* ZXUPCEANExtension2Support.m in Sources */,
+				024A231718D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */,
 				2540420E166AAE6000E13304 /* ZXUPCEANExtension5Support.m in Sources */,
 				2540420F166AAE6000E13304 /* ZXUPCEANExtensionSupport.m in Sources */,
 				25404210166AAE6000E13304 /* ZXUPCEANReader.m in Sources */,
@@ -5323,6 +5338,7 @@
 				254046C6166ABBED00E13304 /* ZXUPCEANExtension2Support.m in Sources */,
 				254046C7166ABBED00E13304 /* ZXUPCEANExtension5Support.m in Sources */,
 				254046C8166ABBED00E13304 /* ZXUPCEANExtensionSupport.m in Sources */,
+				024A231818D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */,
 				2519AB4D17FE5C3100A71C45 /* ZXPDF417Common.m in Sources */,
 				254046C9166ABBED00E13304 /* ZXUPCEANReader.m in Sources */,
 				254046CA166ABBED00E13304 /* ZXUPCEANWriter.m in Sources */,

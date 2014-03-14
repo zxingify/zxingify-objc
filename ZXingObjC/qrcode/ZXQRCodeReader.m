@@ -22,6 +22,7 @@
 #import "ZXDetectorResult.h"
 #import "ZXErrors.h"
 #import "ZXQRCodeDecoder.h"
+#import "ZXQRCodeDecoderMetaData.h"
 #import "ZXQRCodeDetector.h"
 #import "ZXQRCodeReader.h"
 #import "ZXResult.h"
@@ -45,7 +46,7 @@
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXDecoderResult *decoderResult;
-  NSArray *points;
+  NSMutableArray *points;
   ZXBitMatrix *matrix = [image blackMatrixWithError:error];
   if (!matrix) {
     return nil;
@@ -60,7 +61,7 @@
     if (!decoderResult) {
       return nil;
     }
-    points = @[];
+    points = [NSMutableArray array];
   } else {
     ZXDetectorResult *detectorResult = [[[ZXQRCodeDetector alloc] initWithImage:matrix] detect:hints error:error];
     if (!detectorResult) {
@@ -70,14 +71,19 @@
     if (!decoderResult) {
       return nil;
     }
-    points = [detectorResult points];
+    points = [[detectorResult points] mutableCopy];
+  }
+
+  // If the code was mirrored: swap the bottom-left and the top-right points.
+  if ([decoderResult.other isKindOfClass:[ZXQRCodeDecoderMetaData class]]) {
+    [(ZXQRCodeDecoderMetaData *)decoderResult.other applyMirroredCorrection:points];
   }
 
   ZXResult *result = [ZXResult resultWithText:decoderResult.text
-                                      rawBytes:decoderResult.rawBytes
-                                        length:decoderResult.length
-                                  resultPoints:points
-                                        format:kBarcodeFormatQRCode];
+                                     rawBytes:decoderResult.rawBytes
+                                       length:decoderResult.length
+                                 resultPoints:points
+                                       format:kBarcodeFormatQRCode];
   NSMutableArray *byteSegments = decoderResult.byteSegments;
   if (byteSegments != nil) {
     [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];

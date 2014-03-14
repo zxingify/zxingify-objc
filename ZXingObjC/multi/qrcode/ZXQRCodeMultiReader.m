@@ -18,6 +18,7 @@
 #import "ZXDetectorResult.h"
 #import "ZXMultiDetector.h"
 #import "ZXQRCodeDecoder.h"
+#import "ZXQRCodeDecoderMetaData.h"
 #import "ZXQRCodeMultiReader.h"
 #import "ZXResult.h"
 
@@ -33,14 +34,18 @@
     return nil;
   }
   NSMutableArray *results = [NSMutableArray array];
-  NSArray *detectorResult = [[[ZXMultiDetector alloc] initWithImage:matrix] detectMulti:hints error:error];
-  if (!detectorResult) {
+  NSArray *detectorResults = [[[ZXMultiDetector alloc] initWithImage:matrix] detectMulti:hints error:error];
+  if (!detectorResults) {
     return nil;
   }
-  for (int i = 0; i < [detectorResult count]; i++) {
-    ZXDecoderResult *decoderResult = [[self decoder] decodeMatrix:[(ZXDetectorResult *)detectorResult[i] bits] hints:hints error:nil];
+  for (ZXDetectorResult *detectorResult in detectorResults) {
+    ZXDecoderResult *decoderResult = [[self decoder] decodeMatrix:[detectorResult bits] hints:hints error:nil];
     if (decoderResult) {
-      NSArray *points = [(ZXDetectorResult *)detectorResult[i] points];
+      NSMutableArray *points = [[detectorResult points] mutableCopy];
+      // If the code was mirrored: swap the bottom-left and the top-right points.
+      if ([decoderResult.other isKindOfClass:[ZXQRCodeDecoderMetaData class]]) {
+        [(ZXQRCodeDecoderMetaData *)decoderResult.other applyMirroredCorrection:points];
+      }
       ZXResult *result = [ZXResult resultWithText:decoderResult.text
                                           rawBytes:decoderResult.rawBytes
                                             length:decoderResult.length
