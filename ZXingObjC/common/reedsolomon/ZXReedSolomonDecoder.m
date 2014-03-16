@@ -17,6 +17,7 @@
 #import "ZXErrors.h"
 #import "ZXGenericGF.h"
 #import "ZXGenericGFPoly.h"
+#import "ZXIntArray.h"
 #import "ZXReedSolomonDecoder.h"
 
 @interface ZXReedSolomonDecoder ()
@@ -34,21 +35,13 @@
 
   return self;
 }
-
-/**
- * Decodes given set of received codewords, which include both data and error-correction
- * codewords. Really, this means it uses Reed-Solomon to detect and correct errors, in-place,
- * in the input.
- */
-- (BOOL)decode:(int *)received receivedLen:(NSUInteger)receivedLen twoS:(int)twoS error:(NSError **)error {
-  ZXGenericGFPoly *poly = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:received coefficientsLen:receivedLen];
-  int syndromeCoefficientsLen = twoS;
-  int syndromeCoefficients[syndromeCoefficientsLen];
+- (BOOL)decode:(ZXIntArray *)received twoS:(int)twoS error:(NSError **)error {
+  ZXGenericGFPoly *poly = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:received];
+  ZXIntArray *syndromeCoefficients = [[ZXIntArray alloc] initWithLength:twoS];
   BOOL noError = YES;
-
   for (int i = 0; i < twoS; i++) {
     int eval = [poly evaluateAt:[self.field exp:i + self.field.generatorBase]];
-    syndromeCoefficients[syndromeCoefficientsLen - 1 - i] = eval;
+    syndromeCoefficients.array[syndromeCoefficients.length - 1 - i] = eval;
     if (eval != 0) {
       noError = NO;
     }
@@ -56,27 +49,27 @@
   if (noError) {
     return YES;
   }
-  ZXGenericGFPoly *syndrome = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:syndromeCoefficients coefficientsLen:syndromeCoefficientsLen];
+  ZXGenericGFPoly *syndrome = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:syndromeCoefficients];
   NSArray *sigmaOmega = [self runEuclideanAlgorithm:[self.field buildMonomial:twoS coefficient:1] b:syndrome R:twoS error:error];
   if (!sigmaOmega) {
     return NO;
   }
   ZXGenericGFPoly *sigma = sigmaOmega[0];
   ZXGenericGFPoly *omega = sigmaOmega[1];
-  NSArray *errorLocations = [self findErrorLocations:sigma error:error];
+  ZXIntArray *errorLocations = [self findErrorLocations:sigma error:error];
   if (!errorLocations) {
     return NO;
   }
-  NSArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations];
-  for (int i = 0; i < [errorLocations count]; i++) {
-    int position = (int)receivedLen - 1 - [self.field log:[errorLocations[i] intValue]];
+  ZXIntArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocations:errorLocations];
+  for (int i = 0; i < errorLocations.length; i++) {
+    int position = received.length - 1 - [self.field log:errorLocations.array[i]];
     if (position < 0) {
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Bad error location"};
       
       if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
       return NO;
     }
-    received[position] = [ZXGenericGF addOrSubtract:received[position] b:[errorMagnitudes[i] intValue]];
+    received.array[position] = [ZXGenericGF addOrSubtract:received.array[position] b:errorMagnitudes.array[i]];
   }
   return YES;
 }
@@ -140,16 +133,18 @@
   return @[sigma, omega];
 }
 
-- (NSArray *)findErrorLocations:(ZXGenericGFPoly *)errorLocator error:(NSError **)error {
+- (ZXIntArray *)findErrorLocations:(ZXGenericGFPoly *)errorLocator error:(NSError **)error {
   int numErrors = [errorLocator degree];
   if (numErrors == 1) {
-    return @[@([errorLocator coefficient:1])];
+    ZXIntArray *array = [[ZXIntArray alloc] initWithLength:1];
+    array.array[0] = [errorLocator coefficient:1];
+    return array;
   }
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:numErrors];
+  ZXIntArray *result = [[ZXIntArray alloc] initWithLength:numErrors];
   int e = 0;
   for (int i = 1; i < [self.field size] && e < numErrors; i++) {
     if ([errorLocator evaluateAt:i] == 0) {
-      [result addObject:@([self.field inverse:i])];
+      result.array[e] = [self.field inverse:i];
       e++;
     }
   }
@@ -163,24 +158,27 @@
   return result;
 }
 
-- (NSArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(NSArray *)errorLocations {
-  NSUInteger s = [errorLocations count];
-  NSMutableArray *result = [NSMutableArray array];
+- (ZXIntArray *)findErrorMagnitudes:(ZXGenericGFPoly *)errorEvaluator errorLocations:(ZXIntArray *)errorLocations {
+  int s = errorLocations.length;
+  ZXIntArray *result = [[ZXIntArray alloc] initWithLength:s];
   ZXGenericGF *field = self.field;
   for (int i = 0; i < s; i++) {
-    int xiInverse = [field inverse:[errorLocations[i] intValue]];
+    int xiInverse = [field inverse:errorLocations.array[i]];
     int denominator = 1;
     for (int j = 0; j < s; j++) {
       if (i != j) {
-        int term = [field multiply:[errorLocations[j] intValue] b:xiInverse];
+        //denominator = field.multiply(denominator,
+        //    GenericGF.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
+        // Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
+        // Below is a funny-looking workaround from Steven Parkes
+        int term = [field multiply:errorLocations.array[j] b:xiInverse];
         int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
         denominator = [field multiply:denominator b:termPlus1];
       }
     }
-
-    [result addObject:@([field multiply:[errorEvaluator evaluateAt:xiInverse] b:[self.field inverse:denominator]])];
+    result.array[i] = [field multiply:[errorEvaluator evaluateAt:xiInverse] b:[field inverse:denominator]];
     if (field.generatorBase != 0) {
-      result[i] = @([field multiply:[result[i] intValue] b:xiInverse]);
+      result.array[i] = [field multiply:result.array[i] b:xiInverse];
     }
   }
 

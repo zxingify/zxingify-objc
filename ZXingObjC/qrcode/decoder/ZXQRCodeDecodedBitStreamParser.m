@@ -39,9 +39,12 @@ int const GB2312_SUBSET = 1;
 
 @implementation ZXQRCodeDecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(int8_t *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
-                    ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes length:length];
++ (ZXDecoderResult *)decode:(ZXByteArray *)bytes
+                    version:(ZXQRCodeVersion *)version
+                    ecLevel:(ZXErrorCorrectionLevel *)ecLevel
+                      hints:(ZXDecodeHints *)hints
+                      error:(NSError *__autoreleasing *)error {
+  ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes];
   NSMutableString *result = [NSMutableString stringWithCapacity:50];
   ZXCharacterSetECI *currentCharacterSetECI = nil;
   BOOL fc1InEffect = NO;
@@ -115,10 +118,9 @@ int const GB2312_SUBSET = 1;
     }
   } while (![mode isEqual:[ZXMode terminatorMode]]);
   return [[ZXDecoderResult alloc] initWithRawBytes:bytes
-                                             length:length
-                                               text:result.description
-                                       byteSegments:byteSegments.count == 0 ? nil : byteSegments
-                                            ecLevel:ecLevel == nil ? nil : ecLevel.description];
+                                              text:result.description
+                                      byteSegments:byteSegments.count == 0 ? nil : byteSegments
+                                           ecLevel:ecLevel == nil ? nil : ecLevel.description];
 }
 
 

@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
+@class ZXIntArray;
+
 @interface ZXPDF417BarcodeValue : NSObject
 
+/**
+ * Add an occurrence of a value
+ * @param value
+ */
 - (void)setValue:(int)value;
-- (NSArray *)value;
+
+/**
+ * Determines the maximum occurrence of a set value and returns all values which were set with this occurrence.
+ * @return an array of int, containing the values with the highest occurrence, or null, if no value was set
+ */
+- (ZXIntArray *)value;
+
 - (NSNumber *)confidence:(int)value;
 
 @end

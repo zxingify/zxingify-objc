@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXResultPoint.h"
 #import "ZXBitMatrix.h"
 #import "ZXDetectorResult.h"
 

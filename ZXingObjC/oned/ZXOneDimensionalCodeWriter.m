@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitMatrix.h"
+#import "ZXBoolArray.h"
 #import "ZXEncodeHints.h"
 #import "ZXOneDimensionalCodeWriter.h"
 
@@ -41,15 +42,12 @@
     sidesMargin = hints.margin.intValue;
   }
 
-  int length;
-  BOOL *code = [self encode:contents length:&length];
-  ZXBitMatrix *result = [self renderResult:code length:length width:width height:height sidesMargin:sidesMargin];
-  free(code);
-  return result;
+  ZXBoolArray *code = [self encode:contents];
+  return [self renderResult:code width:width height:height sidesMargin:sidesMargin];
 }
 
-- (ZXBitMatrix *)renderResult:(BOOL *)code length:(int)length width:(int)width height:(int)height sidesMargin:(int)sidesMargin {
-  int inputWidth = length;
+- (ZXBitMatrix *)renderResult:(ZXBoolArray *)code width:(int)width height:(int)height sidesMargin:(int)sidesMargin {
+  int inputWidth = code.length;
   // Add quiet zone on both sides.
   int fullWidth = inputWidth + sidesMargin;
   int outputWidth = MAX(width, fullWidth);
@@ -60,7 +58,7 @@
 
   ZXBitMatrix *output = [ZXBitMatrix bitMatrixWithWidth:outputWidth height:outputHeight];
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
-    if (code[inputX]) {
+    if (code.array[inputX]) {
       [output setRegionAtLeft:outputX top:0 width:multiple height:outputHeight];
     }
   }
@@ -70,12 +68,12 @@
 /**
  * Appends the given pattern to the target array starting at pos.
  */
-- (int)appendPattern:(BOOL *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor {
+- (int)appendPattern:(ZXBoolArray *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor {
   BOOL color = startColor;
   int numAdded = 0;
   for (int i = 0; i < patternLen; i++) {
     for (int j = 0; j < pattern[i]; j++) {
-      target[pos++] = color;
+      target.array[pos++] = color;
     }
     numAdded += pattern[i];
     color = !color; // flip color after each segment
@@ -93,7 +91,7 @@
  * Encode the contents to boolean array expression of one-dimensional barcode.
  * Start code and end code should be included in result, and side margins should not be included.
  */
-- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
+- (ZXBoolArray *)encode:(NSString *)contents {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];

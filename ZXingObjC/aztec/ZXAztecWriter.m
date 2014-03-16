@@ -18,6 +18,7 @@
 #import "ZXAztecEncoder.h"
 #import "ZXAztecWriter.h"
 #import "ZXBitMatrix.h"
+#import "ZXByteArray.h"
 #import "ZXEncodeHints.h"
 
 const NSStringEncoding ZX_AZTEC_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
@@ -47,7 +48,10 @@ const NSStringEncoding ZX_AZTEC_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
                                  userInfo:nil];
   }
 
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[contents dataUsingEncoding:encoding] bytes] len:[contents lengthOfBytesUsingEncoding:encoding] minECCPercent:eccPercent];
+  NSData *data = [contents dataUsingEncoding:encoding];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:(unsigned int)[data length]];
+  memcpy(bytes.array, [data bytes], bytes.length * sizeof(int8_t));
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes minECCPercent:eccPercent];
   return [self renderResult:aztec width:width height:height];
 }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXBitArray, ZXEncodeHints, ZXErrorCorrectionLevel, ZXMode, ZXQRCode, ZXQRCodeVersion;
+@class ZXBitArray, ZXByteArray, ZXEncodeHints, ZXErrorCorrectionLevel, ZXMode, ZXQRCode, ZXQRCodeVersion;
 
 extern const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING;
 
@@ -27,7 +27,7 @@ extern const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING;
 + (BOOL)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits error:(NSError **)error;
 + (BOOL)numDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock error:(NSError **)error;
 + (ZXBitArray *)interleaveWithECBytes:(ZXBitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks error:(NSError **)error;
-+ (int8_t *)generateECBytes:(int8_t *)dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock;
++ (ZXByteArray *)generateECBytes:(ZXByteArray *)dataBytes numEcBytesInBlock:(int)numEcBytesInBlock;
 + (void)appendModeInfo:(ZXMode *)mode bits:(ZXBitArray *)bits;
 + (BOOL)appendLengthInfo:(int)numLetters version:(ZXQRCodeVersion *)version mode:(ZXMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error;
 + (BOOL)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error;

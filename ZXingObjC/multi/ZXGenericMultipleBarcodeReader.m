@@ -127,7 +127,7 @@ int const MAX_DEPTH = 4;
     [newResultPoints addObject:[[ZXResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset]];
   }
 
-  ZXResult *newResult = [ZXResult resultWithText:result.text rawBytes:result.rawBytes length:result.length resultPoints:newResultPoints format:result.barcodeFormat];
+  ZXResult *newResult = [ZXResult resultWithText:result.text rawBytes:result.rawBytes resultPoints:newResultPoints format:result.barcodeFormat];
   [newResult putAllMetadata:result.resultMetadata];
   return newResult;
 }

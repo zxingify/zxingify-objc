@@ -25,21 +25,14 @@
 
 @implementation ZXResult
 
-- (id)initWithText:(NSString *)text rawBytes:(int8_t *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
-  return [self initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format timestamp:CFAbsoluteTimeGetCurrent()];
+- (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
+  return [self initWithText:text rawBytes:rawBytes resultPoints:resultPoints format:format timestamp:CFAbsoluteTimeGetCurrent()];
 }
 
-- (id)initWithText:(NSString *)text rawBytes:(int8_t *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
+- (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
   if (self = [super init]) {
     _text = text;
-    if (rawBytes != NULL && length > 0) {
-      _rawBytes = (int8_t *)malloc(length * sizeof(int8_t));
-      memcpy(_rawBytes, rawBytes, length);
-      _length = length;
-    } else {
-      _rawBytes = NULL;
-      _length = 0;
-    }
+    _rawBytes = rawBytes;
     _resultPoints = [resultPoints mutableCopy];
     _barcodeFormat = format;
     _resultMetadata = nil;
@@ -49,19 +42,12 @@
   return self;
 }
 
-+ (id)resultWithText:(NSString *)text rawBytes:(int8_t *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
-  return [[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format];
++ (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
+  return [[self alloc] initWithText:text rawBytes:rawBytes resultPoints:resultPoints format:format];
 }
 
-+ (id)resultWithText:(NSString *)text rawBytes:(int8_t *)rawBytes length:(unsigned int)length resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
-  return [[self alloc] initWithText:text rawBytes:rawBytes length:length resultPoints:resultPoints format:format timestamp:timestamp];
-}
-
-- (void)dealloc {
-  if (_rawBytes != NULL) {
-    free(_rawBytes);
-    _rawBytes = NULL;
-  }
++ (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
+  return [[self alloc] initWithText:text rawBytes:rawBytes resultPoints:resultPoints format:format timestamp:timestamp];
 }
 
 - (void)putMetadata:(ZXResultMetadataType)type value:(id)value {

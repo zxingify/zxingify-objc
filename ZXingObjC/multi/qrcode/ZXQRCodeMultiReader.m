@@ -47,10 +47,9 @@
         [(ZXQRCodeDecoderMetaData *)decoderResult.other applyMirroredCorrection:points];
       }
       ZXResult *result = [ZXResult resultWithText:decoderResult.text
-                                          rawBytes:decoderResult.rawBytes
-                                            length:decoderResult.length
-                                      resultPoints:points
-                                            format:kBarcodeFormatQRCode];
+                                         rawBytes:decoderResult.rawBytes
+                                     resultPoints:points
+                                           format:kBarcodeFormatQRCode];
       NSMutableArray *byteSegments = decoderResult.byteSegments;
       if (byteSegments != nil) {
         [result putMetadata:kResultMetadataTypeByteSegments value:byteSegments];

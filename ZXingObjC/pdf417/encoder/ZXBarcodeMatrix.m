@@ -57,25 +57,25 @@
   return self.rowMatrix[self.currentRowIndex];
 }
 
-- (int8_t **)matrixWithHeight:(int *)pHeight width:(int *)pWidth {
-  return [self scaledMatrixWithHeight:pHeight width:pWidth xScale:1 yScale:1];
+- (NSArray *)matrix {
+  return [self scaledMatrixWithXScale:1 yScale:1];
 }
 
-- (int8_t **)scaledMatrixWithHeight:(int *)pHeight width:(int *)pWidth scale:(int)scale {
-  return [self scaledMatrixWithHeight:pHeight width:pWidth xScale:scale yScale:scale];
+- (NSArray *)scaledMatrix:(int)scale {
+  return [self scaledMatrixWithXScale:scale yScale:scale];
 }
 
-- (int8_t **)scaledMatrixWithHeight:(int *)pHeight width:(int *)pWidth xScale:(int)xScale yScale:(int)yScale {
-  int matrixHeight = self.height * yScale;
-
-  if (pHeight) *pHeight = matrixHeight;
-  if (pWidth) *pWidth = (self.width + 69) * xScale;
-
-  int8_t **matrixOut = (int8_t **)malloc(matrixHeight * sizeof(int8_t *));
+- (NSArray *)scaledMatrixWithXScale:(int)xScale yScale:(int)yScale {
   int yMax = self.height * yScale;
-  for (int ii = 0; ii < yMax; ii++) {
-    matrixOut[yMax - ii - 1] = [self.rowMatrix[ii / yScale] scaledRow:xScale];
+  NSMutableArray *matrixOut = [NSMutableArray array];
+  for (int i = 0; i < yMax; i++) {
+    [matrixOut addObject:[NSNull null]];
   }
+
+  for (int i = 0; i < yMax; i++) {
+    matrixOut[yMax - i - 1] = [(ZXBarcodeRow *)self.rowMatrix[i / yScale] scaledRow:xScale];
+  }
+
   return matrixOut;
 }
 

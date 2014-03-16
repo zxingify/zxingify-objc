@@ -78,8 +78,10 @@
     if (!decoderResult) {
       return nil;
     }
-    ZXResult *result = [[ZXResult alloc] initWithText:decoderResult.text rawBytes:decoderResult.rawBytes
-                                               length:decoderResult.length resultPoints:points format:kBarcodeFormatPDF417];
+    ZXResult *result = [[ZXResult alloc] initWithText:decoderResult.text
+                                             rawBytes:decoderResult.rawBytes
+                                               resultPoints:points
+                                               format:kBarcodeFormatPDF417];
     [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:decoderResult.ecLevel];
     ZXPDF417ResultMetadata *pdf417ResultMetadata = decoderResult.other;
     if (pdf417ResultMetadata) {

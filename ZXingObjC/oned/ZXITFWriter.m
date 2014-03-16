@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXBoolArray.h"
 #import "ZXITFReader.h"
 #import "ZXITFWriter.h"
 
@@ -33,19 +34,17 @@ const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
-  NSUInteger length = [contents length];
+- (ZXBoolArray *)encode:(NSString *)contents {
+  int length = (int)[contents length];
   if (length % 2 != 0) {
     [NSException raise:NSInvalidArgumentException format:@"The length of the input should be even"];
   }
   if (length > 80) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %ld", (unsigned long)length];
+    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
 
-  NSUInteger resultLen = 9 + 9 * length;
-  if (pLength) *pLength = (int)resultLen;
-  BOOL *result = (BOOL *)malloc(resultLen * sizeof(BOOL));
-  int pos = [super appendPattern:result pos:0 pattern:ITF_WRITER_START_PATTERN patternLen:ITF_WRITER_START_PATTERN_LEN startColor:TRUE];
+  ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:9 * 9 * length];
+  int pos = [self appendPattern:result pos:0 pattern:ITF_WRITER_START_PATTERN patternLen:ITF_WRITER_START_PATTERN_LEN startColor:TRUE];
   for (int i = 0; i < length; i += 2) {
     int one = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
     int two = [[contents substringWithRange:NSMakeRange(i + 1, 1)] intValue];
@@ -58,7 +57,7 @@ const int ITF_WRITER_END_PATTERN[ITF_WRITER_END_PATTERN_LEN] = {3, 1, 1};
     }
     pos += [super appendPattern:result pos:pos pattern:encoding patternLen:encodingLen startColor:TRUE];
   }
-  [super appendPattern:result pos:pos pattern:ITF_WRITER_END_PATTERN patternLen:ITF_WRITER_END_PATTERN_LEN startColor:TRUE];
+  [self appendPattern:result pos:pos pattern:ITF_WRITER_END_PATTERN patternLen:ITF_WRITER_END_PATTERN_LEN startColor:TRUE];
 
   return result;
 }

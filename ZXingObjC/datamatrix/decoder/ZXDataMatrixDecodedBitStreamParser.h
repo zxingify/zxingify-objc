@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
- * in one Data Matrix Code. This class decodes the bits back into text.
- * 
- * See ISO 16022:2006, 5.2.1 - 5.2.9.2
- */
-
-@class ZXDecoderResult;
+@class ZXByteArray, ZXDecoderResult;
 
 @interface ZXDataMatrixDecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *)decode:(int8_t *)bytes length:(unsigned int)length error:(NSError **)error;
++ (ZXDecoderResult *)decode:(ZXByteArray *)bytes error:(NSError **)error;
 
 @end

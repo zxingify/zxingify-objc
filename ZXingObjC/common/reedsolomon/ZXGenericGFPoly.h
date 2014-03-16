@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-/**
- * Represents a polynomial whose coefficients are elements of a GF.
- * Instances of this class are immutable.
- * 
- * Much credit is due to William Rucklidge since portions of this code are an indirect
- * port of his C++ Reed-Solomon implementation.
- */
-
-@class ZXGenericGF;
+@class ZXGenericGF, ZXIntArray;
 
 @interface ZXGenericGFPoly : NSObject
 
-@property (nonatomic, assign, readonly) int *coefficients;
-@property (nonatomic, assign, readonly) int coefficientsLen;
+@property (nonatomic, strong, readonly) ZXIntArray *coefficients;
 
-- (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(NSUInteger)coefficientsLen;
+- (id)initWithField:(ZXGenericGF *)field coefficients:(ZXIntArray *)coefficients;
 - (int)degree;
 - (BOOL)zero;
 - (int)coefficient:(int)degree;

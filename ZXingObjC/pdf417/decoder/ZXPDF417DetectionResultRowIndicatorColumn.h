@@ -16,7 +16,7 @@
 
 #import "ZXPDF417DetectionResultColumn.h"
 
-@class ZXPDF417BarcodeMetadata, ZXPDF417BoundingBox;
+@class ZXIntArray, ZXPDF417BarcodeMetadata, ZXPDF417BoundingBox;
 
 @interface ZXPDF417DetectionResultRowIndicatorColumn : ZXPDF417DetectionResultColumn
 
@@ -24,7 +24,7 @@
 
 - (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox isLeft:(BOOL)isLeft;
 - (void)setRowNumbers;
-- (NSArray *)rowHeights;
+- (ZXIntArray *)rowHeights;
 - (int)adjustCompleteIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata;
 - (int)adjustIncompleteIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata;
 - (ZXPDF417BarcodeMetadata *)barcodeMetadata;

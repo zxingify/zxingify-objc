@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-/**
- * Implements Reed-Solomon enbcoding, as the name implies.
- */
-
-@class ZXGenericGF;
+@class ZXGenericGF, ZXIntArray;
 
 @interface ZXReedSolomonEncoder : NSObject
 
 - (id)initWithField:(ZXGenericGF *)field;
-- (void)encode:(int *)toEncode toEncodeLen:(int)toEncodeLen ecBytes:(int)ecBytes;
+- (void)encode:(ZXIntArray *)toEncode ecBytes:(int)ecBytes;
 
 @end

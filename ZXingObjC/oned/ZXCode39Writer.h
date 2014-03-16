@@ -17,9 +17,8 @@
 #import "ZXOneDimensionalCodeWriter.h"
 
 /**
- * This object renders a CODE39 code as a {@link BitMatrix}.
+ * This object renders a CODE39 code as a ZXBitMatrix.
  */
-
 @interface ZXCode39Writer : ZXOneDimensionalCodeWriter
 
 @end

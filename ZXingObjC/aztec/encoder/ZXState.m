@@ -16,6 +16,7 @@
 
 #import "ZXAztecHighLevelEncoder.h"
 #import "ZXBitArray.h"
+#import "ZXByteArray.h"
 #import "ZXState.h"
 #import "ZXToken.h"
 
@@ -108,17 +109,17 @@
   return mySize <= other.bitCount;
 }
 
-- (ZXBitArray *)toBitArray:(const int8_t *)text textLength:(NSUInteger)textLength {
+- (ZXBitArray *)toBitArray:(ZXByteArray *)text {
   // Reverse the tokens, so that they are in the order that they should
   // be output
   NSMutableArray *symbols = [NSMutableArray array];
-  for (ZXToken *token = [self endBinaryShift:(int)textLength].token; token != nil; token = token.previous) {
+  for (ZXToken *token = [self endBinaryShift:text.length].token; token != nil; token = token.previous) {
     [symbols insertObject:token atIndex:0];
   }
   ZXBitArray *bitArray = [[ZXBitArray alloc] init];
   // Add each token to the result.
   for (ZXToken *symbol in symbols) {
-    [symbol appendTo:bitArray text:text length:textLength];
+    [symbol appendTo:bitArray text:text];
   }
   return bitArray;
 }

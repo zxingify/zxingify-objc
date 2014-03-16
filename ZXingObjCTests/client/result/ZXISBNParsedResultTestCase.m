@@ -23,7 +23,7 @@
 }
 
 - (void)doTestWithContents:(NSString *)contents {
-  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatEan13];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatEan13];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   XCTAssertEqual(result.type, kParsedResultTypeISBN, @"Types don't match");
   ZXISBNParsedResult *isbnResult = (ZXISBNParsedResult *)result;

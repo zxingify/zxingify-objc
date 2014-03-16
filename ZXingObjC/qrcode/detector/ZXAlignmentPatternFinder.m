@@ -18,6 +18,7 @@
 #import "ZXAlignmentPatternFinder.h"
 #import "ZXBitMatrix.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXResultPointCallback.h"
 
 @interface ZXAlignmentPatternFinder ()
@@ -29,7 +30,7 @@
 @property (nonatomic, assign) int width;
 @property (nonatomic, assign) int height;
 @property (nonatomic, assign) float moduleSize;
-@property (nonatomic, assign) int *crossCheckStateCount;
+@property (nonatomic, strong) ZXIntArray *crossCheckStateCount;
 @property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
 
 @end
@@ -48,19 +49,11 @@
     _width = width;
     _height = height;
     _moduleSize = moduleSize;
-    _crossCheckStateCount = (int *)malloc(3 * sizeof(int));
-    memset(_crossCheckStateCount, 0, 3 * sizeof(int));
+    _crossCheckStateCount = [[ZXIntArray alloc] initWithLength:3];
     _resultPointCallback = resultPointCallback;
   }
 
   return self;
-}
-
-- (void)dealloc {
-  if (_crossCheckStateCount != NULL) {
-    free(_crossCheckStateCount);
-    _crossCheckStateCount = NULL;
-  }
 }
 
 /**
@@ -156,9 +149,10 @@
  */
 - (float)crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
   int maxI = self.image.height;
-  int stateCount[3] = {0, 0, 0};
-  int i = startI;
+  [self.crossCheckStateCount clear];
+  int32_t *stateCount = self.crossCheckStateCount.array;
 
+  int i = startI;
   while (i >= 0 && [self.image getX:centerJ y:i] && stateCount[1] <= maxCount) {
     stateCount[1]++;
     i--;

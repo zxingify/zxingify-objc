@@ -46,17 +46,10 @@
   NSDictionary *imageFiles = [self imageFileLists];
   int testCount = (int)[self.testResults count];
 
-  int passedCounts[testCount];
-  memset(passedCounts, 0, testCount * sizeof(int));
-
-  int misreadCounts[testCount];
-  memset(misreadCounts, 0, testCount * sizeof(int));
-
-  int tryHarderCounts[testCount];
-  memset(tryHarderCounts, 0, testCount * sizeof(int));
-
-  int tryHarderMisreadCounts[testCount];
-  memset(tryHarderMisreadCounts, 0, testCount * sizeof(int));
+  ZXIntArray *passedCounts = [[ZXIntArray alloc] initWithLength:testCount];
+  ZXIntArray *misreadCounts = [[ZXIntArray alloc] initWithLength:testCount];
+  ZXIntArray *tryHarderCounts = [[ZXIntArray alloc] initWithLength:testCount];
+  ZXIntArray *tryHarderMisreadCounts = [[ZXIntArray alloc] initWithLength:testCount];
 
   for (NSString *fileBaseName in [imageFiles allKeys]) {
     NSLog(@"Starting Image Group %@", fileBaseName);
@@ -104,8 +97,8 @@
         [resultText appendString:result.text];
       }
       XCTAssertEqualObjects(resultText, expectedText, @"ExpectedText");
-      passedCounts[x]++;
-      tryHarderCounts[x]++;
+      passedCounts.array[x]++;
+      tryHarderCounts.array[x]++;
     }
   }
 
@@ -119,15 +112,15 @@
   for (int x = 0; x < [self.testResults count]; x++) {
     TestResult *testResult = self.testResults[x];
     NSLog(@"Rotation %d degrees:", (int) testResult.rotation);
-    NSLog(@" %d of %d images passed (%d required)", passedCounts[x], numberOfTests, testResult.mustPassCount);
-    int failed = numberOfTests - passedCounts[x];
-    NSLog(@" %d failed due to misreads, %d not detected", misreadCounts[x], failed - misreadCounts[x]);
-    NSLog(@" %d of %d images passed with try harder (%d required)", tryHarderCounts[x], numberOfTests, testResult.tryHarderCount);
-    failed = numberOfTests - tryHarderCounts[x];
-    NSLog(@" %d failed due to misreads, %d not detected", tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]);
-    totalFound += passedCounts[x] + tryHarderCounts[x];
+    NSLog(@" %d of %d images passed (%d required)", passedCounts.array[x], numberOfTests, testResult.mustPassCount);
+    int failed = numberOfTests - passedCounts.array[x];
+    NSLog(@" %d failed due to misreads, %d not detected", misreadCounts.array[x], failed - misreadCounts.array[x]);
+    NSLog(@" %d of %d images passed with try harder (%d required)", tryHarderCounts.array[x], numberOfTests, testResult.tryHarderCount);
+    failed = numberOfTests - tryHarderCounts.array[x];
+    NSLog(@" %d failed due to misreads, %d not detected", tryHarderMisreadCounts.array[x], failed - tryHarderMisreadCounts.array[x]);
+    totalFound += passedCounts.array[x] + tryHarderCounts.array[x];
     totalMustPass += testResult.mustPassCount + testResult.tryHarderCount;
-    totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
+    totalMisread += misreadCounts.array[x] + tryHarderMisreadCounts.array[x];
     totalMaxMisread += testResult.maxMisreads + testResult.maxTryHarderMisreads;
   }
 
@@ -151,11 +144,11 @@
     for (int x = 0; x < testCount; x++) {
       TestResult *testResult = self.testResults[x];
       NSString *label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images failed", testResult.rotation];
-      XCTAssertTrue(passedCounts[x] >= testResult.mustPassCount, @"%@", label);
-      XCTAssertTrue(tryHarderCounts[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
+      XCTAssertTrue(passedCounts.array[x] >= testResult.mustPassCount, @"%@", label);
+      XCTAssertTrue(tryHarderCounts.array[x] >= testResult.tryHarderCount, @"Try harder, %@", label);
       label = [NSString stringWithFormat:@"Rotation %f degrees: Too many images misread", testResult.rotation];
-      XCTAssertTrue(misreadCounts[x] <= testResult.maxMisreads, @"%@", label);
-      XCTAssertTrue(tryHarderMisreadCounts[x] <= testResult.maxTryHarderMisreads, @"Try harder, %@", label);
+      XCTAssertTrue(misreadCounts.array[x] <= testResult.maxMisreads, @"%@", label);
+      XCTAssertTrue(tryHarderMisreadCounts.array[x] <= testResult.maxTryHarderMisreads, @"Try harder, %@", label);
     }
   }
 }

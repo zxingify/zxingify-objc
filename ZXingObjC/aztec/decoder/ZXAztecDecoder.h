@@ -19,13 +19,13 @@
  * the Aztec Code from an image.
  */
 
-@class ZXAztecDetectorResult, ZXDecoderResult;
+@class ZXAztecDetectorResult, ZXBoolArray, ZXDecoderResult;
 
 @interface ZXAztecDecoder : NSObject
 
 - (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError **)error;
 
 // This method is used for testing the high-level encoder
-+ (NSString *)highLevelDecode:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength;
++ (NSString *)highLevelDecode:(ZXBoolArray *)correctedBits;
 
 @end

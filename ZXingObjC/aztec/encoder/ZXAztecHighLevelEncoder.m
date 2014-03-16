@@ -15,6 +15,7 @@
  */
 
 #import "ZXAztecHighLevelEncoder.h"
+#import "ZXByteArray.h"
 #import "ZXState.h"
 
 NSArray *ZX_AZTEC_MODE_NAMES = nil;
@@ -81,8 +82,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 
 @interface ZXAztecHighLevelEncoder ()
 
-@property (nonatomic, assign, readonly) int8_t *text;
-@property (nonatomic, assign, readonly) NSUInteger textLength;
+@property (nonatomic, assign, readonly) ZXByteArray *text;
 
 @end
 
@@ -141,26 +141,20 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
   ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_MODE_DIGIT][ZX_AZTEC_MODE_UPPER] = 15;
 }
 
-- (id)initWithData:(const int8_t *)text textLength:(NSUInteger)textLength {
+- (id)initWithText:(ZXByteArray *)text {
   if (self = [super init]) {
-    _text = (int8_t *)malloc(textLength * sizeof(int8_t));
-    memcpy(_text, text, textLength * sizeof(int8_t));
-
-    _textLength = textLength;
+    _text = text;
   }
 
   return self;
 }
 
-/**
- * Convert the text represented by this High Level Encoder into a BitArray.
- */
 - (ZXBitArray *)encode {
   NSArray *states = @[[ZXState initialState]];
-  for (int index = 0; index < self.textLength; index++) {
+  for (int index = 0; index < self.text.length; index++) {
     int pairCode;
-    int nextChar = index + 1 < self.textLength ? self.text[index + 1] : 0;
-    switch (self.text[index]) {
+    int nextChar = index + 1 < self.text.length ? self.text.array[index + 1] : 0;
+    switch (self.text.array[index]) {
       case '\r':
         pairCode = nextChar == '\n' ? 2 : 0;
         break;
@@ -191,7 +185,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
     return a.bitCount - b.bitCount;
   }] firstObject];
   // Convert it to a bit array, and return.
-  return [minState toBitArray:self.text textLength:self.textLength];
+  return [minState toBitArray:self.text];
 }
 
 // We update a set of states for a new character by updating each state
@@ -209,7 +203,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 // state for the next character.  The resulting set of states are added to
 // the "result" list.
 - (void)updateStateForChar:(ZXState *)state index:(int)index result:(NSMutableArray *)result {
-  unichar ch = (unichar) (self.text[index] & 0xFF);
+  unichar ch = (unichar) (self.text.array[index] & 0xFF);
   BOOL charInCurrentTable = ZX_AZTEC_CHAR_MAP[state.mode][ch] > 0;
   ZXState *stateNoBinary = nil;
   for (int mode = 0; mode <= ZX_AZTEC_MODE_PUNCT; mode++) {

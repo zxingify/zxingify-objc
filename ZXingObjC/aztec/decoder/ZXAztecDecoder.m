@@ -17,9 +17,11 @@
 #import "ZXAztecDecoder.h"
 #import "ZXAztecDetectorResult.h"
 #import "ZXBitMatrix.h"
+#import "ZXBoolArray.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXGenericGF.h"
+#import "ZXIntArray.h"
 #import "ZXReedSolomonDecoder.h"
 
 typedef enum {
@@ -67,32 +69,23 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
 - (ZXDecoderResult *)decode:(ZXAztecDetectorResult *)detectorResult error:(NSError **)error {
   self.ddata = detectorResult;
   ZXBitMatrix *matrix = [detectorResult bits];
-
-  BOOL *rawbits;
-  NSUInteger rawbitsLength = [self extractBits:matrix pBits:&rawbits];
-  if (rawbitsLength == 0) {
+  ZXBoolArray *rawbits = [self extractBits:matrix];
+  if (!rawbits) {
     if (error) *error = FormatErrorInstance();
     return nil;
   }
 
-  BOOL *correctedBits;
-  NSUInteger correctedBitsLength = [self correctBits:rawbits bitsLength:rawbitsLength pBits:&correctedBits error:error];
-  free(rawbits);
-  rawbits = NULL;
-  if (correctedBitsLength == 0) {
+  ZXBoolArray *correctedBits = [self correctBits:rawbits error:error];
+  if (!correctedBits) {
     return nil;
   }
 
-  NSString *result = [[self class] encodedData:correctedBits length:correctedBitsLength];
-
-  free(correctedBits);
-  correctedBits = NULL;
-
-  return [[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:nil];
+  NSString *result = [[self class] encodedData:correctedBits];
+  return [[ZXDecoderResult alloc] initWithRawBytes:nil text:result byteSegments:nil ecLevel:nil];
 }
 
-+ (NSString *)highLevelDecode:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength {
-  return [self encodedData:correctedBits length:correctedBitsLength];
++ (NSString *)highLevelDecode:(ZXBoolArray *)correctedBits {
+  return [self encodedData:correctedBits];
 }
 
 /**
@@ -100,8 +93,8 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
  *
  * @return the decoded string
  */
-+ (NSString *)encodedData:(BOOL *)correctedBits length:(NSUInteger)correctedBitsLength {
-  int endIndex = (int)correctedBitsLength;
++ (NSString *)encodedData:(ZXBoolArray *)correctedBits {
+  int endIndex = (int)correctedBits.length;
   ZXAztecTable latchTable = ZXAztecTableUpper; // table most recently latched to
   ZXAztecTable shiftTable = ZXAztecTableUpper; // table to use for the next read
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
@@ -207,7 +200,7 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
  *
  * @return the number of corrected bits, or 0 if the input contains too many errors
  */
-- (NSUInteger)correctBits:(BOOL *)rawbits bitsLength:(NSUInteger)rawbitsLength pBits:(BOOL **)pBits error:(NSError **)error {
+- (ZXBoolArray *)correctBits:(ZXBoolArray *)rawbits error:(NSError **)error {
   ZXGenericGF *gf;
   int codewordSize;
 
@@ -226,18 +219,18 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   }
 
   int numDataCodewords = [self.ddata nbDatablocks];
-  int numCodewords = (int)rawbitsLength / codewordSize;
-  int offset = rawbitsLength % codewordSize;
+  int numCodewords = rawbits.length / codewordSize;
+  int offset = rawbits.length % codewordSize;
   int numECCodewords = numCodewords - numDataCodewords;
 
-  int dataWords[numCodewords];
-  for (int i = 0; i < sizeof(dataWords)/sizeof(int); i++, offset += codewordSize) {
-    dataWords[i] = [[self class] readCode:rawbits startIndex:offset length:codewordSize];
+  ZXIntArray *dataWords = [[ZXIntArray alloc] initWithLength:numCodewords];
+  for (int i = 0; i < numCodewords; i++, offset += codewordSize) {
+    dataWords.array[i] = [[self class] readCode:rawbits startIndex:offset length:codewordSize];
   }
 
   ZXReedSolomonDecoder *rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:gf];
   NSError *decodeError = nil;
-  if (![rsDecoder decode:dataWords receivedLen:sizeof(dataWords)/sizeof(int) twoS:numECCodewords error:&decodeError]) {
+  if (![rsDecoder decode:dataWords twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
       if (error) *error = FormatErrorInstance();
     } else {
@@ -251,7 +244,7 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   int mask = (1 << codewordSize) - 1;
   int stuffedBits = 0;
   for (int i = 0; i < numDataCodewords; i++) {
-    int dataWord = dataWords[i];
+    int32_t dataWord = dataWords.array[i];
     if (dataWord == 0 || dataWord == mask) {
       if (error) *error = FormatErrorInstance();
       return 0;
@@ -261,25 +254,22 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   }
 
   // Now, actually unpack the bits and remove the stuffing
-  NSUInteger correctedBitsLength = numDataCodewords * codewordSize - stuffedBits;
-  BOOL *correctedBits = (BOOL *)calloc(correctedBitsLength, sizeof(BOOL));
+  ZXBoolArray *correctedBits = [[ZXBoolArray alloc] initWithLength:numDataCodewords * codewordSize - stuffedBits];
   int index = 0;
   for (int i = 0; i < numDataCodewords; i++) {
-    int dataWord = dataWords[i];
+    int dataWord = dataWords.array[i];
     if (dataWord == 1 || dataWord == mask - 1) {
       // next codewordSize-1 bits are all zeros or all ones
-      memset(correctedBits + index * sizeof(BOOL), dataWord > 1, codewordSize - 1);
+      memset(correctedBits.array + index * sizeof(BOOL), dataWord > 1, codewordSize - 1);
       index += codewordSize - 1;
     } else {
       for (int bit = codewordSize - 1; bit >= 0; --bit) {
-        correctedBits[index++] = (dataWord & (1 << bit)) != 0;
+        correctedBits.array[index++] = (dataWord & (1 << bit)) != 0;
       }
     }
   }
-  NSAssert(index == correctedBitsLength, @"Expected index to equal %d (got %d)", (int)correctedBitsLength, index);
-
-  *pBits = correctedBits;
-  return correctedBitsLength;
+  NSAssert(index == correctedBits.length, @"Expected index to equal %lu (got %d)", (unsigned long)correctedBits.length, index);
+  return correctedBits;
 }
 
 /**
@@ -287,18 +277,16 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
  *
  * @return the size of the array of bits
  */
-- (NSUInteger)extractBits:(ZXBitMatrix *)matrix pBits:(BOOL **)pBits {
+- (ZXBoolArray *)extractBits:(ZXBitMatrix *)matrix {
   BOOL compact = self.ddata.isCompact;
   int layers = self.ddata.nbLayers;
   int baseMatrixSize = compact ? 11 + layers * 4 : 14 + layers * 4; // not including alignment lines
-  int alignmentMap[baseMatrixSize];
-  memset(alignmentMap, 0, sizeof(alignmentMap)/sizeof(int));
-  NSUInteger rawbitsLength = [self totalBitsInLayer:layers compact:compact];
-  BOOL *rawbits = (BOOL *)calloc(rawbitsLength, sizeof(BOOL));
+  ZXIntArray *alignmentMap = [[ZXIntArray alloc] initWithLength:baseMatrixSize];
+  ZXBoolArray *rawbits = [[ZXBoolArray alloc] initWithLength:[self totalBitsInLayer:layers compact:compact]];
 
   if (compact) {
-    for (int i = 0; i < sizeof(alignmentMap)/sizeof(int); i++) {
-      alignmentMap[i] = i;
+    for (int i = 0; i < alignmentMap.length; i++) {
+      alignmentMap.array[i] = i;
     }
   } else {
     int matrixSize = baseMatrixSize + 1 + 2 * ((baseMatrixSize / 2 - 1) / 15);
@@ -306,8 +294,8 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
     int center = matrixSize / 2;
     for (int i = 0; i < origCenter; i++) {
       int newOffset = i + i / 15;
-      alignmentMap[origCenter - i - 1] = center - newOffset - 1;
-      alignmentMap[origCenter + i] = center + newOffset + 1;
+      alignmentMap.array[origCenter - i - 1] = (int32_t)(center - newOffset - 1);
+      alignmentMap.array[origCenter + i] = (int32_t)(center + newOffset + 1);
     }
   }
   for (int i = 0, rowOffset = 0; i < layers; i++) {
@@ -321,34 +309,32 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
       int columnOffset = j * 2;
       for (int k = 0; k < 2; k++) {
         // left column
-        rawbits[rowOffset + columnOffset + k] =
-          [matrix getX:alignmentMap[low + k] y:alignmentMap[low + j]];
+        rawbits.array[rowOffset + columnOffset + k] =
+          [matrix getX:alignmentMap.array[low + k] y:alignmentMap.array[low + j]];
         // bottom row
-        rawbits[rowOffset + 2 * rowSize + columnOffset + k] =
-          [matrix getX:alignmentMap[low + j] y:alignmentMap[high - k]];
+        rawbits.array[rowOffset + 2 * rowSize + columnOffset + k] =
+          [matrix getX:alignmentMap.array[low + j] y:alignmentMap.array[high - k]];
         // right column
-        rawbits[rowOffset + 4 * rowSize + columnOffset + k] =
-          [matrix getX:alignmentMap[high - k] y:alignmentMap[high - j]];
+        rawbits.array[rowOffset + 4 * rowSize + columnOffset + k] =
+          [matrix getX:alignmentMap.array[high - k] y:alignmentMap.array[high - j]];
         // top row
-        rawbits[rowOffset + 6 * rowSize + columnOffset + k] =
-          [matrix getX:alignmentMap[high - j] y:alignmentMap[low + k]];
+        rawbits.array[rowOffset + 6 * rowSize + columnOffset + k] =
+          [matrix getX:alignmentMap.array[high - j] y:alignmentMap.array[low + k]];
       }
     }
     rowOffset += rowSize * 8;
   }
-
-  *pBits = rawbits;
-  return rawbitsLength;
+  return rawbits;
 }
 
 /**
  * Reads a code of given length and at given index in an array of bits
  */
-+ (int)readCode:(BOOL *)rawbits startIndex:(int)startIndex length:(int)length {
++ (int)readCode:(ZXBoolArray *)rawbits startIndex:(int)startIndex length:(int)length {
   int res = 0;
   for (int i = startIndex; i < startIndex + length; i++) {
     res <<= 1;
-    if (rawbits[i]) {
+    if (rawbits.array[i]) {
       res++;
     }
   }

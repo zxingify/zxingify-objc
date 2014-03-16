@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
+@class ZXIntArray;
+
 /**
  * Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G.
  */
-
 @interface ZXRSSUtils : NSObject
 
 + (NSArray *)rssWidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow;
-+ (int)rssValue:(int *)widths widthsLen:(unsigned int)widthsLen maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow;
++ (int)rssValue:(ZXIntArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow;
 + (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K;
 
 @end

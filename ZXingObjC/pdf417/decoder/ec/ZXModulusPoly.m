@@ -14,84 +14,78 @@
  * limitations under the License.
  */
 
+#import "ZXIntArray.h"
 #import "ZXModulusGF.h"
 #import "ZXModulusPoly.h"
 
 @interface ZXModulusPoly ()
 
-@property (nonatomic, assign) int *coefficients;
-@property (nonatomic, assign) int coefficientsLen;
+@property (nonatomic, strong) ZXIntArray *coefficients;
 @property (nonatomic, weak) ZXModulusGF *field;
 
 @end
 
 @implementation ZXModulusPoly
 
-- (id)initWithField:(ZXModulusGF *)field coefficients:(int *)coefficients coefficientsLen:(int)coefficientsLen {
+- (id)initWithField:(ZXModulusGF *)field coefficients:(ZXIntArray *)coefficients {
   if (self = [super init]) {
+    if (coefficients.length == 0) {
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:@"coefficients must have at least one element"
+                                   userInfo:nil];
+    }
     _field = field;
-    if (coefficientsLen > 1 && coefficients[0] == 0) {
+    int coefficientsLength = coefficients.length;
+    if (coefficientsLength > 1 && coefficients.array[0] == 0) {
       // Leading term must be non-zero for anything except the constant polynomial "0"
       int firstNonZero = 1;
-      while (firstNonZero < coefficientsLen && coefficients[firstNonZero] == 0) {
+      while (firstNonZero < coefficientsLength && coefficients.array[firstNonZero] == 0) {
         firstNonZero++;
       }
-      if (firstNonZero == coefficientsLen) {
-        ZXModulusPoly *zero = field.zero;
-        _coefficients = (int *)malloc(zero.coefficientsLen * sizeof(int));
-        memcpy(_coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
+      if (firstNonZero == coefficientsLength) {
+        _coefficients = field.zero.coefficients;
       } else {
-        _coefficientsLen = (coefficientsLen - firstNonZero);
-        _coefficients = (int *)malloc(_coefficientsLen * sizeof(int));
-        for (int i = 0; i < _coefficientsLen; i++) {
-          _coefficients[i] = coefficients[firstNonZero + i];
+        _coefficients = [[ZXIntArray alloc] initWithLength:coefficientsLength - firstNonZero];
+        for (int i = 0; i < _coefficients.length; i++) {
+          _coefficients.array[i] = coefficients.array[firstNonZero + i];
         }
       }
     } else {
-      _coefficients = (int *)malloc(coefficientsLen * sizeof(int));
-      memcpy(_coefficients, coefficients, coefficientsLen * sizeof(int));
-      _coefficientsLen = coefficientsLen;
+      _coefficients = coefficients;
     }
   }
 
   return self;
 }
 
-- (void)dealloc {
-  if (_coefficients != NULL) {
-    free(_coefficients);
-    _coefficients = NULL;
-  }
-}
-
 - (int)degree {
-  return self.coefficientsLen - 1;
+  return self.coefficients.length - 1;
 }
 
 - (BOOL)zero {
-  return self.coefficients[0] == 0;
+  return self.coefficients.array[0] == 0;
 }
 
 - (int)coefficient:(int)degree {
-  return self.coefficients[self.coefficientsLen - 1 - degree];
+  return self.coefficients.array[self.coefficients.length - 1 - degree];
 }
 
 - (int)evaluateAt:(int)a {
   if (a == 0) {
     return [self coefficient:0];
   }
-  int size = self.coefficientsLen;
+  int size = self.coefficients.length;
   if (a == 1) {
     // Just the sum of the coefficients
     int result = 0;
     for (int i = 0; i < size; i++) {
-      result = [self.field add:result b:self.coefficients[i]];
+      result = [self.field add:result b:self.coefficients.array[i]];
     }
     return result;
   }
-  int result = self.coefficients[0];
+  int result = self.coefficients.array[0];
   for (int i = 1; i < size; i++) {
-    result = [self.field add:[self.field multiply:a b:result] b:self.coefficients[i]];
+    result = [self.field add:[self.field multiply:a b:result] b:self.coefficients.array[i]];
   }
   return result;
 }
@@ -107,29 +101,23 @@
     return self;
   }
 
-  int *smallerCoefficients = self.coefficients;
-  int smallerCoefficientsLen = self.coefficientsLen;
-  int *largerCoefficients = other.coefficients;
-  int largerCoefficientsLen = other.coefficientsLen;
-  if (smallerCoefficientsLen > largerCoefficientsLen) {
-    int *temp = smallerCoefficients;
-    int tempLen = smallerCoefficientsLen;
+  ZXIntArray *smallerCoefficients = self.coefficients;
+  ZXIntArray *largerCoefficients = other.coefficients;
+  if (smallerCoefficients.length > largerCoefficients.length) {
+    ZXIntArray *temp = smallerCoefficients;
     smallerCoefficients = largerCoefficients;
-    smallerCoefficientsLen = largerCoefficientsLen;
     largerCoefficients = temp;
-    largerCoefficientsLen = tempLen;
   }
-  int sumDiff[largerCoefficientsLen];
-  memset(sumDiff, 0, largerCoefficientsLen * sizeof(int));
-  int lengthDiff = largerCoefficientsLen - smallerCoefficientsLen;
-  for (int i = 0; i < lengthDiff; i++) {
-    sumDiff[i] = largerCoefficients[i];
-  }
-  for (int i = lengthDiff; i < largerCoefficientsLen; i++) {
-    sumDiff[i] = [self.field add:smallerCoefficients[i - lengthDiff] b:largerCoefficients[i]];
+  ZXIntArray *sumDiff = [[ZXIntArray alloc] initWithLength:largerCoefficients.length];
+  int lengthDiff = largerCoefficients.length - smallerCoefficients.length;
+  // Copy high-order terms only found in higher-degree polynomial's coefficients
+  memcpy(sumDiff.array, largerCoefficients.array, lengthDiff * sizeof(int32_t));
+
+  for (int i = lengthDiff; i < largerCoefficients.length; i++) {
+    sumDiff.array[i] = [self.field add:smallerCoefficients.array[i - lengthDiff] b:largerCoefficients.array[i]];
   }
 
-  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:sumDiff coefficientsLen:largerCoefficientsLen];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:sumDiff];
 }
 
 - (ZXModulusPoly *)subtract:(ZXModulusPoly *)other {
@@ -149,31 +137,28 @@
   if (self.zero || other.zero) {
     return self.field.zero;
   }
-  int *aCoefficients = self.coefficients;
-  int aLength = self.coefficientsLen;
-  int *bCoefficients = other.coefficients;
-  int bLength = other.coefficientsLen;
-  int productLen = aLength + bLength - 1;
-  int product[productLen];
-  memset(product, 0, productLen * sizeof(int));
-
+  ZXIntArray *aCoefficients = self.coefficients;
+  int aLength = aCoefficients.length;
+  ZXIntArray *bCoefficients = other.coefficients;
+  int bLength = bCoefficients.length;
+  ZXIntArray *product = [[ZXIntArray alloc] initWithLength:aLength + bLength - 1];
   for (int i = 0; i < aLength; i++) {
-    int aCoeff = aCoefficients[i];
+    int aCoeff = aCoefficients.array[i];
     for (int j = 0; j < bLength; j++) {
-      product[i + j] = [self.field add:product[i + j]
-                                     b:[self.field multiply:aCoeff b:bCoefficients[j]]];
+      product.array[i + j] = [self.field add:product.array[i + j]
+                                     b:[self.field multiply:aCoeff b:bCoefficients.array[j]]];
     }
   }
-  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:productLen];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product];
 }
 
 - (ZXModulusPoly *)negative {
-  int negativeCoefficientsLen = self.coefficientsLen;
-  int negativeCoefficients[negativeCoefficientsLen];
-  for (int i = 0; i < self.coefficientsLen; i++) {
-    negativeCoefficients[i] = [self.field subtract:0 b:self.coefficients[i]];
+  int size = self.coefficients.length;
+  ZXIntArray *negativeCoefficients = [[ZXIntArray alloc] initWithLength:size];
+  for (int i = 0; i < size; i++) {
+    negativeCoefficients.array[i] = [self.field subtract:0 b:self.coefficients.array[i]];
   }
-  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:negativeCoefficients coefficientsLen:negativeCoefficientsLen];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:negativeCoefficients];
 }
 
 - (ZXModulusPoly *)multiplyScalar:(int)scalar {
@@ -183,12 +168,12 @@
   if (scalar == 1) {
     return self;
   }
-  int size = self.coefficientsLen;
-  int product[size];
+  int size = self.coefficients.length;
+  ZXIntArray *product = [[ZXIntArray alloc] initWithLength:size];
   for (int i = 0; i < size; i++) {
-    product[i] = [self.field multiply:self.coefficients[i] b:scalar];
+    product.array[i] = [self.field multiply:self.coefficients.array[i] b:scalar];
   }
-  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product];
 }
 
 - (ZXModulusPoly *)multiplyByMonomial:(int)degree coefficient:(int)coefficient {
@@ -198,17 +183,13 @@
   if (coefficient == 0) {
     return self.field.zero;
   }
-  int size = self.coefficientsLen;
-  int product[size + degree];
-  for (int i = 0; i < size + degree; i++) {
-    if (i < size) {
-      product[i] = [self.field multiply:self.coefficients[i] b:coefficient];
-    } else {
-      product[i] = 0;
-    }
+  int size = self.coefficients.length;
+  ZXIntArray *product = [[ZXIntArray alloc] initWithLength:size + degree];
+  for (int i = 0; i < size; i++) {
+    product.array[i] = [self.field multiply:self.coefficients.array[i] b:coefficient];
   }
 
-  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product coefficientsLen:size + degree];
+  return [[ZXModulusPoly alloc] initWithField:self.field coefficients:product];
 }
 
 - (NSArray *)divide:(ZXModulusPoly *)other {

@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitArray.h"
+#import "ZXByteArray.h"
 
 @interface ZXBitArray ()
 
@@ -251,8 +252,7 @@
   }
 }
 
-
-- (void)toBytes:(int)bitOffset array:(int8_t *)array offset:(int)offset numBytes:(int)numBytes {
+- (void)toBytes:(int)bitOffset array:(ZXByteArray *)array offset:(int)offset numBytes:(int)numBytes {
   for (int i = 0; i < numBytes; i++) {
     int32_t theByte = 0;
     for (int j = 0; j < 8; j++) {
@@ -261,7 +261,7 @@
       }
       bitOffset++;
     }
-    array[offset + i] = (int8_t)theByte;
+    array.array[offset + i] = (int8_t) theByte;
   }
 }
 

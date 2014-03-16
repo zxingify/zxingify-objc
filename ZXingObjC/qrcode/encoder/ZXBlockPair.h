@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+@class ZXByteArray;
+
 @interface ZXBlockPair : NSObject
 
-@property (nonatomic, assign, readonly) int8_t *dataBytes;
-@property (nonatomic, assign, readonly) int8_t *errorCorrectionBytes;
-@property (nonatomic, assign, readonly) int errorCorrectionLength;
-@property (nonatomic, assign, readonly) NSUInteger length;
+@property (nonatomic, strong, readonly) ZXByteArray *dataBytes;
+@property (nonatomic, strong, readonly) ZXByteArray *errorCorrectionBytes;
 
-- (id)initWithData:(int8_t *)data length:(NSUInteger)length errorCorrection:(int8_t *)errorCorrection errorCorrectionLength:(unsigned int)errorCorrectionLength;
+- (id)initWithData:(ZXByteArray *)data errorCorrection:(ZXByteArray *)errorCorrection;
 
 @end

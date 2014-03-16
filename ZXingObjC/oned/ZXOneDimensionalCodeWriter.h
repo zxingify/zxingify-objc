@@ -16,13 +16,15 @@
 
 #import "ZXWriter.h"
 
+@class ZXBoolArray;
+
 /**
  * Encapsulates functionality and implementation that is common to one-dimensional barcodes.
  */
 @interface ZXOneDimensionalCodeWriter : NSObject <ZXWriter>
 
-- (BOOL *)encode:(NSString *)contents length:(int *)pLength;
-- (int)appendPattern:(BOOL *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor;
+- (ZXBoolArray *)encode:(NSString *)contents;
+- (int)appendPattern:(ZXBoolArray *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor;
 - (int)defaultMargin;
 
 @end

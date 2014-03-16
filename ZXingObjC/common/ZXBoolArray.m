@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-@class ZXBitArray, ZXByteArray;
+#import "ZXBoolArray.h"
 
-@interface ZXToken : NSObject
+@implementation ZXBoolArray
 
-@property (nonatomic, strong, readonly) ZXToken *previous;
-@property (nonatomic, assign, readonly) int totalBitCount;
+- (id)initWithLength:(unsigned int)length {
+  if (self = [super init]) {
+    _array = (BOOL *)calloc(length, sizeof(BOOL));
+    _length = length;
+  }
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount;
-+ (ZXToken *)empty;
-- (ZXToken *)add:(int)value bitCount:(int)bitCount;
-- (ZXToken *)addBinaryShift:(int)start byteCount:(int)byteCount;
-- (void)appendTo:(ZXBitArray *)bitArray text:(ZXByteArray *)text;
+  return self;
+}
+
+- (void)dealloc {
+  if (_array) {
+    free(_array);
+  }
+}
 
 @end

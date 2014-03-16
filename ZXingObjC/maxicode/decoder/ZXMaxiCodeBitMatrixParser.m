@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitMatrix.h"
+#import "ZXByteArray.h"
 #import "ZXErrors.h"
 #import "ZXMaxiCodeBitMatrixParser.h"
 
@@ -70,11 +71,8 @@ const int BITNR[33][30] = {
   return self;
 }
 
-- (NSArray *)readCodewords {
-  const int resultLength = 144;
-  int8_t result[resultLength];
-  memset(result, 0, resultLength * sizeof(int8_t));
-
+- (ZXByteArray *)readCodewords {
+  ZXByteArray *result = [[ZXByteArray alloc] initWithLength:144];
   int height = self.bitMatrix.height;
   int width = self.bitMatrix.width;
   for (int y = 0; y < height; y++) {
@@ -82,17 +80,11 @@ const int BITNR[33][30] = {
     for (int x = 0; x < width; x++) {
       int bit = bitnrRow[x];
       if (bit >= 0 && [self.bitMatrix getX:x y:y]) {
-        result[bit / 6] |= (int8_t) (1 << (5 - (bit % 6)));
+        result.array[bit / 6] |= (int8_t) (1 << (5 - (bit % 6)));
       }
     }
   }
-
-  NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:resultLength];
-  for (int i = 0; i < resultLength; i++) {
-    [resultArray addObject:[NSNumber numberWithChar:result[i]]];
-  }
-
-  return resultArray;
+  return result;
 }
 
 @end

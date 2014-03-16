@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
 #import "ZXPlanarYUVLuminanceSource.h"
 
 const int THUMBNAIL_SCALE_FACTOR = 2;
 
 @interface ZXPlanarYUVLuminanceSource ()
 
-@property (nonatomic, assign) int8_t *yuvData;
-@property (nonatomic, assign) int yuvDataLen;
+@property (nonatomic, strong) ZXByteArray *yuvData;
 @property (nonatomic, assign) int dataWidth;
 @property (nonatomic, assign) int dataHeight;
 @property (nonatomic, assign) int left;
@@ -39,13 +39,13 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
       [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
     }
 
-    _yuvDataLen = yuvDataLen;
-    _yuvData = (int8_t *)malloc(yuvDataLen * sizeof(int8_t));
-    memcpy(_yuvData, yuvData, yuvDataLen);
+    _yuvData = [[ZXByteArray alloc] initWithLength:yuvDataLen];
+    memcpy(_yuvData.array, yuvData, yuvDataLen * sizeof(int8_t));
     _dataWidth = dataWidth;
     _dataHeight = dataHeight;
     _left = left;
     _top = top;
+
     if (reverseHorizontal) {
       [self reverseHorizontal:width height:height];
     }
@@ -54,39 +54,45 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   return self;
 }
 
-- (void)dealloc {
-  if (_yuvData != NULL) {
-    free(_yuvData);
-    _yuvData = NULL;
-  }
-}
-
-- (int8_t *)row:(int)y {
+- (ZXByteArray *)rowAtY:(int)y row:(ZXByteArray *)row {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException
                 format:@"Requested row is outside the image: %d", y];
   }
-  int8_t *row = (int8_t *)malloc(self.width * sizeof(int8_t));
+  int width = self.width;
+  if (!row || row.length < width) {
+    row = [[ZXByteArray alloc] initWithLength:width];
+  }
   int offset = (y + self.top) * self.dataWidth + self.left;
-  memcpy(row, self.yuvData + offset, self.width);
+  memcpy(row.array, self.yuvData.array + offset, self.width * sizeof(int8_t));
   return row;
 }
 
-- (int8_t *)matrix {
+- (ZXByteArray *)matrix {
+  int width = self.width;
+  int height = self.height;
+
+  // If the caller asks for the entire underlying image, save the copy and give them the
+  // original data. The docs specifically warn that result.length must be ignored.
+  if (width == self.dataWidth && height == self.dataHeight) {
+    return self.yuvData;
+  }
+
   int area = self.width * self.height;
-  int8_t *matrix = malloc(area * sizeof(int8_t));
+  ZXByteArray *matrix = [[ZXByteArray alloc] initWithLength:area];
   int inputOffset = self.top * self.dataWidth + self.left;
 
   // If the width matches the full width of the underlying data, perform a single copy.
   if (self.width == self.dataWidth) {
-    memcpy(matrix, self.yuvData + inputOffset, area - inputOffset);
+    memcpy(matrix.array, self.yuvData.array + inputOffset, (area - inputOffset) * sizeof(int8_t));
     return matrix;
   }
 
   // Otherwise copy one cropped row at a time.
+  ZXByteArray *yuvData = self.yuvData;
   for (int y = 0; y < self.height; y++) {
     int outputOffset = y * self.width;
-    memcpy(matrix + outputOffset, self.yuvData + inputOffset, self.width);
+    memcpy(matrix.array + outputOffset, yuvData.array + inputOffset, self.width * sizeof(int8_t));
     inputOffset += self.dataWidth;
   }
   return matrix;
@@ -97,7 +103,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 }
 
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height {
-  return [[[self class] alloc] initWithYuvData:self.yuvData yuvDataLen:self.yuvDataLen dataWidth:self.dataWidth
+  return [[[self class] alloc] initWithYuvData:self.yuvData.array yuvDataLen:self.yuvData.length dataWidth:self.dataWidth
                                     dataHeight:self.dataHeight left:self.left + left top:self.top + top
                                          width:width height:height reverseHorizontal:NO];
 }
@@ -111,7 +117,7 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   for (int y = 0; y < self.height; y++) {
     int outputOffset = y * self.width;
     for (int x = 0; x < self.width; x++) {
-      int grey = self.yuvData[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff;
+      int grey = self.yuvData.array[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff;
       pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
     }
     inputOffset += self.dataWidth * THUMBNAIL_SCALE_FACTOR;
@@ -127,13 +133,13 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
   return self.height / THUMBNAIL_SCALE_FACTOR;
 }
 
-- (void)reverseHorizontal:(int)_width height:(int)_height {
-  for (int y = 0, rowStart = self.top * self.dataWidth + self.left; y < _height; y++, rowStart += self.dataWidth) {
-    int middle = rowStart + _width / 2;
-    for (int x1 = rowStart, x2 = rowStart + _width - 1; x1 < middle; x1++, x2--) {
-      int8_t temp = self.yuvData[x1];
-      self.yuvData[x1] = self.yuvData[x2];
-      self.yuvData[x2] = temp;
+- (void)reverseHorizontal:(int)width height:(int)height {
+  for (int y = 0, rowStart = self.top * self.dataWidth + self.left; y < height; y++, rowStart += self.dataWidth) {
+    int middle = rowStart + width / 2;
+    for (int x1 = rowStart, x2 = rowStart + width - 1; x1 < middle; x1++, x2--) {
+      int8_t temp = self.yuvData.array[x1];
+      self.yuvData.array[x1] = self.yuvData.array[x2];
+      self.yuvData.array[x2] = temp;
     }
   }
 }

@@ -15,6 +15,7 @@
  */
 
 #import "ZXBarcodeRow.h"
+#import "ZXByteArray.h"
 
 @interface ZXBarcodeRow ()
 
@@ -30,27 +31,18 @@
 
 - (id)initWithWidth:(int)width {
   if (self = [super init]) {
-    _rowLength = width;
-    _row = (int8_t *)malloc(_rowLength * sizeof(int8_t));
-    memset(_row, 0, self.rowLength * sizeof(int8_t));
+    _row = [[ZXByteArray alloc] initWithLength:width];
     _currentLocation = 0;
   }
   return self;
 }
 
-- (void)dealloc {
-  if (_row != NULL) {
-    free(_row);
-    _row = NULL;
-  }
-}
-
 - (void)setX:(int)x value:(int8_t)value {
-  self.row[x] = value;
+  self.row.array[x] = value;
 }
 
 - (void)setX:(int)x black:(BOOL)black {
-  self.row[x] = (int8_t)(black ? 1 : 0);
+  self.row.array[x] = (int8_t) (black ? 1 : 0);
 }
 
 - (void)addBar:(BOOL)black width:(int)width {
@@ -59,10 +51,10 @@
   }
 }
 
-- (int8_t *)scaledRow:(int)scale {
-  int8_t *output = (int8_t *)malloc(self.rowLength * scale);
-  for (int i = 0; i < self.rowLength * scale; i++) {
-    output[i] = self.row[i / scale];
+- (ZXByteArray *)scaledRow:(int)scale {
+  ZXByteArray *output = [[ZXByteArray alloc] initWithLength:self.row.length * scale];
+  for (int i = 0; i < output.length; i++) {
+    output.array[i] = self.row.array[i / scale];
   }
   return output;
 }

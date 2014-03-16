@@ -239,7 +239,7 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
                  attendees:(NSArray *)attendees
                   latitude:(double)latitude
                  longitude:(double)longitude {
-  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   XCTAssertEqual(result.type, kParsedResultTypeCalendar, @"Types do not match");
   ZXCalendarParsedResult *calResult = (ZXCalendarParsedResult *)result;

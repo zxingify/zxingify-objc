@@ -16,11 +16,12 @@
 
 #import "ZXGenericGF.h"
 #import "ZXGenericGFPoly.h"
+#import "ZXIntArray.h"
 
 @interface ZXGenericGF ()
 
-@property (nonatomic, assign) int *expTable;
-@property (nonatomic, assign) int *logTable;
+@property (nonatomic, assign) int32_t *expTable;
+@property (nonatomic, assign) int32_t *logTable;
 @property (nonatomic, assign) int primitive;
 
 @end
@@ -39,27 +40,25 @@
     _size = size;
     _generatorBase = b;
 
-    _expTable = (int *)malloc(self.size * sizeof(int));
-    _logTable = (int *)malloc(self.size * sizeof(int));
-    int x = 1;
+    _expTable = (int32_t *)calloc(self.size, sizeof(int32_t));
+    _logTable = (int32_t *)calloc(self.size, sizeof(int32_t));
+    int32_t x = 1;
     for (int i = 0; i < self.size; i++) {
       _expTable[i] = x;
       x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
       if (x >= self.size) {
-        x ^= self.primitive;
-        x &= self.size - 1;
+        x ^= (int32_t)self.primitive;
+        x &= (int32_t)self.size - 1;
       }
     }
 
-    for (int i = 0; i < self.size-1; i++) {
+    for (int32_t i = 0; i < (int32_t)self.size-1; i++) {
       _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    int zeroInt = 0;
-    _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
+    _zero = [[ZXGenericGFPoly alloc] initWithField:self coefficients:[[ZXIntArray alloc] initWithLength:1]];
 
-    int oneInt = 1;
-    _one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
+    _one = [[ZXGenericGFPoly alloc] initWithField:self coefficients:[[ZXIntArray alloc] initWithInts:1, -1]];
   }
 
   return self;
@@ -127,35 +126,27 @@
   return [self AztecData6];
 }
 
-- (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int)coefficient {
+- (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int32_t)coefficient {
   if (degree < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Degree must be greater than 0."];
   }
   if (coefficient == 0) {
     return self.zero;
   }
-
-  int coefficientsLen = degree + 1;
-  int coefficients[coefficientsLen];
-  coefficients[0] = coefficient;
-  for (int i = 1; i < coefficientsLen; i++) {
-    coefficients[i] = 0;
-  }
-  return [[ZXGenericGFPoly alloc] initWithField:self coefficients:coefficients coefficientsLen:coefficientsLen];
+  ZXIntArray *coefficients = [[ZXIntArray alloc] initWithLength:degree + 1];
+  coefficients.array[0] = coefficient;
+  return [[ZXGenericGFPoly alloc] initWithField:self coefficients:coefficients];
 }
 
-/**
- * Implements both addition and subtraction -- they are the same in GF(size).
- */
-+ (int)addOrSubtract:(int)a b:(int)b {
++ (int32_t)addOrSubtract:(int32_t)a b:(int32_t)b {
   return a ^ b;
 }
 
-- (int)exp:(int)a {
+- (int32_t)exp:(int)a {
   return _expTable[a];
 }
 
-- (int)log:(int)a {
+- (int32_t)log:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
@@ -163,7 +154,7 @@
   return _logTable[a];
 }
 
-- (int)inverse:(int)a {
+- (int32_t)inverse:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
@@ -171,7 +162,7 @@
   return _expTable[_size - _logTable[a] - 1];
 }
 
-- (int)multiply:(int)a b:(int)b {
+- (int32_t)multiply:(int)a b:(int)b {
   if (a == 0 || b == 0) {
     return 0;
   }

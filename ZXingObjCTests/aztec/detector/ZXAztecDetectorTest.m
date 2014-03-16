@@ -37,7 +37,9 @@ unsigned int ZXAztecDetectorTest_RANDOM_SEED = 16807;
 
 // Test that we can tolerate errors in the parameter locator bits
 - (void)testErrorInParameterLocator:(NSString *)data {
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes] len:[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding]];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:(unsigned int)[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding]];
+  memcpy(bytes.array, [[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes], bytes.length * sizeof(int8_t));
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes];
   int layers = aztec.layers;
   BOOL compact = aztec.isCompact;
   NSMutableArray *orientationPoints = [self orientationPoints:aztec];

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
 #import "ZXRGBLuminanceSource.h"
 
 @interface ZXRGBLuminanceSource ()
 
-@property (nonatomic, assign) int8_t *luminances;
-@property (nonatomic, assign) int luminancesCount;
+@property (nonatomic, strong) ZXByteArray *luminances;
 @property (nonatomic, assign) int dataWidth;
 @property (nonatomic, assign) int dataHeight;
 @property (nonatomic, assign) int left;
@@ -38,8 +38,7 @@
 
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-    _luminancesCount = width * height;
-    _luminances = (int8_t *)malloc(_luminancesCount * sizeof(int8_t));
+    _luminances = [[ZXByteArray alloc] initWithLength:width * height];
     for (int y = 0; y < height; y++) {
       int offset = y * width;
       for (int x = 0; x < width; x++) {
@@ -49,10 +48,10 @@
         int b = pixel & 0xff;
         if (r == g && g == b) {
           // Image is already greyscale, so pick any channel.
-          _luminances[offset + x] = (int8_t) r;
+          _luminances.array[offset + x] = (int8_t) r;
         } else {
           // Calculate luminance cheaply, favoring green.
-          _luminances[offset + x] = (int8_t) ((r + g + g + b) >> 2);
+          _luminances.array[offset + x] = (int8_t) ((r + g + g + b) >> 2);
         }
       }
     }
@@ -61,17 +60,14 @@
   return self;
 }
 
-- (id)initWithPixels:(int8_t *)pixels pixelsLen:(int)pixelsLen dataWidth:(int)dataWidth dataHeight:(int)dataHeight
+- (id)initWithPixels:(ZXByteArray *)pixels dataWidth:(int)dataWidth dataHeight:(int)dataHeight
                 left:(int)left top:(int)top width:(int)width height:(int)height {
   if (self = [super initWithWidth:width height:height]) {
     if (left + self.width > dataWidth || top + self.height > dataHeight) {
       [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
     }
 
-    _luminancesCount = pixelsLen;
-    _luminances = (int8_t *)malloc(pixelsLen * sizeof(int8_t));
-    memcpy(_luminances, pixels, pixelsLen * sizeof(int8_t));
-
+    _luminances = pixels;
     _dataWidth = dataWidth;
     _dataHeight = dataHeight;
     _left = left;
@@ -81,32 +77,43 @@
   return self;
 }
 
-- (int8_t *)row:(int)y {
+- (ZXByteArray *)rowAtY:(int)y row:(ZXByteArray *)row {
   if (y < 0 || y >= self.height) {
     [NSException raise:NSInvalidArgumentException format:@"Requested row is outside the image: %d", y];
   }
-  int8_t *row = (int8_t *)malloc(self.width * sizeof(int8_t));
-
+  int width = self.width;
+  if (!row || row.length < width) {
+    row = [[ZXByteArray alloc] initWithLength:width];
+  }
   int offset = (y + self.top) * self.dataWidth + self.left;
-  memcpy(row, self.luminances + offset, self.width);
+  memcpy(row.array, self.luminances.array + offset, self.width * sizeof(int8_t));
   return row;
 }
 
-- (int8_t *)matrix {
+- (ZXByteArray *)matrix {
+  int width = self.width;
+  int height = self.height;
+
+  // If the caller asks for the entire underlying image, save the copy and give them the
+  // original data. The docs specifically warn that result.length must be ignored.
+  if (width == self.dataWidth && height == self.dataHeight) {
+    return self.luminances;
+  }
+
   int area = self.width * self.height;
-  int8_t *matrix = (int8_t *)malloc(area * sizeof(int8_t));
+  ZXByteArray *matrix = [[ZXByteArray alloc] initWithLength:area];
   int inputOffset = self.top * self.dataWidth + self.left;
 
   // If the width matches the full width of the underlying data, perform a single copy.
   if (self.width == self.dataWidth) {
-    memcpy(matrix, self.luminances + inputOffset, area - inputOffset);
+    memcpy(matrix.array, self.luminances.array + inputOffset, (area - inputOffset) * sizeof(int8_t));
     return matrix;
   }
 
   // Otherwise copy one cropped row at a time.
   for (int y = 0; y < self.height; y++) {
     int outputOffset = y * self.width;
-    memcpy(matrix + outputOffset, self.luminances + inputOffset, self.width);
+    memcpy(matrix.array + outputOffset, self.luminances.array + inputOffset, self.width * sizeof(int8_t));
     inputOffset += self.dataWidth;
   }
   return matrix;
@@ -118,7 +125,6 @@
 
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height {
   return [[[self class] alloc] initWithPixels:self.luminances
-                                    pixelsLen:self.luminancesCount
                                     dataWidth:self.dataWidth
                                    dataHeight:self.dataHeight
                                          left:self.left + left

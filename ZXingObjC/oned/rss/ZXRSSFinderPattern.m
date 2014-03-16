@@ -18,7 +18,7 @@
 
 @implementation ZXRSSFinderPattern
 
-- (id)initWithValue:(int)value startEnd:(NSMutableArray *)startEnd start:(int)start end:(int)end rowNumber:(int)rowNumber {
+- (id)initWithValue:(int)value startEnd:(ZXIntArray *)startEnd start:(int)start end:(int)end rowNumber:(int)rowNumber {
   if (self = [super init]) {
     _value = value;
     _startEnd = startEnd;

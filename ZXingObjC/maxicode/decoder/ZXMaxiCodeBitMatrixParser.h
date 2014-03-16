@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-@class ZXBitMatrix;
+@class ZXBitMatrix, ZXByteArray;
 
 @interface ZXMaxiCodeBitMatrixParser : NSObject
 
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error;
-- (NSArray *)readCodewords;
+- (ZXByteArray *)readCodewords;
 
 @end

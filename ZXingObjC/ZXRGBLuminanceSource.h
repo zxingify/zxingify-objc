@@ -20,9 +20,8 @@
  * This class is used to help decode images from files which arrive as RGB data from
  * an ARGB pixel array. It does not support rotation.
  */
-
 @interface ZXRGBLuminanceSource : ZXLuminanceSource
 
-- (id)initWithWidth:(int)width height:(int)height pixels:(int *)pixels pixelsLen:(int)pixelsLen;
+- (id)initWithWidth:(int)width height:(int)height pixels:(int32_t *)pixels pixelsLen:(int)pixelsLen;
 
 @end

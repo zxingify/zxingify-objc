@@ -16,6 +16,8 @@
 
 #import "ZXOneDReader.h"
 
+@class ZXIntArray;
+
 typedef enum {
 	RSS_PATTERNS_RSS14_PATTERNS = 0,
 	RSS_PATTERNS_RSS_EXPANDED_PATTERNS
@@ -23,23 +25,19 @@ typedef enum {
 
 @interface ZXAbstractRSSReader : ZXOneDReader
 
-@property (nonatomic, assign, readonly) int *decodeFinderCounters;
-@property (nonatomic, assign, readonly) unsigned int decodeFinderCountersLen;
-@property (nonatomic, assign, readonly) int *dataCharacterCounters;
-@property (nonatomic, assign, readonly) unsigned int dataCharacterCountersLen;
+@property (nonatomic, strong, readonly) ZXIntArray *decodeFinderCounters;
+@property (nonatomic, strong, readonly) ZXIntArray *dataCharacterCounters;
 @property (nonatomic, assign, readonly) float *oddRoundingErrors;
 @property (nonatomic, assign, readonly) unsigned int oddRoundingErrorsLen;
 @property (nonatomic, assign, readonly) float *evenRoundingErrors;
 @property (nonatomic, assign, readonly) unsigned int evenRoundingErrorsLen;
-@property (nonatomic, assign, readonly) int *oddCounts;
-@property (nonatomic, assign, readonly) unsigned int oddCountsLen;
-@property (nonatomic, assign, readonly) int *evenCounts;
-@property (nonatomic, assign, readonly) unsigned int evenCountsLen;
+@property (nonatomic, strong, readonly) ZXIntArray *oddCounts;
+@property (nonatomic, strong, readonly) ZXIntArray *evenCounts;
 
-+ (int)parseFinderValue:(int *)counters countersSize:(unsigned int)countersSize finderPatternType:(RSS_PATTERNS)finderPatternType;
-+ (int)count:(int *)array arrayLen:(unsigned int)arrayLen;
-+ (void)increment:(int *)array arrayLen:(unsigned int)arrayLen errors:(float *)errors;
-+ (void)decrement:(int *)array arrayLen:(unsigned int)arrayLen errors:(float *)errors;
-+ (BOOL)isFinderPattern:(int *)counters countersLen:(unsigned int)countersLen;
++ (int)parseFinderValue:(ZXIntArray *)counters finderPatternType:(RSS_PATTERNS)finderPatternType;
++ (int)count:(ZXIntArray *)array;
++ (void)increment:(ZXIntArray *)array errors:(float *)errors;
++ (void)decrement:(ZXIntArray *)array errors:(float *)errors;
++ (BOOL)isFinderPattern:(ZXIntArray *)counters;
 
 @end

@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitSource.h"
+#import "ZXByteArray.h"
 #import "ZXDataMatrixDecodedBitStreamParser.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
@@ -61,8 +62,8 @@ enum {
 
 @implementation ZXDataMatrixDecodedBitStreamParser
 
-+ (ZXDecoderResult *)decode:(int8_t *)bytes length:(unsigned int)length error:(NSError **)error {
-  ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes length:length];
++ (ZXDecoderResult *)decode:(ZXByteArray *)bytes error:(NSError **)error {
+  ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes];
   NSMutableString *result = [NSMutableString stringWithCapacity:100];
   NSMutableString *resultTrailer = [NSMutableString string];
   NSMutableArray *byteSegments = [NSMutableArray arrayWithCapacity:1];
@@ -114,7 +115,6 @@ enum {
     [result appendString:resultTrailer];
   }
   return [[ZXDecoderResult alloc] initWithRawBytes:bytes
-                                            length:length
                                               text:result
                                       byteSegments:[byteSegments count] == 0 ? nil : byteSegments
                                            ecLevel:nil];

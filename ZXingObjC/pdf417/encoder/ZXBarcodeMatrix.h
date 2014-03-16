@@ -25,12 +25,10 @@
 @property (nonatomic, assign, readonly) int width;
 
 - (id)initWithHeight:(int)height width:(int)width;
-- (void)setX:(int)x y:(int)y value:(int8_t)value;
-- (void)setMatrixX:(int)x y:(int)y black:(BOOL)black;
 - (void)startRow;
 - (ZXBarcodeRow *)currentRow;
-- (int8_t **)matrixWithHeight:(int *)height width:(int *)width;
-- (int8_t **)scaledMatrixWithHeight:(int *)height width:(int *)width scale:(int)scale;
-- (int8_t **)scaledMatrixWithHeight:(int *)height width:(int *)width xScale:(int)xScale yScale:(int)yScale;
+- (NSArray *)matrix;
+- (NSArray *)scaledMatrix:(int)scale;
+- (NSArray *)scaledMatrixWithXScale:(int)xScale yScale:(int)yScale;
 
 @end

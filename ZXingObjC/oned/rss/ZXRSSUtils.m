@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXIntArray.h"
 #import "ZXRSSUtils.h"
 
 @implementation ZXRSSUtils
@@ -56,18 +57,18 @@
   return widths;
 }
 
-+ (int)rssValue:(int *)widths widthsLen:(unsigned int)widthsLen maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
-  int elements = widthsLen;
++ (int)rssValue:(ZXIntArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
+  int elements = widths.length;
   int n = 0;
   for (int i = 0; i < elements; i++) {
-    n += widths[i];
+    n += widths.array[i];
   }
   int val = 0;
   int narrowMask = 0;
   for (int bar = 0; bar < elements - 1; bar++) {
     int elmWidth;
     for (elmWidth = 1, narrowMask |= 1 << bar;
-         elmWidth < widths[bar];
+         elmWidth < widths.array[bar];
          elmWidth++, narrowMask &= ~(1 << bar)) {
       int subVal = [self combins:n - elmWidth - 1 r:elements - bar - 2];
       if (noNarrow && (narrowMask == 0) &&

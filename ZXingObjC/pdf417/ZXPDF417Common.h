@@ -28,9 +28,12 @@ extern int const ZXPDF417_MODULES_IN_CODEWORD;
 extern int const ZXPDF417_MODULES_IN_STOP_PATTERN;
 #define ZXPDF417_BARS_IN_MODULE 8
 
+@class ZXIntArray;
+
 @interface ZXPDF417Common : NSObject
 
 + (int)bitCountSum:(NSArray *)moduleBitCount;
++ (ZXIntArray *)toIntArray:(NSArray *)list;
 + (int)codeword:(long)symbol;
 
 @end

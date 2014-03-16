@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
+#import "ZXIntArray.h"
 #import "ZXModulusGF.h"
 #import "ZXModulusPoly.h"
 #import "ZXPDF417Common.h"
 
 @interface ZXModulusGF ()
 
-@property (nonatomic, strong) NSMutableArray *expTable;
-@property (nonatomic, strong) NSMutableArray *logTable;
+@property (nonatomic, assign) int32_t *expTable;
+@property (nonatomic, assign) int32_t *logTable;
 @property (nonatomic, assign) int modulus;
 
 @end
@@ -42,27 +43,21 @@
 - (id)initWithModulus:(int)modulus generator:(int)generator {
   if (self = [super init]) {
     _modulus = modulus;
-    _expTable = [NSMutableArray arrayWithCapacity:self.modulus];
-    _logTable = [NSMutableArray arrayWithCapacity:self.modulus];
-    int x = 1;
+    _expTable = (int32_t *)calloc(self.modulus, sizeof(int32_t));
+    _logTable = (int32_t *)calloc(self.modulus, sizeof(int32_t));
+    int32_t x = 1;
     for (int i = 0; i < modulus; i++) {
-      [_expTable addObject:@(x)];
+      _expTable[i] = x;
       x = (x * generator) % modulus;
     }
 
-    for (int i = 0; i < self.size; i++) {
-      [_logTable addObject:@0];
-    }
-
     for (int i = 0; i < self.size - 1; i++) {
-      _logTable[[_expTable[i] intValue]] = @(i);
+      _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
-    int zeroInt = 0;
-    _zero = [[ZXModulusPoly alloc] initWithField:self coefficients:&zeroInt coefficientsLen:1];
+    _zero = [[ZXModulusPoly alloc] initWithField:self coefficients:[[ZXIntArray alloc] initWithLength:1]];
 
-    int oneInt = 1;
-    _one = [[ZXModulusPoly alloc] initWithField:self coefficients:&oneInt coefficientsLen:1];
+    _one = [[ZXModulusPoly alloc] initWithField:self coefficients:[[ZXIntArray alloc] initWithInts:1, -1]];
   }
 
   return self;
@@ -75,14 +70,9 @@
   if (coefficient == 0) {
     return self.zero;
   }
-
-  int coefficientsLen = degree + 1;
-  int coefficients[coefficientsLen];
-  coefficients[0] = coefficient;
-  for (int i = 1; i < coefficientsLen; i++) {
-    coefficients[i] = 0;
-  }
-  return [[ZXModulusPoly alloc] initWithField:self coefficients:coefficients coefficientsLen:coefficientsLen];
+  ZXIntArray *coefficients = [[ZXIntArray alloc] initWithLength:degree + 1];
+  coefficients.array[0] = coefficient;
+  return [[ZXModulusPoly alloc] initWithField:self coefficients:coefficients];
 }
 
 - (int)add:(int)a b:(int)b {
@@ -94,21 +84,22 @@
 }
 
 - (int)exp:(int)a {
-  return [self.expTable[a] intValue];
+  return _expTable[a];
 }
 
 - (int)log:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [self.logTable[a] intValue];
+  return _logTable[a];
 }
 
 - (int)inverse:(int)a {
   if (a == 0) {
     [NSException raise:NSInvalidArgumentException format:@"Argument must be non-zero."];
   }
-  return [self.expTable[self.size - [self.logTable[a] intValue] - 1] intValue];
+
+  return _expTable[_modulus - _logTable[a] - 1];
 }
 
 - (int)multiply:(int)a b:(int)b {
@@ -116,8 +107,7 @@
     return 0;
   }
 
-  int logSum = [self.logTable[a] intValue] + [self.logTable[b] intValue];
-  return [self.expTable[logSum % (self.modulus - 1)] intValue];
+  return _expTable[(_logTable[a] + _logTable[b]) % (_modulus - 1)];
 }
 
 - (int)size {

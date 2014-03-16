@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXBoolArray.h"
 #import "ZXCode128Reader.h"
 #import "ZXCode128Writer.h"
 
@@ -32,7 +33,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
+- (ZXBoolArray *)encode:(NSString *)contents {
   int length = (int)[contents length];
   // Check length
   if (length < 1 || length > 80) {
@@ -157,8 +158,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
   }
 
   // Compute result
-  if (pLength) *pLength = codeWidth;
-  BOOL *result = (BOOL *)malloc(codeWidth * sizeof(BOOL));
+  ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:codeWidth];
   int pos = 0;
   for (NSArray *patternArray in patterns) {
     int patternLen = (int)[patternArray count];
@@ -167,7 +167,7 @@ const unichar ESCAPE_FNC_4 = L'\u00f4';
       pattern[i] = [patternArray[i] intValue];
     }
 
-    pos += [super appendPattern:result pos:pos pattern:pattern patternLen:patternLen startColor:TRUE];
+    pos += [self appendPattern:result pos:pos pattern:pattern patternLen:patternLen startColor:YES];
   }
 
   return result;

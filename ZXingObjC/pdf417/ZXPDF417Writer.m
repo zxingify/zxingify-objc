@@ -16,6 +16,7 @@
 
 #import "ZXBarcodeMatrix.h"
 #import "ZXBitMatrix.h"
+#import "ZXByteArray.h"
 #import "ZXEncodeHints.h"
 #import "ZXPDF417.h"
 #import "ZXPDF417Writer.h"
@@ -60,20 +61,15 @@
 
   int lineThickness = 2;
   int aspectRatio = 4;
-
-  int scaleHeight;
-  int scaleWidth;
-  int8_t **originalScale = [[encoder barcodeMatrix] scaledMatrixWithHeight:&scaleHeight width:&scaleWidth xScale:lineThickness yScale:aspectRatio * lineThickness];
+  NSArray *originalScale = [[encoder barcodeMatrix] scaledMatrixWithXScale:lineThickness yScale:aspectRatio * lineThickness];
   BOOL rotated = NO;
-  if ((height > width) ^ (scaleWidth < scaleHeight)) {
-    int8_t **oldOriginalScale = originalScale;
-    originalScale = [self rotateArray:oldOriginalScale height:scaleHeight width:scaleWidth];
-    free(oldOriginalScale);
+  if ((height > width) ^ ([(ZXByteArray *)originalScale[0] length] < [originalScale count])) {
+    originalScale = [self rotateArray:originalScale];
     rotated = YES;
   }
 
-  int scaleX = width / scaleWidth;
-  int scaleY = height / scaleHeight;
+  int scaleX = width / [(ZXByteArray *)originalScale[0] length];
+  int scaleY = height / [originalScale count];
 
   int scale;
   if (scaleX < scaleY) {
@@ -82,38 +78,31 @@
     scale = scaleY;
   }
 
-  ZXBitMatrix *result = nil;
   if (scale > 1) {
-    int8_t **scaledMatrix =
-      [[encoder barcodeMatrix] scaledMatrixWithHeight:&scaleHeight width:&scaleWidth xScale:scale * lineThickness yScale:scale * aspectRatio * lineThickness];
+    NSArray *scaledMatrix =
+      [[encoder barcodeMatrix] scaledMatrixWithXScale:scale * lineThickness yScale:scale * aspectRatio * lineThickness];
     if (rotated) {
-      int8_t **oldScaledMatrix = scaledMatrix;
-      scaledMatrix = [self rotateArray:scaledMatrix height:scaleHeight width:scaleWidth];
-      free(oldScaledMatrix);
+      scaledMatrix = [self rotateArray:scaledMatrix];
     }
-    result = [self bitMatrixFrombitArray:scaledMatrix height:scaleHeight width:scaleWidth];
-    free(scaledMatrix);
-  } else {
-    result = [self bitMatrixFrombitArray:originalScale height:scaleHeight width:scaleWidth];
+    return [self bitMatrixFrombitArray:scaledMatrix];
   }
-  free(originalScale);
-  return result;
+  return [self bitMatrixFrombitArray:originalScale];
 }
 
 /**
  * This takes an array holding the values of the PDF 417
  */
-- (ZXBitMatrix *)bitMatrixFrombitArray:(int8_t **)input height:(int)height width:(int)width {
+- (ZXBitMatrix *)bitMatrixFrombitArray:(NSArray *)input {
   // Creates a small whitespace boarder around the barcode
   int whiteSpace = 30;
 
   // Creates the bitmatrix with extra space for whtespace
-  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:width + 2 * whiteSpace height:height + 2 * whiteSpace];
+  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:[(ZXByteArray *)input[0] length] + 2 * whiteSpace height:(int)[input count] + 2 * whiteSpace];
   [output clear];
-  for (int y = 0, yOutput = output.height - whiteSpace; y < height; y++, yOutput--) {
-    for (int x = 0; x < width; x++) {
+  for (int y = 0, yOutput = output.height - whiteSpace; y < [input count]; y++, yOutput--) {
+    for (int x = 0; x < [(ZXByteArray *)input[0] length]; x++) {
       // Zero is white in the bytematrix
-      if (input[y][x] == 1) {
+      if ([(ZXByteArray *)input[y] array][x] == 1) {
         [output setX:x + whiteSpace y:yOutput];
       }
     }
@@ -124,18 +113,19 @@
 /**
  * Takes and rotates the it 90 degrees
  */
-- (int8_t **)rotateArray:(int8_t **)bitarray height:(int)height width:(int)width {
-  int8_t **temp = (int8_t **)malloc(width * sizeof(int8_t *));
-  for (int i = 0; i < width; i++) {
-    temp[i] = (int8_t *)malloc(height * sizeof(int8_t));
+- (NSArray *)rotateArray:(NSArray *)bitarray {
+  NSMutableArray *temp = [NSMutableArray array];
+  for (int i = 0; i < [(ZXByteArray *)bitarray[0] length]; i++) {
+    [temp addObject:[[ZXByteArray alloc] initWithLength:(unsigned int)[bitarray count]]];
   }
 
-  for (int ii = 0; ii < height; ii++) {
+  for (int ii = 0; ii < [bitarray count]; ii++) {
     // This makes the direction consistent on screen when rotating the
     // screen;
-    int inverseii = height - ii - 1;
-    for (int jj = 0; jj < width; jj++) {
-      temp[jj][inverseii] = bitarray[ii][jj];
+    int inverseii = (int)[bitarray count] - ii - 1;
+    for (int jj = 0; jj < [(ZXByteArray *)bitarray[0] length]; jj++) {
+      ZXByteArray *b = temp[jj];
+      b.array[inverseii] = [(ZXByteArray *)bitarray[ii] array][jj];
     }
   }
   return temp;

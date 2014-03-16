@@ -19,7 +19,9 @@
 #import "ZXAztecHighLevelEncoder.h"
 #import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
+#import "ZXByteArray.h"
 #import "ZXGenericGF.h"
+#import "ZXIntArray.h"
 #import "ZXReedSolomonEncoder.h"
 
 const int ZX_AZTEC_DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
@@ -32,13 +34,13 @@ const int ZX_AZTEC_WORD_SIZE[] = {
 
 @implementation ZXAztecEncoder
 
-+ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len {
-  return [self encode:data len:len minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
++ (ZXAztecCode *)encode:(ZXByteArray *)data {
+  return [self encode:data minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
 }
 
-+ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len minECCPercent:(int)minECCPercent {
++ (ZXAztecCode *)encode:(ZXByteArray *)data minECCPercent:(int)minECCPercent {
   // High-level encode
-  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:data textLength:len] encode];
+  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithText:data] encode];
 
   // stuff bits and choose symbol size
   int eccBits = bits.size * minECCPercent / 100 + 11;
@@ -81,17 +83,15 @@ const int ZX_AZTEC_WORD_SIZE[] = {
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
   int totalWordsInLayer = totalBitsInLayer / wordSize;
 
-  int messageWords[totalWordsInLayer];
-  memset(messageWords, 0, totalWordsInLayer * sizeof(int));
-  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWordsInLayer message:messageWords];
-  [rs encode:messageWords toEncodeLen:totalWordsInLayer ecBytes:totalWordsInLayer - messageSizeInWords];
+  ZXIntArray *messageWords = [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWordsInLayer];
+  [rs encode:messageWords ecBytes:totalWordsInLayer - messageSizeInWords];
 
   // convert to bit array and pad in the beginning
   int startPad = totalBitsInLayer % wordSize;
   ZXBitArray *messageBits = [[ZXBitArray alloc] init];
   [messageBits appendBits:0 numBits:startPad];
   for (int i = 0; i < totalWordsInLayer; i++) {
-    [messageBits appendBits:messageWords[i] numBits:wordSize];
+    [messageBits appendBits:messageWords.array[i] numBits:wordSize];
   }
 
   // generate mode message
@@ -243,30 +243,29 @@ const int ZX_AZTEC_WORD_SIZE[] = {
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
   int totalWords = totalBits / wordSize;
 
-  int messageWords[totalWords];
-  [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWords message:messageWords];
-
-  [rs encode:messageWords toEncodeLen:totalWords ecBytes:totalWords - messageSizeInWords];
+  ZXIntArray *messageWords = [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWords];
+  [rs encode:messageWords ecBytes:totalWords - messageSizeInWords];
   int startPad = totalBits % wordSize;
   ZXBitArray *messageBits = [[ZXBitArray alloc] init];
   [messageBits appendBits:0 numBits:startPad];
   for (int i = 0; i < totalWords; i++) {
-    [messageBits appendBits:messageWords[i] numBits:wordSize];
+    [messageBits appendBits:messageWords.array[i] numBits:wordSize];
   }
   return messageBits;
 }
 
-+ (void)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords message:(int *)message {
-  memset(message, 0, totalWords * sizeof(int));
++ (ZXIntArray *)bitsToWords:(ZXBitArray *)stuffedBits wordSize:(int)wordSize totalWords:(int)totalWords {
+  ZXIntArray *message = [[ZXIntArray alloc] initWithLength:totalWords];
   int i;
   int n;
   for (i = 0, n = stuffedBits.size / wordSize; i < n; i++) {
-    int value = 0;
+    int32_t value = 0;
     for (int j = 0; j < wordSize; j++) {
       value |= [stuffedBits get:i * wordSize + j] ? (1 << (wordSize - j - 1)) : 0;
     }
-    message[i] = value;
+    message.array[i] = value;
   }
+  return message;
 }
 
 + (ZXGenericGF *)getGF:(int)wordSize {

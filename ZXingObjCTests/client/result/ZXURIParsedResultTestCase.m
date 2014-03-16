@@ -92,7 +92,7 @@
 }
 
 - (void)doTestWithContents:(NSString *)contents uri:(NSString *)uri title:(NSString *)title {
-  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   XCTAssertEqual(result.type, kParsedResultTypeURI, @"Types don't match");
   ZXURIParsedResult *uriResult = (ZXURIParsedResult *)result;
@@ -101,7 +101,7 @@
 }
 
 - (void)doTestNotUri:(NSString *)text {
-  ZXResult *fakeResult = [ZXResult resultWithText:text rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXResult *fakeResult = [ZXResult resultWithText:text rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   XCTAssertEqual(result.type, kParsedResultTypeText, @"Types don't match");
   XCTAssertEqualObjects(result.displayResult, text, @"Display result doesn't match");

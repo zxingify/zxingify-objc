@@ -19,15 +19,11 @@
 @interface ZXBitSourceBuilder ()
 
 @property (nonatomic, assign) int bitsLeftInNextByte;
-@property (nonatomic, assign) int nextByte;
+@property (nonatomic, assign) int8_t nextByte;
 @property (nonatomic, strong) NSMutableData *output;
 
 @end
 
-
-/**
- * Class that lets one easily build an array of bytes by appending bits at a time.
- */
 @implementation ZXBitSourceBuilder
 
 - (id)init {
@@ -60,15 +56,13 @@
   }
 }
 
-- (int8_t *)toByteArray {
+- (ZXByteArray *)toByteArray {
   if (self.bitsLeftInNextByte < 8) {
     [self write:0 numBits:self.bitsLeftInNextByte];
   }
-  return (int8_t *)[self.output bytes];
-}
-
-- (int)byteArrayLength {
-  return (int)[self.output length];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:(unsigned int)[self.output length]];
+  memcpy(bytes.array, [self.output bytes], bytes.length * sizeof(int8_t));
+  return bytes;
 }
 
 @end

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXIntArray.h"
 #import "ZXPDF417BarcodeMetadata.h"
 #import "ZXPDF417BarcodeValue.h"
 #import "ZXPDF417BoundingBox.h"
@@ -119,20 +120,16 @@
   return (int) (averageRowHeight + 0.5);
 }
 
-- (NSArray *)rowHeights {
+- (ZXIntArray *)rowHeights {
   ZXPDF417BarcodeMetadata *barcodeMetadata = [self barcodeMetadata];
   if (!barcodeMetadata) {
     return nil;
   }
   [self adjustIncompleteIndicatorColumnRowNumbers:barcodeMetadata];
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:barcodeMetadata.rowCount];
-  for (int i = 0; i < barcodeMetadata.rowCount; i++) {
-    [result addObject:@0];
-  }
-
+  ZXIntArray *result = [[ZXIntArray alloc] initWithLength:barcodeMetadata.rowCount];
   for (ZXPDF417Codeword *codeword in [self codewords]) {
     if ((id)codeword != [NSNull null]) {
-      result[codeword.rowNumber] = @([result[codeword.rowNumber] intValue] + 1);
+      result.array[[codeword rowNumber]]++;
     }
   }
   return result;
@@ -207,19 +204,19 @@
     }
   }
   // Maybe we should check if we have ambiguous values?
-  if (([[barcodeColumnCount value] count] == 0) ||
-      ([[barcodeRowCountUpperPart value] count] == 0) ||
-      ([[barcodeRowCountLowerPart value] count] == 0) ||
-      ([[barcodeECLevel value] count] == 0) ||
-      [[barcodeColumnCount value][0] intValue] < 1 ||
-      [[barcodeRowCountUpperPart value][0] intValue] + [[barcodeRowCountLowerPart value][0] intValue] < ZXPDF417_MIN_ROWS_IN_BARCODE ||
-      [[barcodeRowCountUpperPart value][0] intValue] + [[barcodeRowCountLowerPart value][0] intValue] > ZXPDF417_MAX_ROWS_IN_BARCODE) {
+  if (([barcodeColumnCount value].length == 0) ||
+      ([barcodeRowCountUpperPart value].length == 0) ||
+      ([barcodeRowCountLowerPart value].length == 0) ||
+      ([barcodeECLevel value].length == 0) ||
+      [barcodeColumnCount value].array[0] < 1 ||
+      [barcodeRowCountUpperPart value].array[0] + [barcodeRowCountLowerPart value].array[0] < ZXPDF417_MIN_ROWS_IN_BARCODE ||
+      [barcodeRowCountUpperPart value].array[0] + [barcodeRowCountLowerPart value].array[0] > ZXPDF417_MAX_ROWS_IN_BARCODE) {
     return nil;
   }
-  ZXPDF417BarcodeMetadata *barcodeMetadata = [[ZXPDF417BarcodeMetadata alloc] initWithColumnCount:[[barcodeColumnCount value][0] intValue]
-                                                                                rowCountUpperPart:[[barcodeRowCountUpperPart value][0] intValue]
-                                                                                rowCountLowerPart:[[barcodeRowCountLowerPart value][0] intValue]
-                                                                             errorCorrectionLevel:[[barcodeECLevel value][0] intValue]];
+  ZXPDF417BarcodeMetadata *barcodeMetadata = [[ZXPDF417BarcodeMetadata alloc] initWithColumnCount:[barcodeColumnCount value].array[0]
+                                                                                rowCountUpperPart:[barcodeRowCountUpperPart value].array[0]
+                                                                                rowCountLowerPart:[barcodeRowCountLowerPart value].array[0]
+                                                                             errorCorrectionLevel:[barcodeECLevel value].array[0]];
   [self removeIncorrectCodewords:barcodeMetadata];
   return barcodeMetadata;
 }

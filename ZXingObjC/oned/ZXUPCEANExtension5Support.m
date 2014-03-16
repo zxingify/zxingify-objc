@@ -17,6 +17,7 @@
 #import "ZXBarcodeFormat.h"
 #import "ZXBitArray.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXResult.h"
 #import "ZXResultMetadataType.h"
 #import "ZXResultPoint.h"
@@ -27,7 +28,21 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05
 };
 
+@interface ZXUPCEANExtension5Support ()
+
+@property (nonatomic, strong) ZXIntArray *decodeMiddleCounters;
+
+@end
+
 @implementation ZXUPCEANExtension5Support
+
+- (id)init {
+  if (self = [super init]) {
+    _decodeMiddleCounters = [[ZXIntArray alloc] initWithLength:4];
+  }
+
+  return self;
+}
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row extensionStartRange:(NSRange)extensionStartRange error:(NSError **)error {
   NSMutableString *resultString = [NSMutableString string];
@@ -40,7 +55,6 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
   ZXResult *extensionResult = [[ZXResult alloc] initWithText:resultString
                                                      rawBytes:nil
-                                                       length:0
                                                  resultPoints:@[[[ZXResultPoint alloc] initWithX:(extensionStartRange.location + NSMaxRange(extensionStartRange)) / 2.0f y:rowNumber],
                                                                 [[ZXResultPoint alloc] initWithX:end y:rowNumber]]
                                                        format:kBarcodeFormatUPCEANExtension];
@@ -51,9 +65,8 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 }
 
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
-  const int countersLen = 4;
-  int counters[countersLen];
-  memset(counters, 0, countersLen * sizeof(int));
+  ZXIntArray *counters = self.decodeMiddleCounters;
+  [counters clear];
 
   int end = [row size];
   int rowOffset = (int)NSMaxRange(startRange);
@@ -61,18 +74,19 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   int lgPatternFound = 0;
 
   for (int x = 0; x < 5 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
-    for (int i = 0; i < countersLen; i++) {
-      rowOffset += counters[i];
+    for (int i = 0; i < counters.length; i++) {
+      rowOffset += counters.array[i];
     }
     if (bestMatch >= 10) {
       lgPatternFound |= 1 << (4 - x);
     }
     if (x != 4) {
+      // Read off separator if not last
       rowOffset = [row nextSet:rowOffset];
       rowOffset = [row nextUnset:rowOffset];
     }
@@ -118,6 +132,11 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   return -1;
 }
 
+/**
+ * @param raw raw content of extension
+ * @return formatted interpretation of raw content as a NSDictionary mapping
+ *  one ZXResultMetadataType to appropriate value, or nil if not known
+ */
 - (NSMutableDictionary *)parseExtensionString:(NSString *)raw {
   if (raw.length != 5) {
     return nil;

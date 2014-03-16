@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
 #import "ZXDataMatrixDataBlock.h"
 #import "ZXDataMatrixVersion.h"
 #import "ZXQRCodeVersion.h"
 
 @implementation ZXDataMatrixDataBlock
 
-- (id)initWithNumDataCodewords:(int)numDataCodewords codewords:(NSMutableArray *)codewords {
+- (id)initWithNumDataCodewords:(int)numDataCodewords codewords:(ZXByteArray *)codewords {
   if (self = [super init]) {
     _numDataCodewords = numDataCodewords;
     _codewords = codewords;
@@ -29,60 +30,60 @@
   return self;
 }
 
-/**
- * When Data Matrix Codes use multiple data blocks, they actually interleave the bytes of each of them.
- * That is, the first byte of data block 1 to n is written, then the second bytes, and so on. This
- * method will separate the data into original blocks.
- */
-+ (NSArray *)dataBlocks:(NSArray *)rawCodewords version:(ZXDataMatrixVersion *)version {
++ (NSArray *)dataBlocks:(ZXByteArray *)rawCodewords version:(ZXDataMatrixVersion *)version {
+  // Figure out the number and size of data blocks used by this version
   ZXDataMatrixECBlocks *ecBlocks = version.ecBlocks;
 
+  // First count the total number of data blocks
   int totalBlocks = 0;
   NSArray *ecBlockArray = ecBlocks.ecBlocks;
   for (ZXDataMatrixECB *ecBlock in ecBlockArray) {
     totalBlocks += ecBlock.count;
   }
 
+  // Now establish DataBlocks of the appropriate size and number of data codewords
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:totalBlocks];
-  int numResultBlocks = 0;
   for (ZXDataMatrixECB *ecBlock in ecBlockArray) {
     for (int i = 0; i < ecBlock.count; i++) {
       int numDataCodewords = ecBlock.dataCodewords;
       int numBlockCodewords = ecBlocks.ecCodewords + numDataCodewords;
-      NSMutableArray *tempCodewords = [NSMutableArray arrayWithCapacity:numBlockCodewords];
-      for (int j = 0; j < numBlockCodewords; j++) {
-        [tempCodewords addObject:@0];
-      }
-      [result addObject:[[ZXDataMatrixDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:tempCodewords]];
-      numResultBlocks++;
+      [result addObject:[[ZXDataMatrixDataBlock alloc] initWithNumDataCodewords:numDataCodewords codewords:[[ZXByteArray alloc] initWithLength:numBlockCodewords]]];
     }
   }
 
-  int longerBlocksTotalCodewords = (int)[[result[0] codewords] count];
+  // All blocks have the same amount of data, except that the last n
+  // (where n may be 0) have 1 less byte. Figure out where these start.
+  // TODO(bbrown): There is only one case where there is a difference for Data Matrix for size 144
+  int longerBlocksTotalCodewords = [[(ZXDataMatrixDataBlock *)result[0] codewords] length];
+  //int shorterBlocksTotalCodewords = longerBlocksTotalCodewords - 1;
+
   int longerBlocksNumDataCodewords = longerBlocksTotalCodewords - ecBlocks.ecCodewords;
   int shorterBlocksNumDataCodewords = longerBlocksNumDataCodewords - 1;
+  // The last elements of result may be 1 element shorter for 144 matrix
+  // first fill out as many elements as all of them have minus 1
   int rawCodewordsOffset = 0;
   for (int i = 0; i < shorterBlocksNumDataCodewords; i++) {
-    for (int j = 0; j < numResultBlocks; j++) {
-      [result[j] codewords][i] = rawCodewords[rawCodewordsOffset++];
+    for (ZXDataMatrixDataBlock *block in result) {
+      block.codewords.array[i] = rawCodewords.array[rawCodewordsOffset++];
     }
   }
 
+  // Fill out the last data block in the longer ones
   BOOL specialVersion = version.versionNumber == 24;
-  int numLongerBlocks = specialVersion ? 8 : numResultBlocks;
+  int numLongerBlocks = specialVersion ? 8 : (int)[result count];
   for (int j = 0; j < numLongerBlocks; j++) {
-    [result[j] codewords][longerBlocksNumDataCodewords - 1] = rawCodewords[rawCodewordsOffset++];
+    [(ZXDataMatrixDataBlock *)result[j] codewords].array[longerBlocksNumDataCodewords - 1] = rawCodewords.array[rawCodewordsOffset++];
   }
 
-  NSUInteger max = [[result[0] codewords] count];
+  NSUInteger max = [(ZXDataMatrixDataBlock *)result[0] codewords].length;
   for (int i = longerBlocksNumDataCodewords; i < max; i++) {
-    for (int j = 0; j < numResultBlocks; j++) {
+    for (int j = 0; j < [result count]; j++) {
       int iOffset = specialVersion && j > 7 ? i - 1 : i;
-      [result[j] codewords][iOffset] = rawCodewords[rawCodewordsOffset++];
+      [(ZXDataMatrixDataBlock *)result[j] codewords].array[iOffset] = rawCodewords.array[rawCodewordsOffset++];
     }
   }
 
-  if (rawCodewordsOffset != [rawCodewords count]) {
+  if (rawCodewordsOffset != rawCodewords.length) {
     [NSException raise:NSInvalidArgumentException format:@"Codewords size mismatch"];
   }
   return result;

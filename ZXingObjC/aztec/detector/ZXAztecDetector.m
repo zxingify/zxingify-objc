@@ -19,6 +19,7 @@
 #import "ZXErrors.h"
 #import "ZXGenericGF.h"
 #import "ZXGridSampler.h"
+#import "ZXIntArray.h"
 #import "ZXMathUtils.h"
 #import "ZXReedSolomonDecoder.h"
 #import "ZXResultPoint.h"
@@ -244,21 +245,20 @@ int bitCount(uint32_t i) {
   }
 
   int numECCodewords = numCodewords - numDataCodewords;
-  int parameterWords[numCodewords];
-  memset(parameterWords, 0, sizeof(parameterWords)/sizeof(int));
+  ZXIntArray *parameterWords = [[ZXIntArray alloc] initWithLength:numCodewords];
   for (int i = numCodewords - 1; i >= 0; --i) {
-    parameterWords[i] = (int) parameterData & 0xF;
+    parameterWords.array[i] = (int32_t) parameterData & 0xF;
     parameterData >>= 4;
   }
 
   ZXReedSolomonDecoder *rsDecoder = [[ZXReedSolomonDecoder alloc] initWithField:[ZXGenericGF AztecParam]];
-  if (![rsDecoder decode:parameterWords receivedLen:sizeof(parameterWords)/sizeof(int) twoS:numECCodewords error:nil]) {
+  if (![rsDecoder decode:parameterWords twoS:numECCodewords error:nil]) {
     return NO;
   }
   // Toss the error correction.  Just return the data as an integer
   int result = 0;
   for (int i = 0; i < numDataCodewords; i++) {
-    result = (result << 4) + parameterWords[i];
+    result = (result << 4) + parameterWords.array[i];
   }
   return result;
 }

@@ -63,18 +63,18 @@
   // from data bytes alone.  See also comments in qrcode_encoder.h.
 
   // AIUE in Hiragana in Shift_JIS
-  int8_t hiraganaBytes[8] = {0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6};
-  XCTAssertEqualObjects([ZXQRCodeEncoder chooseMode:[self shiftJISString:hiraganaBytes bytesLen:8]], [ZXMode byteMode],
+  ZXByteArray *hiraganaBytes = [[ZXByteArray alloc] initWithBytes:0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6, -1];
+  XCTAssertEqualObjects([ZXQRCodeEncoder chooseMode:[self shiftJISString:hiraganaBytes]], [ZXMode byteMode],
                        @"Expected byte mode");
 
   // Nihon in Kanji in Shift_JIS.
-  int8_t kanjiBytes[4] = {0x9, 0xf, 0x9, 0x7b};
-  XCTAssertEqualObjects([ZXQRCodeEncoder chooseMode:[self shiftJISString:kanjiBytes bytesLen:4]], [ZXMode byteMode],
+  ZXByteArray *kanjiBytes = [[ZXByteArray alloc] initWithBytes:0x9, 0xf, 0x9, 0x7b, -1];
+  XCTAssertEqualObjects([ZXQRCodeEncoder chooseMode:[self shiftJISString:kanjiBytes]], [ZXMode byteMode],
                        @"Expected byte mode");
 
   // Sou-Utsu-Byou in Kanji in Shift_JIS.
-  int8_t kanjiBytes2[6] = {0xe, 0x4, 0x9, 0x5, 0x9, 0x61};
-  XCTAssertEqualObjects([ZXQRCodeEncoder chooseMode:[self shiftJISString:kanjiBytes2 bytesLen:6]], [ZXMode byteMode],
+  kanjiBytes = [[ZXByteArray alloc] initWithBytes:0xe, 0x4, 0x9, 0x5, 0x9, 0x61, -1];
+  XCTAssertEqualObjects([ZXQRCodeEncoder chooseMode:[self shiftJISString:kanjiBytes]], [ZXMode byteMode],
                        @"Expected byte mode");
 }
 
@@ -221,8 +221,8 @@
   // Should use appendKanjiBytes.
   // 0x93, 0x5f
   bits = [[ZXBitArray alloc] init];
-  int8_t bytes[2] = {0x93, 0x5f};
-  [ZXQRCodeEncoder appendBytes:[self shiftJISString:bytes bytesLen:2] mode:[ZXMode kanjiMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithBytes:0x93, 0x5f, -1];
+  [ZXQRCodeEncoder appendBytes:[self shiftJISString:bytes] mode:[ZXMode kanjiMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" .XX.XX.. XXXXX";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
@@ -306,44 +306,41 @@
 }
 
 - (void)testInterleaveWithECBytes {
-  const int dataBytesLen = 9;
-  int8_t dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
+  ZXByteArray *dataBytes = [[ZXByteArray alloc] initWithBytes:32, 65, 205, 69, 41, 220, 46, 128, 236, -1];
   ZXBitArray *in = [[ZXBitArray alloc] init];
-  for (int i = 0; i < dataBytesLen; i++) {
-    [in appendBits:dataBytes[i] numBits:8];
+  for (int i = 0; i < dataBytes.length; i++) {
+    [in appendBits:dataBytes.array[i] numBits:8];
   }
   ZXBitArray *out = [ZXQRCodeEncoder interleaveWithECBytes:in numTotalBytes:26 numDataBytes:9 numRSBlocks:1 error:nil];
-  const int expectedLen = 26;
-  int8_t expected[expectedLen] = {
+  ZXByteArray *expected = [[ZXByteArray alloc] initWithBytes:
     // Data bytes.
     32, 65, 205, 69, 41, 220, 46, 128, 236,
     // Error correction bytes.
     42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
     237, 85, 224, 96, 74, 219, 61,
-  };
-  XCTAssertEqual(out.sizeInBytes, expectedLen, @"Expected out sizeInBytes to equal %d", expectedLen);
-  int8_t outArray[expectedLen];
-  memset(outArray, 0, expectedLen * sizeof(int8_t));
-  [out toBytes:0 array:outArray offset:0 numBytes:expectedLen];
-  for (int x = 0; x < expectedLen; x++) {
-    XCTAssertEqual(outArray[x], expected[x], @"Expected outArray[%d] to equal %d", x, expected[x]);
+    -1
+  ];
+  XCTAssertEqual(out.sizeInBytes, (int)expected.length, @"Expected out sizeInBytes to equal %d", (int)expected.length);
+  ZXByteArray *outArray = [[ZXByteArray alloc] initWithLength:expected.length];
+  [out toBytes:0 array:outArray offset:0 numBytes:expected.length];
+  for (int x = 0; x < expected.length; x++) {
+    XCTAssertEqual(outArray.array[x], expected.array[x], @"Expected outArray[%d] to equal %d", x, expected.array[x]);
   }
-  const int dataBytesLen2 = 62;
-  int8_t dataBytes2[dataBytesLen2] = {
+  dataBytes = [[ZXByteArray alloc] initWithBytes:
     67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
     198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
     151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
     182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
     135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
-    17
-  };
+    17, -1
+  ];
   in = [[ZXBitArray alloc] init];
-  for (int i = 0; i < dataBytesLen2; i++) {
-    [in appendBits:dataBytes2[i] numBits:8];
+  for (int i = 0; i < dataBytes.length; i++) {
+    [in appendBits:dataBytes.array[i] numBits:8];
   }
+
   out = [ZXQRCodeEncoder interleaveWithECBytes:in numTotalBytes:134 numDataBytes:62 numRSBlocks:4 error:nil];
-  const int expectedLen2 = 134;
-  int8_t expected2[expectedLen2] = {
+  expected = [[ZXByteArray alloc] initWithBytes:
     // Data bytes.
     67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
     118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
@@ -358,14 +355,13 @@
     190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
     211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
     140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
-    187, 49, 156, 214,
-  };
-  XCTAssertEqual(out.sizeInBytes, expectedLen2, @"Expected out sizeInBytes to equal %d", expectedLen2);
-  int8_t outArray2[expectedLen2];
-  memset(outArray2, 0, expectedLen2 * sizeof(int8_t));
-  [out toBytes:0 array:outArray2 offset:0 numBytes:expectedLen2];
-  for (int x = 0; x < expectedLen2; x++) {
-    XCTAssertEqual(outArray2[x], expected2[x], @"Expected outArray[%d] to equal %d", x, expected2[x]);
+    187, 49, 156, 214, -1
+  ];
+  XCTAssertEqual(out.sizeInBytes, (int)expected.length, @"Expected out sizeInBytes to equal %u", expected.length);
+  outArray = [[ZXByteArray alloc] initWithLength:expected.length];
+  [out toBytes:0 array:outArray offset:0 numBytes:expected.length];
+  for (int x = 0; x < expected.length; x++) {
+    XCTAssertEqual(outArray.array[x], expected.array[x], @"Expected outArray[%d] to equal %d", x, expected.array[x]);
   }
 }
 
@@ -438,12 +434,10 @@
 // Numbers are from page 21 of JISX0510:2004
 - (void)testAppendKanjiBytes {
   ZXBitArray *bits = [[ZXBitArray alloc] init];
-  int8_t bytes[2] = {0x93,0x5f};
-  [ZXQRCodeEncoder appendKanjiBytes:[self shiftJISString:bytes bytesLen:2] bits:bits error:nil];
+  [ZXQRCodeEncoder appendKanjiBytes:[self shiftJISString:[[ZXByteArray alloc] initWithBytes:0x93, 0x5f, -1]] bits:bits error:nil];
   NSString *expected = @" .XX.XX.. XXXXX";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
-  int8_t bytes2[2] = {0xe4,0xaa};
-  [ZXQRCodeEncoder appendKanjiBytes:[self shiftJISString:bytes2 bytesLen:2] bits:bits error:nil];
+  [ZXQRCodeEncoder appendKanjiBytes:[self shiftJISString:[[ZXByteArray alloc] initWithBytes:0xe4, 0xaa, -1]] bits:bits error:nil];
   expected = @" .XX.XX.. XXXXXXX. X.X.X.X. X.";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
@@ -451,41 +445,35 @@
 // Numbers are from http://www.swetake.com/qr/qr3.html and
 // http://www.swetake.com/qr/qr9.html
 - (void)testGenerateECBytes {
-  const int dataBytesLen = 9;
-  int8_t dataBytes[dataBytesLen] = {32, 65, 205, 69, 41, 220, 46, 128, 236};
-  int8_t *ecBytes = [ZXQRCodeEncoder generateECBytes:dataBytes numDataBytes:dataBytesLen numEcBytesInBlock:17];
-  const int expectedLen = 17;
-  int expected[expectedLen] = {
-    42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
-  };
-  for (int x = 0; x < expectedLen; x++) {
-    XCTAssertEqual(ecBytes[x] & 0xFF, expected[x], @"Expected exBytes[%d] to equal %d", x, expected[x]);
+  ZXByteArray *dataBytes = [[ZXByteArray alloc] initWithBytes:32, 65, 205, 69, 41, 220, 46, 128, 236, -1];
+  ZXByteArray *ecBytes = [ZXQRCodeEncoder generateECBytes:dataBytes numEcBytesInBlock:17];
+  ZXIntArray *expected = [[ZXIntArray alloc] initWithInts:
+    42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61, -1
+  ];
+  XCTAssertEqual(ecBytes.length, expected.length, @"Excepted ecBytes and expected to have equal lengths");
+  for (int x = 0; x < expected.length; x++) {
+    XCTAssertEqual(ecBytes.array[x] & 0xFF, expected.array[x], @"Expected exBytes[%d] to equal %d", x, expected.array[x]);
   }
-  free(ecBytes);
-  const int dataBytesLen2 = 15;
-  int8_t dataBytes2[dataBytesLen2] = {67, 70, 22, 38, 54, 70, 86, 102, 118,
-    134, 150, 166, 182, 198, 214};
-  int8_t *ecBytes2 = [ZXQRCodeEncoder generateECBytes:dataBytes2 numDataBytes:dataBytesLen2 numEcBytesInBlock:18];
-  const int expectedLen2 = 18;
-  int expected2[expectedLen2] = {
-    175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
-  };
-  for (int x = 0; x < expectedLen2; x++) {
-    XCTAssertEqual(ecBytes2[x] & 0xFF, expected2[x], @"Expected exBytes[%d] to equal %d", x, expected2[x]);
+  dataBytes = [[ZXByteArray alloc] initWithBytes:67, 70, 22, 38, 54, 70, 86, 102, 118,
+    134, 150, 166, 182, 198, 214, -1];
+  ecBytes = [ZXQRCodeEncoder generateECBytes:dataBytes numEcBytesInBlock:18];
+  expected = [[ZXIntArray alloc] initWithInts:
+    175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187, -1
+  ];
+  XCTAssertEqual(ecBytes.length, expected.length, @"Excepted ecBytes and expected to have equal lengths");
+  for (int x = 0; x < expected.length; x++) {
+    XCTAssertEqual(ecBytes.array[x] & 0xFF, expected.array[x], @"Expected exBytes[%d] to equal %d", x, expected.array[x]);
   }
-  free(ecBytes2);
   // High-order zero coefficient case.
-  const int dataBytesLen3 = 9;
-  int8_t dataBytes3[dataBytesLen3] = {32, 49, 205, 69, 42, 20, 0, 236, 17};
-  int8_t *ecBytes3 = [ZXQRCodeEncoder generateECBytes:dataBytes3 numDataBytes:dataBytesLen3 numEcBytesInBlock:17];
-  const int expectedLen3 = 17;
-  int expected3[expectedLen3] = {
-    0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
-  };
-  for (int x = 0; x < expectedLen3; x++) {
-    XCTAssertEqual(ecBytes3[x] & 0xFF, expected3[x], @"Expected exBytes[%d] to equal %d", x, expected3[x]);
+  dataBytes = [[ZXByteArray alloc] initWithBytes:32, 49, 205, 69, 42, 20, 0, 236, 17, -1];
+  ecBytes = [ZXQRCodeEncoder generateECBytes:dataBytes numEcBytesInBlock:17];
+  expected = [[ZXIntArray alloc] initWithInts:
+    0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213, -1
+  ];
+  XCTAssertEqual(ecBytes.length, expected.length, @"Excepted ecBytes and expected to have equal lengths");
+  for (int x = 0; x < expected.length; x++) {
+    XCTAssertEqual(ecBytes.array[x] & 0xFF, expected.array[x], @"Expected exBytes[%d] to equal %d", x, expected.array[x]);
   }
-  free(ecBytes3);
 }
 
 - (void)testBugInBitVectorNumBytes {
@@ -525,8 +513,8 @@
   XCTAssertNotNil(qrCode, @"Excepted QR code");
 }
 
-- (NSString *)shiftJISString:(int8_t *)bytes bytesLen:(int)bytesLen {
-  return [[NSString alloc] initWithBytes:bytes length:bytesLen encoding:NSShiftJISStringEncoding];
+- (NSString *)shiftJISString:(ZXByteArray *)bytes {
+  return [[NSString alloc] initWithBytes:bytes.array length:bytes.length encoding:NSShiftJISStringEncoding];
 }
 
 @end

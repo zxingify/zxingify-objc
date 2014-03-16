@@ -16,6 +16,12 @@
 
 #import "RSSExpandedImage2binaryTestCase.h"
 
+@interface ZXRSSExpandedReader (PrivateMethods)
+
+- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row;
+
+@end
+
 @implementation RSSExpandedImage2binaryTestCase
 
 - (void)testDecodeRow2binary_1 {

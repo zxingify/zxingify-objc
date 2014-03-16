@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXBitArray;
-@class ZXToken;
+@class ZXBitArray, ZXByteArray, ZXToken;
 
 /**
  * State represents all information about a sequence necessary to generate the current output.
@@ -45,6 +44,6 @@
 - (ZXState *)addBinaryShiftChar:(int)index;
 - (ZXState *)endBinaryShift:(int)index;
 - (BOOL)isBetterThanOrEqualTo:(ZXState *)other;
-- (ZXBitArray *)toBitArray:(const int8_t *)text textLength:(NSUInteger)textLength;
+- (ZXBitArray *)toBitArray:(ZXByteArray *)text;
 
 @end

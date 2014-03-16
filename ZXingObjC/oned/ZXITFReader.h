@@ -33,11 +33,9 @@
 extern const int PATTERNS_LEN;
 extern const int PATTERNS[][5];
 
-@class ZXResult;
-
 @interface ZXITFReader : ZXOneDReader
 
-- (NSArray *)decodeStart:(ZXBitArray *)row;
-- (NSArray *)decodeEnd:(ZXBitArray *)row;
+- (ZXIntArray *)decodeStart:(ZXBitArray *)row;
+- (ZXIntArray *)decodeEnd:(ZXBitArray *)row;
 
 @end

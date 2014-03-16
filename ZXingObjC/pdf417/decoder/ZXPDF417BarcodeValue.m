@@ -15,6 +15,7 @@
  */
 
 #import "ZXPDF417BarcodeValue.h"
+#import "ZXPDF417Common.h"
 
 @interface ZXPDF417BarcodeValue ()
 
@@ -42,11 +43,7 @@
   self.values[@(value)] = confidence;
 }
 
-/**
- * Determines the maximum occurrence of a set value and returns all values which were set with this occurrence.
- * Returns an array of int, containing the values with the highest occurrence, or null, if no value was set
- */
-- (NSArray *)value {
+- (ZXIntArray *)value {
   int maxConfidence = -1;
   NSMutableArray *result = [NSMutableArray array];
   for (NSNumber *key in [self.values allKeys]) {
@@ -59,7 +56,8 @@
       [result addObject:key];
     }
   }
-  return [[[result sortedArrayUsingSelector:@selector(compare:)] reverseObjectEnumerator] allObjects];
+  NSArray *array = [[[result sortedArrayUsingSelector:@selector(compare:)] reverseObjectEnumerator] allObjects];
+  return [ZXPDF417Common toIntArray:array];
 }
 
 - (NSNumber *)confidence:(int)value {

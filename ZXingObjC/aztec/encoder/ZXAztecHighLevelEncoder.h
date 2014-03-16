@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@class ZXBitArray;
-
 extern NSArray *ZX_AZTEC_MODE_NAMES;
 
 extern const int ZX_AZTEC_MODE_UPPER;
@@ -29,6 +27,8 @@ extern const int ZX_AZTEC_LATCH_TABLE[5][5];
 #define ZX_AZTEC_SHIFT_TABLE_SIZE 6
 extern int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 
+@class ZXBitArray, ZXByteArray;
+
 /**
  * This produces nearly optimal encodings of text into the first-level of
  * encoding used by Aztec code.
@@ -40,7 +40,11 @@ extern int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_
  */
 @interface ZXAztecHighLevelEncoder : NSObject
 
-- (id)initWithData:(const int8_t *)text textLength:(NSUInteger)textLength;
+- (id)initWithText:(ZXByteArray *)text;
+
+/**
+ * Convert the text represented by this High Level Encoder into a BitArray.
+ */
 - (ZXBitArray *)encode;
 
 @end

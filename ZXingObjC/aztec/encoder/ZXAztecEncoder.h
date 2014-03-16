@@ -16,7 +16,7 @@
 
 extern const int ZX_AZTEC_DEFAULT_EC_PERCENT;
 
-@class ZXAztecCode, ZXBitArray, ZXGenericGF;
+@class ZXAztecCode, ZXBitArray, ZXByteArray, ZXGenericGF;
 
 /**
  * Generates Aztec 2D barcodes.
@@ -29,7 +29,7 @@ extern const int ZX_AZTEC_DEFAULT_EC_PERCENT;
  * @param data input data string
  * @return Aztec symbol matrix with metadata
  */
-+ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len;
++ (ZXAztecCode *)encode:(ZXByteArray *)data;
 
 /**
  * Encodes the given binary content as an Aztec symbol
@@ -39,6 +39,6 @@ extern const int ZX_AZTEC_DEFAULT_EC_PERCENT;
  *                      a minimum of 23% + 3 words is recommended)
  * @return Aztec symbol matrix with metadata
  */
-+ (ZXAztecCode *)encode:(const int8_t *)data len:(NSUInteger)len minECCPercent:(int)minECCPercent;
++ (ZXAztecCode *)encode:(ZXByteArray *)data minECCPercent:(int)minECCPercent;
 
 @end

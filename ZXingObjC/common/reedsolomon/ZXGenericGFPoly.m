@@ -16,6 +16,7 @@
 
 #import "ZXGenericGF.h"
 #import "ZXGenericGFPoly.h"
+#import "ZXIntArray.h"
 
 @interface ZXGenericGFPoly ()
 
@@ -25,63 +26,58 @@
 
 @implementation ZXGenericGFPoly
 
-- (id)initWithField:(ZXGenericGF *)field coefficients:(int *)coefficients coefficientsLen:(NSUInteger)coefficientsLen {
+- (id)initWithField:(ZXGenericGF *)field coefficients:(ZXIntArray *)coefficients {
   if (self = [super init]) {
+    if (coefficients.length == 0) {
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:@"coefficients must have at least one element"
+                                   userInfo:nil];
+    }
     _field = field;
-    if (coefficientsLen > 1 && coefficients[0] == 0) {
+    int coefficientsLength = coefficients.length;
+    if (coefficientsLength > 1 && coefficients.array[0] == 0) {
+      // Leading term must be non-zero for anything except the constant polynomial "0"
       int firstNonZero = 1;
-      while (firstNonZero < coefficientsLen && coefficients[firstNonZero] == 0) {
+      while (firstNonZero < coefficientsLength && coefficients.array[firstNonZero] == 0) {
         firstNonZero++;
       }
-      if (firstNonZero == coefficientsLen) {
-        ZXGenericGFPoly *zero = [field zero];
-        _coefficients = (int *)malloc(zero.coefficientsLen * sizeof(int));
-        memcpy(_coefficients, zero.coefficients, zero.coefficientsLen * sizeof(int));
-        _coefficientsLen = zero.coefficientsLen;
+      if (firstNonZero == coefficientsLength) {
+        _coefficients = field.zero.coefficients;
       } else {
-        _coefficientsLen = (int)coefficientsLen - firstNonZero;
-        _coefficients = (int *)malloc(_coefficientsLen * sizeof(int));
-        for (int i = 0; i < _coefficientsLen; i++) {
-          _coefficients[i] = coefficients[firstNonZero + i];
+        _coefficients = [[ZXIntArray alloc] initWithLength:coefficientsLength - firstNonZero];
+        for (int i = 0; i < _coefficients.length; i++) {
+          _coefficients.array[i] = coefficients.array[firstNonZero + i];
         }
       }
     } else {
-      _coefficients = (int *)malloc(coefficientsLen * sizeof(int));
-      memcpy(_coefficients, coefficients, coefficientsLen * sizeof(int));
-      _coefficientsLen = (int)coefficientsLen;
+      _coefficients = coefficients;
     }
   }
 
   return self;
 }
 
-- (void)dealloc {
-  if (_coefficients != NULL) {
-    free(_coefficients);
-    _coefficients = NULL;
-  }
-}
-
 - (int)degree {
-  return self.coefficientsLen - 1;
+  return self.coefficients.length - 1;
 }
 
 - (BOOL)zero {
-  return self.coefficients[0] == 0;
+  return self.coefficients.array[0] == 0;
 }
 
 - (int)coefficient:(int)degree {
-  return self.coefficients[self.coefficientsLen - 1 - degree];
+  return self.coefficients.array[self.coefficients.length - 1 - degree];
 }
 
 - (int)evaluateAt:(int)a {
   if (a == 0) {
     return [self coefficient:0];
   }
-  int size = self.coefficientsLen;
-  int *coefficients = self.coefficients;
+  int size = self.coefficients.length;
+  int32_t *coefficients = self.coefficients.array;
   ZXGenericGF *field = self.field;
   if (a == 1) {
+    // Just the sum of the coefficients
     int result = 0;
     for (int i = 0; i < size; i++) {
       result = [ZXGenericGF addOrSubtract:result b:coefficients[i]];
@@ -106,55 +102,46 @@
     return self;
   }
 
-  int *smallerCoefficients = self.coefficients;
-  int smallerCoefficientsLen = self.coefficientsLen;
-  int *largerCoefficients = other.coefficients;
-  int largerCoefficientsLen = other.coefficientsLen;
-  if (smallerCoefficientsLen > largerCoefficientsLen) {
-    int *temp = smallerCoefficients;
-    int tempLen = smallerCoefficientsLen;
+  ZXIntArray *smallerCoefficients = self.coefficients;
+  ZXIntArray *largerCoefficients = other.coefficients;
+  if (smallerCoefficients.length > largerCoefficients.length) {
+    ZXIntArray *temp = smallerCoefficients;
     smallerCoefficients = largerCoefficients;
-    smallerCoefficientsLen = largerCoefficientsLen;
     largerCoefficients = temp;
-    largerCoefficientsLen = tempLen;
   }
-  int sumDiff[largerCoefficientsLen];
-  memset(sumDiff, 0, largerCoefficientsLen * sizeof(int));
-  int lengthDiff = largerCoefficientsLen - smallerCoefficientsLen;
-  for (int i = 0; i < lengthDiff; i++) {
-    sumDiff[i] = largerCoefficients[i];
-  }
-  for (int i = lengthDiff; i < largerCoefficientsLen; i++) {
-    sumDiff[i] = [ZXGenericGF addOrSubtract:smallerCoefficients[i - lengthDiff] b:largerCoefficients[i]];
+  ZXIntArray *sumDiff = [[ZXIntArray alloc] initWithLength:largerCoefficients.length];
+  int lengthDiff = largerCoefficients.length - smallerCoefficients.length;
+  // Copy high-order terms only found in higher-degree polynomial's coefficients
+  memcpy(sumDiff.array, largerCoefficients.array, lengthDiff * sizeof(int32_t));
+
+  for (int i = lengthDiff; i < largerCoefficients.length; i++) {
+    sumDiff.array[i] = [ZXGenericGF addOrSubtract:smallerCoefficients.array[i - lengthDiff] b:largerCoefficients.array[i]];
   }
 
-  return [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:sumDiff coefficientsLen:largerCoefficientsLen];
+  return [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:sumDiff];
 }
 
-- (ZXGenericGFPoly *) multiply:(ZXGenericGFPoly *)other {
+- (ZXGenericGFPoly *)multiply:(ZXGenericGFPoly *)other {
   ZXGenericGF *field = self.field;
-  if (![field isEqual:other.field]) {
+  if (![self.field isEqual:other.field]) {
     [NSException raise:NSInvalidArgumentException format:@"ZXGenericGFPolys do not have same GenericGF field"];
   }
   if (self.zero || other.zero) {
     return field.zero;
   }
-  int *aCoefficients = self.coefficients;
-  int aLength = self.coefficientsLen;
-  int *bCoefficients = other.coefficients;
-  int bLength = other.coefficientsLen;
-  int productLen = aLength + bLength - 1;
-  int product[productLen];
-  memset(product, 0, productLen * sizeof(int));
-
+  ZXIntArray *aCoefficients = self.coefficients;
+  int aLength = aCoefficients.length;
+  ZXIntArray *bCoefficients = other.coefficients;
+  int bLength = bCoefficients.length;
+  ZXIntArray *product = [[ZXIntArray alloc] initWithLength:aLength + bLength - 1];
   for (int i = 0; i < aLength; i++) {
-    int aCoeff = aCoefficients[i];
+    int aCoeff = aCoefficients.array[i];
     for (int j = 0; j < bLength; j++) {
-      product[i + j] = [ZXGenericGF addOrSubtract:product[i + j]
-                                                b:[field multiply:aCoeff b:bCoefficients[j]]];
+      product.array[i + j] = [ZXGenericGF addOrSubtract:product.array[i + j]
+                                                      b:[field multiply:aCoeff b:bCoefficients.array[j]]];
     }
   }
-  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:productLen];
+  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product];
 }
 
 - (ZXGenericGFPoly *)multiplyScalar:(int)scalar {
@@ -164,14 +151,13 @@
   if (scalar == 1) {
     return self;
   }
-  int size = self.coefficientsLen;
-  int *coefficients = self.coefficients;
-  ZXGenericGF *field = self.field;
-  int product[size];
+  int size = self.coefficients.length;
+  int32_t *coefficients = self.coefficients.array;
+  ZXIntArray *product = [[ZXIntArray alloc] initWithLength:size];
   for (int i = 0; i < size; i++) {
-    product[i] = [field multiply:coefficients[i] b:scalar];
+    product.array[i] = [self.field multiply:coefficients[i] b:scalar];
   }
-  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:size];
+  return [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:product];
 }
 
 - (ZXGenericGFPoly *)multiplyByMonomial:(int)degree coefficient:(int)coefficient {
@@ -181,19 +167,15 @@
   if (coefficient == 0) {
     return self.field.zero;
   }
-  int size = self.coefficientsLen;
-  int *coefficients = self.coefficients;
+  int size = self.coefficients.length;
+  int32_t *coefficients = self.coefficients.array;
   ZXGenericGF *field = self.field;
-  int product[size + degree];
-  for (int i = 0; i < size + degree; i++) {
-    if (i < size) {
-      product[i] = [field multiply:coefficients[i] b:coefficient];
-    } else {
-      product[i] = 0;
-    }
+  ZXIntArray *product = [[ZXIntArray alloc] initWithLength:size + degree];
+  for (int i = 0; i < size; i++) {
+    product.array[i] = [field multiply:coefficients[i] b:coefficient];
   }
 
-  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product coefficientsLen:size + degree];
+  return [[ZXGenericGFPoly alloc] initWithField:field coefficients:product];
 }
 
 - (NSArray *)divide:(ZXGenericGFPoly *)other {
@@ -223,7 +205,7 @@
   return @[quotient, remainder];
 }
 
-- (NSString *) description {
+- (NSString *)description {
   NSMutableString *result = [NSMutableString stringWithCapacity:8 * [self degree]];
   for (int degree = [self degree]; degree >= 0; degree--) {
     int coefficient = [self coefficient:degree];

@@ -17,6 +17,7 @@
 #import "ZXBitArray.h"
 #import "ZXCodaBarReader.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
@@ -58,8 +59,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 @interface ZXCodaBarReader ()
 
 @property (nonatomic, strong) NSMutableString *decodeRowResult;
-@property (nonatomic, assign) int *counters;
-@property (nonatomic, assign) int countersLen;
+@property (nonatomic, strong) ZXIntArray *counters;
 @property (nonatomic, assign) int counterLength;
 
 @end
@@ -74,23 +74,16 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 - (id)init {
   if (self = [super init]) {
     _decodeRowResult = [NSMutableString stringWithCapacity:20];
-    _countersLen = 80;
-    _counters = (int *)malloc(_countersLen * sizeof(int));
-    memset(_counters, 0, _countersLen * sizeof(int));
+    _counters = [[ZXIntArray alloc] initWithLength:80];
     _counterLength = 0;
   }
 
   return self;
 }
 
-- (void)dealloc {
-  if (_counters != NULL) {
-    free(_counters);
-    _counters = NULL;
-  }
-}
-
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  [self.counters clear];
+
   if (![self setCountersWithRow:row]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -124,10 +117,10 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   } while (nextStart < self.counterLength); // no fixed end pattern so keep on reading while data is available
 
   // Look for whitespace after pattern:
-  int trailingWhitespace = self.counters[nextStart - 1];
+  int trailingWhitespace = self.counters.array[nextStart - 1];
   int lastPatternSize = 0;
   for (int i = -8; i < -1; i++) {
-    lastPatternSize += self.counters[nextStart + i];
+    lastPatternSize += self.counters.array[nextStart + i];
   }
 
   // We need to see whitespace equal to 50% of the last pattern size,
@@ -170,16 +163,15 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
   int runningCount = 0;
   for (int i = 0; i < startOffset; i++) {
-    runningCount += self.counters[i];
+    runningCount += self.counters.array[i];
   }
   float left = (float) runningCount;
   for (int i = startOffset; i < nextStart - 1; i++) {
-    runningCount += self.counters[i];
+    runningCount += self.counters.array[i];
   }
   float right = (float) runningCount;
   return [ZXResult resultWithText:self.decodeRowResult
                          rawBytes:nil
-                           length:0
                      resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
                                     [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                            format:kBarcodeFormatCodabar];
@@ -200,7 +192,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
       int category = (j & 1) + (pattern & 1) * 2;
-      sizes[category] += self.counters[pos + j];
+      sizes[category] += self.counters.array[pos + j];
       counts[category]++;
       pattern >>= 1;
     }
@@ -212,8 +204,8 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   }
 
   // Calculate our allowable size thresholds using fixed-point math.
-  int maxes[4] = {0};
-  int mins[4] = {0};
+  int maxes[4] = {0, 0, 0, 0};
+  int mins[4] = {0, 0, 0, 0};
   // Define the threshold of acceptability to be the midpoint between the
   // average small stripe and the average large stripe. No stripe lengths
   // should be on the "wrong" side of that line.
@@ -233,7 +225,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
       int category = (j & 1) + (pattern & 1) * 2;
-      int size = self.counters[pos + j] << INTEGER_MATH_SHIFT;
+      int size = self.counters.array[pos + j] << INTEGER_MATH_SHIFT;
       if (size < mins[category] || size > maxes[category]) {
         return NO;
       }
@@ -277,15 +269,12 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 }
 
 - (void)counterAppend:(int)e {
-  self.counters[self.counterLength] = e;
+  self.counters.array[self.counterLength] = e;
   self.counterLength++;
-  if (self.counterLength >= self.countersLen) {
-    int *temp = (int *)malloc(2 * self.counterLength * sizeof(int));
-    memcpy(temp, self.counters, self.countersLen * sizeof(int));
-    free(self.counters);
+  if (self.counterLength >= self.counters.length) {
+    ZXIntArray *temp = [[ZXIntArray alloc] initWithLength:self.counterLength * 2];
+    memcpy(temp.array, self.counters.array, self.counters.length * sizeof(int32_t));
     self.counters = temp;
-    memset(self.counters, 0, 2 * self.counterLength * sizeof(int));
-    self.countersLen = 2 * self.counterLength;
   }
 }
 
@@ -297,9 +286,9 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
       // We make an exception if the whitespace is the first element.
       int patternSize = 0;
       for (int j = i; j < i + 7; j++) {
-        patternSize += self.counters[j];
+        patternSize += self.counters.array[j];
       }
-      if (i == 1 || self.counters[i-1] >= patternSize / 2) {
+      if (i == 1 || self.counters.array[i-1] >= patternSize / 2) {
         return i;
       }
     }
@@ -329,7 +318,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   int maxBar = 0;
   int minBar = INT_MAX;
   for (int j = position; j < end; j += 2) {
-    int currentCounter = self.counters[j];
+    int currentCounter = self.counters.array[j];
     if (currentCounter < minBar) {
       minBar = currentCounter;
     }
@@ -342,7 +331,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   int maxSpace = 0;
   int minSpace = INT_MAX;
   for (int j = position + 1; j < end; j += 2) {
-    int currentCounter = self.counters[j];
+    int currentCounter = self.counters.array[j];
     if (currentCounter < minSpace) {
       minSpace = currentCounter;
     }
@@ -357,7 +346,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   for (int i = 0; i < 7; i++) {
     int threshold = (i & 1) == 0 ? thresholdBar : thresholdSpace;
     bitmask >>= 1;
-    if (self.counters[position + i] > threshold) {
+    if (self.counters.array[position + i] > threshold) {
       pattern |= bitmask;
     }
   }

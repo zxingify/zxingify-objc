@@ -18,14 +18,12 @@
 
 @implementation ZXDecoderResult
 
-- (id)initWithRawBytes:(int8_t *)rawBytes
-                length:(unsigned int)length
+- (id)initWithRawBytes:(ZXByteArray *)rawBytes
                   text:(NSString *)text
           byteSegments:(NSMutableArray *)byteSegments
                ecLevel:(NSString *)ecLevel {
   if (self = [super init]) {
     _rawBytes = rawBytes;
-    _length = length;
     _text = text;
     _byteSegments = byteSegments;
     _ecLevel = ecLevel;

@@ -204,7 +204,7 @@
                       urls:(NSArray *)urls
                   birthday:(NSString *)birthday
                       note:(NSString *)note {
-  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:NULL length:0 resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
   XCTAssertEqual(kParsedResultTypeAddressBook, result.type, @"Result type mismatch");
   ZXAddressBookParsedResult *addressResult = (ZXAddressBookParsedResult *)result;

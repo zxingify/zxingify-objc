@@ -26,8 +26,9 @@
   [builder write:0xF1 numBits:8];
   [builder write:0xF2 numBits:8];
   [builder write:0xF3 numBits:8];
-  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
-                                                     version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
+  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
+                                                     version:[ZXQRCodeVersion versionForNumber:1]
+                                                     ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\u00f1\u00f2\u00f3";
   XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
@@ -40,8 +41,9 @@
   [builder write:0xA2 numBits:8];
   [builder write:0xA3 numBits:8];
   [builder write:0xD0 numBits:8];
-  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
-                                                     version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
+  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
+                                                     version:[ZXQRCodeVersion versionForNumber:1]
+                                                     ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\uff61\uff62\uff63\uff90";
   XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
@@ -55,8 +57,9 @@
   [builder write:0xA1 numBits:8];
   [builder write:0xA2 numBits:8];
   [builder write:0xA3 numBits:8];
-  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
-                                                     version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
+  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
+                                                     version:[ZXQRCodeVersion versionForNumber:1]
+                                                     ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\u00ed\u00f3\u00fa";
   XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }
@@ -67,8 +70,9 @@
   [builder write:0x01 numBits:4]; // Subset 1 = GB2312 encoding
   [builder write:0x01 numBits:8]; // 1 characters
   [builder write:0x03C1 numBits:13];
-  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray] length:[builder byteArrayLength]
-                                                     version:[ZXQRCodeVersion versionForNumber:1] ecLevel:nil hints:nil error:nil] text];
+  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
+                                                     version:[ZXQRCodeVersion versionForNumber:1]
+                                                     ecLevel:nil hints:nil error:nil] text];
   NSString *expected = @"\u963f";
   XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
 }

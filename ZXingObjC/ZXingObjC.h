@@ -92,6 +92,8 @@
 #import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
 #import "ZXBitSource.h"
+#import "ZXBoolArray.h"
+#import "ZXByteArray.h"
 #import "ZXCharacterSetECI.h"
 #import "ZXDecoderResult.h"
 #import "ZXDefaultGridSampler.h"
@@ -100,6 +102,7 @@
 #import "ZXGlobalHistogramBinarizer.h"
 #import "ZXGridSampler.h"
 #import "ZXHybridBinarizer.h"
+#import "ZXIntArray.h"
 #import "ZXPerspectiveTransform.h"
 #import "ZXStringUtils.h"
 

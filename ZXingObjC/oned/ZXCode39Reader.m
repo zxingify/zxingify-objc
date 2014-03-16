@@ -17,6 +17,7 @@
 #import "ZXBitArray.h"
 #import "ZXCode39Reader.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
@@ -44,6 +45,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 
 @property (nonatomic, assign) BOOL extendedMode;
 @property (nonatomic, assign) BOOL usingCheckDigit;
+@property (nonatomic, strong) ZXIntArray *counters;
 
 @end
 
@@ -76,34 +78,34 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   if (self = [super init]) {
     _usingCheckDigit = usingCheckDigit;
     _extendedMode = extendedMode;
+    _counters = [[ZXIntArray alloc] initWithLength:9];
   }
 
   return self;
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
-  const int countersLen = 9;
-  int counters[countersLen];
-  memset(counters, 0, countersLen * sizeof(int));
+  ZXIntArray *theCounters = self.counters;
+  [theCounters clear];
+  NSMutableString *result = [NSMutableString stringWithCapacity:20];
 
-  int start[2] = {0};
-  if (![self findAsteriskPattern:row a:&start[0] b:&start[1] counters:counters countersLen:countersLen]) {
+  ZXIntArray *start = [self findAsteriskPattern:row counters:theCounters];
+  if (!start) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   // Read off white space
-  int nextStart = [row nextSet:start[1]];
+  int nextStart = [row nextSet:start.array[1]];
   int end = [row size];
 
-  NSMutableString *result = [NSMutableString stringWithCapacity:20];
   unichar decodedChar;
   int lastStart;
   do {
-    if (![ZXOneDReader recordPattern:row start:nextStart counters:counters countersSize:countersLen]) {
+    if (![ZXOneDReader recordPattern:row start:nextStart counters:theCounters]) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
     }
-    int pattern = [self toNarrowWidePattern:(int *)counters countersLen:countersLen];
+    int pattern = [self toNarrowWidePattern:theCounters];
     if (pattern < 0) {
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -115,8 +117,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     }
     [result appendFormat:@"%C", decodedChar];
     lastStart = nextStart;
-    for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
-      nextStart += counters[i];
+    for (int i = 0; i < theCounters.length; i++) {
+      nextStart += theCounters.array[i];
     }
     // Read off white space
     nextStart = [row nextSet:nextStart];
@@ -124,8 +126,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
   [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
 
   int lastPatternSize = 0;
-  for (int i = 0; i < sizeof(counters) / sizeof(int); i++) {
-    lastPatternSize += counters[i];
+  for (int i = 0; i < theCounters.length; i++) {
+    lastPatternSize += theCounters.array[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
   if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
@@ -163,62 +165,60 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     resultString = result;
   }
 
-  float left = (float) (start[1] + start[0]) / 2.0f;
+  float left = (float) (start.array[1] + start.array[0]) / 2.0f;
   float right = (float)(nextStart + lastStart) / 2.0f;
 
   return [ZXResult resultWithText:resultString
                          rawBytes:nil
-                           length:0
                      resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
-                                   [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
+                                    [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                            format:kBarcodeFormatCode39];
 }
 
-- (BOOL)findAsteriskPattern:(ZXBitArray *)row a:(int *)a b:(int *)b counters:(int *)counters countersLen:(int)countersLen {
+- (ZXIntArray *)findAsteriskPattern:(ZXBitArray *)row counters:(ZXIntArray *)counters {
   int width = row.size;
   int rowOffset = [row nextSet:0];
 
   int counterPosition = 0;
   int patternStart = rowOffset;
   BOOL isWhite = NO;
+  int patternLength = counters.length;
 
   for (int i = rowOffset; i < width; i++) {
     if ([row get:i] ^ isWhite) {
-      counters[counterPosition]++;
+      counters.array[counterPosition]++;
     } else {
-      if (counterPosition == countersLen - 1) {
-        if ([self toNarrowWidePattern:counters countersLen:countersLen] == CODE39_ASTERISK_ENCODING &&
+      if (counterPosition == patternLength - 1) {
+        if ([self toNarrowWidePattern:counters] == CODE39_ASTERISK_ENCODING &&
             [row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
-          if (a) *a = patternStart;
-          if (b) *b = i;
-          return YES;
+          return [[ZXIntArray alloc] initWithInts:patternLength, i, -1];
         }
-        patternStart += counters[0] + counters[1];
-        for (int y = 2; y < countersLen; y++) {
-          counters[y - 2] = counters[y];
+        patternStart += counters.array[0] + counters.array[1];
+        for (int y = 2; y < counters.length; y++) {
+          counters.array[y - 2] = counters.array[y];
         }
-        counters[countersLen - 2] = 0;
-        counters[countersLen - 1] = 0;
+        counters.array[patternLength - 2] = 0;
+        counters.array[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters[counterPosition] = 1;
+      counters.array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
 
-  return NO;
+  return nil;
 }
 
-- (int)toNarrowWidePattern:(int *)counters countersLen:(unsigned int)countersLen {
-  int numCounters = countersLen;
+- (int)toNarrowWidePattern:(ZXIntArray *)counters {
+  int numCounters = counters.length;
   int maxNarrowCounter = 0;
   int wideCounters;
   do {
     int minCounter = INT_MAX;
     for (int i = 0; i < numCounters; i++) {
-      int counter = counters[i];
+      int counter = counters.array[i];
       if (counter < minCounter && counter > maxNarrowCounter) {
         minCounter = counter;
       }
@@ -228,8 +228,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     int totalWideCountersWidth = 0;
     int pattern = 0;
     for (int i = 0; i < numCounters; i++) {
-      int counter = counters[i];
-      if (counters[i] > maxNarrowCounter) {
+      int counter = counters.array[i];
+      if (counters.array[i] > maxNarrowCounter) {
         pattern |= 1 << (numCounters - 1 - i);
         wideCounters++;
         totalWideCountersWidth += counter;
@@ -237,8 +237,8 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     }
     if (wideCounters == 3) {
       for (int i = 0; i < numCounters && wideCounters > 0; i++) {
-        int counter = counters[i];
-        if (counters[i] > maxNarrowCounter) {
+        int counter = counters.array[i];
+        if (counters.array[i] > maxNarrowCounter) {
           wideCounters--;
           if ((counter << 1) >= totalWideCountersWidth) {
             return -1;

@@ -103,8 +103,7 @@
   NSString *text = result.text;
   if ([text characterAtIndex:0] == '0') {
     return [ZXResult resultWithText:[text substringFromIndex:1]
-                           rawBytes:NULL
-                             length:0
+                           rawBytes:nil
                        resultPoints:result.resultPoints
                              format:kBarcodeFormatUPCA];
   } else {

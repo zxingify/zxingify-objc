@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * Class that lets one easily build an array of bytes by appending bits at a time.
+ */
 @interface ZXBitSourceBuilder : NSObject
 
 - (void)write:(int)value numBits:(int)numBits;
-- (int8_t *)toByteArray;
-- (int)byteArrayLength;
+- (ZXByteArray *)toByteArray;
 
 @end

@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-@class ZXBitArray, ZXByteArray;
+@interface ZXIntArray : NSObject <NSCopying>
 
-@interface ZXToken : NSObject
+@property (nonatomic, assign, readonly) int32_t *array;
+@property (nonatomic, assign, readonly) unsigned int length;
 
-@property (nonatomic, strong, readonly) ZXToken *previous;
-@property (nonatomic, assign, readonly) int totalBitCount;
-
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount;
-+ (ZXToken *)empty;
-- (ZXToken *)add:(int)value bitCount:(int)bitCount;
-- (ZXToken *)addBinaryShift:(int)start byteCount:(int)byteCount;
-- (void)appendTo:(ZXBitArray *)bitArray text:(ZXByteArray *)text;
+- (id)initWithLength:(unsigned int)length;
+- (id)initWithInts:(int32_t)int1, ...;
+- (void)clear;
 
 @end

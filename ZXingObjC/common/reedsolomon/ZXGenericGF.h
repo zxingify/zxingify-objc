@@ -28,8 +28,8 @@
 
 @property (nonatomic, strong, readonly) ZXGenericGFPoly *zero;
 @property (nonatomic, strong, readonly) ZXGenericGFPoly *one;
-@property (nonatomic, assign, readonly) int size;
-@property (nonatomic, assign, readonly) int generatorBase;
+@property (nonatomic, assign, readonly) int32_t size;
+@property (nonatomic, assign, readonly) int32_t generatorBase;
 
 + (ZXGenericGF *)AztecData12;
 + (ZXGenericGF *)AztecData10;
@@ -42,10 +42,10 @@
 
 - (id)initWithPrimitive:(int)primitive size:(int)size b:(int)b;
 - (ZXGenericGFPoly *)buildMonomial:(int)degree coefficient:(int)coefficient;
-+ (int)addOrSubtract:(int)a b:(int)b;
-- (int)exp:(int)a;
-- (int)log:(int)a;
-- (int)inverse:(int)a;
-- (int)multiply:(int)a b:(int)b;
++ (int32_t)addOrSubtract:(int32_t)a b:(int32_t)b;
+- (int32_t)exp:(int)a;
+- (int32_t)log:(int)a;
+- (int32_t)inverse:(int)a;
+- (int32_t)multiply:(int)a b:(int)b;
 
 @end

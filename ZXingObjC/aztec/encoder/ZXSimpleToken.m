@@ -36,7 +36,7 @@
   return self;
 }
 
-- (void)appendTo:(ZXBitArray *)bitArray text:(const int8_t *)text length:(NSUInteger)length {
+- (void)appendTo:(ZXBitArray *)bitArray text:(ZXByteArray *)text {
   [bitArray appendBits:self.value numBits:self.bitCount];
 }
 

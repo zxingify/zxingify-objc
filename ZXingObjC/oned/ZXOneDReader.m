@@ -18,6 +18,7 @@
 #import "ZXBitArray.h"
 #import "ZXDecodeHints.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXOneDReader.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
@@ -73,7 +74,6 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 - (void)reset {
   
 }
-
 
 /**
  * We're going to examine rows from the middle outward, searching alternately above and below the
@@ -145,7 +145,6 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   return nil;
 }
 
-
 /**
  * Records the size of successive runs of white and black pixels in a row, starting at a given point.
  * The values are recorded in the given array, and the number of runs recorded is equal to the size
@@ -153,11 +152,9 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * recorded is the run of white pixels starting from that point; likewise it is the count of a run
  * of black pixels if the row begin on a black pixels at that point.
  */
-+ (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
-  int numCounters = countersSize;
-
-  memset(counters, 0, numCounters * sizeof(int));
-
++ (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters {
+  int numCounters = counters.length;
+  [counters clear];
   int end = row.size;
   if (start >= end) {
     return NO;
@@ -168,13 +165,13 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
   while (i < end) {
     if ([row get:i] ^ isWhite) {
-      counters[counterPosition]++;
+      counters.array[counterPosition]++;
     } else {
       counterPosition++;
       if (counterPosition == numCounters) {
         break;
       } else {
-        counters[counterPosition] = 1;
+        counters.array[counterPosition] = 1;
         isWhite = !isWhite;
       }
     }
@@ -187,10 +184,9 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   return YES;
 }
 
-+ (BOOL)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(int[])counters countersSize:(int)countersSize {
-  int numTransitionsLeft = countersSize;
++ (BOOL)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters {
+  int numTransitionsLeft = counters.length;
   BOOL last = [row get:start];
-
   while (start > 0 && numTransitionsLeft >= 0) {
     if ([row get:--start] != last) {
       numTransitionsLeft--;
@@ -198,7 +194,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
     }
   }
 
-  if (numTransitionsLeft >= 0 || ![self recordPattern:row start:start + 1 counters:counters countersSize:countersSize]) {
+  if (numTransitionsLeft >= 0 || ![self recordPattern:row start:start + 1 counters:counters]) {
     return NO;
   }
   return YES;
@@ -215,13 +211,13 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * the total variance between counters and patterns equals the pattern length, higher values mean
  * even more variance
  */
-+ (int)patternMatchVariance:(const int[])counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
-  int numCounters = countersSize;
++ (int)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
+  int numCounters = counters.length;
   int total = 0;
   int patternLength = 0;
 
   for (int i = 0; i < numCounters; i++) {
-    total += counters[i];
+    total += counters.array[i];
     patternLength += pattern[i];
   }
 
@@ -233,7 +229,7 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   int totalVariance = 0;
 
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters[x] << INTEGER_MATH_SHIFT;
+    int counter = counters.array[x] << INTEGER_MATH_SHIFT;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
@@ -244,7 +240,6 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
   return totalVariance / total;
 }
-
 
 /**
  * Attempts to decode a one-dimensional barcode format given a single row of

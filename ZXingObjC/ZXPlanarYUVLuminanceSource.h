@@ -16,6 +16,8 @@
 
 #import "ZXLuminanceSource.h"
 
+@class ZXByteArray;
+
 /**
  * This object extends LuminanceSource around an array of YUV data returned from the camera driver,
  * with the option to crop to a rectangle within the full data. This can be used to exclude
@@ -24,7 +26,6 @@
  * It works for any pixel format where the Y channel is planar and appears first, including
  * YCbCr_420_SP and YCbCr_422_SP.
  */
-
 @interface ZXPlanarYUVLuminanceSource : ZXLuminanceSource
 
 @property (nonatomic, assign, readonly) int thumbnailWidth;
@@ -33,6 +34,6 @@
 - (id)initWithYuvData:(int8_t *)yuvData yuvDataLen:(int)yuvDataLen dataWidth:(int)dataWidth
            dataHeight:(int)dataHeight left:(int)left top:(int)top width:(int)width height:(int)height
     reverseHorizontal:(BOOL)reverseHorizontal;
-- (int *)renderThumbnail;
+- (int32_t *)renderThumbnail;
 
 @end

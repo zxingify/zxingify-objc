@@ -21,8 +21,7 @@
 - (void)test_RSSExpanded {
   NSDictionary *uncommonAIs = @{@"123": @"544654"};
   ZXResult *result = [ZXResult resultWithText:@"(01)66546(13)001205(3932)4455(3102)6544(123)544654"
-                                     rawBytes:NULL
-                                       length:0
+                                     rawBytes:nil
                                  resultPoints:nil
                                        format:kBarcodeFormatRSSExpanded];
   ZXExpandedProductParsedResult *o = (ZXExpandedProductParsedResult *)[[[ZXExpandedProductResultParser alloc] init] parse:result];

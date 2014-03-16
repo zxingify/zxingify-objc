@@ -91,7 +91,6 @@
       // Transfer the metdata across
       ZXResult *resultUPCA = [ZXResult resultWithText:[result.text substringFromIndex:1]
                                              rawBytes:result.rawBytes
-                                               length:result.length
                                          resultPoints:result.resultPoints
                                                format:kBarcodeFormatUPCA];
       [resultUPCA putAllMetadata:result.resultMetadata];

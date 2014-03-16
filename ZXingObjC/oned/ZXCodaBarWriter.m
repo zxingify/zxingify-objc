@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXBoolArray.h"
 #import "ZXCodaBarReader.h"
 #import "ZXCodaBarWriter.h"
 
@@ -25,7 +26,7 @@ const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'
 
 @implementation ZXCodaBarWriter
 
-- (BOOL *)encode:(NSString *)contents length:(int *)pLength {
+- (ZXBoolArray *)encode:(NSString *)contents {
   if ([contents length] < 2) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:@"Codabar should start/end with start/stop symbols"
@@ -68,8 +69,7 @@ const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'
   // A blank is placed between each character.
   resultLength += contents.length - 1;
 
-  if (pLength) *pLength = resultLength;
-  BOOL *result = (BOOL *)malloc(resultLength * sizeof(BOOL));
+  ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:resultLength];
   int position = 0;
   for (int index = 0; index < contents.length; index++) {
     unichar c = [[contents uppercaseString] characterAtIndex:index];
@@ -102,7 +102,7 @@ const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'
     int counter = 0;
     int bit = 0;
     while (bit < 7) { // A character consists of 7 digit.
-      result[position] = color;
+      result.array[position] = color;
       position++;
       if (((code >> (6 - bit)) & 1) == 0 || counter == 1) {
         color = !color; // Flip the color.
@@ -113,7 +113,7 @@ const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'
       }
     }
     if (index < contents.length - 1) {
-      result[position] = NO;
+      result.array[position] = NO;
       position++;
     }
   }

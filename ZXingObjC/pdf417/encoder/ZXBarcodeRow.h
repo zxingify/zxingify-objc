@@ -14,16 +14,49 @@
  * limitations under the License.
  */
 
+@class ZXByteArray;
+
 @interface ZXBarcodeRow : NSObject
 
-@property (nonatomic, assign, readonly) int8_t *row;
-@property (nonatomic, assign, readonly) int rowLength;
+@property (nonatomic, strong, readonly) ZXByteArray *row;
 
+/**
+ * Creates a Barcode row of the width
+ *
+ * @param width
+ */
 + (ZXBarcodeRow *)barcodeRowWithWidth:(int)width;
+
 - (id)initWithWidth:(int)width;
+
+/**
+ * Sets a specific location in the bar
+ *
+ * @param x The location in the bar
+ * @param value Black if true, white if false;
+ */
 - (void)setX:(int)x value:(int8_t)value;
+
+/**
+ * Sets a specific location in the bar
+ *
+ * @param x The location in the bar
+ * @param black Black if true, white if false;
+ */
 - (void)setX:(int)x black:(BOOL)black;
+
+/**
+ * @param black A boolean which is true if the bar black false if it is white
+ * @param width How many spots wide the bar is.
+ */
 - (void)addBar:(BOOL)black width:(int)width;
-- (int8_t *)scaledRow:(int)scale;
+
+/**
+ * This function scales the row
+ *
+ * @param scale How much you want the image to be scaled, must be greater than or equal to 1.
+ * @return the scaled row
+ */
+- (ZXByteArray *)scaledRow:(int)scale;
 
 @end

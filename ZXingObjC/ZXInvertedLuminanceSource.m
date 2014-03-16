@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
 #import "ZXInvertedLuminanceSource.h"
 
 @interface ZXInvertedLuminanceSource ()
@@ -33,22 +34,22 @@
   return self;
 }
 
-- (int8_t *)row:(int)y {
-  int8_t *row = [self.delegate row:y];
-  for (int i = 0; i < self.width; i++) {
-    row[i] = (int8_t) (255 - (row[i] & 0xFF));
+- (ZXByteArray *)rowAtY:(int)y row:(ZXByteArray *)row {
+  row = [self.delegate rowAtY:y row:row];
+  int width = self.width;
+  for (int i = 0; i < width; i++) {
+    row.array[i] = (int8_t) (255 - (row.array[i] & 0xFF));
   }
   return row;
 }
 
-- (int8_t *)matrix {
-  int8_t *matrix = [self.delegate matrix];
+- (ZXByteArray *)matrix {
+  ZXByteArray *matrix = [self.delegate matrix];
   int length = self.width * self.height;
-  int8_t *invertedMatrix = (int8_t *)malloc(length * sizeof(int8_t));
+  ZXByteArray *invertedMatrix = [[ZXByteArray alloc] initWithLength:length];
   for (int i = 0; i < length; i++) {
-    invertedMatrix[i] = (int8_t) (255 - (matrix[i] & 0xFF));
+    invertedMatrix.array[i] = (int8_t) (255 - (matrix.array[i] & 0xFF));
   }
-  free(matrix);
   return invertedMatrix;
 }
 
@@ -65,7 +66,7 @@
 }
 
 /**
- * Returns original delegate ZXLuminanceSource since invert undoes itself
+ * @return original delegate {@link LuminanceSource} since invert undoes itself
  */
 - (ZXLuminanceSource *)invert {
   return self.delegate;

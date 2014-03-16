@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
+@class ZXDecoderResult, ZXIntArray;
+
 /**
  * This class contains the methods for decoding the PDF417 codewords.
  */
-
-@class ZXDecoderResult;
-
 @interface ZXPDF417DecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
++ (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
 
 @end

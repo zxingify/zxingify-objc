@@ -67,8 +67,7 @@
 
   NSArray *imageFiles = [self imageFiles];
 
-  int falsePositives[self.testResults.count];
-  memset(falsePositives, 0, self.testResults.count * sizeof(int));
+  ZXIntArray *falsePositives = [[ZXIntArray alloc] initWithLength:(unsigned int)[self.testResults count]];
 
   for (NSURL *testImage in imageFiles) {
     NSLog(@"Starting %@", [self pathInBundle:testImage]);
@@ -77,7 +76,7 @@
     for (int x = 0; x < self.testResults.count; x++) {
       NegativeTestResult *testResult = self.testResults[x];
       if (![self checkForFalsePositives:image rotationInDegrees:testResult.rotation]) {
-        falsePositives[x]++;
+        falsePositives.array[x]++;
       }
     }
   }
@@ -87,7 +86,7 @@
 
   for (int x = 0; x < self.testResults.count; x++) {
     NegativeTestResult *testResult = self.testResults[x];
-    totalFalsePositives += falsePositives[x];
+    totalFalsePositives += falsePositives.array[x];
     totalAllowed += testResult.falsePositivesAllowed;
   }
 
@@ -100,9 +99,9 @@
   for (int x = 0; x < self.testResults.count; x++) {
     NegativeTestResult *testResult = self.testResults[x];
     NSLog(@"Rotation %d degrees: %d of %d images were false positives (%d allowed)",
-          (int)testResult.rotation, falsePositives[x], (int)imageFiles.count,
+          (int)testResult.rotation, falsePositives.array[x], (int)imageFiles.count,
           testResult.falsePositivesAllowed);
-    XCTAssertTrue(falsePositives[x] <= testResult.falsePositivesAllowed,
+    XCTAssertTrue(falsePositives.array[x] <= testResult.falsePositivesAllowed,
                  @"Rotation %f degrees: Too many false positives found", testResult.rotation);
   }
 }

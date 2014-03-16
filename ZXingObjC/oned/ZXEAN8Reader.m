@@ -16,10 +16,11 @@
 
 #import "ZXBitArray.h"
 #import "ZXEAN8Reader.h"
+#import "ZXIntArray.h"
 
 @interface ZXEAN8Reader ()
 
-@property (nonatomic, assign) int *decodeMiddleCounters;
+@property (nonatomic, strong) ZXIntArray *decodeMiddleCounters;
 
 @end
 
@@ -27,39 +28,26 @@
 
 - (id)init {
   if (self = [super init]) {
-    _decodeMiddleCounters = (int *)malloc(sizeof(4) * sizeof(int));
-    _decodeMiddleCounters[0] = 0;
-    _decodeMiddleCounters[1] = 0;
-    _decodeMiddleCounters[2] = 0;
-    _decodeMiddleCounters[3] = 0;
+    _decodeMiddleCounters = [[ZXIntArray alloc] initWithLength:4];
   }
 
   return self;
 }
 
-- (void)dealloc {
-  if (_decodeMiddleCounters != NULL) {
-    free(_decodeMiddleCounters);
-    _decodeMiddleCounters = NULL;
-  }
-}
-
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error {
-  const int countersLen = 4;
-  int counters[countersLen];
-  memset(counters, 0, countersLen * sizeof(int));
-
+  ZXIntArray *counters = self.decodeMiddleCounters;
+  [counters clear];
   int end = row.size;
   int rowOffset = (int)NSMaxRange(startRange);
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < countersLen; i++) {
-      rowOffset += counters[i];
+    for (int i = 0; i < counters.length; i++) {
+      rowOffset += counters.array[i];
     }
   }
 
@@ -70,13 +58,13 @@
   rowOffset = (int)NSMaxRange(middleRange);
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters countersLen:countersLen rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < countersLen; i++) {
-      rowOffset += counters[i];
+    for (int i = 0; i < counters.length; i++) {
+      rowOffset += counters.array[i];
     }
   }
 

@@ -18,38 +18,31 @@
 
 @implementation AbstractErrorCorrectionTestCase
 
-- (void)corrupt:(NSMutableArray *)received howMany:(int)howMany {
-  BOOL corrupted[received.count];
-  for (int i = 0; i < received.count; i++) {
-    corrupted[i] = NO;
-  }
-
+- (void)corrupt:(ZXIntArray *)received howMany:(int)howMany {
+  ZXBoolArray *corrupted = [[ZXBoolArray alloc] initWithLength:received.length];
   for (int j = 0; j < howMany; j++) {
-    int location = arc4random() % received.count;
-    if (corrupted[location]) {
+    int location = arc4random() % received.length;
+    if (corrupted.array[location]) {
       j--;
     } else {
-      corrupted[location] = YES;
-      received[location] = [NSNumber numberWithInt:arc4random() % 929];
+      corrupted.array[location] = YES;
+      received.array[location] = (int32_t)arc4random() % 929;
     }
   }
 }
 
-- (NSArray *)erase:(NSMutableArray *)received howMany:(int)howMany {
-  BOOL erased[received.count];
-  for (int i = 0; i < received.count; i++) {
-    erased[i] = NO;
-  }
-
-  NSMutableArray *erasures = [NSMutableArray arrayWithCapacity:howMany];
+- (ZXIntArray *)erase:(ZXIntArray *)received howMany:(int)howMany {
+  ZXBoolArray *erased = [[ZXBoolArray alloc] initWithLength:received.length];
+  ZXIntArray *erasures = [[ZXIntArray alloc] initWithLength:howMany];
+  int erasureOffset = 0;
   for (int j = 0; j < howMany; j++) {
-    int location = arc4random() % received.count;
-    if (erased[location]) {
+    int location = arc4random() % received.length;
+    if (erased.array[location]) {
       j--;
     } else {
-      erased[location] = YES;
-      received[location] = @0;
-      [erasures addObject:@(location)];
+      erased.array[location] = YES;
+      received.array[location] = 0;
+      erasures.array[erasureOffset++] = location;
     }
   }
   return erasures;

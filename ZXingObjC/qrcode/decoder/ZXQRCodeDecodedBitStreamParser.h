@@ -21,11 +21,14 @@
  * See ISO 18004:2006, 6.4.3 - 6.4.7
  */
 
-@class ZXDecodeHints, ZXDecoderResult, ZXErrorCorrectionLevel, ZXQRCodeVersion;
+@class ZXByteArray, ZXDecodeHints, ZXDecoderResult, ZXErrorCorrectionLevel, ZXQRCodeVersion;
 
 @interface ZXQRCodeDecodedBitStreamParser : NSObject
 
-+ (ZXDecoderResult *)decode:(int8_t *)bytes length:(unsigned int)length version:(ZXQRCodeVersion *)version
-                    ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXDecodeHints *)hints error:(NSError **)error;
++ (ZXDecoderResult *)decode:(ZXByteArray *)bytes
+                    version:(ZXQRCodeVersion *)version
+                    ecLevel:(ZXErrorCorrectionLevel *)ecLevel
+                      hints:(ZXDecodeHints *)hints
+                      error:(NSError **)error;
 
 @end

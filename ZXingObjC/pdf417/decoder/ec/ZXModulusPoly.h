@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-@class ZXModulusGF;
+@class ZXIntArray, ZXModulusGF;
 
 @interface ZXModulusPoly : NSObject
 
-- (id)initWithField:(ZXModulusGF *)field coefficients:(int *)coefficients coefficientsLen:(int)coefficientsLen;
+- (id)initWithField:(ZXModulusGF *)field coefficients:(ZXIntArray *)coefficients;
 - (int)degree;
 - (BOOL)zero;
 - (int)coefficient:(int)degree;

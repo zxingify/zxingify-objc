@@ -14,18 +14,37 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix, ZXDecodeHints, ZXDecodeHints, ZXDecoderResult;
+
 /**
  * The main class which implements QR Code decoding -- as opposed to locating and extracting
  * the QR Code from an image.
  */
-
-@class ZXBitMatrix, ZXDecodeHints, ZXDecodeHints, ZXDecoderResult;
-
 @interface ZXQRCodeDecoder : NSObject
 
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error;
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length hints:(ZXDecodeHints *)hints error:(NSError **)error;
+/**
+ * Convenience method that can decode a QR Code represented as a 2D array of booleans.
+ * "true" is taken to mean a black module.
+ *
+ * @param image booleans representing white/black QR Code modules
+ * @return text and bytes encoded within the QR Code
+ * @return nil if the QR Code cannot be decoded
+ * @return nil if error correction fails
+ */
+- (ZXDecoderResult *)decode:(NSArray *)image error:(NSError **)error;
+
+/**
+ * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
+ *
+ * @param bits booleans representing white/black QR Code modules
+ * @return text and bytes encoded within the QR Code
+ * @return nil if the QR Code cannot be decoded
+ * @return nil if error correction fails
+ */
+- (ZXDecoderResult *)decode:(NSArray *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
+
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error;
+
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end

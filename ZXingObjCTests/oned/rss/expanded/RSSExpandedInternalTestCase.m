@@ -16,6 +16,13 @@
 
 #import "RSSExpandedInternalTestCase.h"
 
+@interface ZXRSSExpandedReader (PrivateMethods)
+
+- (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;
+- (ZXExpandedPair *)retrieveNextPair:(ZXBitArray *)row previousPairs:(NSMutableArray *)previousPairs rowNumber:(int)rowNumber;
+
+@end
+
 @implementation RSSExpandedInternalTestCase
 
 - (void)testFindFinderPatterns {
@@ -79,9 +86,9 @@
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
-  NSMutableArray *startEnd = [@[@145, @243] mutableCopy];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
+  ZXIntArray *startEnd = [[ZXIntArray alloc] initWithInts:145, 243, -1];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
-  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[startEnd[0] intValue] end:[startEnd[1] intValue] rowNumber:(int)image.height / 2];
+  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:startEnd.array[0] end:startEnd.array[1] rowNumber:(int)image.height / 2];
   //{1, 8, 4, 1, 1};
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:YES];
@@ -95,9 +102,9 @@
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
-  NSMutableArray *startEnd = [NSMutableArray arrayWithObjects:@145, @243, nil];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
+  ZXIntArray *startEnd = [[ZXIntArray alloc] initWithInts:145, 243, -1];//image pixels where the A1 pattern starts (at 124) and ends (at 214)
   int value = 0;// A
-  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:[startEnd[0] intValue] end:[startEnd[1] intValue] rowNumber:(int)image.height / 2];
+  ZXRSSFinderPattern *finderPatternA1 = [[ZXRSSFinderPattern alloc] initWithValue:value startEnd:startEnd start:startEnd.array[0] end:startEnd.array[1] rowNumber:(int)image.height / 2];
   //{1, 8, 4, 1, 1};
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
   ZXDataCharacter *dataCharacter = [rssExpandedReader decodeDataCharacter:row pattern:finderPatternA1 isOddPattern:YES leftChar:NO];

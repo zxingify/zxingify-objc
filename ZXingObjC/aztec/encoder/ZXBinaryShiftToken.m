@@ -16,6 +16,7 @@
 
 #import "ZXBinaryShiftToken.h"
 #import "ZXBitArray.h"
+#import "ZXByteArray.h"
 
 @interface ZXBinaryShiftToken ()
 
@@ -36,7 +37,7 @@
   return self;
 }
 
-- (void)appendTo:(ZXBitArray *)bitArray text:(const int8_t *)text length:(NSUInteger)length {
+- (void)appendTo:(ZXBitArray *)bitArray text:(ZXByteArray *)text {
   for (int i = 0; i < self.binaryShiftByteCount; i++) {
     if (i == 0 || (i == 31 && self.binaryShiftByteCount <= 62))  {
       // We need a header before the first character, and before
@@ -52,7 +53,7 @@
         [bitArray appendBits:self.binaryShiftByteCount - 31 numBits:5];
       }
     }
-    [bitArray appendBits:text[self.binaryShiftStart + i] numBits:8];
+    [bitArray appendBits:text.array[self.binaryShiftStart + i] numBits:8];
   }
 }
 

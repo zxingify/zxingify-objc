@@ -36,7 +36,7 @@ extern const int MIDDLE_PATTERN[];
 extern const int L_PATTERNS[][4];
 extern const int L_AND_G_PATTERNS[][4];
 
-@class ZXDecodeHints, ZXEANManufacturerOrgSupport, ZXResult, ZXUPCEANExtensionSupport;
+@class ZXDecodeHints, ZXEANManufacturerOrgSupport, ZXIntArray, ZXResult, ZXUPCEANExtensionSupport;
 
 @interface ZXUPCEANReader : ZXOneDReader
 
@@ -44,11 +44,11 @@ extern const int L_AND_G_PATTERNS[][4];
 - (ZXBarcodeFormat)barcodeFormat;
 - (BOOL)checkChecksum:(NSString *)s error:(NSError **)error;
 + (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
-+ (int)decodeDigit:(ZXBitArray *)row counters:(int[])counters countersLen:(int)countersLen rowOffset:(int)rowOffset patternType:(UPC_EAN_PATTERNS)patternType error:(NSError **)error;
++ (int)decodeDigit:(ZXBitArray *)row counters:(ZXIntArray *)counters rowOffset:(int)rowOffset patternType:(UPC_EAN_PATTERNS)patternType error:(NSError **)error;
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error;
 - (int)decodeMiddle:(ZXBitArray *)row startRange:(NSRange)startRange result:(NSMutableString *)result error:(NSError **)error;
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSRange)startGuardRange hints:(ZXDecodeHints *)hints error:(NSError **)error;
 + (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(const int[])pattern patternLen:(int)patternLen error:(NSError **)error;
-+ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(const int[])pattern patternLen:(int)patternLen counters:(int *)counters error:(NSError **)error;
++ (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(const int[])pattern patternLen:(int)patternLen counters:(ZXIntArray *)counters error:(NSError **)error;
 
 @end

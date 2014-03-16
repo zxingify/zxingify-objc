@@ -15,6 +15,7 @@
  */
 
 #import "ZXAztecEncoderTest.h"
+#import "ZXBoolArray.h"
 
 unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 
@@ -122,7 +123,7 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   NSString *data = @"In ut magna vel mauris malesuada";
   ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 error:nil];
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes] len:[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding] minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:[self stringToByteArray:data] minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
   ZXBitMatrix *expectedMatrix = aztec.matrix;
   XCTAssertEqualObjects(expectedMatrix, matrix, @"Expected matrices to be equal");
 }
@@ -359,7 +360,7 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 // Helper routines
 
 - (void)testEncode:(NSString *)data compact:(BOOL)compact layers:(int)layers expected:(NSString *)expected {
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes] len:[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding] minECCPercent:33];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:[self stringToByteArray:data] minECCPercent:33];
   XCTAssertEqual(aztec.compact, compact, @"Unexpected symbol format (compact)");
   XCTAssertEqual(aztec.layers, layers, @"Unexpected nr. of layers");
   ZXBitMatrix *matrix = aztec.matrix;
@@ -367,7 +368,7 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 }
 
 - (void)testEncodeDecode:(NSString *)data compact:(BOOL)compact layers:(int)layers {
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes] len:[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding] minECCPercent:25];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:[self stringToByteArray:data] minECCPercent:25];
   XCTAssertEqual(aztec.compact, compact, @"Unexpected symbol format (compact)");
   XCTAssertEqual(aztec.layers, layers, @"Unexpected nr. of layers");
   ZXBitMatrix *matrix = aztec.matrix;
@@ -389,15 +390,15 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   // 1. Perform an encode-decode round-trip because it can be lossy.
   // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
   NSData *rawData = [data dataUsingEncoding:encoding];
-  int8_t *bytes = (int8_t *)[rawData bytes];
-  int bytesLen = (int)[rawData length];
-  NSString *expectedData = [[NSString alloc] initWithBytes:bytes length:bytesLen encoding:NSISOLatin1StringEncoding];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:(unsigned int)[rawData length]];
+  memcpy(bytes.array, [rawData bytes], bytes.length * sizeof(int8_t));
+  NSString *expectedData = [[NSString alloc] initWithBytes:bytes.array length:bytes.length encoding:NSISOLatin1StringEncoding];
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.encoding = encoding;
   hints.errorCorrectionPercent = @(eccPercent);
   ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 hints:hints error:nil];
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes len:bytesLen minECCPercent:eccPercent];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes minECCPercent:eccPercent];
   XCTAssertEqual(aztec.compact, compact, @"Unexpected symbol format (compact)");
   XCTAssertEqual(aztec.layers, layers, @"Unexpected nr. of layers");
   ZXBitMatrix *matrix2 = aztec.matrix;
@@ -450,26 +451,32 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 }
 
 - (NSString *)highLevelDecode:(ZXBitArray *)bitArray {
-  int resultSize = bitArray.size;
-  BOOL result[resultSize];
-  for (int i = 0; i < resultSize; i++) {
-    result[i] = [bitArray get:i];
+  ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:bitArray.size];
+  for (int i = 0; i < result.length; i++) {
+    result.array[i] = [bitArray get:i];
   }
-  return [ZXAztecDecoder highLevelDecode:result length:resultSize];
+  return [ZXAztecDecoder highLevelDecode:result];
 }
 
 - (void)testHighLevelEncodeString:(NSString *)s expectedBits:(NSString *)expectedBits {
-  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:[[s dataUsingEncoding:NSISOLatin1StringEncoding] bytes] textLength:[s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding]] encode];
+  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithText:[self stringToByteArray:s]] encode];
   NSString *receivedBits = [[bits description] stringByReplacingOccurrencesOfString:@" " withString:@""];
   XCTAssertEqualObjects(receivedBits, [expectedBits stringByReplacingOccurrencesOfString:@" " withString:@""], @"highLevelEncode() failed for input string: %@", s);
   XCTAssertEqualObjects(s, [self highLevelDecode:bits]);
 }
 
 - (void)testHighLevelEncodeString:(NSString *)s receivedBits:(int)receivedBits {
-  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithData:[[s dataUsingEncoding:NSISOLatin1StringEncoding] bytes] textLength:[s lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding]] encode];
+  ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithText:[self stringToByteArray:s]] encode];
   NSUInteger receivedBitCount = [[[bits description] stringByReplacingOccurrencesOfString:@" " withString:@""] length];
   XCTAssertEqual(receivedBitCount, receivedBitCount, @"highLevelEncode() failed for input string: %@", s);
   XCTAssertEqualObjects(s, [self highLevelDecode:bits]);
+}
+
+- (ZXByteArray *)stringToByteArray:(NSString *)string {
+  NSData *data = [string dataUsingEncoding:NSISOLatin1StringEncoding];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:(unsigned int)[data length]];
+  memcpy(bytes.array, [data bytes], bytes.length * sizeof(int8_t));
+  return bytes;
 }
 
 @end

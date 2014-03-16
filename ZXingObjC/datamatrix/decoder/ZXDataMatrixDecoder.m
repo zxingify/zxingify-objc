@@ -15,6 +15,8 @@
  */
 
 #import "ZXBitMatrix.h"
+#import "ZXBoolArray.h"
+#import "ZXByteArray.h"
 #import "ZXDataMatrixBitMatrixParser.h"
 #import "ZXDataMatrixDataBlock.h"
 #import "ZXDataMatrixDecodedBitStreamParser.h"
@@ -23,6 +25,7 @@
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXGenericGF.h"
+#import "ZXIntArray.h"
 #import "ZXReedSolomonDecoder.h"
 
 @interface ZXDataMatrixDecoder ()
@@ -41,16 +44,13 @@
   return self;
 }
 
-/**
- * Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
- * "true" is taken to mean a black module.
- */
-- (ZXDecoderResult *)decode:(BOOL **)image length:(unsigned int)length error:(NSError **)error {
-  int dimension = length;
+- (ZXDecoderResult *)decode:(NSArray *)image error:(NSError **)error {
+  int dimension = (int)[image count];
   ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithDimension:dimension];
   for (int i = 0; i < dimension; i++) {
+    ZXBoolArray *b = image[i];
     for (int j = 0; j < dimension; j++) {
-      if (image[i][j]) {
+      if (b.array[j]) {
         [bits setX:j y:i];
       }
     }
@@ -71,7 +71,7 @@
   }
   ZXDataMatrixVersion *version = [parser version];
 
-  NSArray *codewords = [parser readCodewords];
+  ZXByteArray *codewords = [parser readCodewords];
   NSArray *dataBlocks = [ZXDataMatrixDataBlock dataBlocks:codewords version:version];
 
   NSUInteger dataBlocksCount = [dataBlocks count];
@@ -85,21 +85,22 @@
     return nil;
   }
 
-  int8_t resultBytes[totalBytes];
+  ZXByteArray *resultBytes = [[ZXByteArray alloc] initWithLength:totalBytes];
 
   for (int j = 0; j < dataBlocksCount; j++) {
     ZXDataMatrixDataBlock *dataBlock = dataBlocks[j];
-    NSMutableArray *codewordBytes = dataBlock.codewords;
+    ZXByteArray *codewordBytes = dataBlock.codewords;
     int numDataCodewords = [dataBlock numDataCodewords];
     if (![self correctErrors:codewordBytes numDataCodewords:numDataCodewords error:error]) {
       return nil;
     }
     for (int i = 0; i < numDataCodewords; i++) {
-      resultBytes[i * dataBlocksCount + j] = [codewordBytes[i] charValue];
+      // De-interlace data blocks.
+      resultBytes.array[i * dataBlocksCount + j] = codewordBytes.array[i];
     }
   }
 
-  return [ZXDataMatrixDecodedBitStreamParser decode:resultBytes length:totalBytes error:error];
+  return [ZXDataMatrixDecodedBitStreamParser decode:resultBytes error:error];
 }
 
 
@@ -107,16 +108,17 @@
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
  * correct the errors in-place using Reed-Solomon error correction.
  */
-- (BOOL)correctErrors:(NSMutableArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error {
-  int numCodewords = (int)[codewordBytes count];
-  int codewordsInts[numCodewords];
+- (BOOL)correctErrors:(ZXByteArray *)codewordBytes numDataCodewords:(int)numDataCodewords error:(NSError **)error {
+  int numCodewords = codewordBytes.length;
+  // First read into an array of ints
+  ZXIntArray *codewordsInts = [[ZXIntArray alloc] initWithLength:numCodewords];
   for (int i = 0; i < numCodewords; i++) {
-    codewordsInts[i] = [codewordBytes[i] charValue] & 0xFF;
+    codewordsInts.array[i] = codewordBytes.array[i] & 0xFF;
   }
-  int numECCodewords = (int)[codewordBytes count] - numDataCodewords;
+  int numECCodewords = codewordBytes.length - numDataCodewords;
 
   NSError *decodeError = nil;
-  if (![self.rsDecoder decode:codewordsInts receivedLen:numCodewords twoS:numECCodewords error:&decodeError]) {
+  if (![self.rsDecoder decode:codewordsInts twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
       if (error) *error = ChecksumErrorInstance();
       return NO;
@@ -127,7 +129,7 @@
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
-    codewordBytes[i] = [NSNumber numberWithChar:codewordsInts[i]];
+    codewordBytes.array[i] = (int8_t) codewordsInts.array[i];
   }
   return YES;
 }

@@ -17,6 +17,13 @@
 #import "RSSExpandedStackedInternalTestCase.h"
 #import "TestCaseUtil.h"
 
+@interface ZXRSSExpandedReader (PrivateMethods)
+
+- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row;
+- (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;
+
+@end
+
 @implementation RSSExpandedStackedInternalTestCase
 
 - (void)testDecodingRowByRow {
@@ -39,7 +46,7 @@
 
   XCTAssertEqual([firstExpandedRow.pairs count], (NSUInteger)2, @"wrong number if pairs in the first row");
 
-  [firstExpandedRow.pairs[1] finderPattern].startEnd[1] = @0;
+  [firstExpandedRow.pairs[1] finderPattern].startEnd.array[1] = 0;
 
 	int secondRowNumber = 2 * [binaryMap height] / 3;
   error = nil;

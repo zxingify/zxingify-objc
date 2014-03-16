@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@class ZXByteArray;
+
 /**
  * This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
  * number of bits read is not often a multiple of 8.
@@ -27,7 +29,7 @@
 @property (nonatomic, assign, readonly) int bitOffset;
 @property (nonatomic, assign, readonly) int byteOffset;
 
-- (id)initWithBytes:(int8_t *)bytes length:(unsigned int)length;
+- (id)initWithBytes:(ZXByteArray *)bytes;
 - (int)readBits:(int)numBits;
 - (int)available;
 

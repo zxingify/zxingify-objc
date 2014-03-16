@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXIntArray.h"
 #import "ZXPDF417.h"
 #import "ZXPDF417Common.h"
 
@@ -35,6 +36,15 @@ int const ZXPDF417_MODULES_IN_STOP_PATTERN = 18;
     bitCountSum += [count intValue];
   }
   return bitCountSum;
+}
+
++ (ZXIntArray *)toIntArray:(NSArray *)list {
+  ZXIntArray *result = [[ZXIntArray alloc] initWithLength:(unsigned int)[list count]];
+  int i = 0;
+  for (NSNumber *integer in list) {
+    result.array[i++] = (int32_t)[integer intValue];
+  }
+  return result;
 }
 
 /**

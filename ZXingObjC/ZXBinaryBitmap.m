@@ -75,7 +75,7 @@
 }
 
 - (BOOL)cropSupported {
-  return [[self.binarizer luminanceSource] cropSupported];
+  return [self.binarizer luminanceSource].cropSupported;
 }
 
 /**
@@ -88,7 +88,7 @@
 }
 
 - (BOOL)rotateSupported {
-  return [[self.binarizer luminanceSource] rotateSupported];
+  return [self.binarizer luminanceSource].rotateSupported;
 }
 
 /**

@@ -16,13 +16,14 @@
 
 #import "ZXBitArray.h"
 #import "ZXBlockPair.h"
+#import "ZXByteArray.h"
 #import "ZXByteMatrix.h"
 #import "ZXCharacterSetECI.h"
-#import "ZXECI.h"
 #import "ZXEncodeHints.h"
 #import "ZXErrors.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXGenericGF.h"
+#import "ZXIntArray.h"
 #import "ZXMaskUtil.h"
 #import "ZXMatrixUtil.h"
 #import "ZXMode.h"
@@ -393,15 +394,14 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     }
 
     int size = numDataBytesInBlock[0];
-    int8_t dataBytes[size];
+    ZXByteArray *dataBytes = [[ZXByteArray alloc] initWithLength:size];
     [bits toBytes:8 * dataBytesOffset array:dataBytes offset:0 numBytes:size];
-    int8_t *ecBytes = [self generateECBytes:dataBytes numDataBytes:size numEcBytesInBlock:numEcBytesInBlock[0]];
-    [blocks addObject:[[ZXBlockPair alloc] initWithData:dataBytes length:size errorCorrection:ecBytes errorCorrectionLength:numEcBytesInBlock[0]]];
+    ZXByteArray *ecBytes = [self generateECBytes:dataBytes numEcBytesInBlock:numEcBytesInBlock[0]];
+    [blocks addObject:[[ZXBlockPair alloc] initWithData:dataBytes errorCorrection:ecBytes]];
 
     maxNumDataBytes = MAX(maxNumDataBytes, size);
     maxNumEcBytes = MAX(maxNumEcBytes, numEcBytesInBlock[0]);
     dataBytesOffset += numDataBytesInBlock[0];
-    free(ecBytes);
   }
   if (numDataBytes != dataBytesOffset) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Data bytes does not match offset"};
@@ -415,20 +415,20 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   // First, place data blocks.
   for (int i = 0; i < maxNumDataBytes; ++i) {
     for (ZXBlockPair *block in blocks) {
-      int8_t *dataBytes = block.dataBytes;
-      NSUInteger length = block.length;
+      ZXByteArray *dataBytes = block.dataBytes;
+      NSUInteger length = dataBytes.length;
       if (i < length) {
-        [result appendBits:dataBytes[i] numBits:8];
+        [result appendBits:dataBytes.array[i] numBits:8];
       }
     }
   }
   // Then, place error correction blocks.
   for (int i = 0; i < maxNumEcBytes; ++i) {
     for (ZXBlockPair *block in blocks) {
-      int8_t *ecBytes = block.errorCorrectionBytes;
-      int length = block.errorCorrectionLength;
+      ZXByteArray *ecBytes = block.errorCorrectionBytes;
+      int length = ecBytes.length;
       if (i < length) {
-        [result appendBits:ecBytes[i] numBits:8];
+        [result appendBits:ecBytes.array[i] numBits:8];
       }
     }
   }
@@ -442,21 +442,17 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return result;
 }
 
-+ (int8_t *)generateECBytes:(int8_t[])dataBytes numDataBytes:(int)numDataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
-  int toEncodeLen = numDataBytes + numEcBytesInBlock;
-  int toEncode[toEncodeLen];
++ (ZXByteArray *)generateECBytes:(ZXByteArray *)dataBytes numEcBytesInBlock:(int)numEcBytesInBlock {
+  int numDataBytes = dataBytes.length;
+  ZXIntArray *toEncode = [[ZXIntArray alloc] initWithLength:numDataBytes + numEcBytesInBlock];
   for (int i = 0; i < numDataBytes; i++) {
-    toEncode[i] = dataBytes[i] & 0xFF;
+    toEncode.array[i] = dataBytes.array[i] & 0xFF;
   }
-  for (int i = numDataBytes; i < toEncodeLen; i++) {
-    toEncode[i] = 0;
-  }
+  [[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] encode:toEncode ecBytes:numEcBytesInBlock];
 
-  [[[ZXReedSolomonEncoder alloc] initWithField:[ZXGenericGF QrCodeField256]] encode:toEncode toEncodeLen:toEncodeLen ecBytes:numEcBytesInBlock];
-
-  int8_t *ecBytes = (int8_t *)malloc(numEcBytesInBlock * sizeof(int8_t));
+  ZXByteArray *ecBytes = [[ZXByteArray alloc] initWithLength:numEcBytesInBlock];
   for (int i = 0; i < numEcBytesInBlock; i++) {
-    ecBytes[i] = (int8_t)toEncode[numDataBytes + i];
+    ecBytes.array[i] = (int8_t) toEncode.array[numDataBytes + i];
   }
 
   return ecBytes;

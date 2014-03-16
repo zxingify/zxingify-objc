@@ -16,6 +16,7 @@
 
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXPDF417DecodedBitStreamParser.h"
 #import "ZXPDF417ResultMetadata.h"
 
@@ -77,17 +78,17 @@ static NSArray *EXP900 = nil;
   EXP900 = [[NSArray alloc] initWithArray:exponents];
 }
 
-+ (ZXDecoderResult *)decode:(NSArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
++ (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
   if (!codewords) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  NSMutableString *result = [NSMutableString stringWithCapacity:codewords.count * 2];
+  NSMutableString *result = [NSMutableString stringWithCapacity:codewords.length * 2];
   // Get compaction mode
   int codeIndex = 1;
-  int code = [codewords[codeIndex++] intValue];
+  int code = codewords.array[codeIndex++];
   ZXPDF417ResultMetadata *resultMetadata = [[ZXPDF417ResultMetadata alloc] init];
-  while (codeIndex < [codewords[0] intValue]) {
+  while (codeIndex < codewords.array[0]) {
     switch (code) {
     case TEXT_COMPACTION_MODE_LATCH:
       codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:result];
@@ -124,8 +125,8 @@ static NSArray *EXP900 = nil;
       codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:result];
       break;
     }
-    if (codeIndex < [codewords count]) {
-      code = [codewords[codeIndex++] intValue];
+    if (codeIndex < codewords.length) {
+      code = codewords.array[codeIndex++];
     } else {
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -135,20 +136,19 @@ static NSArray *EXP900 = nil;
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
-  ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:NULL length:0 text:result byteSegments:nil ecLevel:ecLevel];
+  ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:nil text:result byteSegments:nil ecLevel:ecLevel];
   decoderResult.other = resultMetadata;
   return decoderResult;
 }
 
-+ (int)decodeMacroBlock:(NSArray *)codewords codeIndex:(int)codeIndex resultMetadata:(ZXPDF417ResultMetadata *)resultMetadata {
-  if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > [codewords[0] intValue]) {
++ (int)decodeMacroBlock:(ZXIntArray *)codewords codeIndex:(int)codeIndex resultMetadata:(ZXPDF417ResultMetadata *)resultMetadata {
+  if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords.array[0]) {
     // we must have at least two bytes left for the segment index
     return -1;
   }
-  int segmentIndexArray[NUMBER_OF_SEQUENCE_CODEWORDS];
-  memset(segmentIndexArray, 0, NUMBER_OF_SEQUENCE_CODEWORDS * sizeof(int));
+  ZXIntArray *segmentIndexArray = [[ZXIntArray alloc] initWithLength:NUMBER_OF_SEQUENCE_CODEWORDS];
   for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
-    segmentIndexArray[i] = [codewords[codeIndex] intValue];
+    segmentIndexArray.array[i] = codewords.array[codeIndex];
   }
   resultMetadata.segmentIndex = [[self decodeBase900toBase10:segmentIndexArray count:NUMBER_OF_SEQUENCE_CODEWORDS] intValue];
 
@@ -156,13 +156,13 @@ static NSArray *EXP900 = nil;
   codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:fileId];
   resultMetadata.fileId = [NSString stringWithString:fileId];
 
-  if ([codewords[codeIndex] intValue] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+  if (codewords.array[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
     codeIndex++;
     NSMutableArray *additionalOptionCodeWords = [NSMutableArray array];
 
     BOOL end = NO;
-    while ((codeIndex < [codewords[0] intValue]) && !end) {
-      int code = [codewords[codeIndex++] intValue];
+    while ((codeIndex < codewords.array[0]) && !end) {
+      int code = codewords.array[codeIndex++];
       if (code < TEXT_COMPACTION_MODE_LATCH) {
         [additionalOptionCodeWords addObject:@(code)];
       } else {
@@ -179,7 +179,7 @@ static NSArray *EXP900 = nil;
     }
 
     resultMetadata.optionalData = additionalOptionCodeWords;
-  } else if ([codewords[codeIndex] intValue] == MACRO_PDF417_TERMINATOR) {
+  } else if (codewords.array[codeIndex] == MACRO_PDF417_TERMINATOR) {
     resultMetadata.lastSegment = YES;
     codeIndex++;
   }
@@ -192,31 +192,25 @@ static NSArray *EXP900 = nil;
  * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as
  * well as selected control characters.
  */
-+ (int)textCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
-  int count = ([codewords[0] intValue] - codeIndex) << 1;
++ (int)textCompaction:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   // 2 character per codeword
-  int textCompactionData[count];
+  ZXIntArray *textCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) << 1];
   // Used to hold the byte compaction value if there is a mode shift
-  int byteCompactionData[count];
-
-  for (int i = 0; i < count; i++) {
-    textCompactionData[0] = 0;
-    byteCompactionData[0] = 0;
-  }
+  ZXIntArray *byteCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) << 1];
 
   int index = 0;
   BOOL end = NO;
-  while ((codeIndex < [codewords[0] intValue]) && !end) {
-    int code = [codewords[codeIndex++] intValue];
+  while ((codeIndex < codewords.array[0]) && !end) {
+    int code = codewords.array[codeIndex++];
     if (code < TEXT_COMPACTION_MODE_LATCH) {
-      textCompactionData[index] = code / 30;
-      textCompactionData[index + 1] = code % 30;
+      textCompactionData.array[index] = code / 30;
+      textCompactionData.array[index + 1] = code % 30;
       index += 2;
     } else {
       switch (code) {
       case TEXT_COMPACTION_MODE_LATCH:
         // reinitialize text compaction mode to alpha sub mode
-        textCompactionData[index++] = TEXT_COMPACTION_MODE_LATCH;
+        textCompactionData.array[index++] = TEXT_COMPACTION_MODE_LATCH;
         break;
       case BYTE_COMPACTION_MODE_LATCH:
         codeIndex--;
@@ -245,9 +239,9 @@ static NSArray *EXP900 = nil;
         // after which the mode shall revert to the prevailing sub-mode
         // of the Text Compaction mode. Codeword 913 is only available
         // in Text Compaction mode; its use is described in 5.4.2.4.
-        textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
-        code = [codewords[codeIndex++] intValue];
-        byteCompactionData[index] = code;
+        textCompactionData.array[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
+        code = codewords.array[codeIndex++];
+        byteCompactionData.array[index] = code;
         index++;
         break;
       case BYTE_COMPACTION_MODE_LATCH_6:
@@ -273,7 +267,7 @@ static NSArray *EXP900 = nil;
  * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
  * switches are defined in 5.4.2.3.
  */
-+ (void)decodeTextCompaction:(int *)textCompactionData byteCompactionData:(int *)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
++ (void)decodeTextCompaction:(ZXIntArray *)textCompactionData byteCompactionData:(ZXIntArray *)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
   // Beginning from an initial state of the Alpha sub-mode
   // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
   // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
@@ -282,7 +276,7 @@ static NSArray *EXP900 = nil;
   int priorToShiftMode = ALPHA;
   int i = 0;
   while (i < length) {
-    int subModeCh = textCompactionData[i];
+    int subModeCh = textCompactionData.array[i];
     unichar ch = 0;
     switch (subMode) {
       case ALPHA:
@@ -302,7 +296,7 @@ static NSArray *EXP900 = nil;
             priorToShiftMode = subMode;
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -327,7 +321,7 @@ static NSArray *EXP900 = nil;
             priorToShiftMode = subMode;
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -352,7 +346,7 @@ static NSArray *EXP900 = nil;
             priorToShiftMode = subMode;
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -367,7 +361,7 @@ static NSArray *EXP900 = nil;
           if (subModeCh == PAL) {
             subMode = ALPHA;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
-            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -399,7 +393,7 @@ static NSArray *EXP900 = nil;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             // PS before Shift-to-Byte is used as a padding character,
             // see 5.4.2.4 of the specification
-            [result appendFormat:@"%C", (unichar)byteCompactionData[i]];
+            [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -414,27 +408,26 @@ static NSArray *EXP900 = nil;
   }
 }
 
-
 /**
  * Byte Compaction mode (see 5.4.3) permits all 256 possible 8-bit byte values to be encoded.
  * This includes all ASCII characters value 0 to 127 inclusive and provides for international
  * character set support.
  */
-+ (int)byteCompaction:(int)mode codewords:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)byteCompaction:(int)mode codewords:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   if (mode == BYTE_COMPACTION_MODE_LATCH) {
     // Total number of Byte Compaction characters to be encoded
     // is not a multiple of 6
     int count = 0;
     long long value = 0;
-    int8_t decodedData[6] = {0, 0, 0, 0, 0, 0};
-    int byteCompactedCodewords[6] = {0, 0, 0, 0, 0, 0};
+    unichar decodedData[6] = {0, 0, 0, 0, 0, 0};
+    ZXIntArray *byteCompactedCodewords = [[ZXIntArray alloc] initWithLength:6];
     BOOL end = NO;
-    int nextCode = [codewords[codeIndex++] intValue];
-    while ((codeIndex < [codewords[0] intValue]) && !end) {
-      byteCompactedCodewords[count++] = nextCode;
+    int nextCode = codewords.array[codeIndex++];
+    while ((codeIndex < codewords.array[0]) && !end) {
+      byteCompactedCodewords.array[count++] = nextCode;
       // Base 900
       value = 900 * value + nextCode;
-      nextCode = [codewords[codeIndex++] intValue];
+      nextCode = codewords.array[codeIndex++];
       // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
       if (nextCode == TEXT_COMPACTION_MODE_LATCH ||
           nextCode == BYTE_COMPACTION_MODE_LATCH ||
@@ -450,25 +443,25 @@ static NSArray *EXP900 = nil;
           // Decode every 5 codewords
           // Convert to Base 256
           for (int j = 0; j < 6; ++j) {
-            decodedData[5 - j] = (int8_t) (value % 256);
+            decodedData[5 - j] = (unichar) (value % 256);
             value >>= 8;
           }
-          [result appendString:[[NSString alloc] initWithBytes:decodedData length:6 encoding:NSISOLatin1StringEncoding]];
+          [result appendString:[[NSString alloc] initWithCharacters:decodedData length:6]];
           count = 0;
         }
       }
     }
 
     // if the end of all codewords is reached the last codeword needs to be added
-    if (codeIndex == [codewords[0] intValue] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
-      byteCompactedCodewords[count++] = nextCode;
+    if (codeIndex == codewords.array[0] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
+      byteCompactedCodewords.array[count++] = nextCode;
     }
 
     // If Byte Compaction mode is invoked with codeword 901,
     // the last group of codewords is interpreted directly
     // as one byte per codeword, without compaction.
     for (int i = 0; i < count; i++) {
-      [result appendFormat:@"%C", (unichar)byteCompactedCodewords[i]];
+      [result appendFormat:@"%C", (unichar)byteCompactedCodewords.array[i]];
     }
   } else if (mode == BYTE_COMPACTION_MODE_LATCH_6) {
     // Total number of Byte Compaction characters to be encoded
@@ -476,8 +469,8 @@ static NSArray *EXP900 = nil;
     int count = 0;
     long long value = 0;
     BOOL end = NO;
-    while (codeIndex < [codewords[0] intValue] && !end) {
-      int code = [codewords[codeIndex++] intValue];
+    while (codeIndex < codewords.array[0] && !end) {
+      int code = codewords.array[codeIndex++];
       if (code < TEXT_COMPACTION_MODE_LATCH) {
         count++;
         // Base 900
@@ -513,20 +506,19 @@ static NSArray *EXP900 = nil;
 /**
  * Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.
  */
-+ (int)numericCompaction:(NSArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)numericCompaction:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   int count = 0;
   BOOL end = NO;
 
-  int numericCodewords[MAX_NUMERIC_CODEWORDS];
-  memset(numericCodewords, 0, MAX_NUMERIC_CODEWORDS * sizeof(int));
+  ZXIntArray *numericCodewords = [[ZXIntArray alloc] initWithLength:MAX_NUMERIC_CODEWORDS];
 
-  while (codeIndex < [codewords[0] intValue] && !end) {
-    int code = [codewords[codeIndex++] intValue];
-    if (codeIndex == [codewords[0] intValue]) {
+  while (codeIndex < codewords.array[0] && !end) {
+    int code = codewords.array[codeIndex++];
+    if (codeIndex == codewords.array[0]) {
       end = YES;
     }
     if (code < TEXT_COMPACTION_MODE_LATCH) {
-      numericCodewords[count] = code;
+      numericCodewords.array[count] = code;
       count++;
     } else {
       if (code == TEXT_COMPACTION_MODE_LATCH ||
@@ -590,10 +582,10 @@ static NSArray *EXP900 = nil;
    
    Remove leading 1 =>  Result is 000213298174000
  */
-+ (NSString *)decodeBase900toBase10:(int[])codewords count:(int)count {
++ (NSString *)decodeBase900toBase10:(ZXIntArray *)codewords count:(int)count {
   NSDecimalNumber *result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
-    result = [result decimalNumberByAdding:[EXP900[count - i - 1] decimalNumberByMultiplyingBy:[NSDecimalNumber decimalNumberWithDecimal:[@(codewords[i]) decimalValue]]]];
+    result = [result decimalNumberByAdding:[EXP900[count - i - 1] decimalNumberByMultiplyingBy:[NSDecimalNumber decimalNumberWithDecimal:[@(codewords.array[i]) decimalValue]]]];
   }
   NSString *resultString = [result stringValue];
   if (![resultString hasPrefix:@"1"]) {

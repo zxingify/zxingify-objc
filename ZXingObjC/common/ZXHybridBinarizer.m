@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
 #import "ZXHybridBinarizer.h"
+#import "ZXIntArray.h"
 
 // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
 // So this is the smallest dimension in each axis we can accept.
@@ -45,7 +47,7 @@ const int MIN_DYNAMIC_RANGE = 24;
   int width = source.width;
   int height = source.height;
   if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-    int8_t *_luminances = source.matrix;
+    ZXByteArray *luminances = source.matrix;
     int subWidth = width >> BLOCK_SIZE_POWER;
     if ((width & BLOCK_SIZE_MASK) != 0) {
       subWidth++;
@@ -54,18 +56,11 @@ const int MIN_DYNAMIC_RANGE = 24;
     if ((height & BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    int **blackPoints = [self calculateBlackPoints:_luminances subWidth:subWidth subHeight:subHeight width:width height:height];
+    NSArray *blackPoints = [self calculateBlackPoints:luminances subWidth:subWidth subHeight:subHeight width:width height:height];
 
     ZXBitMatrix *newMatrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
-    [self calculateThresholdForBlock:_luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
+    [self calculateThresholdForBlock:luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
     self.matrix = newMatrix;
-
-    free(_luminances);
-
-    for (int i = 0; i < subHeight; i++) {
-      free(blackPoints[i]);
-    }
-    free(blackPoints);
   } else {
     // If the image is too small, fall back to the global histogram approach.
     self.matrix = [super blackMatrixWithError:error];
@@ -82,12 +77,12 @@ const int MIN_DYNAMIC_RANGE = 24;
  * of the blocks around it. Also handles the corner cases (fractional blocks are computed based
  * on the last pixels in the row/column which are also used in the previous block).
  */
-- (void)calculateThresholdForBlock:(int8_t *)luminances
+- (void)calculateThresholdForBlock:(ZXByteArray *)luminances
                           subWidth:(int)subWidth
                          subHeight:(int)subHeight
                              width:(int)width
                             height:(int)height
-                       blackPoints:(int **)blackPoints
+                       blackPoints:(NSArray *)blackPoints
                             matrix:(ZXBitMatrix *)matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
@@ -105,8 +100,8 @@ const int MIN_DYNAMIC_RANGE = 24;
       int top = [self cap:y min:2 max:subHeight - 3];
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
-        int *blackRow = blackPoints[top + z];
-        sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
+        ZXIntArray *blackRow = blackPoints[top + z];
+        sum += blackRow.array[left - 2] + blackRow.array[left - 1] + blackRow.array[left] + blackRow.array[left + 1] + blackRow.array[left + 2];
       }
       int average = sum / 25;
       [self thresholdBlock:luminances xoffset:xoffset yoffset:yoffset threshold:average stride:width matrix:matrix];
@@ -121,7 +116,7 @@ const int MIN_DYNAMIC_RANGE = 24;
 /**
  * Applies a single threshold to a block of pixels.
  */
-- (void)thresholdBlock:(int8_t *)luminances
+- (void)thresholdBlock:(ZXByteArray *)luminances
                xoffset:(int)xoffset
                yoffset:(int)yoffset
              threshold:(int)threshold
@@ -130,7 +125,7 @@ const int MIN_DYNAMIC_RANGE = 24;
   for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride) {
     for (int x = 0; x < BLOCK_SIZE; x++) {
       // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0
-      if ((luminances[offset + x] & 0xFF) <= threshold) {
+      if ((luminances.array[offset + x] & 0xFF) <= threshold) {
         [matrix setX:xoffset + x y:yoffset + y];
       }
     }
@@ -142,14 +137,14 @@ const int MIN_DYNAMIC_RANGE = 24;
  * See the following thread for a discussion of this algorithm:
  *  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
  */
-- (int **)calculateBlackPoints:(int8_t *)_luminances
+- (NSArray *)calculateBlackPoints:(ZXByteArray *)luminances
                          subWidth:(int)subWidth
                         subHeight:(int)subHeight
                             width:(int)width
                            height:(int)height {
-  int **blackPoints = (int **)malloc(subHeight * sizeof(int *));
+  NSMutableArray *blackPoints = [NSMutableArray array];
   for (int y = 0; y < subHeight; y++) {
-    blackPoints[y] = (int *)malloc(subWidth * sizeof(int));
+    [blackPoints addObject:[[ZXIntArray alloc] initWithLength:subWidth]];
 
     int yoffset = y << BLOCK_SIZE_POWER;
     int maxYOffset = height - BLOCK_SIZE;
@@ -167,7 +162,7 @@ const int MIN_DYNAMIC_RANGE = 24;
       int max = 0;
       for (int yy = 0, offset = yoffset * width + xoffset; yy < BLOCK_SIZE; yy++, offset += width) {
         for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-          int pixel = _luminances[offset + xx] & 0xFF;
+          int pixel = luminances.array[offset + xx] & 0xFF;
           sum += pixel;
           // still looking for good contrast
           if (pixel < min) {
@@ -182,7 +177,7 @@ const int MIN_DYNAMIC_RANGE = 24;
           // finish the rest of the rows quickly
           for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
             for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-              sum += _luminances[offset + xx] & 0xFF;
+              sum += luminances.array[offset + xx] & 0xFF;
             }
           }
         }
@@ -207,14 +202,14 @@ const int MIN_DYNAMIC_RANGE = 24;
           // the boundaries is used for the interior.
 
           // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-          int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
-                                           blackPoints[y - 1][x - 1]) >> 2;
+          int averageNeighborBlackPoint = ([(ZXIntArray *)blackPoints[y - 1] array][x] + (2 * [(ZXIntArray *)blackPoints[y] array][x - 1]) +
+                                           [(ZXIntArray *)blackPoints[y - 1] array][x - 1]) >> 2;
           if (min < averageNeighborBlackPoint) {
             average = averageNeighborBlackPoint;
           }
         }
       }
-      blackPoints[y][x] = average;
+      [(ZXIntArray *)blackPoints[y] array][x] = average;
     }
   }
   return blackPoints;

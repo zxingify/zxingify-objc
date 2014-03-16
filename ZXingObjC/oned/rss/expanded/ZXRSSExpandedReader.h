@@ -24,9 +24,4 @@
 
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern isOddPattern:(BOOL)isOddPattern leftChar:(BOOL)leftChar;
 
-// for tests
-- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row;
-- (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;
-- (ZXExpandedPair *)retrieveNextPair:(ZXBitArray *)row previousPairs:(NSMutableArray *)previousPairs rowNumber:(int)rowNumber;
-
 @end

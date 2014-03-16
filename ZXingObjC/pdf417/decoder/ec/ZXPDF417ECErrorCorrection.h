@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+@class ZXIntArray;
+
 /**
  * PDF417 error correction implementation.
  *
  * This example <http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example>
  * is quite useful in understanding the algorithm.
  */
-
 @interface ZXPDF417ECErrorCorrection : NSObject
 
-- (int)decode:(NSMutableArray *)received numECCodewords:(int)numECCodewords erasures:(NSArray *)erasures;
+- (int)decode:(ZXIntArray *)received numECCodewords:(int)numECCodewords erasures:(ZXIntArray *)erasures;
 
 @end
