@@ -18,7 +18,6 @@
  * See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
  * defined by the QR code standard.
  */
-
 @interface ZXErrorCorrectionLevel : NSObject
 
 @property (nonatomic, assign, readonly) int bits;
@@ -26,6 +25,11 @@
 @property (nonatomic, assign, readonly) int ordinal;
 
 - (id)initWithOrdinal:(int)anOrdinal bits:(int)bits name:(NSString *)name;
+
+/**
+ * @param bits int containing the two bits encoding a QR Code's error correction level
+ * @return ErrorCorrectionLevel representing the encoded error correction level
+ */
 + (ZXErrorCorrectionLevel *)forBits:(int)bits;
 
 /**

@@ -27,9 +27,6 @@
   return self;
 }
 
-/**
- * Apply the result points' order correction due to mirroring.
- */
 - (void)applyMirroredCorrection:(NSMutableArray *)points {
   if (!self.mirrored || [points count] < 3) {
     return;

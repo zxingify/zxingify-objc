@@ -41,7 +41,7 @@
   int rowOffset = (int)NSMaxRange(startRange);
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:ZX_UPC_EAN_PATTERNS_L_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
@@ -51,14 +51,14 @@
     }
   }
 
-  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
+  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:ZX_UPC_EAN_MIDDLE_PATTERN patternLen:ZX_UPC_EAN_MIDDLE_PATTERN_LEN error:error];
   if (middleRange.location == NSNotFound) {
     return -1;
   }
   rowOffset = (int)NSMaxRange(middleRange);
 
   for (int x = 0; x < 4 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:ZX_UPC_EAN_PATTERNS_L_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }

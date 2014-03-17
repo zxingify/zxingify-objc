@@ -40,29 +40,29 @@
   ZXIntArray *widths = [[ZXIntArray alloc] initWithLength:9];
   int codeWidth = 24 + 1 + length;
   for (int i = 0; i < length; i++) {
-    NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    NSUInteger indexInString = [ZX_CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     if (indexInString == NSNotFound) {
       [NSException raise:NSInvalidArgumentException format:@"Bad contents: %@", contents];
     }
-    [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
+    [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     for (int j = 0; j < widths.length; j++) {
       codeWidth += widths.array[j];
     }
   }
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:codeWidth];
-  [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
+  [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
   int pos = [self appendPattern:result pos:0 pattern:widths.array patternLen:widths.length startColor:YES];
   ZXIntArray *narrowWhite = [[ZXIntArray alloc] initWithInts:1, -1];
   pos += [self appendPattern:result pos:pos pattern:narrowWhite.array patternLen:narrowWhite.length startColor:NO];
   //append next character to bytematrix
   for (int i = length-1; i >= 0; i--) {
-    NSUInteger indexInString = [CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
-    [self toIntArray:CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
+    NSUInteger indexInString = [ZX_CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
     pos += [self appendPattern:result pos:pos pattern:narrowWhite.array patternLen:narrowWhite.length startColor:NO];
   }
 
-  [self toIntArray:CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
+  [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];
   [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
   return result;
 }

@@ -16,6 +16,12 @@
 
 #import "ZXQRCodeEncoderTestCase.h"
 
+@interface ZXQRCodeEncoder (PrivateMethods)
+
++ (ZXMode *)chooseMode:(NSString *)content;
+
+@end
+
 @implementation ZXQRCodeEncoderTestCase
 
 - (void)testGetAlphanumericCode {
@@ -195,34 +201,34 @@
   // Should use appendNumericBytes.
   // 1 = 01 = 0001 in 4 bits.
   ZXBitArray *bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendBytes:@"1" mode:[ZXMode numericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"1" mode:[ZXMode numericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   NSString *expected = @" ...X";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Should use appendAlphanumericBytes.
   // A = 10 = 0xa = 001010 in 6 bits
   bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendBytes:@"A" mode:[ZXMode alphanumericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"A" mode:[ZXMode alphanumericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" ..X.X.";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
   NSError *error;
-  if ([ZXQRCodeEncoder appendBytes:@"a" mode:[ZXMode alphanumericMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:&error] ||
+  if ([ZXQRCodeEncoder appendBytes:@"a" mode:[ZXMode alphanumericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:&error] ||
       error.code != ZXWriterError) {
     XCTFail(@"Expected ZXWriterError");
   }
   // Should use append8BitBytes.
   // 0x61, 0x62, 0x63
   bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendBytes:@"abc" mode:[ZXMode byteMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"abc" mode:[ZXMode byteMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" .XX....X .XX...X. .XX...XX";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
-  [ZXQRCodeEncoder appendBytes:@"\0" mode:[ZXMode byteMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"\0" mode:[ZXMode byteMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   // Should use appendKanjiBytes.
   // 0x93, 0x5f
   bits = [[ZXBitArray alloc] init];
   ZXByteArray *bytes = [[ZXByteArray alloc] initWithBytes:0x93, 0x5f, -1];
-  [ZXQRCodeEncoder appendBytes:[self shiftJISString:bytes] mode:[ZXMode kanjiMode] bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:[self shiftJISString:bytes] mode:[ZXMode kanjiMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   expected = @" .XX.XX.. XXXXX";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
 }
@@ -422,12 +428,12 @@
 - (void)testAppend8BitBytes {
   // 0x61, 0x62, 0x63
   ZXBitArray *bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder append8BitBytes:@"abc" bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING];
+  [ZXQRCodeEncoder append8BitBytes:@"abc" bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING];
   NSString *expected = @" .XX....X .XX...X. .XX...XX";
   XCTAssertEqualObjects([bits description], expected, @"Expected bits to equal %@", expected);
   // Empty.
   bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder append8BitBytes:@"" bits:bits encoding:DEFAULT_BYTE_MODE_ENCODING];
+  [ZXQRCodeEncoder append8BitBytes:@"" bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING];
   XCTAssertEqualObjects([bits description], @"", @"Expected bits to equal \"\"");
 }
 

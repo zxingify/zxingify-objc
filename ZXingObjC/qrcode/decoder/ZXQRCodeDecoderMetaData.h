@@ -23,6 +23,12 @@
 @property (nonatomic, assign, readonly) BOOL mirrored;
 
 - (id)initWithMirrored:(BOOL)mirrored;
+
+/**
+ * Apply the result points' order correction due to mirroring.
+ *
+ * @param points Array of points to apply mirror correction to.
+ */
 - (void)applyMirroredCorrection:(NSMutableArray *)points;
 
 @end

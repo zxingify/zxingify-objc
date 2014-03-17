@@ -72,10 +72,8 @@
 // ZXingObjC/client
 #import "ZXCapture.h"
 #import "ZXCaptureDelegate.h"
-#import "ZXCaptureView.h"
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXImage.h"
-#import "ZXView.h"
 
 // ZXingObjC/common/detector
 #import "ZXMathUtils.h"
@@ -98,7 +96,6 @@
 #import "ZXDecoderResult.h"
 #import "ZXDefaultGridSampler.h"
 #import "ZXDetectorResult.h"
-#import "ZXECI.h"
 #import "ZXGlobalHistogramBinarizer.h"
 #import "ZXGridSampler.h"
 #import "ZXHybridBinarizer.h"

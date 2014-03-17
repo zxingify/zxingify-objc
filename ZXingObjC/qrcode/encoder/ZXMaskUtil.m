@@ -19,26 +19,17 @@
 #import "ZXQRCode.h"
 
 // Penalty weights from section 6.8.2.1
-const int N1 = 3;
-const int N2 = 3;
-const int N3 = 40;
-const int N4 = 10;
+const int ZX_N1 = 3;
+const int ZX_N2 = 3;
+const int ZX_N3 = 40;
+const int ZX_N4 = 10;
 
 @implementation ZXMaskUtil
 
-/**
- * Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
- * give penalty to them. Example: 00000 or 11111.
- */
 + (int)applyMaskPenaltyRule1:(ZXByteMatrix *)matrix {
   return [self applyMaskPenaltyRule1Internal:matrix isHorizontal:YES] + [self applyMaskPenaltyRule1Internal:matrix isHorizontal:NO];
 }
 
-/**
- * Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
- * penalty to them. This is actually equivalent to the spec's rule, which is to find MxN blocks and give a
- * penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
- */
 + (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix {
   int penalty = 0;
   int8_t **array = matrix.array;
@@ -54,14 +45,9 @@ const int N4 = 10;
     }
   }
 
-  return N2 * penalty;
+  return ZX_N2 * penalty;
 }
 
-/**
- * Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
- * 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
- * penalties twice (i.e. 40 * 2).
- */
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
   int penalty = 0;
   int8_t **array = matrix.array;
@@ -88,7 +74,7 @@ const int N4 = 10;
             array[y][x -  2] == 0 &&
             array[y][x -  3] == 0 &&
             array[y][x -  4] == 0))) {
-             penalty += N3;
+             penalty += ZX_N3;
            }
       if (y + 6 < height &&
           array[y][x] == 1  &&
@@ -108,17 +94,13 @@ const int N4 = 10;
             array[y -  2][x] == 0 &&
             array[y -  3][x] == 0 &&
             array[y -  4][x] == 0))) {
-             penalty += N3;
+             penalty += ZX_N3;
            }
     }
   }
   return penalty;
 }
 
-/**
- * Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give
- * penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
- */
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
   int numDarkCells = 0;
   int8_t **array = matrix.array;
@@ -135,13 +117,9 @@ const int N4 = 10;
   int numTotalCells = [matrix height] * [matrix width];
   double darkRatio = (double) numDarkCells / numTotalCells;
   int fivePercentVariances = abs((int)(darkRatio * 100 - 50)) / 5; // * 100.0 / 5.0
-  return fivePercentVariances * N4;
+  return fivePercentVariances * ZX_N4;
 }
 
-/**
- * Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
- * pattern conditions.
- */
 + (BOOL)dataMaskBit:(int)maskPattern x:(int)x y:(int)y {
   int intermediate;
   int temp;
@@ -198,14 +176,14 @@ const int N4 = 10;
         numSameBitCells++;
       } else {
         if (numSameBitCells >= 5) {
-          penalty += N1 + (numSameBitCells - 5);
+          penalty += ZX_N1 + (numSameBitCells - 5);
         }
         numSameBitCells = 1;  // Include the cell itself.
         prevBit = bit;
       }
     }
     if (numSameBitCells >= 5) {
-      penalty += N1 + (numSameBitCells - 5);
+      penalty += ZX_N1 + (numSameBitCells - 5);
     }
   }
   return penalty;

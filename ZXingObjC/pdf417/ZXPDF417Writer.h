@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXCompaction.h"
 #import "ZXWriter.h"
 
 @interface ZXPDF417Writer : NSObject <ZXWriter>

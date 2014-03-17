@@ -18,11 +18,8 @@
 #import "ZXCodaBarReader.h"
 #import "ZXCodaBarWriter.h"
 
-const int START_END_CHARS_LEN = 4;
-const unichar START_END_CHARS[START_END_CHARS_LEN] = {'A', 'B', 'C', 'D'};
-
-const int ALT_START_END_CHARS_LEN = 4;
-const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'};
+const unichar ZX_CODA_START_END_CHARS[] = {'A', 'B', 'C', 'D'};
+const unichar ZX_CODA_ALT_START_END_CHARS[] = {'T', 'N', '*', 'E'};
 
 @implementation ZXCodaBarWriter
 
@@ -37,15 +34,15 @@ const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'
   unichar firstChar = [[contents uppercaseString] characterAtIndex:0];
   unichar lastChar = [[contents uppercaseString] characterAtIndex:contents.length - 1];
   BOOL startsEndsNormal =
-    [ZXCodaBarReader arrayContains:START_END_CHARS length:START_END_CHARS_LEN key:firstChar] &&
-    [ZXCodaBarReader arrayContains:START_END_CHARS length:START_END_CHARS_LEN key:lastChar];
+    [ZXCodaBarReader arrayContains:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar) key:firstChar] &&
+    [ZXCodaBarReader arrayContains:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar) key:lastChar];
   BOOL startsEndsAlt =
-    [ZXCodaBarReader arrayContains:ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:firstChar] &&
-    [ZXCodaBarReader arrayContains:ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN key:lastChar];
+    [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:firstChar] &&
+    [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:lastChar];
   if (!(startsEndsNormal || startsEndsAlt)) {
     NSString *reason = [NSString stringWithFormat:@"Codabar should start/end with %@, or start/end with %@",
-                        [NSString stringWithCharacters:START_END_CHARS length:START_END_CHARS_LEN],
-                        [NSString stringWithCharacters:ALT_START_END_CHARS length:ALT_START_END_CHARS_LEN]];
+                        [NSString stringWithCharacters:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar)],
+                        [NSString stringWithCharacters:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar)]];
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:reason
                                  userInfo:nil];
@@ -91,10 +88,10 @@ const unichar ALT_START_END_CHARS[ALT_START_END_CHARS_LEN] = {'T', 'N', '*', 'E'
       }
     }
     int code = 0;
-    for (int i = 0; i < CODA_ALPHABET_LEN; i++) {
+    for (int i = 0; i < ZX_CODA_ALPHABET_LEN; i++) {
       // Found any, because I checked above.
-      if (c == CODA_ALPHABET[i]) {
-        code = CODA_CHARACTER_ENCODINGS[i];
+      if (c == ZX_CODA_ALPHABET[i]) {
+        code = ZX_CODA_CHARACTER_ENCODINGS[i];
         break;
       }
     }

@@ -50,10 +50,15 @@
 }
 
 /**
- * Creates the version object based on the dimension of the original bit matrix from 
+ * Creates the version object based on the dimension of the original bit matrix from
  * the datamatrix code.
- * 
- * See ISO 16022:2006 Table 7 - ECC 200 symbol attributes
+ *
+ * See ISO 16022:2006 Table 7 - ECC 200 symbol attributes<
+ *
+ * @param bitMatrix Original ZXBitMatrix including alignment patterns
+ * @return ZXDatamatrixVersion encapsulating the Data Matrix Code's "version"
+ *  or nil if the dimensions of the mapping matrix are not valid
+ *  Data Matrix dimensions.
  */
 - (ZXDataMatrixVersion *)readVersion:(ZXBitMatrix *)bitMatrix {
   int numRows = bitMatrix.height;
@@ -126,9 +131,14 @@
   return result;
 }
 
-
 /**
  * Reads a bit of the mapping matrix accounting for boundary wrapping.
+ *
+ * @param row Row to read in the mapping matrix
+ * @param column Column to read in the mapping matrix
+ * @param numRows Number of rows in the mapping matrix
+ * @param numColumns Number of columns in the mapping matrix
+ * @return value of the given bit in the mapping matrix
  */
 - (BOOL)readModule:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns {
   if (row < 0) {
@@ -143,11 +153,16 @@
   return [self.mappingBitMatrix getX:column y:row];
 }
 
-
 /**
  * Reads the 8 bits of the standard Utah-shaped pattern.
- * 
+ *
  * See ISO 16022:2006, 5.8.1 Figure 6
+ *
+ * @param row Current row in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
+ * @param column Current column in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
+ * @param numRows Number of rows in the mapping matrix
+ * @param numColumns Number of columns in the mapping matrix
+ * @return byte from the utah shape
  */
 - (int)readUtah:(int)row column:(int)column numRows:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
@@ -185,11 +200,14 @@
   return currentByte;
 }
 
-
 /**
  * Reads the 8 bits of the special corner condition 1.
- * 
+ *
  * See ISO 16022:2006, Figure F.3
+ *
+ * @param numRows Number of rows in the mapping matrix
+ * @param numColumns Number of columns in the mapping matrix
+ * @return byte from the Corner condition 1
  */
 - (int)readCorner1:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
@@ -227,11 +245,14 @@
   return currentByte;
 }
 
-
 /**
  * Reads the 8 bits of the special corner condition 2.
- * 
+ *
  * See ISO 16022:2006, Figure F.4
+ *
+ * @param numRows Number of rows in the mapping matrix
+ * @param numColumns Number of columns in the mapping matrix
+ * @return byte from the Corner condition 2
  */
 - (int)readCorner2:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
@@ -269,11 +290,14 @@
   return currentByte;
 }
 
-
 /**
  * Reads the 8 bits of the special corner condition 3.
- * 
+ *
  * See ISO 16022:2006, Figure F.5
+ *
+ * @param numRows Number of rows in the mapping matrix
+ * @param numColumns Number of columns in the mapping matrix
+ * @return byte from the Corner condition 3
  */
 - (int)readCorner3:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
@@ -311,11 +335,14 @@
   return currentByte;
 }
 
-
 /**
  * Reads the 8 bits of the special corner condition 4.
- * 
+ *
  * See ISO 16022:2006, Figure F.6
+ *
+ * @param numRows Number of rows in the mapping matrix
+ * @param numColumns Number of columns in the mapping matrix
+ * @return byte from the Corner condition 4
  */
 - (int)readCorner4:(int)numRows numColumns:(int)numColumns {
   int currentByte = 0;
@@ -353,10 +380,12 @@
   return currentByte;
 }
 
-
 /**
- * Extracts the data region from a {@link BitMatrix} that contains
+ * Extracts the data region from a ZXBitMatrix that contains
  * alignment patterns.
+ *
+ * @param bitMatrix Original ZXBitMatrix with alignment patterns
+ * @return BitMatrix that has the alignment patterns removed
  */
 - (ZXBitMatrix *)extractDataRegion:(ZXBitMatrix *)bitMatrix {
   int symbolSizeRows = self.version.symbolSizeRows;

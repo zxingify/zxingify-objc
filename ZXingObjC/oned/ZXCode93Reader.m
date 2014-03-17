@@ -21,14 +21,16 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-const NSString *CODE93_ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
-const char CODE93_ALPHABET[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
+NSString *ZX_CODE93_ALPHABET_STRING = nil;
+const unichar ZX_CODE93_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
+  'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+  'X', 'Y', 'Z', '-', '.', ' ', '$', '/', '+', '%', 'a', 'b', 'c', 'd', '*'};
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars.
  * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
  */
-const int CODE93_CHARACTER_ENCODINGS[48] = {
+const int ZX_CODE93_CHARACTER_ENCODINGS[] = {
   0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
   0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
   0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
@@ -37,7 +39,7 @@ const int CODE93_CHARACTER_ENCODINGS[48] = {
   0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
 };
 
-const int CODE93_ASTERISK_ENCODING = 0x15E;
+const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
@@ -46,6 +48,11 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 @end
 
 @implementation ZXCode93Reader
+
++ (void)initialize {
+  ZX_CODE93_ALPHABET_STRING = [[NSString alloc] initWithCharacters:ZX_CODE93_ALPHABET
+                                                            length:sizeof(ZX_CODE93_ALPHABET) / sizeof(unichar)];
+}
 
 - (id)init {
   if (self = [super init]) {
@@ -131,7 +138,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   int width = row.size;
   int rowOffset = [row nextSet:0];
 
-  memset(self.counters.array, 0, self.counters.length * sizeof(int32_t));
+  [self.counters clear];
   ZXIntArray *theCounters = self.counters;
   int patternStart = rowOffset;
   BOOL isWhite = NO;
@@ -143,7 +150,7 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
       theCounters.array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self toPattern:theCounters] == CODE93_ASTERISK_ENCODING) {
+        if ([self toPattern:theCounters] == ZX_CODE93_ASTERISK_ENCODING) {
           return [[ZXIntArray alloc] initWithInts:patternStart, i, -1];
         }
         patternStart += theCounters.array[0] + theCounters.array[1];
@@ -172,8 +179,8 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   }
   int pattern = 0;
   for (int i = 0; i < max; i++) {
-    int scaledShifted = (counters.array[i] << INTEGER_MATH_SHIFT) * 9 / sum;
-    int scaledUnshifted = scaledShifted >> INTEGER_MATH_SHIFT;
+    int scaledShifted = (counters.array[i] << ZX_ONED_INTEGER_MATH_SHIFT) * 9 / sum;
+    int scaledUnshifted = scaledShifted >> ZX_ONED_INTEGER_MATH_SHIFT;
     if ((scaledShifted & 0xFF) > 0x7F) {
       scaledUnshifted++;
     }
@@ -192,9 +199,9 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
 }
 
 - (unichar)patternToChar:(int)pattern {
-  for (int i = 0; i < sizeof(CODE93_CHARACTER_ENCODINGS) / sizeof(int); i++) {
-    if (CODE93_CHARACTER_ENCODINGS[i] == pattern) {
-      return CODE93_ALPHABET[i];
+  for (int i = 0; i < sizeof(ZX_CODE93_CHARACTER_ENCODINGS) / sizeof(int); i++) {
+    if (ZX_CODE93_CHARACTER_ENCODINGS[i] == pattern) {
+      return ZX_CODE93_ALPHABET[i];
     }
   }
 
@@ -269,13 +276,13 @@ const int CODE93_ASTERISK_ENCODING = 0x15E;
   int total = 0;
 
   for (int i = checkPosition - 1; i >= 0; i--) {
-    total += weight * [CODE93_ALPHABET_STRING rangeOfString:[NSString stringWithFormat:@"%C", [result characterAtIndex:i]]].location;
+    total += weight * [ZX_CODE93_ALPHABET_STRING rangeOfString:[NSString stringWithFormat:@"%C", [result characterAtIndex:i]]].location;
     if (++weight > weightMax) {
       weight = 1;
     }
   }
 
-  if ([result characterAtIndex:checkPosition] != CODE93_ALPHABET[total % 47]) {
+  if ([result characterAtIndex:checkPosition] != ZX_CODE93_ALPHABET[total % 47]) {
     if (error) *error = ChecksumErrorInstance();
     return NO;
   }

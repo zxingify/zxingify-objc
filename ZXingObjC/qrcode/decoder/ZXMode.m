@@ -160,9 +160,6 @@
   return thisMode;
 }
 
-/**
- * See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
- */
 + (ZXMode *)hanziMode {
   static ZXMode *thisMode = nil;
   static dispatch_once_t onceToken;

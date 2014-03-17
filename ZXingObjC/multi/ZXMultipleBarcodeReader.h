@@ -17,12 +17,11 @@
 #import "ZXBinaryBitmap.h"
 #import "ZXResult.h"
 
+@class ZXDecodeHints;
+
 /**
  * Implementation of this interface attempt to read several barcodes from one image.
  */
-
-@class ZXDecodeHints;
-
 @protocol ZXMultipleBarcodeReader <NSObject>
 
 - (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image error:(NSError **)error;

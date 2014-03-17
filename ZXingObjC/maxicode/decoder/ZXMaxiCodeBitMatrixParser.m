@@ -19,7 +19,7 @@
 #import "ZXErrors.h"
 #import "ZXMaxiCodeBitMatrixParser.h"
 
-const int BITNR[33][30] = {
+const int ZX_BITNR[33][30] = {
   {121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2},
   {123,122,129,128,135,134,141,140,147,146,153,152,159,158,165,164,171,170,177,176,183,182,189,188,195,194,201,200,816, -3},
   {125,124,131,130,137,136,143,142,149,148,155,154,161,160,167,166,173,172,179,178,185,184,191,190,197,196,203,202,818,817},
@@ -76,7 +76,7 @@ const int BITNR[33][30] = {
   int height = self.bitMatrix.height;
   int width = self.bitMatrix.width;
   for (int y = 0; y < height; y++) {
-    int *bitnrRow = (int *)BITNR[y];
+    int *bitnrRow = (int *)ZX_BITNR[y];
     for (int x = 0; x < width; x++) {
       int bit = bitnrRow[x];
       if (bit >= 0 && [self.bitMatrix getX:x y:y]) {

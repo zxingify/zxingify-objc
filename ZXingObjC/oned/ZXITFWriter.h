@@ -17,9 +17,8 @@
 #import "ZXOneDimensionalCodeWriter.h"
 
 /**
- * This object renders a ITF code as a {@link BitMatrix}.
+ * This object renders a ITF code as a ZXBitMatrix.
  */
-
 @interface ZXITFWriter : ZXOneDimensionalCodeWriter
 
 @end

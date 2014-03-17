@@ -82,18 +82,18 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
   ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
 }
 
+- (ZXParsedResult *)parse:(ZXResult *)result {
+  @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                               userInfo:nil];
+}
+
 + (NSString *)massagedText:(ZXResult *)result {
   NSString *text = result.text;
   if (text.length > 0 && [text characterAtIndex:0] == BYTE_ORDER_MARK) {
     text = [text substringFromIndex:1];
   }
   return text;
-}
-
-- (ZXParsedResult *)parse:(ZXResult *)result {
-  @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                               userInfo:nil];
 }
 
 + (ZXParsedResult *)parseResult:(ZXResult *)theResult {
@@ -268,19 +268,22 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     if (i == NSNotFound) {
       break;
     }
-    i += [prefix length];
-    NSUInteger start = i;
+    i += [prefix length]; // Skip past this prefix we found to start
+    NSUInteger start = i; // Found the start of a match here
     BOOL more = YES;
     while (more) {
       i = [rawText rangeOfString:[NSString stringWithFormat:@"%C", endChar] options:NSLiteralSearch range:NSMakeRange(i, [rawText length] - i)].location;
       if (i == NSNotFound) {
+        // No terminating end character? uh, done. Set i such that loop terminates and break
         i = [rawText length];
         more = NO;
       } else if ([rawText characterAtIndex:i - 1] == '\\') {
+        // semicolon was escaped so continue
         i++;
       } else {
+        // found a match
         if (matches == nil) {
-          matches = [NSMutableArray arrayWithCapacity:3];
+          matches = [NSMutableArray arrayWithCapacity:3]; // lazy init
         }
         NSString *element = [self unescapeBackslash:[rawText substringWithRange:NSMakeRange(start, i - start)]];
         if (trim) {

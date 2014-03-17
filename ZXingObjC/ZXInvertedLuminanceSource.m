@@ -66,7 +66,7 @@
 }
 
 /**
- * @return original delegate {@link LuminanceSource} since invert undoes itself
+ * @return original delegate ZXLuminanceSource since invert undoes itself
  */
 - (ZXLuminanceSource *)invert {
   return self.delegate;

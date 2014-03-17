@@ -20,7 +20,6 @@
 /**
  * 000: mask bits for which (x + y) mod 2 == 0
  */
-
 @interface ZXDataMask000 : ZXDataMask
 
 @end
@@ -37,7 +36,6 @@
 /**
  * 001: mask bits for which x mod 2 == 0
  */
-
 @interface ZXDataMask001 : ZXDataMask
 
 @end
@@ -54,7 +52,6 @@
 /**
  * 010: mask bits for which y mod 3 == 0
  */
-
 @interface ZXDataMask010 : ZXDataMask
 
 @end
@@ -71,7 +68,6 @@
 /**
  * 011: mask bits for which (x + y) mod 3 == 0
  */
-
 @interface ZXDataMask011 : ZXDataMask
 
 @end
@@ -88,7 +84,6 @@
 /**
  * 100: mask bits for which (x/2 + y/3) mod 2 == 0
  */
-
 @interface ZXDataMask100 : ZXDataMask
 
 @end
@@ -105,7 +100,6 @@
 /**
  * 101: mask bits for which xy mod 2 + xy mod 3 == 0
  */
-
 @interface ZXDataMask101 : ZXDataMask
 
 @end
@@ -123,7 +117,6 @@
 /**
  * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
  */
-
 @interface ZXDataMask110 : ZXDataMask
 
 @end
@@ -141,7 +134,6 @@
 /**
  * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
  */
-
 @interface ZXDataMask111 : ZXDataMask
 
 @end
@@ -157,6 +149,9 @@
 
 @implementation ZXDataMask
 
+/**
+ * See ISO 18004:2006 6.8.1
+ */
 static NSArray *DATA_MASKS = nil;
 
 /**
@@ -182,9 +177,6 @@ static NSArray *DATA_MASKS = nil;
 
 + (ZXDataMask *)forReference:(int)reference {
   if (!DATA_MASKS) {
-    /**
-     * See ISO 18004:2006 6.8.1
-     */
     DATA_MASKS = @[[[ZXDataMask000 alloc] init],
                    [[ZXDataMask001 alloc] init],
                    [[ZXDataMask010 alloc] init],
@@ -196,7 +188,7 @@ static NSArray *DATA_MASKS = nil;
   }
 
   if (reference < 0 || reference > 7) {
-    [NSException raise:NSInvalidArgumentException  format:@"Invalid reference value"];
+    [NSException raise:NSInvalidArgumentException format:@"Invalid reference value"];
   }
   return DATA_MASKS[reference];
 }

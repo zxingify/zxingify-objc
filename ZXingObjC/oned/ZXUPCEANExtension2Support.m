@@ -69,7 +69,7 @@
   int checkParity = 0;
 
   for (int x = 0; x < 2 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
@@ -100,6 +100,11 @@
   return rowOffset;
 }
 
+/**
+ * @param raw raw content of extension
+ * @return formatted interpretation of raw content as a NSDictionary mapping
+ *  one ZXResultMetadataType to appropriate value, or nil if not known
+ */
 - (NSMutableDictionary *)parseExtensionString:(NSString *)raw {
   if (raw.length != 2) {
     return nil;

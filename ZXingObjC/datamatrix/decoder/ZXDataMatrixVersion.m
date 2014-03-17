@@ -79,9 +79,6 @@ static NSArray *VERSIONS = nil;
   return self;
 }
 
-/**
- * Deduces version information from Data Matrix dimensions.
- */
 + (ZXDataMatrixVersion *)versionForDimensions:(int)numRows numColumns:(int)numColumns {
   if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
     return nil;
@@ -99,7 +96,6 @@ static NSArray *VERSIONS = nil;
 - (NSString *)description {
   return [@(self.versionNumber) stringValue];
 }
-
 
 /**
  * See ISO 16022:2006 5.5.1 Table 7

@@ -16,6 +16,9 @@
 
 #import "ZXOneDimensionalCodeWriter.h"
 
+/**
+ * This class renders CodaBar as ZXBoolArray.
+ */
 @interface ZXCodaBarWriter : ZXOneDimensionalCodeWriter
 
 @end

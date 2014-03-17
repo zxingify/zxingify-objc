@@ -19,7 +19,7 @@
 #import "ZXMode.h"
 #import "ZXQRCode.h"
 
-int const NUM_MASK_PATTERNS = 8;
+const int ZX_NUM_MASK_PATTERNS = 8;
 
 @implementation ZXQRCode
 
@@ -52,7 +52,7 @@ int const NUM_MASK_PATTERNS = 8;
 
 // Check if "mask_pattern" is valid.
 + (BOOL)isValidMaskPattern:(int)maskPattern {
-  return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
+  return maskPattern >= 0 && maskPattern < ZX_NUM_MASK_PATTERNS;
 }
 
 @end

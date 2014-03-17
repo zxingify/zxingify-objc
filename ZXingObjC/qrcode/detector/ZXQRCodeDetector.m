@@ -23,6 +23,7 @@
 #import "ZXFinderPatternFinder.h"
 #import "ZXFinderPatternInfo.h"
 #import "ZXGridSampler.h"
+#import "ZXIntArray.h"
 #import "ZXMathUtils.h"
 #import "ZXPerspectiveTransform.h"
 #import "ZXQRCodeDetector.h"
@@ -47,16 +48,10 @@
   return self;
 }
 
-/**
- * Detects a QR Code in an image, simply.
- */
 - (ZXDetectorResult *)detectWithError:(NSError **)error {
   return [self detect:nil error:error];
 }
 
-/**
- * Detects a QR Code in an image, simply.
- */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
   self.resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
@@ -92,7 +87,7 @@
   int modulesBetweenFPCenters = [provisionalVersion dimensionForVersion] - 7;
 
   ZXAlignmentPattern *alignmentPattern = nil;
-  if ([[provisionalVersion alignmentPatternCenters] count] > 0) {
+  if (provisionalVersion.alignmentPatternCenters.length > 0) {
     float bottomRightX = [topRight x] - [topLeft x] + [bottomLeft x];
     float bottomRightY = [topRight y] - [topLeft y] + [bottomLeft y];
 
@@ -143,6 +138,7 @@
     sourceBottomRightX = dimMinusThree;
     sourceBottomRightY = dimMinusThree;
   }
+
   return [ZXPerspectiveTransform quadrilateralToQuadrilateral:3.5f y0:3.5f
                                                            x1:dimMinusThree y1:3.5f
                                                            x2:sourceBottomRightX y2:sourceBottomRightY
@@ -189,6 +185,11 @@
   return ([self calculateModuleSizeOneWay:topLeft otherPattern:topRight] + [self calculateModuleSizeOneWay:topLeft otherPattern:bottomLeft]) / 2.0f;
 }
 
+/**
+ * Estimates module size based on two finder patterns -- it uses
+ * sizeOfBlackWhiteBlackRunBothWays:fromY:toX:toY: to figure the
+ * width of each, measuring along the axis between their centers.
+ */
 - (float)calculateModuleSizeOneWay:(ZXResultPoint *)pattern otherPattern:(ZXResultPoint *)otherPattern {
   float moduleSizeEst1 = [self sizeOfBlackWhiteBlackRunBothWays:(int)[pattern x] fromY:(int)[pattern y] toX:(int)[otherPattern x] toY:(int)[otherPattern y]];
   float moduleSizeEst2 = [self sizeOfBlackWhiteBlackRunBothWays:(int)[otherPattern x] fromY:(int)[otherPattern y] toX:(int)[pattern x] toY:(int)[pattern y]];
@@ -201,6 +202,11 @@
   return (moduleSizeEst1 + moduleSizeEst2) / 14.0f;
 }
 
+/**
+ * See sizeOfBlackWhiteBlackRun:fromY:toX:toY: computes the total width of
+ * a finder pattern by looking for a black-white-black run from the center in the direction
+ * of another point (another finder pattern center), and in the opposite direction too.</p>
+ */
 - (float)sizeOfBlackWhiteBlackRunBothWays:(int)fromX fromY:(int)fromY toX:(int)toX toY:(int)toY {
   float result = [self sizeOfBlackWhiteBlackRun:fromX fromY:fromY toX:toX toY:toY];
 
@@ -296,10 +302,6 @@
   return NAN;
 }
 
-/**
- * Attempts to locate an alignment pattern in a limited region of the image, which is
- * guessed to contain it. This method uses ZXAlignmentPattern.
- */
 - (ZXAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor error:(NSError **)error {
   int allowance = (int)(allowanceFactor * overallEstModuleSize);
   int alignmentAreaLeftX = MAX(0, estAlignmentX - allowance);

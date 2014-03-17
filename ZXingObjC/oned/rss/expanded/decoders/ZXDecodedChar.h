@@ -16,7 +16,7 @@
 
 #import "ZXDecodedObject.h"
 
-extern unichar const FNC1char;
+extern unichar const ZX_FNC1_CHAR;
 
 @interface ZXDecodedChar : ZXDecodedObject
 

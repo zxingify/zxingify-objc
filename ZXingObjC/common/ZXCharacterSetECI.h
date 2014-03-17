@@ -14,18 +14,27 @@
  * limitations under the License.
  */
 
-#import "ZXECI.h"
-
 /**
  * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
  * of ISO 18004.
  */
+@interface ZXCharacterSetECI : NSObject
 
-@interface ZXCharacterSetECI : ZXECI
+@property (nonatomic, assign, readonly) NSStringEncoding encoding;
+@property (nonatomic, assign, readonly) int value;
 
-@property (nonatomic, readonly) NSStringEncoding encoding;
-
+/**
+ * @param value character set ECI value
+ * @return CharacterSetECI representing ECI of given value, or nil if it is legal but
+ *   unsupported
+ */
 + (ZXCharacterSetECI *)characterSetECIByValue:(int)value;
+
+/**
+ * @param name character set ECI encoding name
+ * @return CharacterSetECI representing ECI for character encoding, or nil if it is legal
+ *   but unsupported
+ */
 + (ZXCharacterSetECI *)characterSetECIByEncoding:(NSStringEncoding)encoding;
 
 @end

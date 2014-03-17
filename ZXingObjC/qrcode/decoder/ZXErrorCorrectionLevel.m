@@ -48,9 +48,6 @@ static NSArray *FOR_BITS = nil;
   return FOR_BITS[bits];
 }
 
-/**
- * L = ~7% correction
- */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelL {
   static ZXErrorCorrectionLevel *thisLevel = nil;
   static dispatch_once_t onceToken;
@@ -60,9 +57,6 @@ static NSArray *FOR_BITS = nil;
   return thisLevel;
 }
 
-/**
- * M = ~15% correction
- */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelM {
   static ZXErrorCorrectionLevel *thisLevel = nil;
   static dispatch_once_t onceToken;
@@ -72,9 +66,6 @@ static NSArray *FOR_BITS = nil;
   return thisLevel;
 }
 
-/**
- * Q = ~25% correction
- */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelQ {
   static ZXErrorCorrectionLevel *thisLevel = nil;
   static dispatch_once_t onceToken;
@@ -84,9 +75,6 @@ static NSArray *FOR_BITS = nil;
   return thisLevel;
 }
 
-/**
- * H = ~30% correction
- */
 + (ZXErrorCorrectionLevel *)errorCorrectionLevelH {
   static ZXErrorCorrectionLevel *thisLevel = nil;
   static dispatch_once_t onceToken;

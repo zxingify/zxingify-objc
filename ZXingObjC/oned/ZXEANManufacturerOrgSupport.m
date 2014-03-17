@@ -61,7 +61,7 @@
 }
 
 - (void)initIfNeeded {
-  @synchronized(self.ranges) {
+  @synchronized (self.ranges) {
     if ([self.ranges count] > 0) {
       return;
     }

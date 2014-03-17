@@ -16,7 +16,7 @@
 
 #import "ZXPDF417Codeword.h"
 
-const int BARCODE_ROW_UNKNOWN = -1;
+const int ZX_PDF417_BARCODE_ROW_UNKNOWN = -1;
 
 @implementation ZXPDF417Codeword
 
@@ -27,7 +27,7 @@ const int BARCODE_ROW_UNKNOWN = -1;
     _endX = endX;
     _bucket = bucket;
     _value = value;
-    _rowNumber = BARCODE_ROW_UNKNOWN;
+    _rowNumber = ZX_PDF417_BARCODE_ROW_UNKNOWN;
   }
 
   return self;
@@ -38,7 +38,7 @@ const int BARCODE_ROW_UNKNOWN = -1;
 }
 
 - (BOOL)isValidRowNumber:(int)rowNumber {
-  return rowNumber != BARCODE_ROW_UNKNOWN && self.bucket == (rowNumber % 3) * 3;
+  return rowNumber != ZX_PDF417_BARCODE_ROW_UNKNOWN && self.bucket == (rowNumber % 3) * 3;
 }
 
 - (void)setRowNumberAsRowIndicatorColumn {

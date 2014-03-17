@@ -16,7 +16,7 @@
 
 #import "ZXDecodedNumeric.h"
 
-const int FNC1 = 10;
+const int ZX_FNC1_INT = 10;
 
 @implementation ZXDecodedNumeric
 
@@ -42,15 +42,15 @@ const int FNC1 = 10;
 }
 
 - (BOOL)firstDigitFNC1 {
-  return self.firstDigit == FNC1;
+  return self.firstDigit == ZX_FNC1_INT;
 }
 
 - (BOOL)secondDigitFNC1 {
-  return self.secondDigit == FNC1;
+  return self.secondDigit == ZX_FNC1_INT;
 }
 
 - (BOOL)anyFNC1 {
-  return self.firstDigit == FNC1 || self.secondDigit == FNC1;
+  return self.firstDigit == ZX_FNC1_INT || self.secondDigit == ZX_FNC1_INT;
 }
 
 @end

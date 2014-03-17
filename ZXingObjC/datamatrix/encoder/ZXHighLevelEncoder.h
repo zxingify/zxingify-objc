@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
+@class ZXDimension, ZXSymbolShapeHint;
+
 /**
  * DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
  * annex S.
  */
-
-@class ZXDimension, ZXSymbolShapeHint;
-
 @interface ZXHighLevelEncoder : NSObject
 
 /**
@@ -84,18 +83,31 @@
 /**
  * Converts the message to a byte array using the default encoding (cp437) as defined by the
  * specification
+ *
+ * @param msg the message
+ * @return the byte array of the message
  */
 + (int8_t *)bytesForMessage:(NSString *)msg;
 
 /**
  * Performs message encoding of a DataMatrix message using the algorithm described in annex P
  * of ISO/IEC 16022:2000(E).
+ *
+ * @param msg the message
+ * @return the encoded message (the char values range from 0 to 255)
  */
 + (NSString *)encodeHighLevel:(NSString *)msg;
 
 /**
  * Performs message encoding of a DataMatrix message using the algorithm described in annex P
  * of ISO/IEC 16022:2000(E).
+ *
+ * @param msg     the message
+ * @param shape   requested shape. May be {@code SymbolShapeHint.FORCE_NONE},
+ *                {@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.
+ * @param minSize the minimum symbol size constraint or null for no constraint
+ * @param maxSize the maximum symbol size constraint or null for no constraint
+ * @return the encoded message (the char values range from 0 to 255)
  */
 + (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXSymbolShapeHint *)shape
                       minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize;
@@ -104,12 +116,15 @@
 
 /**
  * Determines the number of consecutive characters that are encodable using numeric compaction.
+ *
+ * @param msg      the message
+ * @param startpos the start position within the message
+ * @return the requested character count
  */
 + (int)determineConsecutiveDigitCount:(NSString *)msg startpos:(int)startpos;
 
 + (BOOL)isDigit:(unichar)ch;
 + (BOOL)isExtendedASCII:(unichar)ch;
-
 + (void)illegalCharacter:(unichar)c;
 
 @end

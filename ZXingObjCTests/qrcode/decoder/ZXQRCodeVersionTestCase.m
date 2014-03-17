@@ -34,7 +34,7 @@
   XCTAssertEqual(version.versionNumber, number, @"Expected version number to be %d", number);
   XCTAssertNotNil(version.alignmentPatternCenters, @"Expected alignmentPatternCenters to be non-nil");
   if (number > 1) {
-    XCTAssertTrue(version.alignmentPatternCenters.count > 0, @"Expected alignmentPatternCenters to be non-empty");
+    XCTAssertTrue(version.alignmentPatternCenters.length > 0, @"Expected alignmentPatternCenters to be non-empty");
   }
   XCTAssertEqual(version.dimensionForVersion, dimension, @"Expected dimension to be %d", dimension);
   XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]],

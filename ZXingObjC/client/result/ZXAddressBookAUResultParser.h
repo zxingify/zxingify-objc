@@ -20,7 +20,6 @@
  * Implements KDDI AU's address book format. See http://www.au.kddi.com/ezfactory/tec/two_dimensions/index.html.
  * (Thanks to Yuzo for translating!)
  */
-
 @interface ZXAddressBookAUResultParser : ZXResultParser
 
 @end

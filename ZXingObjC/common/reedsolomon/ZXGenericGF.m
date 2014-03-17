@@ -31,9 +31,6 @@
   ZXGenericGFPoly *_zero;
 }
 
-/**
- * Create a representation of GF(size) using the given primitive polynomial.
- */
 - (id)initWithPrimitive:(int)primitive size:(int)size b:(int)b {
   if (self = [super init]) {
     _primitive = primitive;

@@ -19,8 +19,8 @@
 #import "ZXReader.h"
 #import "ZXResultPoint.h"
 
-int const MIN_DIMENSION_TO_RECUR = 100;
-int const MAX_DEPTH = 4;
+const int ZX_MIN_DIMENSION_TO_RECUR = 100;
+const int ZX_MAX_DEPTH = 4;
 
 @interface ZXGenericMultipleBarcodeReader ()
 
@@ -55,7 +55,7 @@ int const MAX_DEPTH = 4;
 
 - (BOOL)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
                  xOffset:(int)xOffset yOffset:(int)yOffset currentDepth:(int)currentDepth error:(NSError **)error {
-  if (currentDepth > MAX_DEPTH) {
+  if (currentDepth > ZX_MAX_DEPTH) {
     return YES;
   }
 
@@ -101,16 +101,16 @@ int const MAX_DEPTH = 4;
     }
   }
 
-  if (minX > MIN_DIMENSION_TO_RECUR) {
+  if (minX > ZX_MIN_DIMENSION_TO_RECUR) {
     return [self doDecodeMultiple:[image crop:0 top:0 width:(int)minX height:height] hints:hints results:results xOffset:xOffset yOffset:yOffset currentDepth:currentDepth + 1 error:error];
   }
-  if (minY > MIN_DIMENSION_TO_RECUR) {
+  if (minY > ZX_MIN_DIMENSION_TO_RECUR) {
     return [self doDecodeMultiple:[image crop:0 top:0 width:width height:(int)minY] hints:hints results:results xOffset:xOffset yOffset:yOffset currentDepth:currentDepth + 1 error:error];
   }
-  if (maxX < width - MIN_DIMENSION_TO_RECUR) {
+  if (maxX < width - ZX_MIN_DIMENSION_TO_RECUR) {
     return [self doDecodeMultiple:[image crop:(int)maxX top:0 width:width - (int)maxX height:height] hints:hints results:results xOffset:xOffset + (int)maxX yOffset:yOffset currentDepth:currentDepth + 1 error:error];
   }
-  if (maxY < height - MIN_DIMENSION_TO_RECUR) {
+  if (maxY < height - ZX_MIN_DIMENSION_TO_RECUR) {
     return [self doDecodeMultiple:[image crop:0 top:(int)maxY width:width height:height - (int)maxY] hints:hints results:results xOffset:xOffset yOffset:yOffset + (int)maxY currentDepth:currentDepth + 1 error:error];
   }
 

@@ -26,7 +26,6 @@
  * Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
  * on exception-based mechanisms during parsing.
  */
-
 @interface ZXParsedResult : NSObject
 
 @property (nonatomic, readonly) ZXParsedResultType type;

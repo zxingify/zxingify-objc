@@ -82,6 +82,10 @@
 
 /**
  * Encode the given symbol info to a bit matrix.
+ *
+ * @param placement  The DataMatrix placement.
+ * @param symbolInfo The symbol info to encode.
+ * @return The bit matrix generated.
  */
 - (ZXBitMatrix *)encodeLowLevel:(ZXDefaultPlacement *)placement symbolInfo:(ZXSymbolInfo *)symbolInfo {
   int symbolWidth = symbolInfo.symbolDataWidth;
@@ -133,7 +137,10 @@
 }
 
 /**
- * Convert the ByteMatrix to BitMatrix.
+ * Convert the ZXByteMatrix to ZXBitMatrix.
+ *
+ * @param matrix The input matrix.
+ * @return The output matrix.
  */
 - (ZXBitMatrix *)convertByteMatrixToBitMatrix:(ZXByteMatrix *)matrix {
   int matrixWidgth = matrix.width;

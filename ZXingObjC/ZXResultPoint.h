@@ -18,15 +18,24 @@
  * Encapsulates a point of interest in an image containing a barcode. Typically, this
  * would be the location of a finder pattern or the corner of the barcode, for example.
  */
-
 @interface ZXResultPoint : NSObject<NSCopying>
 
 @property (nonatomic, assign, readonly) float x;
 @property (nonatomic, assign, readonly) float y;
 
 - (id)initWithX:(float)x y:(float)y;
+
 + (id)resultPointWithX:(float)x y:(float)y;
+
+/**
+ * Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
+ * BC < AC and the angle between BC and BA is less than 180 degrees.
+ */
 + (void)orderBestPatterns:(NSMutableArray *)patterns;
+
+/**
+ * @return distance between two points
+ */
 + (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2;
 
 @end

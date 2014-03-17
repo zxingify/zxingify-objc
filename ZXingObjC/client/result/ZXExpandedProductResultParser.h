@@ -19,7 +19,6 @@
 /**
  * Parses strings of digits that represent a RSS Extended code.
  */
-
 @interface ZXExpandedProductResultParser : ZXResultParser
 
 @end

@@ -19,9 +19,9 @@
 @class ZXIntArray;
 
 typedef enum {
-	RSS_PATTERNS_RSS14_PATTERNS = 0,
-	RSS_PATTERNS_RSS_EXPANDED_PATTERNS
-} RSS_PATTERNS;
+	ZX_RSS_PATTERNS_RSS14_PATTERNS = 0,
+	ZX_RSS_PATTERNS_RSS_EXPANDED_PATTERNS
+} ZX_RSS_PATTERNS;
 
 @interface ZXAbstractRSSReader : ZXOneDReader
 
@@ -34,7 +34,7 @@ typedef enum {
 @property (nonatomic, strong, readonly) ZXIntArray *oddCounts;
 @property (nonatomic, strong, readonly) ZXIntArray *evenCounts;
 
-+ (int)parseFinderValue:(ZXIntArray *)counters finderPatternType:(RSS_PATTERNS)finderPatternType;
++ (int)parseFinderValue:(ZXIntArray *)counters finderPatternType:(ZX_RSS_PATTERNS)finderPatternType;
 + (int)count:(ZXIntArray *)array;
 + (void)increment:(ZXIntArray *)array errors:(float *)errors;
 + (void)decrement:(ZXIntArray *)array errors:(float *)errors;

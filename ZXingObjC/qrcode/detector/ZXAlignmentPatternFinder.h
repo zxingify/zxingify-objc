@@ -14,25 +14,42 @@
  * limitations under the License.
  */
 
-/**
- * This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
- * patterns but are smaller and appear at regular intervals throughout the image.
- * 
- * At the moment this only looks for the bottom-right alignment pattern.
- * 
- * This is mostly a simplified copy of {@link FinderPatternFinder}. It is copied,
- * pasted and stripped down here for maximum performance but does unfortunately duplicate
- * some code.
- * 
- * This class is thread-safe but not reentrant. Each thread must allocate its own object.
- */
-
 @class ZXAlignmentPattern, ZXBitMatrix;
 @protocol ZXResultPointCallback;
 
+/**
+ * This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
+ * patterns but are smaller and appear at regular intervals throughout the image.
+ *
+ * At the moment this only looks for the bottom-right alignment pattern.
+ *
+ * This is mostly a simplified copy of {@link FinderPatternFinder}. It is copied,
+ * pasted and stripped down here for maximum performance but does unfortunately duplicate
+ * some code.
+ *
+ * This class is thread-safe but not reentrant. Each thread must allocate its own object.
+ */
 @interface ZXAlignmentPatternFinder : NSObject
 
+/**
+ * Creates a finder that will look in a portion of the whole image.
+ *
+ * @param image image to search
+ * @param startX left column from which to start searching
+ * @param startY top row from which to start searching
+ * @param width width of region to search
+ * @param height height of region to search
+ * @param moduleSize estimated module size so far
+ */
+
 - (id)initWithImage:(ZXBitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(id<ZXResultPointCallback>)resultPointCallback;
+
+/**
+ * This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
+ * it's pretty performance-critical and so is written to be fast foremost.
+ *
+ * @return ZXAlignmentPattern if found or nil if not found
+ */
 - (ZXAlignmentPattern *)findWithError:(NSError **)error;
 
 @end

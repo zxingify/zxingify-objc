@@ -19,7 +19,6 @@
 /**
  * This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.
  */
-
 @interface ZXDataMatrixWriter : NSObject <ZXWriter>
 
 @end

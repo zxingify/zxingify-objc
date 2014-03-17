@@ -16,6 +16,8 @@
 
 #import "ZXMultipleBarcodeReader.h"
 
+@protocol ZXReader;
+
 /**
  * Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
  * After one barcode is found, the areas left, above, right and below the barcode's
@@ -28,9 +30,6 @@
  * That is, instead of passing an ZXReader a caller might pass
  * [[ZXByQuadrantReader alloc] initWithDelegate:reader]</code>.
  */
-
-@protocol ZXReader;
-
 @interface ZXGenericMultipleBarcodeReader : NSObject <ZXMultipleBarcodeReader>
 
 - (id)initWithDelegate:(id<ZXReader>)delegate;

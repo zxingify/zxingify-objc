@@ -21,13 +21,12 @@
  * Lookup table which factors to use for which number of error correction codewords.
  * See FACTORS.
  */
-const int FACTOR_SETS_LEN = 16;
-const int FACTOR_SETS[FACTOR_SETS_LEN] = {5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68};
+const int ZX_FACTOR_SETS[] = {5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68};
 
 /**
  * Precomputed polynomial factors for ECC 200.
  */
-const int FACTORS[16][68] = {
+const int ZX_FACTORS[16][68] = {
   {228, 48, 15, 111, 62},
   {23, 68, 144, 134, 240, 92, 254},
   {28, 24, 185, 166, 223, 248, 116, 255, 110, 61},
@@ -63,9 +62,9 @@ const int FACTORS[16][68] = {
     181, 241, 59, 52, 172, 25, 49, 232, 211, 189, 64, 54, 108, 153, 132, 63,
     96, 103, 82, 186}};
 
-const int MODULO_VALUE = 0x12D;
+const int ZX_MODULO_VALUE = 0x12D;
 
-static int LOG[256], ALOG[256];
+static int ZX_LOG[256], ZX_ALOG[256];
 
 @implementation ZXDataMatrixErrorCorrection
 
@@ -73,11 +72,11 @@ static int LOG[256], ALOG[256];
   //Create log and antilog table
   int p = 1;
   for (int i = 0; i < 255; i++) {
-    ALOG[i] = p;
-    LOG[p] = i;
+    ZX_ALOG[i] = p;
+    ZX_LOG[p] = i;
     p <<= 1;
     if (p >= 256) {
-      p ^= MODULO_VALUE;
+      p ^= ZX_MODULO_VALUE;
     }
   }
 }
@@ -129,8 +128,8 @@ static int LOG[256], ALOG[256];
 
 + (NSString *)createECCBlock:(NSString *)codewords start:(int)start len:(int)len numECWords:(int)numECWords {
   int table = -1;
-  for (int i = 0; i < FACTOR_SETS_LEN; i++) {
-    if (FACTOR_SETS[i] == numECWords) {
+  for (int i = 0; i < sizeof(ZX_FACTOR_SETS) / sizeof(int); i++) {
+    if (ZX_FACTOR_SETS[i] == numECWords) {
       table = i;
       break;
     }
@@ -138,20 +137,20 @@ static int LOG[256], ALOG[256];
   if (table < 0) {
     [NSException raise:NSInvalidArgumentException format:@"Illegal number of error correction codewords specified: %d", numECWords];
   }
-  int *poly = (int *)FACTORS[table];
+  int *poly = (int *)ZX_FACTORS[table];
   unichar ecc[numECWords];
   memset(ecc, 0, numECWords * sizeof(unichar));
   for (int i = start; i < start + len; i++) {
     int m = ecc[numECWords - 1] ^ [codewords characterAtIndex:i];
     for (int k = numECWords - 1; k > 0; k--) {
       if (m != 0 && poly[k] != 0) {
-        ecc[k] = (unichar) (ecc[k - 1] ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255]);
+        ecc[k] = (unichar) (ecc[k - 1] ^ ZX_ALOG[(ZX_LOG[m] + ZX_LOG[poly[k]]) % 255]);
       } else {
         ecc[k] = ecc[k - 1];
       }
     }
     if (m != 0 && poly[0] != 0) {
-      ecc[0] = (unichar) ALOG[(LOG[m] + LOG[poly[0]]) % 255];
+      ecc[0] = (unichar) ZX_ALOG[(ZX_LOG[m] + ZX_LOG[poly[0]]) % 255];
     } else {
       ecc[0] = 0;
     }

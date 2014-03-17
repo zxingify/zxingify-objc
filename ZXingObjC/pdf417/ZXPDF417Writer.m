@@ -17,6 +17,7 @@
 #import "ZXBarcodeMatrix.h"
 #import "ZXBitMatrix.h"
 #import "ZXByteArray.h"
+#import "ZXCompaction.h"
 #import "ZXEncodeHints.h"
 #import "ZXPDF417.h"
 #import "ZXPDF417Writer.h"
@@ -91,6 +92,9 @@
 
 /**
  * This takes an array holding the values of the PDF 417
+ *
+ * @param input a byte array of information with 0 is black, and 1 is white
+ * @return BitMatrix of the input
  */
 - (ZXBitMatrix *)bitMatrixFrombitArray:(NSArray *)input {
   // Creates a small whitespace boarder around the barcode

@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-#define ZXPDF417_SYMBOL_TABLE_LEN 2787
-extern int ZXPDF417_SYMBOL_TABLE[ZXPDF417_SYMBOL_TABLE_LEN];
+#define ZX_PDF417_SYMBOL_TABLE_LEN 2787
+extern const int ZX_PDF417_SYMBOL_TABLE[];
 
-#define ZXPDF417_CODEWORD_TABLE_LEN 2787
-extern int ZXPDF417_CODEWORD_TABLE[ZXPDF417_CODEWORD_TABLE_LEN];
-
-extern int const ZXPDF417_NUMBER_OF_CODEWORDS;
-extern int const ZXPDF417_MIN_ROWS_IN_BARCODE;
-extern int const ZXPDF417_MAX_ROWS_IN_BARCODE;
-extern int const ZXPDF417_MAX_CODEWORDS_IN_BARCODE;
-extern int const ZXPDF417_MODULES_IN_CODEWORD;
-extern int const ZXPDF417_MODULES_IN_STOP_PATTERN;
-#define ZXPDF417_BARS_IN_MODULE 8
+extern const int ZX_PDF417_NUMBER_OF_CODEWORDS;
+extern const int ZX_PDF417_MIN_ROWS_IN_BARCODE;
+extern const int ZX_PDF417_MAX_ROWS_IN_BARCODE;
+extern const int ZX_PDF417_MAX_CODEWORDS_IN_BARCODE;
+extern const int ZX_PDF417_MODULES_IN_CODEWORD;
+extern const int ZX_PDF417_MODULES_IN_STOP_PATTERN;
+#define ZX_PDF417_BARS_IN_MODULE 8
 
 @class ZXIntArray;
 
@@ -34,6 +31,12 @@ extern int const ZXPDF417_MODULES_IN_STOP_PATTERN;
 
 + (int)bitCountSum:(NSArray *)moduleBitCount;
 + (ZXIntArray *)toIntArray:(NSArray *)list;
+
+/**
+ * Translate the symbol into a codeword.
+ *
+ * @return the codeword corresponding to the symbol.
+ */
 + (int)codeword:(long)symbol;
 
 @end

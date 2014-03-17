@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
+@class ZXDimension, ZXSymbolShapeHint;
+
 /**
  * Symbol info table for DataMatrix.
  */
-
-@class ZXDimension, ZXSymbolShapeHint;
-
 @interface ZXSymbolInfo : NSObject
 
 @property (nonatomic, assign) BOOL rectangular;
@@ -33,6 +32,8 @@
 
 /**
  * Overrides the symbol info set used by this class. Used for testing purposes.
+ *
+ * @param override the symbol info set to use
  */
 + (void)overrideSymbolSet:(NSArray *)override;
 + (NSArray *)prodSymbols;

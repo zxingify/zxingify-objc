@@ -48,7 +48,7 @@
 // in binary:
 //                0    1    1   0   0    1   == 0x19
 //
-int FIRST_DIGIT_ENCODINGS[10] = {
+const int ZX_EAN13_FIRST_DIGIT_ENCODINGS[] = {
   0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A
 };
 
@@ -76,7 +76,7 @@ int FIRST_DIGIT_ENCODINGS[10] = {
   int lgPatternFound = 0;
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
@@ -94,14 +94,23 @@ int FIRST_DIGIT_ENCODINGS[10] = {
     return -1;
   }
 
-  NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN error:error];
+  NSRange middleRange = [[self class] findGuardPattern:row
+                                             rowOffset:rowOffset
+                                            whiteFirst:YES
+                                               pattern:ZX_UPC_EAN_MIDDLE_PATTERN
+                                            patternLen:ZX_UPC_EAN_MIDDLE_PATTERN_LEN
+                                                 error:error];
   if (middleRange.location == NSNotFound) {
     return -1;
   }
   rowOffset = (int)NSMaxRange(middleRange);
 
   for (int x = 0; x < 6 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row
+                                       counters:counters
+                                      rowOffset:rowOffset
+                                    patternType:ZX_UPC_EAN_PATTERNS_L_PATTERNS
+                                          error:error];
     if (bestMatch == -1) {
       return -1;
     }
@@ -122,10 +131,15 @@ int FIRST_DIGIT_ENCODINGS[10] = {
  * Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded
  * digits in a barcode, determines the implicitly encoded first digit and adds it to the
  * result string.
+ *
+ * @param resultString string to insert decoded first digit into
+ * @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
+ *  encode digits
+ * @return NO if first digit cannot be determined
  */
 - (BOOL)determineFirstDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
   for (int d = 0; d < 10; d++) {
-    if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
+    if (lgPatternFound == ZX_EAN13_FIRST_DIGIT_ENCODINGS[d]) {
       [resultString insertString:[NSString stringWithFormat:@"%C", (unichar)('0' + d)] atIndex:0];
       return YES;
     }

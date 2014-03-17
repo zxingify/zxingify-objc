@@ -21,16 +21,28 @@
  * the corners of QR Codes. It also encapsulates a count of similar finder patterns,
  * as a convenience to the finder's bookkeeping.
  */
-
 @interface ZXQRCodeFinderPattern : ZXResultPoint
 
 @property (nonatomic, assign, readonly) int count;
 @property (nonatomic, assign, readonly) float estimatedModuleSize;
 
 - (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize;
+
 - (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize count:(int)count;
+
 - (void)incrementCount;
+
+/**
+ * Determines if this finder pattern "about equals" a finder pattern at the stated
+ * position and size -- meaning, it is at nearly the same center with nearly the same size.
+ */
 - (BOOL)aboutEquals:(float)moduleSize i:(float)i j:(float)j;
+
+/**
+ * Combines this object's current estimate of a finder pattern position and module size
+ * with a new estimate. It returns a new ZXFinderPattern containing a weighted average
+ * based on count.
+ */
 - (ZXQRCodeFinderPattern *)combineEstimateI:(float)i j:(float)j newModuleSize:(float)newModuleSize;
 
 @end

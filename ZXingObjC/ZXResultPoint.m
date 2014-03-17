@@ -52,10 +52,6 @@
   return [NSString stringWithFormat:@"(%f,%f)", self.x, self.y];
 }
 
-/**
- * Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
- * BC < AC and the angle between BC and BA is less than 180 degrees.
- */
 + (void)orderBestPatterns:(NSMutableArray *)patterns {
   float zeroOneDistance = [self distance:patterns[0] pattern2:patterns[1]];
   float oneTwoDistance = [self distance:patterns[1] pattern2:patterns[2]];
@@ -87,9 +83,6 @@
   patterns[2] = pointC;
 }
 
-/**
- * Returns distance between two points
- */
 + (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2 {
   return [ZXMathUtils distance:pattern1.x aY:pattern1.y bX:pattern2.x bY:pattern2.y];
 }
@@ -97,7 +90,7 @@
 /**
  * Returns the z component of the cross product between vectors BC and BA.
  */
-+ (float) crossProductZ:(ZXResultPoint *)pointA pointB:(ZXResultPoint *)pointB pointC:(ZXResultPoint *)pointC {
++ (float)crossProductZ:(ZXResultPoint *)pointA pointB:(ZXResultPoint *)pointB pointC:(ZXResultPoint *)pointC {
   float bX = pointB.x;
   float bY = pointB.y;
   return ((pointC.x - bX) * (pointA.y - bY)) - ((pointC.y - bY) * (pointA.x - bX));

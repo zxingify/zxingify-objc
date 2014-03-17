@@ -21,17 +21,17 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-unichar CODE39_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
+unichar ZX_CODE39_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
   'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
   'X', 'Y', 'Z', '-', '.', ' ', '*', '$', '/', '+', '%'};
-NSString *CODE39_ALPHABET_STRING = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+NSString *ZX_CODE39_ALPHABET_STRING = nil;
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars.
  * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
  * with 1s representing "wide" and 0s representing narrow.
  */
-int CODE39_CHARACTER_ENCODINGS[44] = {
+const int ZX_CODE39_CHARACTER_ENCODINGS[] = {
   0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
   0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
   0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
@@ -39,7 +39,7 @@ int CODE39_CHARACTER_ENCODINGS[44] = {
   0x0A8, 0x0A2, 0x08A, 0x02A // $-%
 };
 
-int const CODE39_ASTERISK_ENCODING = 0x094;
+const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
 
 @interface ZXCode39Reader ()
 
@@ -51,29 +51,19 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 
 @implementation ZXCode39Reader
 
-/**
- * Creates a reader that assumes all encoded data is data, and does not treat the final
- * character as a check digit. It will not decoded "extended Code 39" sequences.
- */
++ (void)initialize {
+  ZX_CODE39_ALPHABET_STRING = [[NSString alloc] initWithCharacters:ZX_CODE39_ALPHABET
+                                                            length:sizeof(ZX_CODE39_ALPHABET) / sizeof(unichar)];
+}
+
 - (id)init {
   return [self initUsingCheckDigit:NO extendedMode:NO];
 }
 
-
-/**
- * Creates a reader that can be configured to check the last character as a check digit.
- * It will not decoded "extended Code 39" sequences.
- */
-- (id)initUsingCheckDigit:(BOOL)isUsingCheckDigit {  
+- (id)initUsingCheckDigit:(BOOL)isUsingCheckDigit {
   return [self initUsingCheckDigit:isUsingCheckDigit extendedMode:NO];
 }
 
-
-/**
- * Creates a reader that can be configured to check the last character as a check digit,
- * or optionally attempt to decode "extended Code 39" sequences that are used to encode
- * the full ASCII character set.
- */
 - (id)initUsingCheckDigit:(BOOL)usingCheckDigit extendedMode:(BOOL)extendedMode {
   if (self = [super init]) {
     _usingCheckDigit = usingCheckDigit;
@@ -139,9 +129,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
     int max = (int)[result length] - 1;
     int total = 0;
     for (int i = 0; i < max; i++) {
-      total += [CODE39_ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
+      total += [ZX_CODE39_ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
     }
-    if ([result characterAtIndex:max] != CODE39_ALPHABET[total % 43]) {
+    if ([result characterAtIndex:max] != ZX_CODE39_ALPHABET[total % 43]) {
       if (error) *error = ChecksumErrorInstance();
       return nil;
     }
@@ -189,7 +179,7 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
       counters.array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self toNarrowWidePattern:counters] == CODE39_ASTERISK_ENCODING &&
+        if ([self toNarrowWidePattern:counters] == ZX_CODE39_ASTERISK_ENCODING &&
             [row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
           return [[ZXIntArray alloc] initWithInts:patternLength, i, -1];
         }
@@ -252,9 +242,9 @@ int const CODE39_ASTERISK_ENCODING = 0x094;
 }
 
 - (unichar)patternToChar:(int)pattern {
-  for (int i = 0; i < sizeof(CODE39_CHARACTER_ENCODINGS) / sizeof(int); i++) {
-    if (CODE39_CHARACTER_ENCODINGS[i] == pattern) {
-      return CODE39_ALPHABET[i];
+  for (int i = 0; i < sizeof(ZX_CODE39_CHARACTER_ENCODINGS) / sizeof(int); i++) {
+    if (ZX_CODE39_CHARACTER_ENCODINGS[i] == pattern) {
+      return ZX_CODE39_ALPHABET[i];
     }
   }
   return 0;

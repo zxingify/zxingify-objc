@@ -20,7 +20,6 @@
  * Encapsulates functionality and implementation that is common to UPC and EAN families
  * of one-dimensional barcodes.
  */
-
 @interface ZXUPCEANWriter : ZXOneDimensionalCodeWriter
 
 @end

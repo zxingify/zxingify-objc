@@ -19,7 +19,6 @@
 /**
  * Parses a "tel:" URI result, which specifies a phone number.
  */
-
 @interface ZXTelResultParser : ZXResultParser
 
 @end

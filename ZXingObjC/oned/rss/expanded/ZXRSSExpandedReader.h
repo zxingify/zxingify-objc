@@ -16,7 +16,7 @@
 
 #import "ZXAbstractRSSReader.h"
 
-@class ZXDataCharacter, ZXExpandedPair, ZXResult, ZXRSSFinderPattern;
+@class ZXDataCharacter, ZXRSSFinderPattern;
 
 @interface ZXRSSExpandedReader : ZXAbstractRSSReader
 

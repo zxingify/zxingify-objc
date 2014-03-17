@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
+@class ZXQRCodeVersion;
+
 /**
  * See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
  * data can be encoded to bits in the QR code standard.
  */
-
-@class ZXQRCodeVersion;
-
 @interface ZXMode : NSObject
 
 @property (nonatomic, assign, readonly) int bits;
 @property (nonatomic, copy, readonly) NSString *name;
 
 - (id)initWithCharacterCountBitsForVersions:(NSArray *)characterCountBitsForVersions bits:(int)bits name:(NSString *)name;
+
+/**
+ * @param bits four bits encoding a QR Code data mode
+ * @return Mode encoded by these bits or nil if bits do not correspond to a known mode
+ */
 + (ZXMode *)forBits:(int)bits;
+
 - (int)characterCountBits:(ZXQRCodeVersion *)version;
 
+/**
+ * @param version version in question
+ * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
+ *         count of characters that will follow encoded in this Mode
+ */
 + (ZXMode *)terminatorMode; // Not really a mode...
 + (ZXMode *)numericMode;
 + (ZXMode *)alphanumericMode;

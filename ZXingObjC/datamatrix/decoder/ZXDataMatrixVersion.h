@@ -20,7 +20,6 @@
  * each set of blocks. It also holds the number of error-correction codewords per block since it
  * will be the same across all blocks within one version.
  */
-
 @interface ZXDataMatrixECBlocks : NSObject
 
 @property (nonatomic, strong, readonly) NSArray *ecBlocks;
@@ -33,7 +32,6 @@
  * This includes the number of data codewords, and the number of times a block with these
  * parameters is used consecutively in the Data Matrix code version's format.
  */
-
 @interface ZXDataMatrixECB : NSObject
 
 @property (nonatomic, assign, readonly) int count;
@@ -45,7 +43,6 @@
  * The Version object encapsulates attributes about a particular
  * size Data Matrix Code.
  */
-
 @interface ZXDataMatrixVersion : NSObject
 
 @property (nonatomic, strong, readonly) ZXDataMatrixECBlocks *ecBlocks;
@@ -56,6 +53,14 @@
 @property (nonatomic, assign, readonly) int totalCodewords;
 @property (nonatomic, assign, readonly) int versionNumber;
 
+/**
+ * <p>Deduces version information from Data Matrix dimensions.</p>
+ *
+ * @param numRows Number of rows in modules
+ * @param numColumns Number of columns in modules
+ * @return Version for a Data Matrix Code of those dimensions or nil
+ *  if dimensions do correspond to a valid Data Matrix size
+ */
 + (ZXDataMatrixVersion *)versionForDimensions:(int)numRows numColumns:(int)numColumns;
 
 @end

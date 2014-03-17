@@ -24,7 +24,9 @@
   if (![rawText hasPrefix:@"tel:"] && ![rawText hasPrefix:@"TEL:"]) {
     return nil;
   }
+  // Normalize "TEL:" to "tel:"
   NSString *telURI = [rawText hasPrefix:@"TEL:"] ? [@"tel:" stringByAppendingString:[rawText substringFromIndex:4]] : rawText;
+  // Drop tel, query portion
   NSUInteger queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
   NSString *number = queryStart == NSNotFound ? [rawText substringFromIndex:4] : [rawText substringWithRange:NSMakeRange(4, [rawText length] - queryStart)];
   return [ZXTelParsedResult telParsedResultWithNumber:number telURI:telURI title:nil];

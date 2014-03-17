@@ -209,8 +209,8 @@
       ([barcodeRowCountLowerPart value].length == 0) ||
       ([barcodeECLevel value].length == 0) ||
       [barcodeColumnCount value].array[0] < 1 ||
-      [barcodeRowCountUpperPart value].array[0] + [barcodeRowCountLowerPart value].array[0] < ZXPDF417_MIN_ROWS_IN_BARCODE ||
-      [barcodeRowCountUpperPart value].array[0] + [barcodeRowCountLowerPart value].array[0] > ZXPDF417_MAX_ROWS_IN_BARCODE) {
+      [barcodeRowCountUpperPart value].array[0] + [barcodeRowCountLowerPart value].array[0] < ZX_PDF417_MIN_ROWS_IN_BARCODE ||
+      [barcodeRowCountUpperPart value].array[0] + [barcodeRowCountLowerPart value].array[0] > ZX_PDF417_MAX_ROWS_IN_BARCODE) {
     return nil;
   }
   ZXPDF417BarcodeMetadata *barcodeMetadata = [[ZXPDF417BarcodeMetadata alloc] initWithColumnCount:[barcodeColumnCount value].array[0]

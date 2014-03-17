@@ -14,25 +14,56 @@
  * limitations under the License.
  */
 
+@class ZXAlignmentPattern, ZXBitMatrix, ZXDecodeHints, ZXDetectorResult, ZXFinderPatternInfo, ZXPerspectiveTransform, ZXResultPoint;
+@protocol ZXResultPointCallback;
+
 /**
  * Encapsulates logic that can detect a QR Code in an image, even if the QR Code
  * is rotated or skewed, or partially obscured.
  */
-
-@class ZXAlignmentPattern, ZXBitMatrix, ZXDecodeHints, ZXDetectorResult, ZXFinderPatternInfo, ZXPerspectiveTransform, ZXResultPoint;
-@protocol ZXResultPointCallback;
-
 @interface ZXQRCodeDetector : NSObject
 
 @property (nonatomic, strong, readonly) ZXBitMatrix *image;
 @property (nonatomic, weak, readonly) id <ZXResultPointCallback> resultPointCallback;
 
 - (id)initWithImage:(ZXBitMatrix *)image;
+
+/**
+ * Detects a QR Code in an image, simply.
+ *
+ * @return ZXDetectorResult encapsulating results of detecting a QR Code or nil
+ * if no QR Code can be found
+ */
 - (ZXDetectorResult *)detectWithError:(NSError **)error;
+
+/**
+ * Detects a QR Code in an image, simply.
+ *
+ * @param hints optional hints to detector
+ * @return ZXDetectorResult encapsulating results of detecting a QR Code
+ * @return nil if QR Code cannot be found
+ * @return nil if a QR Code cannot be decoded
+ */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error;
+
 - (ZXDetectorResult *)processFinderPatternInfo:(ZXFinderPatternInfo *)info error:(NSError **)error;
-+ (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize error:(NSError **)error;
+
+/**
+ * Computes an average estimated module size based on estimated derived from the positions
+ * of the three finder patterns.
+ */
 - (float)calculateModuleSize:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft;
+
+/**
+ * Attempts to locate an alignment pattern in a limited region of the image, which is
+ * guessed to contain it. This method uses ZXAlignmentPattern.
+ *
+ * @param overallEstModuleSize estimated module size so far
+ * @param estAlignmentX x coordinate of center of area probably containing alignment pattern
+ * @param estAlignmentY y coordinate of above
+ * @param allowanceFactor number of pixels in all directions to search from the center
+ * @return ZXAlignmentPattern if found, or nil if an unexpected error occurs during detection
+ */
 - (ZXAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor error:(NSError **)error;
 
 @end

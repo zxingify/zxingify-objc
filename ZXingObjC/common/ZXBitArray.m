@@ -72,19 +72,14 @@
   }
 }
 
-
 - (BOOL)get:(int)i {
   return (self.bits[i >> 5] & (1 << (i & 0x1F))) != 0;
 }
-
 
 - (void)set:(int)i {
   self.bits[i >> 5] |= 1 << (i & 0x1F);
 }
 
-/**
- * Flips bit i.
- */
 - (void)flip:(int)i {
   self.bits[i >> 5] ^= 1 << (i & 0x1F);
 }
@@ -125,19 +120,10 @@
   return result > self.size ? self.size : result;
 }
 
-/**
- * Sets a block of 32 bits, starting at bit i.
- * 
- * newBits is the new value of the next 32 bits. Note again that the least-significant bit
- * corresponds to bit i, the next-least-significant to i+1, and so on.
- */
 - (void)setBulk:(int)i newBits:(int32_t)newBits {
   self.bits[i >> 5] = newBits;
 }
 
-/**
- * Sets a range of bits.
- */
 - (void)setRange:(int)start end:(int)end {
   if (end < start) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Start greater than end" userInfo:nil];
@@ -164,27 +150,20 @@
   }
 }
 
-/**
- * Clears all bits (sets to false).
- */
 - (void)clear {
   memset(self.bits, 0, self.bitsLength * sizeof(int32_t));
 }
 
-/**
- * Efficient method to check if a range of bits is set, or not set.
- */
 - (BOOL)isRange:(int)start end:(int)end value:(BOOL)value {
   if (end < start) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Start greater than end" userInfo:nil];
   }
   if (end == start) {
-    return YES;
+    return YES; // empty range matches
   }
-  end--;
+  end--; // will be easier to treat this as the last actually set bit -- inclusive
   int firstInt = start >> 5;
   int lastInt = end >> 5;
-
   for (int i = firstInt; i <= lastInt; i++) {
     int firstBit = i > firstInt ? 0 : start & 0x1F;
     int lastBit = i < lastInt ? 31 : end & 0x1F;
@@ -193,11 +172,13 @@
       mask = -1;
     } else {
       mask = 0;
-
       for (int j = firstBit; j <= lastBit; j++) {
         mask |= 1 << j;
       }
     }
+
+    // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
+    // equals the mask, or we're looking for 0s and the masked portion is not all 0s
     if ((self.bits[i] & mask) != (value ? mask : 0)) {
       return NO;
     }
@@ -214,11 +195,6 @@
   self.size++;
 }
 
-/**
- * Appends the least-significant bits, from value, in order from most-significant to
- * least-significant. For example, appending 6 bits from 0x000001E will append the bits
- * 0, 1, 1, 1, 1, 0 in that order.
- */
 - (void)appendBits:(int32_t)value numBits:(int)numBits {
   if (numBits < 0 || numBits > 32) {
     @throw [NSException exceptionWithName:NSInvalidArgumentException
@@ -248,6 +224,8 @@
   }
 
   for (int i = 0; i < self.bitsLength; i++) {
+    // The last byte could be incomplete (i.e. not have 8 bits in
+    // it) but there is no problem since 0 XOR 0 == 0.
     self.bits[i] ^= other.bits[i];
   }
 }
@@ -265,9 +243,6 @@
   }
 }
 
-/**
- * Reverses all bits in the array.
- */
 - (void)reverse {
   int32_t *newBits = (int32_t *)malloc(self.size * sizeof(int32_t));
   memset(newBits, 0, self.size * sizeof(int32_t));

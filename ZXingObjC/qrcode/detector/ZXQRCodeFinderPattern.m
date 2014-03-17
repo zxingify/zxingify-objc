@@ -41,10 +41,6 @@
   self.count++;
 }
 
-/**
- * Determines if this finder pattern "about equals" a finder pattern at the stated
- * position and size -- meaning, it is at nearly the same center with nearly the same size.
- */
 - (BOOL)aboutEquals:(float)moduleSize i:(float)i j:(float)j {
   if (fabsf(i - [self y]) <= moduleSize && fabsf(j - [self x]) <= moduleSize) {
     float moduleSizeDiff = fabsf(moduleSize - self.estimatedModuleSize);
@@ -53,11 +49,6 @@
   return NO;
 }
 
-/**
- * Combines this object's current estimate of a finder pattern position and module size
- * with a new estimate. It returns a new ZXQRCodeFinderPattern containing a weighted average
- * based on count.
- */
 - (ZXQRCodeFinderPattern *)combineEstimateI:(float)i j:(float)j newModuleSize:(float)newModuleSize {
   int combinedCount = self.count + 1;
   float combinedX = (self.count * self.x + j) / combinedCount;

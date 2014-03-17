@@ -24,10 +24,8 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-#define CODE_PATTERNS_LENGTH 107
-#define countersLength 7
-
-const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
+const int ZX_CODE128_CODE_PATTERNS_LEN = 107;
+const int ZX_CODE128_CODE_PATTERNS[ZX_CODE128_CODE_PATTERNS_LEN][7] = {
   {2, 1, 2, 2, 2, 2}, // 0
   {2, 2, 2, 1, 2, 2},
   {2, 2, 2, 2, 2, 1},
@@ -137,32 +135,32 @@ const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
   {2, 3, 3, 1, 1, 1, 2}
 };
 
-static int MAX_AVG_VARIANCE = -1;
-static int MAX_INDIVIDUAL_VARIANCE = -1;
+static int ZX_CODE128_MAX_AVG_VARIANCE = -1;
+static int ZX_CODE128_MAX_INDIVIDUAL_VARIANCE = -1;
 
-int const CODE_SHIFT = 98;
-int const CODE_CODE_C = 99;
-int const CODE_CODE_B = 100;
-int const CODE_CODE_A = 101;
-int const CODE_FNC_1 = 102;
-int const CODE_FNC_2 = 97;
-int const CODE_FNC_3 = 96;
-int const CODE_FNC_4_A = 101;
-int const CODE_FNC_4_B = 100;
-int const CODE_START_A = 103;
-int const CODE_START_B = 104;
-int const CODE_START_C = 105;
-int const CODE_STOP = 106;
+const int ZX_CODE128_CODE_SHIFT = 98;
+const int ZX_CODE128_CODE_CODE_C = 99;
+const int ZX_CODE128_CODE_CODE_B = 100;
+const int ZX_CODE128_CODE_CODE_A = 101;
+const int ZX_CODE128_CODE_FNC_1 = 102;
+const int ZX_CODE128_CODE_FNC_2 = 97;
+const int ZX_CODE128_CODE_FNC_3 = 96;
+const int ZX_CODE128_CODE_FNC_4_A = 101;
+const int ZX_CODE128_CODE_FNC_4_B = 100;
+const int ZX_CODE128_CODE_START_A = 103;
+const int ZX_CODE128_CODE_START_B = 104;
+const int ZX_CODE128_CODE_START_C = 105;
+const int ZX_CODE128_CODE_STOP = 106;
 
 @implementation ZXCode128Reader
 
 + (void)initialize {
-  if (MAX_AVG_VARIANCE == -1) {
-    MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
+  if (ZX_CODE128_MAX_AVG_VARIANCE == -1) {
+    ZX_CODE128_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
   }
 
-  if (MAX_INDIVIDUAL_VARIANCE == -1) {
-    MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+  if (ZX_CODE128_MAX_INDIVIDUAL_VARIANCE == -1) {
+    ZX_CODE128_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
   }
 }
 
@@ -181,10 +179,10 @@ int const CODE_STOP = 106;
       counters.array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        int bestVariance = MAX_AVG_VARIANCE;
+        int bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
         int bestMatch = -1;
-        for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-          int variance = [ZXOneDReader patternMatchVariance:counters pattern:CODE_PATTERNS[startCode] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+        for (int startCode = ZX_CODE128_CODE_START_A; startCode <= ZX_CODE128_CODE_START_C; startCode++) {
+          int variance = [ZXOneDReader patternMatchVariance:counters pattern:ZX_CODE128_CODE_PATTERNS[startCode] maxIndividualVariance:ZX_CODE128_MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -217,12 +215,11 @@ int const CODE_STOP = 106;
   if (![ZXOneDReader recordPattern:row start:rowOffset counters:counters]) {
     return -1;
   }
-  int bestVariance = MAX_AVG_VARIANCE;
+  int bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
   int bestMatch = -1;
 
-  for (int d = 0; d < CODE_PATTERNS_LENGTH; d++) {
-    int *pattern = (int *)CODE_PATTERNS[d];
-    int variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+  for (int d = 0; d < ZX_CODE128_CODE_PATTERNS_LEN; d++) {
+    int variance = [ZXOneDReader patternMatchVariance:counters pattern:ZX_CODE128_CODE_PATTERNS[d] maxIndividualVariance:ZX_CODE128_MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = d;
@@ -249,14 +246,14 @@ int const CODE_STOP = 106;
   int codeSet;
 
   switch (startCode) {
-  case CODE_START_A:
-    codeSet = CODE_CODE_A;
+  case ZX_CODE128_CODE_START_A:
+    codeSet = ZX_CODE128_CODE_CODE_A;
     break;
-  case CODE_START_B:
-    codeSet = CODE_CODE_B;
+  case ZX_CODE128_CODE_START_B:
+    codeSet = ZX_CODE128_CODE_CODE_B;
     break;
-  case CODE_START_C:
-    codeSet = CODE_CODE_C;
+  case ZX_CODE128_CODE_START_C:
+    codeSet = ZX_CODE128_CODE_CODE_C;
     break;
   default:
     if (error) *error = FormatErrorInstance();
@@ -295,13 +292,13 @@ int const CODE_STOP = 106;
 
     [rawCodes addObject:@(code)];
 
-    // Remember whether the last code was printable or not (excluding CODE_STOP)
-    if (code != CODE_STOP) {
+    // Remember whether the last code was printable or not (excluding ZX_CODE128_CODE_STOP)
+    if (code != ZX_CODE128_CODE_STOP) {
       lastCharacterWasPrintable = YES;
     }
 
-    // Add to checksum computation (if not CODE_STOP of course)
-    if (code != CODE_STOP) {
+    // Add to checksum computation (if not ZX_CODE128_CODE_STOP of course)
+    if (code != ZX_CODE128_CODE_STOP) {
       multiplier++;
       checksumTotal += multiplier * code;
     }
@@ -314,15 +311,15 @@ int const CODE_STOP = 106;
 
     // Take care of illegal start codes
     switch (code) {
-    case CODE_START_A:
-    case CODE_START_B:
-    case CODE_START_C:
+    case ZX_CODE128_CODE_START_A:
+    case ZX_CODE128_CODE_START_B:
+    case ZX_CODE128_CODE_START_C:
       if (error) *error = FormatErrorInstance();
       return nil;
     }
 
     switch (codeSet) {
-    case CODE_CODE_A:
+    case ZX_CODE128_CODE_CODE_A:
       if (code < 64) {
         [result appendFormat:@"%C", (unichar)(' ' + code)];
       } else if (code < 96) {
@@ -330,12 +327,12 @@ int const CODE_STOP = 106;
       } else {
         // Don't let CODE_STOP, which always appears, affect whether whether we think the last
         // code was printable or not.
-        if (code != CODE_STOP) {
+        if (code != ZX_CODE128_CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
 
         switch (code) {
-        case CODE_FNC_1:
+        case ZX_CODE128_CODE_FNC_1:
             if (convertFNC1) {
               if (result.length == 0) {
                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -347,36 +344,36 @@ int const CODE_STOP = 106;
               }
             }
             break;
-        case CODE_FNC_2:
-        case CODE_FNC_3:
-        case CODE_FNC_4_A:
+        case ZX_CODE128_CODE_FNC_2:
+        case ZX_CODE128_CODE_FNC_3:
+        case ZX_CODE128_CODE_FNC_4_A:
           break;
-        case CODE_SHIFT:
+        case ZX_CODE128_CODE_SHIFT:
           isNextShifted = YES;
-          codeSet = CODE_CODE_B;
+          codeSet = ZX_CODE128_CODE_CODE_B;
           break;
-        case CODE_CODE_B:
-          codeSet = CODE_CODE_B;
+        case ZX_CODE128_CODE_CODE_B:
+          codeSet = ZX_CODE128_CODE_CODE_B;
           break;
-        case CODE_CODE_C:
-          codeSet = CODE_CODE_C;
+        case ZX_CODE128_CODE_CODE_C:
+          codeSet = ZX_CODE128_CODE_CODE_C;
           break;
-        case CODE_STOP:
+        case ZX_CODE128_CODE_STOP:
           done = YES;
           break;
         }
       }
       break;
-    case CODE_CODE_B:
+    case ZX_CODE128_CODE_CODE_B:
       if (code < 96) {
         [result appendFormat:@"%C", (unichar)(' ' + code)];
       } else {
-        if (code != CODE_STOP) {
+        if (code != ZX_CODE128_CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
 
         switch (code) {
-        case CODE_FNC_1:
+        case ZX_CODE128_CODE_FNC_1:
             if (convertFNC1) {
               if (result.length == 0) {
                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -388,39 +385,39 @@ int const CODE_STOP = 106;
               }
             }
             break;
-        case CODE_FNC_2:
-        case CODE_FNC_3:
-        case CODE_FNC_4_B:
+        case ZX_CODE128_CODE_FNC_2:
+        case ZX_CODE128_CODE_FNC_3:
+        case ZX_CODE128_CODE_FNC_4_B:
           break;
-        case CODE_SHIFT:
+        case ZX_CODE128_CODE_SHIFT:
           isNextShifted = YES;
-          codeSet = CODE_CODE_A;
+          codeSet = ZX_CODE128_CODE_CODE_A;
           break;
-        case CODE_CODE_A:
-          codeSet = CODE_CODE_A;
+        case ZX_CODE128_CODE_CODE_A:
+          codeSet = ZX_CODE128_CODE_CODE_A;
           break;
-        case CODE_CODE_C:
-          codeSet = CODE_CODE_C;
+        case ZX_CODE128_CODE_CODE_C:
+          codeSet = ZX_CODE128_CODE_CODE_C;
           break;
-        case CODE_STOP:
+        case ZX_CODE128_CODE_STOP:
           done = YES;
           break;
         }
       }
       break;
-    case CODE_CODE_C:
+    case ZX_CODE128_CODE_CODE_C:
       if (code < 100) {
         if (code < 10) {
           [result appendString:@"0"];
         }
         [result appendFormat:@"%d", code];
       } else {
-        if (code != CODE_STOP) {
+        if (code != ZX_CODE128_CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
 
         switch (code) {
-        case CODE_FNC_1:
+        case ZX_CODE128_CODE_FNC_1:
             if (convertFNC1) {
               if (result.length == 0) {
                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -432,13 +429,13 @@ int const CODE_STOP = 106;
               }
             }
             break;
-        case CODE_CODE_A:
-          codeSet = CODE_CODE_A;
+        case ZX_CODE128_CODE_CODE_A:
+          codeSet = ZX_CODE128_CODE_CODE_A;
           break;
-        case CODE_CODE_B:
-          codeSet = CODE_CODE_B;
+        case ZX_CODE128_CODE_CODE_B:
+          codeSet = ZX_CODE128_CODE_CODE_B;
           break;
-        case CODE_STOP:
+        case ZX_CODE128_CODE_STOP:
           done = YES;
           break;
         }
@@ -448,7 +445,7 @@ int const CODE_STOP = 106;
 
     // Unshift back to another code set if we were shifted
     if (unshift) {
-      codeSet = codeSet == CODE_CODE_A ? CODE_CODE_B : CODE_CODE_A;
+      codeSet = codeSet == ZX_CODE128_CODE_CODE_A ? ZX_CODE128_CODE_CODE_B : ZX_CODE128_CODE_CODE_A;
     }
   }
 
@@ -480,7 +477,7 @@ int const CODE_STOP = 106;
   // Only bother if the result had at least one character, and if the checksum digit happened to
   // be a printable character. If it was just interpreted as a control code, nothing to remove.
   if (resultLength > 0 && lastCharacterWasPrintable) {
-    if (codeSet == CODE_CODE_C) {
+    if (codeSet == ZX_CODE128_CODE_CODE_C) {
       [result deleteCharactersInRange:NSMakeRange(resultLength - 2, 2)];
     } else {
       [result deleteCharactersInRange:NSMakeRange(resultLength - 1, 1)];

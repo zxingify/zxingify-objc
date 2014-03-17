@@ -18,7 +18,6 @@
  * Represents some type of metadata about the result of the decoding that the decoder
  * wishes to communicate back to the caller.
  */
-
 typedef enum {
   /**
    * Unspecified, application-specific metadata. Maps to an unspecified NSObject.

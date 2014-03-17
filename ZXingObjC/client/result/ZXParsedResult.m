@@ -42,6 +42,7 @@
 
 + (void)maybeAppend:(NSString *)value result:(NSMutableString *)result {
   if (value != nil && (id)value != [NSNull null] && [value length] > 0) {
+    // Don't add a newline before the first value
     if ([result length] > 0) {
       [result appendString:@"\n"];
     }

@@ -35,6 +35,7 @@
 
   return self;
 }
+
 - (BOOL)decode:(ZXIntArray *)received twoS:(int)twoS error:(NSError **)error {
   ZXGenericGFPoly *poly = [[ZXGenericGFPoly alloc] initWithField:self.field coefficients:received];
   ZXIntArray *syndromeCoefficients = [[ZXIntArray alloc] initWithLength:twoS];

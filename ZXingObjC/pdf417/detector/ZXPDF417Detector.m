@@ -26,37 +26,31 @@
 #import "ZXPerspectiveTransform.h"
 #import "ZXResultPoint.h"
 
-const int INDEXES_PATTERN_LEN = 4;
-const int INDEXES_START_PATTERN[INDEXES_PATTERN_LEN] = {0, 4, 1, 5};
-const int INDEXES_STOP_PATTERN[INDEXES_PATTERN_LEN] = {6, 2, 7, 3};
-int const PDF417_INTEGER_MATH_SHIFT = 8;
-int const PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << PDF417_INTEGER_MATH_SHIFT;
-int const MAX_AVG_VARIANCE = (int) (PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-int const MAX_INDIVIDUAL_VARIANCE = (int) (PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+const int ZX_PDF417_INDEXES_START_PATTERN[] = {0, 4, 1, 5};
+const int ZX_PDF417_INDEXES_STOP_PATTERN[] = {6, 2, 7, 3};
+const int ZX_PDF417_INTEGER_MATH_SHIFT = 8;
+const int ZX_PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_PDF417_INTEGER_MATH_SHIFT;
+const int ZX_PDF417_MAX_AVG_VARIANCE = (int) (ZX_PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
+const int ZX_PDF417_MAX_INDIVIDUAL_VARIANCE = (int) (ZX_PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
 
 // B S B S B S B S Bar/Space pattern
 // 11111111 0 1 0 1 0 1 000
-int const PDF417_START_PATTERN_LEN = 8;
-int const PDF417_START_PATTERN[PDF417_START_PATTERN_LEN] = {8, 1, 1, 1, 1, 1, 1, 3};
+const int ZX_PDF417_DETECTOR_START_PATTERN[] = {8, 1, 1, 1, 1, 1, 1, 3};
 
 // 1111111 0 1 000 1 0 1 00 1
-int const PDF417_STOP_PATTERN_LEN = 9;
-int const PDF417_STOP_PATTERN[PDF417_STOP_PATTERN_LEN] = {7, 1, 1, 3, 1, 1, 1, 2, 1};
-int const MAX_PIXEL_DRIFT = 3;
-int const MAX_PATTERN_DRIFT = 5;
+const int ZX_PDF417_DETECTOR_STOP_PATTERN[] = {7, 1, 1, 3, 1, 1, 1, 2, 1};
+const int ZX_PDF417_MAX_PIXEL_DRIFT = 3;
+const int ZX_PDF417_MAX_PATTERN_DRIFT = 5;
 // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
 // if we set the value too high, then we might detect the start pattern from a neighbor barcode.
-int const SKIPPED_ROW_COUNT_MAX = 25;
+const int ZX_PDF417_SKIPPED_ROW_COUNT_MAX = 25;
 // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
 // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
-int const ROW_STEP = 5;
-int const BARCODE_MIN_HEIGHT = 10;
+const int ZX_PDF417_ROW_STEP = 5;
+const int ZX_PDF417_BARCODE_MIN_HEIGHT = 10;
 
 @implementation ZXPDF417Detector
 
-/**
- * Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.
- */
 + (ZXPDF417DetectorResult *)detect:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error {
   // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even
   // different binarizers
@@ -80,6 +74,10 @@ int const BARCODE_MIN_HEIGHT = 10;
 
 /**
  * Detects PDF417 codes in an image. Only checks 0 degree rotation
+ * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
+ * be found and returned
+ * @param bitMatrix bit matrix to detect barcodes in
+ * @return List of ResultPoint arrays containing the coordinates of found barcodes
  */
 + (NSArray *)detect:(BOOL)multiple bitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
   NSMutableArray *barcodeCoordinates = [NSMutableArray array];
@@ -106,7 +104,7 @@ int const BARCODE_MIN_HEIGHT = 10;
           row = MAX(row, (int) [(ZXResultPoint *)barcodeCoordinate[3] y]);
         }
       }
-      row += ROW_STEP;
+      row += ZX_PDF417_ROW_STEP;
       continue;
     }
     foundBarcodeInRow = YES;
@@ -129,9 +127,6 @@ int const BARCODE_MIN_HEIGHT = 10;
 
 // The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
 // data structures)
-/**
- * Rotates a bit matrix by 180 degrees.
- */
 + (void)rotate180:(ZXBitMatrix *)bitMatrix {
   int width = bitMatrix.width;
   int height = bitMatrix.height;
@@ -145,9 +140,6 @@ int const BARCODE_MIN_HEIGHT = 10;
   }
 }
 
-/**
- * Copies the bits from the input to the result BitArray in reverse order
- */
 + (ZXBitArray *)mirror:(ZXBitArray *)input result:(ZXBitArray *)result {
   [result clear];
   int size = input.size;
@@ -163,15 +155,16 @@ int const BARCODE_MIN_HEIGHT = 10;
  * Locate the vertices and the codewords area of a black blob using the Start
  * and Stop patterns as locators.
  *
- * Returns an array containing the vertices:
- * vertices[0] x, y top left barcode
- * vertices[1] x, y bottom left barcode
- * vertices[2] x, y top right barcode
- * vertices[3] x, y bottom right barcode
- * vertices[4] x, y top left codeword area
- * vertices[5] x, y bottom left codeword area
- * vertices[6] x, y top right codeword area
- * vertices[7] x, y bottom right codeword area
+ * @param matrix the scanned barcode image.
+ * @return an array containing the vertices:
+ *           vertices[0] x, y top left barcode
+ *           vertices[1] x, y bottom left barcode
+ *           vertices[2] x, y top right barcode
+ *           vertices[3] x, y bottom right barcode
+ *           vertices[4] x, y top left codeword area
+ *           vertices[5] x, y bottom left codeword area
+ *           vertices[6] x, y top right codeword area
+ *           vertices[7] x, y bottom right codeword area
  */
 + (NSMutableArray *)findVertices:(ZXBitMatrix *)matrix startRow:(int)startRow startColumn:(int)startColumn {
   int height = matrix.height;
@@ -181,18 +174,36 @@ int const BARCODE_MIN_HEIGHT = 10;
   for (int i = 0; i < 8; i++) {
     [result addObject:[NSNull null]];
   }
-  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:PDF417_START_PATTERN patternLen:PDF417_START_PATTERN_LEN] destinationIndexes:(int *)INDEXES_START_PATTERN];
+  [self copyToResult:result
+           tmpResult:[self findRowsWithPattern:matrix
+                                        height:height
+                                         width:width
+                                      startRow:startRow
+                                   startColumn:startColumn
+                                       pattern:ZX_PDF417_DETECTOR_START_PATTERN
+                                    patternLen:sizeof(ZX_PDF417_DETECTOR_START_PATTERN) / sizeof(int)]
+  destinationIndexes:ZX_PDF417_INDEXES_START_PATTERN
+              length:sizeof(ZX_PDF417_INDEXES_START_PATTERN) / sizeof(int)];
 
   if (result[4] != [NSNull null]) {
     startColumn = (int) [(ZXResultPoint *)result[4] x];
     startRow = (int) [(ZXResultPoint *)result[4] y];
   }
-  [self copyToResult:result tmpResult:[self findRowsWithPattern:matrix height:height width:width startRow:startRow startColumn:startColumn pattern:PDF417_STOP_PATTERN patternLen:PDF417_STOP_PATTERN_LEN] destinationIndexes:(int *)INDEXES_STOP_PATTERN];
+  [self copyToResult:result
+           tmpResult:[self findRowsWithPattern:matrix
+                                        height:height
+                                         width:width
+                                      startRow:startRow
+                                   startColumn:startColumn
+                                       pattern:ZX_PDF417_DETECTOR_STOP_PATTERN
+                                    patternLen:sizeof(ZX_PDF417_DETECTOR_STOP_PATTERN) / sizeof(int)]
+  destinationIndexes:ZX_PDF417_INDEXES_STOP_PATTERN
+              length:sizeof(ZX_PDF417_INDEXES_STOP_PATTERN) / sizeof(int)];
   return result;
 }
 
-+ (void)copyToResult:(NSMutableArray *)result tmpResult:(NSMutableArray *)tmpResult destinationIndexes:(int *)destinationIndexes {
-  for (int i = 0; i < INDEXES_PATTERN_LEN; i++) {
++ (void)copyToResult:(NSMutableArray *)result tmpResult:(NSMutableArray *)tmpResult destinationIndexes:(const int[])destinationIndexes length:(int)length {
+  for (int i = 0; i < length; i++) {
     result[destinationIndexes[i]] = tmpResult[i];
   }
 }
@@ -206,7 +217,7 @@ int const BARCODE_MIN_HEIGHT = 10;
   BOOL found = NO;
   int counters[patternLen];
   memset(counters, 0, patternLen * sizeof(int));
-  for (; startRow < height; startRow += ROW_STEP) {
+  for (; startRow < height; startRow += ZX_PDF417_ROW_STEP) {
     NSRange loc = [self findGuardPattern:matrix column:startColumn row:startRow width:width whiteFirst:false pattern:pattern patternLen:patternLen counters:counters];
     if (loc.location != NSNotFound) {
       while (startRow > 0) {
@@ -236,12 +247,12 @@ int const BARCODE_MIN_HEIGHT = 10;
       // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
       // larger drift and don't check for skipped rows.
       if (loc.location != NSNotFound &&
-          ABS((int)previousRowLoc.location - (int)loc.location) < MAX_PATTERN_DRIFT &&
-          ABS((int)NSMaxRange(previousRowLoc) - (int)NSMaxRange(loc)) < MAX_PATTERN_DRIFT) {
+          ABS((int)previousRowLoc.location - (int)loc.location) < ZX_PDF417_MAX_PATTERN_DRIFT &&
+          ABS((int)NSMaxRange(previousRowLoc) - (int)NSMaxRange(loc)) < ZX_PDF417_MAX_PATTERN_DRIFT) {
         previousRowLoc = loc;
         skippedRowCount = 0;
       } else {
-        if (skippedRowCount > SKIPPED_ROW_COUNT_MAX) {
+        if (skippedRowCount > ZX_PDF417_SKIPPED_ROW_COUNT_MAX) {
           break;
         } else {
           skippedRowCount++;
@@ -252,7 +263,7 @@ int const BARCODE_MIN_HEIGHT = 10;
     result[2] = [[ZXResultPoint alloc] initWithX:previousRowLoc.location y:stopRow];
     result[3] = [[ZXResultPoint alloc] initWithX:NSMaxRange(previousRowLoc) y:stopRow];
   }
-  if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
+  if (stopRow - startRow < ZX_PDF417_BARCODE_MIN_HEIGHT) {
     for (int i = 0; i < 4; i++) {
       result[i] = [NSNull null];
     }
@@ -260,6 +271,16 @@ int const BARCODE_MIN_HEIGHT = 10;
   return result;
 }
 
+/**
+ * @param matrix row of black/white values to search
+ * @param column x position to start search
+ * @param row y position to start search
+ * @param width the number of pixels to search on this row
+ * @param pattern pattern of counts of number of black and white pixels that are
+ *                 being searched for as a pattern
+ * @param counters array of counters, as long as pattern, to re-use
+ * @return start/end horizontal offset of guard pattern, as an array of two ints.
+ */
 + (NSRange)findGuardPattern:(ZXBitMatrix *)matrix
                      column:(int)column
                         row:(int)row
@@ -274,8 +295,8 @@ int const BARCODE_MIN_HEIGHT = 10;
   int patternStart = column;
   int pixelDrift = 0;
 
-  // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels
-  while ([matrix getX:patternStart y:row] && patternStart > 0 && pixelDrift++ < MAX_PIXEL_DRIFT) {
+  // if there are black pixels left of the current pixel shift to the left, but only for ZX_PDF417_MAX_PIXEL_DRIFT pixels
+  while ([matrix getX:patternStart y:row] && patternStart > 0 && pixelDrift++ < ZX_PDF417_MAX_PIXEL_DRIFT) {
     patternStart--;
   }
   int x = patternStart;
@@ -286,7 +307,7 @@ int const BARCODE_MIN_HEIGHT = 10;
       counters[counterPosition] = counters[counterPosition] + 1;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([self patternMatchVariance:counters countersSize:patternLength pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([self patternMatchVariance:counters countersSize:patternLength pattern:pattern maxIndividualVariance:ZX_PDF417_MAX_INDIVIDUAL_VARIANCE] < ZX_PDF417_MAX_AVG_VARIANCE) {
           return NSMakeRange(patternStart, x - patternStart);
         }
         patternStart += counters[0] + counters[1];
@@ -304,7 +325,7 @@ int const BARCODE_MIN_HEIGHT = 10;
     }
   }
   if (counterPosition == patternLength - 1) {
-    if ([self patternMatchVariance:counters countersSize:patternLen pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+    if ([self patternMatchVariance:counters countersSize:patternLen pattern:pattern maxIndividualVariance:ZX_PDF417_MAX_INDIVIDUAL_VARIANCE] < ZX_PDF417_MAX_AVG_VARIANCE) {
       return NSMakeRange(patternStart, x - patternStart - 1);
     }
   }
@@ -316,6 +337,15 @@ int const BARCODE_MIN_HEIGHT = 10;
  * values matches a given target pattern. This is reported as the ratio of
  * the total variance from the expected pattern proportions across all
  * pattern elements, to the length of the pattern.
+ *
+ * @param counters observed counters
+ * @param pattern expected pattern
+ * @param maxIndividualVariance The most any counter can differ before we give up
+ * @return ratio of total variance between counters and pattern compared to
+ *         total pattern size, where the ratio has been multiplied by 256.
+ *         So, 0 means no variance (perfect match); 256 means the total
+ *         variance between counters and patterns equals the pattern length,
+ *         higher values mean even more variance
  */
 + (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = countersSize;
@@ -329,12 +359,12 @@ int const BARCODE_MIN_HEIGHT = 10;
   if (total < patternLength || patternLength == 0) {
     return INT_MAX;
   }
-  int unitBarWidth = (total << PDF417_INTEGER_MATH_SHIFT) / patternLength;
-  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> PDF417_INTEGER_MATH_SHIFT;
+  int unitBarWidth = (total << ZX_PDF417_INTEGER_MATH_SHIFT) / patternLength;
+  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> ZX_PDF417_INTEGER_MATH_SHIFT;
 
   int totalVariance = 0;
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters[x] << PDF417_INTEGER_MATH_SHIFT;
+    int counter = counters[x] << ZX_PDF417_INTEGER_MATH_SHIFT;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {

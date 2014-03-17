@@ -23,14 +23,35 @@
  * This class is thread-safe but not reentrant -- unless the caller modifies the bytes array
  * it passed in, in which case all bets are off.
  */
-
 @interface ZXBitSource : NSObject
 
+/**
+ * @return index of next bit in current byte which would be read by the next call to {@link #readBits(int)}.
+ */
 @property (nonatomic, assign, readonly) int bitOffset;
+
+/**
+ * @return index of next byte in input byte array which would be read by the next call to {@link #readBits(int)}.
+ */
 @property (nonatomic, assign, readonly) int byteOffset;
 
+/**
+ * @param bytes bytes from which this will read bits. Bits will be read from the first byte first.
+ * Bits are read within a byte from most-significant to least-significant bit.
+ */
 - (id)initWithBytes:(ZXByteArray *)bytes;
+
+/**
+ * @param numBits number of bits to read
+ * @return int representing the bits read. The bits will appear as the least-significant
+ *         bits of the int
+ * @throws NSInvalidArgumentException if numBits isn't in [1,32] or more than is available
+ */
 - (int)readBits:(int)numBits;
+
+/**
+ * @return number of bits that can be read successfully
+ */
 - (int)available;
 
 @end

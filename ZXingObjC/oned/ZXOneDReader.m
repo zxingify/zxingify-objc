@@ -23,8 +23,8 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-int const INTEGER_MATH_SHIFT = 8;
-int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+const int ZX_ONED_INTEGER_MATH_SHIFT = 8;
+const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_SHIFT;
 
 @implementation ZXOneDReader
 
@@ -83,6 +83,10 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily
  * decided that moving up and down by about 1/16 of the image is pretty good; we try more of the
  * image if "trying harder".
+ *
+ * @param image The image to decode
+ * @param hints Any hints that were requested
+ * @return The contents of the decoded barcode or nil if an error occurs
  */
 - (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   int width = image.width;
@@ -151,6 +155,11 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
  * of the array. If the row starts on a white pixel at the given start point, then the first count
  * recorded is the run of white pixels starting from that point; likewise it is the count of a run
  * of black pixels if the row begin on a black pixels at that point.
+ *
+ * @param row row to count from
+ * @param start offset into row to start at
+ * @param counters array into which to record counts or nil if counters cannot be filled entirely
+ *  from row before running out of pixels
  */
 + (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters {
   int numCounters = counters.length;
@@ -200,16 +209,18 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   return YES;
 }
 
-
 /**
  * Determines how closely a set of observed counts of runs of black/white values matches a given
  * target pattern. This is reported as the ratio of the total variance from the expected pattern
  * proportions across all pattern elements, to the length of the pattern.
- * 
- * Returns ratio of total variance between counters and pattern compared to total pattern size,
- * where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
- * the total variance between counters and patterns equals the pattern length, higher values mean
- * even more variance
+ *
+ * @param counters observed counters
+ * @param pattern expected pattern
+ * @param maxIndividualVariance The most any counter can differ before we give up
+ * @return ratio of total variance between counters and pattern compared to total pattern size,
+ *  where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
+ *  the total variance between counters and patterns equals the pattern length, higher values mean
+ *  even more variance
  */
 + (int)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
   int numCounters = counters.length;
@@ -224,12 +235,12 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   if (total < patternLength || patternLength == 0) {
     return INT_MAX;
   }
-  int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
-  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
+  int unitBarWidth = (total << ZX_ONED_INTEGER_MATH_SHIFT) / patternLength;
+  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> ZX_ONED_INTEGER_MATH_SHIFT;
   int totalVariance = 0;
 
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters.array[x] << INTEGER_MATH_SHIFT;
+    int counter = counters.array[x] << ZX_ONED_INTEGER_MATH_SHIFT;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
@@ -244,6 +255,12 @@ int const PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 /**
  * Attempts to decode a one-dimensional barcode format given a single row of
  * an image.
+ *
+ * @param rowNumber row number from top of the row
+ * @param row the black/white pixel data of the row
+ * @param hints decode hints
+ * @return ZXResult containing encoded string and start/end of barcode or nil
+ *  if an error occurs or barcode cannot be found
  */
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException

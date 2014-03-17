@@ -16,6 +16,9 @@
 
 @class ZXGenericGF, ZXIntArray;
 
+/**
+ * Implements Reed-Solomon enbcoding, as the name implies.
+ */
 @interface ZXReedSolomonEncoder : NSObject
 
 - (id)initWithField:(ZXGenericGF *)field;

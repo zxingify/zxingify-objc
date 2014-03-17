@@ -40,7 +40,10 @@
     [NSException raise:NSInvalidArgumentException 
                 format:@"Invalid number of bits: %d", numBits];
   }
+
   int result = 0;
+
+  // First, read remainder from current byte
   if (self.bitOffset > 0) {
     int bitsLeft = 8 - self.bitOffset;
     int toRead = numBits < bitsLeft ? numBits : bitsLeft;
@@ -55,6 +58,7 @@
     }
   }
 
+  // Next read whole bytes
   if (numBits > 0) {
     while (numBits >= 8) {
       result = (result << 8) | (self.bytes.array[self.byteOffset] & 0xFF);
@@ -62,6 +66,7 @@
       numBits -= 8;
     }
 
+    // Finally read a partial byte
     if (numBits > 0) {
       int bitsToNotRead = 8 - numBits;
       int mask = (0xFF >> bitsToNotRead) << bitsToNotRead;
@@ -69,6 +74,7 @@
       self.bitOffset += numBits;
     }
   }
+
   return result;
 }
 

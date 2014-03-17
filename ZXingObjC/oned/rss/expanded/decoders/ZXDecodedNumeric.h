@@ -16,7 +16,7 @@
 
 #import "ZXDecodedObject.h"
 
-extern const int FNC1;
+extern const int ZX_FNC1_INT;
 
 @interface ZXDecodedNumeric : ZXDecodedObject
 

@@ -34,6 +34,10 @@
 
 /**
  * Locates and decodes a PDF417 code in an image.
+ *
+ * @return a String representing the content encoded by the PDF417 code
+ * @return nil if a PDF417 code cannot be found,
+ * @return nil if a PDF417 cannot be decoded
  */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
   return [self decode:image hints:nil error:error];
@@ -108,18 +112,18 @@
 
 - (int)maxCodewordWidth:(NSArray *)p {
   return MAX(
-             MAX([self maxWidth:p[0] p2:p[4]], [self maxWidth:p[6] p2:p[2]] * ZXPDF417_MODULES_IN_CODEWORD /
-                 ZXPDF417_MODULES_IN_STOP_PATTERN),
-             MAX([self maxWidth:p[1] p2:p[5]], [self maxWidth:p[7] p2:p[3]] * ZXPDF417_MODULES_IN_CODEWORD /
-                 ZXPDF417_MODULES_IN_STOP_PATTERN));
+             MAX([self maxWidth:p[0] p2:p[4]], [self maxWidth:p[6] p2:p[2]] * ZX_PDF417_MODULES_IN_CODEWORD /
+                 ZX_PDF417_MODULES_IN_STOP_PATTERN),
+             MAX([self maxWidth:p[1] p2:p[5]], [self maxWidth:p[7] p2:p[3]] * ZX_PDF417_MODULES_IN_CODEWORD /
+                 ZX_PDF417_MODULES_IN_STOP_PATTERN));
 }
 
 - (int)minCodewordWidth:(NSArray *)p {
   return MIN(
-             MIN([self minWidth:p[0] p2:p[4]], [self minWidth:p[6] p2:p[2]] * ZXPDF417_MODULES_IN_CODEWORD /
-                 ZXPDF417_MODULES_IN_STOP_PATTERN),
-             MIN([self minWidth:p[1] p2:p[5]], [self minWidth:p[7] p2:p[3]] * ZXPDF417_MODULES_IN_CODEWORD /
-                 ZXPDF417_MODULES_IN_STOP_PATTERN));
+             MIN([self minWidth:p[0] p2:p[4]], [self minWidth:p[6] p2:p[2]] * ZX_PDF417_MODULES_IN_CODEWORD /
+                 ZX_PDF417_MODULES_IN_STOP_PATTERN),
+             MIN([self minWidth:p[1] p2:p[5]], [self minWidth:p[7] p2:p[3]] * ZX_PDF417_MODULES_IN_CODEWORD /
+                 ZX_PDF417_MODULES_IN_STOP_PATTERN));
 }
 
 - (void)reset {

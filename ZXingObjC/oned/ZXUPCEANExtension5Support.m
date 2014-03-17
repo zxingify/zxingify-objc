@@ -24,7 +24,7 @@
 #import "ZXUPCEANExtension5Support.h"
 #import "ZXUPCEANReader.h"
 
-const int CHECK_DIGIT_ENCODINGS[10] = {
+const int ZX_UPCEAN_CHECK_DIGIT_ENCODINGS[] = {
   0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05
 };
 
@@ -74,7 +74,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
   int lgPatternFound = 0;
 
   for (int x = 0; x < 5 && rowOffset < end; x++) {
-    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
+    int bestMatch = [ZXUPCEANReader decodeDigit:row counters:counters rowOffset:rowOffset patternType:ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS error:error];
     if (bestMatch == -1) {
       return -1;
     }
@@ -125,7 +125,7 @@ const int CHECK_DIGIT_ENCODINGS[10] = {
 
 - (int)determineCheckDigit:(int)lgPatternFound {
   for (int d = 0; d < 10; d++) {
-    if (lgPatternFound == CHECK_DIGIT_ENCODINGS[d]) {
+    if (lgPatternFound == ZX_UPCEAN_CHECK_DIGIT_ENCODINGS[d]) {
       return d;
     }
   }

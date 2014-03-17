@@ -20,8 +20,32 @@
  */
 @interface ZXPDF417ErrorCorrection : NSObject
 
+/**
+ * Determines the number of error correction codewords for a specified error correction
+ * level.
+ *
+ * @param errorCorrectionLevel the error correction level (0-8)
+ * @return the number of codewords generated for error correction
+ */
+
 + (int)errorCorrectionCodewordCount:(int)errorCorrectionLevel;
+
+/**
+ * Returns the recommended minimum error correction level as described in annex E of
+ * ISO/IEC 15438:2001(E).
+ *
+ * @param n the number of data codewords
+ * @return the recommended minimum error correction level
+ */
 + (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError **)error;
+
+/**
+ * Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
+ *
+ * @param dataCodewords        the data codewords
+ * @param errorCorrectionLevel the error correction level (0-8)
+ * @return the String representing the error correction codewords
+ */
 + (NSString *)generateErrorCorrection:(NSString *)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel;
 
 @end

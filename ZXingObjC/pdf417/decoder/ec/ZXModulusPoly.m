@@ -58,18 +58,30 @@
   return self;
 }
 
+/**
+ * @return degree of this polynomial
+ */
 - (int)degree {
   return self.coefficients.length - 1;
 }
 
+/**
+ * @return true iff this polynomial is the monomial "0"
+ */
 - (BOOL)zero {
   return self.coefficients.array[0] == 0;
 }
 
+/**
+ * @return coefficient of x^degree term in this polynomial
+ */
 - (int)coefficient:(int)degree {
   return self.coefficients.array[self.coefficients.length - 1 - degree];
 }
 
+/**
+ * @return evaluation of this polynomial at a given point
+ */
 - (int)evaluateAt:(int)a {
   if (a == 0) {
     return [self coefficient:0];

@@ -20,19 +20,53 @@
 
 @property (nonatomic, readonly, strong) NSArray *names;
 @property (nonatomic, readonly, strong) NSArray *nicknames;
+
+/**
+ * In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
+ * is often provided, called furigana, which spells the name phonetically.
+ *
+ * @return The pronunciation of the names property, often in hiragana or katakana.
+ */
 @property (nonatomic, readonly, copy) NSString *pronunciation;
+
 @property (nonatomic, readonly, strong) NSArray *phoneNumbers;
+
+/**
+ * @return optional descriptions of the type of each phone number. It could be like "HOME", but,
+ *  there is no guaranteed or standard format.
+ */
 @property (nonatomic, readonly, strong) NSArray *phoneTypes;
+
 @property (nonatomic, readonly, strong) NSArray *emails;
+
+/**
+ * @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
+ *  there is no guaranteed or standard format.
+ */
 @property (nonatomic, readonly, strong) NSArray *emailTypes;
+
 @property (nonatomic, readonly, copy) NSString *instantMessenger;
 @property (nonatomic, readonly, copy) NSString *note;
 @property (nonatomic, readonly, strong) NSArray *addresses;
+
+/**
+ * @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
+ *  there is no guaranteed or standard format.
+ */
 @property (nonatomic, readonly, strong) NSArray *addressTypes;
+
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *org;
 @property (nonatomic, readonly, strong) NSArray *urls;
+
+/**
+ * @return birthday formatted as yyyyMMdd (e.g. 19780917)
+ */
 @property (nonatomic, readonly, copy) NSString *birthday;
+
+/**
+ * @return a location as a latitude/longitude pair
+ */
 @property (nonatomic, readonly, strong) NSArray *geo;
 
 - (id)initWithNames:(NSArray *)names phoneNumbers:(NSArray *)phoneNumbers

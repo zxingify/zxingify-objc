@@ -19,7 +19,7 @@
 @interface ZXQRCodeBitMatrixParser : NSObject
 
 /**
- * @param bitMatrix {@link BitMatrix} to parse
+ * @param bitMatrix ZXBitMatrix to parse
  * @return nil if dimension is not >= 21 and 1 mod 4
  */
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error;

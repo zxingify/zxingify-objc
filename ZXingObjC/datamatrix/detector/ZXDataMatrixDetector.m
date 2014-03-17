@@ -25,8 +25,7 @@
 /**
  * Simply encapsulates two points and a number of transitions between them.
  */
-
-@interface ResultPointsAndTransitions : NSObject
+@interface ZXResultPointsAndTransitions : NSObject
 
 @property (nonatomic, strong) ZXResultPoint *from;
 @property (nonatomic, strong) ZXResultPoint *to;
@@ -34,7 +33,7 @@
 
 @end
 
-@implementation ResultPointsAndTransitions
+@implementation ZXResultPointsAndTransitions
 
 - (id)initWithFrom:(ZXResultPoint *)from to:(ZXResultPoint *)to transitions:(int)transitions {
   if (self = [super init]) {
@@ -50,7 +49,7 @@
   return [NSString stringWithFormat:@"%@/%@/%d", self.from, self.to, self.transitions];
 }
 
-- (NSComparisonResult)compare:(ResultPointsAndTransitions *)otherObject {
+- (NSComparisonResult)compare:(ZXResultPointsAndTransitions *)otherObject {
   return [@(self.transitions) compare:@(otherObject.transitions)];
 }
 
@@ -78,9 +77,6 @@
   return self;
 }
 
-/**
- * Detects a Data Matrix Code in an image.
- */
 - (ZXDetectorResult *)detectWithError:(NSError **)error {
   NSArray *cornerPoints = [self.rectangleDetector detectWithError:error];
   if (!cornerPoints) {
@@ -98,8 +94,8 @@
   [transitions addObject:[self transitionsBetween:pointC to:pointD]];
   [transitions sortUsingSelector:@selector(compare:)];
 
-  ResultPointsAndTransitions *lSideOne = (ResultPointsAndTransitions *)transitions[0];
-  ResultPointsAndTransitions *lSideTwo = (ResultPointsAndTransitions *)transitions[1];
+  ZXResultPointsAndTransitions *lSideOne = (ZXResultPointsAndTransitions *)transitions[0];
+  ZXResultPointsAndTransitions *lSideTwo = (ZXResultPointsAndTransitions *)transitions[1];
 
   NSMutableDictionary *pointCount = [NSMutableDictionary dictionary];
   [self increment:pointCount key:[lSideOne from]];
@@ -204,7 +200,6 @@
   return [[ZXDetectorResult alloc] initWithBits:bits points:@[topLeft, bottomLeft, bottomRight, correctedTopRight]];
 }
 
-
 /**
  * Calculates the position of the white top right module using the output of the rectangle detector
  * for a rectangular matrix
@@ -244,7 +239,6 @@
 
   return c2;
 }
-
 
 /**
  * Calculates the position of the white top right module using the output of the rectangle detector
@@ -289,7 +283,6 @@
   return [ZXMathUtils round:[ZXResultPoint distance:a pattern2:b]];
 }
 
-
 /**
  * Increments the Integer associated with a key by one.
  */
@@ -320,11 +313,10 @@
                        error:error];
 }
 
-
 /**
  * Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
  */
-- (ResultPointsAndTransitions *)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to {
+- (ZXResultPointsAndTransitions *)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to {
   int fromX = (int)[from x];
   int fromY = (int)[from y];
   int toX = (int)[to x];
@@ -361,7 +353,7 @@
       error -= dx;
     }
   }
-  return [[ResultPointsAndTransitions alloc] initWithFrom:from to:to transitions:transitions];
+  return [[ZXResultPointsAndTransitions alloc] initWithFrom:from to:to transitions:transitions];
 }
 
 @end

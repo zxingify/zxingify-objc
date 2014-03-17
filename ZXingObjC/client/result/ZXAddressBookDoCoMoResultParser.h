@@ -30,7 +30,6 @@
  * 
  * http://www.mobicode.org.tw/files/OMIA%20Mobile%20Bar%20Code%20Standard%20v3.2.1.doc 
  */
-
 @interface ZXAddressBookDoCoMoResultParser : ZXAbstractDoCoMoResultParser
 
 @end

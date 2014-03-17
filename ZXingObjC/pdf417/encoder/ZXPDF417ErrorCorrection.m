@@ -21,7 +21,7 @@
  * Tables of coefficients for calculating error correction words
  * (see annex F, ISO/IEC 15438:2001(E))
  */
-const int EC_COEFFICIENTS[9][512] = {
+const int ZX_PDF417_EC_COEFFICIENTS[][512] = {
   {27, 917},
   {522, 568, 723, 809},
   {237, 308, 436, 284, 646, 653, 428, 379},
@@ -115,10 +115,6 @@ const int EC_COEFFICIENTS[9][512] = {
 
 @implementation ZXPDF417ErrorCorrection
 
-/**
- * Determines the number of error correction codewords for a specified error correction
- * level.
- */
 + (int)errorCorrectionCodewordCount:(int)errorCorrectionLevel {
   if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8) {
     [NSException raise:NSInvalidArgumentException format:@"Error correction level must be between 0 and 8!"];
@@ -126,10 +122,6 @@ const int EC_COEFFICIENTS[9][512] = {
   return 1 << (errorCorrectionLevel + 1);
 }
 
-/**
- * Returns the recommended minimum error correction level as described in annex E of
- * ISO/IEC 15438:2001(E).
- */
 + (int)recommendedMinimumErrorCorrectionLevel:(int)n error:(NSError **)error {
   if (n <= 0) {
     [NSException raise:NSInvalidArgumentException format:@"n must be > 0"];
@@ -152,9 +144,6 @@ const int EC_COEFFICIENTS[9][512] = {
   return -1;
 }
 
-/**
- * Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
- */
 + (NSString *)generateErrorCorrection:(NSString *)dataCodewords errorCorrectionLevel:(int)errorCorrectionLevel {
   int k = [self errorCorrectionCodewordCount:errorCorrectionLevel];
   unichar e[k];
@@ -166,11 +155,11 @@ const int EC_COEFFICIENTS[9][512] = {
     int t2;
     int t3;
     for (int j = k - 1; j >= 1; j--) {
-      t2 = (t1 * EC_COEFFICIENTS[errorCorrectionLevel][j]) % 929;
+      t2 = (t1 * ZX_PDF417_EC_COEFFICIENTS[errorCorrectionLevel][j]) % 929;
       t3 = 929 - t2;
       e[j] = (unichar) ((e[j - 1] + t3) % 929);
     }
-    t2 = (t1 * EC_COEFFICIENTS[errorCorrectionLevel][0]) % 929;
+    t2 = (t1 * ZX_PDF417_EC_COEFFICIENTS[errorCorrectionLevel][0]) % 929;
     t3 = 929 - t2;
     e[0] = (unichar) (t3 % 929);
   }

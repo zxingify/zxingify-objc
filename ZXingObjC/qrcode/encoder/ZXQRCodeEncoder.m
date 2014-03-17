@@ -33,7 +33,7 @@
 #import "ZXReedSolomonEncoder.h"
 
 // The original table is defined in the table 5 of JISX0510:2004 (p.19).
-const int ALPHANUMERIC_TABLE[96] = {
+const int ZX_ALPHANUMERIC_TABLE[] = {
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x00-0x0f
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x10-0x1f
   36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43,  // 0x20-0x2f
@@ -42,10 +42,12 @@ const int ALPHANUMERIC_TABLE[96] = {
   25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
 };
 
-const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
+const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
 @implementation ZXQRCodeEncoder
 
+// The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
+// Basically it applies four rules and summate all penalties.
 + (int)calculateMaskPenalty:(ZXByteMatrix *)matrix {
   return [ZXMaskUtil applyMaskPenaltyRule1:matrix]
     + [ZXMaskUtil applyMaskPenaltyRule2:matrix]
@@ -53,17 +55,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
     + [ZXMaskUtil applyMaskPenaltyRule4:matrix];
 }
 
-/**
- * Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
- * internally by chooseMode(). On success, store the result in "qrCode".
- * 
- * We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
- * "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
- * strong error correction for this purpose.
- * 
- * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
- * with which clients can specify the encoding mode. For now, we don't need the functionality.
- */
 + (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error {
   return [self encode:content ecLevel:ecLevel hints:nil error:error];
 }
@@ -72,7 +63,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   // Determine what character encoding has been specified by the caller, if any
   NSStringEncoding encoding = hints == nil ? 0 : hints.encoding;
   if (encoding == 0) {
-    encoding = DEFAULT_BYTE_MODE_ENCODING;
+    encoding = ZX_DEFAULT_BYTE_MODE_ENCODING;
   }
 
   // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
@@ -84,7 +75,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   ZXBitArray *headerBits = [[ZXBitArray alloc] init];
 
   // Append ECI segment if applicable
-  if ([mode isEqual:[ZXMode byteMode]] && DEFAULT_BYTE_MODE_ENCODING != encoding) {
+  if ([mode isEqual:[ZXMode byteMode]] && ZX_DEFAULT_BYTE_MODE_ENCODING != encoding) {
     ZXCharacterSetECI *eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
     if (eci != nil) {
       [self appendECI:eci bits:headerBits];
@@ -172,13 +163,9 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return qrCode;
 }
 
-/**
- * Return the code point of the table used in alphanumeric mode or
- * -1 if there is no corresponding code in the table.
- */
 + (int)alphanumericCode:(int)code {
-  if (code < sizeof(ALPHANUMERIC_TABLE) / sizeof(int)) {
-    return ALPHANUMERIC_TABLE[code];
+  if (code < sizeof(ZX_ALPHANUMERIC_TABLE) / sizeof(int)) {
+    return ZX_ALPHANUMERIC_TABLE[code];
   }
   return -1;
 }
@@ -236,7 +223,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   int minPenalty = INT_MAX;
   int bestMaskPattern = -1;
 
-  for (int maskPattern = 0; maskPattern < NUM_MASK_PATTERNS; maskPattern++) {
+  for (int maskPattern = 0; maskPattern < ZX_NUM_MASK_PATTERNS; maskPattern++) {
     if (![ZXMatrixUtil buildMatrix:bits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix error:error]) {
       return -1;
     }
@@ -281,9 +268,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return (totalBits + 7) / 8;
 }
 
-/**
- * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
- */
 + (BOOL)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits error:(NSError **)error {
   int capacity = numDataBytes << 3;
   if ([bits size] > capacity) {
@@ -314,11 +298,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return YES;
 }
 
-/**
- * Get number of data bytes and number of error correction bytes for block id "blockID". Store
- * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
- * JISX0510:2004 (p.30)
- */
 + (BOOL)numDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock error:(NSError **)error {
   if (blockID >= numRSBlocks) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Block ID too large"};
@@ -362,10 +341,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return YES;
 }
 
-/**
- * Interleave "bits" with corresponding error correction bytes. On success, store the result in
- * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
- */
 + (ZXBitArray *)interleaveWithECBytes:(ZXBitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks error:(NSError **)error {
   // "bits" must have "getNumDataBytes" bytes of data.
   if ([bits sizeInBytes] != numDataBytes) {
@@ -458,9 +433,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return ecBytes;
 }
 
-/**
- * Append mode info. On success, store the result in "bits".
- */
 + (void)appendModeInfo:(ZXMode *)mode bits:(ZXBitArray *)bits {
   [bits appendBits:[mode bits] numBits:4];
 }
@@ -480,9 +452,6 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return YES;
 }
 
-/**
- * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
- */
 + (BOOL)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error {
   if ([mode isEqual:[ZXMode numericMode]]) {
     [self appendNumericBytes:content bits:bits];
@@ -586,7 +555,7 @@ const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
   return YES;
 }
 
-+ (void)appendECI:(ZXECI *)eci bits:(ZXBitArray *)bits {
++ (void)appendECI:(ZXCharacterSetECI *)eci bits:(ZXBitArray *)bits {
   [bits appendBits:[[ZXMode eciMode] bits] numBits:4];
   [bits appendBits:[eci value] numBits:8];
 }

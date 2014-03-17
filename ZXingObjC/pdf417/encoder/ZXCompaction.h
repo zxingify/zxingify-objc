@@ -15,8 +15,8 @@
  */
 
 typedef enum {
-  ZX_COMPACTION_AUTO,
-  ZX_COMPACTION_TEXT,
-  ZX_COMPACTION_BYTE,
-  ZX_COMPACTION_NUMERIC
+  ZXCompactionAuto,
+  ZXCompactionText,
+  ZXCompactionByte,
+  ZXCompactionNumeric
 } ZXCompaction;

@@ -34,7 +34,7 @@
   __strong static id _mod = nil;
   dispatch_once(&pred, ^{
     @autoreleasepool {
-      _mod = [[ZXModulusGF alloc] initWithModulus:ZXPDF417_NUMBER_OF_CODEWORDS generator:3];
+      _mod = [[ZXModulusGF alloc] initWithModulus:ZX_PDF417_NUMBER_OF_CODEWORDS generator:3];
     }
   });
   return _mod;
@@ -50,13 +50,11 @@
       _expTable[i] = x;
       x = (x * generator) % modulus;
     }
-
     for (int i = 0; i < self.size - 1; i++) {
       _logTable[_expTable[i]] = i;
     }
     // logTable[0] == 0 but this should never be used
     _zero = [[ZXModulusPoly alloc] initWithField:self coefficients:[[ZXIntArray alloc] initWithLength:1]];
-
     _one = [[ZXModulusPoly alloc] initWithField:self coefficients:[[ZXIntArray alloc] initWithInts:1, -1]];
   }
 

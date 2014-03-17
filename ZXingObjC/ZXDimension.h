@@ -17,7 +17,6 @@
 /**
  * Simply encapsulates a width and height.
  */
-
 @interface ZXDimension : NSObject
 
 @property (nonatomic, assign, readonly) int height;

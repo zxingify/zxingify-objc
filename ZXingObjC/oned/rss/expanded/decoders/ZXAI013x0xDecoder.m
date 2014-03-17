@@ -18,21 +18,21 @@
 #import "ZXBitArray.h"
 #import "ZXErrors.h"
 
-int const AI013x0x_HEADER_SIZE = 4 + 1;
-int const AI013x0x_WEIGHT_SIZE = 15;
+const int ZX_AI013x0x_HEADER_SIZE = 4 + 1;
+const int ZX_AI013x0x_WEIGHT_SIZE = 15;
 
 @implementation ZXAI013x0xDecoder
 
 - (NSString *)parseInformationWithError:(NSError **)error {
-  if (self.information.size != AI013x0x_HEADER_SIZE + GTIN_SIZE + AI013x0x_WEIGHT_SIZE) {
+  if (self.information.size != ZX_AI013x0x_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI013x0x_WEIGHT_SIZE) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
   NSMutableString *buf = [NSMutableString string];
 
-  [self encodeCompressedGtin:buf currentPos:AI013x0x_HEADER_SIZE];
-  [self encodeCompressedWeight:buf currentPos:AI013x0x_HEADER_SIZE + GTIN_SIZE weightSize:AI013x0x_WEIGHT_SIZE];
+  [self encodeCompressedGtin:buf currentPos:ZX_AI013x0x_HEADER_SIZE];
+  [self encodeCompressedWeight:buf currentPos:ZX_AI013x0x_HEADER_SIZE + ZX_AI01_GTIN_SIZE weightSize:ZX_AI013x0x_WEIGHT_SIZE];
 
   return buf;
 }

@@ -40,6 +40,9 @@
     birthday = nil;
   }
   NSArray *urls = [[self class] matchDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];
+
+  // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
+  // honor it when found in the wild.
   NSString *org = [[self class] matchSingleDoCoMoPrefixedField:@"ORG:" rawText:rawText trim:YES];
 
   return [ZXAddressBookParsedResult addressBookParsedResultWithNames:[self maybeWrap:name]
@@ -63,6 +66,7 @@
 - (NSString *)parseName:(NSString *)name {
   NSUInteger comma = [name rangeOfString:@","].location;
   if (comma != NSNotFound) {
+    // Format may be last,first; switch it around
     return [NSString stringWithFormat:@"%@ %@", [name substringFromIndex:comma + 1], [name substringToIndex:comma]];
   }
   return name;

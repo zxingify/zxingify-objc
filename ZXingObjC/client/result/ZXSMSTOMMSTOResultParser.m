@@ -25,6 +25,8 @@
   if (!([rawText hasPrefix:@"smsto:"] || [rawText hasPrefix:@"SMSTO:"] || [rawText hasPrefix:@"mmsto:"] || [rawText hasPrefix:@"MMSTO:"])) {
     return nil;
   }
+  // Thanks to dominik.wild for suggesting this enhancement to support
+  // smsto:number:body URIs
   NSString *number = [rawText substringFromIndex:6];
   NSString *body = nil;
   NSUInteger bodyStart = [number rangeOfString:@":"].location;

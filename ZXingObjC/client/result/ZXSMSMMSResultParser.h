@@ -29,7 +29,6 @@
  * This actually also parses URIs starting with "mms:" and treats them all the same way,
  * and effectively converts them to an "sms:" URI for purposes of forwarding to the platform.
  */
-
 @interface ZXSMSMMSResultParser : ZXResultParser
 
 @end

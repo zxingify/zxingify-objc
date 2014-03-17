@@ -17,9 +17,9 @@
 #import "ZXCurrentParsingState.h"
 
 enum {
-  NUMERIC_STATE,
-  ALPHA_STATE,
-  ISO_IEC_646_STATE
+  ZX_NUMERIC_STATE,
+  ZX_ALPHA_STATE,
+  ZX_ISO_IEC_646_STATE
 };
 
 @interface ZXCurrentParsingState ()
@@ -33,33 +33,33 @@ enum {
 - (id)init {
   if (self = [super init]) {
     _position = 0;
-    _encoding = NUMERIC_STATE;
+    _encoding = ZX_NUMERIC_STATE;
   }
   return self;
 }
 
 - (BOOL)alpha {
-  return self.encoding == ALPHA_STATE;
+  return self.encoding == ZX_ALPHA_STATE;
 }
 
 - (BOOL)numeric {
-  return self.encoding == NUMERIC_STATE;
+  return self.encoding == ZX_NUMERIC_STATE;
 }
 
 - (BOOL)isoIec646 {
-  return self.encoding == ISO_IEC_646_STATE;
+  return self.encoding == ZX_ISO_IEC_646_STATE;
 }
 
 - (void)setNumeric {
-  self.encoding = NUMERIC_STATE;
+  self.encoding = ZX_NUMERIC_STATE;
 }
 
 - (void)setAlpha {
-  self.encoding = ALPHA_STATE;
+  self.encoding = ZX_ALPHA_STATE;
 }
 
 - (void)setIsoIec646 {
-  self.encoding = ISO_IEC_646_STATE;
+  self.encoding = ZX_ISO_IEC_646_STATE;
 }
 
 @end

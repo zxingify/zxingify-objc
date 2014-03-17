@@ -26,12 +26,12 @@
 #import "ZXRSSFinderPattern.h"
 #import "ZXRSSUtils.h"
 
-const int OUTSIDE_EVEN_TOTAL_SUBSET[5] = {1,10,34,70,126};
-const int INSIDE_ODD_TOTAL_SUBSET[4] = {4,20,48,81};
-const int OUTSIDE_GSUM[5] = {0,161,961,2015,2715};
-const int INSIDE_GSUM[4] = {0,336,1036,1516};
-const int OUTSIDE_ODD_WIDEST[5] = {8,6,4,3,1};
-const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
+const int ZX_RSS14_OUTSIDE_EVEN_TOTAL_SUBSET[5] = {1,10,34,70,126};
+const int ZX_RSS14_INSIDE_ODD_TOTAL_SUBSET[4] = {4,20,48,81};
+const int ZX_RSS14_OUTSIDE_GSUM[5] = {0,161,961,2015,2715};
+const int ZX_RSS14_INSIDE_GSUM[4] = {0,336,1036,1516};
+const int ZX_RSS14_OUTSIDE_ODD_WIDEST[5] = {8,6,4,3,1};
+const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 
 @interface ZXRSS14Reader ()
 
@@ -237,24 +237,24 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
       return nil;
     }
     int group = (12 - oddSum) / 2;
-    int oddWidest = OUTSIDE_ODD_WIDEST[group];
+    int oddWidest = ZX_RSS14_OUTSIDE_ODD_WIDEST[group];
     int evenWidest = 9 - oddWidest;
     int vOdd = [ZXRSSUtils rssValue:self.oddCounts maxWidth:oddWidest noNarrow:NO];
     int vEven = [ZXRSSUtils rssValue:self.evenCounts maxWidth:evenWidest noNarrow:YES];
-    int tEven = OUTSIDE_EVEN_TOTAL_SUBSET[group];
-    int gSum = OUTSIDE_GSUM[group];
+    int tEven = ZX_RSS14_OUTSIDE_EVEN_TOTAL_SUBSET[group];
+    int gSum = ZX_RSS14_OUTSIDE_GSUM[group];
     return [[ZXDataCharacter alloc] initWithValue:vOdd * tEven + vEven + gSum checksumPortion:checksumPortion];
   } else {
     if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4) {
       return nil;
     }
     int group = (10 - evenSum) / 2;
-    int oddWidest = INSIDE_ODD_WIDEST[group];
+    int oddWidest = ZX_RSS14_INSIDE_ODD_WIDEST[group];
     int evenWidest = 9 - oddWidest;
     int vOdd = [ZXRSSUtils rssValue:self.oddCounts maxWidth:oddWidest noNarrow:YES];
     int vEven = [ZXRSSUtils rssValue:self.evenCounts maxWidth:evenWidest noNarrow:NO];
-    int tOdd = INSIDE_ODD_TOTAL_SUBSET[group];
-    int gSum = INSIDE_GSUM[group];
+    int tOdd = ZX_RSS14_INSIDE_ODD_TOTAL_SUBSET[group];
+    int gSum = ZX_RSS14_INSIDE_GSUM[group];
     return [[ZXDataCharacter alloc] initWithValue:vEven * tOdd + vOdd + gSum checksumPortion:checksumPortion];
   }
 }
@@ -316,7 +316,7 @@ const int INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     counters.array[i] = counters.array[i-1];
   }
   counters.array[0] = firstCounter;
-  int value = [ZXAbstractRSSReader parseFinderValue:counters finderPatternType:RSS_PATTERNS_RSS14_PATTERNS];
+  int value = [ZXAbstractRSSReader parseFinderValue:counters finderPatternType:ZX_RSS_PATTERNS_RSS14_PATTERNS];
   if (value == -1) {
     return nil;
   }

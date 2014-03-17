@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix, ZXDecodeHints, ZXDecoderResult;
+
 /**
  * The main class which implements MaxiCode decoding -- as opposed to locating and extracting
  * the MaxiCode from an image.
  */
-
-@class ZXBitMatrix, ZXDecodeHints, ZXDecoderResult;
-
 @interface ZXMaxiCodeDecoder : NSObject
 
 - (ZXDecoderResult *)decode:(ZXBitMatrix *)bits error:(NSError **)error;

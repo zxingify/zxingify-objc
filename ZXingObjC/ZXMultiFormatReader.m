@@ -50,25 +50,27 @@
  * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
  * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
  * Use setHints() followed by decodeWithState() for continuous scan applications.
+ *
+ * @param image The pixel data to decode
+ * @return The contents of the image or nil if any errors occurred
  */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
   self.hints = nil;
   return [self decodeInternal:image error:error];
 }
 
-
 /**
  * Decode an image using the hints provided. Does not honor existing state.
+ *
+ * @param image The pixel data to decode
+ * @param hints The hints to use, clearing the previous state.
+ * @return The contents of the image or nil if any errors occurred
  */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   self.hints = hints;
   return [self decodeInternal:image error:error];
 }
 
-/**
- * Decode an image using the state set up by calling setHints() previously. Continuous scan
- * clients will get a <b>large</b> speed increase by using this instead of decode().
- */
 - (ZXResult *)decodeWithState:(ZXBinaryBitmap *)image error:(NSError **)error {
   if (self.readers == nil) {
     self.hints = nil;
@@ -77,9 +79,11 @@
 }
 
 /**
- * This method adds state to the ZXMultiFormatReader. By setting the hints once, subsequent calls
+ * This method adds state to the MultiFormatReader. By setting the hints once, subsequent calls
  * to decodeWithState(image) can reuse the same set of readers without reallocating memory. This
  * is important for performance in continuous scan clients.
+ *
+ * @param hints The set of hints to use for subsequent calls to decode(image)
  */
 - (void)setHints:(ZXDecodeHints *)hints {
   _hints = hints;

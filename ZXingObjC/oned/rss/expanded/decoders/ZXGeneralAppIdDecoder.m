@@ -61,7 +61,7 @@
       remaining = nil;
     }
 
-    if (currentPosition == [info theNewPosition]) {
+    if (currentPosition == [info theNewPosition]) {// No step forward!
       break;
     }
     currentPosition = [info theNewPosition];
@@ -71,6 +71,8 @@
 }
 
 - (BOOL)isStillNumeric:(int)pos {
+  // It's numeric if it still has 7 positions
+  // and one of the first 4 bits is "1".
   if (pos + 7 > self.information.size) {
     return pos + 4 <= self.information.size;
   }
@@ -89,12 +91,12 @@
     int numeric = [self extractNumericValueFromBitArray:pos bits:4];
     if (numeric == 0) {
       return [[ZXDecodedNumeric alloc] initWithNewPosition:self.information.size
-                                                 firstDigit:FNC1
-                                                secondDigit:FNC1];
+                                                 firstDigit:ZX_FNC1_INT
+                                                secondDigit:ZX_FNC1_INT];
     }
     return [[ZXDecodedNumeric alloc] initWithNewPosition:self.information.size
                                                firstDigit:numeric - 1
-                                              secondDigit:FNC1];
+                                              secondDigit:ZX_FNC1_INT];
   }
   int numeric = [self extractNumericValueFromBitArray:pos bits:7];
 
@@ -289,7 +291,7 @@
 - (ZXDecodedChar *)decodeIsoIec646:(int)pos {
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue == 15) {
-    return [[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1char];
+    return [[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:ZX_FNC1_CHAR];
   }
 
   if (fiveBitValue >= 5 && fiveBitValue < 15) {
@@ -385,6 +387,7 @@
     return NO;
   }
 
+  // We now check if it's a valid 5-bit value (0..9 and FNC1)
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue >= 5 && fiveBitValue < 16) {
     return YES;
@@ -395,13 +398,13 @@
   }
 
   int sixBitValue = [self extractNumericValueFromBitArray:pos bits:6];
-  return sixBitValue >= 16 && sixBitValue < 63;
+  return sixBitValue >= 16 && sixBitValue < 63; // 63 not included
 }
 
 - (ZXDecodedChar *)decodeAlphanumeric:(int)pos {
   int fiveBitValue = [self extractNumericValueFromBitArray:pos bits:5];
   if (fiveBitValue == 15) {
-    return [[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:FNC1char];
+    return [[ZXDecodedChar alloc] initWithNewPosition:pos + 5 value:ZX_FNC1_CHAR];
   }
 
   if (fiveBitValue >= 5 && fiveBitValue < 15) {
@@ -459,6 +462,7 @@
 }
 
 - (BOOL)isAlphaOr646ToNumericLatch:(int)pos {
+  // Next is alphanumeric if there are 3 positions and they are all zeros
   if (pos + 3 > self.information.size) {
     return NO;
   }
@@ -473,6 +477,8 @@
 }
 
 - (BOOL)isNumericToAlphaNumericLatch:(int)pos {
+  // Next is alphanumeric if there are 4 positions and they are all zeros, or
+  // if there is a subset of this just before the end of the symbol
   if (pos + 1 > self.information.size) {
     return NO;
   }

@@ -22,7 +22,6 @@
  * 
  * See http://code.google.com/p/zxing/issues/detail?id=536
  */
-
 @interface ZXSMTPResultParser : ZXResultParser
 
 @end

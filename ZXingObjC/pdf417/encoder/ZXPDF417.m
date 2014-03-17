@@ -17,6 +17,7 @@
 #import "ZXBarcodeMatrix.h"
 #import "ZXBarcodeRow.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXPDF417.h"
 #import "ZXPDF417ErrorCorrection.h"
 #import "ZXPDF417HighLevelEncoder.h"
@@ -24,18 +25,18 @@
 /**
  * The start pattern (17 bits)
  */
-const int START_PATTERN_INT = 0x1fea8;
+const int ZX_PDF417_START_PATTERN = 0x1fea8;
 /**
  * The stop pattern (18 bits)
  */
-const int STOP_PATTERN_INT = 0x3fa29;
+const int ZX_PDF417_STOP_PATTERN = 0x3fa29;
 
 /**
  * The codeword table from the Annex A of ISO/IEC 15438:2001(E).
  */
-#define CODEWORD_TABLE_LEN 3
-#define CODEWORD_TABLE_SUB_LEN 929
-const int PDF_CODEWORD_TABLE[CODEWORD_TABLE_LEN][CODEWORD_TABLE_SUB_LEN] = {
+#define ZX_PDF417_CODEWORD_TABLE_LEN 3
+#define ZX_PDF417_CODEWORD_TABLE_SUB_LEN 929
+const int ZX_PDF417_CODEWORD_TABLE[ZX_PDF417_CODEWORD_TABLE_LEN][ZX_PDF417_CODEWORD_TABLE_SUB_LEN] = {
   {0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e,
     0x1a8c0, 0x1d470, 0x1a860, 0x15040, 0x1a830, 0x15020,
     0x1adc0, 0x1d6f0, 0x1eb7c, 0x1ace0, 0x1d678, 0x1eb3e,
@@ -502,9 +503,9 @@ const int PDF_CODEWORD_TABLE[CODEWORD_TABLE_LEN][CODEWORD_TABLE_SUB_LEN] = {
     0x107a4, 0x107a2, 0x10396, 0x107b6, 0x187d4, 0x187d2,
     0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea}};
 
-static float PREFERRED_RATIO = 3.0f;
-static float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
-static float HEIGHT = 2.0f; //mm
+const float ZX_PDF417_PREFERRED_RATIO = 3.0f;
+const float ZX_PDF417_DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
+const float ZX_PDF417_HEIGHT = 2.0f; //mm
 
 @interface ZXPDF417 ()
 
@@ -525,7 +526,7 @@ static float HEIGHT = 2.0f; //mm
 - (id)initWithCompact:(BOOL)compact {
   if (self = [super init]) {
     _compact = compact;
-    _compaction = ZX_COMPACTION_AUTO;
+    _compaction = ZXCompactionAuto;
     _minCols = 2;
     _maxCols = 30;
     _maxRows = 30;
@@ -537,6 +538,13 @@ static float HEIGHT = 2.0f; //mm
 
 /**
  * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
+ *
+ * @param m the number of source codewords prior to the additional of the Symbol Length
+ *          Descriptor and any pad codewords
+ * @param k the number of error correction codewords
+ * @param c the number of columns in the symbol in the data region (excluding start, stop and
+ *          row indicator codewords)
+ * @return the number of rows in the symbol (r)
  */
 - (int)calculateNumberOfRowsM:(int)m k:(int)k c:(int)c {
   int r = ((m + 1 + k) / c) + 1;
@@ -548,6 +556,14 @@ static float HEIGHT = 2.0f; //mm
 
 /**
  * Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
+ *
+ * @param m the number of source codewords prior to the additional of the Symbol Length
+ *          Descriptor and any pad codewords
+ * @param k the number of error correction codewords
+ * @param c the number of columns in the symbol in the data region (excluding start, stop and
+ *          row indicator codewords)
+ * @param r the number of rows in the symbol
+ * @return the number of pad codewords
  */
 - (int)numberOfPadCodewordsM:(int)m k:(int)k c:(int)c r:(int)r {
   int n = c * r - k;
@@ -578,7 +594,7 @@ static float HEIGHT = 2.0f; //mm
   for (int y = 0; y < r; y++) {
     int cluster = y % 3;
     [logic startRow];
-    [self encodeCharPattern:START_PATTERN_INT len:17 logic:logic.currentRow];
+    [self encodeCharPattern:ZX_PDF417_START_PATTERN len:17 logic:logic.currentRow];
 
     int left;
     int right;
@@ -593,29 +609,26 @@ static float HEIGHT = 2.0f; //mm
       right = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
     }
 
-    int pattern = PDF_CODEWORD_TABLE[cluster][left];
+    int pattern = ZX_PDF417_CODEWORD_TABLE[cluster][left];
     [self encodeCharPattern:pattern len:17 logic:logic.currentRow];
 
     for (int x = 0; x < c; x++) {
-      pattern = PDF_CODEWORD_TABLE[cluster][[fullCodewords characterAtIndex:idx]];
+      pattern = ZX_PDF417_CODEWORD_TABLE[cluster][[fullCodewords characterAtIndex:idx]];
       [self encodeCharPattern:pattern len:17 logic:logic.currentRow];
       idx++;
     }
 
     if (self.compact) {
-      [self encodeCharPattern:STOP_PATTERN_INT len:1 logic:logic.currentRow];
+      [self encodeCharPattern:ZX_PDF417_STOP_PATTERN len:1 logic:logic.currentRow];
     } else {
-      pattern = PDF_CODEWORD_TABLE[cluster][right];
+      pattern = ZX_PDF417_CODEWORD_TABLE[cluster][right];
       [self encodeCharPattern:pattern len:17 logic:logic.currentRow];
 
-      [self encodeCharPattern:STOP_PATTERN_INT len:18 logic:logic.currentRow];
+      [self encodeCharPattern:ZX_PDF417_STOP_PATTERN len:18 logic:logic.currentRow];
     }
   }
 }
 
-/**
- * Generates the barcode logic.
- */
 - (BOOL)generateBarcodeLogic:(NSString *)msg errorCorrectionLevel:(int)anErrorCorrectionLevel error:(NSError **)error {
 
   //1. step: High-level encoding
@@ -626,13 +639,13 @@ static float HEIGHT = 2.0f; //mm
   }
   int sourceCodeWords = (int)highLevel.length;
 
-  int dimension[2] = {0};
-  if (![self determineDimensions:dimension sourceCodeWords:sourceCodeWords errorCorrectionCodeWords:errorCorrectionCodeWords error:error]) {
+  ZXIntArray *dimension = [self determineDimensions:sourceCodeWords errorCorrectionCodeWords:errorCorrectionCodeWords error:error];
+  if (!dimension) {
     return NO;
   }
 
-  int cols = dimension[0];
-  int rows = dimension[1];
+  int cols = dimension.array[0];
+  int rows = dimension.array[1];
 
   int pad = [self numberOfPadCodewordsM:sourceCodeWords k:errorCorrectionCodeWords c:cols r:rows];
 
@@ -664,13 +677,9 @@ static float HEIGHT = 2.0f; //mm
   return YES;
 }
 
-/**
- * Determine optimal nr of columns and rows for the specified number of
- * codewords.
- */
-- (BOOL)determineDimensions:(int *)dimension sourceCodeWords:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error{
+- (ZXIntArray *)determineDimensions:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error {
   float ratio = 0.0f;
-  BOOL result = NO;
+  ZXIntArray *dimension = nil;
 
   for (int cols = self.minCols; cols <= self.maxCols; cols++) {
 
@@ -684,41 +693,35 @@ static float HEIGHT = 2.0f; //mm
       continue;
     }
 
-    float newRatio = ((17 * cols + 69) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
+    float newRatio = ((17 * cols + 69) * ZX_PDF417_DEFAULT_MODULE_WIDTH) / (rows * ZX_PDF417_HEIGHT);
 
     // ignore if previous ratio is closer to preferred ratio
-    if (result && fabsf(newRatio - PREFERRED_RATIO) > fabsf(ratio - PREFERRED_RATIO)) {
+    if (dimension && fabsf(newRatio - ZX_PDF417_PREFERRED_RATIO) > fabsf(ratio - ZX_PDF417_PREFERRED_RATIO)) {
       continue;
     }
 
     ratio = newRatio;
-    dimension[0] = cols;
-    dimension[1] = rows;
-    result = YES;
+    dimension = [[ZXIntArray alloc] initWithInts:cols, rows, -1];
   }
 
   // Handle case when min values were larger than necessary
-  if (!result) {
+  if (!dimension) {
     int rows = [self calculateNumberOfRowsM:sourceCodeWords k:errorCorrectionCodeWords c:self.minCols];
     if (rows < self.minRows) {
-      dimension[0] = self.minCols;
-      dimension[1] = self.minRows;
+      dimension = [[ZXIntArray alloc] initWithInts:self.minCols, self.minRows, -1];
     }
   }
 
-  if (!result) {
+  if (!dimension) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Unable to fit message in columns"};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
     return NO;
   }
 
-  return result;
+  return dimension;
 }
 
-/**
- * Sets max/min row/col values
- */
 - (void)setDimensionsWithMaxCols:(int)maxCols minCols:(int)minCols maxRows:(int)maxRows minRows:(int)minRows {
   self.maxCols = maxCols;
   self.minCols = minCols;

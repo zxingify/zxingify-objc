@@ -118,6 +118,10 @@
 
 /**
  * Places the 8 bits of a utah-shaped symbol character in ECC200.
+ *
+ * @param row the row
+ * @param col the column
+ * @param pos character position
  */
 - (void)utahAtRow:(int)row col:(int)col pos:(int)pos {
   [self moduleAtRow:row - 2 col:col - 2 pos:pos bit:1];

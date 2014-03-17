@@ -18,10 +18,36 @@
 
 @interface ZXMaskUtil : NSObject
 
+/**
+ * Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
+ * give penalty to them. Example: 00000 or 11111.
+ */
 + (int)applyMaskPenaltyRule1:(ZXByteMatrix *)matrix;
+
+/**
+ * Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
+ * penalty to them. This is actually equivalent to the spec's rule, which is to find MxN blocks and give a
+ * penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
+ */
 + (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix;
+
+/**
+ * Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
+ * 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
+ * penalties twice (i.e. 40 * 2).
+ */
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix;
+
+/**
+ * Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give
+ * penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
+ */
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix;
+
+/**
+ * Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
+ * pattern conditions.
+ */
 + (BOOL)dataMaskBit:(int)maskPattern x:(int)x y:(int)y;
 
 @end

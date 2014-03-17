@@ -16,8 +16,6 @@
 
 #import "ZXAI01decoder.h"
 
-@class ZXBitArray;
-
 @interface ZXAI01weightDecoder : ZXAI01decoder
 
 - (void)encodeCompressedWeight:(NSMutableString *)buf currentPos:(int)currentPos weightSize:(int)weightSize;

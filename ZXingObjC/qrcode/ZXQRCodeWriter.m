@@ -22,7 +22,7 @@
 #import "ZXQRCodeEncoder.h"
 #import "ZXQRCodeWriter.h"
 
-int const QUIET_ZONE_SIZE = 4;
+const int ZX_QUIET_ZONE_SIZE = 4;
 
 @implementation ZXQRCodeWriter
 
@@ -44,7 +44,7 @@ int const QUIET_ZONE_SIZE = 4;
   }
 
   ZXErrorCorrectionLevel *errorCorrectionLevel = [ZXErrorCorrectionLevel errorCorrectionLevelL];
-  int quietZone = QUIET_ZONE_SIZE;
+  int quietZone = ZX_QUIET_ZONE_SIZE;
   if (hints != nil) {
     if (hints.errorCorrectionLevel) {
       errorCorrectionLevel = hints.errorCorrectionLevel;

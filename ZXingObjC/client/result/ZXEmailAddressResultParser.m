@@ -25,6 +25,7 @@
   NSString *rawText = [ZXResultParser massagedText:result];
   NSString *emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
+    // If it starts with mailto:, assume it is definitely trying to be an email address
     emailAddress = [rawText substringFromIndex:7];
     NSUInteger queryStart = [emailAddress rangeOfString:@"?"].location;
     if (queryStart != NSNotFound) {

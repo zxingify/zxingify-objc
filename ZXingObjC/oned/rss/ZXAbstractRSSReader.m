@@ -17,15 +17,15 @@
 #import "ZXAbstractRSSReader.h"
 #import "ZXIntArray.h"
 
-static int MAX_AVG_VARIANCE;
-static int MAX_INDIVIDUAL_VARIANCE;
+static int ZX_RSS_MAX_AVG_VARIANCE;
+static int ZX_RSS_MAX_INDIVIDUAL_VARIANCE;
 
-float const MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
-float const MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
+float const ZX_RSS_MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
+float const ZX_RSS_MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
 
-#define RSS14_FINDER_PATTERNS_LEN 9
-#define RSS14_FINDER_PATTERNS_SUB_LEN 4
-const int RSS14_FINDER_PATTERNS[RSS14_FINDER_PATTERNS_LEN][RSS14_FINDER_PATTERNS_SUB_LEN] = {
+#define ZX_RSS14_FINDER_PATTERNS_LEN 9
+#define ZX_RSS14_FINDER_PATTERNS_SUB_LEN 4
+const int ZX_RSS14_FINDER_PATTERNS[ZX_RSS14_FINDER_PATTERNS_LEN][ZX_RSS14_FINDER_PATTERNS_SUB_LEN] = {
   {3,8,2,1},
   {3,5,5,1},
   {3,3,7,1},
@@ -37,9 +37,9 @@ const int RSS14_FINDER_PATTERNS[RSS14_FINDER_PATTERNS_LEN][RSS14_FINDER_PATTERNS
   {1,3,9,1},
 };
 
-#define RSS_EXPANDED_FINDER_PATTERNS_LEN 6
-#define RSS_EXPANDED_FINDER_PATTERNS_SUB_LEN 4
-const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXPANDED_FINDER_PATTERNS_SUB_LEN] = {
+#define ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN 6
+#define ZX_RSS_EXPANDED_FINDER_PATTERNS_SUB_LEN 4
+const int ZX_RSS_EXPANDED_FINDER_PATTERNS[ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN][ZX_RSS_EXPANDED_FINDER_PATTERNS_SUB_LEN] = {
   {1,8,4,1}, // A
   {3,6,4,1}, // B
   {3,4,6,1}, // C
@@ -51,8 +51,8 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
 @implementation ZXAbstractRSSReader
 
 + (void)initialize {
-  MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
-  MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.45f);
+  ZX_RSS_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
+  ZX_RSS_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.45f);
 }
 
 - (id)init {
@@ -87,19 +87,19 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   }
 }
 
-+ (int)parseFinderValue:(ZXIntArray *)counters finderPatternType:(RSS_PATTERNS)finderPatternType {
++ (int)parseFinderValue:(ZXIntArray *)counters finderPatternType:(ZX_RSS_PATTERNS)finderPatternType {
   switch (finderPatternType) {
-    case RSS_PATTERNS_RSS14_PATTERNS:
-      for (int value = 0; value < RSS14_FINDER_PATTERNS_LEN; value++) {
-        if ([self patternMatchVariance:counters pattern:RSS14_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+    case ZX_RSS_PATTERNS_RSS14_PATTERNS:
+      for (int value = 0; value < ZX_RSS14_FINDER_PATTERNS_LEN; value++) {
+        if ([self patternMatchVariance:counters pattern:ZX_RSS14_FINDER_PATTERNS[value] maxIndividualVariance:ZX_RSS_MAX_INDIVIDUAL_VARIANCE] < ZX_RSS_MAX_AVG_VARIANCE) {
           return value;
         }
       }
       break;
 
-    case RSS_PATTERNS_RSS_EXPANDED_PATTERNS:
-      for (int value = 0; value < RSS_EXPANDED_FINDER_PATTERNS_LEN; value++) {
-        if ([self patternMatchVariance:counters pattern:RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+    case ZX_RSS_PATTERNS_RSS_EXPANDED_PATTERNS:
+      for (int value = 0; value < ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN; value++) {
+        if ([self patternMatchVariance:counters pattern:ZX_RSS_EXPANDED_FINDER_PATTERNS[value] maxIndividualVariance:ZX_RSS_MAX_INDIVIDUAL_VARIANCE] < ZX_RSS_MAX_AVG_VARIANCE) {
           return value;
         }
       }
@@ -148,7 +148,7 @@ const int RSS_EXPANDED_FINDER_PATTERNS[RSS_EXPANDED_FINDER_PATTERNS_LEN][RSS_EXP
   int firstTwoSum = counters.array[0] + counters.array[1];
   int sum = firstTwoSum + counters.array[2] + counters.array[3];
   float ratio = (float)firstTwoSum / (float)sum;
-  if (ratio >= MIN_FINDER_PATTERN_RATIO && ratio <= MAX_FINDER_PATTERN_RATIO) {
+  if (ratio >= ZX_RSS_MIN_FINDER_PATTERN_RATIO && ratio <= ZX_RSS_MAX_FINDER_PATTERN_RATIO) {
     int minCounter = INT_MAX;
     int maxCounter = INT_MIN;
     for (int i = 0; i < counters.length; i++) {

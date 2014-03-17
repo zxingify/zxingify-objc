@@ -17,13 +17,13 @@
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXFormatInformation.h"
 
-int const FORMAT_INFO_MASK_QR = 0x5412;
+const int ZX_FORMAT_INFO_MASK_QR = 0x5412;
 
 /**
  * See ISO 18004:2006, Annex C, Table C.1
  */
-int const FORMAT_INFO_DECODE_LOOKUP_LEN = 32;
-int const FORMAT_INFO_DECODE_LOOKUP[FORMAT_INFO_DECODE_LOOKUP_LEN][2] = {
+const int ZX_FORMAT_INFO_DECODE_LOOKUP_LEN = 32;
+const int ZX_FORMAT_INFO_DECODE_LOOKUP[ZX_FORMAT_INFO_DECODE_LOOKUP_LEN][2] = {
   {0x5412, 0x00},
   {0x5125, 0x01},
   {0x5E7C, 0x02},
@@ -61,7 +61,7 @@ int const FORMAT_INFO_DECODE_LOOKUP[FORMAT_INFO_DECODE_LOOKUP_LEN][2] = {
 /**
  * Offset i holds the number of 1 bits in the binary representation of i
  */
-int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
+const int ZX_BITS_SET_IN_HALF_BYTE[] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
 @implementation ZXFormatInformation
 
@@ -76,14 +76,14 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
 
 + (int)numBitsDiffering:(int)a b:(int)b {
   a ^= b;
-  return BITS_SET_IN_HALF_BYTE[a & 0x0F] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 4 & 0x0F)] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 8 & 0x0F)] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 12 & 0x0F)] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 16 & 0x0F)] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 20 & 0x0F)] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 24 & 0x0F)] +
-      BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 28 & 0x0F)];
+  return ZX_BITS_SET_IN_HALF_BYTE[a & 0x0F] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 4 & 0x0F)] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 8 & 0x0F)] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 12 & 0x0F)] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 16 & 0x0F)] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 20 & 0x0F)] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 24 & 0x0F)] +
+      ZX_BITS_SET_IN_HALF_BYTE[((int)((unsigned int)a) >> 28 & 0x0F)];
 }
 
 + (ZXFormatInformation *)decodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
@@ -91,27 +91,27 @@ int const BITS_SET_IN_HALF_BYTE[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
   if (formatInfo != nil) {
     return formatInfo;
   }
-  return [self doDecodeFormatInformation:maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR maskedFormatInfo2:maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR];
+  return [self doDecodeFormatInformation:maskedFormatInfo1 ^ ZX_FORMAT_INFO_MASK_QR maskedFormatInfo2:maskedFormatInfo2 ^ ZX_FORMAT_INFO_MASK_QR];
 }
 
 + (ZXFormatInformation *)doDecodeFormatInformation:(int)maskedFormatInfo1 maskedFormatInfo2:(int)maskedFormatInfo2 {
   int bestDifference = INT_MAX;
   int bestFormatInfo = 0;
 
-  for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP_LEN; i++) {
-    int targetInfo = FORMAT_INFO_DECODE_LOOKUP[i][0];
+  for (int i = 0; i < ZX_FORMAT_INFO_DECODE_LOOKUP_LEN; i++) {
+    int targetInfo = ZX_FORMAT_INFO_DECODE_LOOKUP[i][0];
     if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
-      return [[ZXFormatInformation alloc] initWithFormatInfo:FORMAT_INFO_DECODE_LOOKUP[i][1]];
+      return [[ZXFormatInformation alloc] initWithFormatInfo:ZX_FORMAT_INFO_DECODE_LOOKUP[i][1]];
     }
     int bitsDifference = [self numBitsDiffering:maskedFormatInfo1 b:targetInfo];
     if (bitsDifference < bestDifference) {
-      bestFormatInfo = FORMAT_INFO_DECODE_LOOKUP[i][1];
+      bestFormatInfo = ZX_FORMAT_INFO_DECODE_LOOKUP[i][1];
       bestDifference = bitsDifference;
     }
     if (maskedFormatInfo1 != maskedFormatInfo2) {
       bitsDifference = [self numBitsDiffering:maskedFormatInfo2 b:targetInfo];
       if (bitsDifference < bestDifference) {
-        bestFormatInfo = FORMAT_INFO_DECODE_LOOKUP[i][1];
+        bestFormatInfo = ZX_FORMAT_INFO_DECODE_LOOKUP[i][1];
         bestDifference = bitsDifference;
       }
     }

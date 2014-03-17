@@ -26,6 +26,7 @@
     return nil;
   }
 
+  // Check up front if this is a URI syntax string with query arguments
   NSMutableDictionary *nameValuePairs = [self parseNameValuePairs:rawText];
   NSString *subject = nil;
   NSString *body = nil;
@@ -36,8 +37,10 @@
     querySyntax = YES;
   }
 
+  // Drop sms, query portion
   NSUInteger queryStart = [rawText rangeOfString:@"?" options:NSLiteralSearch range:NSMakeRange(4, [rawText length] - 4)].location;
   NSString *smsURIWithoutQuery;
+  // If it's not query syntax, the question mark is part of the subject or message
   if (queryStart == NSNotFound || !querySyntax) {
     smsURIWithoutQuery = [rawText substringFromIndex:4];
   } else {

@@ -14,16 +14,34 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix, ZXDecoderResult, ZXReedSolomonDecoder;
+
 /**
  * The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting
  * the Data Matrix Code from an image.
  */
-
-@class ZXBitMatrix, ZXDecoderResult, ZXReedSolomonDecoder;
-
 @interface ZXDataMatrixDecoder : NSObject
 
+/**
+ * Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.
+ * "true" is taken to mean a black module.
+ *
+ * @param image booleans representing white/black Data Matrix Code modules
+ * @return text and bytes encoded within the Data Matrix Code
+ * @return nil if the Data Matrix Code cannot be decoded
+ * @return nil if error correction fails
+ */
 - (ZXDecoderResult *)decode:(NSArray *)image error:(NSError **)error;
+
+/**
+ * Decodes a Data Matrix Code represented as a {@link BitMatrix}. A 1 or "true" is taken
+ * to mean a black module.
+ *
+ * @param bits booleans representing white/black Data Matrix Code modules
+ * @return text and bytes encoded within the Data Matrix Code
+ * @return nil if the Data Matrix Code cannot be decoded
+ * @return nil if error correction fails
+ */
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error;
 
 @end

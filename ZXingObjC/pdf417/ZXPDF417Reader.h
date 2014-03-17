@@ -17,12 +17,11 @@
 #import "ZXMultipleBarcodeReader.h"
 #import "ZXReader.h"
 
+@class ZXDecodeHints, ZXResult;
+
 /**
  * This implementation can detect and decode PDF417 codes in an image.
  */
-
-@class ZXDecodeHints, ZXResult;
-
 @interface ZXPDF417Reader : NSObject <ZXReader, ZXMultipleBarcodeReader>
 
 - (NSArray *)decodeMultiple:(ZXBinaryBitmap *)image error:(NSError **)error;

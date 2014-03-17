@@ -21,7 +21,6 @@
  * This seems to be used sometimes, but I am not able to find documentation
  * on its origin or official format?
  */
-
 @interface ZXURLTOResultParser : ZXResultParser
 
 @end

@@ -22,9 +22,9 @@
 #import "ZXIntArray.h"
 #import "ZXLuminanceSource.h"
 
-int const LUMINANCE_BITS = 5;
-int const LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+const int ZX_LUMINANCE_BITS = 5;
+const int ZX_LUMINANCE_SHIFT = 8 - ZX_LUMINANCE_BITS;
+const int ZX_LUMINANCE_BUCKETS = 1 << ZX_LUMINANCE_BITS;
 
 @interface ZXGlobalHistogramBinarizer ()
 
@@ -38,7 +38,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 - (id)initWithSource:(ZXLuminanceSource *)source {
   if (self = [super initWithSource:source]) {
     _luminances = [[ZXByteArray alloc] initWithLength:0];
-    _buckets = [[ZXIntArray alloc] initWithLength:LUMINANCE_BUCKETS];
+    _buckets = [[ZXIntArray alloc] initWithLength:ZX_LUMINANCE_BUCKETS];
   }
 
   return self;
@@ -58,7 +58,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   ZXIntArray *localBuckets = self.buckets;
   for (int x = 0; x < width; x++) {
     int pixel = localLuminances.array[x] & 0xff;
-    localBuckets.array[pixel >> LUMINANCE_SHIFT]++;
+    localBuckets.array[pixel >> ZX_LUMINANCE_SHIFT]++;
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
   if (blackPoint == -1) {
@@ -88,6 +88,8 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
   int height = source.height;
   ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
 
+  // Quickly calculates the histogram by sampling four rows from the image. This proved to be
+  // more robust on the blackbox tests than sampling a diagonal as we used to do.
   [self initArrays:width];
 
   // We delay reading the entire image luminance until the black point estimation succeeds.
@@ -100,7 +102,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     int right = (width << 2) / 5;
     for (int x = width / 5; x < right; x++) {
       int pixel = localLuminances.array[x] & 0xff;
-      localBuckets.array[pixel >> LUMINANCE_SHIFT]++;
+      localBuckets.array[pixel >> ZX_LUMINANCE_SHIFT]++;
     }
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
@@ -132,7 +134,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     self.luminances = [[ZXByteArray alloc] initWithLength:luminanceSize];
   }
 
-  for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
+  for (int x = 0; x < ZX_LUMINANCE_BUCKETS; x++) {
     self.buckets.array[x] = 0;
   }
 }
@@ -153,6 +155,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     }
   }
 
+  // Find the second-tallest peak which is somewhat far from the tallest peak.
   int secondPeak = 0;
   int secondPeakScore = 0;
   for (int x = 0; x < numBuckets; x++) {
@@ -165,16 +168,20 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     }
   }
 
+  // Make sure firstPeak corresponds to the black peak.
   if (firstPeak > secondPeak) {
     int temp = firstPeak;
     firstPeak = secondPeak;
     secondPeak = temp;
   }
 
+  // If there is too little contrast in the image to pick a meaningful black point, throw rather
+  // than waste time trying to decode the image, and risk false positives.
   if (secondPeak - firstPeak <= numBuckets >> 4) {
     return -1;
   }
 
+  // Find a valley between them that is low and closer to the white peak.
   int bestValley = secondPeak - 1;
   int bestValleyScore = -1;
   for (int x = secondPeak - 1; x > firstPeak; x--) {
@@ -186,7 +193,7 @@ int const LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
     }
   }
 
-  return bestValley << LUMINANCE_SHIFT;
+  return bestValley << ZX_LUMINANCE_SHIFT;
 }
 
 @end

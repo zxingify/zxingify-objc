@@ -20,7 +20,6 @@
  * A simple result type encapsulating a string that has no further
  * interpretation.
  */
-
 @interface ZXTextParsedResult : ZXParsedResult
 
 @property (nonatomic, copy, readonly) NSString *text;

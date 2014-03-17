@@ -20,7 +20,6 @@
  * Represents a result that encodes an e-mail address, either as a plain address
  * like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
  */
-
 @interface ZXEmailAddressResultParser : ZXResultParser
 
 @end

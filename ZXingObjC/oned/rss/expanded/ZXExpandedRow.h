@@ -21,6 +21,7 @@
 
 @property (nonatomic, strong, readonly) NSArray *pairs;
 @property (nonatomic, assign, readonly) int rowNumber;
+/** Did this row of the image have to be reversed (mirrored) to recognize the pairs? */
 @property (nonatomic, assign, readonly) BOOL wasReversed;
 
 - (id)initWithPairs:(NSArray *)pairs rowNumber:(int)rowNumber wasReversed:(BOOL)wasReversed;

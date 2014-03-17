@@ -17,7 +17,6 @@
 /**
  * Symbol Character Placement Program. Adapted from Annex M.1 in ISO/IEC 16022:2000(E).
  */
-
 @interface ZXDefaultPlacement : NSObject
 
 @property (nonatomic, copy, readonly) NSString *codewords;
@@ -26,6 +25,13 @@
 @property (nonatomic, assign, readonly) int8_t *bits;
 @property (nonatomic, assign, readonly) int bitsLen;
 
+/**
+ * Main constructor
+ *
+ * @param codewords the codewords to place
+ * @param numcols   the number of columns
+ * @param numrows   the number of rows
+ */
 - (id)initWithCodewords:(NSString *)codewords numcols:(int)numcols numrows:(int)numrows;
 - (BOOL)bitAtCol:(int)col row:(int)row;
 - (void)setBitAtCol:(int)col row:(int)row bit:(BOOL)bit;

@@ -19,7 +19,7 @@
 #import "ZXMonochromeRectangleDetector.h"
 #import "ZXResultPoint.h"
 
-int const MONOCHROME_MAX_MODULES = 32;
+const int ZX_MONOCHROME_MAX_MODULES = 32;
 
 @interface ZXMonochromeRectangleDetector ()
 
@@ -37,22 +37,13 @@ int const MONOCHROME_MAX_MODULES = 32;
   return self;
 }
 
-/**
- * Detects a rectangular region of black and white -- mostly black -- with a region of mostly
- * white, in an image.
- * 
- * Returns a ResultPoint NSArray describing the corners of the rectangular region. The first and
- * last points are opposed on the diagonal, as are the second and third. The first point will be
- * the topmost point and the last, the bottommost. The second point will be leftmost and the
- * third, the rightmost
- */
 - (NSArray *)detectWithError:(NSError **)error {
   int height = [self.image height];
   int width = [self.image width];
   int halfHeight = height >> 1;
   int halfWidth = width >> 1;
-  int deltaY = MAX(1, height / (MONOCHROME_MAX_MODULES << 3) > 1);
-  int deltaX = MAX(1, width / (MONOCHROME_MAX_MODULES << 3) > 1);
+  int deltaY = MAX(1, height / (ZX_MONOCHROME_MAX_MODULES << 3) > 1);
+  int deltaX = MAX(1, width / (ZX_MONOCHROME_MAX_MODULES << 3) > 1);
 
   int top = 0;
   int bottom = height;
@@ -97,23 +88,23 @@ int const MONOCHROME_MAX_MODULES = 32;
   return @[pointA, pointB, pointC, pointD];
 }
 
-
 /**
  * Attempts to locate a corner of the barcode by scanning up, down, left or right from a center
  * point which should be within the barcode.
- * 
- * Params:
- * centerX center's x component (horizontal)
- * deltaX same as deltaY but change in x per step instead
- * left minimum value of x
- * right maximum value of x
- * centerY center's y component (vertical)
- * deltaY change in y per step. If scanning up this is negative; down, positive;
- * left or right, 0
- * top minimum value of y to search through (meaningless when di == 0)
- * bottom maximum value of y
- * maxWhiteRun maximum run of white pixels that can still be considered to be within
- * the barcode
+ *
+ * @param centerX center's x component (horizontal)
+ * @param deltaX same as deltaY but change in x per step instead
+ * @param left minimum value of x
+ * @param right maximum value of x
+ * @param centerY center's y component (vertical)
+ * @param deltaY change in y per step. If scanning up this is negative; down, positive;
+ *  left or right, 0
+ * @param top minimum value of y to search through (meaningless when di == 0)
+ * @param bottom maximum value of y
+ * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
+ *  the barcode
+ * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
+ *  or nil if such a point cannot be found
  */
 - (ZXResultPoint *)findCornerFromCenter:(int)centerX deltaX:(int)deltaX left:(int)left right:(int)right centerY:(int)centerY deltaY:(int)deltaY top:(int)top bottom:(int)bottom maxWhiteRun:(int)maxWhiteRun {
   NSArray *lastRange = nil;
@@ -156,19 +147,19 @@ int const MONOCHROME_MAX_MODULES = 32;
   return nil;
 }
 
-
 /**
  * Computes the start and end of a region of pixels, either horizontally or vertically, that could
  * be part of a Data Matrix barcode.
- * 
- * Params:
- * fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
- * where we are scanning. If scanning vertically it's the column, the fixed horizontal location
- * maxWhiteRun largest run of white pixels that can still be considered part of the
- * barcode region
- * minDim minimum pixel location, horizontally or vertically, to consider
- * maxDim maximum pixel location, horizontally or vertically, to consider
- * horizontal if true, we're scanning left-right, instead of up-down
+ *
+ * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
+ *  where we are scanning. If scanning vertically it's the column, the fixed horizontal location
+ * @param maxWhiteRun largest run of white pixels that can still be considered part of the
+ *  barcode region
+ * @param minDim minimum pixel location, horizontally or vertically, to consider
+ * @param maxDim maximum pixel location, horizontally or vertically, to consider
+ * @param horizontal if true, we're scanning left-right, instead of up-down
+ * @return int[] with start and end of found range, or nil if no such range is found
+ *  (e.g. only white was found)
  */
 - (NSArray *)blackWhiteRange:(int)fixedDimension maxWhiteRun:(int)maxWhiteRun minDim:(int)minDim maxDim:(int)maxDim horizontal:(BOOL)horizontal {
   int center = (minDim + maxDim) >> 1;

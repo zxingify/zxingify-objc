@@ -31,7 +31,7 @@ const int ZX_AZTEC_MODE_PUNCT = 4; // 5 bits
 // be up to 14 bits.  In the best possible case, we are already there!
 // The high half-word of each entry gives the number of bits.
 // The low half-word of each entry are the actual bits necessary to change
-const int ZX_AZTEC_LATCH_TABLE[5][5] = {
+const int ZX_AZTEC_LATCH_TABLE[][5] = {
   {
     0,
     (5 << 16) + 28,              // UPPER -> LOWER
@@ -107,23 +107,21 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
   ZX_AZTEC_CHAR_MAP[ZX_AZTEC_MODE_DIGIT][','] = 12;
   ZX_AZTEC_CHAR_MAP[ZX_AZTEC_MODE_DIGIT]['.'] = 13;
 
-  const int mixedTableSize = 28;
-  int mixedTable[mixedTableSize] = {
+  const int mixedTable[] = {
     '\0', ' ', '\1', '\2', '\3', '\4', '\5', '\6', '\7', '\b', '\t', '\n',
     '\13', '\f', '\r', '\33', '\34', '\35', '\36', '\37', '@', '\\', '^',
     '_', '`', '|', '~', '\177'
   };
-  for (int i = 0; i < mixedTableSize; i++) {
+  for (int i = 0; i < sizeof(mixedTable) / sizeof(int); i++) {
     ZX_AZTEC_CHAR_MAP[ZX_AZTEC_MODE_MIXED][mixedTable[i]] = i;
   }
 
-  const int punctTableSize = 31;
-  int punctTable[punctTableSize] = {
+  const int punctTable[] = {
     '\0', '\r', '\0', '\0', '\0', '\0', '!', '\'', '#', '$', '%', '&', '\'',
     '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?',
     '[', ']', '{', '}'
   };
-  for (int i = 0; i < punctTableSize; i++) {
+  for (int i = 0; i < sizeof(punctTable) / sizeof(int); i++) {
     if (punctTable[i] > 0) {
       ZX_AZTEC_CHAR_MAP[ZX_AZTEC_MODE_PUNCT][punctTable[i]] = i;
     }

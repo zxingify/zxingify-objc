@@ -16,24 +16,72 @@
 
 @class ZXBitArray, ZXByteArray, ZXEncodeHints, ZXErrorCorrectionLevel, ZXMode, ZXQRCode, ZXQRCodeVersion;
 
-extern const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING;
+extern const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING;
 
 @interface ZXQRCodeEncoder : NSObject
 
+/**
+ * Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
+ * internally by chooseMode:. On success, store the result in "qrCode".
+ *
+ * We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
+ * "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
+ * strong error correction for this purpose.
+ *
+ * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
+ * with which clients can specify the encoding mode. For now, we don't need the functionality.
+ */
 + (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error;
+
 + (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints error:(NSError **)error;
+
+/**
+ * Return the code point of the table used in alphanumeric mode or
+ * -1 if there is no corresponding code in the table.
+ */
 + (int)alphanumericCode:(int)code;
-+ (ZXMode *)chooseMode:(NSString *)content;
+
+/**
+ * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
+ */
 + (BOOL)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits error:(NSError **)error;
+
+/**
+ * Get number of data bytes and number of error correction bytes for block id "blockID". Store
+ * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
+ * JISX0510:2004 (p.30)
+ */
 + (BOOL)numDataBytesAndNumECBytesForBlockID:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks blockID:(int)blockID numDataBytesInBlock:(int[])numDataBytesInBlock numECBytesInBlock:(int[])numECBytesInBlock error:(NSError **)error;
+
+/**
+ * Interleave "bits" with corresponding error correction bytes. On success, store the result in
+ * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
+ */
 + (ZXBitArray *)interleaveWithECBytes:(ZXBitArray *)bits numTotalBytes:(int)numTotalBytes numDataBytes:(int)numDataBytes numRSBlocks:(int)numRSBlocks error:(NSError **)error;
+
 + (ZXByteArray *)generateECBytes:(ZXByteArray *)dataBytes numEcBytesInBlock:(int)numEcBytesInBlock;
+
+/**
+ * Append mode info. On success, store the result in "bits".
+ */
 + (void)appendModeInfo:(ZXMode *)mode bits:(ZXBitArray *)bits;
+
+/**
+ * Append length info. On success, store the result in "bits".
+ */
 + (BOOL)appendLengthInfo:(int)numLetters version:(ZXQRCodeVersion *)version mode:(ZXMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error;
+
+/**
+ * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
+ */
 + (BOOL)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error;
+
 + (void)appendNumericBytes:(NSString *)content bits:(ZXBitArray *)bits;
+
 + (BOOL)appendAlphanumericBytes:(NSString *)content bits:(ZXBitArray *)bits error:(NSError **)error;
+
 + (void)append8BitBytes:(NSString *)content bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding;
+
 + (BOOL)appendKanjiBytes:(NSString *)content bits:(ZXBitArray *)bits error:(NSError **)error;
 
 @end

@@ -23,7 +23,7 @@
 #import "ZXQRCode.h"
 #import "ZXQRCodeVersion.h"
 
-int const POSITION_DETECTION_PATTERN[7][7] = {
+const int ZX_POSITION_DETECTION_PATTERN[][7] = {
   {1, 1, 1, 1, 1, 1, 1},
   {1, 0, 0, 0, 0, 0, 1},
   {1, 0, 1, 1, 1, 0, 1},
@@ -33,7 +33,7 @@ int const POSITION_DETECTION_PATTERN[7][7] = {
   {1, 1, 1, 1, 1, 1, 1},
 };
 
-int const POSITION_ADJUSTMENT_PATTERN[5][5] = {
+const int ZX_POSITION_ADJUSTMENT_PATTERN[][5] = {
   {1, 1, 1, 1, 1},
   {1, 0, 0, 0, 1},
   {1, 0, 1, 0, 1},
@@ -42,7 +42,7 @@ int const POSITION_ADJUSTMENT_PATTERN[5][5] = {
 };
 
 // From Appendix E. Table 1, JIS0510X:2004 (p 71). The table was double-checked by komatsu.
-int const POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[40][7] = {
+const int ZX_POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[][7] = {
   {-1, -1, -1, -1,  -1,  -1,  -1},  // Version 1
   { 6, 18, -1, -1,  -1,  -1,  -1},  // Version 2
   { 6, 22, -1, -1,  -1,  -1,  -1},  // Version 3
@@ -86,7 +86,7 @@ int const POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[40][7] = {
 };
 
 // Type info cells at the left top corner.
-int const TYPE_INFO_COORDINATES[15][2] = {
+const int ZX_TYPE_INFO_COORDINATES[][2] = {
   {8, 0},
   {8, 1},
   {8, 2},
@@ -105,21 +105,18 @@ int const TYPE_INFO_COORDINATES[15][2] = {
 };
 
 // From Appendix D in JISX0510:2004 (p. 67)
-int const VERSION_INFO_POLY = 0x1f25;  // 1 1111 0010 0101
+const int ZX_VERSION_INFO_POLY = 0x1f25;  // 1 1111 0010 0101
 
 // From Appendix C in JISX0510:2004 (p.65).
-int const TYPE_INFO_POLY = 0x537;
-int const TYPE_INFO_MASK_PATTERN = 0x5412;
+const int ZX_TYPE_INFO_POLY = 0x537;
+const int ZX_TYPE_INFO_MASK_PATTERN = 0x5412;
 
 @implementation ZXMatrixUtil
 
-// Set all cells to -1.  -1 means that the cell is empty (not set yet).
 + (void)clearMatrix:(ZXByteMatrix *)matrix {
   [matrix clear:-1];
 }
 
-// Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
-// success, store the result in "matrix" and return true.
 + (BOOL)buildMatrix:(ZXBitArray *)dataBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(ZXQRCodeVersion *)version maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   [self clearMatrix:matrix];
   if (![self embedBasicPatterns:version matrix:matrix error:error]) {
@@ -140,12 +137,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return YES;
 }
 
-// Embed basic patterns. On success, modify the matrix and return true.
-// The basic patterns are:
-// - Position detection patterns
-// - Timing patterns
-// - Dark dot at the left bottom corner
-// - Position adjustment patterns, if need be
 + (BOOL)embedBasicPatterns:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   // Let's get started with embedding big squares at corners.
   if (![self embedPositionDetectionPatternsAndSeparators:matrix]) {
@@ -166,7 +157,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return YES;
 }
 
-// Embed type information. On success, modify the matrix.
 + (BOOL)embedTypeInfo:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   ZXBitArray *typeInfoBits = [[ZXBitArray alloc] init];
   if (![self makeTypeInfoBits:ecLevel maskPattern:maskPattern bits:typeInfoBits error:error]) {
@@ -179,8 +169,8 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     BOOL bit = [typeInfoBits get:[typeInfoBits size] - 1 - i];
 
     // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
-    int x1 = TYPE_INFO_COORDINATES[i][0];
-    int y1 = TYPE_INFO_COORDINATES[i][1];
+    int x1 = ZX_TYPE_INFO_COORDINATES[i][0];
+    int y1 = ZX_TYPE_INFO_COORDINATES[i][1];
     [matrix setX:x1 y:y1 boolValue:bit];
 
     if (i < 8) {
@@ -199,8 +189,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return YES;
 }
 
-// Embed version information if need be. On success, modify the matrix and return true.
-// See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
 + (BOOL)maybeEmbedVersionInfo:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   if (version.versionNumber < 7) { // Version info is necessary if version >= 7.
     return YES; // Don't need version info.
@@ -226,9 +214,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return YES;
 }
 
-// Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
-// For debugging purposes, it skips masking process if "getMaskPattern" is -1.
-// See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
 + (BOOL)embedDataBits:(ZXBitArray *)dataBits maskPattern:(int)maskPattern matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   int bitIndex = 0;
   int direction = -1;
@@ -280,11 +265,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return YES;
 }
 
-// Return the position of the most significant bit set (to one) in the "value". The most
-// significant bit is position 32. If there is no bit set, return 0. Examples:
-// - findMSBSet(0) => 0
-// - findMSBSet(1) => 1
-// - findMSBSet(255) => 8
 + (int)findMSBSet:(int)value {
   int numDigits = 0;
   while (value != 0) {
@@ -294,31 +274,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return numDigits;
 }
 
-// Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using polynomial "poly". The BCH
-// code is used for encoding type information and version information.
-// Example: Calculation of version information of 7.
-// f(x) is created from 7.
-//   - 7 = 000111 in 6 bits
-//   - f(x) = x^2 + x^1 + x^0
-// g(x) is given by the standard (p. 67)
-//   - g(x) = x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + 1
-// Multiply f(x) by x^(18 - 6)
-//   - f'(x) = f(x) * x^(18 - 6)
-//   - f'(x) = x^14 + x^13 + x^12
-// Calculate the remainder of f'(x) / g(x)
-//         x^2
-//         __________________________________________________
-//   g(x) )x^14 + x^13 + x^12
-//         x^14 + x^13 + x^12 + x^11 + x^10 + x^7 + x^4 + x^2
-//         --------------------------------------------------
-//                              x^11 + x^10 + x^7 + x^4 + x^2
-//
-// The remainder is x^11 + x^10 + x^7 + x^4 + x^2
-// Encode it in binary: 110010010100
-// The return value is 0xc94 (1100 1001 0100)
-//
-// Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
-// operations. We don't care if cofficients are positive or negative.
 + (int)calculateBCHCode:(int)value poly:(int)poly {
   // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
   // from 13 to make it 12.
@@ -332,9 +287,6 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return value;
 }
 
-// Make bit vector of type information. On success, store the result in "bits" and return true.
-// Encode error correction level and mask pattern. See 8.9 of
-// JISX0510:2004 (p.45) for details.
 + (BOOL)makeTypeInfoBits:(ZXErrorCorrectionLevel *)ecLevel maskPattern:(int)maskPattern bits:(ZXBitArray *)bits error:(NSError **)error {
   if (![ZXQRCode isValidMaskPattern:maskPattern]) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Invalid mask pattern"};
@@ -345,11 +297,11 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   int typeInfo = ([ecLevel bits] << 3) | maskPattern;
   [bits appendBits:typeInfo numBits:5];
 
-  int bchCode = [self calculateBCHCode:typeInfo poly:TYPE_INFO_POLY];
+  int bchCode = [self calculateBCHCode:typeInfo poly:ZX_TYPE_INFO_POLY];
   [bits appendBits:bchCode numBits:10];
 
   ZXBitArray *maskBits = [[ZXBitArray alloc] init];
-  [maskBits appendBits:TYPE_INFO_MASK_PATTERN numBits:15];
+  [maskBits appendBits:ZX_TYPE_INFO_MASK_PATTERN numBits:15];
   [bits xor:maskBits];
 
   if ([bits size] != 15) { // Just in case.
@@ -362,11 +314,9 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
   return YES;
 }
 
-// Make bit vector of version information. On success, store the result in "bits" and return true.
-// See 8.10 of JISX0510:2004 (p.45) for details.
 + (BOOL)makeVersionInfoBits:(ZXQRCodeVersion *)version bits:(ZXBitArray *)bits error:(NSError **)error {
   [bits appendBits:version.versionNumber numBits:6];
-  int bchCode = [self calculateBCHCode:version.versionNumber poly:VERSION_INFO_POLY];
+  int bchCode = [self calculateBCHCode:version.versionNumber poly:ZX_VERSION_INFO_POLY];
   [bits appendBits:bchCode numBits:12];
 
   if ([bits size] != 18) { // Just in case.
@@ -438,7 +388,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 + (void)embedPositionAdjustmentPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 5; ++y) {
     for (int x = 0; x < 5; ++x) {
-      [matrix setX:xStart + x y:yStart + y intValue:POSITION_ADJUSTMENT_PATTERN[y][x]];
+      [matrix setX:xStart + x y:yStart + y intValue:ZX_POSITION_ADJUSTMENT_PATTERN[y][x]];
     }
   }
 }
@@ -446,7 +396,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 + (void)embedPositionDetectionPattern:(int)xStart yStart:(int)yStart matrix:(ZXByteMatrix *)matrix {
   for (int y = 0; y < 7; ++y) {
     for (int x = 0; x < 7; ++x) {
-      [matrix setX:xStart + x y:yStart + y intValue:POSITION_DETECTION_PATTERN[y][x]];
+      [matrix setX:xStart + x y:yStart + y intValue:ZX_POSITION_DETECTION_PATTERN[y][x]];
     }
   }
 }
@@ -454,7 +404,7 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
 // Embed position detection patterns and surrounding vertical/horizontal separators.
 + (BOOL)embedPositionDetectionPatternsAndSeparators:(ZXByteMatrix *)matrix {
   // Embed three big squares at corners.
-  int pdpWidth = sizeof(POSITION_DETECTION_PATTERN[0]) / sizeof(int);
+  int pdpWidth = sizeof(ZX_POSITION_DETECTION_PATTERN[0]) / sizeof(int);
   // Left top corner.
   [self embedPositionDetectionPattern:0 yStart:0 matrix:matrix];
   // Right top corner.
@@ -495,11 +445,11 @@ int const TYPE_INFO_MASK_PATTERN = 0x5412;
     return;
   }
   int index = version.versionNumber - 1;
-  int numCoordinates = sizeof(POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index]) / sizeof(int);
+  int numCoordinates = sizeof(ZX_POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index]) / sizeof(int);
   for (int i = 0; i < numCoordinates; ++i) {
     for (int j = 0; j < numCoordinates; ++j) {
-      int y = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index][i];
-      int x = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index][j];
+      int y = ZX_POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index][i];
+      int x = ZX_POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index][j];
       if (x == -1 || y == -1) {
         continue;
       }

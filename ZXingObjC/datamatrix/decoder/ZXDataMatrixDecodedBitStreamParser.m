@@ -182,7 +182,6 @@ enum {
   return ASCII_ENCODE;
 }
 
-
 /**
  * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
  */
@@ -269,7 +268,6 @@ enum {
 
   return YES;
 }
-
 
 /**
  * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
@@ -363,7 +361,6 @@ enum {
   return YES;
 }
 
-
 /**
  * See ISO 16022:2006, 5.2.7
  */
@@ -416,7 +413,6 @@ enum {
   result[2] = fullBitValue - temp * 40;
 }
 
-
 /**
  * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
  */
@@ -447,7 +443,6 @@ enum {
     }
   } while (bits.available > 0);
 }
-
 
 /**
  * See ISO 16022:2006, 5.2.9 and Annex B, B.2
@@ -483,7 +478,6 @@ enum {
   [result appendString:[[NSString alloc] initWithBytes:bytes length:count encoding:NSISOLatin1StringEncoding]];
   return YES;
 }
-
 
 /**
  * See ISO 16022:2006, Annex B, B.2

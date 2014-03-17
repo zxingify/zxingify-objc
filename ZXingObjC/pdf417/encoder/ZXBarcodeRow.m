@@ -19,6 +19,7 @@
 
 @interface ZXBarcodeRow ()
 
+//A tacker for position in the bar
 @property (nonatomic, assign) int currentLocation;
 
 @end

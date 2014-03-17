@@ -18,15 +18,17 @@
 #import "ZXPDF417.h"
 #import "ZXPDF417Common.h"
 
-int const ZXPDF417_NUMBER_OF_CODEWORDS = 929;
+const int ZX_PDF417_NUMBER_OF_CODEWORDS = 929;
 // Maximum Codewords (Data + Error).
-int const ZXPDF417_MAX_CODEWORDS_IN_BARCODE = ZXPDF417_NUMBER_OF_CODEWORDS - 1;
-int const ZXPDF417_MIN_ROWS_IN_BARCODE = 3;
-int const ZXPDF417_MAX_ROWS_IN_BARCODE = 90;
+const int ZX_PDF417_MAX_CODEWORDS_IN_BARCODE = ZX_PDF417_NUMBER_OF_CODEWORDS - 1;
+const int ZX_PDF417_MIN_ROWS_IN_BARCODE = 3;
+const int ZX_PDF417_MAX_ROWS_IN_BARCODE = 90;
 // One left row indication column + max 30 data columns + one right row indicator column
-int const ZXPDF417_MAX_CODEWORDS_IN_ROW = 32;
-int const ZXPDF417_MODULES_IN_CODEWORD = 17;
-int const ZXPDF417_MODULES_IN_STOP_PATTERN = 18;
+const int ZX_PDF417_MAX_CODEWORDS_IN_ROW = 32;
+const int ZX_PDF417_MODULES_IN_CODEWORD = 17;
+const int ZX_PDF417_MODULES_IN_STOP_PATTERN = 18;
+
+const int ZX_PDF417_COMMON_CODEWORD_TABLE[];
 
 @implementation ZXPDF417Common
 
@@ -47,30 +49,30 @@ int const ZXPDF417_MODULES_IN_STOP_PATTERN = 18;
   return result;
 }
 
-/**
- * Translate the symbol into a codeword.
- */
 + (int)codeword:(long)symbol {
   long sym = symbol & 0x3FFFF;
   int i = [self findCodewordIndex:sym];
   if (i == -1) {
     return -1;
   }
-  return (ZXPDF417_CODEWORD_TABLE[i] - 1) % ZXPDF417_NUMBER_OF_CODEWORDS;
+  return (ZX_PDF417_COMMON_CODEWORD_TABLE[i] - 1) % ZX_PDF417_NUMBER_OF_CODEWORDS;
 }
 
 /**
  * Use a binary search to find the index of the codeword corresponding to
  * this symbol.
+ *
+ * @param symbol the symbol from the barcode.
+ * @return the index into the codeword table.
  */
 + (int)findCodewordIndex:(long)symbol {
   int first = 0;
-  int upto = ZXPDF417_SYMBOL_TABLE_LEN;
+  int upto = ZX_PDF417_SYMBOL_TABLE_LEN;
   while (first < upto) {
     int mid = (first + upto) >> 1; // Compute mid point.
-    if (symbol < ZXPDF417_SYMBOL_TABLE[mid]) {
+    if (symbol < ZX_PDF417_SYMBOL_TABLE[mid]) {
       upto = mid; // continue search in bottom half.
-    } else if (symbol > ZXPDF417_SYMBOL_TABLE[mid]) {
+    } else if (symbol > ZX_PDF417_SYMBOL_TABLE[mid]) {
       first = mid + 1; // continue search in top half.
     } else {
       return mid; // Found it. return position
@@ -86,7 +88,7 @@ int const ZXPDF417_MODULES_IN_STOP_PATTERN = 18;
  * specification. The index of a symbol in this table corresponds to the
  * index into the codeword table.
  */
-int ZXPDF417_SYMBOL_TABLE[ZXPDF417_SYMBOL_TABLE_LEN] = {
+const int ZX_PDF417_SYMBOL_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN] = {
   0x1025e, 0x1027a, 0x1029e, 0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e, 0x1035c, 0x10396, 0x103a6, 0x103ac,
   0x10422, 0x10428, 0x10436, 0x10442, 0x10444, 0x10448, 0x10450, 0x1045e, 0x10466, 0x1046c, 0x1047a, 0x10482,
   0x1049e, 0x104a0, 0x104bc, 0x104c6, 0x104d8, 0x104ee, 0x104f2, 0x104f4, 0x10504, 0x10508, 0x10510, 0x1051e,
@@ -324,7 +326,7 @@ int ZXPDF417_SYMBOL_TABLE[ZXPDF417_SYMBOL_TABLE_LEN] = {
 /**
  * This table contains to codewords for all symbols.
  */
-int ZXPDF417_CODEWORD_TABLE[ZXPDF417_CODEWORD_TABLE_LEN] = {
+const int ZX_PDF417_COMMON_CODEWORD_TABLE[] = {
   2627, 1819, 2622, 2621, 1813, 1812, 2729, 2724, 2723, 2779, 2774, 2773, 902, 896, 908, 868, 865, 861, 859, 2511,
   873, 871, 1780, 835, 2493, 825, 2491, 842, 837, 844, 1764, 1762, 811, 810, 809, 2483, 807, 2482, 806, 2480, 815,
   814, 813, 812, 2484, 817, 816, 1745, 1744, 1742, 1746, 2655, 2637, 2635, 2626, 2625, 2623, 2628, 1820, 2752,

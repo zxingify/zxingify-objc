@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
+@class ZXByteArray, ZXErrorCorrectionLevel, ZXQRCodeVersion;
+
 /**
  * Encapsulates a block of data within a QR Code. QR Codes may split their data into
  * multiple blocks, each of which is a unit of data and error-correction codewords. Each
  * is represented by an instance of this class.
  */
-
-@class ZXByteArray, ZXErrorCorrectionLevel, ZXQRCodeVersion;
-
 @interface ZXQRCodeDataBlock : NSObject
 
 @property (nonatomic, strong, readonly) ZXByteArray *codewords;

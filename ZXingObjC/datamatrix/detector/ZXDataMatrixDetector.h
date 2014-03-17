@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix, ZXDetectorResult, ZXWhiteRectangleDetector;
+
 /**
  * Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
  * is rotated or skewed, or partially obscured.
  */
-
-@class ZXBitMatrix, ZXDetectorResult, ZXWhiteRectangleDetector;
-
 @interface ZXDataMatrixDetector : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error;
+
+/**
+ * Detects a Data Matrix Code in an image.
+ *
+ * @return ZXDetectorResult encapsulating results of detecting a Data Matrix Code or nil
+ *  if no Data Matrix Code can be found
+ */
 - (ZXDetectorResult *)detectWithError:(NSError **)error;
 
 @end

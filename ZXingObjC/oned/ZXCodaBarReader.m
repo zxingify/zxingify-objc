@@ -24,19 +24,18 @@
 // These values are critical for determining how permissive the decoding
 // will be. All stripe sizes must be within the window these define, as
 // compared to the average stripe size.
-static int MAX_ACCEPTABLE;
-static int PADDING;
+static int ZX_CODA_MAX_ACCEPTABLE;
+static int ZX_CODA_PADDING;
 
-const int CODA_ALPHABET_LEN = 22;
-const unichar CODA_ALPHABET[CODA_ALPHABET_LEN] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+const unichar ZX_CODA_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
   '-', '$', ':', '/', '.', '+', 'A', 'B', 'C', 'D', 'T', 'N'};
+const int ZX_CODA_ALPHABET_LEN = sizeof(ZX_CODA_ALPHABET) / sizeof(unichar);
 
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
  * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow.
  */
-const int CODA_CHARACTER_ENCODINGS_LEN = 20;
-const int CODA_CHARACTER_ENCODINGS[CODA_CHARACTER_ENCODINGS_LEN] = {
+const int ZX_CODA_CHARACTER_ENCODINGS[] = {
   0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
   0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
 };
@@ -44,11 +43,10 @@ const int CODA_CHARACTER_ENCODINGS[CODA_CHARACTER_ENCODINGS_LEN] = {
 // minimal number of characters that should be present (inclusing start and stop characters)
 // under normal circumstances this should be set to 3, but can be set higher
 // as a last-ditch attempt to reduce false positives.
-const int MIN_CHARACTER_LENGTH = 3;
+const int ZX_CODA_MIN_CHARACTER_LENGTH = 3;
 
 // official start and end patterns
-const int STARTEND_ENCODING_LEN = 4;
-const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
+const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
 
 // some codabar generator allow the codabar string to be closed by every
 // character. This will cause lots of false positives!
@@ -67,8 +65,8 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 @implementation ZXCodaBarReader
 
 + (void)initialize {
-  MAX_ACCEPTABLE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 2.0f);
-  PADDING = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 1.5f);
+  ZX_CODA_MAX_ACCEPTABLE = (int) (ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 2.0f);
+  ZX_CODA_PADDING = (int) (ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 1.5f);
 }
 
 - (id)init {
@@ -111,7 +109,9 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
     nextStart += 8;
     // Stop as soon as we see the end character.
     if (self.decodeRowResult.length > 1 &&
-        [ZXCodaBarReader arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+        [ZXCodaBarReader arrayContains:ZX_CODA_STARTEND_ENCODING
+                                length:sizeof(ZX_CODA_STARTEND_ENCODING) / sizeof(unichar)
+                                   key:ZX_CODA_ALPHABET[charOffset]]) {
       break;
     }
   } while (nextStart < self.counterLength); // no fixed end pattern so keep on reading while data is available
@@ -138,22 +138,26 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 
   // Translate character table offsets to actual characters.
   for (int i = 0; i < self.decodeRowResult.length; i++) {
-    [self.decodeRowResult replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%c", CODA_ALPHABET[[self.decodeRowResult characterAtIndex:i]]]];
+    [self.decodeRowResult replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%c", ZX_CODA_ALPHABET[[self.decodeRowResult characterAtIndex:i]]]];
   }
   // Ensure a valid start and end character
   unichar startchar = [self.decodeRowResult characterAtIndex:0];
-  if (![ZXCodaBarReader arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:startchar]) {
+  if (![ZXCodaBarReader arrayContains:ZX_CODA_STARTEND_ENCODING
+                               length:sizeof(ZX_CODA_STARTEND_ENCODING) / sizeof(unichar)
+                                  key:startchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
   unichar endchar = [self.decodeRowResult characterAtIndex:self.decodeRowResult.length - 1];
-  if (![ZXCodaBarReader arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:endchar]) {
+  if (![ZXCodaBarReader arrayContains:ZX_CODA_STARTEND_ENCODING
+                               length:sizeof(ZX_CODA_STARTEND_ENCODING) / sizeof(unichar)
+                                  key:endchar]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
   // remove stop/start characters character and check if a long enough string is contained
-  if (self.decodeRowResult.length <= MIN_CHARACTER_LENGTH) {
+  if (self.decodeRowResult.length <= ZX_CODA_MIN_CHARACTER_LENGTH) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
@@ -187,7 +191,7 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   // inter-character spaces properly.
   int pos = start;
   for (int i = 0; true; i++) {
-    int pattern = CODA_CHARACTER_ENCODINGS[[self.decodeRowResult characterAtIndex:i]];
+    int pattern = ZX_CODA_CHARACTER_ENCODINGS[[self.decodeRowResult characterAtIndex:i]];
     for (int j = 6; j >= 0; j--) {
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
@@ -211,21 +215,21 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   // should be on the "wrong" side of that line.
   for (int i = 0; i < 2; i++) {
     mins[i] = 0;  // Accept arbitrarily small "short" stripes.
-    mins[i + 2] = ((sizes[i] << INTEGER_MATH_SHIFT) / counts[i] +
-                   (sizes[i + 2] << INTEGER_MATH_SHIFT) / counts[i + 2]) >> 1;
+    mins[i + 2] = ((sizes[i] << ZX_ONED_INTEGER_MATH_SHIFT) / counts[i] +
+                   (sizes[i + 2] << ZX_ONED_INTEGER_MATH_SHIFT) / counts[i + 2]) >> 1;
     maxes[i] = mins[i + 2];
-    maxes[i + 2] = (sizes[i + 2] * MAX_ACCEPTABLE + PADDING) / counts[i + 2];
+    maxes[i + 2] = (sizes[i + 2] * ZX_CODA_MAX_ACCEPTABLE + ZX_CODA_PADDING) / counts[i + 2];
   }
 
   // Now verify that all of the stripes are within the thresholds.
   pos = start;
   for (int i = 0; true; i++) {
-    int pattern = CODA_CHARACTER_ENCODINGS[[self.decodeRowResult characterAtIndex:i]];
+    int pattern = ZX_CODA_CHARACTER_ENCODINGS[[self.decodeRowResult characterAtIndex:i]];
     for (int j = 6; j >= 0; j--) {
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
       int category = (j & 1) + (pattern & 1) * 2;
-      int size = self.counters.array[pos + j] << INTEGER_MATH_SHIFT;
+      int size = self.counters.array[pos + j] << ZX_ONED_INTEGER_MATH_SHIFT;
       if (size < mins[category] || size > maxes[category]) {
         return NO;
       }
@@ -281,7 +285,9 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
 - (int)findStartPattern {
   for (int i = 1; i < self.counterLength; i += 2) {
     int charOffset = [self toNarrowWidePattern:i];
-    if (charOffset != -1 && [[self class] arrayContains:STARTEND_ENCODING length:STARTEND_ENCODING_LEN key:CODA_ALPHABET[charOffset]]) {
+    if (charOffset != -1 && [[self class] arrayContains:ZX_CODA_STARTEND_ENCODING
+                                                 length:sizeof(ZX_CODA_STARTEND_ENCODING) / sizeof(unichar)
+                                                    key:ZX_CODA_ALPHABET[charOffset]]) {
       // Look for whitespace before start pattern, >= 50% of width of start pattern
       // We make an exception if the whitespace is the first element.
       int patternSize = 0;
@@ -351,8 +357,8 @@ const unichar STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
     }
   }
 
-  for (int i = 0; i < CODA_CHARACTER_ENCODINGS_LEN; i++) {
-    if (CODA_CHARACTER_ENCODINGS[i] == pattern) {
+  for (int i = 0; i < sizeof(ZX_CODA_CHARACTER_ENCODINGS) / sizeof(int); i++) {
+    if (ZX_CODA_CHARACTER_ENCODINGS[i] == pattern) {
       return i;
     }
   }

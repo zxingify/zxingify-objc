@@ -20,50 +20,50 @@
 #import "ZXPDF417DecodedBitStreamParser.h"
 #import "ZXPDF417ResultMetadata.h"
 
-enum {
-  ALPHA,
-  LOWER,
-  MIXED,
-  PUNCT,
-  ALPHA_SHIFT,
-  PUNCT_SHIFT
-};
+typedef enum {
+  ZXPDF417ModeAlpha = 0,
+  ZXPDF417ModeLower,
+  ZXPDF417ModeMixed,
+  ZXPDF417ModePunct,
+  ZXPDF417ModeAlphaShift,
+  ZXPDF417ModePunctShift
+} ZXPDF417Mode;
 
-int const TEXT_COMPACTION_MODE_LATCH = 900;
-int const BYTE_COMPACTION_MODE_LATCH = 901;
-int const NUMERIC_COMPACTION_MODE_LATCH = 902;
-int const BYTE_COMPACTION_MODE_LATCH_6 = 924;
-int const BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
-int const BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
-int const MACRO_PDF417_TERMINATOR = 922;
-int const MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
-int const MAX_NUMERIC_CODEWORDS = 15;
+const int ZX_PDF417_TEXT_COMPACTION_MODE_LATCH = 900;
+const int ZX_PDF417_BYTE_COMPACTION_MODE_LATCH = 901;
+const int ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH = 902;
+const int ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6 = 924;
+const int ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
+const int ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
+const int ZX_PDF417_MACRO_PDF417_TERMINATOR = 922;
+const int ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
+const int ZX_PDF417_MAX_NUMERIC_CODEWORDS = 15;
 
-int const PL = 25;
-int const LL = 27;
-int const AS = 27;
-int const ML = 28;
-int const AL = 28;
-int const PS = 29;
-int const PAL = 29;
+const int ZX_PDF417_PL = 25;
+const int ZX_PDF417_LL = 27;
+const int ZX_PDF417_AS = 27;
+const int ZX_PDF417_ML = 28;
+const int ZX_PDF417_AL = 28;
+const int ZX_PDF417_PS = 29;
+const int ZX_PDF417_PAL = 29;
 
-char const PUNCT_CHARS[29] = {
+const unichar ZX_PDF417_PUNCT_CHARS[] = {
   ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
   '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
   '(', ')', '?', '{', '}', '\''};
 
-char const MIXED_CHARS[25] = {
+const unichar ZX_PDF417_MIXED_CHARS[] = {
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
   '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
   '=', '^'};
 
-int const NUMBER_OF_SEQUENCE_CODEWORDS = 2;
+const int ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 
 /**
  * Table containing values for the exponent of 900.
  * This is used in the numeric compaction decode algorithm.
  */
-static NSArray *EXP900 = nil;
+static NSArray *ZX_PDF417_EXP900 = nil;
 
 @implementation ZXPDF417DecodedBitStreamParser
 
@@ -75,7 +75,7 @@ static NSArray *EXP900 = nil;
   for (int i = 2; i < 16; i++) {
     [exponents addObject:[exponents[i - 1] decimalNumberByMultiplyingBy:nineHundred]];
   }
-  EXP900 = [[NSArray alloc] initWithArray:exponents];
+  ZX_PDF417_EXP900 = [[NSArray alloc] initWithArray:exponents];
 }
 
 + (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
@@ -90,30 +90,30 @@ static NSArray *EXP900 = nil;
   ZXPDF417ResultMetadata *resultMetadata = [[ZXPDF417ResultMetadata alloc] init];
   while (codeIndex < codewords.array[0]) {
     switch (code) {
-    case TEXT_COMPACTION_MODE_LATCH:
+    case ZX_PDF417_TEXT_COMPACTION_MODE_LATCH:
       codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:result];
       break;
-    case BYTE_COMPACTION_MODE_LATCH:
+    case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
       codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
       break;
-    case NUMERIC_COMPACTION_MODE_LATCH:
+    case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
       codeIndex = [self numericCompaction:codewords codeIndex:codeIndex result:result];
       break;
-    case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+    case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
       codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
       break;
-    case BYTE_COMPACTION_MODE_LATCH_6:
+    case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
       codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
       break;
-    case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+    case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
       codeIndex = [self decodeMacroBlock:codewords codeIndex:codeIndex resultMetadata:resultMetadata];
       if (codeIndex < 0) {
         if (error) *error = NotFoundErrorInstance();
         return nil;
       }
       break;
-    case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-    case MACRO_PDF417_TERMINATOR:
+    case ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+    case ZX_PDF417_MACRO_PDF417_TERMINATOR:
       // Should not see these outside a macro block
       if (error) *error = NotFoundErrorInstance();
       return nil;
@@ -142,32 +142,32 @@ static NSArray *EXP900 = nil;
 }
 
 + (int)decodeMacroBlock:(ZXIntArray *)codewords codeIndex:(int)codeIndex resultMetadata:(ZXPDF417ResultMetadata *)resultMetadata {
-  if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords.array[0]) {
+  if (codeIndex + ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS > codewords.array[0]) {
     // we must have at least two bytes left for the segment index
     return -1;
   }
-  ZXIntArray *segmentIndexArray = [[ZXIntArray alloc] initWithLength:NUMBER_OF_SEQUENCE_CODEWORDS];
-  for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
+  ZXIntArray *segmentIndexArray = [[ZXIntArray alloc] initWithLength:ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS];
+  for (int i = 0; i < ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
     segmentIndexArray.array[i] = codewords.array[codeIndex];
   }
-  resultMetadata.segmentIndex = [[self decodeBase900toBase10:segmentIndexArray count:NUMBER_OF_SEQUENCE_CODEWORDS] intValue];
+  resultMetadata.segmentIndex = [[self decodeBase900toBase10:segmentIndexArray count:ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS] intValue];
 
   NSMutableString *fileId = [NSMutableString string];
   codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:fileId];
   resultMetadata.fileId = [NSString stringWithString:fileId];
 
-  if (codewords.array[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
+  if (codewords.array[codeIndex] == ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD) {
     codeIndex++;
     NSMutableArray *additionalOptionCodeWords = [NSMutableArray array];
 
     BOOL end = NO;
     while ((codeIndex < codewords.array[0]) && !end) {
       int code = codewords.array[codeIndex++];
-      if (code < TEXT_COMPACTION_MODE_LATCH) {
+      if (code < ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
         [additionalOptionCodeWords addObject:@(code)];
       } else {
         switch (code) {
-          case MACRO_PDF417_TERMINATOR:
+          case ZX_PDF417_MACRO_PDF417_TERMINATOR:
             resultMetadata.lastSegment = YES;
             codeIndex++;
             end = YES;
@@ -179,7 +179,7 @@ static NSArray *EXP900 = nil;
     }
 
     resultMetadata.optionalData = additionalOptionCodeWords;
-  } else if (codewords.array[codeIndex] == MACRO_PDF417_TERMINATOR) {
+  } else if (codewords.array[codeIndex] == ZX_PDF417_MACRO_PDF417_TERMINATOR) {
     resultMetadata.lastSegment = YES;
     codeIndex++;
   }
@@ -191,6 +191,11 @@ static NSArray *EXP900 = nil;
  * Text Compaction mode (see 5.4.1.5) permits all printable ASCII characters to be
  * encoded, i.e. values 32 - 126 inclusive in accordance with ISO/IEC 646 (IRV), as
  * well as selected control characters.
+ *
+ * @param codewords The array of codewords (data + error)
+ * @param codeIndex The current index into the codeword array.
+ * @param result    The decoded data is appended to the result.
+ * @return The next index into the codeword array.
  */
 + (int)textCompaction:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   // 2 character per codeword
@@ -202,49 +207,49 @@ static NSArray *EXP900 = nil;
   BOOL end = NO;
   while ((codeIndex < codewords.array[0]) && !end) {
     int code = codewords.array[codeIndex++];
-    if (code < TEXT_COMPACTION_MODE_LATCH) {
+    if (code < ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
       textCompactionData.array[index] = code / 30;
       textCompactionData.array[index + 1] = code % 30;
       index += 2;
     } else {
       switch (code) {
-      case TEXT_COMPACTION_MODE_LATCH:
+      case ZX_PDF417_TEXT_COMPACTION_MODE_LATCH:
         // reinitialize text compaction mode to alpha sub mode
-        textCompactionData.array[index++] = TEXT_COMPACTION_MODE_LATCH;
+        textCompactionData.array[index++] = ZX_PDF417_TEXT_COMPACTION_MODE_LATCH;
         break;
-      case BYTE_COMPACTION_MODE_LATCH:
+      case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
         codeIndex--;
         end = YES;
         break;
-      case NUMERIC_COMPACTION_MODE_LATCH:
+      case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
         codeIndex--;
         end = YES;
         break;
-      case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+      case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
         codeIndex--;
         end = YES;
         break;
-      case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+      case ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
         codeIndex--;
         end = YES;
         break;
-      case MACRO_PDF417_TERMINATOR:
+      case ZX_PDF417_MACRO_PDF417_TERMINATOR:
         codeIndex--;
         end = YES;
         break;
-      case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+      case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
         // The Mode Shift codeword 913 shall cause a temporary
         // switch from Text Compaction mode to Byte Compaction mode.
         // This switch shall be in effect for only the next codeword,
         // after which the mode shall revert to the prevailing sub-mode
         // of the Text Compaction mode. Codeword 913 is only available
         // in Text Compaction mode; its use is described in 5.4.2.4.
-        textCompactionData.array[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
+        textCompactionData.array[index] = ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
         code = codewords.array[codeIndex++];
         byteCompactionData.array[index] = code;
         index++;
         break;
-      case BYTE_COMPACTION_MODE_LATCH_6:
+      case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
         codeIndex--;
         end = YES;
         break;
@@ -256,7 +261,6 @@ static NSArray *EXP900 = nil;
   return codeIndex;
 }
 
-
 /**
  * The Text Compaction mode includes all the printable ASCII characters
  * (i.e. values from 32 to 126) and three ASCII control characters: HT or tab
@@ -266,20 +270,26 @@ static NSArray *EXP900 = nil;
  * Compaction mode encodes up to 2 characters per codeword. The compaction rules
  * for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
  * switches are defined in 5.4.2.3.
+ *
+ * @param textCompactionData The text compaction data.
+ * @param byteCompactionData The byte compaction data if there
+ *                           was a mode shift.
+ * @param length             The size of the text compaction and byte compaction data.
+ * @param result             The decoded data is appended to the result.
  */
 + (void)decodeTextCompaction:(ZXIntArray *)textCompactionData byteCompactionData:(ZXIntArray *)byteCompactionData length:(unsigned int)length result:(NSMutableString *)result {
   // Beginning from an initial state of the Alpha sub-mode
   // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
   // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
   // Compaction mode shall always switch to the Text Compaction Alpha sub-mode.
-  int subMode = ALPHA;
-  int priorToShiftMode = ALPHA;
+  ZXPDF417Mode subMode = ZXPDF417ModeAlpha;
+  ZXPDF417Mode priorToShiftMode = ZXPDF417ModeAlpha;
   int i = 0;
   while (i < length) {
     int subModeCh = textCompactionData.array[i];
     unichar ch = 0;
     switch (subMode) {
-      case ALPHA:
+      case ZXPDF417ModeAlpha:
         // Alpha (uppercase alphabetic)
         if (subModeCh < 26) {
         // Upper case Alpha Character
@@ -287,88 +297,88 @@ static NSArray *EXP900 = nil;
         } else {
           if (subModeCh == 26) {
             ch = ' ';
-          } else if (subModeCh == LL) {
-            subMode = LOWER;
-          } else if (subModeCh == ML) {
-            subMode = MIXED;
-          } else if (subModeCh == PS) {
+          } else if (subModeCh == ZX_PDF417_LL) {
+            subMode = ZXPDF417ModeLower;
+          } else if (subModeCh == ZX_PDF417_ML) {
+            subMode = ZXPDF417ModeMixed;
+          } else if (subModeCh == ZX_PDF417_PS) {
             // Shift to punctuation
             priorToShiftMode = subMode;
-            subMode = PUNCT_SHIFT;
-          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            subMode = ZXPDF417ModePunctShift;
+          } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
-          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
-            subMode = ALPHA;
+          } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ZXPDF417ModeAlpha;
           }
         }
         break;
 
-      case LOWER:
+      case ZXPDF417ModeLower:
         // Lower (lowercase alphabetic)
         if (subModeCh < 26) {
           ch = (unichar)('a' + subModeCh);
         } else {
           if (subModeCh == 26) {
             ch = ' ';
-          } else if (subModeCh == AS) {
+          } else if (subModeCh == ZX_PDF417_AS) {
             // Shift to alpha
             priorToShiftMode = subMode;
-            subMode = ALPHA_SHIFT;
-          } else if (subModeCh == ML) {
-            subMode = MIXED;
-          } else if (subModeCh == PS) {
+            subMode = ZXPDF417ModeAlphaShift;
+          } else if (subModeCh == ZX_PDF417_ML) {
+            subMode = ZXPDF417ModeMixed;
+          } else if (subModeCh == ZX_PDF417_PS) {
             // Shift to punctuation
             priorToShiftMode = subMode;
-            subMode = PUNCT_SHIFT;
-          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            subMode = ZXPDF417ModePunctShift;
+          } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
-          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
-            subMode = ALPHA;
+          } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ZXPDF417ModeAlpha;
           }
         }
         break;
 
-      case MIXED:
+      case ZXPDF417ModeMixed:
         // Mixed (numeric and some punctuation)
-        if (subModeCh < PL) {
-          ch = MIXED_CHARS[subModeCh];
+        if (subModeCh < ZX_PDF417_PL) {
+          ch = ZX_PDF417_MIXED_CHARS[subModeCh];
         } else {
-          if (subModeCh == PL) {
-            subMode = PUNCT;
+          if (subModeCh == ZX_PDF417_PL) {
+            subMode = ZXPDF417ModePunct;
           } else if (subModeCh == 26) {
             ch = ' ';
-          } else if (subModeCh == LL) {
-            subMode = LOWER;
-          } else if (subModeCh == AL) {
-            subMode = ALPHA;
-          } else if (subModeCh == PS) {
+          } else if (subModeCh == ZX_PDF417_LL) {
+            subMode = ZXPDF417ModeLower;
+          } else if (subModeCh == ZX_PDF417_AL) {
+            subMode = ZXPDF417ModeAlpha;
+          } else if (subModeCh == ZX_PDF417_PS) {
             // Shift to punctuation
             priorToShiftMode = subMode;
-            subMode = PUNCT_SHIFT;
-          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            subMode = ZXPDF417ModePunctShift;
+          } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
-          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
-            subMode = ALPHA;
+          } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ZXPDF417ModeAlpha;
           }
         }
         break;
 
-      case PUNCT:
+      case ZXPDF417ModePunct:
         // Punctuation
-        if (subModeCh < PAL) {
-          ch = PUNCT_CHARS[subModeCh];
+        if (subModeCh < ZX_PDF417_PAL) {
+          ch = ZX_PDF417_PUNCT_CHARS[subModeCh];
         } else {
-          if (subModeCh == PAL) {
-            subMode = ALPHA;
-          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+          if (subModeCh == ZX_PDF417_PAL) {
+            subMode = ZXPDF417ModeAlpha;
+          } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
-          } else if (TEXT_COMPACTION_MODE_LATCH) {
-            subMode = ALPHA;
+          } else if (ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ZXPDF417ModeAlpha;
           }
         }
         break;
 
-      case ALPHA_SHIFT:
+      case ZXPDF417ModeAlphaShift:
         // Restore sub-mode
         subMode = priorToShiftMode;
         if (subModeCh < 26) {
@@ -376,26 +386,26 @@ static NSArray *EXP900 = nil;
         } else {
           if (subModeCh == 26) {
             ch = ' ';
-          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
-            subMode = ALPHA;
+          } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ZXPDF417ModeAlpha;
           }
         }
         break;
 
-      case PUNCT_SHIFT:
+      case ZXPDF417ModePunctShift:
         // Restore sub-mode
         subMode = priorToShiftMode;
-        if (subModeCh < PAL) {
-          ch = PUNCT_CHARS[subModeCh];
+        if (subModeCh < ZX_PDF417_PAL) {
+          ch = ZX_PDF417_PUNCT_CHARS[subModeCh];
         } else {
-          if (subModeCh == PAL) {
-            subMode = ALPHA;
-          } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+          if (subModeCh == ZX_PDF417_PAL) {
+            subMode = ZXPDF417ModeAlpha;
+          } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             // PS before Shift-to-Byte is used as a padding character,
             // see 5.4.2.4 of the specification
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
-          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
-            subMode = ALPHA;
+          } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
+            subMode = ZXPDF417ModeAlpha;
           }
         }
         break;
@@ -412,9 +422,15 @@ static NSArray *EXP900 = nil;
  * Byte Compaction mode (see 5.4.3) permits all 256 possible 8-bit byte values to be encoded.
  * This includes all ASCII characters value 0 to 127 inclusive and provides for international
  * character set support.
+ *
+ * @param mode      The byte compaction mode i.e. 901 or 924
+ * @param codewords The array of codewords (data + error)
+ * @param codeIndex The current index into the codeword array.
+ * @param result    The decoded data is appended to the result.
+ * @return The next index into the codeword array.
  */
 + (int)byteCompaction:(int)mode codewords:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
-  if (mode == BYTE_COMPACTION_MODE_LATCH) {
+  if (mode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH) {
     // Total number of Byte Compaction characters to be encoded
     // is not a multiple of 6
     int count = 0;
@@ -429,13 +445,13 @@ static NSArray *EXP900 = nil;
       value = 900 * value + nextCode;
       nextCode = codewords.array[codeIndex++];
       // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
-      if (nextCode == TEXT_COMPACTION_MODE_LATCH ||
-          nextCode == BYTE_COMPACTION_MODE_LATCH ||
-          nextCode == NUMERIC_COMPACTION_MODE_LATCH ||
-          nextCode == BYTE_COMPACTION_MODE_LATCH_6 ||
-          nextCode == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-          nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-          nextCode == MACRO_PDF417_TERMINATOR) {
+      if (nextCode == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH ||
+          nextCode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH ||
+          nextCode == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH ||
+          nextCode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6 ||
+          nextCode == ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+          nextCode == ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+          nextCode == ZX_PDF417_MACRO_PDF417_TERMINATOR) {
         codeIndex--;
         end = YES;
       } else {
@@ -453,7 +469,7 @@ static NSArray *EXP900 = nil;
     }
 
     // if the end of all codewords is reached the last codeword needs to be added
-    if (codeIndex == codewords.array[0] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
+    if (codeIndex == codewords.array[0] && nextCode < ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
       byteCompactedCodewords.array[count++] = nextCode;
     }
 
@@ -463,7 +479,7 @@ static NSArray *EXP900 = nil;
     for (int i = 0; i < count; i++) {
       [result appendFormat:@"%C", (unichar)byteCompactedCodewords.array[i]];
     }
-  } else if (mode == BYTE_COMPACTION_MODE_LATCH_6) {
+  } else if (mode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6) {
     // Total number of Byte Compaction characters to be encoded
     // is an integer multiple of 6
     int count = 0;
@@ -471,18 +487,18 @@ static NSArray *EXP900 = nil;
     BOOL end = NO;
     while (codeIndex < codewords.array[0] && !end) {
       int code = codewords.array[codeIndex++];
-      if (code < TEXT_COMPACTION_MODE_LATCH) {
+      if (code < ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
         count++;
         // Base 900
         value = 900 * value + code;
       } else {
-        if (code == TEXT_COMPACTION_MODE_LATCH ||
-            code == BYTE_COMPACTION_MODE_LATCH ||
-            code == NUMERIC_COMPACTION_MODE_LATCH ||
-            code == BYTE_COMPACTION_MODE_LATCH_6 ||
-            code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-            code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-            code == MACRO_PDF417_TERMINATOR) {
+        if (code == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH ||
+            code == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH ||
+            code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH ||
+            code == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6 ||
+            code == ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+            code == ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+            code == ZX_PDF417_MACRO_PDF417_TERMINATOR) {
           codeIndex--;
           end = YES;
         }
@@ -505,33 +521,38 @@ static NSArray *EXP900 = nil;
 
 /**
  * Numeric Compaction mode (see 5.4.4) permits efficient encoding of numeric data strings.
+ *
+ * @param codewords The array of codewords (data + error)
+ * @param codeIndex The current index into the codeword array.
+ * @param result    The decoded data is appended to the result.
+ * @return The next index into the codeword array.
  */
 + (int)numericCompaction:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   int count = 0;
   BOOL end = NO;
 
-  ZXIntArray *numericCodewords = [[ZXIntArray alloc] initWithLength:MAX_NUMERIC_CODEWORDS];
+  ZXIntArray *numericCodewords = [[ZXIntArray alloc] initWithLength:ZX_PDF417_MAX_NUMERIC_CODEWORDS];
 
   while (codeIndex < codewords.array[0] && !end) {
     int code = codewords.array[codeIndex++];
     if (codeIndex == codewords.array[0]) {
       end = YES;
     }
-    if (code < TEXT_COMPACTION_MODE_LATCH) {
+    if (code < ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
       numericCodewords.array[count] = code;
       count++;
     } else {
-      if (code == TEXT_COMPACTION_MODE_LATCH ||
-          code == BYTE_COMPACTION_MODE_LATCH ||
-          code == BYTE_COMPACTION_MODE_LATCH_6 ||
-          code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-          code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-          code == MACRO_PDF417_TERMINATOR) {
+      if (code == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH ||
+          code == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH ||
+          code == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6 ||
+          code == ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+          code == ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+          code == ZX_PDF417_MACRO_PDF417_TERMINATOR) {
         codeIndex--;
         end = YES;
       }
     }
-    if (count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) {
+    if (count % ZX_PDF417_MAX_NUMERIC_CODEWORDS == 0 || code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH || end) {
       NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
       if (s == nil) {
         return INT_MAX;
@@ -545,6 +566,10 @@ static NSArray *EXP900 = nil;
 
 /**
  * Convert a list of Numeric Compacted codewords from Base 900 to Base 10.
+ *
+ * @param codewords The array of codewords
+ * @param count     The number of codewords
+ * @return The decoded string representing the Numeric data.
  */
 /*
    EXAMPLE
@@ -585,7 +610,7 @@ static NSArray *EXP900 = nil;
 + (NSString *)decodeBase900toBase10:(ZXIntArray *)codewords count:(int)count {
   NSDecimalNumber *result = [NSDecimalNumber zero];
   for (int i = 0; i < count; i++) {
-    result = [result decimalNumberByAdding:[EXP900[count - i - 1] decimalNumberByMultiplyingBy:[NSDecimalNumber decimalNumberWithDecimal:[@(codewords.array[i]) decimalValue]]]];
+    result = [result decimalNumberByAdding:[ZX_PDF417_EXP900[count - i - 1] decimalNumberByMultiplyingBy:[NSDecimalNumber decimalNumberWithDecimal:[@(codewords.array[i]) decimalValue]]]];
   }
   NSString *resultString = [result stringValue];
   if (![resultString hasPrefix:@"1"]) {

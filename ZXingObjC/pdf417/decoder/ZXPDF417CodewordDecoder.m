@@ -17,23 +17,23 @@
 #import "ZXPDF417CodewordDecoder.h"
 #import "ZXPDF417Common.h"
 
-static float ZXPDF417_RATIOS_TABLE[ZXPDF417_SYMBOL_TABLE_LEN][ZXPDF417_BARS_IN_MODULE];
+static float ZX_PDF417_RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN][ZX_PDF417_BARS_IN_MODULE];
 
 @implementation ZXPDF417CodewordDecoder
 
 + (void)initialize {
   // Pre-computes the symbol ratio table.
-  for (int i = 0; i < ZXPDF417_SYMBOL_TABLE_LEN; i++) {
-    int currentSymbol = ZXPDF417_SYMBOL_TABLE[i];
+  for (int i = 0; i < ZX_PDF417_SYMBOL_TABLE_LEN; i++) {
+    int currentSymbol = ZX_PDF417_SYMBOL_TABLE[i];
     int currentBit = currentSymbol & 0x1;
-    for (int j = 0; j < ZXPDF417_BARS_IN_MODULE; j++) {
+    for (int j = 0; j < ZX_PDF417_BARS_IN_MODULE; j++) {
       float size = 0.0f;
       while ((currentSymbol & 0x1) == currentBit) {
         size += 1.0f;
         currentSymbol >>= 1;
       }
       currentBit = currentSymbol & 0x1;
-      ZXPDF417_RATIOS_TABLE[i][ZXPDF417_BARS_IN_MODULE - j - 1] = size / ZXPDF417_MODULES_IN_CODEWORD;
+      ZX_PDF417_RATIOS_TABLE[i][ZX_PDF417_BARS_IN_MODULE - j - 1] = size / ZX_PDF417_MODULES_IN_CODEWORD;
     }
   }
 }
@@ -48,17 +48,17 @@ static float ZXPDF417_RATIOS_TABLE[ZXPDF417_SYMBOL_TABLE_LEN][ZXPDF417_BARS_IN_M
 
 + (NSArray *)sampleBitCounts:(NSArray *)moduleBitCount {
   float bitCountSum = [ZXPDF417Common bitCountSum:moduleBitCount];
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:ZXPDF417_BARS_IN_MODULE];
-  for (int i = 0; i < ZXPDF417_BARS_IN_MODULE; i++) {
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:ZX_PDF417_BARS_IN_MODULE];
+  for (int i = 0; i < ZX_PDF417_BARS_IN_MODULE; i++) {
     [result addObject:@0];
   }
 
   int bitCountIndex = 0;
   int sumPreviousBits = 0;
-  for (int i = 0; i < ZXPDF417_MODULES_IN_CODEWORD; i++) {
+  for (int i = 0; i < ZX_PDF417_MODULES_IN_CODEWORD; i++) {
     float sampleIndex =
-      bitCountSum / (2 * ZXPDF417_MODULES_IN_CODEWORD) +
-      (i * bitCountSum) / ZXPDF417_MODULES_IN_CODEWORD;
+      bitCountSum / (2 * ZX_PDF417_MODULES_IN_CODEWORD) +
+      (i * bitCountSum) / ZX_PDF417_MODULES_IN_CODEWORD;
     if (sumPreviousBits + [moduleBitCount[bitCountIndex] intValue] <= sampleIndex) {
       sumPreviousBits += [moduleBitCount[bitCountIndex] intValue];
       bitCountIndex++;
@@ -85,21 +85,21 @@ static float ZXPDF417_RATIOS_TABLE[ZXPDF417_SYMBOL_TABLE_LEN][ZXPDF417_BARS_IN_M
 
 + (int)closestDecodedValue:(NSArray *)moduleBitCount {
   int bitCountSum = [ZXPDF417Common bitCountSum:moduleBitCount];
-  float bitCountRatios[ZXPDF417_BARS_IN_MODULE];
-  for (int i = 0; i < ZXPDF417_BARS_IN_MODULE; i++) {
+  float bitCountRatios[ZX_PDF417_BARS_IN_MODULE];
+  for (int i = 0; i < ZX_PDF417_BARS_IN_MODULE; i++) {
     bitCountRatios[i] = [moduleBitCount[i] intValue] / (float) bitCountSum;
   }
   float bestMatchError = MAXFLOAT;
   int bestMatch = -1;
-  for (int j = 0; j < ZXPDF417_SYMBOL_TABLE_LEN; j++) {
+  for (int j = 0; j < ZX_PDF417_SYMBOL_TABLE_LEN; j++) {
     float error = 0.0f;
-    for (int k = 0; k < ZXPDF417_BARS_IN_MODULE; k++) {
-      float diff = ZXPDF417_RATIOS_TABLE[j][k] - bitCountRatios[k];
+    for (int k = 0; k < ZX_PDF417_BARS_IN_MODULE; k++) {
+      float diff = ZX_PDF417_RATIOS_TABLE[j][k] - bitCountRatios[k];
       error += diff * diff;
     }
     if (error < bestMatchError) {
       bestMatchError = error;
-      bestMatch = ZXPDF417_SYMBOL_TABLE[j];
+      bestMatch = ZX_PDF417_SYMBOL_TABLE[j];
     }
   }
   return bestMatch;

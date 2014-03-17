@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-/*
- * This file has been modified from its original form in Barcode4J.
- */
-
 #import "ZXCompaction.h"
 
 /**
  * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
  * annex P.
  */
-
 @interface ZXPDF417HighLevelEncoder : NSObject
 
+/**
+ * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
+ * of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
+ * is used.
+ *
+ * @param msg the message
+ * @return the encoded message (the char values range from 0 to 928)
+ */
 + (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction error:(NSError **)error;
 
 @end

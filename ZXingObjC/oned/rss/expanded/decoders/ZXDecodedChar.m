@@ -16,7 +16,7 @@
 
 #import "ZXDecodedChar.h"
 
-unichar const FNC1char = '$';
+unichar const ZX_FNC1_CHAR = '$'; // It's not in Alphanumeric neither in ISO/IEC 646 charset
 
 @implementation ZXDecodedChar
 
@@ -29,7 +29,7 @@ unichar const FNC1char = '$';
 }
 
 - (BOOL)fnc1 {
-  return self.value == FNC1char;
+  return self.value == ZX_FNC1_CHAR;
 }
 
 @end

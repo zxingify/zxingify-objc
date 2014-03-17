@@ -21,6 +21,7 @@
 #import "ZXDecoderResult.h"
 #import "ZXDetectorResult.h"
 #import "ZXErrors.h"
+#import "ZXIntArray.h"
 #import "ZXQRCodeDecoder.h"
 #import "ZXQRCodeDecoderMetaData.h"
 #import "ZXQRCodeDetector.h"
@@ -39,6 +40,11 @@
 
 /**
  * Locates and decodes a QR code in an image.
+ *
+ * @return a String representing the content encoded by the QR code
+ * @throws NotFoundException if a QR code cannot be found
+ * @throws FormatException if a QR code cannot be decoded
+ * @throws ChecksumException if error correction fails
  */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
   return [self decode:image hints:nil error:error];
@@ -105,8 +111,8 @@
  * case.
  */
 - (ZXBitMatrix *)extractPureBits:(ZXBitMatrix *)image {
-  NSArray *leftTopBlack = image.topLeftOnBit;
-  NSArray *rightBottomBlack = image.bottomRightOnBit;
+  ZXIntArray *leftTopBlack = image.topLeftOnBit;
+  ZXIntArray *rightBottomBlack = image.bottomRightOnBit;
   if (leftTopBlack == nil || rightBottomBlack == nil) {
     return nil;
   }
@@ -116,10 +122,10 @@
     return nil;
   }
 
-  int top = [leftTopBlack[1] intValue];
-  int bottom = [rightBottomBlack[1] intValue];
-  int left = [leftTopBlack[0] intValue];
-  int right = [rightBottomBlack[0] intValue];
+  int top = leftTopBlack.array[1];
+  int bottom = rightBottomBlack.array[1];
+  int left = leftTopBlack.array[0];
+  int right = rightBottomBlack.array[0];
 
   // Sanity check!
   if (left >= right || top >= bottom) {
@@ -176,11 +182,11 @@
   return bits;
 }
 
-- (float)moduleSize:(NSArray *)leftTopBlack image:(ZXBitMatrix *)image {
+- (float)moduleSize:(ZXIntArray *)leftTopBlack image:(ZXBitMatrix *)image {
   int height = image.height;
   int width = image.width;
-  int x = [leftTopBlack[0] intValue];
-  int y = [leftTopBlack[1] intValue];
+  int x = leftTopBlack.array[0];
+  int y = leftTopBlack.array[1];
   BOOL inBlack = YES;
   int transitions = 0;
   while (x < width && y < height) {
@@ -196,7 +202,7 @@
     return -1;
   }
 
-  return (x - [leftTopBlack[0] intValue]) / 7.0f;
+  return (x - leftTopBlack.array[0]) / 7.0f;
 }
 
 @end

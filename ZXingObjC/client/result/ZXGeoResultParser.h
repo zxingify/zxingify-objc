@@ -21,7 +21,6 @@
  * the Earth as well as an optional altitude above the surface. See
  * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00.
  */
-
 @interface ZXGeoResultParser : ZXResultParser
 
 @end

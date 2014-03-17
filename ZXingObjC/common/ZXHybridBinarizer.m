@@ -20,11 +20,11 @@
 
 // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
 // So this is the smallest dimension in each axis we can accept.
-const int BLOCK_SIZE_POWER = 3;
-const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER; // ...0100...00
-const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;   // ...0011...11
-const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
-const int MIN_DYNAMIC_RANGE = 24;
+const int ZX_BLOCK_SIZE_POWER = 3;
+const int ZX_BLOCK_SIZE = 1 << ZX_BLOCK_SIZE_POWER; // ...0100...00
+const int ZX_BLOCK_SIZE_MASK = ZX_BLOCK_SIZE - 1;   // ...0011...11
+const int ZX_MINIMUM_DIMENSION = ZX_BLOCK_SIZE * 5;
+const int ZX_MIN_DYNAMIC_RANGE = 24;
 
 @interface ZXHybridBinarizer ()
 
@@ -46,14 +46,14 @@ const int MIN_DYNAMIC_RANGE = 24;
   ZXLuminanceSource *source = [self luminanceSource];
   int width = source.width;
   int height = source.height;
-  if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
+  if (width >= ZX_MINIMUM_DIMENSION && height >= ZX_MINIMUM_DIMENSION) {
     ZXByteArray *luminances = source.matrix;
-    int subWidth = width >> BLOCK_SIZE_POWER;
-    if ((width & BLOCK_SIZE_MASK) != 0) {
+    int subWidth = width >> ZX_BLOCK_SIZE_POWER;
+    if ((width & ZX_BLOCK_SIZE_MASK) != 0) {
       subWidth++;
     }
-    int subHeight = height >> BLOCK_SIZE_POWER;
-    if ((height & BLOCK_SIZE_MASK) != 0) {
+    int subHeight = height >> ZX_BLOCK_SIZE_POWER;
+    if ((height & ZX_BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
     NSArray *blackPoints = [self calculateBlackPoints:luminances subWidth:subWidth subHeight:subHeight width:width height:height];
@@ -85,14 +85,14 @@ const int MIN_DYNAMIC_RANGE = 24;
                        blackPoints:(NSArray *)blackPoints
                             matrix:(ZXBitMatrix *)matrix {
   for (int y = 0; y < subHeight; y++) {
-    int yoffset = y << BLOCK_SIZE_POWER;
-    int maxYOffset = height - BLOCK_SIZE;
+    int yoffset = y << ZX_BLOCK_SIZE_POWER;
+    int maxYOffset = height - ZX_BLOCK_SIZE;
     if (yoffset > maxYOffset) {
       yoffset = maxYOffset;
     }
     for (int x = 0; x < subWidth; x++) {
-      int xoffset = x << BLOCK_SIZE_POWER;
-      int maxXOffset = width - BLOCK_SIZE;
+      int xoffset = x << ZX_BLOCK_SIZE_POWER;
+      int maxXOffset = width - ZX_BLOCK_SIZE;
       if (xoffset > maxXOffset) {
         xoffset = maxXOffset;
       }
@@ -122,8 +122,8 @@ const int MIN_DYNAMIC_RANGE = 24;
              threshold:(int)threshold
                 stride:(int)stride
                 matrix:(ZXBitMatrix *)matrix {
-  for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride) {
-    for (int x = 0; x < BLOCK_SIZE; x++) {
+  for (int y = 0, offset = yoffset * stride + xoffset; y < ZX_BLOCK_SIZE; y++, offset += stride) {
+    for (int x = 0; x < ZX_BLOCK_SIZE; x++) {
       // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0
       if ((luminances.array[offset + x] & 0xFF) <= threshold) {
         [matrix setX:xoffset + x y:yoffset + y];
@@ -146,22 +146,22 @@ const int MIN_DYNAMIC_RANGE = 24;
   for (int y = 0; y < subHeight; y++) {
     [blackPoints addObject:[[ZXIntArray alloc] initWithLength:subWidth]];
 
-    int yoffset = y << BLOCK_SIZE_POWER;
-    int maxYOffset = height - BLOCK_SIZE;
+    int yoffset = y << ZX_BLOCK_SIZE_POWER;
+    int maxYOffset = height - ZX_BLOCK_SIZE;
     if (yoffset > maxYOffset) {
       yoffset = maxYOffset;
     }
     for (int x = 0; x < subWidth; x++) {
-      int xoffset = x << BLOCK_SIZE_POWER;
-      int maxXOffset = width - BLOCK_SIZE;
+      int xoffset = x << ZX_BLOCK_SIZE_POWER;
+      int maxXOffset = width - ZX_BLOCK_SIZE;
       if (xoffset > maxXOffset) {
         xoffset = maxXOffset;
       }
       int sum = 0;
       int min = 0xFF;
       int max = 0;
-      for (int yy = 0, offset = yoffset * width + xoffset; yy < BLOCK_SIZE; yy++, offset += width) {
-        for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+      for (int yy = 0, offset = yoffset * width + xoffset; yy < ZX_BLOCK_SIZE; yy++, offset += width) {
+        for (int xx = 0; xx < ZX_BLOCK_SIZE; xx++) {
           int pixel = luminances.array[offset + xx] & 0xFF;
           sum += pixel;
           // still looking for good contrast
@@ -173,10 +173,10 @@ const int MIN_DYNAMIC_RANGE = 24;
           }
         }
         // short-circuit min/max tests once dynamic range is met
-        if (max - min > MIN_DYNAMIC_RANGE) {
+        if (max - min > ZX_MIN_DYNAMIC_RANGE) {
           // finish the rest of the rows quickly
-          for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
-            for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+          for (yy++, offset += width; yy < ZX_BLOCK_SIZE; yy++, offset += width) {
+            for (int xx = 0; xx < ZX_BLOCK_SIZE; xx++) {
               sum += luminances.array[offset + xx] & 0xFF;
             }
           }
@@ -184,8 +184,8 @@ const int MIN_DYNAMIC_RANGE = 24;
       }
 
       // The default estimate is the average of the values in the block.
-      int average = sum >> (BLOCK_SIZE_POWER * 2);
-      if (max - min <= MIN_DYNAMIC_RANGE) {
+      int average = sum >> (ZX_BLOCK_SIZE_POWER * 2);
+      if (max - min <= ZX_MIN_DYNAMIC_RANGE) {
         // If variation within the block is low, assume this is a block with only light or only
         // dark pixels. In that case we do not want to use the average, as it would divide this
         // low contrast area into black and white pixels, essentially creating data out of noise.

@@ -19,8 +19,7 @@
 #import "ZXUPCEANExtension5Support.h"
 #import "ZXUPCEANReader.h"
 
-#define EXTENSION_START_PATTERN_LEN 3
-const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
+const int ZX_UPCEAN_EXTENSION_START_PATTERN[] = {1,1,2};
 
 @interface ZXUPCEANExtensionSupport ()
 
@@ -41,7 +40,12 @@ const int EXTENSION_START_PATTERN[EXTENSION_START_PATTERN_LEN] = {1,1,2};
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row rowOffset:(int)rowOffset error:(NSError **)error {
-  NSRange extensionStartRange = [ZXUPCEANReader findGuardPattern:row rowOffset:rowOffset whiteFirst:NO pattern:EXTENSION_START_PATTERN patternLen:EXTENSION_START_PATTERN_LEN error:error];
+  NSRange extensionStartRange = [ZXUPCEANReader findGuardPattern:row
+                                                       rowOffset:rowOffset
+                                                      whiteFirst:NO
+                                                         pattern:ZX_UPCEAN_EXTENSION_START_PATTERN
+                                                      patternLen:sizeof(ZX_UPCEAN_EXTENSION_START_PATTERN)/sizeof(int)
+                                                           error:error];
 
   if (extensionStartRange.location == NSNotFound) {
     return nil;

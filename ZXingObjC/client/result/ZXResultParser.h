@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@class ZXParsedResult, ZXResult;
+
 /**
  * Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
@@ -23,13 +25,16 @@
  * Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
  * on exception-based mechanisms during parsing.
  */
-
-@class ZXParsedResult, ZXResult;
-
 @interface ZXResultParser : NSObject
 
-+ (NSString *)massagedText:(ZXResult *)result;
+/**
+ * Attempts to parse the raw ZXResult's contents as a particular type
+ * of information (email, URL, etc.) and return a ZXParsedResult encapsulating
+ * the result of parsing.
+ */
 - (ZXParsedResult *)parse:(ZXResult *)result;
+
++ (NSString *)massagedText:(ZXResult *)result;
 + (ZXParsedResult *)parseResult:(ZXResult *)theResult;
 - (void)maybeAppend:(NSString *)value result:(NSMutableString *)result;
 - (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;

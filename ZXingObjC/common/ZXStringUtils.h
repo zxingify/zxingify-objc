@@ -22,6 +22,13 @@
 
 @interface ZXStringUtils : NSObject
 
+/**
+ * @param bytes bytes encoding a string, whose encoding should be guessed
+ * @param hints decode hints if applicable
+ * @return name of guessed encoding; at the moment will only guess one of:
+ *  NSShiftJISStringEncoding, NSUTF8StringEncoding, NSISOLatin1StringEncoding, or the platform
+ *  default encoding if none of these can possibly be correct
+ */
 + (NSStringEncoding)guessEncoding:(int8_t *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints;
 
 @end

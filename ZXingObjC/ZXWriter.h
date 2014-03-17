@@ -16,15 +16,31 @@
 
 #import "ZXBarcodeFormat.h"
 
+@class ZXBitMatrix, ZXEncodeHints;
+
 /**
  * The base class for all objects which encode/generate a barcode image.
  */
-
-@class ZXBitMatrix, ZXEncodeHints;
-
 @protocol ZXWriter <NSObject>
 
+/**
+ * Encode a barcode using the default settings.
+ *
+ * @param contents The contents to encode in the barcode
+ * @param format The barcode format to generate
+ * @param width The preferred width in pixels
+ * @param height The preferred height in pixels
+ */
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error;
+
+/**
+ *
+ * @param contents The contents to encode in the barcode
+ * @param format The barcode format to generate
+ * @param width The preferred width in pixels
+ * @param height The preferred height in pixels
+ * @param hints Additional parameters to supply to the encoder
+ */
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error;
 
 @end

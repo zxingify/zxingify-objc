@@ -18,11 +18,11 @@
 
 /**
  * Parses a WIFI configuration string.  Strings will be of the form:
+ *
  * WIFI:T:[network type];S:[SSID];P:[network password];H:[hidden?];;
- * 
+ *
  * The fields can appear in any order. Only "S:" is required.
  */
-
 @interface ZXWifiResultParser : ZXResultParser
 
 @end

@@ -22,25 +22,27 @@
 
 @implementation ZXAI01393xDecoder
 
-int const AI01393xDecoder_HEADER_SIZE = 5 + 1 + 2;
-int const AI01393xDecoder_LAST_DIGIT_SIZE = 2;
-int const AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
+const int ZX_AI01393xDecoder_HEADER_SIZE = 5 + 1 + 2;
+const int ZX_AI01393xDecoder_LAST_DIGIT_SIZE = 2;
+const int ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
 
 - (NSString *)parseInformationWithError:(NSError **)error {
-  if (self.information.size < AI01393xDecoder_HEADER_SIZE + GTIN_SIZE) {
+  if (self.information.size < ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
   }
 
   NSMutableString *buf = [NSMutableString string];
 
-  [self encodeCompressedGtin:buf currentPos:AI01393xDecoder_HEADER_SIZE];
+  [self encodeCompressedGtin:buf currentPos:ZX_AI01393xDecoder_HEADER_SIZE];
 
-  int lastAIdigit = [self.generalDecoder extractNumericValueFromBitArray:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE bits:AI01393xDecoder_LAST_DIGIT_SIZE];
+  int lastAIdigit = [self.generalDecoder extractNumericValueFromBitArray:ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE
+                                                                    bits:ZX_AI01393xDecoder_LAST_DIGIT_SIZE];
 
   [buf appendFormat:@"(393%d)", lastAIdigit];
 
-  int firstThreeDigits = [self.generalDecoder extractNumericValueFromBitArray:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE + AI01393xDecoder_LAST_DIGIT_SIZE bits:AI01393xDecoder_FIRST_THREE_DIGITS_SIZE];
+  int firstThreeDigits = [self.generalDecoder extractNumericValueFromBitArray:ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI01393xDecoder_LAST_DIGIT_SIZE
+                                                                         bits:ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE];
   if (firstThreeDigits / 100 == 0) {
     [buf appendString:@"0"];
   }
@@ -49,7 +51,8 @@ int const AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
   }
   [buf appendFormat:@"%d", firstThreeDigits];
 
-  ZXDecodedInformation *generalInformation = [self.generalDecoder decodeGeneralPurposeField:AI01393xDecoder_HEADER_SIZE + GTIN_SIZE + AI01393xDecoder_LAST_DIGIT_SIZE + AI01393xDecoder_FIRST_THREE_DIGITS_SIZE remaining:nil];
+  ZXDecodedInformation *generalInformation = [self.generalDecoder decodeGeneralPurposeField:ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI01393xDecoder_LAST_DIGIT_SIZE + ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE
+                                                                                  remaining:nil];
   [buf appendString:generalInformation.theNewString];
 
   return buf;

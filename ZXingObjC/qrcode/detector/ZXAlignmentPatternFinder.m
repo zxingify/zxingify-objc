@@ -37,9 +37,6 @@
 
 @implementation ZXAlignmentPatternFinder
 
-/**
- * Creates a finder that will look in a portion of the whole image.
- */
 - (id)initWithImage:(ZXBitMatrix *)image startX:(int)startX startY:(int)startY width:(int)width height:(int)height moduleSize:(float)moduleSize resultPointCallback:(id<ZXResultPointCallback>)resultPointCallback {
   if (self = [super init]) {
     _image = image;
@@ -56,10 +53,6 @@
   return self;
 }
 
-/**
- * This method attempts to find the bottom-right alignment pattern in the image. It is a bit messy since
- * it's pretty performance-critical and so is written to be fast foremost.
- */
 - (ZXAlignmentPattern *)findWithError:(NSError **)error {
   int maxJ = self.startX + self.width;
   int middleI = self.startY + (self.height >> 1);
@@ -130,6 +123,11 @@
   return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
 }
 
+/**
+ * @param stateCount count of black/white/black pixels just read
+ * @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
+ *         used by alignment patterns to be considered a match
+ */
 - (BOOL)foundPatternCross:(int *)stateCount {
   float maxVariance = self.moduleSize / 2.0f;
 
@@ -146,6 +144,12 @@
  * After a horizontal scan finds a potential alignment pattern, this method
  * "cross-checks" by scanning down vertically through the center of the possible
  * alignment pattern to see if the same proportion is detected.
+ *
+ * @param startI row where an alignment pattern was detected
+ * @param centerJ center of the section that appears to cross an alignment pattern
+ * @param maxCount maximum reasonable number of modules that should be
+ * observed in any reading state, based on the results of the horizontal scan
+ * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
  */
 - (float)crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
   int maxI = self.image.height;
@@ -201,6 +205,11 @@
  * cross check with a vertical scan, and if successful, will see if this pattern had been
  * found on a previous horizontal scan. If so, we consider it confirmed and conclude we have
  * found the alignment pattern.
+ *
+ * @param stateCount reading state module counts from horizontal scan
+ * @param i row where alignment pattern may be found
+ * @param j end of possible alignment pattern in row
+ * @return ZXAlignmentPattern if we have found the same pattern twice, or null if not
  */
 - (ZXAlignmentPattern *)handlePossibleCenter:(int *)stateCount i:(int)i j:(int)j {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];

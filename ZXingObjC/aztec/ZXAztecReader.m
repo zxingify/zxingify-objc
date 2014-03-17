@@ -27,9 +27,6 @@
 
 @implementation ZXAztecReader
 
-/**
- * Locates and decodes a Data Matrix code in an image.
- */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
   return [self decode:image hints:nil error:error];
 }

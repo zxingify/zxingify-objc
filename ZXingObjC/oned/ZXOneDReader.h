@@ -16,8 +16,8 @@
 
 #import "ZXReader.h"
 
-extern int const INTEGER_MATH_SHIFT;
-extern int const PATTERN_MATCH_RESULT_SCALE_FACTOR;
+extern const int ZX_ONED_INTEGER_MATH_SHIFT;
+extern const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR;
 
 @class ZXBitArray, ZXDecodeHints, ZXIntArray, ZXResult;
 

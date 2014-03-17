@@ -27,11 +27,11 @@
 #import "ZXRSSFinderPattern.h"
 #import "ZXRSSUtils.h"
 
-const int SYMBOL_WIDEST[5] = {7, 5, 4, 3, 1};
-const int EVEN_TOTAL_SUBSET[5] = {4, 20, 52, 104, 204};
-const int GSUM[5] = {0, 348, 1388, 2948, 3988};
+const int ZX_SYMBOL_WIDEST[] = {7, 5, 4, 3, 1};
+const int ZX_EVEN_TOTAL_SUBSET[] = {4, 20, 52, 104, 204};
+const int ZX_GSUM[] = {0, 348, 1388, 2948, 3988};
 
-const int WEIGHTS[23][8] = {
+const int ZX_WEIGHTS[][8] = {
   {  1,   3,   9,  27,  81,  32,  96,  77},
   { 20,  60, 180, 118, 143,   7,  21,  63},
   {189, 145,  13,  39, 117, 140, 209, 205},
@@ -57,31 +57,27 @@ const int WEIGHTS[23][8] = {
   { 45, 135, 194, 160,  58, 174, 100,  89}
 };
 
-const int FINDER_PAT_A = 0;
-const int FINDER_PAT_B = 1;
-const int FINDER_PAT_C = 2;
-const int FINDER_PAT_D = 3;
-const int FINDER_PAT_E = 4;
-const int FINDER_PAT_F = 5;
+const int ZX_FINDER_PAT_A = 0;
+const int ZX_FINDER_PAT_B = 1;
+const int ZX_FINDER_PAT_C = 2;
+const int ZX_FINDER_PAT_D = 3;
+const int ZX_FINDER_PAT_E = 4;
+const int ZX_FINDER_PAT_F = 5;
 
-#define FINDER_PATTERN_SEQUENCES_LEN 10
-#define FINDER_PATTERN_SEQUENCES_SUBLEN 11
-const int FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES_LEN][FINDER_PATTERN_SEQUENCES_SUBLEN] = {
-  { FINDER_PAT_A, FINDER_PAT_A },
-  { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
-  { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
-  { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C },
-  { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F },
-  { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D },
-  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E },
-  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-  { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+#define ZX_FINDER_PATTERN_SEQUENCES_LEN 10
+#define ZX_FINDER_PATTERN_SEQUENCES_SUBLEN 11
+const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER_PATTERN_SEQUENCES_SUBLEN] = {
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_A },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_B, ZX_FINDER_PAT_B },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_C, ZX_FINDER_PAT_B, ZX_FINDER_PAT_D },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_E, ZX_FINDER_PAT_B, ZX_FINDER_PAT_D, ZX_FINDER_PAT_C },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_E, ZX_FINDER_PAT_B, ZX_FINDER_PAT_D, ZX_FINDER_PAT_D, ZX_FINDER_PAT_F },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_E, ZX_FINDER_PAT_B, ZX_FINDER_PAT_D, ZX_FINDER_PAT_E, ZX_FINDER_PAT_F, ZX_FINDER_PAT_F },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_A, ZX_FINDER_PAT_B, ZX_FINDER_PAT_B, ZX_FINDER_PAT_C, ZX_FINDER_PAT_C, ZX_FINDER_PAT_D, ZX_FINDER_PAT_D },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_A, ZX_FINDER_PAT_B, ZX_FINDER_PAT_B, ZX_FINDER_PAT_C, ZX_FINDER_PAT_C, ZX_FINDER_PAT_D, ZX_FINDER_PAT_E, ZX_FINDER_PAT_E },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_A, ZX_FINDER_PAT_B, ZX_FINDER_PAT_B, ZX_FINDER_PAT_C, ZX_FINDER_PAT_C, ZX_FINDER_PAT_D, ZX_FINDER_PAT_E, ZX_FINDER_PAT_F, ZX_FINDER_PAT_F },
+  { ZX_FINDER_PAT_A, ZX_FINDER_PAT_A, ZX_FINDER_PAT_B, ZX_FINDER_PAT_B, ZX_FINDER_PAT_C, ZX_FINDER_PAT_D, ZX_FINDER_PAT_D, ZX_FINDER_PAT_E, ZX_FINDER_PAT_E, ZX_FINDER_PAT_F, ZX_FINDER_PAT_F },
 };
-
-//#define LONGEST_SEQUENCE_SIZE FINDER_PATTERN_SEQUENCES_SUBLEN
-
-const int MAX_PAIRS = 11;
 
 @interface ZXRSSExpandedReader ()
 
@@ -227,14 +223,14 @@ const int MAX_PAIRS = 11;
 // Whether the pairs form a valid find pattern seqience,
 // either complete or a prefix
 - (BOOL)isValidSequence:(NSArray *)pairs {
-  for (int i = 0, sz = 2; i < FINDER_PATTERN_SEQUENCES_LEN; i++, sz++) {
+  for (int i = 0, sz = 2; i < ZX_FINDER_PATTERN_SEQUENCES_LEN; i++, sz++) {
     if ([self.pairs count] > sz) {
       continue;
     }
 
     BOOL stop = YES;
     for (int j = 0; j < [self.pairs count]; j++) {
-      if ([[self.pairs[j] finderPattern] value] != FINDER_PATTERN_SEQUENCES[i][j]) {
+      if ([[self.pairs[j] finderPattern] value] != ZX_FINDER_PATTERN_SEQUENCES[i][j]) {
         stop = NO;
         break;
       }
@@ -546,7 +542,7 @@ const int MAX_PAIRS = 11;
   counters.array[0] = firstCounter;
   memcpy(self.decodeFinderCounters.array, counters.array, counters.length * sizeof(int32_t));
 
-  int value = [ZXAbstractRSSReader parseFinderValue:counters finderPatternType:RSS_PATTERNS_RSS_EXPANDED_PATTERNS];
+  int value = [ZXAbstractRSSReader parseFinderValue:counters finderPatternType:ZX_RSS_PATTERNS_RSS_EXPANDED_PATTERNS];
   if (value == -1) {
     return nil;
   }
@@ -616,7 +612,7 @@ const int MAX_PAIRS = 11;
   int oddChecksumPortion = 0;
   for (int i = self.oddCounts.length - 1; i >= 0; i--) {
     if ([self isNotA1left:pattern isOddPattern:isOddPattern leftChar:leftChar]) {
-      int weight = WEIGHTS[weightRowNumber][2 * i];
+      int weight = ZX_WEIGHTS[weightRowNumber][2 * i];
       oddChecksumPortion += self.oddCounts.array[i] * weight;
     }
     oddSum += self.oddCounts.array[i];
@@ -625,7 +621,7 @@ const int MAX_PAIRS = 11;
   //int evenSum = 0;
   for (int i = self.evenCounts.length - 1; i >= 0; i--) {
     if ([self isNotA1left:pattern isOddPattern:isOddPattern leftChar:leftChar]) {
-      int weight = WEIGHTS[weightRowNumber][2 * i + 1];
+      int weight = ZX_WEIGHTS[weightRowNumber][2 * i + 1];
       evenChecksumPortion += self.evenCounts.array[i] * weight;
     }
     //evenSum += self.evenCounts[i];
@@ -637,12 +633,12 @@ const int MAX_PAIRS = 11;
   }
 
   int group = (13 - oddSum) / 2;
-  int oddWidest = SYMBOL_WIDEST[group];
+  int oddWidest = ZX_SYMBOL_WIDEST[group];
   int evenWidest = 9 - oddWidest;
   int vOdd = [ZXRSSUtils rssValue:self.oddCounts maxWidth:oddWidest noNarrow:YES];
   int vEven = [ZXRSSUtils rssValue:self.evenCounts maxWidth:evenWidest noNarrow:NO];
-  int tEven = EVEN_TOTAL_SUBSET[group];
-  int gSum = GSUM[group];
+  int tEven = ZX_EVEN_TOTAL_SUBSET[group];
+  int gSum = ZX_GSUM[group];
   int value = vOdd * tEven + vEven + gSum;
   return [[ZXDataCharacter alloc] initWithValue:value checksumPortion:checksumPortion];
 }

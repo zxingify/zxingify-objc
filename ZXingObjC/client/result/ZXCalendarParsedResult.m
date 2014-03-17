@@ -21,8 +21,7 @@ static NSRegularExpression *RFC2445_DURATION = nil;
 static NSDateFormatter *DATE_FORMAT = nil;
 static NSDateFormatter *DATE_TIME_FORMAT = nil;
 
-const int RFC2445_DURATION_FIELD_UNITS_LEN = 5;
-const long RFC2445_DURATION_FIELD_UNITS[RFC2445_DURATION_FIELD_UNITS_LEN] = {
+const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
   7 * 24 * 60 * 60 * 1000, // 1 week
   24 * 60 * 60 * 1000, // 1 day
   60 * 60 * 1000, // 1 hour
@@ -98,7 +97,6 @@ const long RFC2445_DURATION_FIELD_UNITS[RFC2445_DURATION_FIELD_UNITS_LEN] = {
   return result;
 }
 
-
 /**
  * Parses a string as a date. RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021)
  * or DATE-TIME (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
@@ -141,11 +139,11 @@ const long RFC2445_DURATION_FIELD_UNITS[RFC2445_DURATION_FIELD_UNITS_LEN] = {
   }
   long durationMS = 0;
   NSTextCheckingResult *match = m[0];
-  for (int i = 0; i < RFC2445_DURATION_FIELD_UNITS_LEN; i++) {
+  for (int i = 0; i < sizeof(ZX_RFC2445_DURATION_FIELD_UNITS) / sizeof(long); i++) {
     if ([match rangeAtIndex:i + 1].location != NSNotFound) {
       NSString *fieldValue = [durationString substringWithRange:[match rangeAtIndex:i + 1]];
       if (fieldValue != nil) {
-        durationMS += RFC2445_DURATION_FIELD_UNITS[i] * [fieldValue intValue];
+        durationMS += ZX_RFC2445_DURATION_FIELD_UNITS[i] * [fieldValue intValue];
       }
     }
   }

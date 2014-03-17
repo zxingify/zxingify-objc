@@ -30,10 +30,10 @@
 #import "ZXPDF417ScanningDecoder.h"
 #import "ZXResultPoint.h"
 
-const int ZXPDF417_CODEWORD_SKEW_SIZE = 2;
+const int ZX_PDF417_CODEWORD_SKEW_SIZE = 2;
 
-const int ZXPDF417_MAX_ERRORS = 3;
-const int ZXPDF417_MAX_EC_CODEWORDS = 512;
+const int ZX_PDF417_MAX_ERRORS = 3;
+const int ZX_PDF417_MAX_EC_CODEWORDS = 512;
 static ZXPDF417ECErrorCorrection *errorCorrection;
 
 @implementation ZXPDF417ScanningDecoder
@@ -228,7 +228,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   int calculatedNumberOfCodewords = [detectionResult barcodeColumnCount] * [detectionResult barcodeRowCount];
     [self numberOfECCodeWords:detectionResult.barcodeECLevel];
   if (numberOfCodewords.length == 0) {
-    if (calculatedNumberOfCodewords < 1 || calculatedNumberOfCodewords > ZXPDF417_MAX_CODEWORDS_IN_BARCODE) {
+    if (calculatedNumberOfCodewords < 1 || calculatedNumberOfCodewords > ZX_PDF417_MAX_CODEWORDS_IN_BARCODE) {
       return NO;
     }
     [(ZXPDF417BarcodeValue *)barcodeMatrix[0][1] setValue:calculatedNumberOfCodewords];
@@ -277,6 +277,11 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
  * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the
  * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,
  * so decoding the normal barcodes is not affected by this.
+ *
+ * @param erasureArray contains the indexes of erasures
+ * @param ambiguousIndexes array with the indexes that have more than one most likely value
+ * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must
+ * be the same length as the ambiguousIndexes array
  */
 + (ZXDecoderResult *)createDecoderResultFromAmbiguousValues:(int)ecLevel codewords:(ZXIntArray *)codewords
                                                erasureArray:(ZXIntArray *)erasureArray ambiguousIndexes:(ZXIntArray *)ambiguousIndexes
@@ -484,7 +489,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   for (int i = 0; i < 2; i++) {
     while (((leftToRight && correctedStartColumn >= minColumn) || (!leftToRight && correctedStartColumn < maxColumn)) &&
            leftToRight == [image getX:correctedStartColumn y:imageRow]) {
-      if (abs(codewordStartColumn - correctedStartColumn) > ZXPDF417_CODEWORD_SKEW_SIZE) {
+      if (abs(codewordStartColumn - correctedStartColumn) > ZX_PDF417_CODEWORD_SKEW_SIZE) {
         return codewordStartColumn;
       }
       correctedStartColumn += increment;
@@ -496,8 +501,8 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 }
 
 + (BOOL)checkCodewordSkew:(int)codewordSize minCodewordWidth:(int)minCodewordWidth maxCodewordWidth:(int)maxCodewordWidth {
-  return minCodewordWidth - ZXPDF417_CODEWORD_SKEW_SIZE <= codewordSize &&
-      codewordSize <= maxCodewordWidth + ZXPDF417_CODEWORD_SKEW_SIZE;
+  return minCodewordWidth - ZX_PDF417_CODEWORD_SKEW_SIZE <= codewordSize &&
+      codewordSize <= maxCodewordWidth + ZX_PDF417_CODEWORD_SKEW_SIZE;
 }
 
 + (ZXDecoderResult *)decodeCodewords:(ZXIntArray *)codewords ecLevel:(int)ecLevel erasures:(ZXIntArray *)erasures {
@@ -524,12 +529,17 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 /**
  * Given data and error-correction codewords received, possibly corrupted by errors, attempts to
  * correct the errors in-place.
+ *
+ * @param codewords   data and error correction codewords
+ * @param erasures positions of any known erasures
+ * @param numECCodewords number of error correction codewords that are available in codewords
+ * @throws ChecksumException if error correction fails
  */
 + (int)correctErrors:(ZXIntArray *)codewords erasures:(ZXIntArray *)erasures numECCodewords:(int)numECCodewords {
   if (erasures &&
-      (erasures.length > numECCodewords / 2 + ZXPDF417_MAX_ERRORS ||
+      (erasures.length > numECCodewords / 2 + ZX_PDF417_MAX_ERRORS ||
        numECCodewords < 0 ||
-       numECCodewords > ZXPDF417_MAX_EC_CODEWORDS)) {
+       numECCodewords > ZX_PDF417_MAX_EC_CODEWORDS)) {
     // Too many errors or EC Codewords is corrupted
     return -1;
   }
@@ -538,6 +548,9 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 
 /**
  * Verify that all is OK with the codeword array.
+ *
+ * @param codewords
+ * @return an index to the first data codeword.
  */
 + (BOOL)verifyCodewordCount:(ZXIntArray *)codewords numECCodewords:(int)numECCodewords {
   if (codewords.length < 4) {

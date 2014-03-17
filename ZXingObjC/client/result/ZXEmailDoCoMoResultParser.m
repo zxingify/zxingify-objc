@@ -49,13 +49,6 @@ static NSRegularExpression *ATEXT_ALPHANUMERIC = nil;
                                                                     mailtoURI:[@"mailto:" stringByAppendingString:to]];
 }
 
-
-/**
- * This implements only the most basic checking for an email address's validity -- that it contains
- * an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
- * validity. We want to generally be lenient here since this class is only intended to encapsulate what's
- * in a barcode, not "judge" it.
- */
 + (BOOL)isBasicallyValidEmailAddress:(NSString *)email {
   return email != nil && [ATEXT_ALPHANUMERIC numberOfMatchesInString:email options:0 range:NSMakeRange(0, email.length)] > 0 && [email rangeOfString:@"@"].location != NSNotFound;
 }

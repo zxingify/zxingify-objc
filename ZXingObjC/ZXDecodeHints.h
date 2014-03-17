@@ -28,7 +28,7 @@
 + (id)hints;
 
 /**
- * Assume Code 39 codes employ a check digit. Maps to {@link Boolean}.
+ * Assume Code 39 codes employ a check digit.
  */
 @property (nonatomic, assign) BOOL assumeCode39CheckDigit;
 
@@ -39,7 +39,7 @@
 @property (nonatomic, assign) BOOL assumeGS1;
 
 /**
- * Allowed lengths of encoded data -- reject anything else. Maps to an int[].
+ * Allowed lengths of encoded data -- reject anything else.
  */
 @property (nonatomic, strong) NSArray *allowedLengths;
 
@@ -59,8 +59,8 @@
 @property (nonatomic, assign) BOOL pureBarcode;
 
 /**
- * The caller needs to be notified via callback when a possible {@link ResultPoint}
- * is found. Maps to a {@link ResultPointCallback}.
+ * The caller needs to be notified via callback when a possible ZXResultPoint
+ * is found.
  */
 @property (nonatomic, strong) id <ZXResultPointCallback> resultPointCallback;
 

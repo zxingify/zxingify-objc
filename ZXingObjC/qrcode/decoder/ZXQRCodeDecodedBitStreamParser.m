@@ -24,18 +24,17 @@
 #import "ZXQRCodeVersion.h"
 #import "ZXStringUtils.h"
 
-
 /**
  * See ISO 18004:2006, 6.4.4 Table 5
  */
-char const ALPHANUMERIC_CHARS[45] = {
+const unichar ZX_ALPHANUMERIC_CHARS[45] = {
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
   'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
   'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
   ' ', '$', '%', '*', '+', '-', '.', '/', ':'
 };
 
-int const GB2312_SUBSET = 1;
+const int ZX_GB2312_SUBSET = 1;
 
 @implementation ZXQRCodeDecodedBitStreamParser
 
@@ -43,7 +42,7 @@ int const GB2312_SUBSET = 1;
                     version:(ZXQRCodeVersion *)version
                     ecLevel:(ZXErrorCorrectionLevel *)ecLevel
                       hints:(ZXDecodeHints *)hints
-                      error:(NSError *__autoreleasing *)error {
+                      error:(NSError **)error {
   ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes];
   NSMutableString *result = [NSMutableString stringWithCapacity:50];
   ZXCharacterSetECI *currentCharacterSetECI = nil;
@@ -81,7 +80,7 @@ int const GB2312_SUBSET = 1;
         if ([mode isEqual:[ZXMode hanziMode]]) {
           int subset = [bits readBits:4];
           int countHanzi = [bits readBits:[mode characterCountBits:version]];
-          if (subset == GB2312_SUBSET) {
+          if (subset == ZX_GB2312_SUBSET) {
             if (![self decodeHanziSegment:bits result:result count:countHanzi]) {
               if (error) *error = FormatErrorInstance();
               return nil;
@@ -219,7 +218,7 @@ int const GB2312_SUBSET = 1;
   if (value >= 45) {
     return -1;
   }
-  return ALPHANUMERIC_CHARS[value];
+  return ZX_ALPHANUMERIC_CHARS[value];
 }
 
 + (BOOL)decodeAlphanumericSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count fc1InEffect:(BOOL)fc1InEffect {

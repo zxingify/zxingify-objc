@@ -19,7 +19,7 @@
 #import "ZXEAN8Writer.h"
 #import "ZXUPCEANReader.h"
 
-int const EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
+const int ZX_EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
 @implementation ZXEAN8Writer
 
@@ -38,24 +38,24 @@ int const EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", (int)[contents length]];
   }
 
-  ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:EAN8_CODE_WIDTH];
+  ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_EAN8_CODE_WIDTH];
   int pos = 0;
 
-  pos += [self appendPattern:result pos:pos pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  pos += [self appendPattern:result pos:pos pattern:ZX_UPC_EAN_START_END_PATTERN patternLen:ZX_UPC_EAN_START_END_PATTERN_LEN startColor:YES];
 
   for (int i = 0; i <= 3; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [self appendPattern:result pos:pos pattern:L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:FALSE];
+    pos += [self appendPattern:result pos:pos pattern:ZX_UPC_EAN_L_PATTERNS[digit] patternLen:ZX_UPC_EAN_L_PATTERNS_SUB_LEN startColor:FALSE];
   }
 
-  pos += [self appendPattern:result pos:pos pattern:MIDDLE_PATTERN patternLen:MIDDLE_PATTERN_LEN startColor:FALSE];
+  pos += [self appendPattern:result pos:pos pattern:ZX_UPC_EAN_MIDDLE_PATTERN patternLen:ZX_UPC_EAN_MIDDLE_PATTERN_LEN startColor:FALSE];
 
   for (int i = 4; i <= 7; i++) {
     int digit = [[contents substringWithRange:NSMakeRange(i, 1)] intValue];
-    pos += [super appendPattern:result pos:pos pattern:L_PATTERNS[digit] patternLen:L_PATTERNS_SUB_LEN startColor:TRUE];
+    pos += [super appendPattern:result pos:pos pattern:ZX_UPC_EAN_L_PATTERNS[digit] patternLen:ZX_UPC_EAN_L_PATTERNS_SUB_LEN startColor:YES];
   }
 
-  [self appendPattern:result pos:pos pattern:START_END_PATTERN patternLen:START_END_PATTERN_LEN startColor:TRUE];
+  [self appendPattern:result pos:pos pattern:ZX_UPC_EAN_START_END_PATTERN patternLen:ZX_UPC_EAN_START_END_PATTERN_LEN startColor:YES];
 
   return result;
 }

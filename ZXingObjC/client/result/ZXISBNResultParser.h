@@ -19,7 +19,6 @@
 /**
  * Parses strings of digits that represent a ISBN.
  */
-
 @interface ZXISBNResultParser : ZXResultParser
 
 @end

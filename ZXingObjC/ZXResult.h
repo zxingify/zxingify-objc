@@ -24,11 +24,35 @@
  */
 @interface ZXResult : NSObject
 
+/**
+ * @return raw text encoded by the barcode
+ */
 @property (nonatomic, copy, readonly) NSString *text;
+
+/**
+ * @return raw bytes encoded by the barcode, if applicable, otherwise nil
+ */
 @property (nonatomic, strong, readonly) ZXByteArray *rawBytes;
+
+/**
+ * @return points related to the barcode in the image. These are typically points
+ *         identifying finder patterns or the corners of the barcode. The exact meaning is
+ *         specific to the type of barcode that was decoded.
+ */
 @property (nonatomic, strong, readonly) NSMutableArray *resultPoints;
+
+/**
+ * @return ZXBarcodeFormat representing the format of the barcode that was decoded
+ */
 @property (nonatomic, assign, readonly) ZXBarcodeFormat barcodeFormat;
+
+/**
+ * @return NSDictionary mapping ZXResultMetadataType keys to values. May be
+ *   nil. This contains optional metadata about what was detected about the barcode,
+ *   like orientation.
+ */
 @property (nonatomic, strong, readonly) NSMutableDictionary *resultMetadata;
+
 @property (nonatomic, assign, readonly) long timestamp;
 
 - (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format;

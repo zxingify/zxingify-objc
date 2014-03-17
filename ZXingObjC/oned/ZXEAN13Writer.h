@@ -17,9 +17,8 @@
 #import "ZXUPCEANWriter.h"
 
 /**
- * This object renders an EAN13 code as a {@link BitMatrix}.
+ * This object renders an EAN13 code as a ZXBitMatrix.
  */
-
 @interface ZXEAN13Writer : ZXUPCEANWriter
 
 @end

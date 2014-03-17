@@ -14,15 +14,33 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix, ZXErrorCorrectionLevel, ZXIntArray, ZXQRCodeECB, ZXQRCodeECBlocks;
+
+/**
+ * See ISO 18004:2006 Annex D
+ */
+@interface ZXQRCodeVersion : NSObject
+
+@property (nonatomic, assign, readonly) int versionNumber;
+@property (nonatomic, strong, readonly) ZXIntArray *alignmentPatternCenters;
+@property (nonatomic, strong, readonly) NSArray *ecBlocks;
+@property (nonatomic, assign, readonly) int totalCodewords;
+@property (nonatomic, assign, readonly) int dimensionForVersion;
+
+- (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXErrorCorrectionLevel *)ecLevel;
++ (ZXQRCodeVersion *)provisionalVersionForDimension:(int)dimension;
++ (ZXQRCodeVersion *)versionForNumber:(int)versionNumber;
++ (ZXQRCodeVersion *)decodeVersionInformation:(int)versionBits;
+- (ZXBitMatrix *)buildFunctionPattern;
+
+@end
+
 /**
  * Encapsulates a set of error-correction blocks in one symbol version. Most versions will
  * use blocks of differing sizes within one version, so, this encapsulates the parameters for
  * each set of blocks. It also holds the number of error-correction codewords per block since it
  * will be the same across all blocks within one version.
  */
-
-@class ZXQRCodeECB;
-
 @interface ZXQRCodeECBlocks : NSObject
 
 @property (nonatomic, assign, readonly) int ecCodewordsPerBlock;
@@ -42,7 +60,6 @@
  * This includes the number of data codewords, and the number of times a block with these
  * parameters is used consecutively in the QR code version's format.
  */
-
 @interface ZXQRCodeECB : NSObject
 
 @property (nonatomic, assign, readonly) int count;
@@ -50,27 +67,5 @@
 
 - (id)initWithCount:(int)count dataCodewords:(int)dataCodewords;
 + (ZXQRCodeECB *)ecbWithCount:(int)count dataCodewords:(int)dataCodewords;
-
-@end
-
-/**
- * See ISO 18004:2006 Annex D
- */
-
-@class ZXErrorCorrectionLevel, ZXBitMatrix;
-
-@interface ZXQRCodeVersion : NSObject
-
-@property (nonatomic, assign, readonly) int versionNumber;
-@property (nonatomic, strong, readonly) NSArray *alignmentPatternCenters;
-@property (nonatomic, strong, readonly) NSArray *ecBlocks;
-@property (nonatomic, assign, readonly) int totalCodewords;
-@property (nonatomic, assign, readonly) int dimensionForVersion;
-
-- (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXErrorCorrectionLevel *)ecLevel;
-+ (ZXQRCodeVersion *)provisionalVersionForDimension:(int)dimension;
-+ (ZXQRCodeVersion *)versionForNumber:(int)versionNumber;
-+ (ZXQRCodeVersion *)decodeVersionInformation:(int)versionBits;
-- (ZXBitMatrix *)buildFunctionPattern;
 
 @end

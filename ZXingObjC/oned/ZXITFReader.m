@@ -22,13 +22,13 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-static int MAX_AVG_VARIANCE;
-static int MAX_INDIVIDUAL_VARIANCE;
+static int ZX_ITF_MAX_AVG_VARIANCE;
+static int ZX_ITF_MAX_INDIVIDUAL_VARIANCE;
 
-static const int W = 3; // Pixel width of a wide line
-static const int N = 1; // Pixel width of a narrow line
+static const int ZX_ITF_W = 3; // Pixel width of a wide line
+static const int ZX_ITF_N = 1; // Pixel width of a narrow line
 
-int const DEFAULT_ALLOWED_LENGTHS[11] = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+const int ZX_ITF_DEFAULT_ALLOWED_LENGTHS[] = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
 
 /**
  * Start/end guard pattern.
@@ -36,24 +36,24 @@ int const DEFAULT_ALLOWED_LENGTHS[11] = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8,
  * Note: The end pattern is reversed because the row is reversed before
  * searching for the END_PATTERN
  */
-int const ITF_START_PATTERN[4] = {N, N, N, N};
-int const END_PATTERN_REVERSED[3] = {N, N, W};
+const int ZX_ITF_ITF_START_PATTERN[] = {ZX_ITF_N, ZX_ITF_N, ZX_ITF_N, ZX_ITF_N};
+const int ZX_ITF_END_PATTERN_REVERSED[] = {ZX_ITF_N, ZX_ITF_N, ZX_ITF_W};
 
 /**
  * Patterns of Wide / Narrow lines to indicate each digit
  */
-const int PATTERNS_LEN = 10;
-const int PATTERNS[PATTERNS_LEN][5] = {
-  {N, N, W, W, N}, // 0
-  {W, N, N, N, W}, // 1
-  {N, W, N, N, W}, // 2
-  {W, W, N, N, N}, // 3
-  {N, N, W, N, W}, // 4
-  {W, N, W, N, N}, // 5
-  {N, W, W, N, N}, // 6
-  {N, N, N, W, W}, // 7
-  {W, N, N, W, N}, // 8
-  {N, W, N, W, N}  // 9
+const int ZX_ITF_PATTERNS_LEN = 10;
+const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
+  {ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_W, ZX_ITF_N}, // 0
+  {ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W}, // 1
+  {ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W}, // 2
+  {ZX_ITF_W, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_N}, // 3
+  {ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_W}, // 4
+  {ZX_ITF_W, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N}, // 5
+  {ZX_ITF_N, ZX_ITF_W, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N}, // 6
+  {ZX_ITF_N, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_W}, // 7
+  {ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N}, // 8
+  {ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N}  // 9
 };
 
 @interface ZXITFReader ()
@@ -65,8 +65,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
 @implementation ZXITFReader
 
 + (void)initialize {
-  MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-  MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
+  ZX_ITF_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
+  ZX_ITF_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
 }
 
 - (id)init {
@@ -97,8 +97,8 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   }
   if (allowedLengths == nil) {
     NSMutableArray *temp = [NSMutableArray array];
-    for (int i = 0; i < sizeof(DEFAULT_ALLOWED_LENGTHS) / sizeof(int); i++) {
-      [temp addObject:@(DEFAULT_ALLOWED_LENGTHS[i])];
+    for (int i = 0; i < sizeof(ZX_ITF_DEFAULT_ALLOWED_LENGTHS) / sizeof(int); i++) {
+      [temp addObject:@(ZX_ITF_DEFAULT_ALLOWED_LENGTHS[i])];
     }
     allowedLengths = [NSArray arrayWithArray:temp];
   }
@@ -181,7 +181,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
   if (endStart == -1) {
     return nil;
   }
-  ZXIntArray *startPattern = [self findGuardPattern:row rowOffset:endStart pattern:ITF_START_PATTERN patternLen:sizeof(ITF_START_PATTERN)/sizeof(int)];
+  ZXIntArray *startPattern = [self findGuardPattern:row rowOffset:endStart pattern:ZX_ITF_ITF_START_PATTERN patternLen:sizeof(ZX_ITF_ITF_START_PATTERN)/sizeof(int)];
   if (!startPattern) {
     return nil;
   }
@@ -255,7 +255,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  ZXIntArray *endPattern = [self findGuardPattern:row rowOffset:endStart pattern:END_PATTERN_REVERSED patternLen:sizeof(END_PATTERN_REVERSED)/sizeof(int)];
+  ZXIntArray *endPattern = [self findGuardPattern:row rowOffset:endStart pattern:ZX_ITF_END_PATTERN_REVERSED patternLen:sizeof(ZX_ITF_END_PATTERN_REVERSED)/sizeof(int)];
   if (!endPattern) {
     [row reverse];
     return nil;
@@ -289,7 +289,7 @@ const int PATTERNS[PATTERNS_LEN][5] = {
       counters.array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if ([ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE] < MAX_AVG_VARIANCE) {
+        if ([ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_ITF_MAX_INDIVIDUAL_VARIANCE] < ZX_ITF_MAX_AVG_VARIANCE) {
           return [[ZXIntArray alloc] initWithInts:patternStart, x, -1];
         }
         patternStart += counters.array[0] + counters.array[1];
@@ -318,15 +318,15 @@ const int PATTERNS[PATTERNS_LEN][5] = {
  * @return The decoded digit or -1 if digit cannot be decoded
  */
 - (int)decodeDigit:(ZXIntArray *)counters {
-  int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+  int bestVariance = ZX_ITF_MAX_AVG_VARIANCE; // worst variance we'll accept
   int bestMatch = -1;
-  int max = PATTERNS_LEN;
+  int max = ZX_ITF_PATTERNS_LEN;
   for (int i = 0; i < max; i++) {
     int pattern[counters.length];
-    for(int ind = 0; ind<counters.length; ind++){
-      pattern[ind] = PATTERNS[i][ind];
+    for(int ind = 0; ind < counters.length; ind++){
+      pattern[ind] = ZX_ITF_PATTERNS[i][ind];
     }
-    int variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:MAX_INDIVIDUAL_VARIANCE];
+    int variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_ITF_MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = i;

@@ -23,7 +23,6 @@
  * (e.g. QR Codes). Instead this scans the four quadrants of the image -- and also the center
  * 'quadrant' to cover the case where a barcode is found in the center.
  */
-
 @interface ZXByQuadrantReader : NSObject <ZXReader>
 
 - (id)initWithDelegate:(id<ZXReader>)delegate;

@@ -19,7 +19,6 @@
 /**
  * Parses strings of digits that represent a UPC code.
  */
-
 @interface ZXProductResultParser : ZXResultParser
 
 @end

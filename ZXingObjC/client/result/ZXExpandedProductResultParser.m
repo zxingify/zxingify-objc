@@ -23,10 +23,12 @@
 - (ZXParsedResult *)parse:(ZXResult *)result {
   ZXBarcodeFormat format = [result barcodeFormat];
   if (kBarcodeFormatRSSExpanded != format) {
+    // ExtendedProductParsedResult NOT created. Not a RSS Expanded barcode
     return nil;
   }
   NSString *rawText = [ZXResultParser massagedText:result];
   if (rawText == nil) {
+    // ExtendedProductParsedResult NOT created. Input text is NULL
     return nil;
   }
 
@@ -85,12 +87,16 @@
       priceIncrement = [ai substringFromIndex:3];
     } else if ([@"3930" isEqualToString:ai] || [@"3931" isEqualToString:ai] || [@"3932" isEqualToString:ai] || [@"3933" isEqualToString:ai]) {
       if ([value length] < 4) {
+        // The value must have more of 3 symbols (3 for currency and
+        // 1 at least for the price)
+        // ExtendedProductParsedResult NOT created. Not match with RSS Expanded pattern
         return nil;
       }
       price = [value substringFromIndex:3];
       priceCurrency = [value substringToIndex:3];
       priceIncrement = [ai substringFromIndex:3];
     } else {
+      // No match with common AIs
       uncommonAIs[ai] = value;
     }
   }
@@ -114,6 +120,7 @@
 
 - (NSString *)findAIvalue:(int)i rawText:(NSString *)rawText {
   unichar c = [rawText characterAtIndex:i];
+  // First character must be a open parenthesis.If not, ERROR
   if (c != '(') {
     return nil;
   }
@@ -141,6 +148,8 @@
   for (int index = 0; index < [rawTextAux length]; index++) {
     unichar c = [rawTextAux characterAtIndex:index];
     if (c == '(') {
+      // We look for a new AI. If it doesn't exist (ERROR), we coninue
+      // with the iteration
       if ([self findAIvalue:index rawText:rawTextAux] == nil) {
         [buf appendString:@"("];
       } else {

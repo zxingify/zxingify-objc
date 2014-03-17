@@ -19,7 +19,6 @@
 /**
  * Tries to parse results that are a URI of some kind.
  */
-
 @interface ZXURIResultParser : ZXResultParser
 
 + (BOOL)isBasicallyValidURI:(NSString *)uri;

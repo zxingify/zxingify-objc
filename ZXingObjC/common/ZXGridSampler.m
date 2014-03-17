@@ -24,13 +24,6 @@ static ZXGridSampler *gridSampler = nil;
 
 @implementation ZXGridSampler
 
-/**
- * Sets the implementation of GridSampler used by the library. One global
- * instance is stored, which may sound problematic. But, the implementation provided
- * ought to be appropriate for the entire platform, and all uses of this library
- * in the whole lifetime of the JVM. For instance, an Android activity can swap in
- * an implementation that takes advantage of native platform libraries.
- */
 + (void)setGridSampler:(ZXGridSampler *)newGridSampler {
   gridSampler = newGridSampler;
 }
@@ -43,9 +36,6 @@ static ZXGridSampler *gridSampler = nil;
   return gridSampler;
 }
 
-/**
- * Samples an image for a rectangular matrix of bits of the given dimension.
- */
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
                  dimensionX:(int)dimensionX
                  dimensionY:(int)dimensionY
@@ -73,22 +63,10 @@ static ZXGridSampler *gridSampler = nil;
                                userInfo:nil];
 }
 
-
-/**
- * Checks a set of points that have been transformed to sample points on an image against
- * the image's dimensions to see if the point are even within the image.
- * 
- * This method will actually "nudge" the endpoints back onto the image if they are found to be
- * barely (less than 1 pixel) off the image. This accounts for imperfect detection of finder
- * patterns in an image where the QR Code runs all the way to the image border.
- * 
- * For efficiency, the method will check points from either end of the line until one is found
- * to be within the image. Because the set of points are assumed to be linear, this is valid.
- */
 + (BOOL)checkAndNudgePoints:(ZXBitMatrix *)image points:(float *)points pointsLen:(int)pointsLen error:(NSError **)error {
   int width = image.width;
   int height = image.height;
-
+  // Check and nudge points from start until we see some that are OK:
   BOOL nudged = YES;
   for (int offset = 0; offset < pointsLen && nudged; offset += 2) {
     int x = (int) points[offset];
@@ -113,7 +91,7 @@ static ZXGridSampler *gridSampler = nil;
       nudged = YES;
     }
   }
-
+  // Check and nudge points from end:
   nudged = YES;
   for (int offset = pointsLen - 2; offset >= 0 && nudged; offset -= 2) {
     int x = (int) points[offset];

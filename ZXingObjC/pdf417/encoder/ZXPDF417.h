@@ -16,10 +16,10 @@
 
 #import "ZXCompaction.h"
 
-@class ZXBarcodeMatrix;
+@class ZXBarcodeMatrix, ZXIntArray;
 
-/*
- * This file has been modified from its original form in Barcode4J.
+/**
+ * Top-level class for the logic part of the PDF417 implementation.
  */
 @interface ZXPDF417 : NSObject
 
@@ -28,8 +28,27 @@
 @property (nonatomic, assign) ZXCompaction compaction;
 
 - (id)initWithCompact:(BOOL)compact;
+
+/**
+ * Generates the barcode logic.
+ *
+ * @param msg        the message to encode
+ */
 - (BOOL)generateBarcodeLogic:(NSString *)msg errorCorrectionLevel:(int)errorCorrectionLevel error:(NSError **)error;
-- (BOOL)determineDimensions:(int *)dimension sourceCodeWords:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error;
+
+/**
+ * Determine optimal nr of columns and rows for the specified number of
+ * codewords.
+ *
+ * @param sourceCodeWords number of code words
+ * @param errorCorrectionCodeWords number of error correction code words
+ * @return dimension object containing cols as width and rows as height
+ */
+- (ZXIntArray *)determineDimensions:(int)sourceCodeWords errorCorrectionCodeWords:(int)errorCorrectionCodeWords error:(NSError **)error;
+
+/**
+ * Sets max/min row/col values
+ */
 - (void)setDimensionsWithMaxCols:(int)maxCols minCols:(int)minCols maxRows:(int)maxRows minRows:(int)minRows;
 
 @end

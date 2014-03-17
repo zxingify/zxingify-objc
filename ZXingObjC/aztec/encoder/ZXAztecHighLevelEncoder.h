@@ -22,7 +22,7 @@ extern const int ZX_AZTEC_MODE_DIGIT;
 extern const int ZX_AZTEC_MODE_MIXED;
 extern const int ZX_AZTEC_MODE_PUNCT;
 
-extern const int ZX_AZTEC_LATCH_TABLE[5][5];
+extern const int ZX_AZTEC_LATCH_TABLE[][5];
 
 #define ZX_AZTEC_SHIFT_TABLE_SIZE 6
 extern int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];

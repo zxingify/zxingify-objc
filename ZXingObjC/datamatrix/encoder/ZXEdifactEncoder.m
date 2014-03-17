@@ -51,6 +51,9 @@
 
 /**
  * Handle "end of data" situations
+ *
+ * @param context the encoder context
+ * @param buffer  the buffer with the remaining encoded characters
  */
 - (void)handleEOD:(ZXEncoderContext *)context buffer:(NSMutableString *)buffer {
   @try {

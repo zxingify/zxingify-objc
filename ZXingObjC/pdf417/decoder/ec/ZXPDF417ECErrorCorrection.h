@@ -24,6 +24,9 @@
  */
 @interface ZXPDF417ECErrorCorrection : NSObject
 
+/**
+ * @return number of errors
+ */
 - (int)decode:(ZXIntArray *)received numECCodewords:(int)numECCodewords erasures:(ZXIntArray *)erasures;
 
 @end
