@@ -281,6 +281,7 @@ const char STARTEND_ENCODING[STARTEND_ENCODING_LEN]  = {'A', 'B', 'C', 'D'};
   if (self.counterLength >= self.countersLen) {
     int *temp = (int *)malloc(2 * self.counterLength * sizeof(int));
     memcpy(temp, self.counters, self.countersLen * sizeof(int));
+    free(self.counters);
     self.counters = temp;
     memset(self.counters, 0, 2 * self.counterLength * sizeof(int));
     self.countersLen = 2 * self.counterLength;
