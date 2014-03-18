@@ -174,6 +174,7 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 - (ZXDataCharacter *)decodeDataCharacter:(ZXBitArray *)row pattern:(ZXRSSFinderPattern *)pattern outsideChar:(BOOL)outsideChar {
   ZXIntArray *counters = self.dataCharacterCounters;
   [counters clear];
+  int32_t *array = counters.array;
 
   if (outsideChar) {
     if (![ZXOneDReader recordPatternInReverse:row start:[pattern startEnd].array[0] counters:counters]) {
@@ -185,9 +186,9 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     }
 
     for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
-      int temp = counters.array[i];
-      counters.array[i] = counters.array[j];
-      counters.array[j] = temp;
+      int temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
   }
 
@@ -195,7 +196,7 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   float elementWidth = (float)[ZXAbstractRSSReader count:counters] / (float)numModules;
 
   for (int i = 0; i < counters.length; i++) {
-    float value = (float) counters.array[i] / elementWidth;
+    float value = (float) array[i] / elementWidth;
     int count = (int)(value + 0.5f);
     if (count < 1) {
       count = 1;
@@ -262,6 +263,7 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
 - (ZXIntArray *)findFinderPattern:(ZXBitArray *)row rowOffset:(int)rowOffset rightFinderPattern:(BOOL)rightFinderPattern {
   ZXIntArray *counters = self.decodeFinderCounters;
   [counters clear];
+  int32_t *array = counters.array;
 
   int width = row.size;
   BOOL isWhite = NO;
@@ -277,22 +279,22 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   int patternStart = rowOffset;
   for (int x = rowOffset; x < width; x++) {
     if ([row get:x] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       if (counterPosition == 3) {
         if ([ZXAbstractRSSReader isFinderPattern:counters]) {
           return [[ZXIntArray alloc] initWithInts:patternStart, x, -1];
         }
-        patternStart += counters.array[0] + counters.array[1];
-        counters.array[0] = counters.array[2];
-        counters.array[1] = counters.array[3];
-        counters.array[2] = 0;
-        counters.array[3] = 0;
+        patternStart += array[0] + array[1];
+        array[0] = array[2];
+        array[1] = array[3];
+        array[2] = 0;
+        array[3] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters.array[counterPosition] = 1;
+      array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -312,10 +314,11 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
   int firstCounter = startEnd.array[0] - firstElementStart;
 
   ZXIntArray *counters = self.decodeFinderCounters;
+  int32_t *array = counters.array;
   for (int i = counters.length - 1; i > 0; i--) {
-    counters.array[i] = counters.array[i-1];
+    array[i] = array[i-1];
   }
-  counters.array[0] = firstCounter;
+  array[0] = firstCounter;
   int value = [ZXAbstractRSSReader parseFinderValue:counters finderPatternType:ZX_RSS_PATTERNS_RSS14_PATTERNS];
   if (value == -1) {
     return nil;

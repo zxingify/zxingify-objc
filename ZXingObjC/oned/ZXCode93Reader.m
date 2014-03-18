@@ -173,13 +173,11 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 
 - (int)toPattern:(ZXIntArray *)counters {
   int max = counters.length;
-  int sum = 0;
-  for (int i = 0; i < max; i++) {
-    sum += counters.array[i];
-  }
+  int sum = [counters sum];
+  int32_t *array = counters.array;
   int pattern = 0;
   for (int i = 0; i < max; i++) {
-    int scaledShifted = (counters.array[i] << ZX_ONED_INTEGER_MATH_SHIFT) * 9 / sum;
+    int scaledShifted = (array[i] << ZX_ONED_INTEGER_MATH_SHIFT) * 9 / sum;
     int scaledUnshifted = scaledShifted >> ZX_ONED_INTEGER_MATH_SHIFT;
     if ((scaledShifted & 0xFF) > 0x7F) {
       scaledUnshifted++;

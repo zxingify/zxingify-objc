@@ -268,27 +268,28 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   rowOffset = whiteFirst ? [row nextUnset:rowOffset] : [row nextSet:rowOffset];
   int counterPosition = 0;
   int patternStart = rowOffset;
+  int32_t *array = counters.array;
   for (int x = rowOffset; x < width; x++) {
     if ([row get:x] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         if ([self patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE] < ZX_UPC_EAN_MAX_AVG_VARIANCE) {
           return NSMakeRange(patternStart, x - patternStart);
         }
-        patternStart += counters.array[0] + counters.array[1];
+        patternStart += array[0] + array[1];
 
         for (int y = 2; y < patternLength; y++) {
-          counters.array[y - 2] = counters.array[y];
+          array[y - 2] = array[y];
         }
 
-        counters.array[patternLength - 2] = 0;
-        counters.array[patternLength - 1] = 0;
+        array[patternLength - 2] = 0;
+        array[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters.array[counterPosition] = 1;
+      array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -297,6 +298,9 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   return NSMakeRange(NSNotFound, 0);
 }
 
+/**
+ * Attempts to decode a single UPC/EAN-encoded digit.
+ */
 + (int)decodeDigit:(ZXBitArray *)row counters:(ZXIntArray *)counters rowOffset:(int)rowOffset patternType:(ZX_UPC_EAN_PATTERNS)patternType error:(NSError **)error {
   if (![self recordPattern:row start:rowOffset counters:counters]) {
     if (error) *error = NotFoundErrorInstance();

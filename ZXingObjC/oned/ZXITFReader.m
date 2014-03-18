@@ -279,6 +279,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
 - (ZXIntArray *)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset pattern:(const int[])pattern patternLen:(int)patternLen {
   int patternLength = patternLen;
   ZXIntArray *counters = [[ZXIntArray alloc] initWithLength:patternLength];
+  int32_t *array = counters.array;
   int width = row.size;
   BOOL isWhite = NO;
 
@@ -286,23 +287,23 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
   int patternStart = rowOffset;
   for (int x = rowOffset; x < width; x++) {
     if ([row get:x] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         if ([ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_ITF_MAX_INDIVIDUAL_VARIANCE] < ZX_ITF_MAX_AVG_VARIANCE) {
           return [[ZXIntArray alloc] initWithInts:patternStart, x, -1];
         }
-        patternStart += counters.array[0] + counters.array[1];
+        patternStart += array[0] + array[1];
         for (int y = 2; y < patternLength; y++) {
-          counters.array[y - 2] = counters.array[y];
+          array[y - 2] = array[y];
         }
-        counters.array[patternLength - 2] = 0;
-        counters.array[patternLength - 1] = 0;
+        array[patternLength - 2] = 0;
+        array[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters.array[counterPosition] = 1;
+      array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }

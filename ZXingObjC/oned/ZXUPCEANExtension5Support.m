@@ -79,9 +79,7 @@ const int ZX_UPCEAN_CHECK_DIGIT_ENCODINGS[] = {
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
-    for (int i = 0; i < counters.length; i++) {
-      rowOffset += counters.array[i];
-    }
+    rowOffset += [counters sum];
     if (bestMatch >= 10) {
       lgPatternFound |= 1 << (4 - x);
     }

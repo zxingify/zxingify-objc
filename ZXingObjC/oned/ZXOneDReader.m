@@ -164,6 +164,7 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
 + (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters {
   int numCounters = counters.length;
   [counters clear];
+  int32_t *array = counters.array;
   int end = row.size;
   if (start >= end) {
     return NO;
@@ -174,13 +175,13 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
 
   while (i < end) {
     if ([row get:i] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       counterPosition++;
       if (counterPosition == numCounters) {
         break;
       } else {
-        counters.array[counterPosition] = 1;
+        array[counterPosition] = 1;
         isWhite = !isWhite;
       }
     }
@@ -227,8 +228,9 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
   int total = 0;
   int patternLength = 0;
 
+  int32_t *array = counters.array;
   for (int i = 0; i < numCounters; i++) {
-    total += counters.array[i];
+    total += array[i];
     patternLength += pattern[i];
   }
 
@@ -240,7 +242,7 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
   int totalVariance = 0;
 
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters.array[x] << ZX_ONED_INTEGER_MATH_SHIFT;
+    int counter = array[x] << ZX_ONED_INTEGER_MATH_SHIFT;
     int scaledPattern = pattern[x] * unitBarWidth;
     int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {

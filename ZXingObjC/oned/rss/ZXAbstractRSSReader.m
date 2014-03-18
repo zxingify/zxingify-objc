@@ -113,11 +113,7 @@ const int ZX_RSS_EXPANDED_FINDER_PATTERNS[ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN][Z
 }
 
 + (int)count:(ZXIntArray *)array {
-  int count = 0;
-  for (int i = 0; i < array.length; i++) {
-    count += array.array[i];
-  }
-  return count;
+  return [array sum];
 }
 
 + (void)increment:(ZXIntArray *)array errors:(float *)errors {
@@ -145,14 +141,15 @@ const int ZX_RSS_EXPANDED_FINDER_PATTERNS[ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN][Z
 }
 
 + (BOOL)isFinderPattern:(ZXIntArray *)counters {
-  int firstTwoSum = counters.array[0] + counters.array[1];
-  int sum = firstTwoSum + counters.array[2] + counters.array[3];
+  int32_t *array = counters.array;
+  int firstTwoSum = array[0] + array[1];
+  int sum = firstTwoSum + array[2] + array[3];
   float ratio = (float)firstTwoSum / (float)sum;
   if (ratio >= ZX_RSS_MIN_FINDER_PATTERN_RATIO && ratio <= ZX_RSS_MAX_FINDER_PATTERN_RATIO) {
     int minCounter = INT_MAX;
     int maxCounter = INT_MIN;
     for (int i = 0; i < counters.length; i++) {
-      int counter = counters.array[i];
+      int counter = array[i];
       if (counter > maxCounter) {
         maxCounter = counter;
       }

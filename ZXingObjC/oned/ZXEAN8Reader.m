@@ -46,9 +46,7 @@
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < counters.length; i++) {
-      rowOffset += counters.array[i];
-    }
+    rowOffset += [counters sum];
   }
 
   NSRange middleRange = [[self class] findGuardPattern:row rowOffset:rowOffset whiteFirst:YES pattern:ZX_UPC_EAN_MIDDLE_PATTERN patternLen:ZX_UPC_EAN_MIDDLE_PATTERN_LEN error:error];
@@ -63,9 +61,7 @@
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < counters.length; i++) {
-      rowOffset += counters.array[i];
-    }
+    rowOffset += [counters sum];
   }
 
   return rowOffset;

@@ -81,9 +81,7 @@ const int ZX_EAN13_FIRST_DIGIT_ENCODINGS[] = {
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch % 10)];
-    for (int i = 0; i < counters.length; i++) {
-      rowOffset += counters.array[i];
-    }
+    rowOffset += [counters sum];
     if (bestMatch >= 10) {
       lgPatternFound |= 1 << (5 - x);
     }
@@ -115,9 +113,7 @@ const int ZX_EAN13_FIRST_DIGIT_ENCODINGS[] = {
       return -1;
     }
     [result appendFormat:@"%C", (unichar)('0' + bestMatch)];
-    for (int i = 0; i < counters.length; i++) {
-      rowOffset += counters.array[i];
-    }
+    rowOffset += [counters sum];
   }
 
   return rowOffset;

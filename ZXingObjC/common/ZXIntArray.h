@@ -22,5 +22,6 @@
 - (id)initWithLength:(unsigned int)length;
 - (id)initWithInts:(int32_t)int1, ...;
 - (void)clear;
+- (int)sum;
 
 @end

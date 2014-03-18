@@ -316,6 +316,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
 
 // Assumes that counters[position] is a bar.
 - (int)toNarrowWidePattern:(int)position {
+  int32_t *array = self.counters.array;
   int end = position + 7;
   if (end >= self.counterLength) {
     return -1;
@@ -324,7 +325,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   int maxBar = 0;
   int minBar = INT_MAX;
   for (int j = position; j < end; j += 2) {
-    int currentCounter = self.counters.array[j];
+    int currentCounter = array[j];
     if (currentCounter < minBar) {
       minBar = currentCounter;
     }
@@ -337,7 +338,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   int maxSpace = 0;
   int minSpace = INT_MAX;
   for (int j = position + 1; j < end; j += 2) {
-    int currentCounter = self.counters.array[j];
+    int currentCounter = array[j];
     if (currentCounter < minSpace) {
       minSpace = currentCounter;
     }
@@ -352,7 +353,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   for (int i = 0; i < 7; i++) {
     int threshold = (i & 1) == 0 ? thresholdBar : thresholdSpace;
     bitmask >>= 1;
-    if (self.counters.array[position + i] > threshold) {
+    if (array[position + i] > threshold) {
       pattern |= bitmask;
     }
   }

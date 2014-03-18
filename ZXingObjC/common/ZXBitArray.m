@@ -50,7 +50,6 @@
   return self;
 }
 
-
 - (void)dealloc {
   if (_bits != NULL) {
     free(_bits);
@@ -73,15 +72,15 @@
 }
 
 - (BOOL)get:(int)i {
-  return (self.bits[i >> 5] & (1 << (i & 0x1F))) != 0;
+  return (_bits[i >> 5] & (1 << (i & 0x1F))) != 0;
 }
 
 - (void)set:(int)i {
-  self.bits[i >> 5] |= 1 << (i & 0x1F);
+  _bits[i >> 5] |= 1 << (i & 0x1F);
 }
 
 - (void)flip:(int)i {
-  self.bits[i >> 5] ^= 1 << (i & 0x1F);
+  _bits[i >> 5] ^= 1 << (i & 0x1F);
 }
 
 - (int)nextSet:(int)from {
@@ -121,7 +120,7 @@
 }
 
 - (void)setBulk:(int)i newBits:(int32_t)newBits {
-  self.bits[i >> 5] = newBits;
+  _bits[i >> 5] = newBits;
 }
 
 - (void)setRange:(int)start end:(int)end {
@@ -146,7 +145,7 @@
         mask |= 1 << j;
       }
     }
-    self.bits[i] |= mask;
+    _bits[i] |= mask;
   }
 }
 
@@ -179,7 +178,7 @@
 
     // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
     // equals the mask, or we're looking for 0s and the masked portion is not all 0s
-    if ((self.bits[i] & mask) != (value ? mask : 0)) {
+    if ((_bits[i] & mask) != (value ? mask : 0)) {
       return NO;
     }
   }
@@ -244,10 +243,11 @@
 }
 
 - (void)reverse {
-  int32_t *newBits = (int32_t *)malloc(self.size * sizeof(int32_t));
-  memset(newBits, 0, self.size * sizeof(int32_t));
-  for (int i = 0; i < self.size; i++) {
-    if ([self get:self.size - i - 1]) {
+  int size = self.size;
+  int32_t *newBits = (int32_t *)malloc(size * sizeof(int32_t));
+  memset(newBits, 0, size * sizeof(int32_t));
+  for (int i = 0; i < size; i++) {
+    if ([self get:size - i - 1]) {
       newBits[i >> 5] |= 1 << (i & 0x1F);
     }
   }

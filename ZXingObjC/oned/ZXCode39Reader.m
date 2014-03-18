@@ -173,27 +173,28 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   int patternStart = rowOffset;
   BOOL isWhite = NO;
   int patternLength = counters.length;
+  int32_t *array = counters.array;
 
   for (int i = rowOffset; i < width; i++) {
     if ([row get:i] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         if ([self toNarrowWidePattern:counters] == ZX_CODE39_ASTERISK_ENCODING &&
             [row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
           return [[ZXIntArray alloc] initWithInts:patternLength, i, -1];
         }
-        patternStart += counters.array[0] + counters.array[1];
+        patternStart += array[0] + array[1];
         for (int y = 2; y < counters.length; y++) {
-          counters.array[y - 2] = counters.array[y];
+          array[y - 2] = array[y];
         }
-        counters.array[patternLength - 2] = 0;
-        counters.array[patternLength - 1] = 0;
+        array[patternLength - 2] = 0;
+        array[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters.array[counterPosition] = 1;
+      array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -207,8 +208,9 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   int wideCounters;
   do {
     int minCounter = INT_MAX;
+    int32_t *array = counters.array;
     for (int i = 0; i < numCounters; i++) {
-      int counter = counters.array[i];
+      int counter = array[i];
       if (counter < minCounter && counter > maxNarrowCounter) {
         minCounter = counter;
       }
@@ -218,8 +220,8 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     int totalWideCountersWidth = 0;
     int pattern = 0;
     for (int i = 0; i < numCounters; i++) {
-      int counter = counters.array[i];
-      if (counters.array[i] > maxNarrowCounter) {
+      int counter = array[i];
+      if (array[i] > maxNarrowCounter) {
         pattern |= 1 << (numCounters - 1 - i);
         wideCounters++;
         totalWideCountersWidth += counter;
@@ -227,8 +229,8 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     }
     if (wideCounters == 3) {
       for (int i = 0; i < numCounters && wideCounters > 0; i++) {
-        int counter = counters.array[i];
-        if (counters.array[i] > maxNarrowCounter) {
+        int counter = array[i];
+        if (array[i] > maxNarrowCounter) {
           wideCounters--;
           if ((counter << 1) >= totalWideCountersWidth) {
             return -1;

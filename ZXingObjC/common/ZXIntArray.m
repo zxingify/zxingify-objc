@@ -69,6 +69,15 @@
   memset(self.array, 0, self.length * sizeof(int32_t));
 }
 
+- (int)sum {
+  int sum = 0;
+  int32_t *array = self.array;
+  for (int i = 0; i < self.length; i++) {
+    sum += array[i];
+  }
+  return sum;
+}
+
 - (NSString *)description {
   NSMutableString *s = [NSMutableString stringWithFormat:@"length=%u, array=(", self.length];
 

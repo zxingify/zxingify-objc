@@ -45,9 +45,7 @@
       [NSException raise:NSInvalidArgumentException format:@"Bad contents: %@", contents];
     }
     [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
-    for (int j = 0; j < widths.length; j++) {
-      codeWidth += widths.array[j];
-    }
+    codeWidth += [widths sum];
   }
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:codeWidth];
   [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[39] toReturn:widths];

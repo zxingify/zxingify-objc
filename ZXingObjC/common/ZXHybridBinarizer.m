@@ -56,11 +56,16 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
     if ((height & ZX_BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    NSArray *blackPoints = [self calculateBlackPoints:luminances subWidth:subWidth subHeight:subHeight width:width height:height];
+    int **blackPoints = [self calculateBlackPoints:luminances.array subWidth:subWidth subHeight:subHeight width:width height:height];
 
     ZXBitMatrix *newMatrix = [[ZXBitMatrix alloc] initWithWidth:width height:height];
-    [self calculateThresholdForBlock:luminances subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
+    [self calculateThresholdForBlock:luminances.array subWidth:subWidth subHeight:subHeight width:width height:height blackPoints:blackPoints matrix:newMatrix];
     self.matrix = newMatrix;
+
+    for (int i = 0; i < subHeight; i++) {
+      free(blackPoints[i]);
+    }
+    free(blackPoints);
   } else {
     // If the image is too small, fall back to the global histogram approach.
     self.matrix = [super blackMatrixWithError:error];
@@ -77,12 +82,12 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
  * of the blocks around it. Also handles the corner cases (fractional blocks are computed based
  * on the last pixels in the row/column which are also used in the previous block).
  */
-- (void)calculateThresholdForBlock:(ZXByteArray *)luminances
+- (void)calculateThresholdForBlock:(int8_t *)luminances
                           subWidth:(int)subWidth
                          subHeight:(int)subHeight
                              width:(int)width
                             height:(int)height
-                       blackPoints:(NSArray *)blackPoints
+                       blackPoints:(int **)blackPoints
                             matrix:(ZXBitMatrix *)matrix {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << ZX_BLOCK_SIZE_POWER;
@@ -100,8 +105,8 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
       int top = [self cap:y min:2 max:subHeight - 3];
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
-        ZXIntArray *blackRow = blackPoints[top + z];
-        sum += blackRow.array[left - 2] + blackRow.array[left - 1] + blackRow.array[left] + blackRow.array[left + 1] + blackRow.array[left + 2];
+        int *blackRow = blackPoints[top + z];
+        sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
       }
       int average = sum / 25;
       [self thresholdBlock:luminances xoffset:xoffset yoffset:yoffset threshold:average stride:width matrix:matrix];
@@ -116,7 +121,7 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
 /**
  * Applies a single threshold to a block of pixels.
  */
-- (void)thresholdBlock:(ZXByteArray *)luminances
+- (void)thresholdBlock:(int8_t *)luminances
                xoffset:(int)xoffset
                yoffset:(int)yoffset
              threshold:(int)threshold
@@ -125,7 +130,7 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
   for (int y = 0, offset = yoffset * stride + xoffset; y < ZX_BLOCK_SIZE; y++, offset += stride) {
     for (int x = 0; x < ZX_BLOCK_SIZE; x++) {
       // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0
-      if ((luminances.array[offset + x] & 0xFF) <= threshold) {
+      if ((luminances[offset + x] & 0xFF) <= threshold) {
         [matrix setX:xoffset + x y:yoffset + y];
       }
     }
@@ -137,14 +142,14 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
  * See the following thread for a discussion of this algorithm:
  *  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
  */
-- (NSArray *)calculateBlackPoints:(ZXByteArray *)luminances
-                         subWidth:(int)subWidth
-                        subHeight:(int)subHeight
-                            width:(int)width
-                           height:(int)height {
-  NSMutableArray *blackPoints = [NSMutableArray array];
+- (int **)calculateBlackPoints:(int8_t *)luminances
+                      subWidth:(int)subWidth
+                     subHeight:(int)subHeight
+                         width:(int)width
+                        height:(int)height {
+  int **blackPoints = (int **)malloc(subHeight * sizeof(int *));
   for (int y = 0; y < subHeight; y++) {
-    [blackPoints addObject:[[ZXIntArray alloc] initWithLength:subWidth]];
+    blackPoints[y] = (int *)malloc(subWidth * sizeof(int));
 
     int yoffset = y << ZX_BLOCK_SIZE_POWER;
     int maxYOffset = height - ZX_BLOCK_SIZE;
@@ -162,7 +167,7 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
       int max = 0;
       for (int yy = 0, offset = yoffset * width + xoffset; yy < ZX_BLOCK_SIZE; yy++, offset += width) {
         for (int xx = 0; xx < ZX_BLOCK_SIZE; xx++) {
-          int pixel = luminances.array[offset + xx] & 0xFF;
+          int pixel = luminances[offset + xx] & 0xFF;
           sum += pixel;
           // still looking for good contrast
           if (pixel < min) {
@@ -177,7 +182,7 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
           // finish the rest of the rows quickly
           for (yy++, offset += width; yy < ZX_BLOCK_SIZE; yy++, offset += width) {
             for (int xx = 0; xx < ZX_BLOCK_SIZE; xx++) {
-              sum += luminances.array[offset + xx] & 0xFF;
+              sum += luminances[offset + xx] & 0xFF;
             }
           }
         }
@@ -202,14 +207,14 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
           // the boundaries is used for the interior.
 
           // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-          int averageNeighborBlackPoint = ([(ZXIntArray *)blackPoints[y - 1] array][x] + (2 * [(ZXIntArray *)blackPoints[y] array][x - 1]) +
-                                           [(ZXIntArray *)blackPoints[y - 1] array][x - 1]) >> 2;
+          int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
+                                           blackPoints[y - 1][x - 1]) >> 2;
           if (min < averageNeighborBlackPoint) {
             average = averageNeighborBlackPoint;
           }
         }
       }
-      [(ZXIntArray *)blackPoints[y] array][x] = average;
+      blackPoints[y][x] = average;
     }
   }
   return blackPoints;

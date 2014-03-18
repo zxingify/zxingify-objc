@@ -170,13 +170,14 @@ const int ZX_CODE128_CODE_STOP = 106;
 
   int counterPosition = 0;
   ZXIntArray *counters = [[ZXIntArray alloc] initWithLength:6];
+  int32_t *array = counters.array;
   int patternStart = rowOffset;
   BOOL isWhite = NO;
   int patternLength = (int)counters.length;
 
   for (int i = rowOffset; i < width; i++) {
     if ([row get:i] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
         int bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
@@ -193,17 +194,17 @@ const int ZX_CODE128_CODE_STOP = 106;
             [row isRange:MAX(0, patternStart - (i - patternStart) / 2) end:patternStart value:NO]) {
           return [[ZXIntArray alloc] initWithInts:patternStart, i, bestMatch, -1];
         }
-        patternStart += counters.array[0] + counters.array[1];
+        patternStart += array[0] + array[1];
         for (int y = 2; y < patternLength; y++) {
-          counters.array[y - 2] = counters.array[y];
+          array[y - 2] = array[y];
         }
-        counters.array[patternLength - 2] = 0;
-        counters.array[patternLength - 1] = 0;
+        array[patternLength - 2] = 0;
+        array[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters.array[counterPosition] = 1;
+      array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -305,9 +306,7 @@ const int ZX_CODE128_CODE_STOP = 106;
 
     // Advance to where the next code will to start
     lastStart = nextStart;
-    for (int i = 0; i < counters.length; i++) {
-      nextStart += counters.array[i];
-    }
+    nextStart += [counters sum];
 
     // Take care of illegal start codes
     switch (code) {

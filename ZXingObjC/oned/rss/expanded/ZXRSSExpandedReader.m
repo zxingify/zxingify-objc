@@ -223,14 +223,15 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
 // Whether the pairs form a valid find pattern seqience,
 // either complete or a prefix
 - (BOOL)isValidSequence:(NSArray *)pairs {
+  int count = (int)[pairs count];
   for (int i = 0, sz = 2; i < ZX_FINDER_PATTERN_SEQUENCES_LEN; i++, sz++) {
-    if ([self.pairs count] > sz) {
+    if (count > sz) {
       continue;
     }
 
     BOOL stop = YES;
-    for (int j = 0; j < [self.pairs count]; j++) {
-      if ([[self.pairs[j] finderPattern] value] != ZX_FINDER_PATTERN_SEQUENCES[i][j]) {
+    for (int j = 0; j < count; j++) {
+      if ([[pairs[j] finderPattern] value] != ZX_FINDER_PATTERN_SEQUENCES[i][j]) {
         stop = NO;
         break;
       }
@@ -461,9 +462,10 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
 
   int counterPosition = 0;
   int patternStart = rowOffset;
+  int32_t *array = counters.array;
   for (int x = rowOffset; x < width; x++) {
     if ([row get:x] ^ isWhite) {
-      counters.array[counterPosition]++;
+      array[counterPosition]++;
     } else {
       if (counterPosition == 3) {
         if (searchingEvenPair) {
@@ -480,16 +482,16 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
           [self reverseCounters:counters];
         }
 
-        patternStart += counters.array[0] + counters.array[1];
-        counters.array[0] = counters.array[2];
-        counters.array[1] = counters.array[3];
-        counters.array[2] = 0;
-        counters.array[3] = 0;
+        patternStart += array[0] + array[1];
+        array[0] = array[2];
+        array[1] = array[3];
+        array[2] = 0;
+        array[3] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters.array[counterPosition] = 1;
+      array[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
@@ -498,10 +500,11 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
 
 - (void)reverseCounters:(ZXIntArray *)counters {
   int length = counters.length;
-  for(int i = 0; i < length / 2; ++i){
-    int tmp = counters.array[i];
-    counters.array[i] = counters.array[length - i - 1];
-    counters.array[length - i - 1] = tmp;
+  int32_t *array = counters.array;
+  for(int i = 0; i < length / 2; ++i) {
+    int tmp = array[i];
+    array[i] = array[length - i - 1];
+    array[length - i - 1] = tmp;
   }
 }
 
@@ -562,10 +565,11 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
       return nil;
     }
     // reverse it
+    int32_t *array = counters.array;
     for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
-      int temp = counters.array[i];
-      counters.array[i] = counters.array[j];
-      counters.array[j] = temp;
+      int temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
   }//counters[] has the pixels of the module
 
@@ -578,8 +582,9 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
     return nil;
   }
 
+  int32_t *array = counters.array;
   for (int i = 0; i < counters.length; i++) {
-    float value = 1.0f * counters.array[i] / elementWidth;
+    float value = 1.0f * array[i] / elementWidth;
     int count = (int)(value + 0.5f);
     if (count < 1) {
       if (value < 0.3f) {
