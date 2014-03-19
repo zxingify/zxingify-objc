@@ -15,6 +15,7 @@
  */
 
 extern const int ZX_AZTEC_DEFAULT_EC_PERCENT;
+extern const int ZX_AZTEC_DEFAULT_LAYERS;
 
 @class ZXAztecCode, ZXBitArray, ZXByteArray, ZXGenericGF;
 
@@ -37,8 +38,11 @@ extern const int ZX_AZTEC_DEFAULT_EC_PERCENT;
  * @param data input data string
  * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
  *                      a minimum of 23% + 3 words is recommended)
+ * @param userSpecifiedLayers if non-zero, a user-specified value for the number of layers
  * @return Aztec symbol matrix with metadata
  */
-+ (ZXAztecCode *)encode:(ZXByteArray *)data minECCPercent:(int)minECCPercent;
++ (ZXAztecCode *)encode:(ZXByteArray *)data
+          minECCPercent:(int)minECCPercent
+    userSpecifiedLayers:(int)userSpecifiedLayers;
 
 @end

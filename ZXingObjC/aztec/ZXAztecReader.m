@@ -37,11 +37,27 @@
     return nil;
   }
 
-  ZXAztecDetectorResult *detectorResult = [[[ZXAztecDetector alloc] initWithImage:matrix] detectWithError:error];
-  if (!detectorResult) {
+  ZXAztecDetector *detector = [[ZXAztecDetector alloc] initWithImage:matrix];
+  NSArray *points = nil;
+  ZXDecoderResult *decoderResult = nil;
+
+  ZXAztecDetectorResult *detectorResult = [detector detectWithMirror:NO error:error];
+  if (detectorResult) {
+    points = detectorResult.points;
+    decoderResult = [[[ZXAztecDecoder alloc] init] decode:detectorResult error:error];
+  }
+
+  if (decoderResult == nil) {
+    detectorResult = [detector detectWithMirror:YES error:nil];
+    points = detectorResult.points;
+    if (detectorResult) {
+      decoderResult = [[[ZXAztecDecoder alloc] init] decode:detectorResult error:nil];
+    }
+  }
+
+  if (!decoderResult) {
     return nil;
   }
-  NSArray *points = [detectorResult points];
 
   if (hints != nil) {
     id <ZXResultPointCallback> rpcb = hints.resultPointCallback;
@@ -52,10 +68,6 @@
     }
   }
 
-  ZXDecoderResult *decoderResult = [[[ZXAztecDecoder alloc] init] decode:detectorResult error:error];
-  if (!decoderResult) {
-    return nil;
-  }
   ZXResult *result = [ZXResult resultWithText:decoderResult.text rawBytes:decoderResult.rawBytes resultPoints:points format:kBarcodeFormatAztec];
 
   NSMutableArray *byteSegments = decoderResult.byteSegments;

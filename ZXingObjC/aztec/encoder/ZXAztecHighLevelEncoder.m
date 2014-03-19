@@ -76,7 +76,7 @@ const int ZX_AZTEC_CHAR_MAP_HEIGHT = 5;
 const int ZX_AZTEC_CHAR_MAP_WIDTH = 256;
 static int ZX_AZTEC_CHAR_MAP[ZX_AZTEC_CHAR_MAP_HEIGHT][ZX_AZTEC_CHAR_MAP_WIDTH];
 
-// A map showing the available shift coodes.  (The shifts to BINARY are not
+// A map showing the available shift codes.  (The shifts to BINARY are not
 // shown
 int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 

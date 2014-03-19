@@ -66,6 +66,10 @@
 }
 
 - (ZXAztecDetectorResult *)detectWithError:(NSError **)error {
+  return [self detectWithMirror:NO error:error];
+}
+
+- (ZXAztecDetectorResult *)detectWithMirror:(BOOL)isMirror error:(NSError **)error {
   // 1. Get the center of the aztec matrix
   ZXAztecPoint *pCenter = [self matrixCenter];
   if (!pCenter) {
@@ -75,10 +79,16 @@
 
   // 2. Get the center points of the four diagonal points just outside the bull's eye
   //  [topRight, bottomRight, bottomLeft, topLeft]
-  NSArray *bullsEyeCorners = [self bullsEyeCorners:pCenter];
+  NSMutableArray *bullsEyeCorners = [self bullsEyeCorners:pCenter];
   if (!bullsEyeCorners) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
+  }
+
+  if (isMirror) {
+    ZXResultPoint *temp = bullsEyeCorners[0];
+    bullsEyeCorners[0] = bullsEyeCorners[2];
+    bullsEyeCorners[2] = temp;
   }
 
   // 3. Get the size of the matrix and other parameters from the bull's eye
@@ -271,7 +281,7 @@ int bitCount(uint32_t i) {
  * @param pCenter Center point
  * @return The corners of the bull-eye, or nil if no valid bull-eye can be found
  */
-- (NSArray *)bullsEyeCorners:(ZXAztecPoint *)pCenter {
+- (NSMutableArray *)bullsEyeCorners:(ZXAztecPoint *)pCenter {
   ZXAztecPoint *pina = pCenter;
   ZXAztecPoint *pinb = pCenter;
   ZXAztecPoint *pinc = pCenter;
@@ -319,9 +329,9 @@ int bitCount(uint32_t i) {
 
   // Expand the square so that its corners are the centers of the points
   // just outside the bull's eye.
-  return [self expandSquare:@[pinax, pinbx, pincx, pindx]
-                    oldSide:2 * self.nbCenterLayers - 3
-                    newSide:2 * self.nbCenterLayers];
+  return [[self expandSquare:@[pinax, pinbx, pincx, pindx]
+                     oldSide:2 * self.nbCenterLayers - 3
+                     newSide:2 * self.nbCenterLayers] mutableCopy];
 }
 
 /**

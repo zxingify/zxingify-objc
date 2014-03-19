@@ -21,28 +21,25 @@
 
 @implementation ZXToken
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount {
+- (id)initWithPrevious:(ZXToken *)previous {
   if (self = [super init]) {
     _previous = previous;
-    _totalBitCount = totalBitCount;
   }
 
   return self;
 }
 
 + (ZXToken *)empty {
-  return [[ZXSimpleToken alloc] initWithPrevious:nil totalBitCount:0 value:0 bitCount:0];
+  return [[ZXSimpleToken alloc] initWithPrevious:nil value:0 bitCount:0];
 }
 
 - (ZXToken *)add:(int)value bitCount:(int)bitCount {
-  return [[ZXSimpleToken alloc] initWithPrevious:self totalBitCount:self.totalBitCount + bitCount
-                                           value:value bitCount:bitCount];
+  return [[ZXSimpleToken alloc] initWithPrevious:self value:value bitCount:bitCount];
 }
 
 - (ZXToken *)addBinaryShift:(int)start byteCount:(int)byteCount {
-  int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
-  return [[ZXBinaryShiftToken alloc] initWithPrevious:self totalBitCount:self.totalBitCount + bitCount
-                                     binaryShiftStart:start binaryShiftByteCount:byteCount];
+//  int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
+  return [[ZXBinaryShiftToken alloc] initWithPrevious:self binaryShiftStart:start binaryShiftByteCount:byteCount];
 }
 
 - (void)appendTo:(ZXBitArray *)bitArray text:(ZXByteArray *)text {

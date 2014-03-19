@@ -18,6 +18,6 @@
 
 @interface ZXSimpleToken : ZXToken
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount value:(int)value bitCount:(int)bitCount;
+- (id)initWithPrevious:(ZXToken *)previous value:(int)value bitCount:(int)bitCount;
 
 @end

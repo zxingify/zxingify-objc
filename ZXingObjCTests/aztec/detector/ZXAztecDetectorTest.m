@@ -39,30 +39,46 @@ unsigned int ZXAztecDetectorTest_RANDOM_SEED = 16807;
 - (void)testErrorInParameterLocator:(NSString *)data {
   ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:(unsigned int)[data lengthOfBytesUsingEncoding:NSISOLatin1StringEncoding]];
   memcpy(bytes.array, [[data dataUsingEncoding:NSISOLatin1StringEncoding] bytes], bytes.length * sizeof(int8_t));
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes];
+  ZXAztecCode *aztec = [ZXAztecEncoder encode:bytes minECCPercent:25 userSpecifiedLayers:ZX_AZTEC_DEFAULT_LAYERS];
   int layers = aztec.layers;
   BOOL compact = aztec.isCompact;
   NSMutableArray *orientationPoints = [self orientationPoints:aztec];
   srand(ZXAztecDetectorTest_RANDOM_SEED);
-  for (ZXBitMatrix *matrix in [self rotations:aztec.matrix]) {
-    // Each time through this loop, we reshuffle the corners, to get a different set of errors
-    [self shuffle:orientationPoints];
-    for (int errors = 1; errors <= 3; errors++) {
-      // Add another error to one of the parameter locator bits
-      [matrix flipX:[(ZXAztecPoint *)orientationPoints[errors] x] y:[(ZXAztecPoint *)orientationPoints[errors] y]];
-
-      // The detector can't yet deal with bitmaps in which each square is only 1x1 pixel.
-      // We zoom it larger.
-      NSError *error;
-      ZXAztecDetectorResult *r = [[[ZXAztecDetector alloc] initWithImage:[self makeLarger:matrix factor:3]] detectWithError:&error];
-      if (errors < 3) {
-        XCTAssertNotNil(r, @"");
-        XCTAssertEqual(layers, r.nbLayers, @"");
-        XCTAssertEqual(compact, r.isCompact, @"");
-      } else if (!error) {
-        XCTFail(@"Should not succeed with more than two errors");
-      } else {
-        XCTAssertEqual(errors, 3, @"Should only fail with three errors");
+  for (NSNumber *isMirrorNum in @[@NO, @YES]) {
+    BOOL isMirror = [isMirrorNum boolValue];
+    for (ZXBitMatrix *matrix in [self rotations:aztec.matrix]) {
+      // Systematically try every possible 1- and 2-bit error.
+      for (int error1 = 0; error1 < [orientationPoints count]; error1++) {
+        for (int error2 = error1; error2 < orientationPoints.count; error2++) {
+          ZXBitMatrix *copy = isMirror ? [self transpose:matrix] : [self clone:matrix];
+          [copy flipX:[(ZXAztecPoint *)orientationPoints[error1] x] y:[(ZXAztecPoint *)orientationPoints[error1] y]];
+          if (error2 > error1) {
+            // if error2 == error1, we only test a single error
+            [copy flipX:[(ZXAztecPoint *)orientationPoints[error2] x] y:[(ZXAztecPoint *)orientationPoints[error2] y]];
+          }
+          // The detector doesn't seem to work when matrix bits are only 1x1.  So magnify.
+          ZXAztecDetectorResult *r = [[[ZXAztecDetector alloc] initWithImage:[self makeLarger:copy factor:3]] detectWithMirror:isMirror error:nil];
+          XCTAssertNotNil(r, @"");
+          XCTAssertEqual(layers, r.nbLayers, @"");
+          XCTAssertEqual(compact, r.isCompact, @"");
+          ZXDecoderResult *res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
+          XCTAssertEqualObjects(res.text, data, @"%@ should equal %@", res.text, data);
+        }
+      }
+      // Try a few random three-bit errors;
+      for (int i = 0; i < 5; i++) {
+        ZXBitMatrix *copy = [self clone:matrix];
+        NSMutableOrderedSet *errors = [[NSMutableOrderedSet alloc] init];
+        while ([errors count] < 3) {
+          // Quick and dirty way of getting three distinct integers between 1 and n.
+          [errors addObject:@(rand() % [orientationPoints count])];
+        }
+        for (NSNumber *errorNum in errors) {
+          [copy flipX:[(ZXAztecPoint *)orientationPoints[[errorNum intValue]] x] y:[(ZXAztecPoint *)orientationPoints[[errorNum intValue]] y]];
+        }
+        if ([[[ZXAztecDetector alloc] initWithImage:[self makeLarger:copy factor:3]] detectWithMirror:NO error:nil]) {
+          XCTFail(@"Should not reach here");
+        }
       }
     }
   }
@@ -82,25 +98,55 @@ unsigned int ZXAztecDetectorTest_RANDOM_SEED = 16807;
   return output;
 }
 
-// Returns a list of the four rotations of the BitMatrix.  The identity rotation is
-// explicitly a copy, so that it can be modified without affecting the original matrix.
+// Returns a list of the four rotations of the ZXBitMatrix.
 - (NSArray *)rotations:(ZXBitMatrix *)input {
+  ZXBitMatrix *matrix0 = input;
+  ZXBitMatrix *matrix90 = [self rotateRight:input];
+  ZXBitMatrix *matrix180 = [self rotateRight:matrix90];
+  ZXBitMatrix *matrix270 = [self rotateRight:matrix180];
+  return @[matrix0, matrix90, matrix180, matrix270];
+}
+
+// Rotates a square BitMatrix to the right by 90 degrees
+- (ZXBitMatrix *)rotateRight:(ZXBitMatrix *)input {
   int width = input.width;
-  ZXBitMatrix *matrix0 = [[ZXBitMatrix alloc] initWithDimension:width];
-  ZXBitMatrix *matrix90 = [[ZXBitMatrix alloc] initWithDimension:width];
-  ZXBitMatrix *matrix180 = [[ZXBitMatrix alloc] initWithDimension:width];
-  ZXBitMatrix *matrix270 = [[ZXBitMatrix alloc] initWithDimension:width];
+  ZXBitMatrix *result = [[ZXBitMatrix alloc] initWithDimension:width];
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < width; y++) {
       if ([input getX:x y:y]) {
-        [matrix0 setX:x y:y];
-        [matrix90 setX:y y:width - x - 1];
-        [matrix180 setX:width - x - 1 y:width - y - 1];
-        [matrix270 setX:width - y - 1 y:x];
+        [result setX:y y:width - x - 1];
       }
     }
   }
-  return @[matrix0, matrix90, matrix180, matrix270];
+  return result;
+}
+
+// Returns the transpose of a bit matrix, which is equivalent to rotating the
+// matrix to the right, and then flipping it left-to-right
+- (ZXBitMatrix *)transpose:(ZXBitMatrix *)input {
+  int width = input.width;
+  ZXBitMatrix *result = [[ZXBitMatrix alloc] initWithDimension:width];
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < width; y++) {
+      if ([input getX:x y:y]) {
+        [result setX:y y:x];
+      }
+    }
+  }
+  return result;
+}
+
+- (ZXBitMatrix *)clone:(ZXBitMatrix *)input {
+  int width = input.width;
+  ZXBitMatrix *result = [[ZXBitMatrix alloc] initWithDimension:width];
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < width; y++) {
+      if ([input getX:x y:y]) {
+        [result setX:x y:y];
+      }
+    }
+  }
+  return result;
 }
 
 - (NSMutableArray *)orientationPoints:(ZXAztecCode *)code {

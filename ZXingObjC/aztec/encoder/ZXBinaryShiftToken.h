@@ -18,7 +18,6 @@
 
 @interface ZXBinaryShiftToken : ZXToken
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount
-      binaryShiftStart:(int)binaryShiftStart binaryShiftByteCount:(int)binaryShiftByteCount;
+- (id)initWithPrevious:(ZXToken *)previous binaryShiftStart:(int)binaryShiftStart binaryShiftByteCount:(int)binaryShiftByteCount;
 
 @end

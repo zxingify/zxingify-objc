@@ -27,11 +27,10 @@
 
 @implementation ZXBinaryShiftToken
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount
-      binaryShiftStart:(int)binaryShiftStart binaryShiftByteCount:(int)binaryShiftByteCount {
-  if (self = [super initWithPrevious:previous totalBitCount:totalBitCount]) {
-    _binaryShiftStart = (int16_t)binaryShiftStart;
-    _binaryShiftByteCount = (int16_t)binaryShiftByteCount;
+- (id)initWithPrevious:(ZXToken *)previous binaryShiftStart:(int)binaryShiftStart binaryShiftByteCount:(int)binaryShiftByteCount {
+  if (self = [super initWithPrevious:previous]) {
+    _binaryShiftStart = (int16_t) binaryShiftStart;
+    _binaryShiftByteCount = (int16_t) binaryShiftByteCount;
   }
 
   return self;
@@ -42,7 +41,7 @@
     if (i == 0 || (i == 31 && self.binaryShiftByteCount <= 62))  {
       // We need a header before the first character, and before
       // character 31 when the total byte code is <= 62
-      [bitArray appendBits:31 numBits:5];
+      [bitArray appendBits:31 numBits:5]; // BINARY_SHIFT
       if (self.binaryShiftByteCount > 62) {
         [bitArray appendBits:self.binaryShiftByteCount - 31 numBits:16];
       } else if (i == 0) {

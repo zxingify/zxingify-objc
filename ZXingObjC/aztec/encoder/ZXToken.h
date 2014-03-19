@@ -19,9 +19,8 @@
 @interface ZXToken : NSObject
 
 @property (nonatomic, strong, readonly) ZXToken *previous;
-@property (nonatomic, assign, readonly) int totalBitCount;
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount;
+- (id)initWithPrevious:(ZXToken *)previous;
 + (ZXToken *)empty;
 - (ZXToken *)add:(int)value bitCount:(int)bitCount;
 - (ZXToken *)addBinaryShift:(int)start byteCount:(int)byteCount;

@@ -27,8 +27,8 @@
 
 @implementation ZXSimpleToken
 
-- (id)initWithPrevious:(ZXToken *)previous totalBitCount:(int)totalBitCount value:(int)value bitCount:(int)bitCount {
-  if (self = [super initWithPrevious:previous totalBitCount:totalBitCount]) {
+- (id)initWithPrevious:(ZXToken *)previous value:(int)value bitCount:(int)bitCount {
+  if (self = [super initWithPrevious:previous]) {
     _value = (int16_t)value;
     _bitCount = (int16_t)bitCount;
   }

@@ -33,11 +33,13 @@
 
 - (id)initWithImage:(ZXBitMatrix *)image;
 
+- (ZXAztecDetectorResult *)detectWithError:(NSError **)error;
+
 /**
  * Detects an Aztec Code in an image.
  *
  * @return ZXAztecDetectorResult encapsulating results of detecting an Aztec Code, or nil if no Aztec Code can be found
  */
-- (ZXAztecDetectorResult *)detectWithError:(NSError **)error;
+- (ZXAztecDetectorResult *)detectWithMirror:(BOOL)isMirror error:(NSError **)error;
 
 @end

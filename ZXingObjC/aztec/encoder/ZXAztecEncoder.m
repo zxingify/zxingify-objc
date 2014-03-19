@@ -25,7 +25,9 @@
 #import "ZXReedSolomonEncoder.h"
 
 const int ZX_AZTEC_DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
+const int ZX_AZTEC_DEFAULT_LAYERS = 0;
 const int ZX_AZTEC_MAX_NB_BITS = 32;
+const int ZX_AZTEC_MAX_NB_BITS_COMPACT = 4;
 
 const int ZX_AZTEC_WORD_SIZE[] = {
   4, 6, 6, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
@@ -35,10 +37,10 @@ const int ZX_AZTEC_WORD_SIZE[] = {
 @implementation ZXAztecEncoder
 
 + (ZXAztecCode *)encode:(ZXByteArray *)data {
-  return [self encode:data minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT];
+  return [self encode:data minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT userSpecifiedLayers:ZX_AZTEC_DEFAULT_LAYERS];
 }
 
-+ (ZXAztecCode *)encode:(ZXByteArray *)data minECCPercent:(int)minECCPercent {
++ (ZXAztecCode *)encode:(ZXByteArray *)data minECCPercent:(int)minECCPercent userSpecifiedLayers:(int)userSpecifiedLayers {
   // High-level encode
   ZXBitArray *bits = [[[ZXAztecHighLevelEncoder alloc] initWithText:data] encode];
 
@@ -48,53 +50,67 @@ const int ZX_AZTEC_WORD_SIZE[] = {
   BOOL compact;
   int layers;
   int totalBitsInLayer;
-  int wordSize = 0;
-  ZXBitArray *stuffedBits = nil;
-  // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
-  // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
-  // is the same size, but has more data.
-  for (int i = 0; ; i++) {
-    if (i > ZX_AZTEC_MAX_NB_BITS) {
+  int wordSize;
+  ZXBitArray *stuffedBits;
+  if (userSpecifiedLayers != ZX_AZTEC_DEFAULT_LAYERS) {
+    compact = userSpecifiedLayers < 0;
+    layers = abs(userSpecifiedLayers);
+    if (layers > (compact ? ZX_AZTEC_MAX_NB_BITS_COMPACT : ZX_AZTEC_MAX_NB_BITS)) {
       @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                     reason:@"Data too large for an Aztec code"
+                                     reason:[NSString stringWithFormat:@"Illegal value %d for layers", userSpecifiedLayers]
                                    userInfo:nil];
     }
-    compact = i <= 3;
-    layers = compact ? i + 1 : i;
     totalBitsInLayer = [self totalBitsInLayer:layers compact:compact];
-    if (totalSizeBits > totalBitsInLayer) {
-      continue;
-    }
-    // [Re]stuff the bits if this is the first opportunity, or if the
-    // wordSize has changed
-    if (wordSize != ZX_AZTEC_WORD_SIZE[layers]) {
-      wordSize = ZX_AZTEC_WORD_SIZE[layers];
-      stuffedBits = [self stuffBits:bits wordSize:wordSize];
-    }
+    wordSize = ZX_AZTEC_WORD_SIZE[layers];
     int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
-    if (stuffedBits.size + eccBits <= usableBitsInLayers) {
-      break;
+    stuffedBits = [self stuffBits:bits wordSize:wordSize];
+    if (stuffedBits.size + eccBits > usableBitsInLayers) {
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:@"Data too large for user specified layer"
+                                   userInfo:nil];
+    }
+    if (compact && stuffedBits.size > wordSize * 64) {
+      // Compact format only allows 64 data words, though C4 can hold more words than that
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:@"Data too large for user specified layer"
+                                   userInfo:nil];
+    }
+  } else {
+    // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
+    // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
+    // is the same size, but has more data.
+    for (int i = 0; ; i++) {
+      if (i > ZX_AZTEC_MAX_NB_BITS) {
+        @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                       reason:@"Data too large for an Aztec code"
+                                     userInfo:nil];
+      }
+      compact = i <= 3;
+      layers = compact ? i + 1 : i;
+      totalBitsInLayer = [self totalBitsInLayer:layers compact:compact];
+      if (totalSizeBits > totalBitsInLayer) {
+        continue;
+      }
+      // [Re]stuff the bits if this is the first opportunity, or if the
+      // wordSize has changed
+      if (wordSize != ZX_AZTEC_WORD_SIZE[layers]) {
+        wordSize = ZX_AZTEC_WORD_SIZE[layers];
+        stuffedBits = [self stuffBits:bits wordSize:wordSize];
+      }
+      int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
+      if (compact && stuffedBits.size > wordSize * 64) {
+        // Compact format only allows 64 data words, though C4 can hold more words than that
+        continue;
+      }
+      if (stuffedBits.size + eccBits <= usableBitsInLayers) {
+        break;
+      }
     }
   }
-
-  int messageSizeInWords = stuffedBits.size / wordSize;
+  ZXBitArray *messageBits = [self generateCheckWords:stuffedBits totalBits:totalBitsInLayer wordSize:wordSize];
 
   // generate check words
-  ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
-  int totalWordsInLayer = totalBitsInLayer / wordSize;
-
-  ZXIntArray *messageWords = [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWordsInLayer];
-  [rs encode:messageWords ecBytes:totalWordsInLayer - messageSizeInWords];
-
-  // convert to bit array and pad in the beginning
-  int startPad = totalBitsInLayer % wordSize;
-  ZXBitArray *messageBits = [[ZXBitArray alloc] init];
-  [messageBits appendBits:0 numBits:startPad];
-  for (int i = 0; i < totalWordsInLayer; i++) {
-    [messageBits appendBits:messageWords.array[i] numBits:wordSize];
-  }
-
-  // generate mode message
+  int messageSizeInWords = stuffedBits.size / wordSize;
   ZXBitArray *modeMessage = [self generateModeMessageCompact:compact layers:layers messageSizeInWords:messageSizeInWords];
 
   // allocate symbol
@@ -237,13 +253,14 @@ const int ZX_AZTEC_WORD_SIZE[] = {
   }
 }
 
-+ (ZXBitArray *)generateCheckWords:(ZXBitArray *)stuffedBits totalBits:(int)totalBits wordSize:(int)wordSize {
-  // stuffedBits is guaranteed to be a multiple of the wordSize, so no padding needed
-  int messageSizeInWords = stuffedBits.size / wordSize;
++ (ZXBitArray *)generateCheckWords:(ZXBitArray *)bitArray totalBits:(int)totalBits wordSize:(int)wordSize {
+  NSAssert(bitArray.size % wordSize == 0, @"");
+  // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
+  int messageSizeInWords = bitArray.size / wordSize;
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];
   int totalWords = totalBits / wordSize;
 
-  ZXIntArray *messageWords = [self bitsToWords:stuffedBits wordSize:wordSize totalWords:totalWords];
+  ZXIntArray *messageWords = [self bitsToWords:bitArray wordSize:wordSize totalWords:totalWords];
   [rs encode:messageWords ecBytes:totalWords - messageSizeInWords];
   int startPad = totalBits % wordSize;
   ZXBitArray *messageBits = [[ZXBitArray alloc] init];
@@ -288,7 +305,6 @@ const int ZX_AZTEC_WORD_SIZE[] = {
 + (ZXBitArray *)stuffBits:(ZXBitArray *)bits wordSize:(int)wordSize {
   ZXBitArray *arrayOut = [[ZXBitArray alloc] init];
 
-  // 1. stuff the bits
   int n = bits.size;
   int mask = (1 << wordSize) - 2;
   for (int i = 0; i < n; i += wordSize) {

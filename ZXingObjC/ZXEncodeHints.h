@@ -85,4 +85,12 @@
  */
 @property (nonatomic, strong) ZXDimensions *pdf417Dimensions;
 
+/**
+ * Specifies the required number of layers for an Aztec code:
+ *   a negative number (-1, -2, -3, -4) specifies a compact Aztec code
+ *   0 indicates to use the minimum number of layers (the default)
+ *   a positive number (1, 2, .. 32) specifies a normaol (non-compact) Aztec code
+ */
+@property (nonatomic, strong) NSNumber *aztecLayers;
+
 @end
