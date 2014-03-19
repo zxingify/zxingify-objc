@@ -15,7 +15,7 @@
  */
 
 #import "ZXDataMatrixErrorCorrectionTestCase.h"
-#import "ZXHighLevelEncodeTestCase.h"
+#import "ZXDataMatrixHighLevelEncodeTestCase.h"
 
 @implementation ZXDataMatrixErrorCorrectionTestCase
 
@@ -24,12 +24,12 @@
   const unichar cw1[3] = {142, 164, 186};
   ZXSymbolInfo *symbolInfo = [ZXSymbolInfo lookup:3];
   NSString *s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCharacters:cw1 length:3] symbolInfo:symbolInfo];
-  XCTAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"142 164 186 114 25 5 88 102", @"");
+  XCTAssertEqualObjects([ZXDataMatrixHighLevelEncodeTestCase visualize:s], @"142 164 186 114 25 5 88 102", @"");
 
   //"A" encoded (ASCII encoding + 2 padding characters)
   const unichar cw2[3] = {66, 129, 70};
   s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCharacters:cw2 length:3] symbolInfo:symbolInfo];
-  XCTAssertEqualObjects([ZXHighLevelEncodeTestCase visualize:s], @"66 129 70 138 234 82 82 95", @"");
+  XCTAssertEqualObjects([ZXDataMatrixHighLevelEncodeTestCase visualize:s], @"66 129 70 138 234 82 82 95", @"");
 }
 
 @end

@@ -15,14 +15,14 @@
  */
 
 #import "ZXBase256Encoder.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXEncoderContext.h"
-#import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 
 @implementation ZXBase256Encoder
 
 - (int)encodingMode {
-  return [ZXHighLevelEncoder base256Encodation];
+  return [ZXDataMatrixHighLevelEncoder base256Encodation];
 }
 
 - (void)encode:(ZXEncoderContext *)context {
@@ -34,7 +34,7 @@
 
     context.pos++;
 
-    int newMode = [ZXHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
+    int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
     if (newMode != [self encodingMode]) {
       [context signalEncoderChange:newMode];
       break;

@@ -15,48 +15,48 @@
  */
 
 #import "ZXASCIIEncoder.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXEncoderContext.h"
-#import "ZXHighLevelEncoder.h"
 
 @implementation ZXASCIIEncoder
 
 - (int)encodingMode {
-  return [ZXHighLevelEncoder asciiEncodation];
+  return [ZXDataMatrixHighLevelEncoder asciiEncodation];
 }
 
 - (void)encode:(ZXEncoderContext *)context {
   //step B
-  int n = [ZXHighLevelEncoder determineConsecutiveDigitCount:context.message startpos:context.pos];
+  int n = [ZXDataMatrixHighLevelEncoder determineConsecutiveDigitCount:context.message startpos:context.pos];
   if (n >= 2) {
     [context writeCodeword:[self encodeASCIIDigits:[context.message characterAtIndex:context.pos]
                                             digit2:[context.message characterAtIndex:context.pos + 1]]];
     context.pos += 2;
   } else {
     unichar c = [context currentChar];
-    int newMode = [ZXHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
+    int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
     if (newMode != [self encodingMode]) {
-      if (newMode == [ZXHighLevelEncoder base256Encodation]) {
-        [context writeCodeword:[ZXHighLevelEncoder latchToBase256]];
-        [context signalEncoderChange:[ZXHighLevelEncoder base256Encodation]];
+      if (newMode == [ZXDataMatrixHighLevelEncoder base256Encodation]) {
+        [context writeCodeword:[ZXDataMatrixHighLevelEncoder latchToBase256]];
+        [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder base256Encodation]];
         return;
-      } else if (newMode == [ZXHighLevelEncoder c40Encodation]) {
-        [context writeCodeword:[ZXHighLevelEncoder latchToC40]];
-        [context signalEncoderChange:[ZXHighLevelEncoder c40Encodation]];
+      } else if (newMode == [ZXDataMatrixHighLevelEncoder c40Encodation]) {
+        [context writeCodeword:[ZXDataMatrixHighLevelEncoder latchToC40]];
+        [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder c40Encodation]];
         return;
-      } else if (newMode == [ZXHighLevelEncoder x12Encodation]) {
-        [context writeCodeword:[ZXHighLevelEncoder latchToAnsiX12]];
-        [context signalEncoderChange:[ZXHighLevelEncoder x12Encodation]];
-      } else if (newMode == [ZXHighLevelEncoder textEncodation]) {
-        [context writeCodeword:[ZXHighLevelEncoder latchToText]];
-        [context signalEncoderChange:[ZXHighLevelEncoder textEncodation]];
-      } else if (newMode == [ZXHighLevelEncoder edifactEncodation]) {
-        [context writeCodeword:[ZXHighLevelEncoder latchToEdifact]];
-        [context signalEncoderChange:[ZXHighLevelEncoder edifactEncodation]];
+      } else if (newMode == [ZXDataMatrixHighLevelEncoder x12Encodation]) {
+        [context writeCodeword:[ZXDataMatrixHighLevelEncoder latchToAnsiX12]];
+        [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder x12Encodation]];
+      } else if (newMode == [ZXDataMatrixHighLevelEncoder textEncodation]) {
+        [context writeCodeword:[ZXDataMatrixHighLevelEncoder latchToText]];
+        [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder textEncodation]];
+      } else if (newMode == [ZXDataMatrixHighLevelEncoder edifactEncodation]) {
+        [context writeCodeword:[ZXDataMatrixHighLevelEncoder latchToEdifact]];
+        [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder edifactEncodation]];
       } else {
         @throw [NSException exceptionWithName:@"IllegalStateException" reason:@"Illegal mode" userInfo:nil];
       }
-    } else if ([ZXHighLevelEncoder isExtendedASCII:c]) {
-      [context writeCodeword:[ZXHighLevelEncoder upperShift]];
+    } else if ([ZXDataMatrixHighLevelEncoder isExtendedASCII:c]) {
+      [context writeCodeword:[ZXDataMatrixHighLevelEncoder upperShift]];
       [context writeCodeword:(unichar)(c - 128 + 1)];
       context.pos++;
     } else {
@@ -67,7 +67,7 @@
 }
 
 - (unichar)encodeASCIIDigits:(unichar)digit1 digit2:(unichar)digit2 {
-  if ([ZXHighLevelEncoder isDigit:digit1] && [ZXHighLevelEncoder isDigit:digit2]) {
+  if ([ZXDataMatrixHighLevelEncoder isDigit:digit1] && [ZXDataMatrixHighLevelEncoder isDigit:digit2]) {
     int num = (digit1 - 48) * 10 + (digit2 - 48);
     return (unichar) (num + 130);
   }

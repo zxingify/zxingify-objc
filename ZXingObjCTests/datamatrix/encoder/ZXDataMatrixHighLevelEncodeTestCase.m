@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-#import "ZXHighLevelEncodeTestCase.h"
+#import "ZXDataMatrixHighLevelEncodeTestCase.h"
 
 static NSArray *TEST_SYMBOLS;
 
-@implementation ZXHighLevelEncodeTestCase
+@implementation ZXDataMatrixHighLevelEncodeTestCase
 
 + (void)initialize {
   TEST_SYMBOLS = @[[[ZXSymbolInfo alloc] initWithRectangular:NO dataCapacity:3 errorCodewords:5 matrixWidth:8 matrixHeight:8 dataRegions:1],
@@ -286,7 +286,7 @@ static NSArray *TEST_SYMBOLS;
 }
 
 - (NSString *)encodeHighLevel:(NSString *)msg {
-  NSString *encoded = [ZXHighLevelEncoder encodeHighLevel:msg];
+  NSString *encoded = [ZXDataMatrixHighLevelEncoder encodeHighLevel:msg];
   //[ZXDecodeHighLevel decode:encoded];
   return [[self class] visualize:encoded];
 }

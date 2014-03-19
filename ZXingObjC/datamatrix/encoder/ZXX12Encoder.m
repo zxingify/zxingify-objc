@@ -15,14 +15,14 @@
  */
 
 #import "ZXEncoderContext.h"
-#import "ZXHighLevelEncoder.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 #import "ZXX12Encoder.h"
 
 @implementation ZXX12Encoder
 
 - (int)encodingMode {
-  return [ZXHighLevelEncoder x12Encodation];
+  return [ZXDataMatrixHighLevelEncoder x12Encodation];
 }
 
 - (void)encode:(ZXEncoderContext *)context {
@@ -38,7 +38,7 @@
     if ((count % 3) == 0) {
       [self writeNextTriplet:context buffer:buffer];
 
-      int newMode = [ZXHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
+      int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
       if (newMode != [self encodingMode]) {
         [context signalEncoderChange:newMode];
         break;
@@ -62,7 +62,7 @@
   } else if (c >= 'A' && c <= 'Z') {
     [sb appendFormat:@"%C", (unichar) (c - 65 + 14)];
   } else {
-    [ZXHighLevelEncoder illegalCharacter:c];
+    [ZXDataMatrixHighLevelEncoder illegalCharacter:c];
   }
   return 1;
 }
@@ -72,16 +72,16 @@
   int available = context.symbolInfo.dataCapacity - [context codewordCount];
   NSUInteger count = buffer.length;
   if (count == 2) {
-    [context writeCodeword:[ZXHighLevelEncoder x12Unlatch]];
+    [context writeCodeword:[ZXDataMatrixHighLevelEncoder x12Unlatch]];
     context.pos -= 2;
-    [context signalEncoderChange:[ZXHighLevelEncoder asciiEncodation]];
+    [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
   } else if (count == 1) {
     context.pos--;
     if (available > 1) {
-      [context writeCodeword:[ZXHighLevelEncoder x12Unlatch]];
+      [context writeCodeword:[ZXDataMatrixHighLevelEncoder x12Unlatch]];
     }
     //NOP - No unlatch necessary
-    [context signalEncoderChange:[ZXHighLevelEncoder asciiEncodation]];
+    [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
   }
 }
 

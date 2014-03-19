@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-#import "ZXHighLevelEncoder.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXTextEncoder.h"
 
 @implementation ZXTextEncoder
 
 - (int)encodingMode {
-  return [ZXHighLevelEncoder textEncodation];
+  return [ZXDataMatrixHighLevelEncoder textEncodation];
 }
 
 - (int)encodeChar:(unichar)c buffer:(NSMutableString *)sb {
@@ -77,7 +77,7 @@
     len += [self encodeChar:(unichar) (c - 128) buffer:sb];
     return len;
   }
-  [ZXHighLevelEncoder illegalCharacter:c];
+  [ZXDataMatrixHighLevelEncoder illegalCharacter:c];
   return -1;
 }
 

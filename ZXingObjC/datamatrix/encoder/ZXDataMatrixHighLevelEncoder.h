@@ -20,7 +20,7 @@
  * DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
  * annex S.
  */
-@interface ZXHighLevelEncoder : NSObject
+@interface ZXDataMatrixHighLevelEncoder : NSObject
 
 /**
  * mode latch to C40 encodation mode

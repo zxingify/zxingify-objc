@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXEdifactEncoder.h"
 #import "ZXEncoderContext.h"
-#import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 
 @implementation ZXEdifactEncoder
 
 - (int)encodingMode {
-  return [ZXHighLevelEncoder edifactEncodation];
+  return [ZXDataMatrixHighLevelEncoder edifactEncodation];
 }
 
 - (void)encode:(ZXEncoderContext *)context {
@@ -38,9 +38,9 @@
       [context writeCodewords:[self encodeToCodewords:buffer startpos:0]];
       [buffer deleteCharactersInRange:NSMakeRange(0, 4)];
 
-      int newMode = [ZXHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
+      int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
       if (newMode != [self encodingMode]) {
-        [context signalEncoderChange:[ZXHighLevelEncoder asciiEncodation]];
+        [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
         break;
       }
     }
@@ -98,7 +98,7 @@
       [context writeCodewords:encoded];
     }
   } @finally {
-    [context signalEncoderChange:[ZXHighLevelEncoder asciiEncodation]];
+    [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
   }
 }
 
@@ -108,7 +108,7 @@
   } else if (c >= '@' && c <= '^') {
     [sb appendFormat:@"%C", (unichar) (c - 64)];
   } else {
-    [ZXHighLevelEncoder illegalCharacter:c];
+    [ZXDataMatrixHighLevelEncoder illegalCharacter:c];
   }
 }
 

@@ -17,11 +17,11 @@
 #import "ZXBitMatrix.h"
 #import "ZXByteMatrix.h"
 #import "ZXDataMatrixErrorCorrection.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXDataMatrixWriter.h"
 #import "ZXDefaultPlacement.h"
 #import "ZXDimension.h"
 #import "ZXEncodeHints.h"
-#import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 #import "ZXSymbolShapeHint.h"
 
@@ -65,7 +65,7 @@
   }
 
   //1. step: Data encodation
-  NSString *encoded = [ZXHighLevelEncoder encodeHighLevel:contents shape:shape minSize:minSize maxSize:maxSize];
+  NSString *encoded = [ZXDataMatrixHighLevelEncoder encodeHighLevel:contents shape:shape minSize:minSize maxSize:maxSize];
 
   ZXSymbolInfo *symbolInfo = [ZXSymbolInfo lookup:(int)encoded.length shape:shape minSize:minSize maxSize:maxSize fail:YES];
 

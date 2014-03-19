@@ -17,9 +17,9 @@
 #import "ZXASCIIEncoder.h"
 #import "ZXBase256Encoder.h"
 #import "ZXC40Encoder.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXEdifactEncoder.h"
 #import "ZXEncoderContext.h"
-#import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 #import "ZXSymbolShapeHint.h"
 #import "ZXTextEncoder.h"
@@ -45,7 +45,7 @@ static NSString *MACRO_06_HEADER = nil;
  */
 static NSString *MACRO_TRAILER = nil;
 
-@implementation ZXHighLevelEncoder
+@implementation ZXDataMatrixHighLevelEncoder
 
 + (void)initialize {
   MACRO_05_HEADER = [[NSString alloc] initWithFormat:@"[)>%C05%C", (unichar)0x001E, (unichar)0x001D];

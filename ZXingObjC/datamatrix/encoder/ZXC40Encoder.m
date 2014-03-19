@@ -15,14 +15,14 @@
  */
 
 #import "ZXC40Encoder.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXEncoderContext.h"
-#import "ZXHighLevelEncoder.h"
 #import "ZXSymbolInfo.h"
 
 @implementation ZXC40Encoder
 
 - (int)encodingMode {
-  return [ZXHighLevelEncoder c40Encodation];
+  return [ZXDataMatrixHighLevelEncoder c40Encodation];
 }
 
 - (void)encode:(ZXEncoderContext *)context {
@@ -57,7 +57,7 @@
 
     NSUInteger count = buffer.length;
     if ((count % 3) == 0) {
-      int newMode = [ZXHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
+      int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
       if (newMode != [self encodingMode]) {
         [context signalEncoderChange:newMode];
         break;
@@ -100,14 +100,14 @@
       [self writeNextTriplet:context buffer:buffer];
     }
     if ([context hasMoreCharacters]) {
-      [context writeCodeword:[ZXHighLevelEncoder c40Unlatch]];
+      [context writeCodeword:[ZXDataMatrixHighLevelEncoder c40Unlatch]];
     }
   } else if (available == 1 && rest == 1) {
     while (buffer.length >= 3) {
       [self writeNextTriplet:context buffer:buffer];
     }
     if ([context hasMoreCharacters]) {
-      [context writeCodeword:[ZXHighLevelEncoder c40Unlatch]];
+      [context writeCodeword:[ZXDataMatrixHighLevelEncoder c40Unlatch]];
     }
     // else no latch
     context.pos--;
@@ -116,14 +116,14 @@
       [self writeNextTriplet:context buffer:buffer];
     }
     if (available > 0 || [context hasMoreCharacters]) {
-      [context writeCodeword:[ZXHighLevelEncoder c40Unlatch]];
+      [context writeCodeword:[ZXDataMatrixHighLevelEncoder c40Unlatch]];
     }
   } else {
     @throw [NSException exceptionWithName:@"IllegalStateException"
                                    reason:@"Unexpected case. Please report!"
                                  userInfo:nil];
   }
-  [context signalEncoderChange:[ZXHighLevelEncoder asciiEncodation]];
+  [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
 }
 
 - (int)encodeChar:(unichar)c buffer:(NSMutableString *)sb {

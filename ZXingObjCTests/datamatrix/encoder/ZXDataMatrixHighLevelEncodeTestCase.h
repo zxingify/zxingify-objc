@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@interface ZXHighLevelEncodeTestCase : XCTestCase
+@interface ZXDataMatrixHighLevelEncodeTestCase : XCTestCase
 
 /**
  * Convert a string of char codewords into a different string which lists each character
