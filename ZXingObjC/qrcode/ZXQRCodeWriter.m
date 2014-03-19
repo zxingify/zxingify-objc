@@ -17,9 +17,9 @@
 #import "ZXBitMatrix.h"
 #import "ZXByteMatrix.h"
 #import "ZXEncodeHints.h"
-#import "ZXEncoder.h"
 #import "ZXErrorCorrectionLevel.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeEncoder.h"
 #import "ZXQRCodeWriter.h"
 
 int const QUIET_ZONE_SIZE = 4;
@@ -54,7 +54,7 @@ int const QUIET_ZONE_SIZE = 4;
     }
   }
 
-  ZXQRCode *code = [ZXEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints error:error];
+  ZXQRCode *code = [ZXQRCodeEncoder encode:contents ecLevel:errorCorrectionLevel hints:hints error:error];
   return [self renderResult:code width:width height:height quietZone:quietZone];
 }
 

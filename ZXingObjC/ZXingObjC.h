@@ -275,10 +275,10 @@
 // ZXingObjC/qrcode/encoder
 #import "ZXBlockPair.h"
 #import "ZXByteMatrix.h"
-#import "ZXEncoder.h"
 #import "ZXMaskUtil.h"
 #import "ZXMatrixUtil.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeEncoder.h"
 
 // ZXingObjC/qrcode
 #import "ZXQRCodeReader.h"

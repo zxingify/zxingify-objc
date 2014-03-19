@@ -18,7 +18,7 @@
 
 extern const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING;
 
-@interface ZXEncoder : NSObject
+@interface ZXQRCodeEncoder : NSObject
 
 + (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error;
 + (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints error:(NSError **)error;

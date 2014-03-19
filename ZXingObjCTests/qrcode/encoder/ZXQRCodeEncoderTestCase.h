@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-@interface ZXEncoderTestCase : XCTestCase
+@interface ZXQRCodeEncoderTestCase : XCTestCase
 
 @end

@@ -19,7 +19,6 @@
 #import "ZXByteMatrix.h"
 #import "ZXCharacterSetECI.h"
 #import "ZXECI.h"
-#import "ZXEncoder.h"
 #import "ZXEncodeHints.h"
 #import "ZXErrors.h"
 #import "ZXErrorCorrectionLevel.h"
@@ -27,8 +26,9 @@
 #import "ZXMaskUtil.h"
 #import "ZXMatrixUtil.h"
 #import "ZXMode.h"
-#import "ZXQRCodeVersion.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeEncoder.h"
+#import "ZXQRCodeVersion.h"
 #import "ZXReedSolomonEncoder.h"
 
 // The original table is defined in the table 5 of JISX0510:2004 (p.19).
@@ -43,7 +43,7 @@ const int ALPHANUMERIC_TABLE[96] = {
 
 const NSStringEncoding DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding;
 
-@implementation ZXEncoder
+@implementation ZXQRCodeEncoder
 
 + (int)calculateMaskPenalty:(ZXByteMatrix *)matrix {
   return [ZXMaskUtil applyMaskPenaltyRule1:matrix]
