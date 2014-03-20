@@ -29,13 +29,13 @@
 - (id)initWithHeight:(int)height width:(int)width {
   if (self = [super init]) {
     NSMutableArray *matrix = [NSMutableArray array];
-    for (int i = 0, matrixLength = height + 2; i < matrixLength; i++) {
+    for (int i = 0, matrixLength = height; i < matrixLength; i++) {
       [matrix addObject:[ZXBarcodeRow barcodeRowWithWidth:(width + 4) * 17 + 1]];
     }
     _rowMatrix = matrix;
     _width = width * 17;
-    _height = height + 2;
-    _currentRowIndex = 0;
+    _height = height;
+    _currentRowIndex = -1;
   }
 
   return self;

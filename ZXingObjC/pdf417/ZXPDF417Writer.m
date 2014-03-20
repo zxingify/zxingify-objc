@@ -22,6 +22,11 @@
 #import "ZXPDF417.h"
 #import "ZXPDF417Writer.h"
 
+/**
+ * default white space (margin) around the code
+ */
+const int ZX_PDF417_WHITE_SPACE = 30;
+
 @implementation ZXPDF417Writer
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height
@@ -31,6 +36,7 @@
   }
 
   ZXPDF417 *encoder = [[ZXPDF417 alloc] init];
+  int margin = ZX_PDF417_WHITE_SPACE;
 
   if (hints != nil) {
     encoder.compact = hints.pdf417Compact;
@@ -42,9 +48,12 @@
                                 maxRows:dimensions.maxRows
                                 minRows:dimensions.minRows];
     }
+    if (hints.margin) {
+      margin = [hints.margin intValue];
+    }
   }
 
-  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height error:error];
+  return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height margin:margin error:error];
 }
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
@@ -54,7 +63,12 @@
 /**
  * Takes encoder, accounts for width/height, and retrieves bit matrix
  */
-- (ZXBitMatrix *)bitMatrixFromEncoder:(ZXPDF417 *)encoder contents:(NSString *)contents width:(int)width height:(int)height error:(NSError **)error {
+- (ZXBitMatrix *)bitMatrixFromEncoder:(ZXPDF417 *)encoder
+                             contents:(NSString *)contents
+                                width:(int)width
+                               height:(int)height
+                               margin:(int)margin
+                                error:(NSError **)error {
   int errorCorrectionLevel = 2;
   if (![encoder generateBarcodeLogic:contents errorCorrectionLevel:errorCorrectionLevel error:error]) {
     return nil;
@@ -85,29 +99,27 @@
     if (rotated) {
       scaledMatrix = [self rotateArray:scaledMatrix];
     }
-    return [self bitMatrixFrombitArray:scaledMatrix];
+    return [self bitMatrixFrombitArray:scaledMatrix margin:margin];
   }
-  return [self bitMatrixFrombitArray:originalScale];
+  return [self bitMatrixFrombitArray:originalScale margin:margin];
 }
 
 /**
  * This takes an array holding the values of the PDF 417
  *
  * @param input a byte array of information with 0 is black, and 1 is white
+ * @param margin border around the barcode
  * @return BitMatrix of the input
  */
-- (ZXBitMatrix *)bitMatrixFrombitArray:(NSArray *)input {
-  // Creates a small whitespace boarder around the barcode
-  int whiteSpace = 30;
-
+- (ZXBitMatrix *)bitMatrixFrombitArray:(NSArray *)input margin:(int)margin {
   // Creates the bitmatrix with extra space for whtespace
-  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:[(ZXByteArray *)input[0] length] + 2 * whiteSpace height:(int)[input count] + 2 * whiteSpace];
+  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:[(ZXByteArray *)input[0] length] + 2 * margin height:(int)[input count] + 2 * margin];
   [output clear];
-  for (int y = 0, yOutput = output.height - whiteSpace; y < [input count]; y++, yOutput--) {
+  for (int y = 0, yOutput = output.height - margin; y < [input count]; y++, yOutput--) {
     for (int x = 0; x < [(ZXByteArray *)input[0] length]; x++) {
       // Zero is white in the bytematrix
       if ([(ZXByteArray *)input[y] array][x] == 1) {
-        [output setX:x + whiteSpace y:yOutput];
+        [output setX:x + margin y:yOutput];
       }
     }
   }
