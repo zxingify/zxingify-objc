@@ -32,9 +32,9 @@
 + (int)applyMaskPenaltyRule2:(ZXByteMatrix *)matrix;
 
 /**
- * Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
- * 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
- * penalties twice (i.e. 40 * 2).
+ * Apply mask penalty rule 3 and return the penalty. Find consecutive runs of 1:1:3:1:1:4
+ * starting with black, or 4:1:1:3:1:1 starting with white, and give penalty to them.  If we
+ * find patterns like 000010111010000, we give penalty once.
  */
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix;
 

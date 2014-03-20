@@ -109,19 +109,6 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 - (void)testRegressionTest {
   [self compareToGoldenFile:@"http://www.google.com/" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelM]
                  resolution:99 fileName:@"renderer-test-01.png"];
-
-  [self compareToGoldenFile:@"12345" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL]
-                 resolution:58 fileName:@"renderer-test-02.png"];
-
-  // Test in Katakana in Shift_JIS.
-  // TODO: this test is bogus now that byte mode has been basically fixed to assuming ISO-8859-1 encoding
-  //  The real solution is to implement Kanji mode, in which case the golden file will be wrong again
-  /*
-   compareToGoldenFile(
-   new String(new byte[] {(byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67}, "Shift_JIS"),
-   ErrorCorrectionLevel.H, 145,
-   "renderer-test-03.png");
-   */
 }
 
 @end
