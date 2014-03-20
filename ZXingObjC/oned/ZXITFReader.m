@@ -213,6 +213,9 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
 - (BOOL)validateQuietZone:(ZXBitArray *)row startPattern:(int)startPattern {
   int quietCount = self.narrowLineWidth * 10;
 
+  // if there are not so many pixel at all let's try as many as possible
+  quietCount = quietCount < startPattern ? quietCount : startPattern;
+
   for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
     if ([row get:i]) {
       break;
@@ -260,7 +263,10 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  [self validateQuietZone:row startPattern:endPattern.array[0]];
+  if (![self validateQuietZone:row startPattern:endPattern.array[0]]) {
+    [row reverse];
+    return nil;
+  }
   int temp = endPattern.array[0];
   endPattern.array[0] = [row size] - endPattern.array[1];
   endPattern.array[1] = [row size] - temp;
