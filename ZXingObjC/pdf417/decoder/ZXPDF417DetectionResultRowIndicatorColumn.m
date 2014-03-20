@@ -90,11 +90,9 @@
       maxRowHeight = MAX(maxRowHeight, currentRowHeight);
       currentRowHeight = 1;
       barcodeRow = codeword.rowNumber;
-    } else if (rowDifference < 0) {
-      self.codewords[codewordsRow] = [NSNull null];
-    } else if (codeword.rowNumber >= barcodeMetadata.rowCount) {
-      self.codewords[codewordsRow] = [NSNull null];
-    } else if (rowDifference > codewordsRow) {
+    } else if (rowDifference < 0 ||
+               codeword.rowNumber >= barcodeMetadata.rowCount ||
+               rowDifference > codewordsRow) {
       self.codewords[codewordsRow] = [NSNull null];
     } else {
       int checkedRows;

@@ -262,7 +262,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   }
   BOOL isWhite = YES;
   int count = 0;
-  for (; i < end; i++) {
+  while (i < end) {
     if ([row get:i] ^ isWhite) { // that is, exactly one is true
       count++;
     } else {
@@ -270,6 +270,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
       count = 1;
       isWhite = !isWhite;
     }
+    i++;
   }
   [self counterAppend:count];
   return YES;

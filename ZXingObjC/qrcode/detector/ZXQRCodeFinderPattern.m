@@ -37,9 +37,11 @@
   return self;
 }
 
+/*
 - (void)incrementCount {
   self.count++;
 }
+*/
 
 - (BOOL)aboutEquals:(float)moduleSize i:(float)i j:(float)j {
   if (fabsf(i - [self y]) <= moduleSize && fabsf(j - [self x]) <= moduleSize) {

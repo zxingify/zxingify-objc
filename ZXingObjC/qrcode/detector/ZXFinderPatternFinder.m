@@ -353,7 +353,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   if (max <= 1) {
     return 0;
   }
-  ZXQRCodeFinderPattern *firstConfirmedCenter = nil;
+  ZXResultPoint *firstConfirmedCenter = nil;
   for (int i = 0; i < max; i++) {
     ZXQRCodeFinderPattern *center = self.possibleCenters[i];
     if ([center count] >= ZX_CENTER_QUORUM) {

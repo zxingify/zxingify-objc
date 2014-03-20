@@ -28,9 +28,9 @@
 
 - (id)init {
   if(self = [super init]) {
-    _bitsLeftInNextByte = 8;
-    _nextByte = 0;
     _output = [NSMutableData data];
+    _nextByte = 0;
+    _bitsLeftInNextByte = 8;
   }
 
   return self;

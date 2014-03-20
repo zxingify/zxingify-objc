@@ -19,6 +19,7 @@
 
 @implementation ZXRSSUtils
 
+/*
 + (NSArray *)rssWidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
   NSMutableArray *widths = [NSMutableArray arrayWithCapacity:elements];
   int bar;
@@ -56,6 +57,7 @@
   [widths addObject:@(n)];
   return widths;
 }
+*/
 
 + (int)rssValue:(ZXIntArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow {
   int elements = widths.length;
@@ -120,6 +122,7 @@
   return val;
 }
 
+/*
 + (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K {
   NSMutableArray *widths = [NSMutableArray arrayWithCapacity:[eDist count] + 2];
   int twoK = K << 1;
@@ -148,5 +151,6 @@
   }
   return widths;
 }
+*/
 
 @end

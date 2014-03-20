@@ -45,9 +45,11 @@
   [self.rowMatrix[y] setX:x value:value];
 }
 
+/*
 - (void)setMatrixX:(int)x y:(int)y black:(BOOL)black {
   [self setX:x y:y value:(int8_t)(black ? 1 : 0)];
 }
+*/
 
 - (void)startRow {
   ++self.currentRowIndex;
@@ -61,9 +63,11 @@
   return [self scaledMatrixWithXScale:1 yScale:1];
 }
 
+/*
 - (NSArray *)scaledMatrix:(int)scale {
   return [self scaledMatrixWithXScale:scale yScale:scale];
 }
+*/
 
 - (NSArray *)scaledMatrixWithXScale:(int)xScale yScale:(int)yScale {
   int yMax = self.height * yScale;

@@ -115,24 +115,23 @@
 }
 
 - (void)testXOR {
-  {
-    ZXBitArray *v1 = [[ZXBitArray alloc] init];
-    [v1 appendBits:0x5555aaaa numBits:32];
-    ZXBitArray *v2 = [[ZXBitArray alloc] init];
-    [v2 appendBits:0xaaaa5555 numBits:32];
-    [v1 xor:v2];
-    XCTAssertEqual([self unsignedInt:v1 index:0], (unsigned long)0xffffffffL,
-                   @"Expected unsigned int at index 0 to equal %ld", 0xffffffffL);
-  }
-  {
-    ZXBitArray *v1 = [[ZXBitArray alloc] init];
-    [v1 appendBits:0x2a numBits:7];  // 010 1010
-    ZXBitArray *v2 = [[ZXBitArray alloc] init];
-    [v2 appendBits:0x55 numBits:7];  // 101 0101
-    [v1 xor:v2];
-    XCTAssertEqual([self unsignedInt:v1 index:0], (unsigned long)0xfe000000L,
-                   @"Expected unsigned int at index 0 to equal %ld", 0xfe000000L); // 1111 1110
-  }
+  ZXBitArray *v1 = [[ZXBitArray alloc] init];
+  [v1 appendBits:0x5555aaaa numBits:32];
+  ZXBitArray *v2 = [[ZXBitArray alloc] init];
+  [v2 appendBits:0xaaaa5555 numBits:32];
+  [v1 xor:v2];
+  XCTAssertEqual([self unsignedInt:v1 index:0], (unsigned long)0xffffffffL,
+                 @"Expected unsigned int at index 0 to equal %ld", 0xffffffffL);
+}
+
+- (void)testXOR2 {
+  ZXBitArray *v1 = [[ZXBitArray alloc] init];
+  [v1 appendBits:0x2a numBits:7];  // 010 1010
+  ZXBitArray *v2 = [[ZXBitArray alloc] init];
+  [v2 appendBits:0x55 numBits:7];  // 101 0101
+  [v1 xor:v2];
+  XCTAssertEqual([self unsignedInt:v1 index:0], (unsigned long)0xfe000000L,
+                 @"Expected unsigned int at index 0 to equal %ld", 0xfe000000L); // 1111 1110
 }
 
 - (void)testAt {

@@ -24,7 +24,7 @@ const int ZX_PDF417_MAX_CODEWORDS_IN_BARCODE = ZX_PDF417_NUMBER_OF_CODEWORDS - 1
 const int ZX_PDF417_MIN_ROWS_IN_BARCODE = 3;
 const int ZX_PDF417_MAX_ROWS_IN_BARCODE = 90;
 // One left row indication column + max 30 data columns + one right row indicator column
-const int ZX_PDF417_MAX_CODEWORDS_IN_ROW = 32;
+//const int ZX_PDF417_MAX_CODEWORDS_IN_ROW = 32;
 const int ZX_PDF417_MODULES_IN_CODEWORD = 17;
 const int ZX_PDF417_MODULES_IN_STOP_PATTERN = 18;
 

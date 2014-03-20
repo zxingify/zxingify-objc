@@ -80,14 +80,17 @@
 + (int)edifactEncodation;
 + (int)base256Encodation;
 
-/**
+/*
  * Converts the message to a byte array using the default encoding (cp437) as defined by the
  * specification
  *
  * @param msg the message
  * @return the byte array of the message
  */
+
+/*
 + (int8_t *)bytesForMessage:(NSString *)msg;
+*/
 
 /**
  * Performs message encoding of a DataMatrix message using the algorithm described in annex P

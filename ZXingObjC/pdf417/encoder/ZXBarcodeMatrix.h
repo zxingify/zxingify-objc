@@ -32,7 +32,7 @@
 - (void)startRow;
 - (ZXBarcodeRow *)currentRow;
 - (NSArray *)matrix;
-- (NSArray *)scaledMatrix:(int)scale;
+//- (NSArray *)scaledMatrix:(int)scale;
 - (NSArray *)scaledMatrixWithXScale:(int)xScale yScale:(int)yScale;
 
 @end

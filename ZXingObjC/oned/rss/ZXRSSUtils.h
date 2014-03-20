@@ -21,8 +21,8 @@
  */
 @interface ZXRSSUtils : NSObject
 
-+ (NSArray *)rssWidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow;
+//+ (NSArray *)rssWidths:(int)val n:(int)n elements:(int)elements maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow;
 + (int)rssValue:(ZXIntArray *)widths maxWidth:(int)maxWidth noNarrow:(BOOL)noNarrow;
-+ (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K;
+//+ (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K;
 
 @end

@@ -120,6 +120,7 @@
   self.maxY = (int) MAX(self.bottomLeft.y, self.bottomRight.y);
 }
 
+/*
 - (void)setTopRight:(ZXResultPoint *)topRight {
   _topRight = topRight;
   [self calculateMinMaxValues];
@@ -129,5 +130,6 @@
   _bottomRight = bottomRight;
   [self calculateMinMaxValues];
 }
+*/
 
 @end

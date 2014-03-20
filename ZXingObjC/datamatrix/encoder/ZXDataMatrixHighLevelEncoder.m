@@ -117,9 +117,11 @@ static NSString *MACRO_TRAILER = nil;
   return 5;
 }
 
+/*
 + (int8_t *)bytesForMessage:(NSString *)msg {
   return (int8_t *)[[msg dataUsingEncoding:(NSStringEncoding) 0x80000400] bytes]; //See 4.4.3 and annex B of ISO/IEC 15438:2001(E)
 }
+*/
 
 + (unichar)randomize253State:(unichar)ch codewordPosition:(int)codewordPosition {
   int pseudoRandom = ((149 * codewordPosition) % 253) + 1;

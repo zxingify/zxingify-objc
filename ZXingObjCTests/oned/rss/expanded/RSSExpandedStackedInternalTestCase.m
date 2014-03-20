@@ -63,7 +63,7 @@
 }
 
 - (void)testCompleteDecoding {
-  ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
+  ZXOneDReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
 
   ZXBinaryBitmap *binaryMap = [TestCaseUtil binaryBitmap:@"Resources/blackbox/rssexpandedstacked-2/1000.png"];
 

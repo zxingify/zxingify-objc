@@ -20,7 +20,7 @@
 const NSString *numeric_10                     = @"..X..XX";
 const NSString *numeric_12                     = @"..X.X.X";
 const NSString *numeric_1FNC1                  = @"..XXX.X";
-const NSString *numeric_FNC11                  = @"XXX.XXX";
+//const NSString *numeric_FNC11                  = @"XXX.XXX";
 
 const NSString *numeric2alpha                  = @"....";
 

@@ -31,6 +31,7 @@
   }
 }
 
+/*
 - (ZXIntArray *)erase:(ZXIntArray *)received howMany:(int)howMany {
   ZXBoolArray *erased = [[ZXBoolArray alloc] initWithLength:received.length];
   ZXIntArray *erasures = [[ZXIntArray alloc] initWithLength:howMany];
@@ -47,5 +48,6 @@
   }
   return erasures;
 }
+*/
 
 @end

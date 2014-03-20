@@ -23,9 +23,9 @@
 @property (nonatomic, assign, readonly) int minY;
 @property (nonatomic, assign, readonly) int maxY;
 @property (nonatomic, strong, readonly) ZXResultPoint *topLeft;
-@property (nonatomic, strong) ZXResultPoint *topRight;
+@property (nonatomic, strong, readonly) ZXResultPoint *topRight;
 @property (nonatomic, strong, readonly) ZXResultPoint *bottomLeft;
-@property (nonatomic, strong) ZXResultPoint *bottomRight;
+@property (nonatomic, strong, readonly) ZXResultPoint *bottomRight;
 
 - (id)initWithImage:(ZXBitMatrix *)image topLeft:(ZXResultPoint *)topLeft bottomLeft:(ZXResultPoint *)bottomLeft
            topRight:(ZXResultPoint *)topRight bottomRight:(ZXResultPoint *)bottomRight;

@@ -99,9 +99,8 @@ unsigned int ZXAztecDetectorTest_RANDOM_SEED = 16807;
 }
 
 // Returns a list of the four rotations of the ZXBitMatrix.
-- (NSArray *)rotations:(ZXBitMatrix *)input {
-  ZXBitMatrix *matrix0 = input;
-  ZXBitMatrix *matrix90 = [self rotateRight:input];
+- (NSArray *)rotations:(ZXBitMatrix *)matrix0 {
+  ZXBitMatrix *matrix90 = [self rotateRight:matrix0];
   ZXBitMatrix *matrix180 = [self rotateRight:matrix90];
   ZXBitMatrix *matrix270 = [self rotateRight:matrix180];
   return @[matrix0, matrix90, matrix180, matrix270];

@@ -17,6 +17,6 @@
 @interface AbstractErrorCorrectionTestCase : XCTestCase
 
 - (void)corrupt:(ZXIntArray *)received howMany:(int)howMany;
-- (ZXIntArray *)erase:(ZXIntArray *)received howMany:(int)howMany;
+//- (ZXIntArray *)erase:(ZXIntArray *)received howMany:(int)howMany;
 
 @end

@@ -30,7 +30,7 @@
 
 - (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize count:(int)count;
 
-- (void)incrementCount;
+//- (void)incrementCount;
 
 /**
  * Determines if this finder pattern "about equals" a finder pattern at the stated

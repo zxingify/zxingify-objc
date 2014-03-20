@@ -17,7 +17,7 @@
 extern const NSString *numeric_10;
 extern const NSString *numeric_12;
 extern const NSString *numeric_1FNC1;
-extern const NSString *numeric_FNC11;
+//extern const NSString *numeric_FNC11;
 
 extern const NSString *numeric2alpha;
 
