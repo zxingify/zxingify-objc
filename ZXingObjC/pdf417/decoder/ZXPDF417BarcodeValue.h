@@ -20,7 +20,6 @@
 
 /**
  * Add an occurrence of a value
- * @param value
  */
 - (void)setValue:(int)value;
 

@@ -254,7 +254,6 @@ const int ZX_AZTEC_WORD_SIZE[] = {
 }
 
 + (ZXBitArray *)generateCheckWords:(ZXBitArray *)bitArray totalBits:(int)totalBits wordSize:(int)wordSize {
-  NSAssert(bitArray.size % wordSize == 0, @"");
   // bitArray is guaranteed to be a multiple of the wordSize, so no padding needed
   int messageSizeInWords = bitArray.size / wordSize;
   ZXReedSolomonEncoder *rs = [[ZXReedSolomonEncoder alloc] initWithField:[self getGF:wordSize]];

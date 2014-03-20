@@ -49,56 +49,56 @@ const int ZX_N4 = 10;
 }
 
 + (int)applyMaskPenaltyRule3:(ZXByteMatrix *)matrix {
-  int penalty = 0;
+  int numPenalties = 0;
   int8_t **array = matrix.array;
   int width = matrix.width;
   int height = matrix.height;
-
   for (int y = 0; y < height; y++) {
+    int8_t *arrayY = array[y];  // We can at least optimize this access
     for (int x = 0; x < width; x++) {
-      if (x + 6 < width &&
-          array[y][x] == 1 &&
-          array[y][x +  1] == 0 &&
-          array[y][x +  2] == 1 &&
-          array[y][x +  3] == 1 &&
-          array[y][x +  4] == 1 &&
-          array[y][x +  5] == 0 &&
-          array[y][x +  6] == 1 &&
-          ((x + 10 < width &&
-            array[y][x +  7] == 0 &&
-            array[y][x +  8] == 0 &&
-            array[y][x +  9] == 0 &&
-            array[y][x + 10] == 0) ||
-           (x - 4 >= 0 &&
-            array[y][x -  1] == 0 &&
-            array[y][x -  2] == 0 &&
-            array[y][x -  3] == 0 &&
-            array[y][x -  4] == 0))) {
-             penalty += ZX_N3;
+      if (x + 8 < width &&
+          arrayY[x]     == 0 &&
+          arrayY[x + 1] == 1 &&
+          arrayY[x + 2] == 0 &&
+          arrayY[x + 3] == 1 &&
+          arrayY[x + 4] == 1 &&
+          arrayY[x + 5] == 1 &&
+          arrayY[x + 6] == 0 &&
+          arrayY[x + 7] == 1 &&
+          arrayY[x + 8] == 0 &&
+          ((x + 11 < width &&
+            arrayY[x +  9] == 0 &&
+            arrayY[x + 10] == 0 &&
+            arrayY[x + 11] == 0) ||
+           (x - 3 >= 0 &&
+            arrayY[x -  1] == 0 &&
+            arrayY[x -  2] == 0 &&
+            arrayY[x -  3] == 0))) {
+             numPenalties++;
            }
-      if (y + 6 < height &&
-          array[y][x] == 1  &&
-          array[y +  1][x] == 0  &&
-          array[y +  2][x] == 1  &&
-          array[y +  3][x] == 1  &&
-          array[y +  4][x] == 1  &&
-          array[y +  5][x] == 0  &&
-          array[y +  6][x] == 1 &&
-          ((y + 10 < height &&
-            array[y +  7][x] == 0 &&
-            array[y +  8][x] == 0 &&
+      if (y + 8 < height &&
+          array[y][x]     == 0 &&
+          array[y + 1][x] == 1 &&
+          array[y + 2][x] == 0 &&
+          array[y + 3][x] == 1 &&
+          array[y + 4][x] == 1 &&
+          array[y + 5][x] == 1 &&
+          array[y + 6][x] == 0 &&
+          array[y + 7][x] == 1 &&
+          array[y + 8][x] == 0 &&
+          ((y + 11 < height &&
             array[y +  9][x] == 0 &&
-            array[y + 10][x] == 0) ||
-           (y - 4 >= 0 &&
+            array[y + 10][x] == 0 &&
+            array[y + 11][x] == 0) ||
+           (y - 3 >= 0 &&
             array[y -  1][x] == 0 &&
             array[y -  2][x] == 0 &&
-            array[y -  3][x] == 0 &&
-            array[y -  4][x] == 0))) {
-             penalty += ZX_N3;
+            array[y -  3][x] == 0))) {
+             numPenalties++;
            }
     }
   }
-  return penalty;
+  return numPenalties * ZX_N3;
 }
 
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
@@ -115,8 +115,7 @@ const int ZX_N4 = 10;
     }
   }
   int numTotalCells = [matrix height] * [matrix width];
-  double darkRatio = (double) numDarkCells / numTotalCells;
-  int fivePercentVariances = abs((int)(darkRatio * 100 - 50)) / 5; // * 100.0 / 5.0
+  int fivePercentVariances = abs(numDarkCells * 2 - numTotalCells) * 10 / numTotalCells;
   return fivePercentVariances * ZX_N4;
 }
 

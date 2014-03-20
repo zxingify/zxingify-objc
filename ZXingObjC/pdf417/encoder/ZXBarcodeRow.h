@@ -22,8 +22,6 @@
 
 /**
  * Creates a Barcode row of the width
- *
- * @param width
  */
 + (ZXBarcodeRow *)barcodeRowWithWidth:(int)width;
 

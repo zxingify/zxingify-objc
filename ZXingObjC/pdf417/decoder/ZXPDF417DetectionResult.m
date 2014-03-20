@@ -103,9 +103,9 @@ const int ZX_PDF417_ADJUST_ROW_NUMBER_SKIP = 2;
   return unadjustedCount + [self adjustRowNumbersFromRRI];
 }
 
-- (int)adjustRowNumbersFromBothRI {
+- (void)adjustRowNumbersFromBothRI {
   if (self.detectionResultColumnsInternal[0] == [NSNull null] || self.detectionResultColumnsInternal[self.barcodeColumnCount + 1] == [NSNull null]) {
-    return 0;
+    return;
   }
   NSArray *LRIcodewords = [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[0] codewords];
   NSArray *RRIcodewords = [(ZXPDF417DetectionResultColumn *)self.detectionResultColumnsInternal[self.barcodeColumnCount + 1] codewords];
@@ -125,7 +125,6 @@ const int ZX_PDF417_ADJUST_ROW_NUMBER_SKIP = 2;
       }
     }
   }
-  return 0;
 }
 
 - (int)adjustRowNumbersFromRRI {

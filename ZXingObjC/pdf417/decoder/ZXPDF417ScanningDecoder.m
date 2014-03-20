@@ -548,9 +548,6 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 
 /**
  * Verify that all is OK with the codeword array.
- *
- * @param codewords
- * @return an index to the first data codeword.
  */
 + (BOOL)verifyCodewordCount:(ZXIntArray *)codewords numECCodewords:(int)numECCodewords {
   if (codewords.length < 4) {

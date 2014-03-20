@@ -268,7 +268,6 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
       }
     }
   }
-  NSAssert(index == correctedBits.length, @"Expected index to equal %lu (got %d)", (unsigned long)correctedBits.length, index);
   return correctedBits;
 }
 
