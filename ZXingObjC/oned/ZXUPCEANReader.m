@@ -180,6 +180,11 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   }
 
   NSString *resultString = [result description];
+  // UPC/EAN should never be less than 8 chars anyway
+  if ([resultString length] < 8) {
+    if (error) *error = FormatErrorInstance();
+    return nil;
+  }
   if (![self checkChecksum:resultString error:error]) {
     if (error) *error = ChecksumErrorInstance();
     return nil;
