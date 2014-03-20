@@ -57,7 +57,6 @@ const int ZX_N4 = 10;
     for (int x = 0; x < width; x++) {
       int8_t *arrayY = array[y];  // We can at least optimize this access
       if (x + 6 < width &&
-          (x == 0 || arrayY[x-1] == 0) &&
           arrayY[x] == 1 &&
           arrayY[x +  1] == 0 &&
           arrayY[x +  2] == 1 &&
@@ -65,21 +64,10 @@ const int ZX_N4 = 10;
           arrayY[x +  4] == 1 &&
           arrayY[x +  5] == 0 &&
           arrayY[x +  6] == 1 &&
-          (x + 7 >= width || arrayY[x+7] == 0) &&
-          ((x + 10 < width &&
-            arrayY[x +  7] == 0 &&
-            arrayY[x +  8] == 0 &&
-            arrayY[x +  9] == 0 &&
-            arrayY[x + 10] == 0) ||
-           (x - 4 >= 0 &&
-            arrayY[x -  1] == 0 &&
-            arrayY[x -  2] == 0 &&
-            arrayY[x -  3] == 0 &&
-            arrayY[x -  4] == 0))) {
-             numPenalties++;
-           }
+          ([self isWhiteHorizontal:arrayY length:width from:x - 4 to:x] || [self isWhiteHorizontal:arrayY length:width from:x + 7 to:x + 11])) {
+        numPenalties++;
+      }
       if (y + 6 < height &&
-          (y == 0 || array[y-1][x] == 0) &&
           array[y][x] == 1  &&
           array[y +  1][x] == 0  &&
           array[y +  2][x] == 1  &&
@@ -87,22 +75,30 @@ const int ZX_N4 = 10;
           array[y +  4][x] == 1  &&
           array[y +  5][x] == 0  &&
           array[y +  6][x] == 1 &&
-          (y + 7 >= height || array[y+7][x] == 0) &&
-          ((y + 10 < height &&
-            array[y +  7][x] == 0 &&
-            array[y +  8][x] == 0 &&
-            array[y +  9][x] == 0 &&
-            array[y + 10][x] == 0) ||
-           (y - 4 >= 0 &&
-            array[y -  1][x] == 0 &&
-            array[y -  2][x] == 0 &&
-            array[y -  3][x] == 0 &&
-            array[y -  4][x] == 0))) {
-             numPenalties++;
-           }
+          ([self isWhiteVertical:array length:width col:x from:y - 4 to:y] || [self isWhiteVertical:array length:height col:x from:y + 7 to:y + 11])) {
+        numPenalties++;
+      }
     }
   }
   return numPenalties * ZX_N3;
+}
+
++ (BOOL)isWhiteHorizontal:(int8_t *)rowArray length:(int)length from:(int)from to:(int)to {
+  for (int i = from; i < to; i++) {
+    if (i >= 0 && i < length && rowArray[i] == 1) {
+      return NO;
+    }
+  }
+  return YES;
+}
+
++ (BOOL)isWhiteVertical:(int8_t **)array length:(int)length col:(int)col from:(int)from to:(int)to {
+  for (int i = from; i < to; i++) {
+    if (i >= 0 && i < length && array[i][col] == 1) {
+      return NO;
+    }
+  }
+  return YES;
 }
 
 + (int)applyMaskPenaltyRule4:(ZXByteMatrix *)matrix {
