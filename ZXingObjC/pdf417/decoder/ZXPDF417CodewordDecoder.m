@@ -93,9 +93,13 @@ static float ZX_PDF417_RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN][ZX_PDF417_BARS_I
   int bestMatch = -1;
   for (int j = 0; j < ZX_PDF417_SYMBOL_TABLE_LEN; j++) {
     float error = 0.0f;
+    float *ratioTableRow = ZX_PDF417_RATIOS_TABLE[j];
     for (int k = 0; k < ZX_PDF417_BARS_IN_MODULE; k++) {
-      float diff = ZX_PDF417_RATIOS_TABLE[j][k] - bitCountRatios[k];
+      float diff = ratioTableRow[k] - bitCountRatios[k];
       error += diff * diff;
+      if (error >= bestMatchError) {
+        break;
+      }
     }
     if (error < bestMatchError) {
       bestMatchError = error;
