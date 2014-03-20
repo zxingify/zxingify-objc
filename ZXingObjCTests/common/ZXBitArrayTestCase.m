@@ -16,6 +16,13 @@
 
 #import "ZXBitArrayTestCase.h"
 
+@interface ZXBitArray (TestConstructor)
+
+// For testing only
+- (id)initWithBits:(ZXIntArray *)bits size:(int)size;
+
+@end
+
 @implementation ZXBitArrayTestCase
 
 - (void)testGetSet {
@@ -159,6 +166,40 @@
   }
   XCTAssertTrue([array isRange:0 end:64 value:YES], @"Expected range 0-64 of YES to be true");
   XCTAssertFalse([array isRange:0 end:64 value:NO], @"Expected range 0-64 of YES to be false");
+}
+
+- (void)testReverseAlgorithm {
+  ZXIntArray *oldBits = [[ZXIntArray alloc] initWithInts:128, 256, 512, 6453324, 50934953, -1];
+  for (int size = 1; size < 160; size++) {
+    ZXIntArray *newBitsOriginal = [self reverseOriginal:[oldBits copy] size:size];
+    ZXBitArray *newBitArray = [[ZXBitArray alloc] initWithBits:[oldBits copy] size:size];
+    [newBitArray reverse];
+    ZXIntArray *newBitsNew = [newBitArray bitArray];
+    XCTAssertTrue([self arraysAreEqual:newBitsOriginal right:newBitsNew size:size / 32 + 1], @"Arrays are not equal");
+  }
+}
+
+- (ZXIntArray *)reverseOriginal:(ZXIntArray *)oldBits size:(int)size {
+  ZXIntArray *newBits = [[ZXIntArray alloc] initWithLength:oldBits.length];
+  for (int i = 0; i < size; i++) {
+    if ([self bitSet:oldBits i:size - i - 1]) {
+      newBits.array[i / 32] |= 1 << (i & 0x1F);
+    }
+  }
+  return newBits;
+}
+
+- (BOOL)bitSet:(ZXIntArray *)bits i:(int)i {
+  return (bits.array[i / 32] & (1 << (i & 0x1F))) != 0;
+}
+
+- (BOOL)arraysAreEqual:(ZXIntArray *)left right:(ZXIntArray *)right size:(int)size {
+  for (int i = 0; i < size; i++) {
+    if (left.array[i] != right.array[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 @end

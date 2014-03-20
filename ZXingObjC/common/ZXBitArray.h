@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXByteArray;
+@class ZXByteArray, ZXIntArray;
 
 /**
  * A simple, fast array of bits, represented compactly by an array of ints internally.
@@ -117,6 +117,12 @@
  * @param numBytes how many bytes to write
  */
 - (void)toBytes:(int)bitOffset array:(ZXByteArray *)array offset:(int)offset numBytes:(int)numBytes;
+
+/**
+ * @return underlying array of ints. The first element holds the first 32 bits, and the least
+ *         significant bit is bit 0.
+ */
+- (ZXIntArray *)bitArray;
 
 /**
  * Reverses all bits in the array.
