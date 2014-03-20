@@ -29,7 +29,7 @@ static NSRegularExpression *URL_WITHOUT_PROTOCOL_PATTERN = nil;
                                                                    options:0
                                                                      error:nil];
   URL_WITHOUT_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:
-                                  [[[NSString stringWithFormat:@"(%@+\\.)+%@{2,}", ALPHANUM_PART, ALPHANUM_PART] // host name elements
+                                  [[@"([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}" // host name elements
                                     stringByAppendingString:@"(:\\d{1,5})?"] // maybe port
                                    stringByAppendingString:@"(/|\\?|$)"] // query, path or nothing
                                                                       options:0

@@ -26,6 +26,7 @@
 
 - (void)testURI {
   [self doTestWithContents:@"google.com" uri:@"http://google.com" title:nil];
+  [self doTestWithContents:@"123.com" uri:@"http://123.com" title:nil];
   [self doTestWithContents:@"http://google.com" uri:@"http://google.com" title:nil];
   [self doTestWithContents:@"https://google.com" uri:@"https://google.com" title:nil];
   [self doTestWithContents:@"google.com:443" uri:@"http://google.com:443" title:nil];
@@ -45,6 +46,8 @@
   [self doTestNotUri:@":80/"];
   [self doTestNotUri:@"ABC,20.3,AB,AD"];
   [self doTestNotUri:@"http://google.com?q=foo bar"];
+  [self doTestNotUri:@"12756.501"];
+  [self doTestNotUri:@"google.50"];
 }
 
 - (void)testURLTO {
