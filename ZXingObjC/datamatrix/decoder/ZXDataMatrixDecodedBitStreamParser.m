@@ -46,7 +46,7 @@ const unichar TEXT_BASIC_SET_CHARS[40] = {
 };
 
 const unichar TEXT_SHIFT3_SET_CHARS[32] = {
-  '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+  '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
   'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (unichar) 127
 };
 
