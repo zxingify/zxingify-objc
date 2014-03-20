@@ -81,7 +81,7 @@
 
 - (void)testApplyMaskPenaltyRule3 {
   // Horizontal 00001011101.
-  ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:12 height:1];
+  ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
   [matrix setX:0 y:0 intValue:0];
   [matrix setX:1 y:0 intValue:0];
   [matrix setX:2 y:0 intValue:0];
@@ -93,52 +93,48 @@
   [matrix setX:8 y:0 intValue:1];
   [matrix setX:9 y:0 intValue:0];
   [matrix setX:10 y:0 intValue:1];
-  [matrix setX:11 y:0 intValue:0];
   XCTAssertEqual([ZXMaskUtil applyMaskPenaltyRule3:matrix], 40, @"Expected applyMaskPenaltyRule3 to return 40");
   // Horizontal 10111010000.
-  matrix = [[ZXByteMatrix alloc] initWithWidth:12 height:1];
-  [matrix setX:0 y:0 intValue:0];
-  [matrix setX:1 y:0 intValue:1];
-  [matrix setX:2 y:0 intValue:0];
+  matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
+  [matrix setX:0 y:0 intValue:1];
+  [matrix setX:1 y:0 intValue:0];
+  [matrix setX:2 y:0 intValue:1];
   [matrix setX:3 y:0 intValue:1];
   [matrix setX:4 y:0 intValue:1];
-  [matrix setX:5 y:0 intValue:1];
-  [matrix setX:6 y:0 intValue:0];
-  [matrix setX:7 y:0 intValue:1];
+  [matrix setX:5 y:0 intValue:0];
+  [matrix setX:6 y:0 intValue:1];
+  [matrix setX:7 y:0 intValue:0];
   [matrix setX:8 y:0 intValue:0];
   [matrix setX:9 y:0 intValue:0];
   [matrix setX:10 y:0 intValue:0];
-  [matrix setX:11 y:0 intValue:0];
   XCTAssertEqual([ZXMaskUtil applyMaskPenaltyRule3:matrix], 40, @"Expected applyMaskPenaltyRule3 to return 40");
   // Vertical 00001011101.
-  matrix = [[ZXByteMatrix alloc] initWithWidth:1 height:12];
+  matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
   [matrix setX:0 y:0 intValue:0];
-  [matrix setX:0 y:1 intValue:0];
-  [matrix setX:0 y:2 intValue:0];
-  [matrix setX:0 y:3 intValue:0];
-  [matrix setX:0 y:4 intValue:1];
-  [matrix setX:0 y:5 intValue:0];
-  [matrix setX:0 y:6 intValue:1];
-  [matrix setX:0 y:7 intValue:1];
-  [matrix setX:0 y:8 intValue:1];
-  [matrix setX:0 y:9 intValue:0];
-  [matrix setX:0 y:10 intValue:1];
-  [matrix setX:0 y:11 intValue:0];
+  [matrix setX:1 y:0 intValue:0];
+  [matrix setX:2 y:0 intValue:0];
+  [matrix setX:3 y:0 intValue:0];
+  [matrix setX:4 y:0 intValue:1];
+  [matrix setX:5 y:0 intValue:0];
+  [matrix setX:6 y:0 intValue:1];
+  [matrix setX:7 y:0 intValue:1];
+  [matrix setX:8 y:0 intValue:1];
+  [matrix setX:9 y:0 intValue:0];
+  [matrix setX:10 y:0 intValue:1];
   XCTAssertEqual([ZXMaskUtil applyMaskPenaltyRule3:matrix], 40, @"Expected applyMaskPenaltyRule3 to return 40");
   // Vertical 10111010000.
-  matrix = [[ZXByteMatrix alloc] initWithWidth:1 height:12];
-  [matrix setX:0 y:0 intValue:0];
-  [matrix setX:0 y:1 intValue:1];
-  [matrix setX:0 y:2 intValue:0];
-  [matrix setX:0 y:3 intValue:1];
-  [matrix setX:0 y:4 intValue:1];
-  [matrix setX:0 y:5 intValue:1];
-  [matrix setX:0 y:6 intValue:0];
-  [matrix setX:0 y:7 intValue:1];
-  [matrix setX:0 y:8 intValue:0];
-  [matrix setX:0 y:9 intValue:0];
-  [matrix setX:0 y:10 intValue:0];
-  [matrix setX:0 y:11 intValue:0];
+  matrix = [[ZXByteMatrix alloc] initWithWidth:11 height:1];
+  [matrix setX:0 y:0 intValue:1];
+  [matrix setX:1 y:0 intValue:0];
+  [matrix setX:2 y:0 intValue:1];
+  [matrix setX:3 y:0 intValue:1];
+  [matrix setX:4 y:0 intValue:1];
+  [matrix setX:5 y:0 intValue:0];
+  [matrix setX:6 y:0 intValue:1];
+  [matrix setX:7 y:0 intValue:0];
+  [matrix setX:8 y:0 intValue:0];
+  [matrix setX:9 y:0 intValue:0];
+  [matrix setX:10 y:0 intValue:0];
   XCTAssertEqual([ZXMaskUtil applyMaskPenaltyRule3:matrix], 40, @"Expected applyMaskPenaltyRule3 to return 40");
 }
 
