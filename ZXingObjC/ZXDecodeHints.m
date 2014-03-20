@@ -50,6 +50,7 @@
     result.encoding = self.encoding;
     result.other = self.other;
     result.pureBarcode = self.pureBarcode;
+    result.returnCodaBarStartEnd = self.returnCodaBarStartEnd;
     result.resultPointCallback = self.resultPointCallback;
     result.tryHarder = self.tryHarder;
   }

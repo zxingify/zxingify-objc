@@ -16,6 +16,7 @@
 
 #import "ZXBitArray.h"
 #import "ZXCodaBarReader.h"
+#import "ZXDecodeHints.h"
 #import "ZXErrors.h"
 #import "ZXIntArray.h"
 #import "ZXResult.h"
@@ -162,8 +163,10 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
     return nil;
   }
 
-  [self.decodeRowResult deleteCharactersInRange:NSMakeRange(self.decodeRowResult.length - 1, 1)];
-  [self.decodeRowResult deleteCharactersInRange:NSMakeRange(0, 1)];
+  if (!hints.returnCodaBarStartEnd) {
+    [self.decodeRowResult deleteCharactersInRange:NSMakeRange(self.decodeRowResult.length - 1, 1)];
+    [self.decodeRowResult deleteCharactersInRange:NSMakeRange(0, 1)];
+  }
 
   int runningCount = 0;
   for (int i = 0; i < startOffset; i++) {

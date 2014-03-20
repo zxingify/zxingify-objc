@@ -59,6 +59,13 @@
 @property (nonatomic, assign) BOOL pureBarcode;
 
 /**
+ * If true, return the start and end digits in a Codabar barcode instead of stripping them. They
+ * are alpha, whereas the rest are numeric. By default, they are stripped, but this causes them
+ * to not be.
+ */
+@property (nonatomic, assign) BOOL returnCodaBarStartEnd;
+
+/**
  * The caller needs to be notified via callback when a possible ZXResultPoint
  * is found.
  */
