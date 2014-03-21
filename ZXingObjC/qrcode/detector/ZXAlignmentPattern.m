@@ -18,7 +18,7 @@
 
 @interface ZXAlignmentPattern ()
 
-@property (nonatomic, assign) float estimatedModuleSize;
+@property (nonatomic, assign, readonly) float estimatedModuleSize;
 
 @end
 

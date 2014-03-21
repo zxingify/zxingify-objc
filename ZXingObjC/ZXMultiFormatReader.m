@@ -28,7 +28,7 @@
 
 @interface ZXMultiFormatReader ()
 
-@property (nonatomic, strong) NSMutableArray *readers;
+@property (nonatomic, strong, readonly) NSMutableArray *readers;
 
 @end
 

@@ -20,7 +20,7 @@
 @interface ZXBarcodeMatrix ()
 
 @property (nonatomic, assign) int currentRowIndex;
-@property (nonatomic, strong) NSArray *rowMatrix;
+@property (nonatomic, strong, readonly) NSArray *rowMatrix;
 
 @end
 

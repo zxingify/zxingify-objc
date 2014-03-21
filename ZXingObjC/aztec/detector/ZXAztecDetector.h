@@ -16,8 +16,8 @@
 
 @interface ZXAztecPoint : NSObject
 
-@property (nonatomic, assign) int x;
-@property (nonatomic, assign) int y;
+@property (nonatomic, assign, readonly) int x;
+@property (nonatomic, assign, readonly) int y;
 
 - (id)initWithX:(int)x y:(int)y;
 

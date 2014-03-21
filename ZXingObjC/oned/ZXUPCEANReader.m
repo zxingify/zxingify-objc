@@ -88,9 +88,9 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
 
 @interface ZXUPCEANReader ()
 
-@property (nonatomic, strong) NSMutableString *decodeRowNSMutableString;
-@property (nonatomic, strong) ZXUPCEANExtensionSupport *extensionReader;
-@property (nonatomic, strong) ZXEANManufacturerOrgSupport *eanManSupport;
+@property (nonatomic, strong, readonly) NSMutableString *decodeRowNSMutableString;
+@property (nonatomic, strong, readonly) ZXUPCEANExtensionSupport *extensionReader;
+@property (nonatomic, strong, readonly) ZXEANManufacturerOrgSupport *eanManSupport;
 
 @end
 

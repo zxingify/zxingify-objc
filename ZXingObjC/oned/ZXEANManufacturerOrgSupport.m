@@ -18,8 +18,8 @@
 
 @interface ZXEANManufacturerOrgSupport ()
 
-@property (nonatomic, strong) NSMutableArray *countryIdentifiers;
-@property (nonatomic, strong) NSMutableArray *ranges;
+@property (nonatomic, strong, readonly) NSMutableArray *countryIdentifiers;
+@property (nonatomic, strong, readonly) NSMutableArray *ranges;
 
 @end
 

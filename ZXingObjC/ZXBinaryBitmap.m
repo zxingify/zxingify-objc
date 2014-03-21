@@ -21,7 +21,7 @@
 
 @interface ZXBinaryBitmap ()
 
-@property (nonatomic, strong) ZXBinarizer *binarizer;
+@property (nonatomic, strong, readonly) ZXBinarizer *binarizer;
 @property (nonatomic, strong) ZXBitMatrix *matrix;
 
 @end
@@ -34,7 +34,7 @@
       [NSException raise:NSInvalidArgumentException format:@"Binarizer must be non-null."];
     }
 
-    self.binarizer = binarizer;
+    _binarizer = binarizer;
   }
 
   return self;

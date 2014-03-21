@@ -34,7 +34,7 @@ NSInteger centerCompare(id center1, id center2, void *context);
 NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
 @property (nonatomic, assign) BOOL hasSkipped;
-@property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, weak, readonly) id<ZXResultPointCallback> resultPointCallback;
 @property (nonatomic, strong) NSMutableArray *possibleCenters;
 
 @end

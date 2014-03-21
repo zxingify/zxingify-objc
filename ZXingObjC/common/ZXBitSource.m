@@ -19,7 +19,7 @@
 
 @interface ZXBitSource ()
 
-@property (nonatomic, strong) ZXByteArray *bytes;
+@property (nonatomic, strong, readonly) ZXByteArray *bytes;
 @property (nonatomic, assign) int byteOffset;
 @property (nonatomic, assign) int bitOffset;
 

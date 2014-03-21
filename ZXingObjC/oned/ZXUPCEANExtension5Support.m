@@ -30,7 +30,7 @@ const int ZX_UPCEAN_CHECK_DIGIT_ENCODINGS[] = {
 
 @interface ZXUPCEANExtension5Support ()
 
-@property (nonatomic, strong) ZXIntArray *decodeMiddleCounters;
+@property (nonatomic, strong, readonly) ZXIntArray *decodeMiddleCounters;
 
 @end
 

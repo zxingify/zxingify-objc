@@ -23,8 +23,8 @@ const int ZX_UPCEAN_EXTENSION_START_PATTERN[] = {1,1,2};
 
 @interface ZXUPCEANExtensionSupport ()
 
-@property (nonatomic, strong) ZXUPCEANExtension2Support *twoSupport;
-@property (nonatomic, strong) ZXUPCEANExtension5Support *fiveSupport;
+@property (nonatomic, strong, readonly) ZXUPCEANExtension2Support *twoSupport;
+@property (nonatomic, strong, readonly) ZXUPCEANExtension5Support *fiveSupport;
 
 @end
 

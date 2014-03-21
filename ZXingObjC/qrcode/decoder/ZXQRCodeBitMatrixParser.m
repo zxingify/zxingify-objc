@@ -24,7 +24,7 @@
 
 @interface ZXQRCodeBitMatrixParser ()
 
-@property (nonatomic, strong) ZXBitMatrix *bitMatrix;
+@property (nonatomic, strong, readonly) ZXBitMatrix *bitMatrix;
 @property (nonatomic, assign) BOOL shouldMirror;
 @property (nonatomic, strong) ZXFormatInformation *parsedFormatInfo;
 @property (nonatomic, strong) ZXQRCodeVersion *parsedVersion;

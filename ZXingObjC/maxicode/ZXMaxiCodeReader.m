@@ -29,7 +29,7 @@ const int ZX_MATRIX_HEIGHT = 33;
 
 @interface ZXMaxiCodeReader ()
 
-@property (nonatomic, strong) ZXMaxiCodeDecoder *decoder;
+@property (nonatomic, strong, readonly) ZXMaxiCodeDecoder *decoder;
 
 @end
 

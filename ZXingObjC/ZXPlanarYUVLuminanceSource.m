@@ -21,11 +21,11 @@ const int THUMBNAIL_SCALE_FACTOR = 2;
 
 @interface ZXPlanarYUVLuminanceSource ()
 
-@property (nonatomic, strong) ZXByteArray *yuvData;
-@property (nonatomic, assign) int dataWidth;
-@property (nonatomic, assign) int dataHeight;
-@property (nonatomic, assign) int left;
-@property (nonatomic, assign) int top;
+@property (nonatomic, strong, readonly) ZXByteArray *yuvData;
+@property (nonatomic, assign, readonly) int dataWidth;
+@property (nonatomic, assign, readonly) int dataHeight;
+@property (nonatomic, assign, readonly) int left;
+@property (nonatomic, assign, readonly) int top;
 
 @end
 

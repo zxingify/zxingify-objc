@@ -20,7 +20,7 @@
 
 @interface ZXGenericGFPoly ()
 
-@property (nonatomic, strong) ZXGenericGF *field;
+@property (nonatomic, strong, readonly) ZXGenericGF *field;
 
 @end
 

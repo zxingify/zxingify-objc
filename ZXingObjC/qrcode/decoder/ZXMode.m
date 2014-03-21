@@ -19,7 +19,7 @@
 
 @interface ZXMode ()
 
-@property (nonatomic, strong) NSArray *characterCountBitsForVersions;
+@property (nonatomic, strong, readonly) NSArray *characterCountBitsForVersions;
 
 @end
 

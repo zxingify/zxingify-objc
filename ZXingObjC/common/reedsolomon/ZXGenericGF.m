@@ -20,9 +20,9 @@
 
 @interface ZXGenericGF ()
 
-@property (nonatomic, assign) int32_t *expTable;
-@property (nonatomic, assign) int32_t *logTable;
-@property (nonatomic, assign) int primitive;
+@property (nonatomic, assign, readonly) int32_t *expTable;
+@property (nonatomic, assign, readonly) int32_t *logTable;
+@property (nonatomic, assign, readonly) int primitive;
 
 @end
 

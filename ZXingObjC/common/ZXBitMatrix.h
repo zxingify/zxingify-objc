@@ -33,14 +33,14 @@
 /**
  * @return The width of the matrix
  */
-@property (nonatomic, readonly) int width;
+@property (nonatomic, assign, readonly) int width;
 
 /**
  * @return The height of the matrix
  */
-@property (nonatomic, readonly) int height;
+@property (nonatomic, assign, readonly) int height;
 
-@property (nonatomic, readonly) int32_t *bits;
+@property (nonatomic, assign, readonly) int32_t *bits;
 
 // A helper to construct a square matrix.
 + (ZXBitMatrix *)bitMatrixWithDimension:(int)dimension;

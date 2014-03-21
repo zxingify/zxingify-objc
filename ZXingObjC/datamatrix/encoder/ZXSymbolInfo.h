@@ -21,14 +21,14 @@
  */
 @interface ZXSymbolInfo : NSObject
 
-@property (nonatomic, assign) BOOL rectangular;
-@property (nonatomic, assign) int errorCodewords;
-@property (nonatomic, assign) int dataCapacity;
-@property (nonatomic, assign) int dataRegions;
-@property (nonatomic, assign) int matrixWidth;
-@property (nonatomic, assign) int matrixHeight;
-@property (nonatomic, assign) int rsBlockData;
-@property (nonatomic, assign) int rsBlockError;
+@property (nonatomic, assign, readonly) BOOL rectangular;
+@property (nonatomic, assign, readonly) int errorCodewords;
+@property (nonatomic, assign, readonly) int dataCapacity;
+@property (nonatomic, assign, readonly) int dataRegions;
+@property (nonatomic, assign, readonly) int matrixWidth;
+@property (nonatomic, assign, readonly) int matrixHeight;
+@property (nonatomic, assign, readonly) int rsBlockData;
+@property (nonatomic, assign, readonly) int rsBlockError;
 
 /**
  * Overrides the symbol info set used by this class. Used for testing purposes.

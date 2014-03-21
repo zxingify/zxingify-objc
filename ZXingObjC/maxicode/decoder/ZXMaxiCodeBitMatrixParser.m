@@ -57,7 +57,7 @@ const int ZX_BITNR[33][30] = {
 
 @interface ZXMaxiCodeBitMatrixParser ()
 
-@property (nonatomic, strong) ZXBitMatrix *bitMatrix;
+@property (nonatomic, strong, readonly) ZXBitMatrix *bitMatrix;
 
 @end
 

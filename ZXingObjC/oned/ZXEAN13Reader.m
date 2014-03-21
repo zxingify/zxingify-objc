@@ -54,7 +54,7 @@ const int ZX_EAN13_FIRST_DIGIT_ENCODINGS[] = {
 
 @interface ZXEAN13Reader ()
 
-@property (nonatomic, strong) ZXIntArray *decodeMiddleCounters;
+@property (nonatomic, strong, readonly) ZXIntArray *decodeMiddleCounters;
 
 @end
 

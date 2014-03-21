@@ -43,9 +43,9 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
 
 @interface ZXCode39Reader ()
 
-@property (nonatomic, assign) BOOL extendedMode;
-@property (nonatomic, assign) BOOL usingCheckDigit;
-@property (nonatomic, strong) ZXIntArray *counters;
+@property (nonatomic, assign, readonly) BOOL extendedMode;
+@property (nonatomic, assign, readonly) BOOL usingCheckDigit;
+@property (nonatomic, strong, readonly) ZXIntArray *counters;
 
 @end
 

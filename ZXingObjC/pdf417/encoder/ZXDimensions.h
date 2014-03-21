@@ -19,10 +19,10 @@
  */
 @interface ZXDimensions : NSObject
 
-@property (nonatomic, assign) int minCols;
-@property (nonatomic, assign) int maxCols;
-@property (nonatomic, assign) int minRows;
-@property (nonatomic, assign) int maxRows;
+@property (nonatomic, assign, readonly) int minCols;
+@property (nonatomic, assign, readonly) int maxCols;
+@property (nonatomic, assign, readonly) int minRows;
+@property (nonatomic, assign, readonly) int maxRows;
 
 - (id)initWithMinCols:(int)minCols maxCols:(int)maxCols minRows:(int)minRows maxRows:(int)maxRows;
 

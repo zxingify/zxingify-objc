@@ -26,9 +26,9 @@
 
 @interface ZXGeneralAppIdDecoder ()
 
-@property (nonatomic, strong) ZXBitArray *information;
-@property (nonatomic, strong) ZXCurrentParsingState *current;
-@property (nonatomic, strong) NSMutableString *buffer;
+@property (nonatomic, strong, readonly) ZXBitArray *information;
+@property (nonatomic, strong, readonly) ZXCurrentParsingState *current;
+@property (nonatomic, strong, readonly) NSMutableString *buffer;
 
 @end
 

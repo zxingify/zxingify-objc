@@ -21,12 +21,6 @@
 #import <ImageIO/ImageIO.h>
 #endif
 
-@interface ZXImage ()
-
-@property (nonatomic, assign) CGImageRef cgimage;
-
-@end
-
 @implementation ZXImage
 
 - (ZXImage *)initWithCGImageRef:(CGImageRef)image {

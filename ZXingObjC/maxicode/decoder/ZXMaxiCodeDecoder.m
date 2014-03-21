@@ -32,7 +32,7 @@ const int ZX_MAXI_CODE_ODD = 2;
 
 @interface ZXMaxiCodeDecoder ()
 
-@property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
+@property (nonatomic, strong, readonly) ZXReedSolomonDecoder *rsDecoder;
 
 @end
 

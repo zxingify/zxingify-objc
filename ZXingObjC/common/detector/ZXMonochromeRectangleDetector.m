@@ -23,7 +23,7 @@ const int ZX_MONOCHROME_MAX_MODULES = 32;
 
 @interface ZXMonochromeRectangleDetector ()
 
-@property (nonatomic, strong) ZXBitMatrix *image;
+@property (nonatomic, strong, readonly) ZXBitMatrix *image;
 
 @end
 

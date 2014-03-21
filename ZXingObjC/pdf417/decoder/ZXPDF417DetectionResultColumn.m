@@ -20,13 +20,6 @@
 
 const int ZX_PDF417_MAX_NEARBY_DISTANCE = 5;
 
-@interface ZXPDF417DetectionResultColumn ()
-
-@property (nonatomic, strong) ZXPDF417BoundingBox *boundingBox;
-@property (nonatomic, strong) NSMutableArray *codewords;
-
-@end
-
 @implementation ZXPDF417DetectionResultColumn
 
 - (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox {

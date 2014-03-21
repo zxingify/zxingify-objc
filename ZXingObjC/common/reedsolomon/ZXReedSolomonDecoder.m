@@ -22,7 +22,7 @@
 
 @interface ZXReedSolomonDecoder ()
 
-@property (nonatomic, strong) ZXGenericGF *field;
+@property (nonatomic, strong, readonly) ZXGenericGF *field;
 
 @end
 

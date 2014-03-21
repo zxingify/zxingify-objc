@@ -19,7 +19,7 @@
 
 @interface ZXInvertedLuminanceSource ()
 
-@property (nonatomic, weak) ZXLuminanceSource *delegate;
+@property (nonatomic, weak, readonly) ZXLuminanceSource *delegate;
 
 @end
 

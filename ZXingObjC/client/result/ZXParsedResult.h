@@ -28,7 +28,7 @@
  */
 @interface ZXParsedResult : NSObject
 
-@property (nonatomic, readonly) ZXParsedResultType type;
+@property (nonatomic, assign, readonly) ZXParsedResultType type;
 
 - (id)initWithType:(ZXParsedResultType)type;
 + (id)parsedResultWithType:(ZXParsedResultType)type;

@@ -81,8 +81,8 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
 
 @interface ZXRSSExpandedReader ()
 
-@property (nonatomic, strong) ZXIntArray *startEnd;
-@property (nonatomic, strong) NSMutableArray *pairs;
+@property (nonatomic, strong, readonly) ZXIntArray *startEnd;
+@property (nonatomic, strong, readonly) NSMutableArray *pairs;
 @property (nonatomic, strong) NSMutableArray *rows;
 @property (nonatomic, assign) BOOL startFromEven;
 

@@ -20,8 +20,8 @@
 
 @interface ZXModulusPoly ()
 
-@property (nonatomic, strong) ZXIntArray *coefficients;
-@property (nonatomic, weak) ZXModulusGF *field;
+@property (nonatomic, strong, readonly) ZXIntArray *coefficients;
+@property (nonatomic, weak, readonly) ZXModulusGF *field;
 
 @end
 

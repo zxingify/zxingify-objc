@@ -21,17 +21,17 @@
 /**
  * @return latitude in degrees
  */
-@property (nonatomic, readonly) double latitude;
+@property (nonatomic, assign, readonly) double latitude;
 
 /**
  * @return longitude in degrees
  */
-@property (nonatomic, readonly) double longitude;
+@property (nonatomic, assign, readonly) double longitude;
 
 /**
  * @return altitude in meters. If not specified, in the geo URI, returns 0.0
  */
-@property (nonatomic, readonly) double altitude;
+@property (nonatomic, assign, readonly) double altitude;
 
 /**
  * @return query string associated with geo URI or null if none exists

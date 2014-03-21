@@ -21,10 +21,10 @@
 
 @interface ZXCGImageLuminanceSource ()
 
-@property (nonatomic, assign) CGImageRef image;
-@property (nonatomic, assign) int8_t *data;
-@property (nonatomic, assign) size_t left;
-@property (nonatomic, assign) size_t top;
+@property (nonatomic, assign, readonly) CGImageRef image;
+@property (nonatomic, assign, readonly) int8_t *data;
+@property (nonatomic, assign, readonly) size_t left;
+@property (nonatomic, assign, readonly) size_t top;
 
 @end
 
@@ -141,10 +141,6 @@
   CGImageRelease(image);
 
   return self;
-}
-
-- (CGImageRef)image {
-  return _image;
 }
 
 - (void)dealloc {

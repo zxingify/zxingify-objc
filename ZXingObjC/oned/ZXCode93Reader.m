@@ -43,7 +43,7 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 
 @interface ZXCode93Reader ()
 
-@property (nonatomic, strong) ZXIntArray *counters;
+@property (nonatomic, strong, readonly) ZXIntArray *counters;
 
 @end
 

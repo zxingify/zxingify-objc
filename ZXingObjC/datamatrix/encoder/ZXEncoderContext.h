@@ -18,8 +18,8 @@
 
 @interface ZXEncoderContext : NSObject
 
-@property (nonatomic, copy) NSMutableString *codewords;
-@property (nonatomic, copy) NSString *message;
+@property (nonatomic, copy, readonly) NSMutableString *codewords;
+@property (nonatomic, copy, readonly) NSString *message;
 @property (nonatomic, assign) int newEncoding;
 @property (nonatomic, assign) int pos;
 @property (nonatomic, assign) int skipAtEnd;

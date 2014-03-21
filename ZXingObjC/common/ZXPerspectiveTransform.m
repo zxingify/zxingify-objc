@@ -18,15 +18,15 @@
 
 @interface ZXPerspectiveTransform ()
 
-@property (nonatomic, assign) float a11;
-@property (nonatomic, assign) float a12;
-@property (nonatomic, assign) float a13;
-@property (nonatomic, assign) float a21;
-@property (nonatomic, assign) float a22;
-@property (nonatomic, assign) float a23;
-@property (nonatomic, assign) float a31;
-@property (nonatomic, assign) float a32;
-@property (nonatomic, assign) float a33;
+@property (nonatomic, assign, readonly) float a11;
+@property (nonatomic, assign, readonly) float a12;
+@property (nonatomic, assign, readonly) float a13;
+@property (nonatomic, assign, readonly) float a21;
+@property (nonatomic, assign, readonly) float a22;
+@property (nonatomic, assign, readonly) float a23;
+@property (nonatomic, assign, readonly) float a31;
+@property (nonatomic, assign, readonly) float a32;
+@property (nonatomic, assign, readonly) float a33;
 
 @end
 

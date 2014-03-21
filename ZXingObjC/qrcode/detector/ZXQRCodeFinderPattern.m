@@ -16,12 +16,6 @@
 
 #import "ZXQRCodeFinderPattern.h"
 
-@interface ZXQRCodeFinderPattern ()
-
-@property (nonatomic, assign) int count;
-
-@end
-
 @implementation ZXQRCodeFinderPattern
 
 - (id)initWithPosX:(float)posX posY:(float)posY estimatedModuleSize:(float)estimatedModuleSize {

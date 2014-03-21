@@ -22,8 +22,8 @@
 
 @interface ZXDataMatrixBitMatrixParser ()
 
-@property (nonatomic, strong) ZXBitMatrix *mappingBitMatrix;
-@property (nonatomic, strong) ZXBitMatrix *readMappingMatrix;
+@property (nonatomic, strong, readonly) ZXBitMatrix *mappingBitMatrix;
+@property (nonatomic, strong, readonly) ZXBitMatrix *readMappingMatrix;
 
 @end
 

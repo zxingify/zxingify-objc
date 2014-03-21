@@ -26,7 +26,7 @@
 
 @interface ZXUPCEANExtension2Support ()
 
-@property (nonatomic, strong) ZXIntArray *decodeMiddleCounters;
+@property (nonatomic, strong, readonly) ZXIntArray *decodeMiddleCounters;
 
 @end
 

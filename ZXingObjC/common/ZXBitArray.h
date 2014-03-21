@@ -25,9 +25,9 @@
  * @return underlying array of ints. The first element holds the first 32 bits, and the least
  *         significant bit is bit 0.
  */
-@property (nonatomic, readonly) int32_t *bits;
+@property (nonatomic, assign, readonly) int32_t *bits;
 
-@property (nonatomic, readonly) int size;
+@property (nonatomic, assign, readonly) int size;
 
 - (id)initWithSize:(int)size;
 

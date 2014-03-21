@@ -26,9 +26,9 @@ const int ZX_PDF417_ADJUST_ROW_NUMBER_SKIP = 2;
 
 @interface ZXPDF417DetectionResult ()
 
-@property (nonatomic, strong) ZXPDF417BarcodeMetadata *barcodeMetadata;
-@property (nonatomic, strong) NSMutableArray *detectionResultColumnsInternal;
-@property (nonatomic, assign) int barcodeColumnCount;
+@property (nonatomic, strong, readonly) ZXPDF417BarcodeMetadata *barcodeMetadata;
+@property (nonatomic, strong, readonly) NSMutableArray *detectionResultColumnsInternal;
+@property (nonatomic, assign, readonly) int barcodeColumnCount;
 
 @end
 
@@ -251,10 +251,6 @@ const int ZX_PDF417_ADJUST_ROW_NUMBER_SKIP = 2;
     return YES;
   }
   return NO;
-}
-
-- (int)barcodeColumnCount {
-  return _barcodeColumnCount;
 }
 
 - (int)barcodeRowCount {

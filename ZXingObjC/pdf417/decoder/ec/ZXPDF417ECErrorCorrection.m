@@ -21,7 +21,7 @@
 
 @interface ZXPDF417ECErrorCorrection ()
 
-@property (nonatomic, strong) ZXModulusGF *field;
+@property (nonatomic, strong, readonly) ZXModulusGF *field;
 
 @end
 

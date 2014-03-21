@@ -20,13 +20,13 @@
 
 @interface ZXWhiteRectangleDetector ()
 
-@property (nonatomic, strong) ZXBitMatrix *image;
-@property (nonatomic, assign) int height;
-@property (nonatomic, assign) int width;
-@property (nonatomic, assign) int leftInit;
-@property (nonatomic, assign) int rightInit;
-@property (nonatomic, assign) int downInit;
-@property (nonatomic, assign) int upInit;
+@property (nonatomic, strong, readonly) ZXBitMatrix *image;
+@property (nonatomic, assign, readonly) int height;
+@property (nonatomic, assign, readonly) int width;
+@property (nonatomic, assign, readonly) int leftInit;
+@property (nonatomic, assign, readonly) int rightInit;
+@property (nonatomic, assign, readonly) int downInit;
+@property (nonatomic, assign, readonly) int upInit;
 
 @end
 

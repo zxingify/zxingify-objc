@@ -37,7 +37,7 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
 
 @interface ZXUPCEReader ()
 
-@property (nonatomic, strong) ZXIntArray *decodeMiddleCounters;
+@property (nonatomic, strong, readonly) ZXIntArray *decodeMiddleCounters;
 
 @end
 

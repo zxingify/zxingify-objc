@@ -24,7 +24,7 @@ const int ZX_MAX_DEPTH = 4;
 
 @interface ZXGenericMultipleBarcodeReader ()
 
-@property (nonatomic, weak) id<ZXReader> delegate;
+@property (nonatomic, weak, readonly) id<ZXReader> delegate;
 
 @end
 

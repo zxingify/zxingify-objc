@@ -20,8 +20,8 @@
 
 @interface ZXBitMatrix ()
 
-@property (nonatomic, assign) int rowSize;
-@property (nonatomic, assign) int bitsSize;
+@property (nonatomic, assign, readonly) int rowSize;
+@property (nonatomic, assign, readonly) int bitsSize;
 
 @end
 

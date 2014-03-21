@@ -25,8 +25,8 @@ const int ZX_AI013x0x1x_DATE_SIZE = 16;
 
 @interface ZXAI013x0x1xDecoder ()
 
-@property (nonatomic, copy) NSString *dateCode;
-@property (nonatomic, copy) NSString *firstAIdigits;
+@property (nonatomic, copy, readonly) NSString *dateCode;
+@property (nonatomic, copy, readonly) NSString *firstAIdigits;
 
 @end
 

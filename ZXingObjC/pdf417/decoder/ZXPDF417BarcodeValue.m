@@ -19,7 +19,7 @@
 
 @interface ZXPDF417BarcodeValue ()
 
-@property (nonatomic, strong) NSMutableDictionary *values;
+@property (nonatomic, strong, readonly) NSMutableDictionary *values;
 
 @end
 

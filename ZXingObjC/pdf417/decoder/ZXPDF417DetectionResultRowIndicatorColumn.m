@@ -24,12 +24,6 @@
 #import "ZXPDF417DetectionResultRowIndicatorColumn.h"
 #import "ZXResultPoint.h"
 
-@interface ZXPDF417DetectionResultRowIndicatorColumn ()
-
-@property (nonatomic, assign) BOOL isLeft;
-
-@end
-
 @implementation ZXPDF417DetectionResultRowIndicatorColumn
 
 - (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox isLeft:(BOOL)isLeft {

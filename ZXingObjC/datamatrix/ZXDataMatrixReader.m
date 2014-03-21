@@ -28,7 +28,7 @@
 
 @interface ZXDataMatrixReader ()
 
-@property (nonatomic, strong) ZXDataMatrixDecoder *decoder;
+@property (nonatomic, strong, readonly) ZXDataMatrixDecoder *decoder;
 
 @end
 

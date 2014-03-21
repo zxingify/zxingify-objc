@@ -21,7 +21,7 @@
 
 @interface ZXUPCAReader ()
 
-@property (nonatomic, strong) ZXUPCEANReader *ean13Reader;
+@property (nonatomic, strong, readonly) ZXUPCEANReader *ean13Reader;
 
 @end
 

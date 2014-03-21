@@ -33,7 +33,7 @@
 
 @interface ZXQRCodeDecoder ()
 
-@property (nonatomic, strong) ZXReedSolomonDecoder *rsDecoder;
+@property (nonatomic, strong, readonly) ZXReedSolomonDecoder *rsDecoder;
 
 @end
 

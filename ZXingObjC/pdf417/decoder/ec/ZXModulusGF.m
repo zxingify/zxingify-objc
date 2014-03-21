@@ -21,9 +21,9 @@
 
 @interface ZXModulusGF ()
 
-@property (nonatomic, assign) int32_t *expTable;
-@property (nonatomic, assign) int32_t *logTable;
-@property (nonatomic, assign) int modulus;
+@property (nonatomic, assign, readonly) int32_t *expTable;
+@property (nonatomic, assign, readonly) int32_t *logTable;
+@property (nonatomic, assign, readonly) int modulus;
 
 @end
 

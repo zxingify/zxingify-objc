@@ -34,7 +34,7 @@
 
 @interface ZXQRCodeDetector ()
 
-@property (nonatomic, weak) id <ZXResultPointCallback> resultPointCallback;
+@property (nonatomic, weak) id<ZXResultPointCallback> resultPointCallback;
 
 @end
 
