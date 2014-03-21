@@ -156,7 +156,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   }
 
   float left = (float) (start.array[1] + start.array[0]) / 2.0f;
-  float right = (float)(nextStart + lastStart) / 2.0f;
+  float right = (lastStart + lastPatternSize) / 2.0f;
 
   return [ZXResult resultWithText:resultString
                          rawBytes:nil
