@@ -340,12 +340,18 @@ unichar ZX_PDF417_PUNCTUATION[ZX_PDF417_PUNCTUATION_LEN];
 + (void)encodeBinary:(ZXByteArray *)bytes startpos:(int)startpos count:(int)count startmode:(int)startmode buffer:(NSMutableString *)sb {
   if (count == 1 && startmode == ZX_PDF417_TEXT_COMPACTION) {
     [sb appendFormat:@"%C", (unichar) ZX_PDF417_SHIFT_TO_BYTE];
+  } else {
+    BOOL sixpack = ((count % 6) == 0);
+    if (sixpack) {
+      [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_BYTE];
+    } else {
+      [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_BYTE_PADDED];
+    }
   }
 
   int idx = startpos;
   // Encode sixpacks
   if (count >= 6) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_BYTE];
     const int charsLen = 5;
     unichar chars[charsLen];
     memset(chars, 0, charsLen * sizeof(unichar));
@@ -366,9 +372,6 @@ unichar ZX_PDF417_PUNCTUATION[ZX_PDF417_PUNCTUATION_LEN];
     }
   }
   //Encode rest (remaining n<5 bytes if any)
-  if (idx < startpos + count) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_BYTE_PADDED];
-  }
   for (int i = idx; i < startpos + count; i++) {
     int ch = bytes.array[i] & 0xff;
     [sb appendFormat:@"%C", (unichar)ch];
