@@ -63,20 +63,18 @@ static int WORD_SIZE[33] = {
   CHAR_MAP[TABLE_DIGIT][','] = 12;
   CHAR_MAP[TABLE_DIGIT]['.'] = 13;
 
-  const int mixedTableLen = 28;
-  int mixedTable[mixedTableLen] = {
+  int mixedTable[] = {
     '\0', ' ', '\1', '\2', '\3', '\4', '\5', '\6', '\7', '\b', '\t', '\n', '\13', '\f', '\r',
     '\33', '\34', '\35', '\36', '\37', '@', '\\', '^', '_', '`', '|', '~', '\177'
   };
-  for (int i = 0; i < 28; i++) {
+  for (int i = 0; i < sizeof(mixedTable) / sizeof(int); i++) {
     CHAR_MAP[TABLE_MIXED][mixedTable[i]] = i;
   }
-  const int punctTableLen = 31;
-  int punctTable[punctTableLen] = {
+  int punctTable[] = {
     '\0', '\r', '\0', '\0', '\0', '\0', '!', '\'', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
     ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '[', ']', '{', '}'
   };
-  for (int i = 0; i < punctTableLen; i++) {
+  for (int i = 0; i < sizeof(punctTable) / sizeof(int); i++) {
     if (punctTable[i] > 0) {
       CHAR_MAP[TABLE_PUNCT][punctTable[i]] = i;
     }
