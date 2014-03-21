@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
 #import "ZXDecoderResult.h"
 #import "ZXDetectorResult.h"
 #import "ZXMultiDetector.h"
@@ -58,11 +59,89 @@
       if (ecLevel != nil) {
         [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
       }
+      if ([decoderResult hasStructuredAppend]) {
+        [result putMetadata:kResultMetadataTypeStructuredAppendSequence
+                      value:@(decoderResult.structuredAppendSequenceNumber)];
+        [result putMetadata:kResultMetadataTypeStructuredAppendParity
+                      value:@(decoderResult.structuredAppendParity)];
+      }
       [results addObject:result];
     }
   }
 
+  results = [self processStructuredAppend:results];
   return results;
+}
+
+- (NSMutableArray *)processStructuredAppend:(NSMutableArray *)results {
+  BOOL hasSA = NO;
+
+  // first, check, if there is at least on SA result in the list
+  for (ZXResult *result in results) {
+    if (result.resultMetadata[@(kResultMetadataTypeStructuredAppendSequence)]) {
+      hasSA = YES;
+      break;
+    }
+  }
+  if (!hasSA) {
+    return results;
+  }
+
+  // it is, second, split the lists and built a new result list
+  NSMutableArray *newResults = [NSMutableArray array];
+  NSMutableArray *saResults = [NSMutableArray array];
+  for (ZXResult *result in results) {
+    [newResults addObject:result];
+    if (result.resultMetadata[@(kResultMetadataTypeStructuredAppendSequence)]) {
+      [saResults addObject:result];
+    }
+  }
+  // sort and concatenate the SA list items
+  [saResults sortUsingComparator:^NSComparisonResult(ZXResult *a, ZXResult *b) {
+    int aNumber = [a.resultMetadata[@(kResultMetadataTypeStructuredAppendSequence)] intValue];
+    int bNumber = [b.resultMetadata[@(kResultMetadataTypeStructuredAppendSequence)] intValue];
+    if (aNumber < bNumber) {
+      return NSOrderedAscending;
+    }
+    if (aNumber > bNumber) {
+      return NSOrderedDescending;
+    }
+    return NSOrderedSame;
+  }];
+  NSMutableString *concatedText = [NSMutableString string];
+  int rawBytesLen = 0;
+  int byteSegmentLength = 0;
+  for (ZXResult *saResult in saResults) {
+    [concatedText appendString:saResult.text];
+    rawBytesLen += saResult.rawBytes.length;
+    if (saResult.resultMetadata[@(kResultMetadataTypeByteSegments)]) {
+      for (ZXByteArray *segment in saResult.resultMetadata[@(kResultMetadataTypeByteSegments)]) {
+        byteSegmentLength += segment.length;
+      }
+    }
+  }
+  ZXByteArray *newRawBytes = [[ZXByteArray alloc] initWithLength:rawBytesLen];
+  ZXByteArray *newByteSegment = [[ZXByteArray alloc] initWithLength:byteSegmentLength];
+  int newRawBytesIndex = 0;
+  int byteSegmentIndex = 0;
+  for (ZXResult *saResult in saResults) {
+    memcpy(newRawBytes.array, saResult.rawBytes.array, saResult.rawBytes.length * sizeof(int8_t));
+    newRawBytesIndex += saResult.rawBytes.length;
+    if (saResult.resultMetadata[@(kResultMetadataTypeByteSegments)]) {
+      for (ZXByteArray *segment in saResult.resultMetadata[@(kResultMetadataTypeByteSegments)]) {
+        memcpy(newByteSegment.array, segment.array, segment.length * sizeof(int8_t));
+        byteSegmentIndex += segment.length;
+      }
+    }
+  }
+  ZXResult *newResult = [[ZXResult alloc] initWithText:concatedText rawBytes:newRawBytes resultPoints:@[] format:kBarcodeFormatQRCode];
+  if (byteSegmentLength > 0) {
+    NSMutableArray *byteSegmentList = [NSMutableArray array];
+    [byteSegmentList addObject:newByteSegment];
+    [newResult putMetadata:kResultMetadataTypeByteSegments value:byteSegmentList];
+  }
+  [newResults addObject:newResult];
+  return newResults;
 }
 
 @end

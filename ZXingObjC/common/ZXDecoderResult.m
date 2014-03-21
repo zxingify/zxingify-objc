@@ -18,18 +18,28 @@
 
 @implementation ZXDecoderResult
 
-- (id)initWithRawBytes:(ZXByteArray *)rawBytes
-                  text:(NSString *)text
-          byteSegments:(NSMutableArray *)byteSegments
-               ecLevel:(NSString *)ecLevel {
+- (id)initWithRawBytes:(ZXByteArray *)rawBytes text:(NSString *)text
+          byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel {
+  return [self initWithRawBytes:rawBytes text:text byteSegments:byteSegments ecLevel:ecLevel saSequence:-1 saParity:-1];
+}
+
+- (id)initWithRawBytes:(ZXByteArray *)rawBytes text:(NSString *)text
+          byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel
+            saSequence:(int)saSequence saParity:(int)saParity {
   if (self = [super init]) {
     _rawBytes = rawBytes;
     _text = text;
     _byteSegments = byteSegments;
     _ecLevel = ecLevel;
+    _structuredAppendParity = saParity;
+    _structuredAppendSequenceNumber = saSequence;
   }
 
   return self;
+}
+
+- (BOOL)hasStructuredAppend {
+  return self.structuredAppendParity >= 0 && self.structuredAppendSequenceNumber >= 0;
 }
 
 @end

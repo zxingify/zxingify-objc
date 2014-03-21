@@ -30,10 +30,16 @@
 @property (nonatomic, copy) NSNumber *errorsCorrected;
 @property (nonatomic, copy) NSNumber *erasures;
 @property (nonatomic, strong) id other;
+@property (nonatomic, assign, readonly) int structuredAppendParity;
+@property (nonatomic, assign, readonly) int structuredAppendSequenceNumber;
 
-- (id)initWithRawBytes:(ZXByteArray *)rawBytes
-                  text:(NSString *)text
-          byteSegments:(NSMutableArray *)byteSegments
-               ecLevel:(NSString *)ecLevel;
+- (id)initWithRawBytes:(ZXByteArray *)rawBytes text:(NSString *)text
+          byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel;
+
+- (id)initWithRawBytes:(ZXByteArray *)rawBytes text:(NSString *)text
+          byteSegments:(NSMutableArray *)byteSegments ecLevel:(NSString *)ecLevel
+            saSequence:(int)saSequence saParity:(int)saParity;
+
+- (BOOL)hasStructuredAppend;
 
 @end

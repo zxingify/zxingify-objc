@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitSource.h"
+#import "ZXByteArray.h"
 #import "ZXCharacterSetECI.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
@@ -45,16 +46,21 @@ const int ZX_GB2312_SUBSET = 1;
                       error:(NSError **)error {
   ZXBitSource *bits = [[ZXBitSource alloc] initWithBytes:bytes];
   NSMutableString *result = [NSMutableString stringWithCapacity:50];
-  ZXCharacterSetECI *currentCharacterSetECI = nil;
-  BOOL fc1InEffect = NO;
   NSMutableArray *byteSegments = [NSMutableArray arrayWithCapacity:1];
+  int symbolSequence = -1;
+  int parityData = -1;
+
+  ZXCharacterSetECI *currentCharacterSetECI = nil;
   ZXMode *mode;
+  BOOL fc1InEffect = NO;
 
   do {
+    // While still another segment to read...
     if ([bits available] < 4) {
+      // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
       mode = [ZXMode terminatorMode];
     } else {
-      mode = [ZXMode forBits:[bits readBits:4]];
+      mode = [ZXMode forBits:[bits readBits:4]]; // mode is encoded by 4 bits
       if (!mode) {
         if (error) *error = ZXFormatErrorInstance();
         return nil;
@@ -62,14 +68,19 @@ const int ZX_GB2312_SUBSET = 1;
     }
     if (![mode isEqual:[ZXMode terminatorMode]]) {
       if ([mode isEqual:[ZXMode fnc1FirstPositionMode]] || [mode isEqual:[ZXMode fnc1SecondPositionMode]]) {
+        // We do little with FNC1 except alter the parsed result a bit according to the spec
         fc1InEffect = YES;
       } else if ([mode isEqual:[ZXMode structuredAppendMode]]) {
         if (bits.available < 16) {
           if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
-        [bits readBits:16];
+        // sequence number and parity is added later to the result metadata
+        // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
+        symbolSequence = [bits readBits:8];
+        parityData = [bits readBits:8];
       } else if ([mode isEqual:[ZXMode eciMode]]) {
+        // Count doesn't apply to ECI
         int value = [self parseECIValue:bits];
         currentCharacterSetECI = [ZXCharacterSetECI characterSetECIByValue:value];
         if (currentCharacterSetECI == nil) {
@@ -77,7 +88,9 @@ const int ZX_GB2312_SUBSET = 1;
           return nil;
         }
       } else {
+        // First handle Hanzi mode which does not start with character count
         if ([mode isEqual:[ZXMode hanziMode]]) {
+          //chinese mode contains a sub set indicator right after mode indicator
           int subset = [bits readBits:4];
           int countHanzi = [bits readBits:[mode characterCountBits:version]];
           if (subset == ZX_GB2312_SUBSET) {
@@ -87,6 +100,8 @@ const int ZX_GB2312_SUBSET = 1;
             }
           }
         } else {
+          // "Normal" QR code modes:
+          // How many characters will follow, encoded in this mode?
           int count = [bits readBits:[mode characterCountBits:version]];
           if ([mode isEqual:[ZXMode numericMode]]) {
             if (![self decodeNumericSegment:bits result:result count:count]) {
@@ -116,10 +131,13 @@ const int ZX_GB2312_SUBSET = 1;
       }
     }
   } while (![mode isEqual:[ZXMode terminatorMode]]);
+
   return [[ZXDecoderResult alloc] initWithRawBytes:bytes
                                               text:result.description
                                       byteSegments:byteSegments.count == 0 ? nil : byteSegments
-                                           ecLevel:ecLevel == nil ? nil : ecLevel.description];
+                                           ecLevel:ecLevel == nil ? nil : ecLevel.description
+                                        saSequence:symbolSequence
+                                          saParity:parityData];
 }
 
 
@@ -190,27 +208,24 @@ const int ZX_GB2312_SUBSET = 1;
   if (count << 3 > bits.available) {
     return NO;
   }
-  int8_t readBytes[count];
-  NSMutableArray *readBytesArray = [NSMutableArray arrayWithCapacity:count];
 
+  ZXByteArray *readBytes = [[ZXByteArray alloc] initWithLength:count];
   for (int i = 0; i < count; i++) {
-    readBytes[i] = (int8_t)[bits readBits:8];
-    [readBytesArray addObject:[NSNumber numberWithChar:readBytes[i]]];
+    readBytes.array[i] = (int8_t)[bits readBits:8];
   }
-
   NSStringEncoding encoding;
   if (currentCharacterSetECI == nil) {
-    encoding = [ZXStringUtils guessEncoding:readBytes length:count hints:hints];
+    encoding = [ZXStringUtils guessEncoding:readBytes hints:hints];
   } else {
     encoding = [currentCharacterSetECI encoding];
   }
 
-  NSString *string = [[NSString alloc] initWithBytes:readBytes length:count encoding:encoding];
+  NSString *string = [[NSString alloc] initWithBytes:readBytes.array length:readBytes.length encoding:encoding];
   if (string) {
     [result appendString:string];
   }
 
-  [byteSegments addObject:readBytesArray];
+  [byteSegments addObject:readBytes];
   return YES;
 }
 

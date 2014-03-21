@@ -20,24 +20,21 @@
 
 - (void)testShortShiftJIS_1 {
   // ÈáëÈ≠ö
-  int8_t bytes[4] = { 0x8b, 0xe0, 0x8b, 0x9b };
-  [self doTestWithBytes:bytes length:4 encoding:NSShiftJISStringEncoding];
+  [self doTestWithBytes:[[ZXByteArray alloc] initWithBytes:0x8b, 0xe0, 0x8b, 0x9b, -1] encoding:NSShiftJISStringEncoding];
 }
 
 - (void)testShortISO88591_1 {
   // b√•d
-  int8_t bytes[3] = { 0x62, 0xe5, 0x64 };
-  [self doTestWithBytes:bytes length:3 encoding:NSISOLatin1StringEncoding];
+  [self doTestWithBytes:[[ZXByteArray alloc] initWithBytes:0x62, 0xe5, 0x64, -1] encoding:NSISOLatin1StringEncoding];
 }
 
 - (void)testMixedShiftJIS_1 {
   // Hello Èáë!
-  int8_t bytes[9] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21 };
-  [self doTestWithBytes:bytes length:9 encoding:NSShiftJISStringEncoding];
+  [self doTestWithBytes:[[ZXByteArray alloc] initWithBytes:0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x8b, 0xe0, 0x21, -1] encoding:NSShiftJISStringEncoding];
 }
 
-- (void)doTestWithBytes:(int8_t *)bytes length:(int)length encoding:(NSStringEncoding)encoding {
-  XCTAssertEqual([ZXStringUtils guessEncoding:bytes length:length hints:nil], encoding, @"Encodings do not match");
+- (void)doTestWithBytes:(ZXByteArray *)bytes encoding:(NSStringEncoding)encoding {
+  XCTAssertEqual([ZXStringUtils guessEncoding:bytes hints:nil], encoding, @"Encodings do not match");
 }
 
 @end

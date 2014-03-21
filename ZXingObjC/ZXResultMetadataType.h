@@ -75,5 +75,17 @@ typedef enum {
   /**
    * PDF417-specific metadata
    */
-  kResultMetadataTypePDF417ExtraMetadata
+  kResultMetadataTypePDF417ExtraMetadata,
+
+  /**
+   * If the code format supports structured append and the current scanned code is part of one then the
+   * sequence number is given with it.
+   */
+  kResultMetadataTypeStructuredAppendSequence,
+
+  /**
+   * If the code format supports structured append and the current scanned code is part of one then the
+   * parity is given with it.
+   */
+  kResultMetadataTypeStructuredAppendParity
 } ZXResultMetadataType;

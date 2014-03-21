@@ -463,19 +463,16 @@ enum {
     return NO;
   }
 
-  NSMutableArray *bytesArray = [NSMutableArray arrayWithCapacity:count];
-  int8_t bytes[count];
+  ZXByteArray *bytes = [[ZXByteArray alloc] initWithLength:count];
   for (int i = 0; i < count; i++) {
     if ([bits available] < 8) {
       return NO;
     }
-    int8_t byte = (int8_t)[self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
-    bytes[i] = byte;
-    [bytesArray addObject:[NSNumber numberWithChar:byte]];
+    bytes.array[i] = (int8_t)[self unrandomize255State:[bits readBits:8] base256CodewordPosition:codewordPosition++];
   }
-  [byteSegments addObject:bytesArray];
+  [byteSegments addObject:bytes];
 
-  [result appendString:[[NSString alloc] initWithBytes:bytes length:count encoding:NSISOLatin1StringEncoding]];
+  [result appendString:[[NSString alloc] initWithBytes:bytes.array length:bytes.length encoding:NSISOLatin1StringEncoding]];
   return YES;
 }
 

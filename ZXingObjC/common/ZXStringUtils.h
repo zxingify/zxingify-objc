@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
+@class ZXByteArray, ZXDecodeHints;
+
 /**
  * Common string-related functions.
  */
-
-@class ZXDecodeHints;
-
 @interface ZXStringUtils : NSObject
 
 /**
@@ -29,6 +28,6 @@
  *  NSShiftJISStringEncoding, NSUTF8StringEncoding, NSISOLatin1StringEncoding, or the platform
  *  default encoding if none of these can possibly be correct
  */
-+ (NSStringEncoding)guessEncoding:(int8_t *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints;
++ (NSStringEncoding)guessEncoding:(ZXByteArray *)bytes hints:(ZXDecodeHints *)hints;
 
 @end

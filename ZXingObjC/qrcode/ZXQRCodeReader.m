@@ -97,6 +97,12 @@
   if (ecLevel != nil) {
     [result putMetadata:kResultMetadataTypeErrorCorrectionLevel value:ecLevel];
   }
+  if ([decoderResult hasStructuredAppend]) {
+    [result putMetadata:kResultMetadataTypeStructuredAppendSequence
+                  value:@(decoderResult.structuredAppendSequenceNumber)];
+    [result putMetadata:kResultMetadataTypeStructuredAppendParity
+                  value:@(decoderResult.structuredAppendParity)];
+  }
   return result;
 }
 
