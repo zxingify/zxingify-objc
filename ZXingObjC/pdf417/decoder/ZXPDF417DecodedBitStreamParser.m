@@ -94,16 +94,12 @@ static NSArray *ZX_PDF417_EXP900 = nil;
       codeIndex = [self textCompaction:codewords codeIndex:codeIndex result:result];
       break;
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
+    case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
+    case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
       codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
       break;
     case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
       codeIndex = [self numericCompaction:codewords codeIndex:codeIndex result:result];
-      break;
-    case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-      codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
-      break;
-    case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
-      codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
       break;
     case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
       codeIndex = [self decodeMacroBlock:codewords codeIndex:codeIndex resultMetadata:resultMetadata];
@@ -218,21 +214,10 @@ static NSArray *ZX_PDF417_EXP900 = nil;
         textCompactionData.array[index++] = ZX_PDF417_TEXT_COMPACTION_MODE_LATCH;
         break;
       case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
-        codeIndex--;
-        end = YES;
-        break;
+      case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
       case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
-        codeIndex--;
-        end = YES;
-        break;
       case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-        codeIndex--;
-        end = YES;
-        break;
       case ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-        codeIndex--;
-        end = YES;
-        break;
       case ZX_PDF417_MACRO_PDF417_TERMINATOR:
         codeIndex--;
         end = YES;
@@ -248,10 +233,6 @@ static NSArray *ZX_PDF417_EXP900 = nil;
         code = codewords.array[codeIndex++];
         byteCompactionData.array[index] = code;
         index++;
-        break;
-      case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
-        codeIndex--;
-        end = YES;
         break;
       }
     }

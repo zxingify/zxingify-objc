@@ -247,6 +247,9 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
       fragment = [[NSString alloc] initWithData:fragmentBuffer encoding:NSUTF8StringEncoding];
     } else {
       fragment = [[NSString alloc] initWithData:fragmentBuffer encoding:CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)charset))];
+      if (!fragment) {
+        fragment = [[NSString alloc] initWithData:fragmentBuffer encoding:NSUTF8StringEncoding];
+      }
     }
     [fragmentBuffer setLength:0];
     [result appendString:fragment];

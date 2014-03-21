@@ -27,10 +27,6 @@
     return nil;
   }
   NSString *rawText = [ZXResultParser massagedText:result];
-  if (rawText == nil) {
-    // ExtendedProductParsedResult NOT created. Input text is NULL
-    return nil;
-  }
 
   NSString *productID = nil;
   NSString *sscc = nil;
