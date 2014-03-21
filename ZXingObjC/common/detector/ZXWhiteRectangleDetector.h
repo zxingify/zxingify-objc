@@ -23,7 +23,7 @@
  * region until it finds a white rectangular region. By keeping track of the
  * last black points it encountered, it determines the corners of the barcode.
  */
-@interface ZXWhiteRectangleDetector : NSObject 
+@interface ZXWhiteRectangleDetector : NSObject
 
 - (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error;
 - (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error;

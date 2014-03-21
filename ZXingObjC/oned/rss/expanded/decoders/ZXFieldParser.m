@@ -34,18 +34,18 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
     TWO_DIGIT_DATA_LENGTH = @[@[@"00", @18],
                              @[@"01", @14],
                              @[@"02", @14],
-                             
+
                              @[@"10", VARIABLE_LENGTH, @20],
                              @[@"11", @6],
                              @[@"12", @6],
                              @[@"13", @6],
                              @[@"15", @6],
                              @[@"17", @6],
-                             
+
                              @[@"20", @2],
                              @[@"21", VARIABLE_LENGTH, @20],
                              @[@"22", VARIABLE_LENGTH, @29],
-                             
+
                              @[@"30", VARIABLE_LENGTH, @8],
                              @[@"37", VARIABLE_LENGTH, @8],
 
@@ -70,7 +70,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                                @[@"251", VARIABLE_LENGTH, @30],
                                @[@"253", VARIABLE_LENGTH, @17],
                                @[@"254", VARIABLE_LENGTH, @20],
-                               
+
                                @[@"400", VARIABLE_LENGTH, @30],
                                @[@"401", VARIABLE_LENGTH, @30],
                                @[@"402", @17],
@@ -154,7 +154,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
     FOUR_DIGIT_DATA_LENGTH = @[@[@"7001", @13],
                               @[@"7002", VARIABLE_LENGTH, @30],
                               @[@"7003", @10],
-                              
+
                               @[@"8001", @14],
                               @[@"8002", VARIABLE_LENGTH, @20],
                               @[@"8003", VARIABLE_LENGTH, @30],

@@ -45,7 +45,7 @@
     _readMappingMatrix = [[ZXBitMatrix alloc] initWithWidth:_mappingBitMatrix.width
                                                      height:_mappingBitMatrix.height];
   }
-  
+
   return self;
 }
 
@@ -72,15 +72,15 @@
 
   int row = 4;
   int column = 0;
-  
+
   int numRows = self.mappingBitMatrix.height;
   int numColumns = self.mappingBitMatrix.width;
-  
+
   BOOL corner1Read = NO;
   BOOL corner2Read = NO;
   BOOL corner3Read = NO;
   BOOL corner4Read = NO;
-  
+
   do {
     if ((row == numRows) && (column == 0) && !corner1Read) {
       result.array[resultOffset++] = (int8_t) [self readCorner1:numRows numColumns:numColumns];
@@ -112,7 +112,7 @@
       } while ((row >= 0) && (column < numColumns));
       row += 1;
       column += 3;
-      
+
       do {
         if ((row >= 0) && (column < numColumns) && ![self.readMappingMatrix getX:column y:row]) {
           result.array[resultOffset++] = (int8_t) [self readUtah:row column:column numRows:numRows numColumns:numColumns];
@@ -124,7 +124,7 @@
       column += 1;
     }
   } while ((row < numRows) || (column < numColumns));
-  
+
   if (resultOffset != self.version.totalCodewords) {
     return nil;
   }
@@ -390,20 +390,20 @@
 - (ZXBitMatrix *)extractDataRegion:(ZXBitMatrix *)bitMatrix {
   int symbolSizeRows = self.version.symbolSizeRows;
   int symbolSizeColumns = self.version.symbolSizeColumns;
-  
+
   if (bitMatrix.height != symbolSizeRows) {
     [NSException raise:NSInvalidArgumentException format:@"Dimension of bitMatrix must match the version size"];
   }
-  
+
   int dataRegionSizeRows = self.version.dataRegionSizeRows;
   int dataRegionSizeColumns = self.version.dataRegionSizeColumns;
-  
+
   int numDataRegionsRow = symbolSizeRows / dataRegionSizeRows;
   int numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns;
-  
+
   int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
   int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
-  
+
   ZXBitMatrix *bitMatrixWithoutAlignment = [[ZXBitMatrix alloc] initWithWidth:sizeDataRegionColumn height:sizeDataRegionRow];
   for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
     int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
@@ -422,7 +422,7 @@
       }
     }
   }
-  
+
   return bitMatrixWithoutAlignment;
 }
 

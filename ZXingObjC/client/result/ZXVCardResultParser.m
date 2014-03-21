@@ -99,7 +99,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   NSUInteger max = [rawText length];
 
   while (i < max) {
-    // At start or after newling, match prefix, followed by optional metadata 
+    // At start or after newling, match prefix, followed by optional metadata
     // (led by ;) ultimately ending in colon
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"(?:^|\n)%@(?:;([^:]*))?:", prefix]
                                                                              options:NSRegularExpressionCaseInsensitive error:nil];

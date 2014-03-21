@@ -559,33 +559,33 @@ static NSArray *ZX_PDF417_EXP900 = nil;
    t = 1 000 213 298 174 000
    Calculate codeword 0
    d0 = 1 000 213 298 174 000 mod 900 = 200
-   
+
    t = 1 000 213 298 174 000 div 900 = 1 111 348 109 082
    Calculate codeword 1
    d1 = 1 111 348 109 082 mod 900 = 282
-   
+
    t = 1 111 348 109 082 div 900 = 1 234 831 232
    Calculate codeword 2
    d2 = 1 234 831 232 mod 900 = 632
-   
+
    t = 1 234 831 232 div 900 = 1 372 034
    Calculate codeword 3
    d3 = 1 372 034 mod 900 = 434
-   
+
    t = 1 372 034 div 900 = 1 524
    Calculate codeword 4u
    d4 = 1 524 mod 900 = 624
-   
+
    t = 1 524 div 900 = 1
    Calculate codeword 5
    d5 = 1 mod 900 = 1
    t = 1 div 900 = 0
    Codeword sequence is: 1, 624, 434, 632, 282, 200
-   
+
    Decode the above codewords involves
    1 x 900 power of 5 + 624 x 900 power of 4 + 434 x 900 power of 3 +
    632 x 900 power of 2 + 282 x 900 power of 1 + 200 x 900 power of 0 = 1000213298174000
-   
+
    Remove leading 1 =>  Result is 000213298174000
  */
 + (NSString *)decodeBase900toBase10:(ZXIntArray *)codewords count:(int)count {

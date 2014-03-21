@@ -23,7 +23,7 @@ typedef enum {
    * Unspecified, application-specific metadata. Maps to an unspecified NSObject.
    */
   kResultMetadataTypeOther,
-  
+
   /**
    * Denotes the likely approximate orientation of the barcode in the image. This value
    * is given as degrees rotated clockwise from the normal, upright orientation.
@@ -38,7 +38,7 @@ typedef enum {
    * which is sometimes used to encode binary data. While {@link Result} makes available
    * the complete raw bytes in the barcode for these formats, it does not offer the bytes
    * from the byte segments alone.
-   * 
+   *
    * This maps to an array of byte arrays corresponding to the
    * raw bytes in the byte segments in the barcode, in order.
    */

@@ -32,7 +32,7 @@ const int ZX_ITF_DEFAULT_ALLOWED_LENGTHS[] = { 48, 44, 24, 20, 18, 16, 14, 12, 1
 
 /**
  * Start/end guard pattern.
- * 
+ *
  * Note: The end pattern is reversed because the row is reversed before
  * searching for the END_PATTERN
  */

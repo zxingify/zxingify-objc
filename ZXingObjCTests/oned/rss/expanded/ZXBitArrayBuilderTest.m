@@ -22,7 +22,7 @@
   int lengths[2] = {1, 2};
   int pairValue1[1] = { 19 };
   int pairValue2[2] = { 673, 16 };
-  
+
   int *pairValues[2];
   pairValues[0] = pairValue1;
   pairValues[1] = pairValue2;

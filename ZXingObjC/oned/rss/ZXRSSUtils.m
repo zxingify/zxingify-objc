@@ -132,7 +132,7 @@
   int barSum = 1;
   for (i = 1; i < twoK - 2; i += 2) {
     [widths addObject:@([eDist[i - 1] intValue] - [widths[i - 1] intValue])];
-    [widths addObject:@([eDist[i] intValue] - [widths[i] intValue])];    
+    [widths addObject:@([eDist[i] intValue] - [widths[i] intValue])];
     barSum += [widths[i] intValue] + [widths[i + 1] intValue];
     if ([widths[i] intValue] < minEven) {
       minEven = [widths[i] intValue];

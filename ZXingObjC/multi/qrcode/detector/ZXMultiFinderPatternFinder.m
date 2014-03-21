@@ -80,7 +80,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
    * counterintuitive at first, but the performance penalty is not that big. At this point,
    * we cannot make a good quality decision whether the three finders actually represent
    * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
-   * So, if the layout seems right, lets have the decoder try to decode.     
+   * So, if the layout seems right, lets have the decoder try to decode.
    */
 
   NSMutableArray *results = [NSMutableArray array];
@@ -159,7 +159,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
   int maxJ = self.image.width;
   // We are looking for black/white/black/white/black modules in
   // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
-  
+
   // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the
   // image, and then account for the center being 3 modules in size. This gives the smallest
   // number of pixels the center could be, so skip this often. When trying harder, look for all

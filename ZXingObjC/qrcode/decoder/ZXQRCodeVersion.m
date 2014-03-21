@@ -422,7 +422,7 @@ static NSArray *ZX_VERSIONS = nil;
                                                        ecBlocks2:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:28 ecBlocks1:[ZXQRCodeECB ecbWithCount:40 dataCodewords:47] ecBlocks2:[ZXQRCodeECB ecbWithCount:7 dataCodewords:48]]
                                                        ecBlocks3:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:43 dataCodewords:24] ecBlocks2:[ZXQRCodeECB ecbWithCount:22 dataCodewords:25]]
                                                        ecBlocks4:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:10 dataCodewords:15] ecBlocks2:[ZXQRCodeECB ecbWithCount:67 dataCodewords:16]]],
-               
+
                [ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:40
                                          alignmentPatternCenters:[[ZXIntArray alloc] initWithInts:6, 30, 58, 86, 114, 142, 170, -1]
                                                        ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:30 ecBlocks1:[ZXQRCodeECB ecbWithCount:19 dataCodewords:118] ecBlocks2:[ZXQRCodeECB ecbWithCount:6 dataCodewords:119]]

@@ -28,7 +28,7 @@
   if (via) {
     vias = @[via];
   }
-  
+
   return [self initWithNumbers:numbers vias:vias subject:subject body:body];
 }
 

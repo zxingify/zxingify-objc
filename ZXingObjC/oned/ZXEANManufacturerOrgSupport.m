@@ -36,7 +36,7 @@
 
 - (NSString *)lookupCountryIdentifier:(NSString *)productCode {
   [self initIfNeeded];
-  
+
   int prefix = [[productCode substringToIndex:3] intValue];
   NSUInteger max = self.ranges.count;
 

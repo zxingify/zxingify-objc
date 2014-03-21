@@ -104,7 +104,7 @@ const int ZX_RSS_EXPANDED_FINDER_PATTERNS[ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN][Z
         }
       }
       break;
-      
+
     default:
       break;
   }

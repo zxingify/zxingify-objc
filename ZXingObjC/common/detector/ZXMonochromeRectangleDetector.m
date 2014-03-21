@@ -163,7 +163,7 @@ const int ZX_MONOCHROME_MAX_MODULES = 32;
  */
 - (NSArray *)blackWhiteRange:(int)fixedDimension maxWhiteRun:(int)maxWhiteRun minDim:(int)minDim maxDim:(int)maxDim horizontal:(BOOL)horizontal {
   int center = (minDim + maxDim) >> 1;
-  
+
   int start = center;
   while (start >= minDim) {
     if (horizontal ? [self.image getX:start y:fixedDimension] : [self.image getX:fixedDimension y:start]) {

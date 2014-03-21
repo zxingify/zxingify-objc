@@ -72,7 +72,7 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
 }
 
 - (void)reset {
-  
+  // do nothing
 }
 
 /**

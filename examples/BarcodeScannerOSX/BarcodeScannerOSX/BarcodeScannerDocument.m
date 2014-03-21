@@ -102,7 +102,7 @@
 
     case kBarcodeFormatUPCEANExtension:
       return @"UPC/EAN extension";
-      
+
     default:
       return @"Unknown";
   }

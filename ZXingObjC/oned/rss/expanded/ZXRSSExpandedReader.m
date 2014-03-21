@@ -672,7 +672,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
   } else if (evenSum < 4) {
     incrementEven = YES;
   }
-  
+
   if (mismatch == 1) {
     if (oddParityBad) {
       if (evenParityBad) {

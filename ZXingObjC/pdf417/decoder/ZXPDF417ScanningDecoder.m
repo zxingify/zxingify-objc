@@ -419,7 +419,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   }
   // TODO implement check for width and correction of black and white bars
   // use start (and maybe stop pattern) to determine if blackbars are wider than white bars. If so, adjust.
-  // should probably done only for codewords with a lot more than 17 bits. 
+  // should probably done only for codewords with a lot more than 17 bits.
   // The following fixes 10-1.png, which has wide black bars and small white bars
   //    for (int i = 0; i < moduleBitCount.length; i++) {
   //      if (i % 2 == 0) {

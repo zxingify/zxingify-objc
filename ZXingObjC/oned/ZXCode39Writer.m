@@ -24,8 +24,7 @@
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatCode39) {
-    [NSException raise:NSInvalidArgumentException 
-                format:@"Can only encode CODE_39."];
+    [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_39."];
   }
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
@@ -33,7 +32,7 @@
 - (ZXBoolArray *)encode:(NSString *)contents {
   int length = (int)[contents length];
   if (length > 80) {
-    [NSException raise:NSInvalidArgumentException 
+    [NSException raise:NSInvalidArgumentException
                 format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
 

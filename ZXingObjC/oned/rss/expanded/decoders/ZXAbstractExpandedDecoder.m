@@ -66,7 +66,7 @@
   case 13:
     return [[ZXAI01393xDecoder alloc] initWithInformation:information];
   }
-  
+
   int sevenBitEncodationMethod = [ZXGeneralAppIdDecoder extractNumericValueFromBitArray:information pos:1 bits:7];
   switch (sevenBitEncodationMethod) {
   case 56:

@@ -66,7 +66,7 @@
     int position = received.length - 1 - [self.field log:errorLocations.array[i]];
     if (position < 0) {
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Bad error location"};
-      
+
       if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
       return NO;
     }
@@ -152,7 +152,7 @@
 
   if (e != numErrors) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Error locator degree does not match number of roots"};
-    
+
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
     return nil;
   }

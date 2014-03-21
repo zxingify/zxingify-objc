@@ -142,7 +142,7 @@
 
   for (NSURL *testImage in imageFiles) {
     NSLog(@"Starting %@", [self pathInBundle:testImage]);
-    
+
     ZXImage *image = [[ZXImage alloc] initWithURL:testImage];
 
     NSString *testImageFileName = [[[testImage path] componentsSeparatedByString:@"/"] lastObject];
@@ -321,9 +321,9 @@
                         +(rotatedRect.size.height/2));
   CGContextRotateCTM(context, radians);
 
-  CGContextDrawImage(context, CGRectMake(-imgRect.size.width/2, 
-                                         -imgRect.size.height/2,
-                                         imgRect.size.width, 
+  CGContextDrawImage(context, CGRectMake(-imgRect.size.width / 2,
+                                         -imgRect.size.height / 2,
+                                         imgRect.size.width,
                                          imgRect.size.height),
                      original.cgimage);
 

@@ -173,7 +173,7 @@ const int ZX_GB2312_SUBSET = 1;
     int8_t bytes[2];
     bytes[0] = (int8_t)(assembledTwoBytes >> 8);
     bytes[1] = (int8_t)assembledTwoBytes;
-    
+
     [buffer appendBytes:bytes length:2];
 
     count--;
@@ -209,7 +209,7 @@ const int ZX_GB2312_SUBSET = 1;
   if (string) {
     [result appendString:string];
   }
-  
+
   [byteSegments addObject:readBytesArray];
   return YES;
 }

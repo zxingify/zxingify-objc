@@ -18,7 +18,7 @@
 
 /**
  * Implements the "MATMSG" email message entry format.
- * 
+ *
  * Supported keys: TO, SUB, BODY
  */
 @interface ZXEmailDoCoMoResultParser : ZXAbstractDoCoMoResultParser

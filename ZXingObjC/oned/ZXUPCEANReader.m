@@ -337,7 +337,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
         for(int j = 0; j< counters.length; j++){
           pattern[j] = ZX_UPC_EAN_L_AND_G_PATTERNS[i][j];
         }
-        
+
         int variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE];
         if (variance < bestVariance) {
           bestVariance = variance;

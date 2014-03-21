@@ -151,8 +151,7 @@ const int ZX_N4 = 10;
     intermediate = ((temp % 3) + ((y + x) & 0x1)) & 0x1;
     break;
   default:
-      [NSException raise:NSInvalidArgumentException 
-                  format:@"Invalid mask pattern: %d", maskPattern];
+      [NSException raise:NSInvalidArgumentException format:@"Invalid mask pattern: %d", maskPattern];
   }
   return intermediate == 0;
 }

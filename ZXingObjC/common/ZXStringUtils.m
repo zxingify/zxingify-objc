@@ -21,7 +21,7 @@
 
 + (NSStringEncoding)guessEncoding:(int8_t *)bytes length:(unsigned int)length hints:(ZXDecodeHints *)hints {
   BOOL assumeShiftJIS = CFStringGetSystemEncoding() == NSShiftJISStringEncoding || CFStringGetSystemEncoding() == NSJapaneseEUCStringEncoding;
-  
+
   if (hints != nil) {
     NSStringEncoding encoding = hints.encoding;
     if (encoding > 0) {
