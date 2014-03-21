@@ -140,6 +140,9 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
     return nil;
   }
   ZXIntArray *rowHeights = [rowIndicatorColumn rowHeights];
+  if (!rowHeights) {
+    return nil;
+  }
   int maxRowHeight = [self max:rowHeights];
   int missingStartRows = 0;
   for (int i = 0; i < rowHeights.length; i++) {
