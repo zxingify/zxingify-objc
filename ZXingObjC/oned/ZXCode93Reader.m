@@ -101,8 +101,11 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
     // Read off white space
     nextStart = [row nextSet:nextStart];
   } while (decodedChar != '*');
-  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
+  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)]; // remove asterisk
 
+  int lastPatternSize = [theCounters sum];
+
+  // Should be at least one more black module
   if (nextStart == end || ![row get:nextStart]) {
     if (error) *error = NotFoundErrorInstance();
     return nil;
@@ -126,7 +129,7 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
   }
 
   float left = (float) (start.array[1] + start.array[0]) / 2.0f;
-  float right = (float) (nextStart + lastStart) / 2.0f;
+  float right = lastStart + lastPatternSize / 2.0f;
   return [ZXResult resultWithText:resultString
                          rawBytes:nil
                      resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber],
