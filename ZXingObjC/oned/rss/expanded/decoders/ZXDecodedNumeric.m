@@ -20,18 +20,14 @@ const int ZX_FNC1_INT = 10;
 
 @implementation ZXDecodedNumeric
 
-- (id)initWithNewPosition:(int)newPosition firstDigit:(int)aFirstDigit secondDigit:(int)aSecondDigit {
+- (id)initWithNewPosition:(int)newPosition firstDigit:(int)firstDigit secondDigit:(int)secondDigit {
+  if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10) {
+    return nil;
+  }
+
   if (self = [super initWithNewPosition:newPosition]) {
-    _firstDigit = aFirstDigit;
-    _secondDigit = aSecondDigit;
-
-    if (_firstDigit < 0 || _firstDigit > 10) {
-      [NSException raise:NSInvalidArgumentException format:@"Invalid firstDigit: %d", _firstDigit];
-    }
-
-    if (_secondDigit < 0 || _secondDigit > 10) {
-      [NSException raise:NSInvalidArgumentException format:@"Invalid secondDigit: %d", _secondDigit];
-    }
+    _firstDigit = firstDigit;
+    _secondDigit = secondDigit;
   }
 
   return self;

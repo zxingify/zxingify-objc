@@ -20,6 +20,7 @@
 #import "ZXDecodedChar.h"
 #import "ZXDecodedInformation.h"
 #import "ZXDecodedNumeric.h"
+#import "ZXErrors.h"
 #import "ZXFieldParser.h"
 #import "ZXGeneralAppIdDecoder.h"
 
@@ -48,6 +49,10 @@
   NSString *remaining = nil;
   do {
     ZXDecodedInformation *info = [self decodeGeneralPurposeField:currentPosition remaining:remaining];
+    if (!info) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
     NSString *parsedFields = [ZXFieldParser parseFieldsInGeneralPurpose:[info theNewString] error:error];
     if (!parsedFields) {
       return nil;
@@ -136,7 +141,12 @@
 
   self.current.position = pos;
 
-  ZXDecodedInformation *lastDecoded = [self parseBlocks];
+  NSError *error;
+  ZXDecodedInformation *lastDecoded = [self parseBlocksWithError:&error];
+  if (error) {
+    return nil;
+  }
+
   if (lastDecoded != nil && [lastDecoded remaining]) {
     return [[ZXDecodedInformation alloc] initWithNewPosition:self.current.position
                                                     newString:self.buffer
@@ -145,21 +155,27 @@
   return [[ZXDecodedInformation alloc] initWithNewPosition:self.current.position newString:self.buffer];
 }
 
-- (ZXDecodedInformation *)parseBlocks {
+- (ZXDecodedInformation *)parseBlocksWithError:(NSError **)error {
   BOOL isFinished;
   ZXBlockParsedResult *result;
   do {
     int initialPosition = self.current.position;
 
+    NSError *localError;
     if (self.current.alpha) {
       result = [self parseAlphaBlock];
       isFinished = result.finished;
     } else if (self.current.isoIec646) {
-      result = [self parseIsoIec646Block];
+      result = [self parseIsoIec646BlockWithError:&localError];
       isFinished = result.finished;
     } else {
-      result = [self parseNumericBlock];
+      result = [self parseNumericBlockWithError:&localError];
       isFinished = result.finished;
+    }
+
+    if (localError) {
+      if (error) *error = localError;
+      return nil;
     }
 
     BOOL positionChanged = initialPosition != self.current.position;
@@ -170,9 +186,13 @@
   return result.decodedInformation;
 }
 
-- (ZXBlockParsedResult *)parseNumericBlock {
+- (ZXBlockParsedResult *)parseNumericBlockWithError:(NSError **)error {
   while ([self isStillNumeric:self.current.position]) {
     ZXDecodedNumeric *numeric = [self decodeNumeric:self.current.position];
+    if (!numeric) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
     self.current.position = numeric.theNewPosition;
 
     if ([numeric firstDigitFNC1]) {
@@ -204,9 +224,13 @@
   return [[ZXBlockParsedResult alloc] initWithFinished:NO];
 }
 
-- (ZXBlockParsedResult *)parseIsoIec646Block {
+- (ZXBlockParsedResult *)parseIsoIec646BlockWithError:(NSError **)error {
   while ([self isStillIsoIec646:self.current.position]) {
     ZXDecodedChar *iso = [self decodeIsoIec646:self.current.position];
+    if (!iso) {
+      if (error) *error = FormatErrorInstance();
+      return nil;
+    }
     self.current.position = iso.theNewPosition;
 
     if (iso.fnc1) {
@@ -375,9 +399,7 @@
       c = ' ';
       break;
     default:
-      @throw [NSException exceptionWithName:@"RuntimeException"
-                                     reason:[NSString stringWithFormat:@"Decoding invalid ISO/IEC 646 value: %d", eightBitValue]
-                                   userInfo:nil];
+      return nil;
   }
   return [[ZXDecodedChar alloc] initWithNewPosition:pos + 8 value:c];
 }
