@@ -25,8 +25,8 @@
                     expectedFormat:kBarcodeFormatCode128];
 
   if (self) {
-    [self addTest:5 tryHarderCount:5 rotation:0.0f];
-    [self addTest:5 tryHarderCount:5 rotation:180.0f];
+    [self addTest:6 tryHarderCount:6 rotation:0.0f];
+    [self addTest:6 tryHarderCount:6 rotation:180.0f];
   }
 
   return self;

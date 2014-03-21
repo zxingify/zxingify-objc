@@ -277,6 +277,8 @@ const int ZX_CODE128_CODE_STOP = 106;
   int checksumTotal = startCode;
   int multiplier = 0;
   BOOL lastCharacterWasPrintable = YES;
+  BOOL upperMode = NO;
+  BOOL shiftUpperMode = NO;
 
   while (!done) {
     BOOL unshift = isNextShifted;
@@ -321,9 +323,19 @@ const int ZX_CODE128_CODE_STOP = 106;
     switch (codeSet) {
     case ZX_CODE128_CODE_CODE_A:
       if (code < 64) {
-        [result appendFormat:@"%C", (unichar)(' ' + code)];
+        if (shiftUpperMode == upperMode) {
+          [result appendFormat:@"%C", (unichar)(' ' + code)];
+        } else {
+          [result appendFormat:@"%C", (unichar)(' ' + code + 128)];
+        }
+        shiftUpperMode = NO;
       } else if (code < 96) {
-        [result appendFormat:@"%C", (unichar)(code - 64)];
+        if (shiftUpperMode == upperMode) {
+          [result appendFormat:@"%C", (unichar)(code - 64)];
+        } else {
+          [result appendFormat:@"%C", (unichar)(code + 64)];
+        }
+        shiftUpperMode = NO;
       } else {
         // Don't let CODE_STOP, which always appears, affect whether whether we think the last
         // code was printable or not.
@@ -332,7 +344,7 @@ const int ZX_CODE128_CODE_STOP = 106;
         }
 
         switch (code) {
-        case ZX_CODE128_CODE_FNC_1:
+          case ZX_CODE128_CODE_FNC_1:
             if (convertFNC1) {
               if (result.length == 0) {
                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -344,36 +356,52 @@ const int ZX_CODE128_CODE_STOP = 106;
               }
             }
             break;
-        case ZX_CODE128_CODE_FNC_2:
-        case ZX_CODE128_CODE_FNC_3:
-        case ZX_CODE128_CODE_FNC_4_A:
-          break;
-        case ZX_CODE128_CODE_SHIFT:
-          isNextShifted = YES;
-          codeSet = ZX_CODE128_CODE_CODE_B;
-          break;
-        case ZX_CODE128_CODE_CODE_B:
-          codeSet = ZX_CODE128_CODE_CODE_B;
-          break;
-        case ZX_CODE128_CODE_CODE_C:
-          codeSet = ZX_CODE128_CODE_CODE_C;
-          break;
-        case ZX_CODE128_CODE_STOP:
-          done = YES;
-          break;
+          case ZX_CODE128_CODE_FNC_2:
+          case ZX_CODE128_CODE_FNC_3:
+            // do nothing?
+            break;
+          case ZX_CODE128_CODE_FNC_4_A:
+            if (!upperMode && shiftUpperMode) {
+              upperMode = YES;
+              shiftUpperMode = NO;
+            } else if (upperMode && shiftUpperMode) {
+              upperMode = NO;
+              shiftUpperMode = NO;
+            } else {
+              shiftUpperMode = YES;
+            }
+            break;
+          case ZX_CODE128_CODE_SHIFT:
+            isNextShifted = YES;
+            codeSet = ZX_CODE128_CODE_CODE_B;
+            break;
+          case ZX_CODE128_CODE_CODE_B:
+            codeSet = ZX_CODE128_CODE_CODE_B;
+            break;
+          case ZX_CODE128_CODE_CODE_C:
+            codeSet = ZX_CODE128_CODE_CODE_C;
+            break;
+          case ZX_CODE128_CODE_STOP:
+            done = YES;
+            break;
         }
       }
       break;
     case ZX_CODE128_CODE_CODE_B:
       if (code < 96) {
-        [result appendFormat:@"%C", (unichar)(' ' + code)];
+        if (shiftUpperMode == upperMode) {
+          [result appendFormat:@"%C", (unichar)(' ' + code)];
+        } else {
+          [result appendFormat:@"%C", (unichar)(' ' + code + 128)];
+        }
+        shiftUpperMode = NO;
       } else {
         if (code != ZX_CODE128_CODE_STOP) {
           lastCharacterWasPrintable = NO;
         }
 
         switch (code) {
-        case ZX_CODE128_CODE_FNC_1:
+          case ZX_CODE128_CODE_FNC_1:
             if (convertFNC1) {
               if (result.length == 0) {
                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
@@ -385,23 +413,34 @@ const int ZX_CODE128_CODE_STOP = 106;
               }
             }
             break;
-        case ZX_CODE128_CODE_FNC_2:
-        case ZX_CODE128_CODE_FNC_3:
-        case ZX_CODE128_CODE_FNC_4_B:
-          break;
-        case ZX_CODE128_CODE_SHIFT:
-          isNextShifted = YES;
-          codeSet = ZX_CODE128_CODE_CODE_A;
-          break;
-        case ZX_CODE128_CODE_CODE_A:
-          codeSet = ZX_CODE128_CODE_CODE_A;
-          break;
-        case ZX_CODE128_CODE_CODE_C:
-          codeSet = ZX_CODE128_CODE_CODE_C;
-          break;
-        case ZX_CODE128_CODE_STOP:
-          done = YES;
-          break;
+          case ZX_CODE128_CODE_FNC_2:
+          case ZX_CODE128_CODE_FNC_3:
+            // do nothing?
+            break;
+          case ZX_CODE128_CODE_FNC_4_B:
+            if (!upperMode && shiftUpperMode) {
+              upperMode = YES;
+              shiftUpperMode = NO;
+            } else if (upperMode && shiftUpperMode) {
+              upperMode = NO;
+              shiftUpperMode = NO;
+            } else {
+              shiftUpperMode = YES;
+            }
+            break;
+          case ZX_CODE128_CODE_SHIFT:
+            isNextShifted = YES;
+            codeSet = ZX_CODE128_CODE_CODE_A;
+            break;
+          case ZX_CODE128_CODE_CODE_A:
+            codeSet = ZX_CODE128_CODE_CODE_A;
+            break;
+          case ZX_CODE128_CODE_CODE_C:
+            codeSet = ZX_CODE128_CODE_CODE_C;
+            break;
+          case ZX_CODE128_CODE_STOP:
+            done = YES;
+            break;
         }
       }
       break;
