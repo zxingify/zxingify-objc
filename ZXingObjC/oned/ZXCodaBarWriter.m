@@ -20,6 +20,7 @@
 
 const unichar ZX_CODA_START_END_CHARS[] = {'A', 'B', 'C', 'D'};
 const unichar ZX_CODA_ALT_START_END_CHARS[] = {'T', 'N', '*', 'E'};
+const unichar ZX_CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED[] = {'/', ':', '+', '.'};
 
 @implementation ZXCodaBarWriter
 
@@ -50,12 +51,11 @@ const unichar ZX_CODA_ALT_START_END_CHARS[] = {'T', 'N', '*', 'E'};
 
   // The start character and the end character are decoded to 10 length each.
   int resultLength = 20;
-  unichar charsWhichAreTenLengthEachAfterDecoded[4] = {'/', ':', '+', '.'};
   for (int i = 1; i < contents.length - 1; i++) {
     if (([contents characterAtIndex:i] >= '0' && [contents characterAtIndex:i] <= '9') ||
         [contents characterAtIndex:i] == '-' || [contents characterAtIndex:i] == '$') {
       resultLength += 9;
-    } else if ([ZXCodaBarReader arrayContains:charsWhichAreTenLengthEachAfterDecoded length:4 key:[contents characterAtIndex:i]]) {
+    } else if ([ZXCodaBarReader arrayContains:ZX_CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED length:4 key:[contents characterAtIndex:i]]) {
       resultLength += 10;
     } else {
       @throw [NSException exceptionWithName:NSInvalidArgumentException
@@ -70,8 +70,8 @@ const unichar ZX_CODA_ALT_START_END_CHARS[] = {'T', 'N', '*', 'E'};
   int position = 0;
   for (int index = 0; index < contents.length; index++) {
     unichar c = [[contents uppercaseString] characterAtIndex:index];
-    if (index == contents.length - 1) {
-      // The end chars are not in the CodaBarReader.ALPHABET.
+    if (index == 0 || index == contents.length - 1) {
+      // The start/end chars are not in the CodaBarReader.ALPHABET.
       switch (c) {
         case 'T':
           c = 'A';

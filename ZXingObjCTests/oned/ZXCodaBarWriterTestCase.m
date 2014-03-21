@@ -18,16 +18,46 @@
 
 @implementation ZXCodaBarWriterTestCase
 
-- (void) testEncode {
-  // 1001001011 0 110101001 0 101011001 0 110101001 0 101001101 0 110010101 0 1101101011 0
-  // 1001001011
-  NSString *resultStr = @"0000000000"
-    @"1001001011011010100101010110010110101001010100110101100101010110110101101001001011"
-    @"0000000000";
-  ZXBitMatrix *result = [[[ZXCodaBarWriter alloc] init] encode:@"B515-3/B" format:kBarcodeFormatCodabar width:(int)resultStr.length height:0 error:nil];
-  for (int i = 0; i < resultStr.length; i++) {
-    XCTAssertEqual([result getX:i y:0], (BOOL)([resultStr characterAtIndex:i] == '1'), @"Element %d", i);
+- (void)testEncode {
+  [self doTest:@"B515-3/B"
+      expected:@"00000"
+                "1001001011"
+                "0110101001"
+                "0101011001"
+                "0110101001"
+                "0101001101"
+                "0110010101"
+                "01101101011"
+                "01001001011"
+                "00000"];
+}
+
+- (void)testEncode2 {
+  [self doTest:@"T123T"
+      expected:@"00000"
+                "1011001001"
+                "0101011001"
+                "0101001011"
+                "0110010101"
+                "01011001001"
+                "00000"];
+}
+
+- (void)testAltStartEnd {
+  XCTAssertEqualObjects([self encode:@"T123456789-$T"], [self encode:@"A123456789-$A"]);
+}
+
+- (void)doTest:(NSString *)input expected:(NSString *)expected {
+  ZXBitMatrix *result = [self encode:input];
+  NSMutableString *actual = [NSMutableString stringWithCapacity:result.width];
+  for (int i = 0; i < result.width; i++) {
+    [actual appendString:[result getX:i y:0] ? @"1" : @"0"];
   }
+  XCTAssertEqualObjects(actual, expected);
+}
+
+- (ZXBitMatrix *)encode:(NSString *)input {
+  return [[[ZXCodaBarWriter alloc] init] encode:input format:kBarcodeFormatCodabar width:0 height:0 error:nil];
 }
 
 @end
