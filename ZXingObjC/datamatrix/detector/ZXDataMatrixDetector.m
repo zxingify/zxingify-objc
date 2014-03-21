@@ -120,7 +120,7 @@
   }
 
   if (maybeTopLeft == nil || bottomLeft == nil || maybeBottomRight == nil) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

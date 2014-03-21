@@ -86,12 +86,12 @@
   }
 
   if (result.length != 2) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
 
   if ([result intValue] % 4 != checkParity) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
 

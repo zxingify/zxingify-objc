@@ -28,7 +28,7 @@ const int ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
 
 - (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size < ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

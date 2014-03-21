@@ -118,7 +118,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
   self.startFromEven = YES;
   pairs = [self decodeRow2pairs:rowNumber row:row];
   if (!pairs) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

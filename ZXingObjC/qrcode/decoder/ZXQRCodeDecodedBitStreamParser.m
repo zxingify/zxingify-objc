@@ -56,7 +56,7 @@ const int ZX_GB2312_SUBSET = 1;
     } else {
       mode = [ZXMode forBits:[bits readBits:4]];
       if (!mode) {
-        if (error) *error = FormatErrorInstance();
+        if (error) *error = ZXFormatErrorInstance();
         return nil;
       }
     }
@@ -65,7 +65,7 @@ const int ZX_GB2312_SUBSET = 1;
         fc1InEffect = YES;
       } else if ([mode isEqual:[ZXMode structuredAppendMode]]) {
         if (bits.available < 16) {
-          if (error) *error = FormatErrorInstance();
+          if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
         [bits readBits:16];
@@ -73,7 +73,7 @@ const int ZX_GB2312_SUBSET = 1;
         int value = [self parseECIValue:bits];
         currentCharacterSetECI = [ZXCharacterSetECI characterSetECIByValue:value];
         if (currentCharacterSetECI == nil) {
-          if (error) *error = FormatErrorInstance();
+          if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
       } else {
@@ -82,7 +82,7 @@ const int ZX_GB2312_SUBSET = 1;
           int countHanzi = [bits readBits:[mode characterCountBits:version]];
           if (subset == ZX_GB2312_SUBSET) {
             if (![self decodeHanziSegment:bits result:result count:countHanzi]) {
-              if (error) *error = FormatErrorInstance();
+              if (error) *error = ZXFormatErrorInstance();
               return nil;
             }
           }
@@ -90,26 +90,26 @@ const int ZX_GB2312_SUBSET = 1;
           int count = [bits readBits:[mode characterCountBits:version]];
           if ([mode isEqual:[ZXMode numericMode]]) {
             if (![self decodeNumericSegment:bits result:result count:count]) {
-              if (error) *error = FormatErrorInstance();
+              if (error) *error = ZXFormatErrorInstance();
               return nil;
             }
           } else if ([mode isEqual:[ZXMode alphanumericMode]]) {
             if (![self decodeAlphanumericSegment:bits result:result count:count fc1InEffect:fc1InEffect]) {
-              if (error) *error = FormatErrorInstance();
+              if (error) *error = ZXFormatErrorInstance();
               return nil;
             }
           } else if ([mode isEqual:[ZXMode byteMode]]) {
             if (![self decodeByteSegment:bits result:result count:count currentCharacterSetECI:currentCharacterSetECI byteSegments:byteSegments hints:hints]) {
-              if (error) *error = FormatErrorInstance();
+              if (error) *error = ZXFormatErrorInstance();
               return nil;
             }
           } else if ([mode isEqual:[ZXMode kanjiMode]]) {
             if (![self decodeKanjiSegment:bits result:result count:count]) {
-              if (error) *error = FormatErrorInstance();
+              if (error) *error = ZXFormatErrorInstance();
               return nil;
             }
           } else {
-            if (error) *error = FormatErrorInstance();
+            if (error) *error = ZXFormatErrorInstance();
             return nil;
           }
         }

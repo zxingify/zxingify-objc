@@ -16,19 +16,19 @@
 
 #import "ZXErrors.h"
 
-NSError *ChecksumErrorInstance() {
+NSError *ZXChecksumErrorInstance() {
   NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"This barcode failed its checksum"};
 
   return [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXChecksumError userInfo:userInfo];
 }
 
-NSError *FormatErrorInstance() {
+NSError *ZXFormatErrorInstance() {
   NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"This barcode does not confirm to the format's rules"};
 
   return [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXFormatError userInfo:userInfo];
 }
 
-NSError *NotFoundErrorInstance() {
+NSError *ZXNotFoundErrorInstance() {
   NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"A barcode was not found in this image"};
 
   return [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];

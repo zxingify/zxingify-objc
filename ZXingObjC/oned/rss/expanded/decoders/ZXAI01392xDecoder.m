@@ -27,7 +27,7 @@ const int ZX_AI01392x_LAST_DIGIT_SIZE = 2;
 
 - (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size < ZX_AI01392x_HEADER_SIZE + ZX_AI01_GTIN_SIZE) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   NSMutableString *buf = [NSMutableString string];

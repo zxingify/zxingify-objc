@@ -64,7 +64,7 @@ const int ZX_MATRIX_HEIGHT = 33;
     }
     ZXBitMatrix *bits = [self extractPureBits:matrix];
     if (!bits) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     decoderResult = [self.decoder decode:bits hints:hints error:error];
@@ -72,7 +72,7 @@ const int ZX_MATRIX_HEIGHT = 33;
       return nil;
     }
   } else {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

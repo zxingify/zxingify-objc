@@ -72,7 +72,7 @@ static ZXGridSampler *gridSampler = nil;
     int x = (int) points[offset];
     int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return NO;
     }
     nudged = NO;
@@ -97,7 +97,7 @@ static ZXGridSampler *gridSampler = nil;
     int x = (int) points[offset];
     int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return NO;
     }
     nudged = NO;

@@ -239,7 +239,7 @@ const int ZX_CODE128_CODE_STOP = 106;
 
   ZXIntArray *startPatternInfo = [self findStartPattern:row];
   if (!startPatternInfo) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -257,7 +257,7 @@ const int ZX_CODE128_CODE_STOP = 106;
     codeSet = ZX_CODE128_CODE_CODE_C;
     break;
   default:
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
 
@@ -287,7 +287,7 @@ const int ZX_CODE128_CODE_STOP = 106;
     // Decode another code from image
     code = [self decodeCode:row counters:counters rowOffset:nextStart];
     if (code == -1) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
 
@@ -313,7 +313,7 @@ const int ZX_CODE128_CODE_STOP = 106;
     case ZX_CODE128_CODE_START_A:
     case ZX_CODE128_CODE_START_B:
     case ZX_CODE128_CODE_START_C:
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
 
@@ -455,7 +455,7 @@ const int ZX_CODE128_CODE_STOP = 106;
   // to read off. Would be slightly better to properly read. Here we just skip it:
   nextStart = [row nextUnset:nextStart];
   if (![row isRange:nextStart end:MIN(row.size, nextStart + (nextStart - lastStart) / 2) value:NO]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -463,7 +463,7 @@ const int ZX_CODE128_CODE_STOP = 106;
   checksumTotal -= multiplier * lastCode;
   // lastCode is the checksum then:
   if (checksumTotal % 103 != lastCode) {
-    if (error) *error = ChecksumErrorInstance();
+    if (error) *error = ZXChecksumErrorInstance();
     return nil;
   }
 
@@ -471,7 +471,7 @@ const int ZX_CODE128_CODE_STOP = 106;
   NSUInteger resultLength = [result length];
   if (resultLength == 0) {
     // false positive
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

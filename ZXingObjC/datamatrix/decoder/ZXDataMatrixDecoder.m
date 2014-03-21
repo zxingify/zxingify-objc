@@ -118,7 +118,7 @@
   NSError *decodeError = nil;
   if (![self.rsDecoder decode:codewordsInts twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
-      if (error) *error = ChecksumErrorInstance();
+      if (error) *error = ZXChecksumErrorInstance();
       return NO;
     } else {
       if (error) *error = decodeError;

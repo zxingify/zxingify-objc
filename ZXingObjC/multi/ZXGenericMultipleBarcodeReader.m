@@ -47,7 +47,7 @@ const int ZX_MAX_DEPTH = 4;
   if (![self doDecodeMultiple:image hints:hints results:results xOffset:0 yOffset:0 currentDepth:0 error:error]) {
     return nil;
   } else if (results.count == 0) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   return results;

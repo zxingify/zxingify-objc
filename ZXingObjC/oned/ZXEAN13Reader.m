@@ -88,7 +88,7 @@ const int ZX_EAN13_FIRST_DIGIT_ENCODINGS[] = {
   }
 
   if (![self determineFirstDigit:result lgPatternFound:lgPatternFound]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
 

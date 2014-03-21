@@ -40,7 +40,7 @@
   if (result) {
     result = [self maybeReturnResult:result];
     if (!result) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     return result;
@@ -54,7 +54,7 @@
   if (result) {
     result = [self maybeReturnResult:result];
     if (!result) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     return result;
@@ -68,7 +68,7 @@
   if (result) {
     result = [self maybeReturnResult:result];
     if (!result) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     return result;
@@ -82,7 +82,7 @@
   if (result) {
     result = [self maybeReturnResult:result];
     if (!result) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     return result;

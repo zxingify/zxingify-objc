@@ -27,7 +27,7 @@
   ZXMultiFinderPatternFinder *finder = [[ZXMultiFinderPatternFinder alloc] initWithImage:self.image resultPointCallback:resultPointCallback];
   NSArray *info = [finder findMulti:hints error:error];
   if ([info count] == 0) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

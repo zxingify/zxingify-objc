@@ -72,26 +72,26 @@ enum {
     if (mode == ASCII_ENCODE) {
       mode = [self decodeAsciiSegment:bits result:result resultTrailer:resultTrailer];
       if (mode == -1) {
-        if (error) *error = FormatErrorInstance();
+        if (error) *error = ZXFormatErrorInstance();
         return nil;
       }
     } else {
       switch (mode) {
       case C40_ENCODE:
         if (![self decodeC40Segment:bits result:result]) {
-          if (error) *error = FormatErrorInstance();
+          if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
         break;
       case TEXT_ENCODE:
         if (![self decodeTextSegment:bits result:result]) {
-          if (error) *error = FormatErrorInstance();
+          if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
         break;
       case ANSIX12_ENCODE:
         if (![self decodeAnsiX12Segment:bits result:result]) {
-          if (error) *error = FormatErrorInstance();
+          if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
         break;
@@ -100,12 +100,12 @@ enum {
         break;
       case BASE256_ENCODE:
         if (![self decodeBase256Segment:bits result:result byteSegments:byteSegments]) {
-          if (error) *error = FormatErrorInstance();
+          if (error) *error = ZXFormatErrorInstance();
           return nil;
         }
         break;
       default:
-        if (error) *error = FormatErrorInstance();
+        if (error) *error = ZXFormatErrorInstance();
         return nil;
       }
       mode = ASCII_ENCODE;

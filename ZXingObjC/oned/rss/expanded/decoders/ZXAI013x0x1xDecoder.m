@@ -43,7 +43,7 @@ const int ZX_AI013x0x1x_DATE_SIZE = 16;
 
 - (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size != ZX_AI013x0x1x_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI013x0x1x_WEIGHT_SIZE + ZX_AI013x0x1x_DATE_SIZE) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   NSMutableString *buf = [NSMutableString string];

@@ -62,7 +62,7 @@ const int ZX_LUMINANCE_BUCKETS = 1 << ZX_LUMINANCE_BITS;
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
   if (blackPoint == -1) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -107,7 +107,7 @@ const int ZX_LUMINANCE_BUCKETS = 1 << ZX_LUMINANCE_BITS;
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
   if (blackPoint == -1) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

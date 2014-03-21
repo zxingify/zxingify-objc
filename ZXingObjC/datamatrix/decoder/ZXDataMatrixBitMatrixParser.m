@@ -33,12 +33,12 @@
   if (self = [super init]) {
     int dimension = bitMatrix.height;
     if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     _version = [self readVersion:bitMatrix];
     if (!_version) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     _mappingBitMatrix = [self extractDataRegion:bitMatrix];

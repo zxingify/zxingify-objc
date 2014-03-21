@@ -74,7 +74,7 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
   }
 
   if (![self determineNumSysAndCheckDigit:result lgPatternFound:lgPatternFound]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
   return rowOffset;

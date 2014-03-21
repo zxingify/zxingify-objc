@@ -81,13 +81,13 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
   ZXIntArray *startRange = [self decodeStart:row];
   ZXIntArray *endRange = [self decodeEnd:row];
   if (!startRange || !endRange) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   NSMutableString *resultString = [NSMutableString stringWithCapacity:20];
   if (![self decodeMiddle:row payloadStart:startRange.array[1] payloadEnd:endRange.array[0] resultString:resultString]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -112,7 +112,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     }
   }
   if (!lengthOK) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
 

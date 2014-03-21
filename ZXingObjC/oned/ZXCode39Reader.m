@@ -81,7 +81,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
 
   ZXIntArray *start = [self findAsteriskPattern:row counters:theCounters];
   if (!start) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   // Read off white space
@@ -92,17 +92,17 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   int lastStart;
   do {
     if (![ZXOneDReader recordPattern:row start:nextStart counters:theCounters]) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     int pattern = [self toNarrowWidePattern:theCounters];
     if (pattern < 0) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     decodedChar = [self patternToChar:pattern];
     if (decodedChar == 0) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     [result appendFormat:@"%C", decodedChar];
@@ -121,7 +121,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
   if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -132,7 +132,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
       total += [ZX_CODE39_ALPHABET_STRING rangeOfString:[result substringWithRange:NSMakeRange(i, 1)]].location;
     }
     if ([result characterAtIndex:max] != ZX_CODE39_ALPHABET[total % 43]) {
-      if (error) *error = ChecksumErrorInstance();
+      if (error) *error = ZXChecksumErrorInstance();
       return nil;
     }
     [result deleteCharactersInRange:NSMakeRange(max, 1)];
@@ -140,7 +140,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
 
   if ([result length] == 0) {
     // false positive
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -148,7 +148,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   if (self.extendedMode) {
     resultString = [self decodeExtended:result];
     if (!resultString) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
   } else {

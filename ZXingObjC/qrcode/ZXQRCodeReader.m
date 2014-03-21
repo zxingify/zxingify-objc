@@ -60,7 +60,7 @@
   if (hints != nil && hints.pureBarcode) {
     ZXBitMatrix *bits = [self extractPureBits:matrix];
     if (!bits) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     decoderResult = [self.decoder decodeMatrix:bits hints:hints error:error];

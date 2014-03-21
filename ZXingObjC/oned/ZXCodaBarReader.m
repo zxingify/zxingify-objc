@@ -84,13 +84,13 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   [self.counters clear];
 
   if (![self setCountersWithRow:row]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   int startOffset = [self findStartPattern];
   if (startOffset == -1) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -100,7 +100,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   do {
     int charOffset = [self toNarrowWidePattern:nextStart];
     if (charOffset == -1) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     // Hack: We store the position in the alphabet table into a
@@ -128,12 +128,12 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   // otherwise this is probably a false positive. The exception is if we are
   // at the end of the row. (I.e. the barcode barely fits.)
   if (nextStart < self.counterLength && trailingWhitespace < lastPatternSize / 2) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   if (![self validatePattern:startOffset]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -146,20 +146,20 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   if (![ZXCodaBarReader arrayContains:ZX_CODA_STARTEND_ENCODING
                                length:sizeof(ZX_CODA_STARTEND_ENCODING) / sizeof(unichar)
                                   key:startchar]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   unichar endchar = [self.decodeRowResult characterAtIndex:self.decodeRowResult.length - 1];
   if (![ZXCodaBarReader arrayContains:ZX_CODA_STARTEND_ENCODING
                                length:sizeof(ZX_CODA_STARTEND_ENCODING) / sizeof(unichar)
                                   key:endchar]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   // remove stop/start characters character and check if a long enough string is contained
   if (self.decodeRowResult.length <= ZX_CODA_MIN_CHARACTER_LENGTH) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

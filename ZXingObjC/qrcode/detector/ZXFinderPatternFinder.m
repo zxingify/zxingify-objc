@@ -141,7 +141,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
   NSMutableArray *patternInfo = [self selectBestPatterns];
   if (!patternInfo) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   [ZXResultPoint orderBestPatterns:patternInfo];

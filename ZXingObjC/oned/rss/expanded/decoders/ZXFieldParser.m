@@ -178,7 +178,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
     return @"";
   }
   if ([rawInformation length] < 2) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   NSString *firstTwoDigits = [rawInformation substringWithRange:NSMakeRange(0, 2)];
@@ -194,7 +194,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                                     fieldSize:[TWO_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
-        if (error) *error = NotFoundErrorInstance();
+        if (error) *error = ZXNotFoundErrorInstance();
         return nil;
       }
       return result;
@@ -202,7 +202,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   }
 
   if ([rawInformation length] < 3) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   NSString *firstThreeDigits = [rawInformation substringWithRange:NSMakeRange(0, 3)];
@@ -218,7 +218,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                                     fieldSize:[THREE_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
-        if (error) *error = NotFoundErrorInstance();
+        if (error) *error = ZXNotFoundErrorInstance();
         return nil;
       }
       return result;
@@ -236,7 +236,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                                     fieldSize:[THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
-        if (error) *error = NotFoundErrorInstance();
+        if (error) *error = ZXNotFoundErrorInstance();
         return nil;
       }
       return result;
@@ -244,7 +244,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
   }
 
   if ([rawInformation length] < 4) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   NSString *firstFourDigits = [rawInformation substringWithRange:NSMakeRange(0, 4)];
@@ -256,7 +256,7 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                                  variableFieldSize:[FOUR_DIGIT_DATA_LENGTH[i][2] intValue]
                                     rawInformation:rawInformation];
         if (!result) {
-          if (error) *error = NotFoundErrorInstance();
+          if (error) *error = ZXNotFoundErrorInstance();
           return nil;
         }
         return result;
@@ -265,14 +265,14 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
                                     fieldSize:[FOUR_DIGIT_DATA_LENGTH[i][1] intValue]
                                rawInformation:rawInformation];
       if (!result) {
-        if (error) *error = NotFoundErrorInstance();
+        if (error) *error = ZXNotFoundErrorInstance();
         return nil;
       }
       return result;
     }
   }
 
-  if (error) *error = NotFoundErrorInstance();
+  if (error) *error = ZXNotFoundErrorInstance();
   return nil;
 }
 

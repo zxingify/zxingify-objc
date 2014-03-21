@@ -46,7 +46,7 @@
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   NSArray *result = [self decode:image hints:hints multiple:NO error:error];
   if (!result || result.count == 0 || !result[0]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   return result[0];

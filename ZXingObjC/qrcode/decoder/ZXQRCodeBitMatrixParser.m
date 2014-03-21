@@ -36,7 +36,7 @@
 - (id)initWithBitMatrix:(ZXBitMatrix *)bitMatrix error:(NSError **)error {
   int dimension = bitMatrix.height;
   if (dimension < 21 || (dimension & 0x03) != 1) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
 
@@ -82,7 +82,7 @@
   if (self.parsedFormatInfo != nil) {
     return self.parsedFormatInfo;
   }
-  if (error) *error = FormatErrorInstance();
+  if (error) *error = ZXFormatErrorInstance();
   return nil;
 }
 
@@ -124,7 +124,7 @@
     self.parsedVersion = theParsedVersion;
     return self.parsedVersion;
   }
-  if (error) *error = FormatErrorInstance();
+  if (error) *error = ZXFormatErrorInstance();
   return nil;
 }
 
@@ -188,7 +188,7 @@
     readingUp ^= YES; // readingUp = !readingUp; // switch directions
   }
   if (resultOffset != [version totalCodewords]) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
   return result;

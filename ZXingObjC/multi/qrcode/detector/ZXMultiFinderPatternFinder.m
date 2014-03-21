@@ -55,7 +55,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
   NSUInteger size = [_possibleCenters count];
 
   if (size < 3) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -149,7 +149,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
     return results;
   }
 
-  if (error) *error = NotFoundErrorInstance();
+  if (error) *error = ZXNotFoundErrorInstance();
   return nil;
 }
 

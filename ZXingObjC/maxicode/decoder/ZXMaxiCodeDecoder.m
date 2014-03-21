@@ -84,7 +84,7 @@ const int ZX_MAXI_CODE_ODD = 2;
       datawords = [[ZXByteArray alloc] initWithLength:78];
       break;
     default:
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
   }
 
@@ -116,7 +116,7 @@ const int ZX_MAXI_CODE_ODD = 2;
   NSError *decodeError = nil;
   if (![self.rsDecoder decode:codewordsInts twoS:ecCodewords / divisor error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError && error) {
-      *error = ChecksumErrorInstance();
+      *error = ZXChecksumErrorInstance();
     }
     return NO;
   }

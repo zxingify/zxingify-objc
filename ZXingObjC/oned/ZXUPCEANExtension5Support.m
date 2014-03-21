@@ -91,16 +91,16 @@ const int ZX_UPCEAN_CHECK_DIGIT_ENCODINGS[] = {
   }
 
   if (result.length != 5) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
 
   int checkDigit = [self determineCheckDigit:lgPatternFound];
   if (checkDigit == -1) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   } else if ([self extensionChecksum:result] != checkDigit) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
 

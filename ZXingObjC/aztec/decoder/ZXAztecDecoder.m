@@ -71,7 +71,7 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   ZXBitMatrix *matrix = [detectorResult bits];
   ZXBoolArray *rawbits = [self extractBits:matrix];
   if (!rawbits) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
 
@@ -232,7 +232,7 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   NSError *decodeError = nil;
   if (![rsDecoder decode:dataWords twoS:numECCodewords error:&decodeError]) {
     if (decodeError.code == ZXReedSolomonError) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
     } else {
       if (error) *error = decodeError;
     }
@@ -246,7 +246,7 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   for (int i = 0; i < numDataCodewords; i++) {
     int32_t dataWord = dataWords.array[i];
     if (dataWord == 0 || dataWord == mask) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return 0;
     } else if (dataWord == 1 || dataWord == mask - 1) {
       stuffedBits++;

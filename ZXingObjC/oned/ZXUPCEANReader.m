@@ -175,18 +175,18 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   int end = (int)NSMaxRange(endRange);
   int quietEnd = end + (end - (int)endRange.location);
   if (quietEnd >= [row size] || ![row isRange:end end:quietEnd value:NO]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   NSString *resultString = [result description];
   // UPC/EAN should never be less than 8 chars anyway
   if ([resultString length] < 8) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
   if (![self checkChecksum:resultString error:error]) {
-    if (error) *error = ChecksumErrorInstance();
+    if (error) *error = ZXChecksumErrorInstance();
     return nil;
   }
 
@@ -219,7 +219,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   if ([[self class] checkStandardUPCEANChecksum:s]) {
     return YES;
   } else {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return NO;
   }
 }
@@ -299,7 +299,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
     }
   }
 
-  if (error) *error = NotFoundErrorInstance();
+  if (error) *error = ZXNotFoundErrorInstance();
   return NSMakeRange(NSNotFound, 0);
 }
 
@@ -308,7 +308,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
  */
 + (int)decodeDigit:(ZXBitArray *)row counters:(ZXIntArray *)counters rowOffset:(int)rowOffset patternType:(ZX_UPC_EAN_PATTERNS)patternType error:(NSError **)error {
   if (![self recordPattern:row start:rowOffset counters:counters]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
   int bestVariance = ZX_UPC_EAN_MAX_AVG_VARIANCE;
@@ -352,7 +352,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   if (bestMatch >= 0) {
     return bestMatch;
   } else {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
 }

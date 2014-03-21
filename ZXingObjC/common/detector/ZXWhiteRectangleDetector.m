@@ -45,7 +45,7 @@ const int ZX_CORR = 1;
     _upInit = (_height - ZX_INIT_SIZE) >> 1;
     _downInit = (_height + ZX_INIT_SIZE) >> 1;
     if (_upInit < 0 || _leftInit < 0 || _downInit >= _height || _rightInit >= _width) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
   }
@@ -64,7 +64,7 @@ const int ZX_CORR = 1;
     _upInit = y - halfsize;
     _downInit = y + halfsize;
     if (_upInit < 0 || _leftInit < 0 || _downInit >= _height || _rightInit >= _width) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
   }
@@ -169,7 +169,7 @@ const int ZX_CORR = 1;
     }
 
     if (z == nil) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
 
@@ -182,7 +182,7 @@ const int ZX_CORR = 1;
     }
 
     if (t == nil) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
 
@@ -195,7 +195,7 @@ const int ZX_CORR = 1;
     }
 
     if (x == nil) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
 
@@ -208,12 +208,12 @@ const int ZX_CORR = 1;
     }
 
     if (y == nil) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     return [self centerEdges:y z:z x:x t:t];
   } else {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 }

@@ -71,7 +71,7 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     }
   }
 
-  if (error) *error = NotFoundErrorInstance();
+  if (error) *error = ZXNotFoundErrorInstance();
   return nil;
 }
 

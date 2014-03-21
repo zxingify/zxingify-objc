@@ -111,7 +111,7 @@
   if ([self.possibleCenters count] > 0) {
     return self.possibleCenters[0];
   }
-  if (error) *error = NotFoundErrorInstance();
+  if (error) *error = ZXNotFoundErrorInstance();
   return nil;
 }
 

@@ -25,7 +25,7 @@ const int ZX_AI013x0x_WEIGHT_SIZE = 15;
 
 - (NSString *)parseInformationWithError:(NSError **)error {
   if (self.information.size != ZX_AI013x0x_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI013x0x_WEIGHT_SIZE) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

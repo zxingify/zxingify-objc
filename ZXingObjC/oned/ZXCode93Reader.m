@@ -65,7 +65,7 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
   ZXIntArray *start = [self findAsteriskPattern:row];
   if (!start) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   // Read off white space
@@ -80,17 +80,17 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
   int lastStart;
   do {
     if (![ZXOneDReader recordPattern:row start:nextStart counters:theCounters]) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     int pattern = [self toPattern:theCounters];
     if (pattern < 0) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     decodedChar = [self patternToChar:pattern];
     if (decodedChar == 0) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     [result appendFormat:@"%C", decodedChar];
@@ -107,13 +107,13 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 
   // Should be at least one more black module
   if (nextStart == end || ![row get:nextStart]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   if ([result length] < 2) {
     // false positive -- need at least 2 checksum digits
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -124,7 +124,7 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 
   NSString *resultString = [self decodeExtended:result];
   if (!resultString) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
 
@@ -284,7 +284,7 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
   }
 
   if ([result characterAtIndex:checkPosition] != ZX_CODE93_ALPHABET[total % 47]) {
-    if (error) *error = ChecksumErrorInstance();
+    if (error) *error = ZXChecksumErrorInstance();
     return NO;
   }
   return YES;

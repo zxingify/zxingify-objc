@@ -61,7 +61,7 @@
     }
     ZXBitMatrix *bits = [self extractPureBits:matrix];
     if (!bits) {
-      if (error) *error = NotFoundErrorInstance();
+      if (error) *error = ZXNotFoundErrorInstance();
       return nil;
     }
     decoderResult = [self.decoder decodeMatrix:bits error:error];

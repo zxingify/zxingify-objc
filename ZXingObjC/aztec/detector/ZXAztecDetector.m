@@ -73,7 +73,7 @@
   // 1. Get the center of the aztec matrix
   ZXAztecPoint *pCenter = [self matrixCenter];
   if (!pCenter) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -81,7 +81,7 @@
   //  [topRight, bottomRight, bottomLeft, topLeft]
   NSMutableArray *bullsEyeCorners = [self bullsEyeCorners:pCenter];
   if (!bullsEyeCorners) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -93,7 +93,7 @@
 
   // 3. Get the size of the matrix and other parameters from the bull's eye
   if (![self extractParameters:bullsEyeCorners]) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
@@ -104,14 +104,14 @@
                            bottomRight:bullsEyeCorners[(self.shift + 2) % 4]
                             bottomLeft:bullsEyeCorners[(self.shift + 3) % 4]];
   if (!bits) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   // 5. Get the corners of the matrix.
   NSArray *corners = [self matrixCornerPoints:bullsEyeCorners];
   if (!corners) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 

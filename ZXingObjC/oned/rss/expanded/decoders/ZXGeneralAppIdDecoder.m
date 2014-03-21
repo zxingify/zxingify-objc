@@ -50,7 +50,7 @@
   do {
     ZXDecodedInformation *info = [self decodeGeneralPurposeField:currentPosition remaining:remaining];
     if (!info) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     NSString *parsedFields = [ZXFieldParser parseFieldsInGeneralPurpose:[info theNewString] error:error];
@@ -190,7 +190,7 @@
   while ([self isStillNumeric:self.current.position]) {
     ZXDecodedNumeric *numeric = [self decodeNumeric:self.current.position];
     if (!numeric) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     self.current.position = numeric.theNewPosition;
@@ -228,7 +228,7 @@
   while ([self isStillIsoIec646:self.current.position]) {
     ZXDecodedChar *iso = [self decodeIsoIec646:self.current.position];
     if (!iso) {
-      if (error) *error = FormatErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
     self.current.position = iso.theNewPosition;

@@ -56,6 +56,6 @@ enum {
 };
 
 // Helper methods for error instances
-NSError *ChecksumErrorInstance(void);
-NSError *FormatErrorInstance(void);
-NSError *NotFoundErrorInstance(void);
+NSError *ZXChecksumErrorInstance(void);
+NSError *ZXFormatErrorInstance(void);
+NSError *ZXNotFoundErrorInstance(void);

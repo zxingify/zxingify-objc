@@ -71,7 +71,7 @@
 
   float moduleSize = [self calculateModuleSize:topLeft topRight:topRight bottomLeft:bottomLeft];
   if (moduleSize < 1.0f) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   int dimension = [ZXQRCodeDetector computeDimension:topLeft topRight:topRight bottomLeft:bottomLeft moduleSize:moduleSize error:error];
@@ -81,7 +81,7 @@
 
   ZXQRCodeVersion *provisionalVersion = [ZXQRCodeVersion provisionalVersionForDimension:dimension];
   if (!provisionalVersion) {
-    if (error) *error = FormatErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
   int modulesBetweenFPCenters = [provisionalVersion dimensionForVersion] - 7;
@@ -171,7 +171,7 @@
     dimension--;
     break;
   case 3:
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
   return dimension;
@@ -307,14 +307,14 @@
   int alignmentAreaLeftX = MAX(0, estAlignmentX - allowance);
   int alignmentAreaRightX = MIN(self.image.width - 1, estAlignmentX + allowance);
   if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
   int alignmentAreaTopY = MAX(0, estAlignmentY - allowance);
   int alignmentAreaBottomY = MIN(self.image.height - 1, estAlignmentY + allowance);
   if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
-    if (error) *error = NotFoundErrorInstance();
+    if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
 
