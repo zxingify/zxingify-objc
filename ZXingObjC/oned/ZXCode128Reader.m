@@ -246,6 +246,8 @@ const int ZX_CODE128_CODE_STOP = 106;
   int startCode = startPatternInfo.array[2];
   int codeSet;
 
+  NSMutableArray *rawCodes = [NSMutableArray arrayWithObject:@(startCode)];
+
   switch (startCode) {
   case ZX_CODE128_CODE_START_A:
     codeSet = ZX_CODE128_CODE_CODE_A;
@@ -265,7 +267,6 @@ const int ZX_CODE128_CODE_STOP = 106;
   BOOL isNextShifted = NO;
 
   NSMutableString *result = [NSMutableString stringWithCapacity:20];
-  NSMutableArray *rawCodes = [NSMutableArray arrayWithCapacity:20];
 
   int lastStart = startPatternInfo.array[0];
   int nextStart = startPatternInfo.array[1];
