@@ -53,7 +53,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   NSMutableArray *names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES parseFieldDivider:NO];
   if (names == nil) {
     // If no display names found, look for regular name fields and format them
-    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:NO];
+    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:YES];
     [self formatNames:names];
   }
   NSArray *nicknameString = [[self class] matchSingleVCardPrefixedField:@"NICKNAME" rawText:rawText trim:YES parseFieldDivider:NO];
