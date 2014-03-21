@@ -72,6 +72,48 @@
                       note:nil];
 }
 
+- (void)testVCardFullN {
+  [self doTestWithContents:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;T;Mr.;Esq.\r\nEND:VCARD"
+                     title:nil
+                     names:@[@"Mr. Sean T Owen Esq."]
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                      urls:nil
+                  birthday:nil
+                      note:nil];
+}
+
+- (void)testVCardFullN2 {
+  [self doTestWithContents:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean;;;\r\nEND:VCARD"
+                     title:nil
+                     names:@[@"Sean Owen"]
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                      urls:nil
+                  birthday:nil
+                      note:nil];
+}
+
+- (void)testVCardFullN3 {
+  [self doTestWithContents:@"BEGIN:VCARD\r\nVERSION:2.1\r\nN:;Sean;;;\r\nEND:VCARD"
+                     title:nil
+                     names:@[@"Sean"]
+             pronunciation:nil
+                 addresses:nil
+                    emails:nil
+              phoneNumbers:nil
+                       org:nil
+                      urls:nil
+                  birthday:nil
+                      note:nil];
+}
+
 - (void)testVCardCaseInsensitive {
   [self doTestWithContents:@"begin:vcard\r\nadr;HOME:123 Main St\r\nVersion:2.1\r\nn:Owen;Sean\r\nEND:VCARD"
                      title:nil

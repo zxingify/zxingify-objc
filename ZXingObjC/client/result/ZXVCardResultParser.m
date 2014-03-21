@@ -53,7 +53,7 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   NSMutableArray *names = [[self class] matchVCardPrefixedField:@"FN" rawText:rawText trim:YES parseFieldDivider:NO];
   if (names == nil) {
     // If no display names found, look for regular name fields and format them
-    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:YES];
+    names = [[self class] matchVCardPrefixedField:@"N" rawText:rawText trim:YES parseFieldDivider:NO];
     [self formatNames:names];
   }
   NSArray *nicknameString = [[self class] matchSingleVCardPrefixedField:@"NICKNAME" rawText:rawText trim:YES parseFieldDivider:NO];
@@ -316,6 +316,8 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 /**
  * Formats name fields of the form "Public;John;Q.;Reverend;III" into a form like
  * "Reverend John Q. Public III".
+ *
+ * @param names name values to format, in place
  */
 - (void)formatNames:(NSMutableArray *)names {
   if (names != nil) {
@@ -341,8 +343,11 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
 }
 
 - (void)maybeAppendComponent:(NSArray *)components i:(int)i newName:(NSMutableString *)newName {
-  if ([components count] > i && components[i]) {
-    [newName appendFormat:@" %@", components[i]];
+  if ([components count] > i && components[i] && [(NSString *)components[i] length] > 0) {
+    if ([newName length] > 0) {
+      [newName appendString:@" "];
+    }
+    [newName appendString:components[i]];
   }
 }
 
