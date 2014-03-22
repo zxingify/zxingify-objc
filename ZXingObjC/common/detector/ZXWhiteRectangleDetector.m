@@ -30,27 +30,13 @@
 
 @end
 
-const int ZX_INIT_SIZE = 30;
+const int ZX_INIT_SIZE = 10;
 const int ZX_CORR = 1;
 
 @implementation ZXWhiteRectangleDetector
 
 - (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error {
-  if (self = [super init]) {
-    _image = image;
-    _height = image.height;
-    _width = image.width;
-    _leftInit = (_width - ZX_INIT_SIZE) >> 1;
-    _rightInit = (_width + ZX_INIT_SIZE) >> 1;
-    _upInit = (_height - ZX_INIT_SIZE) >> 1;
-    _downInit = (_height + ZX_INIT_SIZE) >> 1;
-    if (_upInit < 0 || _leftInit < 0 || _downInit >= _height || _rightInit >= _width) {
-      if (error) *error = ZXNotFoundErrorInstance();
-      return nil;
-    }
-  }
-
-  return self;
+  return [self initWithImage:image initSize:ZX_INIT_SIZE x:image.width / 2 y:image.height / 2 error:error];
 }
 
 - (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error {
@@ -58,7 +44,7 @@ const int ZX_CORR = 1;
     _image = image;
     _height = image.height;
     _width = image.width;
-    int halfsize = initSize >> 1;
+    int halfsize = initSize / 2;
     _leftInit = x - halfsize;
     _rightInit = x + halfsize;
     _upInit = y - halfsize;
