@@ -63,12 +63,6 @@ const int ZX_PDF417_MAX_NEARBY_DISTANCE = 5;
   return imageRow - self.boundingBox.minY;
 }
 
-/*
-- (int)codewordIndexToImageRow:(int)codewordIndex {
-  return self.boundingBox.minY + codewordIndex;
-}
-*/
-
 - (void)setCodeword:(int)imageRow codeword:(ZXPDF417Codeword *)codeword {
   _codewords[[self imageRowToCodewordIndex:imageRow]] = codeword;
 }

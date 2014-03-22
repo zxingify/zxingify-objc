@@ -185,7 +185,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
     return rightRowIndicatorColumn ? rightRowIndicatorColumn.barcodeMetadata : nil;
   }
   if (!rightRowIndicatorColumn || !rightRowIndicatorColumn.barcodeMetadata) {
-    return leftRowIndicatorColumn ? leftRowIndicatorColumn.barcodeMetadata : nil;
+    return leftRowIndicatorColumn.barcodeMetadata;
   }
   ZXPDF417BarcodeMetadata *leftBarcodeMetadata = leftRowIndicatorColumn.barcodeMetadata;
   ZXPDF417BarcodeMetadata *rightBarcodeMetadata = rightRowIndicatorColumn.barcodeMetadata;
