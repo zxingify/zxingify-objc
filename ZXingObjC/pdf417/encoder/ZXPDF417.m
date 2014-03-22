@@ -527,6 +527,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
   if (self = [super init]) {
     _compact = compact;
     _compaction = ZXCompactionAuto;
+    _encoding = ZX_PDF417_DEFAULT_ENCODING;
     _minCols = 2;
     _maxCols = 30;
     _maxRows = 30;
@@ -633,7 +634,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
 
   //1. step: High-level encoding
   int errorCorrectionCodeWords = [ZXPDF417ErrorCorrection errorCorrectionCodewordCount:anErrorCorrectionLevel];
-  NSString *highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg compaction:self.compaction error:error];
+  NSString *highLevel = [ZXPDF417HighLevelEncoder encodeHighLevel:msg compaction:self.compaction encoding:self.encoding error:error];
   if (!highLevel) {
     return NO;
   }

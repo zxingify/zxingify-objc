@@ -16,6 +16,8 @@
 
 #import "ZXCompaction.h"
 
+extern const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING;
+
 /**
  * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
  * annex P.
@@ -30,6 +32,6 @@
  * @param msg the message
  * @return the encoded message (the char values range from 0 to 928)
  */
-+ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction error:(NSError **)error;
++ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction encoding:(NSStringEncoding)encoding error:(NSError **)error;
 
 @end

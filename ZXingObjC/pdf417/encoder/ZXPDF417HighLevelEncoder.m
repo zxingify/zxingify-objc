@@ -15,6 +15,7 @@
  */
 
 #import "ZXByteArray.h"
+#import "ZXCharacterSetECI.h"
 #import "ZXErrors.h"
 #import "ZXPDF417HighLevelEncoder.h"
 
@@ -79,6 +80,21 @@ const int ZX_PDF417_SHIFT_TO_BYTE = 913;
 const int ZX_PDF417_LATCH_TO_BYTE = 924;
 
 /**
+ * identifier for a user defined Extended Channel Interpretation (ECI)
+ */
+const int ZX_PDF417_ECI_USER_DEFINED = 925;
+
+/**
+ * identifier for a general purpose ECO format
+ */
+const int ZX_PDF417_ECI_GENERAL_PURPOSE = 926;
+
+/**
+ * identifier for an ECI of a character set of code page
+ */
+const int ZX_PDF417_ECI_CHARSET = 927;
+
+/**
  * Raw code table for text compaction Mixed sub-mode
  */
 const int8_t ZX_PDF417_TEXT_MIXED_RAW[] = {
@@ -124,36 +140,27 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
   }
 }
 
-/**
- * Converts the message to a byte array using the default encoding (Cp437) as defined by the
- * specification
- *
- * @param msg the message
- * @return the byte array of the message
- */
-+ (ZXByteArray *)bytesForMessage:(NSString *)msg {
-  NSData *data = [msg dataUsingEncoding:ZX_PDF417_DEFAULT_ENCODING];
-  int8_t *bytes = (int8_t *)[data bytes];
-  ZXByteArray *byteArray = [[ZXByteArray alloc] initWithLength:(unsigned int)[data length]];
-  memcpy(byteArray.array, bytes, [data length] * sizeof(int8_t));
-  return byteArray;
-}
-
-+ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction error:(NSError **)error {
-  ZXByteArray *bytes = nil; //Fill later and only if needed
-
++ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction encoding:(NSStringEncoding)encoding error:(NSError **)error {
   //the codewords 0..928 are encoded as Unicode characters
   NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
+
+  if (ZX_PDF417_DEFAULT_ENCODING != encoding) {
+    ZXCharacterSetECI *eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
+    if (![self encodingECI:eci.value sb:sb error:error]) {
+      return nil;
+    }
+  }
 
   NSUInteger len = msg.length;
   int p = 0;
   int textSubMode = ZX_PDF417_SUBMODE_ALPHA;
 
   // User selected encoding mode
+  ZXByteArray *bytes = nil; //Fill later and only if needed
   if (compaction == ZXCompactionText) {
     [self encodeText:msg startpos:p count:(int)len buffer:sb initialSubmode:textSubMode];
   } else if (compaction == ZXCompactionByte) {
-    bytes = [self bytesForMessage:msg];
+    bytes = [self bytesForMessage:msg encoding:encoding];
     [self encodeBinary:bytes startpos:p count:(int)msg.length startmode:ZX_PDF417_BYTE_COMPACTION buffer:sb];
   } else if (compaction == ZXCompactionNumeric) {
     [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_NUMERIC];
@@ -180,7 +187,7 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
           p += t;
         } else {
           if (bytes == NULL) {
-            bytes = [self bytesForMessage:msg];
+            bytes = [self bytesForMessage:msg encoding:encoding];
           }
           int b = [self determineConsecutiveBinaryCount:msg bytes:bytes startpos:p error:error];
           if (b == -1) {
@@ -541,6 +548,34 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
     idx++;
   }
   return idx - startpos;
+}
+
++ (BOOL)encodingECI:(int)eci sb:(NSMutableString *)sb error:(NSError **)error {
+  if (eci >= 0 && eci < 900) {
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_CHARSET];
+    [sb appendFormat:@"%C", (unichar) eci];
+  } else if (eci < 810900) {
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_GENERAL_PURPOSE];
+    [sb appendFormat:@"%C", (unichar) (eci / 900 - 1)];
+    [sb appendFormat:@"%C", (unichar) (eci % 900)];
+  } else if (eci < 811800) {
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_USER_DEFINED];
+    [sb appendFormat:@"%C", (unichar) (810900 - eci)];
+  } else {
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"ECI number not in valid range from 0..811799, but was %d", eci]};
+
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+    return NO;
+  }
+  return YES;
+}
+
++ (ZXByteArray *)bytesForMessage:(NSString *)msg encoding:(NSStringEncoding)encoding {
+  NSData *data = [msg dataUsingEncoding:encoding];
+  int8_t *bytes = (int8_t *)[data bytes];
+  ZXByteArray *byteArray = [[ZXByteArray alloc] initWithLength:(unsigned int)[data length]];
+  memcpy(byteArray.array, bytes, [data length] * sizeof(int8_t));
+  return byteArray;
 }
 
 @end

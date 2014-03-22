@@ -51,6 +51,9 @@ const int ZX_PDF417_WHITE_SPACE = 30;
     if (hints.margin) {
       margin = [hints.margin intValue];
     }
+    if (hints.encoding > 0) {
+      encoder.encoding = hints.encoding;
+    }
   }
 
   return [self bitMatrixFromEncoder:encoder contents:contents width:width height:height margin:margin error:error];

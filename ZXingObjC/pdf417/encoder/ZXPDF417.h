@@ -26,6 +26,7 @@
 @property (nonatomic, strong, readonly) ZXBarcodeMatrix *barcodeMatrix;
 @property (nonatomic, assign) BOOL compact;
 @property (nonatomic, assign) ZXCompaction compaction;
+@property (nonatomic, assign) NSStringEncoding encoding;
 
 - (id)initWithCompact:(BOOL)compact;
 
