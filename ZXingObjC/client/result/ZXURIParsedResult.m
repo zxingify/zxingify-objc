@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXResultParser.h"
 #import "ZXURIParsedResult.h"
 
 static NSRegularExpression *ZX_USER_IN_HOST = nil;
@@ -65,22 +66,13 @@ static NSRegularExpression *ZX_USER_IN_HOST = nil;
   return massagedUri;
 }
 
-- (BOOL)isColonFollowedByPortNumber:(NSString *)aUri protocolEnd:(int)protocolEnd {
-  NSUInteger nextSlash = [aUri rangeOfString:@"/" options:0 range:NSMakeRange(protocolEnd + 1, [aUri length] - protocolEnd - 1)].location;
+- (BOOL)isColonFollowedByPortNumber:(NSString *)uri protocolEnd:(int)protocolEnd {
+  int start = protocolEnd + 1;
+  NSUInteger nextSlash = [uri rangeOfString:@"/" options:0 range:NSMakeRange(start, [uri length] - start)].location;
   if (nextSlash == NSNotFound) {
-    nextSlash = [aUri length];
+    nextSlash = [uri length];
   }
-  if (nextSlash <= protocolEnd + 1) {
-    return NO;
-  }
-
-  for (int x = protocolEnd + 1; x < nextSlash; x++) {
-    if ([aUri characterAtIndex:x] < '0' || [aUri characterAtIndex:x] > '9') {
-      return NO;
-    }
-  }
-
-  return YES;
+  return [ZXResultParser isSubstringOfDigits:uri offset:start length:(int)nextSlash - start];
 }
 
 @end

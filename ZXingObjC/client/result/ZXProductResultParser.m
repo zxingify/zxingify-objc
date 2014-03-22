@@ -28,12 +28,8 @@
     return nil;
   }
   NSString *rawText = [ZXResultParser massagedText:result];
-  NSUInteger length = [rawText length];
-  for (int x = 0; x < length; x++) {
-    unichar c = [rawText characterAtIndex:x];
-    if (c < '0' || c > '9') {
-      return nil;
-    }
+  if (![[self class] isStringOfDigits:rawText length:(unsigned int)[rawText length]]) {
+    return nil;
   }
   // Not actually checking the checksum again here
 

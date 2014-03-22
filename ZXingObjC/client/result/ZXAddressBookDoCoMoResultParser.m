@@ -36,7 +36,7 @@
   NSString *note = [[self class] matchSingleDoCoMoPrefixedField:@"NOTE:" rawText:rawText trim:NO];
   NSArray *addresses = [[self class] matchDoCoMoPrefixedField:@"ADR:" rawText:rawText trim:YES];
   NSString *birthday = [[self class] matchSingleDoCoMoPrefixedField:@"BDAY:" rawText:rawText trim:YES];
-  if (birthday != nil && ![[self class] isStringOfDigits:birthday length:8]) {
+  if (![[self class] isStringOfDigits:birthday length:8]) {
     birthday = nil;
   }
   NSArray *urls = [[self class] matchDoCoMoPrefixedField:@"URL:" rawText:rawText trim:YES];

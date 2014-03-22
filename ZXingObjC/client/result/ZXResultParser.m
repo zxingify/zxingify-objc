@@ -52,7 +52,6 @@
 
 static NSArray *ZX_PARSERS = nil;
 static NSRegularExpression *ZX_DIGITS = nil;
-static NSRegularExpression *ZX_ALPHANUM = nil;
 static NSString *ZX_AMPERSAND = @"&";
 static NSString *ZX_EQUALS = @"=";
 static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
@@ -80,8 +79,7 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
                  [[ZXProductResultParser alloc] init],
                  [[ZXExpandedProductResultParser alloc] init],
                  [[ZXVINResultParser alloc] init]];
-  ZX_DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
-  ZX_ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
+  ZX_DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d+$" options:0 error:nil];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -161,7 +159,7 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
 }
 
 + (BOOL)isStringOfDigits:(NSString *)value length:(unsigned int)length {
-  return value != nil && length == value.length && [ZX_DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(0, value.length)] > 0;
+  return value != nil && length > 0 && length == value.length && [ZX_DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(0, value.length)] > 0;
 }
 
 - (NSString *)urlDecode:(NSString *)escaped {
@@ -217,20 +215,12 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
   return -1;
 }
 
-+ (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length {
-  if (value == nil) {
++ (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(int)length {
+  if (value == nil || length <= 0) {
     return NO;
   }
   int max = offset + length;
   return value.length >= max && [ZX_DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(offset, max - offset)] > 0;
-}
-
-+ (BOOL)isSubstringOfAlphaNumeric:(NSString *)value offset:(int)offset length:(unsigned int)length {
-  if (value == nil) {
-    return NO;
-  }
-  int max = offset + length;
-  return value.length >= max && [ZX_ALPHANUM numberOfMatchesInString:value options:0 range:NSMakeRange(offset, max - offset)] > 0;
 }
 
 - (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri {

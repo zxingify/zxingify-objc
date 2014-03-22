@@ -40,8 +40,7 @@
 - (void)maybeAppendArray:(NSArray *)value result:(NSMutableString *)result;
 - (NSArray *)maybeWrap:(NSString *)value;
 + (BOOL)isStringOfDigits:(NSString *)value length:(unsigned int)length;
-+ (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(unsigned int)length;
-+ (BOOL)isSubstringOfAlphaNumeric:(NSString *)value offset:(int)offset length:(unsigned int)length;
++ (BOOL)isSubstringOfDigits:(NSString *)value offset:(int)offset length:(int)length;
 + (int)parseHexDigit:(unichar)c;
 - (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri;
 + (NSString *)urlDecode:(NSString *)encoded;
