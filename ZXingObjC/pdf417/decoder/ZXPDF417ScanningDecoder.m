@@ -181,14 +181,16 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 
 + (ZXPDF417BarcodeMetadata *)barcodeMetadata:(ZXPDF417DetectionResultRowIndicatorColumn *)leftRowIndicatorColumn
                      rightRowIndicatorColumn:(ZXPDF417DetectionResultRowIndicatorColumn *)rightRowIndicatorColumn {
-  if (!leftRowIndicatorColumn || !leftRowIndicatorColumn.barcodeMetadata) {
+  ZXPDF417BarcodeMetadata *leftBarcodeMetadata;
+  if (!leftRowIndicatorColumn ||
+      !(leftBarcodeMetadata = leftRowIndicatorColumn.barcodeMetadata)) {
     return rightRowIndicatorColumn ? rightRowIndicatorColumn.barcodeMetadata : nil;
   }
-  if (!rightRowIndicatorColumn || !rightRowIndicatorColumn.barcodeMetadata) {
+  ZXPDF417BarcodeMetadata *rightBarcodeMetadata;
+  if (!rightRowIndicatorColumn ||
+      !(rightBarcodeMetadata = rightRowIndicatorColumn.barcodeMetadata)) {
     return leftRowIndicatorColumn.barcodeMetadata;
   }
-  ZXPDF417BarcodeMetadata *leftBarcodeMetadata = leftRowIndicatorColumn.barcodeMetadata;
-  ZXPDF417BarcodeMetadata *rightBarcodeMetadata = rightRowIndicatorColumn.barcodeMetadata;
 
   if (leftBarcodeMetadata.columnCount != rightBarcodeMetadata.columnCount &&
       leftBarcodeMetadata.errorCorrectionLevel != rightBarcodeMetadata.errorCorrectionLevel &&
