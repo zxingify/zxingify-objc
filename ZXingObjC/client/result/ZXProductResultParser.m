@@ -34,7 +34,7 @@
   // Not actually checking the checksum again here
 
   NSString *normalizedProductID;
-  if (format == kBarcodeFormatUPCE) {
+  if (format == kBarcodeFormatUPCE && [rawText length] == 8) {
     normalizedProductID = [ZXUPCEReader convertUPCEtoUPCA:rawText];
   } else {
     normalizedProductID = rawText;
