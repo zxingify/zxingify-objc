@@ -274,8 +274,6 @@
 		25389B8C18010B9A00772392 /* ZXPDF417DetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B8818010B9A00772392 /* ZXPDF417DetectorResult.m */; };
 		25389B8D18010B9A00772392 /* ZXPDF417DetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B8818010B9A00772392 /* ZXPDF417DetectorResult.m */; };
 		25389B8E18010B9A00772392 /* ZXPDF417DetectorResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B8818010B9A00772392 /* ZXPDF417DetectorResult.m */; };
-		25389B9818010DCB00772392 /* ZXPDF417DetectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B9118010D9B00772392 /* ZXPDF417DetectorTest.m */; };
-		25389B9918010DCB00772392 /* ZXPDF417DetectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 25389B9118010D9B00772392 /* ZXPDF417DetectorTest.m */; };
 		25403CB7166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
 		25403CC9166A96FA00E13304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB6166A96FA00E13304 /* Foundation.framework */; };
 		25403CCC166A96FA00E13304 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */; };
@@ -1716,8 +1714,6 @@
 		25389B801800E35B00772392 /* ZXPDF417ScanningDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417ScanningDecoder.m; sourceTree = "<group>"; };
 		25389B8718010B9A00772392 /* ZXPDF417DetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417DetectorResult.h; sourceTree = "<group>"; };
 		25389B8818010B9A00772392 /* ZXPDF417DetectorResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417DetectorResult.m; sourceTree = "<group>"; };
-		25389B9018010D9B00772392 /* ZXPDF417DetectorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPDF417DetectorTest.h; sourceTree = "<group>"; };
-		25389B9118010D9B00772392 /* ZXPDF417DetectorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417DetectorTest.m; sourceTree = "<group>"; };
 		25403CB3166A96FA00E13304 /* libZXingObjC-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25403CB6166A96FA00E13304 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		25403CBB166A96FA00E13304 /* ZXingObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXingObjC.h; sourceTree = "<group>"; };
@@ -2494,15 +2490,6 @@
 				2504D9E516FFF27C00DF8882 /* ZXAztecEncoderTest.m */,
 			);
 			name = encoder;
-			sourceTree = "<group>";
-		};
-		25389B8F18010D7A00772392 /* detector */ = {
-			isa = PBXGroup;
-			children = (
-				25389B9018010D9B00772392 /* ZXPDF417DetectorTest.h */,
-				25389B9118010D9B00772392 /* ZXPDF417DetectorTest.m */,
-			);
-			name = detector;
 			sourceTree = "<group>";
 		};
 		25403CA8166A96F900E13304 = {
@@ -3489,7 +3476,6 @@
 			isa = PBXGroup;
 			children = (
 				254040A6166AA0F100E13304 /* decoder */,
-				25389B8F18010D7A00772392 /* detector */,
 				254040AC166AA0F100E13304 /* PDF417BlackBox1TestCase.h */,
 				254040AD166AA0F100E13304 /* PDF417BlackBox1TestCase.m */,
 				254040AE166AA0F100E13304 /* PDF417BlackBox2TestCase.h */,
@@ -4850,7 +4836,6 @@
 				25404139166AA0F100E13304 /* ZXMaskUtilTestCase.m in Sources */,
 				2540413A166AA0F100E13304 /* ZXMatrixUtilTestCase.m in Sources */,
 				2540413B166AA0F100E13304 /* ZXQRCodeTestCase.m in Sources */,
-				25389B9918010DCB00772392 /* ZXPDF417DetectorTest.m in Sources */,
 				25404142166AA0F100E13304 /* ZXQRCodeWriterTestCase.m in Sources */,
 				25FE5D4016D0B84C00826CDB /* RSSExpandedStackedInternalTestCase.m in Sources */,
 				25FE5D4316D0B8B200826CDB /* TestCaseUtil.m in Sources */,
@@ -5203,7 +5188,6 @@
 				2540437D166AB8B800E13304 /* ZXMaskUtilTestCase.m in Sources */,
 				2540437E166AB8B800E13304 /* ZXMatrixUtilTestCase.m in Sources */,
 				2540437F166AB8B800E13304 /* ZXQRCodeTestCase.m in Sources */,
-				25389B9818010DCB00772392 /* ZXPDF417DetectorTest.m in Sources */,
 				25404386166AB8B800E13304 /* ZXQRCodeWriterTestCase.m in Sources */,
 				254299FC16D5DCC300D4C045 /* ZXDataMatrixWriterTestCase.m in Sources */,
 				25429A0116D5DFD800D4C045 /* ZXDebugPlacement.m in Sources */,

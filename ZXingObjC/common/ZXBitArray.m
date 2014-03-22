@@ -258,6 +258,18 @@
   return array;
 }
 
+- (BOOL)isEqual:(id)o {
+  if (![o isKindOfClass:[ZXBitArray class]]) {
+    return NO;
+  }
+  ZXBitArray *other = (ZXBitArray *)o;
+  return self.size == other.size && memcmp(self.bits, other.bits, self.bitsLength) != 0;
+}
+
+- (NSUInteger)hash {
+  return 31 * self.size;
+}
+
 - (void)reverse {
   int32_t *newBits = (int32_t *)calloc(self.bitsLength, sizeof(int32_t));
   int size = self.size;
@@ -319,6 +331,12 @@
   y = i << 4; if (y != 0) { n = n - 4; i = y; }
   y = i << 2; if (y != 0) { n = n - 2; i = y; }
   return n - (int32_t)((uint32_t)(i << 1) >> 31);
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+  ZXBitArray *copy = [[ZXBitArray allocWithZone:zone] initWithSize:self.size];
+  memcpy(copy.bits, self.bits, self.size * sizeof(int32_t));
+  return copy;
 }
 
 @end

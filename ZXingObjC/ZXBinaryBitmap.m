@@ -86,4 +86,13 @@
   return [[ZXBinaryBitmap alloc] initWithBinarizer:[self.binarizer createBinarizer:newSource]];
 }
 
+- (NSString *)description {
+  ZXBitMatrix *matrix = [self blackMatrixWithError:nil];
+  if (matrix) {
+    return [matrix description];
+  } else {
+    return @"";
+  }
+}
+
 @end

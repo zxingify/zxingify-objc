@@ -33,15 +33,4 @@
  */
 + (ZXPDF417DetectorResult *)detect:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints multiple:(BOOL)multiple error:(NSError **)error;
 
-/**
- * Rotates a bit matrix by 180 degrees.
- * @param bitMatrix bit matrix to rotate
- */
-+ (void)rotate180:(ZXBitMatrix *)bitMatrix;
-
-/**
- * Copies the bits from the input to the result BitArray in reverse order
- */
-+ (ZXBitArray *)mirror:(ZXBitArray *)input result:(ZXBitArray *)result;
-
 @end

@@ -28,7 +28,7 @@
  * The ordering of bits is row-major. Within each NSInteger, the least significant bits are used first,
  * meaning they represent lower x values. This is compatible with BitArray's implementation.
  */
-@interface ZXBitMatrix : NSObject
+@interface ZXBitMatrix : NSObject <NSCopying>
 
 /**
  * @return The width of the matrix
@@ -106,6 +106,11 @@
  * @param row ZXBitArray to copy from
  */
 - (void)setRowAtY:(int)y row:(ZXBitArray *)row;
+
+/**
+ * Modifies this ZXBitMatrix to represent the same but rotated 180 degrees
+ */
+- (void)rotate180;
 
 /**
  * This is useful in detecting the enclosing rectangle of a 'pure' barcode.

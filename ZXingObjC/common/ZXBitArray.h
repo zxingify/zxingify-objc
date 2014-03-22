@@ -19,7 +19,7 @@
 /**
  * A simple, fast array of bits, represented compactly by an array of ints internally.
  */
-@interface ZXBitArray : NSObject
+@interface ZXBitArray : NSObject <NSCopying>
 
 /**
  * @return underlying array of ints. The first element holds the first 32 bits, and the least

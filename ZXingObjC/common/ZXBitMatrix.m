@@ -57,6 +57,19 @@
   return self;
 }
 
+- (id)initWithWidth:(int)width height:(int)height rowSize:(int)rowSize bits:(int32_t *)bits {
+  if (self = [super init]) {
+    _width = width;
+    _height = height;
+    _rowSize = rowSize;
+    _bitsSize = _rowSize * _height;
+    _bits = (int32_t *)malloc(_bitsSize * sizeof(int32_t));
+    memcpy(_bits, bits, _bitsSize * sizeof(int32_t));
+  }
+
+  return self;
+}
+
 - (void)dealloc {
   if (_bits != NULL) {
     free(_bits);
@@ -108,6 +121,8 @@
 - (ZXBitArray *)rowAtY:(int)y row:(ZXBitArray *)row {
   if (row == nil || [row size] < self.width) {
     row = [[ZXBitArray alloc] initWithSize:self.width];
+  } else {
+    [row clear];
   }
   int offset = y * self.rowSize;
   for (int x = 0; x < self.rowSize; x++) {
@@ -120,6 +135,21 @@
 - (void)setRowAtY:(int)y row:(ZXBitArray *)row {
   for (NSUInteger i = 0; i < self.rowSize; i++) {
     self.bits[(y * self.rowSize) + i] = row.bits[i];
+  }
+}
+
+- (void)rotate180 {
+  int width = self.width;
+  int height = self.height;
+  ZXBitArray *topRow = [[ZXBitArray alloc] initWithSize:width];
+  ZXBitArray *bottomRow = [[ZXBitArray alloc] initWithSize:width];
+  for (int i = 0; i < (height+1) / 2; i++) {
+    topRow = [self rowAtY:i row:topRow];
+    bottomRow = [self rowAtY:height - 1 - i row:bottomRow];
+    [topRow reverse];
+    [bottomRow reverse];
+    [self setRowAtY:i row:bottomRow];
+    [self setRowAtY:height - 1 - i row:topRow];
   }
 }
 
@@ -218,15 +248,12 @@
     return NO;
   }
   ZXBitMatrix *other = (ZXBitMatrix *)o;
-  if (self.width != other.width || self.height != other.height || self.rowSize != other.rowSize || self.bitsSize != other.bitsSize) {
-    return NO;
-  }
   for (int i = 0; i < self.bitsSize; i++) {
     if (self.bits[i] != other.bits[i]) {
       return NO;
     }
   }
-  return YES;
+  return self.width == other.width && self.height == other.height && self.rowSize == other.rowSize && self.bitsSize == other.bitsSize;
 }
 
 - (NSUInteger)hash {
@@ -249,6 +276,10 @@
     [result appendString:@"\n"];
   }
   return result;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+  return [[ZXBitMatrix allocWithZone:zone] initWithWidth:self.width height:self.height rowSize:self.rowSize bits:self.bits];
 }
 
 @end

@@ -63,7 +63,8 @@ const int ZX_PDF417_BARCODE_MIN_HEIGHT = 10;
     return nil;
   }
   if ([barcodeCoordinates count] == 0) {
-    [[self class] rotate180:bitMatrix];
+    bitMatrix = [bitMatrix copy];
+    [bitMatrix rotate180];
     barcodeCoordinates = [self detect:multiple bitMatrix:bitMatrix error:error];
     if (!barcodeCoordinates) {
       return nil;
@@ -123,32 +124,6 @@ const int ZX_PDF417_BARCODE_MIN_HEIGHT = 10;
     }
   }
   return barcodeCoordinates;
-}
-
-// The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
-// data structures)
-+ (void)rotate180:(ZXBitMatrix *)bitMatrix {
-  int width = bitMatrix.width;
-  int height = bitMatrix.height;
-  ZXBitArray *firstRowBitArray = [[ZXBitArray alloc] initWithSize:width];
-  ZXBitArray *secondRowBitArray = [[ZXBitArray alloc] initWithSize:width];
-  ZXBitArray *tmpBitArray = [[ZXBitArray alloc] initWithSize:width];
-  for (int y = 0; y < (height + 1) >> 1; y++) {
-    firstRowBitArray = [bitMatrix rowAtY:y row:firstRowBitArray];
-    [bitMatrix setRowAtY:y row:[self mirror:[bitMatrix rowAtY:height - 1 - y row:secondRowBitArray] result:tmpBitArray]];
-    [bitMatrix setRowAtY:height - 1 - y row:[self mirror:firstRowBitArray result:tmpBitArray]];
-  }
-}
-
-+ (ZXBitArray *)mirror:(ZXBitArray *)input result:(ZXBitArray *)result {
-  [result clear];
-  int size = input.size;
-  for (int i = 0; i < size; i++) {
-    if ([input get:i]) {
-      [result set:size - 1 - i];
-    }
-  }
-  return result;
 }
 
 /**

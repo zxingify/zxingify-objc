@@ -18,6 +18,12 @@
 
 @implementation ZXBitMatrixTestCase
 
+static ZXIntArray *BIT_MATRIX_POINTS = nil;
+
++ (void)initialize {
+  BIT_MATRIX_POINTS = [[ZXIntArray alloc] initWithInts:1, 2, 2, 0, 3, 1, -1];
+}
+
 - (void)testGetSet {
   ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:33];
   XCTAssertEqual(matrix.height, 33, @"Expected matrix height to be 33");
@@ -115,6 +121,56 @@
     XCTAssertEqual([array2 get:x], on, @"Expected [array2 get:%d] to be %d", x, on);
     XCTAssertEqual([array3 get:x], on, @"Expected [array3 get:%d] to be %d", x, on);
   }
+}
+
+- (void)testRotate180Simple {
+  ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  [matrix setX:0 y:0];
+  [matrix setX:0 y:1];
+  [matrix setX:1 y:2];
+  [matrix setX:2 y:1];
+
+  [matrix rotate180];
+
+  XCTAssertTrue([matrix getX:2 y:2]);
+  XCTAssertTrue([matrix getX:2 y:1]);
+  XCTAssertTrue([matrix getX:1 y:0]);
+  XCTAssertTrue([matrix getX:0 y:1]);
+}
+
+- (void)testRotate180 {
+  [self testRotate180Width:7 height:4];
+  [self testRotate180Width:7 height:5];
+  [self testRotate180Width:8 height:4];
+  [self testRotate180Width:8 height:5];
+}
+
+- (void)testRotate180Width:(int)width height:(int)height {
+  ZXBitMatrix *input = [self inputWithWidth:width height:height];
+  [input rotate180];
+  ZXBitMatrix *expected = [self expectedWithWidth:width height:height];
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      XCTAssertEqual([expected getX:x y:y], [input getX:x y:y], @"(%d,%d)", x, y);
+    }
+  }
+}
+
+- (ZXBitMatrix *)expectedWithWidth:(int)width height:(int)height {
+  ZXBitMatrix *result = [[ZXBitMatrix alloc] initWithWidth:width height:height];
+  for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
+    [result setX:width - 1 - BIT_MATRIX_POINTS.array[i] y:height - 1 - BIT_MATRIX_POINTS.array[i + 1]];
+  }
+  return result;
+}
+
+- (ZXBitMatrix *)inputWithWidth:(int)width height:(int)height {
+  ZXBitMatrix *result = [[ZXBitMatrix alloc] initWithWidth:width height:height];
+  for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
+    [result setX:BIT_MATRIX_POINTS.array[i] y:BIT_MATRIX_POINTS.array[i + 1]];
+  }
+  return result;
 }
 
 @end
