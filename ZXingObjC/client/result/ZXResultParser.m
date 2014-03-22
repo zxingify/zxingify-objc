@@ -46,6 +46,7 @@
 #import "ZXURLTOResultParser.h"
 #import "ZXVCardResultParser.h"
 #import "ZXVEventResultParser.h"
+#import "ZXVINResultParser.h"
 #import "ZXWifiParsedResult.h"
 #import "ZXWifiResultParser.h"
 
@@ -77,7 +78,8 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
               [[ZXURIResultParser alloc] init],
               [[ZXISBNResultParser alloc] init],
               [[ZXProductResultParser alloc] init],
-              [[ZXExpandedProductResultParser alloc] init]];
+              [[ZXExpandedProductResultParser alloc] init],
+              [[ZXVINResultParser alloc] init]];
   DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
   ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
 }

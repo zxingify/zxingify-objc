@@ -66,6 +66,8 @@
 #import "ZXURLTOResultParser.h"
 #import "ZXVCardResultParser.h"
 #import "ZXVEventResultParser.h"
+#import "ZXVINParsedResult.h"
+#import "ZXVINResultParser.h"
 #import "ZXWifiParsedResult.h"
 #import "ZXWifiResultParser.h"
 

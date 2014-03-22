@@ -32,5 +32,6 @@ typedef enum {
   kParsedResultTypeWifi,
   kParsedResultTypeNDEFSMartPoster,
   kParsedResultTypeMobiletagRichWeb,
-  kParsedResultTypeISBN
+  kParsedResultTypeISBN,
+  kParsedResultTypeVIN
 } ZXParsedResultType;
