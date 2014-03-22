@@ -18,8 +18,6 @@
 
 static NSRegularExpression *ZX_DATE_TIME = nil;
 static NSRegularExpression *ZX_RFC2445_DURATION = nil;
-static NSDateFormatter *ZX_DATE_FORMAT = nil;
-static NSDateFormatter *ZX_DATE_TIME_FORMAT = nil;
 
 const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
   7 * 24 * 60 * 60 * 1000, // 1 week
@@ -40,11 +38,11 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
                                                              options:NSRegularExpressionCaseInsensitive
                                                                error:nil];
 
-  ZX_DATE_FORMAT = [[NSDateFormatter alloc] init];
-  ZX_DATE_FORMAT.dateFormat = @"yyyyMMdd";
-
-  ZX_DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
-  ZX_DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss";
+//  ZX_DATE_FORMAT = [[NSDateFormatter alloc] init];
+//  ZX_DATE_FORMAT.dateFormat = @"yyyyMMdd";
+//
+//  ZX_DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
+//  ZX_DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss";
 }
 
 - (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString
@@ -109,13 +107,13 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
   }
   if (when.length == 8) {
     // Show only year/month/day
-    return [ZX_DATE_FORMAT dateFromString:when];
+    return [[self buildDateFormat] dateFromString:when];
   } else {
     // The when string can be local time, or UTC if it ends with a Z
     if (when.length == 16 && [when characterAtIndex:15] == 'Z') {
-      return [ZX_DATE_TIME_FORMAT dateFromString:[when substringToIndex:15]];
+      return [[self buildDateTimeFormat] dateFromString:[when substringToIndex:15]];
     } else {
-      return [ZX_DATE_TIME_FORMAT dateFromString:when];
+      return [[self buildDateTimeFormat] dateFromString:when];
     }
   }
 }
@@ -148,6 +146,18 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
     }
   }
   return durationMS;
+}
+
+- (NSDateFormatter *)buildDateFormat {
+  NSDateFormatter *format = [[NSDateFormatter alloc] init];
+  format.dateFormat = @"yyyyMMdd";
+  return format;
+}
+
+- (NSDateFormatter *)buildDateTimeFormat {
+  NSDateFormatter *format = [[NSDateFormatter alloc] init];
+  format.dateFormat = @"yyyyMMdd'T'HHmmss";
+  return format;
 }
 
 @end
