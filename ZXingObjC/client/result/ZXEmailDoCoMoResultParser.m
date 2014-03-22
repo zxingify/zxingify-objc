@@ -18,13 +18,13 @@
 #import "ZXEmailDoCoMoResultParser.h"
 #import "ZXResult.h"
 
-static NSRegularExpression *ATEXT_ALPHANUMERIC = nil;
+static NSRegularExpression *ZX_ATEXT_ALPHANUMERIC = nil;
 
 @implementation ZXEmailDoCoMoResultParser
 
 + (void)initialize {
-  ATEXT_ALPHANUMERIC = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+$"
-                                                            options:0 error:nil];
+  ZX_ATEXT_ALPHANUMERIC = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+$"
+                                                               options:0 error:nil];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -50,7 +50,7 @@ static NSRegularExpression *ATEXT_ALPHANUMERIC = nil;
 }
 
 + (BOOL)isBasicallyValidEmailAddress:(NSString *)email {
-  return email != nil && [ATEXT_ALPHANUMERIC numberOfMatchesInString:email options:0 range:NSMakeRange(0, email.length)] > 0 && [email rangeOfString:@"@"].location != NSNotFound;
+  return email != nil && [ZX_ATEXT_ALPHANUMERIC numberOfMatchesInString:email options:0 range:NSMakeRange(0, email.length)] > 0 && [email rangeOfString:@"@"].location != NSNotFound;
 }
 
 @end

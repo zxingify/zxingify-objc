@@ -50,38 +50,38 @@
 #import "ZXWifiParsedResult.h"
 #import "ZXWifiResultParser.h"
 
-static NSArray *PARSERS = nil;
-static NSRegularExpression *DIGITS = nil;
-static NSRegularExpression *ALPHANUM = nil;
-static NSString *AMPERSAND = @"&";
-static NSString *EQUALS = @"=";
-static unichar BYTE_ORDER_MARK = L'\ufeff';
+static NSArray *ZX_PARSERS = nil;
+static NSRegularExpression *ZX_DIGITS = nil;
+static NSRegularExpression *ZX_ALPHANUM = nil;
+static NSString *ZX_AMPERSAND = @"&";
+static NSString *ZX_EQUALS = @"=";
+static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
 
 @implementation ZXResultParser
 
 + (void)initialize {
-  PARSERS = @[[[ZXBookmarkDoCoMoResultParser alloc] init],
-              [[ZXAddressBookDoCoMoResultParser alloc] init],
-              [[ZXEmailDoCoMoResultParser alloc] init],
-              [[ZXAddressBookAUResultParser alloc] init],
-              [[ZXVCardResultParser alloc] init],
-              [[ZXBizcardResultParser alloc] init],
-              [[ZXVEventResultParser alloc] init],
-              [[ZXEmailAddressResultParser alloc] init],
-              [[ZXSMTPResultParser alloc] init],
-              [[ZXTelResultParser alloc] init],
-              [[ZXSMSMMSResultParser alloc] init],
-              [[ZXSMSTOMMSTOResultParser alloc] init],
-              [[ZXGeoResultParser alloc] init],
-              [[ZXWifiResultParser alloc] init],
-              [[ZXURLTOResultParser alloc] init],
-              [[ZXURIResultParser alloc] init],
-              [[ZXISBNResultParser alloc] init],
-              [[ZXProductResultParser alloc] init],
-              [[ZXExpandedProductResultParser alloc] init],
-              [[ZXVINResultParser alloc] init]];
-  DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
-  ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
+  ZX_PARSERS = @[[[ZXBookmarkDoCoMoResultParser alloc] init],
+                 [[ZXAddressBookDoCoMoResultParser alloc] init],
+                 [[ZXEmailDoCoMoResultParser alloc] init],
+                 [[ZXAddressBookAUResultParser alloc] init],
+                 [[ZXVCardResultParser alloc] init],
+                 [[ZXBizcardResultParser alloc] init],
+                 [[ZXVEventResultParser alloc] init],
+                 [[ZXEmailAddressResultParser alloc] init],
+                 [[ZXSMTPResultParser alloc] init],
+                 [[ZXTelResultParser alloc] init],
+                 [[ZXSMSMMSResultParser alloc] init],
+                 [[ZXSMSTOMMSTOResultParser alloc] init],
+                 [[ZXGeoResultParser alloc] init],
+                 [[ZXWifiResultParser alloc] init],
+                 [[ZXURLTOResultParser alloc] init],
+                 [[ZXURIResultParser alloc] init],
+                 [[ZXISBNResultParser alloc] init],
+                 [[ZXProductResultParser alloc] init],
+                 [[ZXExpandedProductResultParser alloc] init],
+                 [[ZXVINResultParser alloc] init]];
+  ZX_DIGITS = [[NSRegularExpression alloc] initWithPattern:@"^\\d*$" options:0 error:nil];
+  ZX_ALPHANUM = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]*$" options:0 error:nil];
 }
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
@@ -92,14 +92,14 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 
 + (NSString *)massagedText:(ZXResult *)result {
   NSString *text = result.text;
-  if (text.length > 0 && [text characterAtIndex:0] == BYTE_ORDER_MARK) {
+  if (text.length > 0 && [text characterAtIndex:0] == ZX_BYTE_ORDER_MARK) {
     text = [text substringFromIndex:1];
   }
   return text;
 }
 
 + (ZXParsedResult *)parseResult:(ZXResult *)theResult {
-  for (ZXResultParser *parser in PARSERS) {
+  for (ZXResultParser *parser in ZX_PARSERS) {
     ZXParsedResult *result = [parser parse:theResult];
     if (result != nil) {
       return result;
@@ -161,7 +161,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
 }
 
 + (BOOL)isStringOfDigits:(NSString *)value length:(unsigned int)length {
-  return value != nil && length == value.length && [DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(0, value.length)] > 0;
+  return value != nil && length == value.length && [ZX_DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(0, value.length)] > 0;
 }
 
 - (NSString *)urlDecode:(NSString *)escaped {
@@ -222,7 +222,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     return NO;
   }
   int max = offset + length;
-  return value.length >= max && [DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(offset, max - offset)] > 0;
+  return value.length >= max && [ZX_DIGITS numberOfMatchesInString:value options:0 range:NSMakeRange(offset, max - offset)] > 0;
 }
 
 + (BOOL)isSubstringOfAlphaNumeric:(NSString *)value offset:(int)offset length:(unsigned int)length {
@@ -230,7 +230,7 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     return NO;
   }
   int max = offset + length;
-  return value.length >= max && [ALPHANUM numberOfMatchesInString:value options:0 range:NSMakeRange(offset, max - offset)] > 0;
+  return value.length >= max && [ZX_ALPHANUM numberOfMatchesInString:value options:0 range:NSMakeRange(offset, max - offset)] > 0;
 }
 
 - (NSMutableDictionary *)parseNameValuePairs:(NSString *)uri {
@@ -239,14 +239,14 @@ static unichar BYTE_ORDER_MARK = L'\ufeff';
     return nil;
   }
   NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:3];
-  for (NSString *keyValue in [[uri substringFromIndex:paramStart + 1] componentsSeparatedByString:AMPERSAND]) {
+  for (NSString *keyValue in [[uri substringFromIndex:paramStart + 1] componentsSeparatedByString:ZX_AMPERSAND]) {
     [self appendKeyValue:keyValue result:result];
   }
   return result;
 }
 
 - (void)appendKeyValue:(NSString *)keyValue result:(NSMutableDictionary *)result {
-  NSRange equalsRange = [keyValue rangeOfString:EQUALS];
+  NSRange equalsRange = [keyValue rangeOfString:ZX_EQUALS];
   if (equalsRange.location != NSNotFound) {
     NSString *key = [keyValue substringToIndex:equalsRange.location];
     NSString *value = [keyValue substringFromIndex:equalsRange.location + 1];

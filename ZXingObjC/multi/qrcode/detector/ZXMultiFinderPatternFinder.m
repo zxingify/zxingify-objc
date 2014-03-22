@@ -25,23 +25,23 @@
 // since it limits the number of regions to decode
 
 // max. legal count of modules per QR code edge (177)
-float const MAX_MODULE_COUNT_PER_EDGE = 180;
+float const ZX_MAX_MODULE_COUNT_PER_EDGE = 180;
 // min. legal count per modules per QR code edge (11)
-float const MIN_MODULE_COUNT_PER_EDGE = 9;
+float const ZX_MIN_MODULE_COUNT_PER_EDGE = 9;
 
 /**
  * More or less arbitrary cutoff point for determining if two finder patterns might belong
  * to the same code if they differ less than DIFF_MODSIZE_CUTOFF_PERCENT percent in their
  * estimated modules sizes.
  */
-float const DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
+float const ZX_DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
 
 /**
  * More or less arbitrary cutoff point for determining if two finder patterns might belong
  * to the same code if they differ less than DIFF_MODSIZE_CUTOFF pixels/module in their
  * estimated modules sizes.
  */
-float const DIFF_MODSIZE_CUTOFF = 0.5f;
+float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
 
 @implementation ZXMultiFinderPatternFinder
 
@@ -99,7 +99,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
 
       float vModSize12 = ([p1 estimatedModuleSize] - [p2 estimatedModuleSize]) / MIN([p1 estimatedModuleSize], [p2 estimatedModuleSize]);
       float vModSize12A = fabsf([p1 estimatedModuleSize] - [p2 estimatedModuleSize]);
-      if (vModSize12A > DIFF_MODSIZE_CUTOFF && vModSize12 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
+      if (vModSize12A > ZX_DIFF_MODSIZE_CUTOFF && vModSize12 >= ZX_DIFF_MODSIZE_CUTOFF_PERCENT) {
         break;
       }
 
@@ -111,7 +111,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
 
         float vModSize23 = ([p2 estimatedModuleSize] - [p3 estimatedModuleSize]) / MIN([p2 estimatedModuleSize], [p3 estimatedModuleSize]);
         float vModSize23A = fabsf([p2 estimatedModuleSize] - [p3 estimatedModuleSize]);
-        if (vModSize23A > DIFF_MODSIZE_CUTOFF && vModSize23 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
+        if (vModSize23A > ZX_DIFF_MODSIZE_CUTOFF && vModSize23 >= ZX_DIFF_MODSIZE_CUTOFF_PERCENT) {
           break;
         }
 
@@ -124,7 +124,7 @@ float const DIFF_MODSIZE_CUTOFF = 0.5f;
         float dB = [ZXResultPoint distance:[info topLeft] pattern2:[info topRight]];
 
         float estimatedModuleCount = (dA + dB) / ([p1 estimatedModuleSize] * 2.0f);
-        if (estimatedModuleCount > MAX_MODULE_COUNT_PER_EDGE || estimatedModuleCount < MIN_MODULE_COUNT_PER_EDGE) {
+        if (estimatedModuleCount > ZX_MAX_MODULE_COUNT_PER_EDGE || estimatedModuleCount < ZX_MIN_MODULE_COUNT_PER_EDGE) {
           continue;
         }
 

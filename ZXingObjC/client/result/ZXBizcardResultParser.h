@@ -21,7 +21,6 @@
  * largely reverse-engineered from examples observed in the wild -- still
  * looking for a definitive reference.
  */
-
 @interface ZXBizcardResultParser : ZXAbstractDoCoMoResultParser
 
 @end

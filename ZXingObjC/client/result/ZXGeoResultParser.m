@@ -17,13 +17,13 @@
 #import "ZXGeoParsedResult.h"
 #import "ZXGeoResultParser.h"
 
-static NSRegularExpression *GEO_URL_PATTERN = nil;
+static NSRegularExpression *ZX_GEO_URL_PATTERN = nil;
 
 @implementation ZXGeoResultParser
 
 + (void)initialize {
-  GEO_URL_PATTERN = [[NSRegularExpression alloc] initWithPattern:@"geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?"
-                                            options:NSRegularExpressionCaseInsensitive error:nil];
+  ZX_GEO_URL_PATTERN = [[NSRegularExpression alloc] initWithPattern:@"geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?"
+                                                            options:NSRegularExpressionCaseInsensitive error:nil];
 
 }
 
@@ -33,7 +33,7 @@ static NSRegularExpression *GEO_URL_PATTERN = nil;
     return nil;
   }
 
-  NSArray *matches = [GEO_URL_PATTERN matchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)];
+  NSArray *matches = [ZX_GEO_URL_PATTERN matchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)];
   if (matches.count == 0) {
     return nil;
   }

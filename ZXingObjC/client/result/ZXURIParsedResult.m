@@ -16,12 +16,12 @@
 
 #import "ZXURIParsedResult.h"
 
-static NSRegularExpression *USER_IN_HOST = nil;
+static NSRegularExpression *ZX_USER_IN_HOST = nil;
 
 @implementation ZXURIParsedResult
 
 + (void)initialize {
-  USER_IN_HOST = [[NSRegularExpression alloc] initWithPattern:@":/*([^/@]+)@[^/]+" options:0 error:nil];
+  ZX_USER_IN_HOST = [[NSRegularExpression alloc] initWithPattern:@":/*([^/@]+)@[^/]+" options:0 error:nil];
 }
 
 - (id)initWithUri:(NSString *)uri title:(NSString *)title {
@@ -38,7 +38,7 @@ static NSRegularExpression *USER_IN_HOST = nil;
 }
 
 - (BOOL)possiblyMaliciousURI {
-  return [USER_IN_HOST numberOfMatchesInString:self.uri options:0 range:NSMakeRange(0, self.uri.length)] > 0;
+  return [ZX_USER_IN_HOST numberOfMatchesInString:self.uri options:0 range:NSMakeRange(0, self.uri.length)] > 0;
 }
 
 - (NSString *)displayResult {
