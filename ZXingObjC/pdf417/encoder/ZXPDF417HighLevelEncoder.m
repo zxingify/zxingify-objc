@@ -98,6 +98,8 @@ unichar ZX_PDF417_MIXED_TABLE[ZX_PDF417_MIXED_TABLE_LEN];
 const int ZX_PDF417_PUNCTUATION_LEN = 128;
 unichar ZX_PDF417_PUNCTUATION[ZX_PDF417_PUNCTUATION_LEN];
 
+const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x80000400;
+
 @implementation ZXPDF417HighLevelEncoder
 
 + (void)initialize {
@@ -123,14 +125,14 @@ unichar ZX_PDF417_PUNCTUATION[ZX_PDF417_PUNCTUATION_LEN];
 }
 
 /**
- * Converts the message to a byte array using the default encoding (cp437) as defined by the
+ * Converts the message to a byte array using the default encoding (Cp437) as defined by the
  * specification
  *
  * @param msg the message
  * @return the byte array of the message
  */
 + (ZXByteArray *)bytesForMessage:(NSString *)msg {
-  NSData *data = [msg dataUsingEncoding:(NSStringEncoding) 0x80000400];
+  NSData *data = [msg dataUsingEncoding:ZX_PDF417_DEFAULT_ENCODING];
   int8_t *bytes = (int8_t *)[data bytes];
   ZXByteArray *byteArray = [[ZXByteArray alloc] initWithLength:(unsigned int)[data length]];
   memcpy(byteArray.array, bytes, [data length] * sizeof(int8_t));
