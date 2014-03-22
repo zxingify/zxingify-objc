@@ -47,13 +47,14 @@ extern const int ZX_FINDER_PATTERN_MAX_MODULES;
  * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
  *         used by finder patterns to be considered a match
  */
-+ (BOOL)foundPatternCross:(int[])stateCount;
++ (BOOL)foundPatternCross:(const int[])stateCount;
 
 /**
  * This is called when a horizontal scan finds a possible alignment pattern. It will
  * cross check with a vertical scan, and if successful, will, ah, cross-cross-check
  * with another horizontal scan. This is needed primarily to locate the real horizontal
  * center of the pattern in cases of extreme skew.
+ * And then we cross-cross-cross check with another diagonal scan.
  *
  * If that succeeds the finder pattern location is added to a list that tracks
  * the number of times each location has been nearly-matched as a finder pattern.
@@ -65,6 +66,6 @@ extern const int ZX_FINDER_PATTERN_MAX_MODULES;
  * @param j end of possible finder pattern in row
  * @return true if a finder pattern candidate was found this time
  */
-- (BOOL)handlePossibleCenter:(int[])stateCount i:(int)i j:(int)j;
+- (BOOL)handlePossibleCenter:(const int[])stateCount i:(int)i j:(int)j pureBarcode:(BOOL)pureBarcode;
 
 @end
