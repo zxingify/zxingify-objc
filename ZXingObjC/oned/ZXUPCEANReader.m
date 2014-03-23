@@ -199,11 +199,29 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
                                        resultPoints:@[[[ZXResultPoint alloc] initWithX:left y:(float)rowNumber], [[ZXResultPoint alloc] initWithX:right y:(float)rowNumber]]
                                              format:format];
 
+  int extensionLength = 0;
+
   ZXResult *extensionResult = [self.extensionReader decodeRow:rowNumber row:row rowOffset:(int)NSMaxRange(endRange) error:error];
   if (extensionResult) {
     [decodeResult putMetadata:kResultMetadataTypeUPCEANExtension value:extensionResult.text];
     [decodeResult putAllMetadata:[extensionResult resultMetadata]];
     [decodeResult addResultPoints:[extensionResult resultPoints]];
+    extensionLength = (int)[extensionResult.text length];
+  }
+
+  ZXIntArray *allowedExtensions = hints == nil ? nil : hints.allowedEANExtensions;
+  if (allowedExtensions != nil) {
+    BOOL valid = NO;
+    for (int i = 0; i < allowedExtensions.length; i++) {
+      if (extensionLength == allowedExtensions.array[i]) {
+        valid = YES;
+        break;
+      }
+    }
+    if (!valid) {
+      if (error) *error = ZXNotFoundErrorInstance();
+      return nil;
+    }
   }
 
   if (format == kBarcodeFormatEan13 || format == kBarcodeFormatUPCA) {

@@ -17,6 +17,7 @@
 #import "ZXBarcodeFormat.h"
 
 @protocol ZXResultPointCallback;
+@class ZXIntArray;
 
 /**
  * Encapsulates hints that a caller may pass to a barcode reader to help it
@@ -75,6 +76,14 @@
  * Spend more time to try to find a barcode; optimize for accuracy, not speed.
  */
 @property (nonatomic, assign) BOOL tryHarder;
+
+/**
+ * Allowed extension lengths for EAN or UPC barcodes.
+ * Other formats will ignore this.
+ * A ZXIntArray of the allowed extension lengths, for example [2], [5], or [2, 5].
+ * If it is optional to have an extension, do not set this hint.
+ */
+@property (nonatomic, strong) ZXIntArray *allowedEANExtensions;
 
 /**
  * Image is known to be of one of a few possible formats.
