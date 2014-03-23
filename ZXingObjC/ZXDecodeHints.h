@@ -78,10 +78,11 @@
 @property (nonatomic, assign) BOOL tryHarder;
 
 /**
- * Allowed extension lengths for EAN or UPC barcodes.
- * Other formats will ignore this.
- * A ZXIntArray of the allowed extension lengths, for example [2], [5], or [2, 5].
- * If it is optional to have an extension, do not set this hint.
+ * Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.
+ * Maps to an ZXIntArray of the allowed extension lengths, for example [2], [5], or [2, 5].
+ * If it is optional to have an extension, do not set this hint. If this is set,
+ * and a UPC or EAN barcode is found but an extension is not, then no result will be returned
+ * at all.
  */
 @property (nonatomic, strong) ZXIntArray *allowedEANExtensions;
 
