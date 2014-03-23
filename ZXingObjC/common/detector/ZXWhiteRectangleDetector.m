@@ -30,13 +30,17 @@
 
 @end
 
-const int ZX_INIT_SIZE = 10;
+const float ZX_MIN_PCNT = 0.1;
+const int ZX_MIN_SIZE = 10;
 const int ZX_CORR = 1;
 
 @implementation ZXWhiteRectangleDetector
 
 - (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error {
-  return [self initWithImage:image initSize:ZX_INIT_SIZE x:image.width / 2 y:image.height / 2 error:error];
+  int maxImageDimension = MAX(image.height, image.width);
+  int pcntBasedInitSize = maxImageDimension * ZX_MIN_PCNT;
+  int initSize = MAX(pcntBasedInitSize, ZX_MIN_SIZE);
+  return [self initWithImage:image initSize:initSize x:image.width / 2 y:image.height / 2 error:error];
 }
 
 - (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error {
