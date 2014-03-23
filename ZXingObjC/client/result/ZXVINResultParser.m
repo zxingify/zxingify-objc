@@ -40,6 +40,11 @@ static NSRegularExpression *ZX_AZ09 = nil;
     return nil;
   }
 
+  int modelYear = [self modelYear:[rawText characterAtIndex:9]];
+  if (modelYear == -1) {
+    return nil;
+  }
+
   NSString *wmi = [rawText substringToIndex:3];
   return [[ZXVINParsedResult alloc] initWithVIN:rawText
                             worldManufacturerID:wmi
@@ -47,7 +52,7 @@ static NSRegularExpression *ZX_AZ09 = nil;
                        vehicleIdentifierSection:[rawText substringWithRange:NSMakeRange(9, 8)]
                                     countryCode:[self countryCode:wmi]
                               vehicleAttributes:[rawText substringWithRange:NSMakeRange(3, 5)]
-                                      modelYear:[self modelYear:[rawText characterAtIndex:9]]
+                                      modelYear:modelYear
                                       plantCode:[rawText characterAtIndex:10]
                                sequentialNumber:[rawText substringFromIndex:11]];
 }
@@ -55,9 +60,20 @@ static NSRegularExpression *ZX_AZ09 = nil;
 - (BOOL)checkChecksum:(NSString *)vin {
   int sum = 0;
   for (int i = 0; i < [vin length]; i++) {
-    sum += [self vinPositionWeight:i + 1] * [self vinCharValue:[vin characterAtIndex:i]];
+    int vinPositionWeight = [self vinPositionWeight:i + 1];
+    if (vinPositionWeight == -1) {
+      return NO;
+    }
+    int vinCharValue = [self vinCharValue:[vin characterAtIndex:i]];
+    if (vinCharValue == -1) {
+      return NO;
+    }
+    sum += vinPositionWeight * vinCharValue;
   }
   unichar checkChar = [vin characterAtIndex:8];
+  if (checkChar == '\0') {
+    return NO;
+  }
   unichar expectedCheckChar = [self checkChar:sum % 11];
   return checkChar == expectedCheckChar;
 }
@@ -75,9 +91,7 @@ static NSRegularExpression *ZX_AZ09 = nil;
   if (c >= '0' && c <= '9') {
     return c - '0';
   }
-  @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                 reason:@"Invalid VIN char"
-                               userInfo:nil];
+  return -1;
 }
 
 - (int)vinPositionWeight:(int)position {
@@ -93,9 +107,7 @@ static NSRegularExpression *ZX_AZ09 = nil;
   if (position >= 10 && position <= 17) {
     return 19 - position;
   }
-  @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                 reason:@"Invalid position"
-                               userInfo:nil];
+  return -1;
 }
 
 - (unichar)checkChar:(int)remainder {
@@ -105,9 +117,7 @@ static NSRegularExpression *ZX_AZ09 = nil;
   if (remainder == 10) {
     return 'X';
   }
-  @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                 reason:@"Invalid char"
-                               userInfo:nil];
+  return '\0';
 }
 
 - (int)modelYear:(unichar)c {
@@ -132,9 +142,7 @@ static NSRegularExpression *ZX_AZ09 = nil;
   if (c >= 'A' && c <= 'D') {
     return (c - 'A') + 2010;
   }
-  @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                 reason:@"Invalid model year"
-                               userInfo:nil];
+  return -1;
 }
 
 - (NSString *)countryCode:(NSString *)wmi {
