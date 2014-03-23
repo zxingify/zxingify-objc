@@ -28,7 +28,8 @@ static int ZX_ITF_MAX_INDIVIDUAL_VARIANCE;
 static const int ZX_ITF_W = 3; // Pixel width of a wide line
 static const int ZX_ITF_N = 1; // Pixel width of a narrow line
 
-const int ZX_ITF_DEFAULT_ALLOWED_LENGTHS[] = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+/** Valid ITF lengths. Anything longer than the largest value is also allowed. */
+const int ZX_ITF_DEFAULT_ALLOWED_LENGTHS[] = { 6, 8, 10, 12, 14 };
 
 /**
  * Start/end guard pattern.
@@ -78,6 +79,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
 }
 
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error {
+  // Find out where the Middle section (payload) starts & ends
   ZXIntArray *startRange = [self decodeStart:row];
   ZXIntArray *endRange = [self decodeEnd:row];
   if (!startRange || !endRange) {
@@ -103,13 +105,23 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     allowedLengths = [NSArray arrayWithArray:temp];
   }
 
+  // To avoid false positives with 2D barcodes (and other patterns), make
+  // an assumption that the decoded string must be a 'standard' length if it's short
   NSUInteger length = [resultString length];
   BOOL lengthOK = NO;
+  int maxAllowedLength = 0;
   for (NSNumber *i in allowedLengths) {
-    if (length == [i intValue]) {
+    int allowedLength = [i intValue];
+    if (length == allowedLength) {
       lengthOK = YES;
       break;
     }
+    if (allowedLength > maxAllowedLength) {
+      maxAllowedLength = allowedLength;
+    }
+  }
+  if (!lengthOK && length > maxAllowedLength) {
+    lengthOK = YES;
   }
   if (!lengthOK) {
     if (error) *error = ZXFormatErrorInstance();
