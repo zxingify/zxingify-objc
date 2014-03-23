@@ -30,17 +30,13 @@
 
 @end
 
-const float ZX_MIN_PCNT = 0.1;
-const int ZX_MIN_SIZE = 10;
+const int ZX_INIT_SIZE = 10;
 const int ZX_CORR = 1;
 
 @implementation ZXWhiteRectangleDetector
 
 - (id)initWithImage:(ZXBitMatrix *)image error:(NSError **)error {
-  int maxImageDimension = MAX(image.height, image.width);
-  int pcntBasedInitSize = maxImageDimension * ZX_MIN_PCNT;
-  int initSize = MAX(pcntBasedInitSize, ZX_MIN_SIZE);
-  return [self initWithImage:image initSize:initSize x:image.width / 2 y:image.height / 2 error:error];
+  return [self initWithImage:image initSize:ZX_INIT_SIZE x:image.width / 2 y:image.height / 2 error:error];
 }
 
 - (id)initWithImage:(ZXBitMatrix *)image initSize:(int)initSize x:(int)x y:(int)y error:(NSError **)error {
@@ -71,6 +67,11 @@ const int ZX_CORR = 1;
   BOOL aBlackPointFoundOnBorder = YES;
   BOOL atLeastOneBlackPointFoundOnBorder = NO;
 
+  BOOL atLeastOneBlackPointFoundOnRight = NO;
+  BOOL atLeastOneBlackPointFoundOnBottom = NO;
+  BOOL atLeastOneBlackPointFoundOnLeft = NO;
+  BOOL atLeastOneBlackPointFoundOnTop = NO;
+
   while (aBlackPointFoundOnBorder) {
     aBlackPointFoundOnBorder = NO;
 
@@ -78,11 +79,14 @@ const int ZX_CORR = 1;
     // .   |
     // .....
     BOOL rightBorderNotWhite = YES;
-    while (rightBorderNotWhite && right < self.width) {
+    while ((rightBorderNotWhite || !atLeastOneBlackPointFoundOnRight) && right < self.width) {
       rightBorderNotWhite = [self containsBlackPoint:up b:down fixed:right horizontal:NO];
       if (rightBorderNotWhite) {
         right++;
         aBlackPointFoundOnBorder = YES;
+        atLeastOneBlackPointFoundOnRight = YES;
+      } else if (!atLeastOneBlackPointFoundOnRight) {
+        right++;
       }
     }
 
@@ -95,11 +99,14 @@ const int ZX_CORR = 1;
     // .   .
     // .___.
     BOOL bottomBorderNotWhite = YES;
-    while (bottomBorderNotWhite && down < self.height) {
+    while ((bottomBorderNotWhite || !atLeastOneBlackPointFoundOnBottom) && down < self.height) {
       bottomBorderNotWhite = [self containsBlackPoint:left b:right fixed:down horizontal:YES];
       if (bottomBorderNotWhite) {
         down++;
         aBlackPointFoundOnBorder = YES;
+        atLeastOneBlackPointFoundOnBottom = YES;
+      } else if (!atLeastOneBlackPointFoundOnBottom) {
+        down++;
       }
     }
 
@@ -112,11 +119,14 @@ const int ZX_CORR = 1;
     // |   .
     // .....
     BOOL leftBorderNotWhite = YES;
-    while (leftBorderNotWhite && left >= 0) {
+    while ((leftBorderNotWhite || !atLeastOneBlackPointFoundOnLeft) && left >= 0) {
       leftBorderNotWhite = [self containsBlackPoint:up b:down fixed:left horizontal:NO];
       if (leftBorderNotWhite) {
         left--;
         aBlackPointFoundOnBorder = YES;
+        atLeastOneBlackPointFoundOnLeft = YES;
+      } else if (!atLeastOneBlackPointFoundOnLeft) {
+        left--;
       }
     }
 
@@ -129,11 +139,14 @@ const int ZX_CORR = 1;
     // .   .
     // .....
     BOOL topBorderNotWhite = YES;
-    while (topBorderNotWhite && up >= 0) {
+    while ((topBorderNotWhite  || !atLeastOneBlackPointFoundOnTop) && up >= 0) {
       topBorderNotWhite = [self containsBlackPoint:left b:right fixed:up horizontal:YES];
       if (topBorderNotWhite) {
         up--;
         aBlackPointFoundOnBorder = YES;
+        atLeastOneBlackPointFoundOnTop = YES;
+      } else if (!atLeastOneBlackPointFoundOnTop) {
+        up--;
       }
     }
 
