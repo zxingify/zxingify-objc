@@ -76,8 +76,27 @@ const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
     if (newCodeSet == codeSet) {
       // Encode the current character
       if (codeSet == ZX_CODE128_CODE_CODE_B) {
-        patternIndex = [contents characterAtIndex:position] - ' ';
-        position += 1;
+        switch ([contents characterAtIndex:position]) {
+          case ZX_CODE128_ESCAPE_FNC_1:
+            patternIndex = ZX_CODE128_CODE_FNC_1;
+            position++;
+            break;
+          case ZX_CODE128_ESCAPE_FNC_2:
+            patternIndex = ZX_CODE128_CODE_FNC_2;
+            position++;
+            break;
+          case ZX_CODE128_ESCAPE_FNC_3:
+            patternIndex = ZX_CODE128_CODE_FNC_3;
+            position++;
+            break;
+          case ZX_CODE128_ESCAPE_FNC_4:
+            patternIndex = ZX_CODE128_CODE_FNC_4_B; // FIXME if this ever outputs Code A
+            position++;
+            break;
+          default:
+            patternIndex = [contents characterAtIndex:position] - ' ';
+            position++;
+        }
       } else { // CODE_CODE_C
         switch ([contents characterAtIndex:position]) {
           case ZX_CODE128_ESCAPE_FNC_1:
