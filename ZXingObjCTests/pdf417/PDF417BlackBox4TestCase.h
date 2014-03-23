@@ -16,6 +16,10 @@
 
 #import "AbstractBlackBoxTestCase.h"
 
+/**
+ * This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
+ * several barcodes can be properly combined again to yield the original data content.
+ */
 @interface PDF417BlackBox4TestCase : AbstractBlackBoxTestCase
 
 @end

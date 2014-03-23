@@ -17,10 +17,6 @@
 #import "PDF417BlackBox4TestCase.h"
 #import "TestResult.h"
 
-/**
- * This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
- * several barcodes can be properly combined again to yield the original data content.
- */
 @implementation PDF417BlackBox4TestCase
 
 - (id)initWithInvocation:(NSInvocation *)invocation {

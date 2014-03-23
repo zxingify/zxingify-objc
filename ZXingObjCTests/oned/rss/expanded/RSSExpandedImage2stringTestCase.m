@@ -19,195 +19,117 @@
 @implementation RSSExpandedImage2stringTestCase
 
 - (void)testDecodeRow2string_1 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/1.png";
-  NSString *expected = @"(11)100224(17)110224(3102)000100";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"1.png" expected:@"(11)100224(17)110224(3102)000100"];
 }
 
 - (void)testDecodeRow2string_2 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
-  NSString *expected = @"(01)90012345678908(3103)001750";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"2.png" expected:@"(01)90012345678908(3103)001750"];
 }
 
 - (void)testDecodeRow2string_3 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
-  NSString *expected = @"(10)12A";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"3.png" expected:@"(10)12A"];
 }
 
 - (void)testDecodeRow2string_4 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/4.png";
-  NSString *expected = @"(01)98898765432106(3202)012345(15)991231";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"4.png" expected:@"(01)98898765432106(3202)012345(15)991231"];
 }
 
 - (void)testDecodeRow2string_5 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/5.png";
-  NSString *expected = @"(01)90614141000015(3202)000150";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"5.png" expected:@"(01)90614141000015(3202)000150"];
 }
 
 - (void)testDecodeRow2string_7 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/7.png";
-  NSString *expected = @"(10)567(11)010101";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"7.png" expected:@"(10)567(11)010101"];
 }
 
 - (void)testDecodeRow2string_10 {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/10.png";
   NSString *expected = @"(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456(423)012345678901";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"10.png" expected:expected];
 }
 
 - (void)testDecodeRow2string_11 {
-  NSString *expected = @"(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/11.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"11.png" expected:@"(01)98898765432106(15)991231(3103)001750(10)12A(422)123(21)123456"];
 }
 
 - (void)testDecodeRow2string_12 {
-  NSString *expected = @"(01)98898765432106(3103)001750";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/12.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"12.png" expected:@"(01)98898765432106(3103)001750"];
 }
 
 - (void)testDecodeRow2string_13 {
-  NSString *expected = @"(01)90012345678908(3922)795";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/13.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"13.png" expected:@"(01)90012345678908(3922)795"];
 }
 
 - (void)testDecodeRow2string_14 {
-  NSString *expected = @"(01)90012345678908(3932)0401234";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/14.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"14.png" expected:@"(01)90012345678908(3932)0401234"];
 }
 
 - (void)testDecodeRow2string_15 {
-  NSString *expected = @"(01)90012345678908(3102)001750(11)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/15.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"15.png" expected:@"(01)90012345678908(3102)001750(11)100312"];
 }
 
 - (void)testDecodeRow2string_16 {
-  NSString *expected = @"(01)90012345678908(3202)001750(11)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/16.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"16.png" expected:@"(01)90012345678908(3202)001750(11)100312"];
 }
 
 - (void)testDecodeRow2string_17 {
-  NSString *expected = @"(01)90012345678908(3102)001750(13)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/17.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"17.png" expected:@"(01)90012345678908(3102)001750(13)100312"];
 }
 
 - (void)testDecodeRow2string_18 {
-  NSString *expected = @"(01)90012345678908(3202)001750(13)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/18.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"18.png" expected:@"(01)90012345678908(3202)001750(13)100312"];
 }
 
 - (void)testDecodeRow2string_19 {
-  NSString *expected = @"(01)90012345678908(3102)001750(15)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/19.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"19.png" expected:@"(01)90012345678908(3102)001750(15)100312"];
 }
 
 - (void)testDecodeRow2string_20 {
-  NSString *expected = @"(01)90012345678908(3202)001750(15)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/20.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"20.png" expected:@"(01)90012345678908(3202)001750(15)100312"];
 }
 
 - (void)testDecodeRow2string_21 {
-  NSString *expected = @"(01)90012345678908(3102)001750(17)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/21.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"21.png" expected:@"(01)90012345678908(3102)001750(17)100312"];
 }
 
 - (void)testDecodeRow2string_22 {
-  NSString *expected = @"(01)90012345678908(3202)001750(17)100312";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/22.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"22.png" expected:@"(01)90012345678908(3202)001750(17)100312"];
 }
 
 - (void)testDecodeRow2string_25 {
-  NSString *expected = @"(10)123";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/25.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"25.png" expected:@"(10)123"];
 }
 
 - (void)testDecodeRow2string_26 {
-  NSString *expected = @"(10)5678(11)010101";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/26.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"26.png" expected:@"(10)5678(11)010101"];
 }
 
 - (void)testDecodeRow2string_27 {
-  NSString *expected = @"(10)1098-1234";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/27.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"27.png" expected:@"(10)1098-1234"];
 }
 
 - (void)testDecodeRow2string_28 {
-  NSString *expected = @"(10)1098/1234";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/28.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"28.png" expected:@"(10)1098/1234"];
 }
 
 - (void)testDecodeRow2string_29 {
-  NSString *expected = @"(10)1098.1234";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/29.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"29.png" expected:@"(10)1098.1234"];
 }
 
 - (void)testDecodeRow2string_30 {
-  NSString *expected = @"(10)1098*1234";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/30.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"30.png" expected:@"(10)1098*1234"];
 }
 
 - (void)testDecodeRow2string_31 {
-  NSString *expected = @"(10)1098,1234";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/31.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"31.png" expected:@"(10)1098,1234"];
 }
 
 - (void)testDecodeRow2string_32 {
-  NSString *expected = @"(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012";
-  NSString *path = @"Resources/blackbox/rssexpanded-1/32.png";
-
-  [self assertCorrectImage2string:path expected:expected];
+  [self assertCorrectImage2string:@"32.png" expected:@"(15)991231(3103)001750(10)12A(422)123(21)123456(423)0123456789012"];
 }
 
-- (void)assertCorrectImage2string:(NSString *)path expected:(NSString *)expected {
+- (void)assertCorrectImage2string:(NSString *)filename expected:(NSString *)expected {
+  NSString *path = [@"Resources/blackbox/rssexpanded-1/" stringByAppendingString:filename];
+
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
 
   ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];

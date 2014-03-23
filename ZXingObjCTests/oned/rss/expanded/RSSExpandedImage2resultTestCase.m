@@ -20,17 +20,17 @@
 
 - (void)testDecodeRow2result_2 {
   // (01)90012345678908(3103)001750
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
   ZXExpandedProductParsedResult *expected =
-  [ZXExpandedProductParsedResult expandedProductParsedResultWithRawText:@"(01)90012345678908(3103)001750" productID:@"90012345678908" sscc:nil lotNumber:nil productionDate:nil
-                                                          packagingDate:nil bestBeforeDate:nil expirationDate:nil weight:@"001750"
-                                                             weightType:ZX_KILOGRAM weightIncrement:@"3" price:nil priceIncrement:nil
-                                                          priceCurrency:nil uncommonAIs:[NSMutableDictionary dictionary]];
+    [ZXExpandedProductParsedResult expandedProductParsedResultWithRawText:@"(01)90012345678908(3103)001750" productID:@"90012345678908" sscc:nil lotNumber:nil productionDate:nil
+                                                            packagingDate:nil bestBeforeDate:nil expirationDate:nil weight:@"001750"
+                                                               weightType:ZX_KILOGRAM weightIncrement:@"3" price:nil priceIncrement:nil
+                                                            priceCurrency:nil uncommonAIs:[NSMutableDictionary dictionary]];
 
-  [self assertCorrectImage2result:path expected:expected];
+  [self assertCorrectImage2result:@"2.png" expected:expected];
 }
 
-- (void)assertCorrectImage2result:(NSString *)path expected:(ZXExpandedProductParsedResult *)expected {
+- (void)assertCorrectImage2result:(NSString *)filename expected:(ZXExpandedProductParsedResult *)expected {
+  NSString *path = [@"Resources/blackbox/rssexpanded-1/" stringByAppendingString:filename];
   ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   int rowNumber = binaryMap.height / 2;

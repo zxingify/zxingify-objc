@@ -26,8 +26,7 @@
 @implementation RSSExpandedInternalTestCase
 
 - (void)testFindFinderPatterns {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/2.png";
-  ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
+  ZXImage *image = [self readImage:@"2.png"];
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   int rowNumber = binaryMap.height / 2;
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
@@ -59,8 +58,7 @@
 }
 
 - (void)testRetrieveNextPairPatterns {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
-  ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
+  ZXImage *image = [self readImage:@"3.png"];
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   int rowNumber = binaryMap.height / 2;
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
@@ -81,8 +79,7 @@
 }
 
 - (void)testDecodeCheckCharacter {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
-  ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
+  ZXImage *image = [self readImage:@"3.png"];
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
@@ -97,8 +94,7 @@
 }
 
 - (void)testDecodeDataCharacter {
-  NSString *path = @"Resources/blackbox/rssexpanded-1/3.png";
-  ZXImage *image = [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
+  ZXImage *image = [self readImage:@"3.png"];
   ZXBinaryBitmap *binaryMap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXGlobalHistogramBinarizer alloc] initWithSource:[[ZXCGImageLuminanceSource alloc] initWithZXImage:image]]];
   ZXBitArray *row = [binaryMap blackRow:binaryMap.height / 2 row:nil error:nil];
 
@@ -111,6 +107,11 @@
 
   XCTAssertEqual(dataCharacter.value, 19, @"Expected dataCharacter.value to equal 19");
   XCTAssertEqual(dataCharacter.checksumPortion, 1007, @"Expected dataCharacter.checksumPortion to equal 1007");
+}
+
+- (ZXImage *)readImage:(NSString *)fileName {
+  NSString *path = [@"Resources/blackbox/rssexpanded-1/" stringByAppendingString:fileName];
+  return [[ZXImage alloc] initWithURL:[[NSBundle bundleForClass:[self class]] URLForResource:path withExtension:nil]];
 }
 
 @end
