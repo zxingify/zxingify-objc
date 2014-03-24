@@ -51,7 +51,7 @@
   int pos = [self appendPattern:result pos:0 pattern:widths.array patternLen:widths.length startColor:YES];
   ZXIntArray *narrowWhite = [[ZXIntArray alloc] initWithInts:1, -1];
   pos += [self appendPattern:result pos:pos pattern:narrowWhite.array patternLen:narrowWhite.length startColor:NO];
-  //append next character to bytematrix
+  //append next character to byte matrix
   for (int i = 0; i < length; i++) {
     NSUInteger indexInString = [ZX_CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
