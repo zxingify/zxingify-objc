@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@class ZXDataMatrixSymbolInfo, ZXDataMatrixSymbolShapeHint, ZXDimension;
+#import "ZXDataMatrixSymbolShapeHint.h"
+
+@class ZXDataMatrixSymbolInfo, ZXDimension;
 
 @interface ZXDataMatrixEncoderContext : NSObject
 
@@ -23,7 +25,7 @@
 @property (nonatomic, assign) int newEncoding;
 @property (nonatomic, assign) int pos;
 @property (nonatomic, assign) int skipAtEnd;
-@property (nonatomic, strong) ZXDataMatrixSymbolShapeHint *symbolShape;
+@property (nonatomic, assign) ZXDataMatrixSymbolShapeHint symbolShape;
 @property (nonatomic, strong) ZXDataMatrixSymbolInfo *symbolInfo;
 
 - (id)initWithMessage:(NSString *)msg;

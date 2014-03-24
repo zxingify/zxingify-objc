@@ -16,7 +16,6 @@
 
 #import "ZXDataMatrixEncoderContext.h"
 #import "ZXDataMatrixSymbolInfo.h"
-#import "ZXDataMatrixSymbolShapeHint.h"
 
 @interface ZXDataMatrixEncoderContext ()
 
@@ -42,7 +41,7 @@
     }
 
     _message = [[NSString alloc] initWithString:sb];
-    _symbolShape = [ZXDataMatrixSymbolShapeHint forceNone];
+    _symbolShape = ZXDataMatrixSymbolShapeHintForceNone;
     _codewords = [[NSMutableString alloc] initWithCapacity:msg.length];
     _newEncoding = -1;
   }

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@class ZXDataMatrixSymbolShapeHint, ZXDimension;
+#import "ZXDataMatrixSymbolShapeHint.h"
+
+@class ZXDimension;
 
 /**
  * Symbol info table for DataMatrix.
@@ -43,10 +45,10 @@
               matrixWidth:(int)matrixWidth matrixHeight:(int)matrixHeight dataRegions:(int)dataRegions
               rsBlockData:(int)rsBlockData rsBlockError:(int)rsBlockError;
 + (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords;
-+ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint *)shape;
++ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint)shape;
 + (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords allowRectangular:(BOOL)allowRectangular fail:(BOOL)fail;
-+ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint *)shape fail:(BOOL)fail;
-+ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint *)shape minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize fail:(BOOL)fail;
++ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint)shape fail:(BOOL)fail;
++ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint)shape minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize fail:(BOOL)fail;
 - (int)horizontalDataRegions;
 - (int)verticalDataRegions;
 - (int)symbolDataWidth;

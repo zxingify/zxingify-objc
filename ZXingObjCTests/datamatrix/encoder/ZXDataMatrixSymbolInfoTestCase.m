@@ -26,7 +26,7 @@
   XCTAssertEqual(10, info.symbolWidth);
   XCTAssertEqual(10, info.symbolHeight);
 
-  info = [ZXDataMatrixSymbolInfo lookup:3 shape:[ZXDataMatrixSymbolShapeHint forceRectangle]];
+  info = [ZXDataMatrixSymbolInfo lookup:3 shape:ZXDataMatrixSymbolShapeHintForceRectangle];
   XCTAssertEqual(7, info.errorCodewords);
   XCTAssertEqual(16, info.matrixWidth);
   XCTAssertEqual(6, info.matrixHeight);
@@ -40,7 +40,7 @@
   XCTAssertEqual(32, info.symbolWidth);
   XCTAssertEqual(8, info.symbolHeight);
 
-  info = [ZXDataMatrixSymbolInfo lookup:9 shape:[ZXDataMatrixSymbolShapeHint forceSquare]];
+  info = [ZXDataMatrixSymbolInfo lookup:9 shape:ZXDataMatrixSymbolShapeHintForceSquare];
   XCTAssertEqual(12, info.errorCodewords);
   XCTAssertEqual(14, info.matrixWidth);
   XCTAssertEqual(14, info.matrixHeight);
@@ -55,7 +55,7 @@
   }
 
   @try {
-    [ZXDataMatrixSymbolInfo lookup:50 shape:[ZXDataMatrixSymbolShapeHint forceRectangle]];
+    [ZXDataMatrixSymbolInfo lookup:50 shape:ZXDataMatrixSymbolShapeHintForceRectangle];
     XCTFail(@"There's no rectangular symbol for 50 data codewords");
   } @catch (NSException *exception) {
     // expected
@@ -66,29 +66,29 @@
   XCTAssertEqual(24, info.symbolHeight);
 
   ZXDimension *fixedSize = [[ZXDimension alloc] initWithWidth:26 height:26];
-  info = [ZXDataMatrixSymbolInfo lookup:35 shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:fixedSize maxSize:fixedSize fail:NO];
+  info = [ZXDataMatrixSymbolInfo lookup:35 shape:ZXDataMatrixSymbolShapeHintForceNone minSize:fixedSize maxSize:fixedSize fail:NO];
   XCTAssertEqual(26, info.symbolWidth);
   XCTAssertEqual(26, info.symbolHeight);
 
-  info = [ZXDataMatrixSymbolInfo lookup:45 shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:fixedSize maxSize:fixedSize fail:NO];
+  info = [ZXDataMatrixSymbolInfo lookup:45 shape:ZXDataMatrixSymbolShapeHintForceNone minSize:fixedSize maxSize:fixedSize fail:NO];
   XCTAssertNil(info);
 
   ZXDimension *minSize = fixedSize;
   ZXDimension *maxSize = [[ZXDimension alloc] initWithWidth:32 height:32];
 
-  info = [ZXDataMatrixSymbolInfo lookup:35 shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
+  info = [ZXDataMatrixSymbolInfo lookup:35 shape:ZXDataMatrixSymbolShapeHintForceNone minSize:minSize maxSize:maxSize fail:NO];
   XCTAssertEqual(26, info.symbolWidth);
   XCTAssertEqual(26, info.symbolHeight);
 
-  info = [ZXDataMatrixSymbolInfo lookup:40 shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
+  info = [ZXDataMatrixSymbolInfo lookup:40 shape:ZXDataMatrixSymbolShapeHintForceNone minSize:minSize maxSize:maxSize fail:NO];
   XCTAssertEqual(26, info.symbolWidth);
   XCTAssertEqual(26, info.symbolHeight);
 
-  info = [ZXDataMatrixSymbolInfo lookup:45 shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
+  info = [ZXDataMatrixSymbolInfo lookup:45 shape:ZXDataMatrixSymbolShapeHintForceNone minSize:minSize maxSize:maxSize fail:NO];
   XCTAssertEqual(32, info.symbolWidth);
   XCTAssertEqual(32, info.symbolHeight);
 
-  info = [ZXDataMatrixSymbolInfo lookup:63 shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
+  info = [ZXDataMatrixSymbolInfo lookup:63 shape:ZXDataMatrixSymbolShapeHintForceNone minSize:minSize maxSize:maxSize fail:NO];
   XCTAssertNil(info);
 }
 

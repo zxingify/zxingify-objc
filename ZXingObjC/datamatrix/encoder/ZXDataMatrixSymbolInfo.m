@@ -16,7 +16,6 @@
 
 #import "ZXDataMatrixSymbolInfo.h"
 #import "ZXDataMatrixSymbolInfo144.h"
-#import "ZXDataMatrixSymbolShapeHint.h"
 #import "ZXDimension.h"
 
 static NSArray *PROD_SYMBOLS = nil;
@@ -94,30 +93,30 @@ static NSArray *symbols = nil;
 }
 
 + (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords {
-  return [self lookup:dataCodewords shape:[ZXDataMatrixSymbolShapeHint forceNone] fail:YES];
+  return [self lookup:dataCodewords shape:ZXDataMatrixSymbolShapeHintForceNone fail:YES];
 }
 
-+ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint *)shape {
++ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint)shape {
   return [self lookup:dataCodewords shape:shape fail:YES];
 }
 
 + (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords allowRectangular:(BOOL)allowRectangular fail:(BOOL)fail {
-  ZXDataMatrixSymbolShapeHint *shape = allowRectangular
-    ? [ZXDataMatrixSymbolShapeHint forceNone] : [ZXDataMatrixSymbolShapeHint forceSquare];
+  ZXDataMatrixSymbolShapeHint shape = allowRectangular
+    ? ZXDataMatrixSymbolShapeHintForceNone : ZXDataMatrixSymbolShapeHintForceSquare;
   return [self lookup:dataCodewords shape:shape fail:fail];
 }
 
-+ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint *)shape fail:(BOOL)fail {
++ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint)shape fail:(BOOL)fail {
   return [self lookup:dataCodewords shape:shape minSize:nil maxSize:nil fail:fail];
 }
 
-+ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint *)shape minSize:(ZXDimension *)minSize
++ (ZXDataMatrixSymbolInfo *)lookup:(int)dataCodewords shape:(ZXDataMatrixSymbolShapeHint)shape minSize:(ZXDimension *)minSize
                  maxSize:(ZXDimension *)maxSize fail:(BOOL)fail {
   for (ZXDataMatrixSymbolInfo *symbol in symbols) {
-    if (shape == [ZXDataMatrixSymbolShapeHint forceSquare] && symbol.rectangular) {
+    if (shape == ZXDataMatrixSymbolShapeHintForceSquare && symbol.rectangular) {
       continue;
     }
-    if (shape == [ZXDataMatrixSymbolShapeHint forceRectangle] && !symbol.rectangular) {
+    if (shape == ZXDataMatrixSymbolShapeHintForceRectangle && !symbol.rectangular) {
       continue;
     }
     if (minSize != nil

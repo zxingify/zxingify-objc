@@ -23,7 +23,7 @@
  * These are a set of hints that you may pass to Writers to specify their behavior.
  */
 
-@class ZXDataMatrixSymbolShapeHint, ZXDimension;
+@class ZXDimension;
 
 @interface ZXEncodeHints : NSObject
 
@@ -35,9 +35,9 @@
 @property (nonatomic, assign) NSStringEncoding encoding;
 
 /**
- * Specifies the matrix shape for Data Matrix .
+ * Specifies the matrix shape for Data Matrix.
  */
-@property (nonatomic, strong) ZXDataMatrixSymbolShapeHint *dataMatrixShape;
+@property (nonatomic, assign) ZXDataMatrixSymbolShapeHint dataMatrixShape;
 
 /**
  * Specifies a minimum barcode size. Only applicable to Data Matrix now.

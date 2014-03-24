@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@class ZXDataMatrixSymbolShapeHint, ZXDimension;
+#import "ZXDataMatrixSymbolShapeHint.h"
+
+@class ZXDimension;
 
 /**
  * DataMatrix ECC 200 data encoder following the algorithm described in ISO/IEC 16022:200(E) in
@@ -112,7 +114,7 @@
  * @param maxSize the maximum symbol size constraint or null for no constraint
  * @return the encoded message (the char values range from 0 to 255)
  */
-+ (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXDataMatrixSymbolShapeHint *)shape
++ (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXDataMatrixSymbolShapeHint)shape
                       minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize;
 
 + (int)lookAheadTest:(NSString *)msg startpos:(int)startpos currentMode:(int)currentMode;

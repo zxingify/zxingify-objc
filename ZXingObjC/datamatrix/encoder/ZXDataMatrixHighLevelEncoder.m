@@ -21,7 +21,6 @@
 #import "ZXDataMatrixEncoderContext.h"
 #import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXDataMatrixSymbolInfo.h"
-#import "ZXDataMatrixSymbolShapeHint.h"
 #import "ZXDataMatrixTextEncoder.h"
 #import "ZXDataMatrixX12Encoder.h"
 
@@ -130,10 +129,10 @@ static NSString *MACRO_TRAILER = nil;
 }
 
 + (NSString *)encodeHighLevel:(NSString *)msg {
-  return [self encodeHighLevel:msg shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:nil maxSize:nil];
+  return [self encodeHighLevel:msg shape:ZXDataMatrixSymbolShapeHintForceNone minSize:nil maxSize:nil];
 }
 
-+ (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXDataMatrixSymbolShapeHint *)shape
++ (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXDataMatrixSymbolShapeHint)shape
                       minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize {
   //the codewords 0..255 are encoded as Unicode characters
   NSArray *encoders = @[[[ZXDataMatrixASCIIEncoder alloc] init],

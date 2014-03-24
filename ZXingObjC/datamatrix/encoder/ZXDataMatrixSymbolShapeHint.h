@@ -18,10 +18,8 @@
  * Enumeration for DataMatrix symbol shape hint. It can be used to force square or rectangular
  * symbols.
  */
-@interface ZXDataMatrixSymbolShapeHint : NSObject
-
-+ (ZXDataMatrixSymbolShapeHint *)forceNone;
-+ (ZXDataMatrixSymbolShapeHint *)forceSquare;
-+ (ZXDataMatrixSymbolShapeHint *)forceRectangle;
-
-@end
+typedef enum {
+  ZXDataMatrixSymbolShapeHintForceNone,
+  ZXDataMatrixSymbolShapeHintForceSquare,
+  ZXDataMatrixSymbolShapeHintForceRectangle
+} ZXDataMatrixSymbolShapeHint;

@@ -46,14 +46,11 @@
   }
 
   // Try to get force shape & min / max size
-  ZXDataMatrixSymbolShapeHint *shape = [ZXDataMatrixSymbolShapeHint forceNone];
+  ZXDataMatrixSymbolShapeHint shape = ZXDataMatrixSymbolShapeHintForceNone;
   ZXDimension *minSize = nil;
   ZXDimension *maxSize = nil;
   if (hints != nil) {
-    ZXDataMatrixSymbolShapeHint *requestedShape = hints.dataMatrixShape;
-    if (requestedShape != nil) {
-      shape = requestedShape;
-    }
+    shape = hints.dataMatrixShape;
     ZXDimension *requestedMinSize = hints.minSize;
     if (requestedMinSize != nil) {
       minSize = requestedMinSize;
