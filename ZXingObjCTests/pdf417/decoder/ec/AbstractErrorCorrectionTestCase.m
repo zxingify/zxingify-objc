@@ -26,7 +26,7 @@
       j--;
     } else {
       corrupted.array[location] = YES;
-      received.array[location] = (int32_t)arc4random() % 929;
+      received.array[location] = (int32_t)(arc4random() % 929);
     }
   }
 }

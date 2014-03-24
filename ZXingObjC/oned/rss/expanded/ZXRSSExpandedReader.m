@@ -106,7 +106,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
   // So lets try twice
   [self.pairs removeAllObjects];
   self.startFromEven = NO;
-  NSMutableArray* pairs = [self decodeRow2pairs:rowNumber row:row];
+  NSMutableArray* pairs = [self decodeRow2pairs:rowNumber row:row error:error];
   if (pairs) {
     ZXResult *result = [self constructResult:pairs error:error];
     if (result) {
@@ -116,7 +116,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
 
   [self.pairs removeAllObjects];
   self.startFromEven = YES;
-  pairs = [self decodeRow2pairs:rowNumber row:row];
+  pairs = [self decodeRow2pairs:rowNumber row:row error:error];
   if (!pairs) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
@@ -130,7 +130,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
   [self.rows removeAllObjects];
 }
 
-- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row {
+- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row error:(NSError **)error {
   while (YES) {
     ZXExpandedPair *nextPair = [self retrieveNextPair:row previousPairs:self.pairs rowNumber:rowNumber];
     if (!nextPair) {

@@ -19,11 +19,11 @@
 @implementation ZXModeTestCase
 
 - (void)testForBits {
-  XCTAssertEqualObjects([ZXMode forBits:0x00], [ZXMode terminatorMode], @"Expected terminator mode");
-  XCTAssertEqualObjects([ZXMode forBits:0x01], [ZXMode numericMode], @"Expected numeric mode");
-  XCTAssertEqualObjects([ZXMode forBits:0x02], [ZXMode alphanumericMode], @"Expected alphanumeric mode");
-  XCTAssertEqualObjects([ZXMode forBits:0x04], [ZXMode byteMode], @"Expected byte mode");
-  XCTAssertEqualObjects([ZXMode forBits:0x08], [ZXMode kanjiMode], @"Expected kanji mode");
+  XCTAssertEqualObjects([ZXMode terminatorMode], [ZXMode forBits:0x00]);
+  XCTAssertEqualObjects([ZXMode numericMode], [ZXMode forBits:0x01]);
+  XCTAssertEqualObjects([ZXMode alphanumericMode], [ZXMode forBits:0x02]);
+  XCTAssertEqualObjects([ZXMode byteMode], [ZXMode forBits:0x04]);
+  XCTAssertEqualObjects([ZXMode kanjiMode], [ZXMode forBits:0x08]);
   if ([ZXMode forBits:0x10]) {
     XCTFail(@"Should have failed");
   }
@@ -31,16 +31,12 @@
 
 - (void)testCharacterCount {
   // Spot check a few values
-  XCTAssertEqual([[ZXMode numericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:5]], 10,
-                 @"Expected character count bits to be 10");
-  XCTAssertEqual([[ZXMode numericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:26]], 12,
-                 @"Expected character count bits to be 12");
-  XCTAssertEqual([[ZXMode numericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:40]], 14,
-                 @"Expected character count bits to be 14");
-  XCTAssertEqual([[ZXMode byteMode] characterCountBits:[ZXQRCodeVersion versionForNumber:7]], 8,
-                 @"Expected character count bits to be 8");
-  XCTAssertEqual([[ZXMode kanjiMode] characterCountBits:[ZXQRCodeVersion versionForNumber:8]], 8,
-                 @"Expected character count bits to be 8");
+  XCTAssertEqual(10, [[ZXMode numericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:5]]);
+  XCTAssertEqual(12, [[ZXMode numericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:26]]);
+  XCTAssertEqual(14, [[ZXMode numericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:40]]);
+  XCTAssertEqual(9, [[ZXMode alphanumericMode] characterCountBits:[ZXQRCodeVersion versionForNumber:6]]);
+  XCTAssertEqual(8, [[ZXMode byteMode] characterCountBits:[ZXQRCodeVersion versionForNumber:7]]);
+  XCTAssertEqual(8, [[ZXMode kanjiMode] characterCountBits:[ZXQRCodeVersion versionForNumber:8]]);
 }
 
 @end

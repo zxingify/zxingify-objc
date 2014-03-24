@@ -19,41 +19,35 @@
 @implementation ZXBitArrayBuilderTest
 
 - (void)testBuildBitArray1 {
-  int lengths[2] = {1, 2};
-  int pairValue1[1] = { 19 };
-  int pairValue2[2] = { 673, 16 };
-
-  int *pairValues[2];
-  pairValues[0] = pairValue1;
-  pairValues[1] = pairValue2;
+  NSArray *pairValues = @[[[ZXIntArray alloc] initWithInts:19, -1], [[ZXIntArray alloc] initWithInts:673, 16, -1]];
 
   NSString *expected = @" .......X ..XX..X. X.X....X .......X ....";
 
-  [self checkBinaryValues:pairValues pairValuesLen:2 lengths:lengths expected:expected];
+  [self checkBinary:pairValues expected:expected];
 }
 
-- (void)checkBinaryValues:(int **)pairValues pairValuesLen:(int)pairValuesLen lengths:(int *)lengths expected:(NSString *)expected {
-  ZXBitArray *binary = [self buildBitArrayPairValues:pairValues pairValuesLen:pairValuesLen lengths:lengths];
-  XCTAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
+- (void)checkBinary:(NSArray *)pairValues expected:(NSString *)expected {
+  ZXBitArray *binary = [self buildBitArray:pairValues];
+  XCTAssertEqualObjects(expected, [binary description]);
 }
 
-- (ZXBitArray *)buildBitArrayPairValues:(int **)pairValues pairValuesLen:(int)pairValuesLen lengths:(int *)lengths {
+- (ZXBitArray *)buildBitArray:(NSArray *)pairValues {
   NSMutableArray *pairs = [NSMutableArray arrayWithCapacity:2];
-  for (int i = 0; i < pairValuesLen; ++i) {
-    int *pair = pairValues[i];
+  for (int i = 0; i < [pairValues count]; ++i) {
+    ZXIntArray *pair = pairValues[i];
 
     ZXDataCharacter *leftChar;
     if (i == 0) {
       leftChar = nil;
     } else {
-      leftChar = [[ZXDataCharacter alloc] initWithValue:pair[0] checksumPortion:0];
+      leftChar = [[ZXDataCharacter alloc] initWithValue:pair.array[0] checksumPortion:0];
     }
 
     ZXDataCharacter *rightChar;
     if (i == 0) {
-      rightChar = [[ZXDataCharacter alloc] initWithValue:pair[0] checksumPortion:0];
-    } else if (lengths[i] == 2) {
-      rightChar = [[ZXDataCharacter alloc] initWithValue:pair[1] checksumPortion:0];
+      rightChar = [[ZXDataCharacter alloc] initWithValue:pair.array[0] checksumPortion:0];
+    } else if (pair.length == 2) {
+      rightChar = [[ZXDataCharacter alloc] initWithValue:pair.array[1] checksumPortion:0];
     } else {
       rightChar = nil;
     }

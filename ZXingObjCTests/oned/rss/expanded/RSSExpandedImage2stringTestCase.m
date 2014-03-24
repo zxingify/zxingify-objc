@@ -144,8 +144,8 @@
     return;
   }
 
-  XCTAssertEqual(result.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected barcode format to be kBarcodeFormatRSSExpanded");
-  XCTAssertEqualObjects(result.text, expected, @"Expected %@ to equal %@", result.text, expected);
+  XCTAssertEqual(kBarcodeFormatRSSExpanded, result.barcodeFormat);
+  XCTAssertEqualObjects(expected, result.text);
 }
 
 @end

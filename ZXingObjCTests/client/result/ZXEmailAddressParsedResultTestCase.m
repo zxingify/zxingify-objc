@@ -43,12 +43,12 @@
                       body:(NSString *)body {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(result.type, kParsedResultTypeEmailAddress, @"Types do not match");
+  XCTAssertEqual(kParsedResultTypeEmailAddress, result.type, );
   ZXEmailAddressParsedResult *emailResult = (ZXEmailAddressParsedResult *)result;
-  XCTAssertEqualObjects(emailResult.emailAddress, email, @"Email addresses do not match");
-  XCTAssertEqualObjects(emailResult.mailtoURI, [@"mailto:" stringByAppendingString:emailResult.emailAddress], @"Mailto URIs do not match");
-  XCTAssertEqualObjects(emailResult.subject, subject, @"Subjects do not match");
-  XCTAssertEqualObjects(emailResult.body, body, @"Bodies do not match");
+  XCTAssertEqualObjects(email, emailResult.emailAddress);
+  XCTAssertEqualObjects([@"mailto:" stringByAppendingString:emailResult.emailAddress], emailResult.mailtoURI);
+  XCTAssertEqualObjects(subject, emailResult.subject);
+  XCTAssertEqualObjects(body, emailResult.body);
 }
 
 @end

@@ -18,9 +18,6 @@
 
 @implementation ZXBinaryUtil
 
-/*
- * Constructs a BitArray from a String like the one returned from BitArray.toString()
- */
 + (ZXBitArray *)buildBitArrayFromString:(NSString *)data {
   NSString *dotsAndXs = [[data stringByReplacingOccurrencesOfString:@"1" withString:@"X"]
                          stringByReplacingOccurrencesOfString:@"0" withString:@"."];

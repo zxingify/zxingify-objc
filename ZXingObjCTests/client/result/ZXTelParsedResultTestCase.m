@@ -26,11 +26,11 @@
 - (void)doTestWithContents:(NSString *)contents number:(NSString *)number title:(NSString *)title {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(result.type, kParsedResultTypeTel, @"Types don't match");
+  XCTAssertEqual(kParsedResultTypeTel, result.type);
   ZXTelParsedResult *telResult = (ZXTelParsedResult *)result;
-  XCTAssertEqualObjects(telResult.number, number, @"Numbers don't match");
-  XCTAssertEqualObjects(telResult.title, title, @"Titles don't match");
-  XCTAssertEqualObjects(telResult.telURI, [@"tel:" stringByAppendingString:number], @"Tel URIs don't match");
+  XCTAssertEqualObjects(number, telResult.number);
+  XCTAssertEqualObjects(title, telResult.title);
+  XCTAssertEqualObjects([@"tel:" stringByAppendingString:number], telResult.telURI);
 }
 
 @end

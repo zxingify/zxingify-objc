@@ -21,50 +21,50 @@ typedef BOOL (^MaskCondition)(int i, int j);
 @implementation ZXDataMaskTestCase
 
 - (void)testMask0 {
-  [self runTestMaskAcrossDimensions:0 condition:^(int i, int j) {
-    return (BOOL)((i + j) % 2 == 0);
+  [self runTestMaskAcrossDimensions:0 condition:^BOOL(int i, int j) {
+    return (i + j) % 2 == 0;
   }];
 }
 
 - (void)testMask1 {
-  [self runTestMaskAcrossDimensions:1 condition:^(int i, int j) {
-    return (BOOL)(i % 2 == 0);
+  [self runTestMaskAcrossDimensions:1 condition:^BOOL(int i, int j) {
+    return i % 2 == 0;
   }];
 }
 
 - (void)testMask2 {
-  [self runTestMaskAcrossDimensions:2 condition:^(int i, int j) {
-    return (BOOL)(j % 3 == 0);
+  [self runTestMaskAcrossDimensions:2 condition:^BOOL(int i, int j) {
+    return j % 3 == 0;
   }];
 }
 
 - (void)testMask3 {
-  [self runTestMaskAcrossDimensions:3 condition:^(int i, int j) {
-    return (BOOL)((i + j) % 3 == 0);
+  [self runTestMaskAcrossDimensions:3 condition:^BOOL(int i, int j) {
+    return (i + j) % 3 == 0;
   }];
 }
 
 - (void)testMask4 {
-  [self runTestMaskAcrossDimensions:4 condition:^(int i, int j) {
-    return (BOOL)((i / 2 + j / 3) % 2 == 0);
+  [self runTestMaskAcrossDimensions:4 condition:^BOOL(int i, int j) {
+    return (i / 2 + j / 3) % 2 == 0;
   }];
 }
 
 - (void)testMask5 {
-  [self runTestMaskAcrossDimensions:5 condition:^(int i, int j) {
-    return (BOOL)((i * j) % 2 + (i * j) % 3 == 0);
+  [self runTestMaskAcrossDimensions:5 condition:^BOOL(int i, int j) {
+    return (i * j) % 2 + (i * j) % 3 == 0;
   }];
 }
 
 - (void)testMask6 {
-  [self runTestMaskAcrossDimensions:6 condition:^(int i, int j) {
-    return (BOOL)(((i * j) % 2 + (i * j) % 3) % 2 == 0);
+  [self runTestMaskAcrossDimensions:6 condition:^BOOL(int i, int j) {
+    return ((i * j) % 2 + (i * j) % 3) % 2 == 0;
   }];
 }
 
 - (void)testMask7 {
-  [self runTestMaskAcrossDimensions:7 condition:^(int i, int j) {
-    return (BOOL)(((i + j) % 2 + (i * j) % 3) % 2 == 0);
+  [self runTestMaskAcrossDimensions:7 condition:^BOOL(int i, int j) {
+    return ((i + j) % 2 + (i * j) % 3) % 2 == 0;
   }];
 }
 
@@ -81,8 +81,7 @@ typedef BOOL (^MaskCondition)(int i, int j);
   [mask unmaskBitMatrix:bits dimension:dimension];
   for (int i = 0; i < dimension; i++) {
     for (int j = 0; j < dimension; j++) {
-      BOOL expected = condition(i, j);
-      XCTAssertEqual([bits getX:j y:i], expected, @"Expected (%d,%d) to equal %d", j, i, expected);
+      XCTAssertEqual(condition(i, j), [bits getX:j y:i], @"(%d,%d)", i, j);
     }
   }
 }

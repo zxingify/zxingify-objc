@@ -18,7 +18,7 @@
 
 @interface ZXRSSExpandedReader (PrivateMethods)
 
-- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row;
+- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row error:(NSError **)error ;
 
 @end
 
@@ -138,13 +138,14 @@
   ZXBitArray *row = [binaryMap blackRow:rowNumber row:nil error:nil];
 
   ZXRSSExpandedReader *rssExpandedReader = [[ZXRSSExpandedReader alloc] init];
-  NSArray *pairs = [rssExpandedReader decodeRow2pairs:rowNumber row:row];
+  NSError *error;
+  NSArray *pairs = [rssExpandedReader decodeRow2pairs:rowNumber row:row error:&error];
   if (!pairs) {
-    XCTFail(@"Unable to decode pairs");
+    XCTFail(@"%@", [error description]);
     return;
   }
   ZXBitArray *binary = [ZXBitArrayBuilder buildBitArray:pairs];
-  XCTAssertEqualObjects([binary description], expected, @"Expected %@ to equal %@", [binary description], expected);
+  XCTAssertEqualObjects(expected, [binary description]);
 }
 
 @end

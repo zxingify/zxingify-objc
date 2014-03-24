@@ -59,12 +59,12 @@
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
 
   // Ensure it is a wifi code
-  XCTAssertEqual(result.type, kParsedResultTypeWifi, @"Types don't match");
+  XCTAssertEqual(kParsedResultTypeWifi, result.type);
   ZXWifiParsedResult *wifiResult = (ZXWifiParsedResult *)result;
 
-  XCTAssertEqualObjects(wifiResult.ssid, ssid, @"Ssid's don't match");
-  XCTAssertEqualObjects(wifiResult.password, password, @"Passwords don't match");
-  XCTAssertEqualObjects(wifiResult.networkEncryption, type, @"Network encryption doesn't match");
+  XCTAssertEqualObjects(ssid, wifiResult.ssid);
+  XCTAssertEqualObjects(password, wifiResult.password);
+  XCTAssertEqualObjects(type, wifiResult.networkEncryption);
 }
 
 @end

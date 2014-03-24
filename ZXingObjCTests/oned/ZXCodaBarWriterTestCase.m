@@ -53,7 +53,7 @@
   for (int i = 0; i < result.width; i++) {
     [actual appendString:[result getX:i y:0] ? @"1" : @"0"];
   }
-  XCTAssertEqualObjects(actual, expected);
+  XCTAssertEqualObjects(expected, actual);
 }
 
 - (ZXBitMatrix *)encode:(NSString *)input {

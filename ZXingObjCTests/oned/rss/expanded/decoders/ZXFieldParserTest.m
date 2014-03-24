@@ -22,7 +22,7 @@
   NSString *field = [[expected stringByReplacingOccurrencesOfString:@"(" withString:@""]
                      stringByReplacingOccurrencesOfString:@")" withString:@""];
   NSString *actual = [ZXFieldParser parseFieldsInGeneralPurpose:field error:nil];
-  XCTAssertEqualObjects(actual, expected, @"Expected %@ to equal %@", actual, expected);
+  XCTAssertEqualObjects(expected, actual);
 }
 
 - (void)testParseField {

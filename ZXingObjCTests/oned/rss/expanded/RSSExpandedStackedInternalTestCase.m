@@ -19,7 +19,7 @@
 
 @interface ZXRSSExpandedReader (PrivateMethods)
 
-- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row;
+- (NSMutableArray *)decodeRow2pairs:(int)rowNumber row:(ZXBitArray *)row error:(NSError **)error ;
 - (ZXResult *)constructResult:(NSMutableArray *)pairs error:(NSError **)error;
 
 @end
@@ -36,30 +36,26 @@
   ZXBitArray *firstRow = [binaryMap blackRow:firstRowNumber row:nil error:&error];
   XCTAssertNil(error, @"%@", [error description]);
 
-  if ([rssExpandedReader decodeRow2pairs:firstRowNumber row:firstRow]) {
+  if ([rssExpandedReader decodeRow2pairs:firstRowNumber row:firstRow error:&error]) {
     XCTFail(@"Not found error expected");
   }
 
-  XCTAssertEqual([[rssExpandedReader rows] count], (NSUInteger)1, @"the first row not recognized");
+  XCTAssertEqual(1, [[rssExpandedReader rows] count]);
   ZXExpandedRow *firstExpandedRow = rssExpandedReader.rows[0];
-  XCTAssertEqual(firstExpandedRow.rowNumber, firstRowNumber, @"the first row number doesn't match");
+  XCTAssertEqual(firstRowNumber, firstExpandedRow.rowNumber);
 
-  XCTAssertEqual([firstExpandedRow.pairs count], (NSUInteger)2, @"wrong number if pairs in the first row");
+  XCTAssertEqual(2, [firstExpandedRow.pairs count]);
 
   [firstExpandedRow.pairs[1] finderPattern].startEnd.array[1] = 0;
 
 	int secondRowNumber = 2 * [binaryMap height] / 3;
-  error = nil;
-  ZXBitArray *secondRow = [binaryMap blackRow:secondRowNumber row:nil error:&error];
-  XCTAssertNil(error, @"%@", [error description]);
+  ZXBitArray *secondRow = [binaryMap blackRow:secondRowNumber row:nil error:nil];
   [secondRow reverse];
 
-  NSMutableArray* totalPairs = [rssExpandedReader decodeRow2pairs:secondRowNumber row:secondRow];
-  error = nil;
+  NSMutableArray* totalPairs = [rssExpandedReader decodeRow2pairs:secondRowNumber row:secondRow error:nil];
 
-  ZXResult *result = [rssExpandedReader constructResult:totalPairs error:&error];
-  XCTAssertNil(error, @"%@", [error description]);
-  XCTAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
+  ZXResult *result = [rssExpandedReader constructResult:totalPairs error:nil];
+  XCTAssertEqualObjects(@"(01)98898765432106(3202)012345(15)991231", result.text);
 }
 
 - (void)testCompleteDecoding {
@@ -67,10 +63,8 @@
 
   ZXBinaryBitmap *binaryMap = [TestCaseUtil binaryBitmap:@"Resources/blackbox/rssexpandedstacked-2/1000.png"];
 
-  NSError *error = nil;
-  ZXResult *result = [rssExpandedReader decode:binaryMap error:&error];
-  XCTAssertNil(error, @"%@", [error description]);
-  XCTAssertEqualObjects(result.text, @"(01)98898765432106(3202)012345(15)991231", @"wrong result");
+  ZXResult *result = [rssExpandedReader decode:binaryMap error:nil];
+  XCTAssertEqualObjects(@"(01)98898765432106(3202)012345(15)991231", result.text);
 }
 
 @end

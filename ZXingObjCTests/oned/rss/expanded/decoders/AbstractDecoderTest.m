@@ -48,15 +48,14 @@ const NSString *compressedDate_End             = @"X..X.XX.........";
 
 @implementation AbstractDecoderTest
 
-- (BOOL)assertCorrectBinaryString:(NSString *)binaryString expectedNumber:(NSString *)expectedNumber error:(NSError **)error {
+- (void)assertCorrectBinaryString:(NSString *)binaryString expectedNumber:(NSString *)expectedNumber error:(NSError **)error {
   ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromStringWithoutSpaces:binaryString];
   ZXAbstractExpandedDecoder *decoder = [ZXAbstractExpandedDecoder createDecoder:binary];
   NSString *result = [decoder parseInformationWithError:error];
   if (!result) {
-    return NO;
+    return;
   }
-  XCTAssertEqualObjects(result, expectedNumber, @"Expected %@ to equal %@", result, expectedNumber);
-  return YES;
+  XCTAssertEqualObjects(expectedNumber, result);
 }
 
 @end

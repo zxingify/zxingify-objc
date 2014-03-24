@@ -16,6 +16,9 @@
 
 #import "AbstractNegativeBlackBoxTestCase.h"
 
+/**
+ * This test ensures that unsupported barcodes do not decode.
+ */
 @interface UnsupportedBlackBoxTestCase : AbstractNegativeBlackBoxTestCase
 
 @end

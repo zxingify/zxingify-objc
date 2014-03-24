@@ -30,10 +30,10 @@
                     format:(ZXBarcodeFormat)format {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:format];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(result.type, kParsedResultTypeProduct, @"Types don't match");
+  XCTAssertEqual(kParsedResultTypeProduct, result.type);
   ZXProductParsedResult *productResult = (ZXProductParsedResult *)result;
-  XCTAssertEqualObjects(productResult.productID, contents, @"Contents don't match");
-  XCTAssertEqualObjects(productResult.normalizedProductID, normalized, @"Normalized doesn't match");
+  XCTAssertEqualObjects(contents, productResult.productID);
+  XCTAssertEqualObjects(normalized, productResult.normalizedProductID);
 }
 
 @end

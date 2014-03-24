@@ -34,7 +34,7 @@
 }
 
 - (void)doTestWithBytes:(ZXByteArray *)bytes encoding:(NSStringEncoding)encoding {
-  XCTAssertEqual([ZXStringUtils guessEncoding:bytes hints:nil], encoding, @"Encodings do not match");
+  XCTAssertEqual(encoding, [ZXStringUtils guessEncoding:bytes hints:nil]);
 }
 
 @end

@@ -26,8 +26,7 @@
                                                      height:0
                                                       error:nil];
   for (int i = 0; i < testStr.length; i++) {
-    BOOL expected = [testStr characterAtIndex:i] == '1';
-    XCTAssertEqual([result getX:i y:0], expected, @"Expected (%d, 0) to be %d", i, expected);
+    XCTAssertEqual([testStr characterAtIndex:i] == '1', [result getX:i y:0], @"Element %d", i);
   }
 }
 
@@ -39,8 +38,7 @@
                                                      height:0
                                                       error:nil];
   for (int i = 0; i < testStr.length; i++) {
-    BOOL expected = [testStr characterAtIndex:i] == '1';
-    XCTAssertEqual([result getX:i y:0], expected, @"Expected (%d, 0) to be %d", i, expected);
+    XCTAssertEqual([testStr characterAtIndex:i] == '1', [result getX:i y:0], @"Element %d", i);
   }
 }
 

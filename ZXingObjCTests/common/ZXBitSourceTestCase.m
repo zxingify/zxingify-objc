@@ -21,21 +21,21 @@
 - (void)testSource {
   ZXByteArray *bytes = [[ZXByteArray alloc] initWithBytes:1, 2, 3, 4, 5, -1];
   ZXBitSource *source = [[ZXBitSource alloc] initWithBytes:bytes];
-  XCTAssertEqual(source.available, 40, @"Expected source.available to 40");
-  XCTAssertEqual([source readBits:1], 0, @"Expected [source readBits:1] to 0");
-  XCTAssertEqual(source.available, 39, @"Expected source.available to 39");
-  XCTAssertEqual([source readBits:6], 0, @"Expected [source readBits:6] to 0");
-  XCTAssertEqual(source.available, 33, @"Expected source.available to 33");
-  XCTAssertEqual([source readBits:1], 1, @"Expected [source readBits:1] to 1");
-  XCTAssertEqual(source.available, 32, @"Expected source.available to 32");
-  XCTAssertEqual([source readBits:8], 2, @"Expected [source readBits:1] to 1");
-  XCTAssertEqual(source.available, 24, @"Expected source.available to 24");
-  XCTAssertEqual([source readBits:10], 12, @"Expected [source readBits:10] to 1");
-  XCTAssertEqual(source.available, 14, @"Expected source.available to 14");
-  XCTAssertEqual([source readBits:8], 16, @"Expected [source readBits:8] to 16");
-  XCTAssertEqual(source.available, 6, @"Expected source.available to 6");
-  XCTAssertEqual([source readBits:6], 5, @"Expected [source readBits:6] to 5");
-  XCTAssertEqual(source.available, 0, @"Expected source.available to 0");
+  XCTAssertEqual(40, source.available);
+  XCTAssertEqual(0, [source readBits:1]);
+  XCTAssertEqual(39, source.available);
+  XCTAssertEqual(0, [source readBits:6]);
+  XCTAssertEqual(33, source.available);
+  XCTAssertEqual(1, [source readBits:1]);
+  XCTAssertEqual(32, source.available);
+  XCTAssertEqual(2, [source readBits:8]);
+  XCTAssertEqual(24, source.available);
+  XCTAssertEqual(12, [source readBits:10]);
+  XCTAssertEqual(14, source.available);
+  XCTAssertEqual(16, [source readBits:8]);
+  XCTAssertEqual(6, source.available);
+  XCTAssertEqual(5, [source readBits:6]);
+  XCTAssertEqual(0, source.available);
 }
 
 @end

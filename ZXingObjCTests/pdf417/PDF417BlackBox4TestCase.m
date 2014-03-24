@@ -37,7 +37,7 @@
 }
 
 - (void)testPDF417BlackBoxCountingResults:(BOOL)assertOnFailure {
-  XCTAssertFalse([self.testResults count] == 0, @"Expected testResults to be non-empty");
+  XCTAssertFalse([self.testResults count] == 0);
 
   NSDictionary *imageFiles = [self imageFileLists];
   int testCount = (int)[self.testResults count];
@@ -56,7 +56,7 @@
       expectedText = [self readFileAsString:expectedTextFile encoding:NSUTF8StringEncoding];
     } else {
       NSString *expectedTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:fileBaseName ofType:@"bin" inDirectory:self.testBase];
-      XCTAssertNotNil(expectedTextFile, @"Expected text does not exist");
+      XCTAssertNotNil(expectedTextFile);
       expectedText = [self readFileAsString:expectedTextFile encoding:NSISOLatin1StringEncoding];
     }
 
@@ -89,10 +89,10 @@
         if (!fileId) {
           fileId = resultMetadata.fileId;
         }
-        XCTAssertEqualObjects(resultMetadata.fileId, fileId, @"FileId");
+        XCTAssertEqualObjects(fileId, resultMetadata.fileId, @"FileId");
         [resultText appendString:result.text];
       }
-      XCTAssertEqualObjects(resultText, expectedText, @"ExpectedText");
+      XCTAssertEqualObjects(expectedText, resultText, @"ExpectedText");
       passedCounts.array[x]++;
       tryHarderCounts.array[x]++;
     }

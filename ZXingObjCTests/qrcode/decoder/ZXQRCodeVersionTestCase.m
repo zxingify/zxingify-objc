@@ -30,28 +30,23 @@
 }
 
 - (void)checkVersion:(ZXQRCodeVersion *)version number:(int)number dimension:(int)dimension {
-  XCTAssertNotNil(version, @"Expected version to be non-nil");
-  XCTAssertEqual(version.versionNumber, number, @"Expected version number to be %d", number);
-  XCTAssertNotNil(version.alignmentPatternCenters, @"Expected alignmentPatternCenters to be non-nil");
+  XCTAssertNotNil(version);
+  XCTAssertEqual(number, version.versionNumber);
+  XCTAssertNotNil(version.alignmentPatternCenters);
   if (number > 1) {
-    XCTAssertTrue(version.alignmentPatternCenters.length > 0, @"Expected alignmentPatternCenters to be non-empty");
+    XCTAssertTrue(version.alignmentPatternCenters.length > 0);
   }
-  XCTAssertEqual(version.dimensionForVersion, dimension, @"Expected dimension to be %d", dimension);
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]],
-                 @"Expected ecblocks for error correction level H to be non-nil");
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL]],
-                 @"Expected ecblocks for error correction level L to be non-nil");
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelM]],
-                 @"Expected ecblocks for error correction level M to be non-nil");
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelQ]],
-                 @"Expected ecblocks for error correction level Q to be non-nil");
-  XCTAssertNotNil([version buildFunctionPattern], @"Expected version buildFunctionPattern to be non-nil");
+  XCTAssertEqual(dimension, version.dimensionForVersion);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelM]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelQ]]);
+  XCTAssertNotNil([version buildFunctionPattern]);
 }
 
 - (void)testGetProvisionalVersionForDimension {
   for (int i = 1; i <= 40; i++) {
-    XCTAssertEqual([ZXQRCodeVersion provisionalVersionForDimension:4*i + 17].versionNumber, i,
-                   @"Expected version number to be %d", i);
+    XCTAssertEqual(i, [ZXQRCodeVersion provisionalVersionForDimension:4*i + 17].versionNumber);
   }
 }
 
@@ -67,8 +62,8 @@
 
 - (void)doTestVersion:(int)expectedVersion mask:(int)mask {
   ZXQRCodeVersion *version = [ZXQRCodeVersion decodeVersionInformation:mask];
-  XCTAssertNotNil(version, @"Expected version to be non-nil");
-  XCTAssertEqual(version.versionNumber, expectedVersion, @"Expected version number to be %d", expectedVersion);
+  XCTAssertNotNil(version);
+  XCTAssertEqual(expectedVersion, version.versionNumber);
 }
 
 @end

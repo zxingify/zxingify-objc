@@ -58,11 +58,11 @@ unsigned int ZXAztecDetectorTest_RANDOM_SEED = 16807;
           }
           // The detector doesn't seem to work when matrix bits are only 1x1.  So magnify.
           ZXAztecDetectorResult *r = [[[ZXAztecDetector alloc] initWithImage:[self makeLarger:copy factor:3]] detectWithMirror:isMirror error:nil];
-          XCTAssertNotNil(r, @"");
-          XCTAssertEqual(layers, r.nbLayers, @"");
-          XCTAssertEqual(compact, r.isCompact, @"");
+          XCTAssertNotNil(r);
+          XCTAssertEqual(r.nbLayers, layers);
+          XCTAssertEqual(r.isCompact, compact);
           ZXDecoderResult *res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
-          XCTAssertEqualObjects(res.text, data, @"%@ should equal %@", res.text, data);
+          XCTAssertEqualObjects(data, res.text);
         }
       }
       // Try a few random three-bit errors;

@@ -38,8 +38,9 @@ static NSString *header = @"..X..";
   NSString *data = [NSString stringWithFormat:@"%@%@%@..", header, compressedGtin_900123456798908, compressed15bitWeight_1750];
 
   NSError *error;
-  if([self assertCorrectBinaryString:data expectedNumber:@"" error:&error] || error.code != ZXNotFoundError) {
-    XCTFail(@"NotFoundError expected");
+  [self assertCorrectBinaryString:data expectedNumber:@"" error:&error];
+  if (!error || error.code != ZXNotFoundError) {
+    XCTFail(@"ZXNotFoundError expected");
   }
 }
 

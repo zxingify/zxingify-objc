@@ -28,20 +28,20 @@
 - (void)testGetSet {
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:33];
   for (int i = 0; i < 33; i++) {
-    XCTAssertFalse([array get:i], @"Expected [array get:%d] to be false", i);
+    XCTAssertFalse([array get:i]);
     [array set:i];
-    XCTAssertTrue([array get:i], @"Expected [array get:%d] to be true", i);
+    XCTAssertTrue([array get:i]);
   }
 }
 
 - (void)testGetNextSet1 {
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:32];
   for (int i = 0; i < array.size; i++) {
-    XCTAssertEqual([array nextSet:i], 32, @"Expected [array nextSet:%d] to equal 32", i);
+    XCTAssertEqual(32, [array nextSet:i], @"%d", i);
   }
   array = [[ZXBitArray alloc] initWithSize:33];
   for (int i = 0; i < array.size; i++) {
-    XCTAssertEqual([array nextSet:i], 33, @"Expected [array nextSet:%d] to equal 33", i);
+    XCTAssertEqual(33, [array nextSet:i], @"%d", i);
   }
 }
 
@@ -49,13 +49,12 @@
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:33];
   [array set:31];
   for (int i = 0; i < array.size; i++) {
-    int expected = i <= 31 ? 31 : 33;
-    XCTAssertEqual([array nextSet:i], expected, @"Expected [array nextSet:%d] to equal %d", i, expected);
+    XCTAssertEqual(i <= 31 ? 31 : 33, [array nextSet:i], @"%d", i);
   }
   array = [[ZXBitArray alloc] initWithSize:33];
   [array set:32];
   for (int i = 0; i < array.size; i++) {
-    XCTAssertEqual([array nextSet:i], 32, @"Expected [array nextSet:%d] to equal 32", i);
+    XCTAssertEqual(32, [array nextSet:i], @"%d", i);
   }
 }
 
@@ -72,7 +71,7 @@
     } else {
       expected = 63;
     }
-    XCTAssertEqual([array nextSet:i], expected, @"Expected [array nextSet:%d] to equal %d", i, expected);
+    XCTAssertEqual(expected, [array nextSet:i], @"%d", i);
   }
 }
 
@@ -89,7 +88,7 @@
     } else {
       expected = 63;
     }
-    XCTAssertEqual([array nextSet:i], expected, @"Expected [array nextSet:%d] to equal %d", i, expected);
+    XCTAssertEqual(expected, [array nextSet:i], @"%d", i);
   }
 }
 
@@ -111,7 +110,7 @@
       if (actual != expected) {
         [array nextSet:query];
       }
-      XCTAssertEqual(actual, expected, @"Expected %d to equal %d", actual, expected);
+      XCTAssertEqual(expected, actual);
     }
   }
 }
@@ -120,10 +119,10 @@
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:64];
   [array setBulk:32 newBits:0xFFFF0000];
   for (int i = 0; i < 48; i++) {
-    XCTAssertFalse([array get:i], @"Expected [array get:%d] to be false", i);
+    XCTAssertFalse([array get:i]);
   }
   for (int i = 48; i < 64; i++) {
-    XCTAssertTrue([array get:i], @"Expected [array get:%d] to be true", i);
+    XCTAssertTrue([array get:i]);
   }
 }
 
@@ -134,7 +133,7 @@
   }
   [array clear];
   for (int i = 0; i < 32; i++) {
-    XCTAssertFalse([array get:i], @"Expected [array get:%d] to be false", i);
+    XCTAssertFalse([array get:i]);
   }
 }
 
@@ -143,29 +142,29 @@
   [array set:0];
   [array set:63];
   int32_t *ints = array.bits;
-  XCTAssertEqual(ints[0], 1, @"Expected ints[0] to equal 1");
-  XCTAssertEqual(ints[1], INT_MIN, @"Expected ints[1] to equal INT_MIN");
+  XCTAssertEqual(1, ints[0]);
+  XCTAssertEqual(INT_MIN, ints[1]);
 }
 
 - (void)testIsRange {
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:64];
-  XCTAssertTrue([array isRange:0 end:64 value:NO], @"Expected range 0-64 of NO to be true");
-  XCTAssertFalse([array isRange:0 end:64 value:YES], @"Expected range 0-64 of YES to be false");
+  XCTAssertTrue([array isRange:0 end:64 value:NO]);
+  XCTAssertFalse([array isRange:0 end:64 value:YES]);
   [array set:32];
-  XCTAssertTrue([array isRange:32 end:33 value:YES], @"Expected range 32-33 of YES to be true");
+  XCTAssertTrue([array isRange:32 end:33 value:YES]);
   [array set:31];
-  XCTAssertTrue([array isRange:31 end:33 value:YES], @"Expected range 31-33 of YES to be true");
+  XCTAssertTrue([array isRange:31 end:33 value:YES]);
   [array set:34];
-  XCTAssertFalse([array isRange:31 end:35 value:YES], @"Expected range 31-35 of YES to be false");
+  XCTAssertFalse([array isRange:31 end:35 value:YES]);
   for (int i = 0; i < 31; i++) {
     [array set:i];
   }
-  XCTAssertTrue([array isRange:0 end:33 value:YES], @"Expected range 0-33 of YES to be true");
+  XCTAssertTrue([array isRange:0 end:33 value:YES]);
   for (int i = 33; i < 64; i++) {
     [array set:i];
   }
-  XCTAssertTrue([array isRange:0 end:64 value:YES], @"Expected range 0-64 of YES to be true");
-  XCTAssertFalse([array isRange:0 end:64 value:NO], @"Expected range 0-64 of YES to be false");
+  XCTAssertTrue([array isRange:0 end:64 value:YES]);
+  XCTAssertFalse([array isRange:0 end:64 value:NO]);
 }
 
 - (void)testReverseAlgorithm {
@@ -175,7 +174,7 @@
     ZXBitArray *newBitArray = [[ZXBitArray alloc] initWithBits:[oldBits copy] size:size];
     [newBitArray reverse];
     ZXIntArray *newBitsNew = [newBitArray bitArray];
-    XCTAssertTrue([self arraysAreEqual:newBitsOriginal right:newBitsNew size:size / 32 + 1], @"Arrays are not equal");
+    XCTAssertTrue([self arraysAreEqual:newBitsOriginal right:newBitsNew size:size / 32 + 1]);
   }
 }
 

@@ -20,7 +20,6 @@
 @implementation ZXBinaryUtilTest
 
 - (void)testBuildBitArrayFromString {
-
   NSString *data = @" ..X..X.. ..XXX... XXXXXXXX ........";
   [self check:data];
 
@@ -39,13 +38,30 @@
 
 - (void)check:(NSString *)data {
   ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromString:data];
-  XCTAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
+  XCTAssertEqualObjects(data, [binary description]);
+}
+
+- (void)testBuildBitArrayFromStringWithoutSpaces {
+  NSString *data = @" ..X..X.. ..XXX... XXXXXXXX ........";
+  [self checkWithoutSpaces:data];
+
+  data = @" XXX..X..";
+  [self checkWithoutSpaces:data];
+
+  data = @" XX";
+  [self checkWithoutSpaces:data];
+
+  data = @" ....XX.. ..XX";
+  [self checkWithoutSpaces:data];
+
+  data = @" ....XX.. ..XX..XX ....X.X. ........";
+  [self checkWithoutSpaces:data];
 }
 
 - (void)checkWithoutSpaces:(NSString *)data {
   NSString *dataWithoutSpaces = [data stringByReplacingOccurrencesOfString:@" " withString:@""];
   ZXBitArray *binary = [ZXBinaryUtil buildBitArrayFromStringWithoutSpaces:dataWithoutSpaces];
-  XCTAssertEqualObjects([binary description], data, @"Expected %@ to equal %@", [binary description], data);
+  XCTAssertEqualObjects(data, [binary description]);
 }
 
 @end

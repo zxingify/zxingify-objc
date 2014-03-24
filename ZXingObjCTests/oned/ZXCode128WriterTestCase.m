@@ -44,7 +44,7 @@ const NSString *ZX_STOP = @"1100011101011";
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 
   NSString *actual = [self matrixToString:result];
-  XCTAssertEqualObjects(expected, actual);
+  XCTAssertEqualObjects(actual, expected);
 }
 
 - (void)testEncodeWithFunc2 {
@@ -55,7 +55,7 @@ const NSString *ZX_STOP = @"1100011101011";
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 
   NSString *actual = [self matrixToString:result];
-  XCTAssertEqualObjects(expected, actual);
+  XCTAssertEqualObjects(actual, expected);
 }
 
 - (void)testEncodeWithFunc1 {
@@ -66,7 +66,7 @@ const NSString *ZX_STOP = @"1100011101011";
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 
   NSString *actual = [self matrixToString:result];
-  XCTAssertEqualObjects(expected, actual);
+  XCTAssertEqualObjects(actual, expected);
 }
 
 - (void)testEncodeWithFunc4 {
@@ -77,7 +77,7 @@ const NSString *ZX_STOP = @"1100011101011";
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 
   NSString *actual = [self matrixToString:result];
-  XCTAssertEqualObjects(expected, actual);
+  XCTAssertEqualObjects(actual, expected);
 }
 
 - (NSString *)matrixToString:(ZXBitMatrix *)matrix {

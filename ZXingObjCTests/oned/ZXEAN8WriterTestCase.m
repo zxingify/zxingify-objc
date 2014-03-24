@@ -26,7 +26,7 @@
                                                      height:0
                                                       error:nil];
   for (int i = 0; i < testStr.length; i++) {
-    XCTAssertEqual([result getX:i y:0], (BOOL)([testStr characterAtIndex:i] == '1'), @"Element %d", i);
+    XCTAssertEqual([testStr characterAtIndex:i] == '1', [result getX:i y:0], @"Element %d", i);
   }
 }
 

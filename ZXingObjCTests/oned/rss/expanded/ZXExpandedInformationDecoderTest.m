@@ -24,7 +24,7 @@
 
   ZXAbstractExpandedDecoder *decoder = [ZXAbstractExpandedDecoder createDecoder:information];
   NSString *decoded = [decoder parseInformationWithError:nil];
-  XCTAssertEqualObjects(decoded, @"(10)12A", @"Expected %@ to equal \"(10)12A\"", decoded);
+  XCTAssertEqualObjects(@"(10)12A", decoded);
 }
 
 @end

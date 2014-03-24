@@ -16,6 +16,9 @@
 
 #import "AbstractNegativeBlackBoxTestCase.h"
 
+/**
+ * This test ensures that partial barcodes do not decode.
+ */
 @interface PartialBlackBoxTestCase : AbstractNegativeBlackBoxTestCase
 
 @end

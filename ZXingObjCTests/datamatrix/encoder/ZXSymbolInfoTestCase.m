@@ -20,32 +20,32 @@
 
 - (void)testSymbolInfo {
   ZXSymbolInfo *info = [ZXSymbolInfo lookup:3];
-  XCTAssertEqual(info.errorCodewords, 5, @"");
-  XCTAssertEqual(info.matrixWidth, 8, @"");
-  XCTAssertEqual(info.matrixHeight, 8, @"");
-  XCTAssertEqual(info.symbolWidth, 10, @"");
-  XCTAssertEqual(info.symbolHeight, 10, @"");
+  XCTAssertEqual(5, info.errorCodewords);
+  XCTAssertEqual(8, info.matrixWidth);
+  XCTAssertEqual(8, info.matrixHeight);
+  XCTAssertEqual(10, info.symbolWidth);
+  XCTAssertEqual(10, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:3 shape:[ZXSymbolShapeHint forceRectangle]];
-  XCTAssertEqual(info.errorCodewords, 7, @"");
-  XCTAssertEqual(info.matrixWidth, 16, @"");
-  XCTAssertEqual(info.matrixHeight, 6, @"");
-  XCTAssertEqual(info.symbolWidth, 18, @"");
-  XCTAssertEqual(info.symbolHeight, 8, @"");
+  XCTAssertEqual(7, info.errorCodewords);
+  XCTAssertEqual(16, info.matrixWidth);
+  XCTAssertEqual(6, info.matrixHeight);
+  XCTAssertEqual(18, info.symbolWidth);
+  XCTAssertEqual(8, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:9];
-  XCTAssertEqual(info.errorCodewords, 11, @"");
-  XCTAssertEqual(info.matrixWidth, 14, @"");
-  XCTAssertEqual(info.matrixHeight, 6, @"");
-  XCTAssertEqual(info.symbolWidth, 32, @"");
-  XCTAssertEqual(info.symbolHeight, 8, @"");
+  XCTAssertEqual(11, info.errorCodewords);
+  XCTAssertEqual(14, info.matrixWidth);
+  XCTAssertEqual(6, info.matrixHeight);
+  XCTAssertEqual(32, info.symbolWidth);
+  XCTAssertEqual(8, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:9 shape:[ZXSymbolShapeHint forceSquare]];
-  XCTAssertEqual(info.errorCodewords, 12, @"");
-  XCTAssertEqual(info.matrixWidth, 14, @"");
-  XCTAssertEqual(info.matrixHeight, 14, @"");
-  XCTAssertEqual(info.symbolWidth, 16, @"");
-  XCTAssertEqual(info.symbolHeight, 16, @"");
+  XCTAssertEqual(12, info.errorCodewords);
+  XCTAssertEqual(14, info.matrixWidth);
+  XCTAssertEqual(14, info.matrixHeight);
+  XCTAssertEqual(16, info.symbolWidth);
+  XCTAssertEqual(16, info.symbolHeight);
 
   @try {
     [ZXSymbolInfo lookup:1559];
@@ -62,34 +62,34 @@
   }
 
   info = [ZXSymbolInfo lookup:35];
-  XCTAssertEqual(info.symbolWidth, 24, @"");
-  XCTAssertEqual(info.symbolHeight, 24, @"");
+  XCTAssertEqual(24, info.symbolWidth);
+  XCTAssertEqual(24, info.symbolHeight);
 
   ZXDimension *fixedSize = [[ZXDimension alloc] initWithWidth:26 height:26];
   info = [ZXSymbolInfo lookup:35 shape:[ZXSymbolShapeHint forceNone] minSize:fixedSize maxSize:fixedSize fail:NO];
-  XCTAssertEqual(info.symbolWidth, 26, @"");
-  XCTAssertEqual(info.symbolHeight, 26, @"");
+  XCTAssertEqual(26, info.symbolWidth);
+  XCTAssertEqual(26, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:45 shape:[ZXSymbolShapeHint forceNone] minSize:fixedSize maxSize:fixedSize fail:NO];
-  XCTAssertNil(info, @"");
+  XCTAssertNil(info);
 
   ZXDimension *minSize = fixedSize;
   ZXDimension *maxSize = [[ZXDimension alloc] initWithWidth:32 height:32];
 
   info = [ZXSymbolInfo lookup:35 shape:[ZXSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
-  XCTAssertEqual(info.symbolWidth, 26, @"");
-  XCTAssertEqual(info.symbolHeight, 26, @"");
+  XCTAssertEqual(26, info.symbolWidth);
+  XCTAssertEqual(26, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:40 shape:[ZXSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
-  XCTAssertEqual(info.symbolWidth, 26, @"");
-  XCTAssertEqual(info.symbolHeight, 26, @"");
+  XCTAssertEqual(26, info.symbolWidth);
+  XCTAssertEqual(26, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:45 shape:[ZXSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
-  XCTAssertEqual(info.symbolWidth, 32, @"");
-  XCTAssertEqual(info.symbolHeight, 32, @"");
+  XCTAssertEqual(32, info.symbolWidth);
+  XCTAssertEqual(32, info.symbolHeight);
 
   info = [ZXSymbolInfo lookup:63 shape:[ZXSymbolShapeHint forceNone] minSize:minSize maxSize:maxSize fail:NO];
-  XCTAssertNil(info, @"");
+  XCTAssertNil(info);
 }
 
 @end

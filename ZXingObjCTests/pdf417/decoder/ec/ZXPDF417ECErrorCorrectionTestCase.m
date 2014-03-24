@@ -18,7 +18,7 @@
 
 @interface ZXPDF417ECErrorCorrectionTestCase ()
 
-@property (nonatomic, strong) ZXPDF417ECErrorCorrection *ec;
+@property (nonatomic, strong, readonly) ZXPDF417ECErrorCorrection *ec;
 
 @end
 
@@ -59,35 +59,36 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
   return self;
 }
 
-//- (void)testNoError {
-//  ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
-//  // no errors
-//  [self checkDecode:received];
-//}
+- (void)testNoError {
+  ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
+  // no errors
+  [self checkDecode:received];
+}
 
 - (void)testOneError {
   for (int i = 0; i < PDF417_TEST_WITH_EC.length; i++) {
     ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
-//    received.array[i] = (int32_t)(arc4random() % 256);
-    received.array[i] = 0;
+    received.array[i] = (int32_t)(arc4random() % 256);
     [self checkDecode:received];
   }
 }
 
-//- (void)testMaxErrors {
-//  for (int testIterations = 0; testIterations < 100; testIterations++) { // # iterations is kind of arbitrary
-//    ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
-//    [self corrupt:received howMany:MAX_ERRORS];
-//    [self checkDecode:received];
-//  }
-//}
-//
-//- (void)testTooManyErrors {
-//  ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
-//  [self corrupt:received howMany:MAX_ERRORS + 3]; // +3 since the algo can actually correct 2 more than it should here
-//
-//  XCTAssertFalse([self checkDecode:received], @"Should not have decoded");
-//}
+- (void)testMaxErrors {
+  for (int testIterations = 0; testIterations < 100; testIterations++) { // # iterations is kind of arbitrary
+    ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
+    [self corrupt:received howMany:MAX_ERRORS];
+    [self checkDecode:received];
+  }
+}
+
+- (void)testTooManyErrors {
+  ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
+  [self corrupt:received howMany:MAX_ERRORS + 3]; // +3 since the algo can actually correct 2 more than it should here
+
+  if ([self checkDecode:received]) {
+    XCTFail(@"Should not have decoded");
+  }
+}
 
 - (BOOL)checkDecode:(ZXIntArray *)received {
   return [self checkDecode:received erasures:[[ZXIntArray alloc] initWithLength:0]];
@@ -99,7 +100,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
   }
 
   for (int i = 0; i < PDF417_TEST.length; i++) {
-    XCTAssertEqual(received.array[i], PDF417_TEST.array[i], @"Expected %d to equal %d", received.array[i], PDF417_TEST.array[i]);
+    XCTAssertEqual(received.array[i], PDF417_TEST.array[i]);
   }
   return YES;
 }

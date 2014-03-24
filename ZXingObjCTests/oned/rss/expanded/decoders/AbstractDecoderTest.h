@@ -45,6 +45,6 @@ extern const NSString *compressedDate_End;
 
 @interface AbstractDecoderTest : XCTestCase
 
-- (BOOL)assertCorrectBinaryString:(NSString *)binaryString expectedNumber:(NSString *)expectedNumber error:(NSError **)error;
+- (void)assertCorrectBinaryString:(NSString *)binaryString expectedNumber:(NSString *)expectedNumber error:(NSError **)error;
 
 @end

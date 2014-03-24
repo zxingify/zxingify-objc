@@ -44,11 +44,11 @@
     return;
   }
 
-  XCTAssertEqual(theResult.barcodeFormat, kBarcodeFormatRSSExpanded, @"Expected format to be kBarcodeFormatRSSExpanded");
+  XCTAssertEqual(kBarcodeFormatRSSExpanded, theResult.barcodeFormat);
 
   ZXParsedResult *result = [ZXResultParser parseResult:theResult];
 
-  XCTAssertEqualObjects(result, expected, @"Result does not match expected");
+  XCTAssertEqualObjects(expected, result);
 }
 
 @end

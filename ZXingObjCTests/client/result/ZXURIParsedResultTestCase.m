@@ -97,23 +97,22 @@
 - (void)doTestWithContents:(NSString *)contents uri:(NSString *)uri title:(NSString *)title {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(result.type, kParsedResultTypeURI, @"Types don't match");
+  XCTAssertEqual(kParsedResultTypeURI, result.type);
   ZXURIParsedResult *uriResult = (ZXURIParsedResult *)result;
-  XCTAssertEqualObjects(uriResult.uri, uri, @"URIs don't match");
-  XCTAssertEqualObjects(uriResult.title, title, @"Titles don't match");
+  XCTAssertEqualObjects(uri, uriResult.uri);
+  XCTAssertEqualObjects(title, uriResult.title);
 }
 
 - (void)doTestNotUri:(NSString *)text {
   ZXResult *fakeResult = [ZXResult resultWithText:text rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(result.type, kParsedResultTypeText, @"Types don't match");
-  XCTAssertEqualObjects(result.displayResult, text, @"Display result doesn't match");
+  XCTAssertEqual(kParsedResultTypeText, result.type);
+  XCTAssertEqualObjects(text, result.displayResult);
 }
 
 - (void)doTestIsPossiblyMalicious:(NSString *)uri expected:(BOOL)expected {
   ZXURIParsedResult *result = [ZXURIParsedResult uriParsedResultWithUri:uri title:nil];
-  XCTAssertEqual([result possiblyMaliciousURI], expected, @"%@",
-                 expected ? @"Expected to be possibly malicious URI but wasn't" : @"Not expected to be possibly malicious URI but was");
+  XCTAssertEqual(expected, [result possiblyMaliciousURI]);
 }
 
 @end

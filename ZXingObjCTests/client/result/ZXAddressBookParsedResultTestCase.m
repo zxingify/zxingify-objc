@@ -248,18 +248,18 @@
                       note:(NSString *)note {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(kParsedResultTypeAddressBook, result.type, @"Result type mismatch");
+  XCTAssertEqual(kParsedResultTypeAddressBook, result.type);
   ZXAddressBookParsedResult *addressResult = (ZXAddressBookParsedResult *)result;
-  XCTAssertEqualObjects(addressResult.title, title, @"Titles do not match");
-  XCTAssertEqualObjects(addressResult.names, names, @"Names do not match");
-  XCTAssertEqualObjects(addressResult.pronunciation, pronunciation, @"Pronunciation does not match");
-  XCTAssertEqualObjects(addressResult.addresses, addresses, @"Addresses do not match");
-  XCTAssertEqualObjects(addressResult.emails, emails, @"Emails do not match");
-  XCTAssertEqualObjects(addressResult.phoneNumbers, phoneNumbers, @"Phone numbers do not match");
-  XCTAssertEqualObjects(addressResult.org, org, @"Org does not match");
-  XCTAssertEqualObjects(addressResult.urls, urls, @"URLs do not match");
-  XCTAssertEqualObjects(addressResult.birthday, birthday, @"Birthday does not match");
-  XCTAssertEqualObjects(addressResult.note, note, @"Note does not match");
+  XCTAssertEqualObjects(title, addressResult.title);
+  XCTAssertEqualObjects(names, addressResult.names);
+  XCTAssertEqualObjects(pronunciation, addressResult.pronunciation);
+  XCTAssertEqualObjects(addresses, addressResult.addresses);
+  XCTAssertEqualObjects(emails, addressResult.emails);
+  XCTAssertEqualObjects(phoneNumbers, addressResult.phoneNumbers);
+  XCTAssertEqualObjects(org, addressResult.org);
+  XCTAssertEqualObjects(urls, addressResult.urls);
+  XCTAssertEqualObjects(birthday, addressResult.birthday);
+  XCTAssertEqualObjects(note, addressResult.note);
 }
 
 @end

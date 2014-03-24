@@ -241,24 +241,24 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
                  longitude:(double)longitude {
   ZXResult *fakeResult = [ZXResult resultWithText:contents rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
   ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
-  XCTAssertEqual(result.type, kParsedResultTypeCalendar, @"Types do not match");
+  XCTAssertEqual(kParsedResultTypeCalendar, result.type);
   ZXCalendarParsedResult *calResult = (ZXCalendarParsedResult *)result;
-  XCTAssertEqualObjects(calResult.description, description, @"Descriptions do not match");
-  XCTAssertEqualObjects(calResult.summary, summary, @"Summaries do not match");
-  XCTAssertEqualObjects(calResult.location, location, @"Locations do not match");
-  XCTAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.start], startString, @"Starts do not match");
-  XCTAssertEqualObjects([DATE_TIME_FORMAT stringFromDate:calResult.end], endString, @"Ends do not match");
-  XCTAssertEqualObjects(organizer, calResult.organizer, @"Organizers do not match");
-  XCTAssertEqualObjects(attendees, calResult.attendees, @"Attendees do not match");
+  XCTAssertEqualObjects(description, calResult.description);
+  XCTAssertEqualObjects(summary, calResult.summary);
+  XCTAssertEqualObjects(location, calResult.location);
+  XCTAssertEqualObjects(startString, [DATE_TIME_FORMAT stringFromDate:calResult.start]);
+  XCTAssertEqualObjects(endString, [DATE_TIME_FORMAT stringFromDate:calResult.end]);
+  XCTAssertEqualObjects(organizer, calResult.organizer);
+  XCTAssertEqualObjects(attendees, calResult.attendees);
   [self assertEqualOrNAN:latitude actual:calResult.latitude];
   [self assertEqualOrNAN:longitude actual:calResult.longitude];
 }
 
 - (void)assertEqualOrNAN:(double)expected actual:(double)actual {
   if (isnan(expected)) {
-    XCTAssertTrue(isnan(actual), @"Expected %f to be NAN", actual);
+    XCTAssertTrue(isnan(actual));
   } else {
-    XCTAssertEqualWithAccuracy(actual, expected, EPSILON, @"Expected %f to equal %f", actual, expected);
+    XCTAssertEqualWithAccuracy(expected, actual, EPSILON);
   }
 }
 

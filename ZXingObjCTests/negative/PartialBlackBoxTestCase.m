@@ -16,9 +16,6 @@
 
 #import "PartialBlackBoxTestCase.h"
 
-/**
- * This test ensures that partial barcodes do not decode.
- */
 @implementation PartialBlackBoxTestCase
 
 - (id)initWithInvocation:(NSInvocation *)invocation {

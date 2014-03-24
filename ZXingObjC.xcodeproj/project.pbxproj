@@ -3292,11 +3292,11 @@
 		2540400C166AA0F100E13304 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				25404011166AA0F100E13304 /* reedsolomon */,
 				2540400D166AA0F100E13304 /* AbstractBlackBoxTestCase.h */,
 				2540400E166AA0F100E13304 /* AbstractBlackBoxTestCase.m */,
 				2540400F166AA0F100E13304 /* AbstractNegativeBlackBoxTestCase.h */,
 				25404010166AA0F100E13304 /* AbstractNegativeBlackBoxTestCase.m */,
-				25404011166AA0F100E13304 /* reedsolomon */,
 				2540401A166AA0F100E13304 /* TestResult.h */,
 				2540401B166AA0F100E13304 /* TestResult.m */,
 				2540401C166AA0F100E13304 /* ZXBitArrayTestCase.h */,
@@ -3327,12 +3327,12 @@
 		25404028166AA0F100E13304 /* datamatrix */ = {
 			isa = PBXGroup;
 			children = (
+				2540402D166AA0F100E13304 /* decoder */,
+				254299FD16D5DFBB00D4C045 /* encoder */,
 				25404029166AA0F100E13304 /* DataMatrixBlackBox1TestCase.h */,
 				2540402A166AA0F100E13304 /* DataMatrixBlackBox1TestCase.m */,
 				2540402B166AA0F100E13304 /* DataMatrixBlackBox2TestCase.h */,
 				2540402C166AA0F100E13304 /* DataMatrixBlackBox2TestCase.m */,
-				2540402D166AA0F100E13304 /* decoder */,
-				254299FD16D5DFBB00D4C045 /* encoder */,
 				254299F316D5DC8E00D4C045 /* ZXDataMatrixWriterTestCase.h */,
 				254299F416D5DC8E00D4C045 /* ZXDataMatrixWriterTestCase.m */,
 			);

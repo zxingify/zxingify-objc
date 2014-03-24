@@ -20,11 +20,11 @@
 
 - (void)testEncode {
   ZXEANManufacturerOrgSupport *support = [[ZXEANManufacturerOrgSupport alloc] init];
-  XCTAssertNil([support lookupCountryIdentifier:@"472000"], @"Expected country identifier to be nil");
-  XCTAssertEqualObjects([support lookupCountryIdentifier:@"000000"], @"US/CA", @"Expected country identifier to be US/CA");
-  XCTAssertEqualObjects([support lookupCountryIdentifier:@"958000"], @"MO", @"Expected country identifier to be MO");
-  XCTAssertEqualObjects([support lookupCountryIdentifier:@"500000"], @"GB", @"Expected country identifier to be GB");
-  XCTAssertEqualObjects([support lookupCountryIdentifier:@"509000"], @"GB", @"Expected country identifier to be GB");
+  XCTAssertNil([support lookupCountryIdentifier:@"472000"]);
+  XCTAssertEqualObjects(@"US/CA", [support lookupCountryIdentifier:@"000000"]);
+  XCTAssertEqualObjects(@"MO", [support lookupCountryIdentifier:@"958000"]);
+  XCTAssertEqualObjects(@"GB", [support lookupCountryIdentifier:@"500000"]);
+  XCTAssertEqualObjects(@"GB", [support lookupCountryIdentifier:@"509000"]);
 }
 
 @end

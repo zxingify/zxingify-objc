@@ -16,9 +16,6 @@
 
 #import "UnsupportedBlackBoxTestCase.h"
 
-/**
- * This test ensures that unsupported barcodes do not decode.
- */
 @implementation UnsupportedBlackBoxTestCase
 
 - (id)initWithInvocation:(NSInvocation *)invocation {

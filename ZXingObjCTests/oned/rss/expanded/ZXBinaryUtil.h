@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-@class ZXBitArray;
-
 @interface ZXBinaryUtil : NSObject
 
+/*
+ * Constructs a ZXBitArray from a NSString like the one returned from [ZXBitArray description]
+ */
 + (ZXBitArray *)buildBitArrayFromString:(NSString *)data;
 + (ZXBitArray *)buildBitArrayFromStringWithoutSpaces:(NSString *)data;
 

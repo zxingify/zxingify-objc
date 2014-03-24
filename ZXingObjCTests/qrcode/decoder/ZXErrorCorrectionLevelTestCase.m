@@ -19,14 +19,10 @@
 @implementation ZXErrorCorrectionLevelTestCase
 
 - (void)testForBits {
-  XCTAssertEqualObjects([ZXErrorCorrectionLevel forBits:0], [ZXErrorCorrectionLevel errorCorrectionLevelM],
-                       @"Expected forBits:0 to equal error correction level M");
-  XCTAssertEqualObjects([ZXErrorCorrectionLevel forBits:1], [ZXErrorCorrectionLevel errorCorrectionLevelL],
-                       @"Expected forBits:1 to equal error correction level M");
-  XCTAssertEqualObjects([ZXErrorCorrectionLevel forBits:2], [ZXErrorCorrectionLevel errorCorrectionLevelH],
-                       @"Expected forBits:2 to equal error correction level M");
-  XCTAssertEqualObjects([ZXErrorCorrectionLevel forBits:3], [ZXErrorCorrectionLevel errorCorrectionLevelQ],
-                       @"Expected forBits:3 to equal error correction level M");
+  XCTAssertEqualObjects([ZXErrorCorrectionLevel errorCorrectionLevelM], [ZXErrorCorrectionLevel forBits:0]);
+  XCTAssertEqualObjects([ZXErrorCorrectionLevel errorCorrectionLevelL], [ZXErrorCorrectionLevel forBits:1]);
+  XCTAssertEqualObjects([ZXErrorCorrectionLevel errorCorrectionLevelH], [ZXErrorCorrectionLevel forBits:2]);
+  XCTAssertEqualObjects([ZXErrorCorrectionLevel errorCorrectionLevelQ], [ZXErrorCorrectionLevel forBits:3]);
   @try {
     [ZXErrorCorrectionLevel forBits:4];
     XCTFail(@"Should have thrown an exception");

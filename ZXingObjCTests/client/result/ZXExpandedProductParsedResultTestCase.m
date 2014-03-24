@@ -25,21 +25,21 @@
                                  resultPoints:nil
                                        format:kBarcodeFormatRSSExpanded];
   ZXExpandedProductParsedResult *o = (ZXExpandedProductParsedResult *)[[[ZXExpandedProductResultParser alloc] init] parse:result];
-  XCTAssertNotNil(o, @"Expected result to be non-nil");
-  XCTAssertEqualObjects(o.productID, @"66546", @"Product IDs don't match");
-  XCTAssertNil(o.sscc, @"Expected sscc to be nil");
-  XCTAssertNil(o.lotNumber, @"Expected lot number to be nil");
-  XCTAssertNil(o.productionDate, @"Expected production dates to be nil");
-  XCTAssertEqualObjects(o.packagingDate, @"001205", @"Packaging dates don't match");
-  XCTAssertNil(o.bestBeforeDate, @"Expected best before date to be nil");
-  XCTAssertNil(o.expirationDate, @"Expected expiration date to be nil");
-  XCTAssertEqualObjects(o.weight, @"6544", @"Weights don't match");
-  XCTAssertEqualObjects(o.weightType, @"KG", @"Weight types don't match");
-  XCTAssertEqualObjects(o.weightIncrement, @"2", @"Weight increments don't match");
-  XCTAssertEqualObjects(o.price, @"5", @"Prices don't match");
-  XCTAssertEqualObjects(o.priceIncrement, @"2", @"Price increments don't match");
-  XCTAssertEqualObjects(o.priceCurrency, @"445", @"Price currencies don't match");
-  XCTAssertEqualObjects(o.uncommonAIs, uncommonAIs, @"Uncommon AIs don't match");
+  XCTAssertNotNil(o);
+  XCTAssertEqualObjects(@"66546", o.productID);
+  XCTAssertNil(o.sscc);
+  XCTAssertNil(o.lotNumber);
+  XCTAssertNil(o.productionDate);
+  XCTAssertEqualObjects(@"001205", o.packagingDate);
+  XCTAssertNil(o.bestBeforeDate);
+  XCTAssertNil(o.expirationDate);
+  XCTAssertEqualObjects(@"6544", o.weight);
+  XCTAssertEqualObjects(@"KG", o.weightType);
+  XCTAssertEqualObjects(@"2", o.weightIncrement);
+  XCTAssertEqualObjects(@"5", o.price);
+  XCTAssertEqualObjects(@"2", o.priceIncrement);
+  XCTAssertEqualObjects(@"445", o.priceCurrency);
+  XCTAssertEqualObjects(uncommonAIs, o.uncommonAIs);
 }
 
 @end

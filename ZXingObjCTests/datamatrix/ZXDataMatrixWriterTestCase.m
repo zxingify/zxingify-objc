@@ -25,9 +25,9 @@
   int bigEnough = 64;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"Hello Google" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
-  XCTAssertNotNil(matrix, @"Matrix should not be nil");
-  XCTAssertTrue(bigEnough >= matrix.width, @"Matrix width should be less than %d", bigEnough);
-  XCTAssertTrue(bigEnough >= matrix.height, @"Matrix height should be less than %d", bigEnough);
+  XCTAssertNotNil(matrix);
+  XCTAssertTrue(bigEnough >= matrix.width);
+  XCTAssertTrue(bigEnough >= matrix.height);
 }
 
 - (void)testDataMatrixWriter {
@@ -37,9 +37,9 @@
   int bigEnough = 14;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"Hello Me" format:kBarcodeFormatDataMatrix width:bigEnough height:bigEnough hints:hints error:nil];
-  XCTAssertNotNil(matrix, @"Matrix should not be nil");
-  XCTAssertEqual(matrix.width, bigEnough, @"Expected matrix width to equal %d", bigEnough);
-  XCTAssertEqual(matrix.height, bigEnough, @"Expected matrix height to equal %d", bigEnough);
+  XCTAssertNotNil(matrix);
+  XCTAssertEqual(bigEnough, matrix.width);
+  XCTAssertEqual(bigEnough, matrix.height);
 }
 
 - (void)testDataMatrixTooSmall {
@@ -47,10 +47,9 @@
   int tooSmall = 8;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:@"http://www.google.com/" format:kBarcodeFormatDataMatrix width:tooSmall height:tooSmall hints:nil error:nil];
-
-  XCTAssertNotNil(matrix, @"Matrix should not be nil");
-  XCTAssertTrue(tooSmall < matrix.width, @"Expected matrix width to be less than %d", tooSmall);
-  XCTAssertTrue(tooSmall < matrix.height, @"Expected matrix height to be less than %d", tooSmall);
+  XCTAssertNotNil(matrix);
+  XCTAssertTrue(tooSmall < matrix.width);
+  XCTAssertTrue(tooSmall < matrix.height);
 }
 
 @end

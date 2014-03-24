@@ -29,8 +29,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
                                                      version:[ZXQRCodeVersion versionForNumber:1]
                                                      ecLevel:nil hints:nil error:nil] text];
-  NSString *expected = @"\u00f1\u00f2\u00f3";
-  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(@"\u00f1\u00f2\u00f3", result);
 }
 
 - (void)testSimpleSJIS {
@@ -44,8 +43,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
                                                      version:[ZXQRCodeVersion versionForNumber:1]
                                                      ecLevel:nil hints:nil error:nil] text];
-  NSString *expected = @"\uff61\uff62\uff63\uff90";
-  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(@"\uff61\uff62\uff63\uff90", result);
 }
 
 - (void)testECI {
@@ -60,8 +58,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
                                                      version:[ZXQRCodeVersion versionForNumber:1]
                                                      ecLevel:nil hints:nil error:nil] text];
-  NSString *expected = @"\u00ed\u00f3\u00fa";
-  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(@"\u00ed\u00f3\u00fa", result);
 }
 
 - (void)testHanzi {
@@ -73,8 +70,7 @@
   NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
                                                      version:[ZXQRCodeVersion versionForNumber:1]
                                                      ecLevel:nil hints:nil error:nil] text];
-  NSString *expected = @"\u963f";
-  XCTAssertEqualObjects(result, expected, @"Expected %@ to equal %@", result, expected);
+  XCTAssertEqualObjects(@"\u963f", result);
 }
 
 @end
