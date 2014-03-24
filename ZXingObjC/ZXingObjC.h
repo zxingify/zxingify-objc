@@ -16,24 +16,17 @@
 
 #import <Foundation/Foundation.h>
 
-// ZXingObjC/aztec/decoder
-#import "ZXAztecDecoder.h"
-
-// ZXingObjC/aztec/detector
-#import "ZXAztecDetector.h"
-
-// ZXingObjC/aztec/encoder
+// Aztec
 #import "ZXAztecCode.h"
+#import "ZXAztecDecoder.h"
+#import "ZXAztecDetector.h"
+#import "ZXAztecDetectorResult.h"
 #import "ZXAztecEncoder.h"
 #import "ZXAztecHighLevelEncoder.h"
+#import "ZXAztecReader.h"
 #import "ZXAztecWriter.h"
 
-// ZXingObjC/aztec
-#import "ZXAztecDetectorResult.h"
-#import "ZXAztecReader.h"
-
-// ZXingObjC/client/result
-#import "ZXAbstractDoCoMoResultParser.h"
+// Result
 #import "ZXAddressBookAUResultParser.h"
 #import "ZXAddressBookDoCoMoResultParser.h"
 #import "ZXAddressBookParsedResult.h"
@@ -71,24 +64,13 @@
 #import "ZXWifiParsedResult.h"
 #import "ZXWifiResultParser.h"
 
-// ZXingObjC/client
+// Client
 #import "ZXCapture.h"
 #import "ZXCaptureDelegate.h"
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXImage.h"
 
-// ZXingObjC/common/detector
-#import "ZXMathUtils.h"
-#import "ZXMonochromeRectangleDetector.h"
-#import "ZXWhiteRectangleDetector.h"
-
-// ZXingObjC/common/reedsolomon
-#import "ZXGenericGF.h"
-#import "ZXGenericGFPoly.h"
-#import "ZXReedSolomonDecoder.h"
-#import "ZXReedSolomonEncoder.h"
-
-// ZXingObjC/common
+// Common
 #import "ZXBitArray.h"
 #import "ZXBitMatrix.h"
 #import "ZXBitSource.h"
@@ -98,99 +80,45 @@
 #import "ZXDecoderResult.h"
 #import "ZXDefaultGridSampler.h"
 #import "ZXDetectorResult.h"
+#import "ZXGenericGF.h"
 #import "ZXGlobalHistogramBinarizer.h"
 #import "ZXGridSampler.h"
 #import "ZXHybridBinarizer.h"
 #import "ZXIntArray.h"
+#import "ZXMathUtils.h"
+#import "ZXMonochromeRectangleDetector.h"
 #import "ZXPerspectiveTransform.h"
+#import "ZXReedSolomonDecoder.h"
+#import "ZXReedSolomonEncoder.h"
 #import "ZXStringUtils.h"
+#import "ZXWhiteRectangleDetector.h"
 
-// ZXingObjC/datamatrix/decoder
-#import "ZXDataMatrixBitMatrixParser.h"
-#import "ZXDataMatrixDataBlock.h"
-#import "ZXDataMatrixDecodedBitStreamParser.h"
+// Data Matrix
 #import "ZXDataMatrixDecoder.h"
-#import "ZXDataMatrixVersion.h"
-
-// ZXingObjC/datamatrix/detector
+#import "ZXDataMatrixDefaultPlacement.h"
 #import "ZXDataMatrixDetector.h"
-
-// ZXingObjC/datamatrix/encoder
-#import "ZXASCIIEncoder.h"
-#import "ZXBase256Encoder.h"
-#import "ZXC40Encoder.h"
-#import "ZXDataMatrixEncoder.h"
 #import "ZXDataMatrixErrorCorrection.h"
 #import "ZXDataMatrixHighLevelEncoder.h"
-#import "ZXDataMatrixSymbolInfo144.h"
-#import "ZXDefaultPlacement.h"
-#import "ZXEdifactEncoder.h"
-#import "ZXEncoderContext.h"
-#import "ZXSymbolInfo.h"
-#import "ZXSymbolShapeHint.h"
-#import "ZXTextEncoder.h"
-#import "ZXX12Encoder.h"
-
-// ZXingObjC/datamatrix
 #import "ZXDataMatrixReader.h"
+#import "ZXDataMatrixSymbolInfo.h"
+#import "ZXDataMatrixSymbolShapeHint.h"
+#import "ZXDataMatrixVersion.h"
 #import "ZXDataMatrixWriter.h"
 
-// ZXingObjC/maxicode/decoder
-#import "ZXMaxiCodeBitMatrixParser.h"
-#import "ZXMaxiCodeDecodedBitStreamParser.h"
+// MaxiCode
 #import "ZXMaxiCodeDecoder.h"
-
-// ZXingObjC/maxicode
 #import "ZXMaxiCodeReader.h"
 
-// ZXingObjC/multi/qrcode/detector
-#import "ZXMultiDetector.h"
-#import "ZXMultiFinderPatternFinder.h"
-
-// ZXingObjC/multi/qrcode
-#import "ZXQRCodeMultiReader.h"
-
-// ZXingObjC/multi
+// Multi
 #import "ZXByQuadrantReader.h"
 #import "ZXGenericMultipleBarcodeReader.h"
+#import "ZXMultiDetector.h"
 #import "ZXMultipleBarcodeReader.h"
+#import "ZXQRCodeMultiReader.h"
 
-// ZXingObjC/oned/rss/expanded/decoders
+// OneD
 #import "ZXAbstractExpandedDecoder.h"
-#import "ZXAI013103decoder.h"
-#import "ZXAI01320xDecoder.h"
-#import "ZXAI01392xDecoder.h"
-#import "ZXAI01393xDecoder.h"
-#import "ZXAI013x0x1xDecoder.h"
-#import "ZXAI013x0xDecoder.h"
-#import "ZXAI01AndOtherAIs.h"
-#import "ZXAI01decoder.h"
-#import "ZXAI01weightDecoder.h"
-#import "ZXAnyAIDecoder.h"
-#import "ZXBlockParsedResult.h"
-#import "ZXCurrentParsingState.h"
-#import "ZXDecodedChar.h"
-#import "ZXDecodedInformation.h"
-#import "ZXDecodedNumeric.h"
-#import "ZXDecodedObject.h"
-#import "ZXFieldParser.h"
-#import "ZXGeneralAppIdDecoder.h"
-
-// ZXingObjC/oned/rss/expanded
-#import "ZXBitArrayBuilder.h"
-#import "ZXExpandedPair.h"
-#import "ZXExpandedRow.h"
-#import "ZXRSSExpandedReader.h"
-
-// ZXingObjC/oned/rss
 #import "ZXAbstractRSSReader.h"
-#import "ZXDataCharacter.h"
-#import "ZXPair.h"
-#import "ZXRSS14Reader.h"
-#import "ZXRSSFinderPattern.h"
-#import "ZXRSSUtils.h"
-
-// ZXingObjC/oned
 #import "ZXCodaBarReader.h"
 #import "ZXCodaBarWriter.h"
 #import "ZXCode128Reader.h"
@@ -202,88 +130,54 @@
 #import "ZXEAN13Writer.h"
 #import "ZXEAN8Reader.h"
 #import "ZXEAN8Writer.h"
-#import "ZXEANManufacturerOrgSupport.h"
 #import "ZXITFReader.h"
 #import "ZXITFWriter.h"
 #import "ZXMultiFormatOneDReader.h"
 #import "ZXMultiFormatUPCEANReader.h"
 #import "ZXOneDimensionalCodeWriter.h"
 #import "ZXOneDReader.h"
+#import "ZXRSS14Reader.h"
+#import "ZXRSSDataCharacter.h"
+#import "ZXRSSExpandedReader.h"
+#import "ZXRSSFinderPattern.h"
+#import "ZXRSSUtils.h"
 #import "ZXUPCAReader.h"
 #import "ZXUPCAWriter.h"
-#import "ZXUPCEANExtension2Support.h"
-#import "ZXUPCEANExtension5Support.h"
-#import "ZXUPCEANExtensionSupport.h"
 #import "ZXUPCEANReader.h"
 #import "ZXUPCEANWriter.h"
 #import "ZXUPCEReader.h"
 
-// ZXingObjC/pdf417/decoder/ec
+// PDF417
 #import "ZXModulusGF.h"
-#import "ZXModulusPoly.h"
-#import "ZXPDF417ECErrorCorrection.h"
-
-// ZXingObjC/pdf417/decoder
-#import "ZXPDF417BarcodeMetadata.h"
-#import "ZXPDF417BarcodeValue.h"
-#import "ZXPDF417BoundingBox.h"
-#import "ZXPDF417Codeword.h"
-#import "ZXPDF417CodewordDecoder.h"
-#import "ZXPDF417DecodedBitStreamParser.h"
-#import "ZXPDF417DetectionResult.h"
-#import "ZXPDF417DetectionResultColumn.h"
-#import "ZXPDF417DetectionResultRowIndicatorColumn.h"
-#import "ZXPDF417ScanningDecoder.h"
-
-// ZXingObjC/pdf417/detector
+#import "ZXPDF417.h"
+#import "ZXPDF417BarcodeMatrix.h"
+#import "ZXPDF417Common.h"
+#import "ZXPDF417Compaction.h"
 #import "ZXPDF417Detector.h"
 #import "ZXPDF417DetectorResult.h"
-
-// ZXingObjC/pdf417/encoder
-#import "ZXBarcodeMatrix.h"
-#import "ZXBarcodeRow.h"
-#import "ZXCompaction.h"
-#import "ZXDimensions.h"
-#import "ZXPDF417.h"
-#import "ZXPDF417ErrorCorrection.h"
-#import "ZXPDF417HighLevelEncoder.h"
-#import "ZXPDF417Writer.h"
-
-// ZXingObjC/pdf417
-#import "ZXPDF417Common.h"
+#import "ZXPDF417Dimensions.h"
+#import "ZXPDF417ECErrorCorrection.h"
 #import "ZXPDF417Reader.h"
 #import "ZXPDF417ResultMetadata.h"
+#import "ZXPDF417ScanningDecoder.h"
 #import "ZXPDF417Writer.h"
 
-// ZXingObjC/qrcode/decoder
-#import "ZXDataMask.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXFormatInformation.h"
-#import "ZXMode.h"
-#import "ZXQRCodeBitMatrixParser.h"
-#import "ZXQRCodeDataBlock.h"
-#import "ZXQRCodeDecodedBitStreamParser.h"
-#import "ZXQRCodeDecoder.h"
-#import "ZXQRCodeVersion.h"
-
-// ZXingObjC/qrcode/detector
-#import "ZXAlignmentPattern.h"
-#import "ZXAlignmentPatternFinder.h"
-#import "ZXFinderPatternFinder.h"
-#import "ZXFinderPatternInfo.h"
-#import "ZXQRCodeDetector.h"
-#import "ZXQRCodeFinderPattern.h"
-
-// ZXingObjC/qrcode/encoder
-#import "ZXBlockPair.h"
+// QR Code
 #import "ZXByteMatrix.h"
-#import "ZXMaskUtil.h"
-#import "ZXMatrixUtil.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeAlignmentPattern.h"
+#import "ZXQRCodeDecoder.h"
+#import "ZXQRCodeDecoderMetaData.h"
+#import "ZXQRCodeDetector.h"
 #import "ZXQRCodeEncoder.h"
-
-// ZXingObjC/qrcode
+#import "ZXQRCodeErrorCorrectionLevel.h"
+#import "ZXQRCodeFinderPatternInfo.h"
+#import "ZXQRCodeFinderPattern.h"
+#import "ZXQRCodeFinderPatternFinder.h"
+#import "ZXQRCodeFinderPatternInfo.h"
+#import "ZXQRCodeMode.h"
 #import "ZXQRCodeReader.h"
+#import "ZXQRCodeVersion.h"
 #import "ZXQRCodeWriter.h"
 
 // ZXingObjC

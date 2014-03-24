@@ -15,9 +15,9 @@
  */
 
 #import "ZXBitMatrix.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXFormatInformation.h"
 #import "ZXIntArray.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
+#import "ZXQRCodeFormatInformation.h"
 #import "ZXQRCodeVersion.h"
 
 /**
@@ -64,7 +64,7 @@ static NSArray *ZX_VERSIONS = nil;
   return 17 + 4 * self.versionNumber;
 }
 
-- (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXErrorCorrectionLevel *)ecLevel {
+- (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel {
   return self.ecBlocks[[ecLevel ordinal]];
 }
 
@@ -98,7 +98,7 @@ static NSArray *ZX_VERSIONS = nil;
     if (targetVersion == versionBits) {
       return [self versionForNumber:i + 7];
     }
-    int bitsDifference = [ZXFormatInformation numBitsDiffering:versionBits b:targetVersion];
+    int bitsDifference = [ZXQRCodeFormatInformation numBitsDiffering:versionBits b:targetVersion];
     if (bitsDifference < bestDifference) {
       bestVersion = i + 7;
       bestDifference = bitsDifference;

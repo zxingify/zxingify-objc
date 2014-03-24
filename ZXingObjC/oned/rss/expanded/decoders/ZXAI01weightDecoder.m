@@ -15,7 +15,7 @@
  */
 
 #import "ZXAI01weightDecoder.h"
-#import "ZXGeneralAppIdDecoder.h"
+#import "ZXRSSExpandedGeneralAppIdDecoder.h"
 
 @implementation ZXAI01weightDecoder
 

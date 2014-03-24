@@ -16,8 +16,8 @@
 
 #import "ZXBitArray.h"
 #import "ZXBitArrayBuilder.h"
-#import "ZXDataCharacter.h"
-#import "ZXExpandedPair.h"
+#import "ZXRSSDataCharacter.h"
+#import "ZXRSSExpandedPair.h"
 
 @implementation ZXBitArrayBuilder
 
@@ -32,7 +32,7 @@
   ZXBitArray *binary = [[ZXBitArray alloc] initWithSize:size];
   int accPos = 0;
 
-  ZXExpandedPair *firstPair = pairs[0];
+  ZXRSSExpandedPair *firstPair = pairs[0];
   int firstValue = [[firstPair rightChar] value];
   for (int i = 11; i >= 0; --i) {
     if ((firstValue & (1 << i)) != 0) {
@@ -42,7 +42,7 @@
   }
 
   for (int i = 1; i < [pairs count]; ++i) {
-    ZXExpandedPair *currentPair = pairs[i];
+    ZXRSSExpandedPair *currentPair = pairs[i];
     int leftValue = [[currentPair leftChar] value];
 
     for (int j = 11; j >= 0; --j) {

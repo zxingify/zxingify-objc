@@ -15,7 +15,7 @@
  */
 
 #import "ZXAI01AndOtherAIs.h"
-#import "ZXGeneralAppIdDecoder.h"
+#import "ZXRSSExpandedGeneralAppIdDecoder.h"
 
 const int ZX_AI01_HEADER_SIZE = 1 + 1 + 2;
 

@@ -15,8 +15,8 @@
  */
 
 #import "ZXByteArray.h"
-#import "ZXErrorCorrectionLevel.h"
 #import "ZXQRCodeDataBlock.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
 #import "ZXQRCodeVersion.h"
 
 @implementation ZXQRCodeDataBlock
@@ -30,7 +30,7 @@
   return self;
 }
 
-+ (NSArray *)dataBlocks:(ZXByteArray *)rawCodewords version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel {
++ (NSArray *)dataBlocks:(ZXByteArray *)rawCodewords version:(ZXQRCodeVersion *)version ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel {
   if (rawCodewords.length != version.totalCodewords) {
     [NSException raise:NSInvalidArgumentException format:@"Invalid codewords count"];
   }

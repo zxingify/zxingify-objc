@@ -15,6 +15,7 @@
  */
 
 #import "ZXBitSourceBuilder.h"
+#import "ZXQRCodeDecodedBitStreamParser.h"
 #import "ZXQRCodeDecodedBitStreamParserTestCase.h"
 
 @implementation ZXQRCodeDecodedBitStreamParserTestCase

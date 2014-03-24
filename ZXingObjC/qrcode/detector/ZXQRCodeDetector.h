@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXAlignmentPattern, ZXBitMatrix, ZXDecodeHints, ZXDetectorResult, ZXFinderPatternInfo, ZXPerspectiveTransform, ZXResultPoint;
+@class ZXBitMatrix, ZXDecodeHints, ZXDetectorResult, ZXPerspectiveTransform, ZXQRCodeAlignmentPattern, ZXQRCodeFinderPatternInfo, ZXResultPoint;
 @protocol ZXResultPointCallback;
 
 /**
@@ -46,7 +46,7 @@
  */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error;
 
-- (ZXDetectorResult *)processFinderPatternInfo:(ZXFinderPatternInfo *)info error:(NSError **)error;
+- (ZXDetectorResult *)processFinderPatternInfo:(ZXQRCodeFinderPatternInfo *)info error:(NSError **)error;
 
 /**
  * Computes an average estimated module size based on estimated derived from the positions
@@ -64,6 +64,6 @@
  * @param allowanceFactor number of pixels in all directions to search from the center
  * @return ZXAlignmentPattern if found, or nil if an unexpected error occurs during detection
  */
-- (ZXAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor error:(NSError **)error;
+- (ZXQRCodeAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor error:(NSError **)error;
 
 @end

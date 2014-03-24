@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#import "ZXSymbolInfo.h"
+#import "ZXDataMatrixSymbolInfo.h"
 
-@interface ZXDataMatrixSymbolInfo144 : ZXSymbolInfo
+@interface ZXDataMatrixSymbolInfo144 : ZXDataMatrixSymbolInfo
 
 @end

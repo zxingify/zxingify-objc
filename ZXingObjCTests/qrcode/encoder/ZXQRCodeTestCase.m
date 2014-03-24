@@ -23,13 +23,13 @@
 
   // First, test simple setters and getters.
   // We use numbers of version 7-H.
-  qrCode.mode = [ZXMode byteMode];
-  qrCode.ecLevel = [ZXErrorCorrectionLevel errorCorrectionLevelH];
+  qrCode.mode = [ZXQRCodeMode byteMode];
+  qrCode.ecLevel = [ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH];
   qrCode.version = [ZXQRCodeVersion versionForNumber:7];
   qrCode.maskPattern = 3;
 
-  XCTAssertEqualObjects([ZXMode byteMode], qrCode.mode);
-  XCTAssertEqualObjects([ZXErrorCorrectionLevel errorCorrectionLevelH], qrCode.ecLevel);
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], qrCode.mode);
+  XCTAssertEqualObjects([ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH], qrCode.ecLevel);
   XCTAssertEqual(7, qrCode.version.versionNumber);
   XCTAssertEqual(3, qrCode.maskPattern);
 
@@ -62,8 +62,8 @@
 
 - (void)testToString2 {
   ZXQRCode *qrCode = [[ZXQRCode alloc] init];
-  qrCode.mode = [ZXMode byteMode];
-  qrCode.ecLevel = [ZXErrorCorrectionLevel errorCorrectionLevelH];
+  qrCode.mode = [ZXQRCodeMode byteMode];
+  qrCode.ecLevel = [ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH];
   qrCode.version = [ZXQRCodeVersion versionForNumber:1];
   qrCode.maskPattern = 3;
   ZXByteMatrix *matrix = [[ZXByteMatrix alloc] initWithWidth:21 height:21];

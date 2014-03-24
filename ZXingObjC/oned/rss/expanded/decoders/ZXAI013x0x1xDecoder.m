@@ -17,7 +17,7 @@
 #import "ZXAI013x0x1xDecoder.h"
 #import "ZXBitArray.h"
 #import "ZXErrors.h"
-#import "ZXGeneralAppIdDecoder.h"
+#import "ZXRSSExpandedGeneralAppIdDecoder.h"
 
 const int ZX_AI013x0x1x_HEADER_SIZE = 7 + 1;
 const int ZX_AI013x0x1x_WEIGHT_SIZE = 20;

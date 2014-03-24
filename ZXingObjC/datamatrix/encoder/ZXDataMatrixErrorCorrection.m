@@ -15,7 +15,7 @@
  */
 
 #import "ZXDataMatrixErrorCorrection.h"
-#import "ZXSymbolInfo.h"
+#import "ZXDataMatrixSymbolInfo.h"
 
 /**
  * Lookup table which factors to use for which number of error correction codewords.
@@ -81,7 +81,7 @@ static int ZX_LOG[256], ZX_ALOG[256];
   }
 }
 
-+ (NSString *)encodeECC200:(NSString *)codewords symbolInfo:(ZXSymbolInfo *)symbolInfo {
++ (NSString *)encodeECC200:(NSString *)codewords symbolInfo:(ZXDataMatrixSymbolInfo *)symbolInfo {
   if (codewords.length != symbolInfo.dataCapacity) {
     [NSException raise:NSInvalidArgumentException format:@"The number of codewords does not match the selected symbol"];
   }

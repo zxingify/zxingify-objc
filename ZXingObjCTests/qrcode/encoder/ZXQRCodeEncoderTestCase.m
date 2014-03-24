@@ -18,7 +18,7 @@
 
 @interface ZXQRCodeEncoder (PrivateMethods)
 
-+ (ZXMode *)chooseMode:(NSString *)content;
++ (ZXQRCodeMode *)chooseMode:(NSString *)content;
 
 @end
 
@@ -54,35 +54,35 @@
 
 - (void)testChooseMode {
   // Numeric mode.
-  XCTAssertEqualObjects([ZXMode numericMode], [ZXQRCodeEncoder chooseMode:@"0"]);
-  XCTAssertEqualObjects([ZXMode numericMode], [ZXQRCodeEncoder chooseMode:@"0123456789"]);
+  XCTAssertEqualObjects([ZXQRCodeMode numericMode], [ZXQRCodeEncoder chooseMode:@"0"]);
+  XCTAssertEqualObjects([ZXQRCodeMode numericMode], [ZXQRCodeEncoder chooseMode:@"0123456789"]);
   // Alphanumeric mode.
-  XCTAssertEqualObjects([ZXMode alphanumericMode], [ZXQRCodeEncoder chooseMode:@"A"]);
-  XCTAssertEqualObjects([ZXMode alphanumericMode],
+  XCTAssertEqualObjects([ZXQRCodeMode alphanumericMode], [ZXQRCodeEncoder chooseMode:@"A"]);
+  XCTAssertEqualObjects([ZXQRCodeMode alphanumericMode],
                         [ZXQRCodeEncoder chooseMode:@"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"]);
   // 8-bit byte mode.
-  XCTAssertEqualObjects([ZXMode byteMode], [ZXQRCodeEncoder chooseMode:@"a"]);
-  XCTAssertEqualObjects([ZXMode byteMode], [ZXQRCodeEncoder chooseMode:@"#"]);
-  XCTAssertEqualObjects([ZXMode byteMode], [ZXQRCodeEncoder chooseMode:@""]);
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], [ZXQRCodeEncoder chooseMode:@"a"]);
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], [ZXQRCodeEncoder chooseMode:@"#"]);
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], [ZXQRCodeEncoder chooseMode:@""]);
   // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
   // doing that as we cannot distinguish Shift_JIS from other encodings
   // from data bytes alone.  See also comments in qrcode_encoder.h.
 
   // AIUE in Hiragana in Shift_JIS
-  ZXMode *mode = [ZXQRCodeEncoder chooseMode:[self shiftJISString:[[ZXByteArray alloc] initWithBytes:0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6, -1]]];
-  XCTAssertEqualObjects([ZXMode byteMode], mode);
+  ZXQRCodeMode *mode = [ZXQRCodeEncoder chooseMode:[self shiftJISString:[[ZXByteArray alloc] initWithBytes:0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6, -1]]];
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], mode);
 
   // Nihon in Kanji in Shift_JIS.
   mode = [ZXQRCodeEncoder chooseMode:[self shiftJISString:[[ZXByteArray alloc] initWithBytes:0x9, 0xf, 0x9, 0x7b, -1]]];
-  XCTAssertEqualObjects([ZXMode byteMode], mode);
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], mode);
 
   // Sou-Utsu-Byou in Kanji in Shift_JIS.
   mode = [ZXQRCodeEncoder chooseMode:[self shiftJISString:[[ZXByteArray alloc] initWithBytes:0xe, 0x4, 0x9, 0x5, 0x9, 0x61, -1]]];
-  XCTAssertEqualObjects([ZXMode byteMode], mode);
+  XCTAssertEqualObjects([ZXQRCodeMode byteMode], mode);
 }
 
 - (void)testEncode {
-  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"ABCDEF" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH] error:nil];
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"ABCDEF" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH] error:nil];
   // The following is a valid QR Code that can be read by cell phones.
   NSString *expected =
     @"<<\n"
@@ -119,7 +119,7 @@
 - (void)testSimpleUTF8ECI {
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.encoding = NSUTF8StringEncoding;
-  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"hello" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH] hints:hints error:nil];
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"hello" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH] hints:hints error:nil];
   NSString *expected =
     @"<<\n"
          " mode: BYTE\n"
@@ -154,7 +154,7 @@
 
 - (void)testAppendModeInfo {
   ZXBitArray *bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendModeInfo:[ZXMode numericMode] bits:bits];
+  [ZXQRCodeEncoder appendModeInfo:[ZXQRCodeMode numericMode] bits:bits];
   XCTAssertEqualObjects(@" ...X", [bits description]);
 }
 
@@ -162,28 +162,28 @@
   ZXBitArray *bits = [[ZXBitArray alloc] init];
   [ZXQRCodeEncoder appendLengthInfo:1  // 1 letter (1/1).
                       version:[ZXQRCodeVersion versionForNumber:1]
-                         mode:[ZXMode numericMode]
+                         mode:[ZXQRCodeMode numericMode]
                          bits:bits
                         error:nil];
   XCTAssertEqualObjects(@" ........ .X", [bits description]);  // 10 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXQRCodeEncoder appendLengthInfo:2  // 2 letter (2/1).
                       version:[ZXQRCodeVersion versionForNumber:10]
-                         mode:[ZXMode alphanumericMode]
+                         mode:[ZXQRCodeMode alphanumericMode]
                          bits:bits
                         error:nil];
   XCTAssertEqualObjects(@" ........ .X.", [bits description]);  // 11 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXQRCodeEncoder appendLengthInfo:255  // 255 letter (255/1).
                       version:[ZXQRCodeVersion versionForNumber:27]
-                         mode:[ZXMode byteMode]
+                         mode:[ZXQRCodeMode byteMode]
                          bits:bits
                         error:nil];
   XCTAssertEqualObjects(@" ........ XXXXXXXX", [bits description]);  // 16 bits.
   bits = [[ZXBitArray alloc] init];
   [ZXQRCodeEncoder appendLengthInfo:512  // 512 letter (1024/2).
                       version:[ZXQRCodeVersion versionForNumber:40]
-                         mode:[ZXMode kanjiMode]
+                         mode:[ZXQRCodeMode kanjiMode]
                          bits:bits
                         error:nil];
   XCTAssertEqualObjects(@" ..X..... ....", [bits description]);  // 12 bits.
@@ -193,31 +193,31 @@
   // Should use appendNumericBytes.
   // 1 = 01 = 0001 in 4 bits.
   ZXBitArray *bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendBytes:@"1" mode:[ZXMode numericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"1" mode:[ZXQRCodeMode numericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   XCTAssertEqualObjects(@" ...X", [bits description]);
   // Should use appendAlphanumericBytes.
   // A = 10 = 0xa = 001010 in 6 bits
   bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendBytes:@"A" mode:[ZXMode alphanumericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"A" mode:[ZXQRCodeMode alphanumericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   XCTAssertEqualObjects(@" ..X.X.", [bits description]);
   // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
   NSError *error;
-  if ([ZXQRCodeEncoder appendBytes:@"a" mode:[ZXMode alphanumericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:&error] ||
+  if ([ZXQRCodeEncoder appendBytes:@"a" mode:[ZXQRCodeMode alphanumericMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:&error] ||
       error.code != ZXWriterError) {
     XCTFail(@"Expected ZXWriterError");
   }
   // Should use append8BitBytes.
   // 0x61, 0x62, 0x63
   bits = [[ZXBitArray alloc] init];
-  [ZXQRCodeEncoder appendBytes:@"abc" mode:[ZXMode byteMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"abc" mode:[ZXQRCodeMode byteMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   XCTAssertEqualObjects(@" .XX....X .XX...X. .XX...XX", [bits description]);
   // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
-  [ZXQRCodeEncoder appendBytes:@"\0" mode:[ZXMode byteMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:@"\0" mode:[ZXQRCodeMode byteMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   // Should use appendKanjiBytes.
   // 0x93, 0x5f
   bits = [[ZXBitArray alloc] init];
   ZXByteArray *bytes = [[ZXByteArray alloc] initWithBytes:0x93, 0x5f, -1];
-  [ZXQRCodeEncoder appendBytes:[self shiftJISString:bytes] mode:[ZXMode kanjiMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
+  [ZXQRCodeEncoder appendBytes:[self shiftJISString:bytes] mode:[ZXQRCodeMode kanjiMode] bits:bits encoding:ZX_DEFAULT_BYTE_MODE_ENCODING error:nil];
   XCTAssertEqualObjects(@" .XX.XX.. XXXXX", [bits description]);
 }
 
@@ -487,7 +487,7 @@
   for (int x = 0; x < 3518; x++) {
     [builder appendString:@"0"];
   }
-  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:builder ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL] error:nil];
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:builder ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelL] error:nil];
   XCTAssertNotNil(qrCode);
 }
 

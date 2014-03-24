@@ -16,9 +16,9 @@
 
 #import "ZXAI01393xDecoder.h"
 #import "ZXBitArray.h"
-#import "ZXDecodedInformation.h"
 #import "ZXErrors.h"
-#import "ZXGeneralAppIdDecoder.h"
+#import "ZXRSSExpandedDecodedInformation.h"
+#import "ZXRSSExpandedGeneralAppIdDecoder.h"
 
 @implementation ZXAI01393xDecoder
 
@@ -51,7 +51,7 @@ const int ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE = 10;
   }
   [buf appendFormat:@"%d", firstThreeDigits];
 
-  ZXDecodedInformation *generalInformation = [self.generalDecoder decodeGeneralPurposeField:ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI01393xDecoder_LAST_DIGIT_SIZE + ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE
+  ZXRSSExpandedDecodedInformation *generalInformation = [self.generalDecoder decodeGeneralPurposeField:ZX_AI01393xDecoder_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI01393xDecoder_LAST_DIGIT_SIZE + ZX_AI01393xDecoder_FIRST_THREE_DIGITS_SIZE
                                                                                   remaining:nil];
   [buf appendString:generalInformation.theNewString];
 

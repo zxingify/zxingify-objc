@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-#import "ZXBarcodeMatrix.h"
-#import "ZXBarcodeRow.h"
 #import "ZXErrors.h"
 #import "ZXIntArray.h"
 #import "ZXPDF417.h"
+#import "ZXPDF417BarcodeMatrix.h"
+#import "ZXPDF417BarcodeRow.h"
 #import "ZXPDF417ErrorCorrection.h"
 #import "ZXPDF417HighLevelEncoder.h"
 
@@ -509,7 +509,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
 
 @interface ZXPDF417 ()
 
-@property (nonatomic, strong) ZXBarcodeMatrix *barcodeMatrix;
+@property (nonatomic, strong) ZXPDF417BarcodeMatrix *barcodeMatrix;
 @property (nonatomic, assign) int minCols;
 @property (nonatomic, assign) int maxCols;
 @property (nonatomic, assign) int minRows;
@@ -571,7 +571,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
   return n > m + 1 ? n - m - 1 : 0;
 }
 
-- (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXBarcodeRow *)logic {
+- (void)encodeCharPattern:(int)pattern len:(int)len logic:(ZXPDF417BarcodeRow *)logic {
   int map = 1 << (len - 1);
   BOOL last = (pattern & map) != 0; //Initialize to inverse of first bit
   int width = 0;
@@ -590,7 +590,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
   [logic addBar:last width:width];
 }
 
-- (void)encodeLowLevel:(NSString *)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)errorCorrectionLevel logic:(ZXBarcodeMatrix *)logic {
+- (void)encodeLowLevel:(NSString *)fullCodewords c:(int)c r:(int)r errorCorrectionLevel:(int)errorCorrectionLevel logic:(ZXPDF417BarcodeMatrix *)logic {
   int idx = 0;
   for (int y = 0; y < r; y++) {
     int cluster = y % 3;
@@ -672,7 +672,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
   NSString *fullCodewords = [dataCodewords stringByAppendingString:ec];
 
   //4. step: low-level encoding
-  self.barcodeMatrix = [[ZXBarcodeMatrix alloc] initWithHeight:rows width:cols];
+  self.barcodeMatrix = [[ZXPDF417BarcodeMatrix alloc] initWithHeight:rows width:cols];
   [self encodeLowLevel:fullCodewords c:cols r:rows errorCorrectionLevel:anErrorCorrectionLevel logic:self.barcodeMatrix];
 
   return YES;

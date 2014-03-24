@@ -17,9 +17,9 @@
 #import "ZXBitMatrix.h"
 #import "ZXByteMatrix.h"
 #import "ZXEncodeHints.h"
-#import "ZXErrorCorrectionLevel.h"
 #import "ZXQRCode.h"
 #import "ZXQRCodeEncoder.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
 #import "ZXQRCodeWriter.h"
 
 const int ZX_QUIET_ZONE_SIZE = 4;
@@ -43,7 +43,7 @@ const int ZX_QUIET_ZONE_SIZE = 4;
     [NSException raise:NSInvalidArgumentException format:@"Requested dimensions are too small: %dx%d", width, height];
   }
 
-  ZXErrorCorrectionLevel *errorCorrectionLevel = [ZXErrorCorrectionLevel errorCorrectionLevelL];
+  ZXQRCodeErrorCorrectionLevel *errorCorrectionLevel = [ZXQRCodeErrorCorrectionLevel errorCorrectionLevelL];
   int quietZone = ZX_QUIET_ZONE_SIZE;
   if (hints != nil) {
     if (hints.errorCorrectionLevel) {

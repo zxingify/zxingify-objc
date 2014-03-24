@@ -17,9 +17,9 @@
 #import "ZXBitMatrix.h"
 #import "ZXDecodeHints.h"
 #import "ZXErrors.h"
-#import "ZXFinderPatternInfo.h"
 #import "ZXMultiFinderPatternFinder.h"
 #import "ZXQRCodeFinderPattern.h"
+#import "ZXQRCodeFinderPatternInfo.h"
 
 // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
 // since it limits the number of regions to decode
@@ -118,7 +118,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
         NSMutableArray *test = [NSMutableArray arrayWithObjects:p1, p2, p3, nil];
         [ZXResultPoint orderBestPatterns:test];
 
-        ZXFinderPatternInfo *info = [[ZXFinderPatternInfo alloc] initWithPatternCenters:test];
+        ZXQRCodeFinderPatternInfo *info = [[ZXQRCodeFinderPatternInfo alloc] initWithPatternCenters:test];
         float dA = [ZXResultPoint distance:[info topLeft] pattern2:[info bottomLeft]];
         float dC = [ZXResultPoint distance:[info topRight] pattern2:[info bottomLeft]];
         float dB = [ZXResultPoint distance:[info topLeft] pattern2:[info topRight]];
@@ -188,7 +188,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
       } else {
         if ((currentState & 1) == 0) {
           if (currentState == 4) {
-            if ([ZXFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j pureBarcode:pureBarcode]) {
+            if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j pureBarcode:pureBarcode]) {
               currentState = 0;
               stateCount[0] = 0;
               stateCount[1] = 0;
@@ -212,7 +212,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
       }
     }
 
-    if ([ZXFinderPatternFinder foundPatternCross:stateCount]) {
+    if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount]) {
       [self handlePossibleCenter:stateCount i:i j:maxJ pureBarcode:pureBarcode];
     }
   }
@@ -223,7 +223,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
   NSMutableArray *result = [NSMutableArray array];
   for (NSMutableArray *pattern in patternInfo) {
     [ZXResultPoint orderBestPatterns:pattern];
-    [result addObject:[[ZXFinderPatternInfo alloc] initWithPatternCenters:pattern]];
+    [result addObject:[[ZXQRCodeFinderPatternInfo alloc] initWithPatternCenters:pattern]];
   }
 
   return result;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXCompaction.h"
+#import "ZXPDF417Compaction.h"
 
 extern const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING;
 
@@ -32,6 +32,6 @@ extern const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING;
  * @param msg the message
  * @return the encoded message (the char values range from 0 to 928)
  */
-+ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction encoding:(NSStringEncoding)encoding error:(NSError **)error;
++ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXPDF417Compaction)compaction encoding:(NSStringEncoding)encoding error:(NSError **)error;
 
 @end

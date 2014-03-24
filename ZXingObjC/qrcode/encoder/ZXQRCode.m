@@ -15,9 +15,9 @@
  */
 
 #import "ZXByteMatrix.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXMode.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
+#import "ZXQRCodeMode.h"
 
 const int ZX_NUM_MASK_PATTERNS = 8;
 

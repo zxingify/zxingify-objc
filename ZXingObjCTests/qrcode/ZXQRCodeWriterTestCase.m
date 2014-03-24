@@ -85,7 +85,7 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
   XCTAssertEqual(strangeHeight, matrix.height);
 }
 
-- (void)compareToGoldenFile:(NSString *)contents ecLevel:(ZXErrorCorrectionLevel *)ecLevel
+- (void)compareToGoldenFile:(NSString *)contents ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel
                  resolution:(int)resolution fileName:(NSString *)fileName {
   ZXImage *image = [self loadImage:fileName];
   XCTAssertNotNil(image);
@@ -107,7 +107,7 @@ static NSString *BASE_IMAGE_PATH = @"Resources/golden/qrcode/";
 // and cell phones. We expect pixel-perfect results, because the error correction level is known,
 // and the pixel dimensions matches exactly.
 - (void)testRegressionTest {
-  [self compareToGoldenFile:@"http://www.google.com/" ecLevel:[ZXErrorCorrectionLevel errorCorrectionLevelM]
+  [self compareToGoldenFile:@"http://www.google.com/" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelM]
                  resolution:99 fileName:@"renderer-test-01.png"];
 }
 

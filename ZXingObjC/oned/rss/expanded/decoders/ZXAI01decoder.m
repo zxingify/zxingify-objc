@@ -16,7 +16,7 @@
 
 #import "ZXAI01decoder.h"
 #import "ZXBitArray.h"
-#import "ZXGeneralAppIdDecoder.h"
+#import "ZXRSSExpandedGeneralAppIdDecoder.h"
 
 const int ZX_AI01_GTIN_SIZE = 40;
 

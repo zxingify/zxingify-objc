@@ -22,7 +22,7 @@
 - (void)testRS {
   //Sample from Annexe R in ISO/IEC 16022:2000(E)
   const unichar cw1[3] = {142, 164, 186};
-  ZXSymbolInfo *symbolInfo = [ZXSymbolInfo lookup:3];
+  ZXDataMatrixSymbolInfo *symbolInfo = [ZXDataMatrixSymbolInfo lookup:3];
   NSString *s = [ZXDataMatrixErrorCorrection encodeECC200:[NSString stringWithCharacters:cw1 length:3] symbolInfo:symbolInfo];
   XCTAssertEqualObjects(@"142 164 186 114 25 5 88 102", [ZXDataMatrixHighLevelEncodeTestCase visualize:s]);
 

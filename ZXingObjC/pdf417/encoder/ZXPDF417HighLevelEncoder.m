@@ -140,7 +140,7 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
   }
 }
 
-+ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXCompaction)compaction encoding:(NSStringEncoding)encoding error:(NSError **)error {
++ (NSString *)encodeHighLevel:(NSString *)msg compaction:(ZXPDF417Compaction)compaction encoding:(NSStringEncoding)encoding error:(NSError **)error {
   //the codewords 0..928 are encoded as Unicode characters
   NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
 

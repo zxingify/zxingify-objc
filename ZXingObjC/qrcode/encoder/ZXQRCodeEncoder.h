@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXBitArray, ZXByteArray, ZXEncodeHints, ZXErrorCorrectionLevel, ZXMode, ZXQRCode, ZXQRCodeVersion;
+@class ZXBitArray, ZXByteArray, ZXEncodeHints, ZXQRCode, ZXQRCodeErrorCorrectionLevel, ZXQRCodeMode, ZXQRCodeVersion;
 
 extern const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING;
 
@@ -31,9 +31,9 @@ extern const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING;
  * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
  * with which clients can specify the encoding mode. For now, we don't need the functionality.
  */
-+ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error;
++ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel error:(NSError **)error;
 
-+ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints error:(NSError **)error;
++ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints error:(NSError **)error;
 
 /**
  * Return the code point of the table used in alphanumeric mode or
@@ -64,17 +64,17 @@ extern const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING;
 /**
  * Append mode info. On success, store the result in "bits".
  */
-+ (void)appendModeInfo:(ZXMode *)mode bits:(ZXBitArray *)bits;
++ (void)appendModeInfo:(ZXQRCodeMode *)mode bits:(ZXBitArray *)bits;
 
 /**
  * Append length info. On success, store the result in "bits".
  */
-+ (BOOL)appendLengthInfo:(int)numLetters version:(ZXQRCodeVersion *)version mode:(ZXMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error;
++ (BOOL)appendLengthInfo:(int)numLetters version:(ZXQRCodeVersion *)version mode:(ZXQRCodeMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error;
 
 /**
  * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
  */
-+ (BOOL)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error;
++ (BOOL)appendBytes:(NSString *)content mode:(ZXQRCodeMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error;
 
 + (void)appendNumericBytes:(NSString *)content bits:(ZXBitArray *)bits;
 

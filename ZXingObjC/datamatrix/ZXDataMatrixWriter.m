@@ -16,14 +16,14 @@
 
 #import "ZXBitMatrix.h"
 #import "ZXByteMatrix.h"
+#import "ZXDataMatrixDefaultPlacement.h"
 #import "ZXDataMatrixErrorCorrection.h"
 #import "ZXDataMatrixHighLevelEncoder.h"
+#import "ZXDataMatrixSymbolInfo.h"
+#import "ZXDataMatrixSymbolShapeHint.h"
 #import "ZXDataMatrixWriter.h"
-#import "ZXDefaultPlacement.h"
 #import "ZXDimension.h"
 #import "ZXEncodeHints.h"
-#import "ZXSymbolInfo.h"
-#import "ZXSymbolShapeHint.h"
 
 @implementation ZXDataMatrixWriter
 
@@ -46,11 +46,11 @@
   }
 
   // Try to get force shape & min / max size
-  ZXSymbolShapeHint *shape = [ZXSymbolShapeHint forceNone];
+  ZXDataMatrixSymbolShapeHint *shape = [ZXDataMatrixSymbolShapeHint forceNone];
   ZXDimension *minSize = nil;
   ZXDimension *maxSize = nil;
   if (hints != nil) {
-    ZXSymbolShapeHint *requestedShape = hints.dataMatrixShape;
+    ZXDataMatrixSymbolShapeHint *requestedShape = hints.dataMatrixShape;
     if (requestedShape != nil) {
       shape = requestedShape;
     }
@@ -67,13 +67,13 @@
   //1. step: Data encodation
   NSString *encoded = [ZXDataMatrixHighLevelEncoder encodeHighLevel:contents shape:shape minSize:minSize maxSize:maxSize];
 
-  ZXSymbolInfo *symbolInfo = [ZXSymbolInfo lookup:(int)encoded.length shape:shape minSize:minSize maxSize:maxSize fail:YES];
+  ZXDataMatrixSymbolInfo *symbolInfo = [ZXDataMatrixSymbolInfo lookup:(int)encoded.length shape:shape minSize:minSize maxSize:maxSize fail:YES];
 
   //2. step: ECC generation
   NSString *codewords = [ZXDataMatrixErrorCorrection encodeECC200:encoded symbolInfo:symbolInfo];
 
   //3. step: Module placement in Matrix
-  ZXDefaultPlacement *placement = [[ZXDefaultPlacement alloc] initWithCodewords:codewords numcols:symbolInfo.symbolDataWidth numrows:symbolInfo.symbolDataHeight];
+  ZXDataMatrixDefaultPlacement *placement = [[ZXDataMatrixDefaultPlacement alloc] initWithCodewords:codewords numcols:symbolInfo.symbolDataWidth numrows:symbolInfo.symbolDataHeight];
   [placement place];
 
   //4. step: low-level encoding
@@ -87,7 +87,7 @@
  * @param symbolInfo The symbol info to encode.
  * @return The bit matrix generated.
  */
-- (ZXBitMatrix *)encodeLowLevel:(ZXDefaultPlacement *)placement symbolInfo:(ZXSymbolInfo *)symbolInfo {
+- (ZXBitMatrix *)encodeLowLevel:(ZXDataMatrixDefaultPlacement *)placement symbolInfo:(ZXDataMatrixSymbolInfo *)symbolInfo {
   int symbolWidth = symbolInfo.symbolDataWidth;
   int symbolHeight = symbolInfo.symbolDataHeight;
 

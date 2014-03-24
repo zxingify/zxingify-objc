@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXFinderPatternFinder.h"
+#import "ZXQRCodeFinderPatternFinder.h"
 
 @class ZXDecodeHints;
 
@@ -29,7 +29,7 @@
  *
  * Use the tryHarder hint to ask for a more thorough detection.
  */
-@interface ZXMultiFinderPatternFinder : ZXFinderPatternFinder
+@interface ZXMultiFinderPatternFinder : ZXQRCodeFinderPatternFinder
 
 - (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError **)error;
 

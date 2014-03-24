@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+#import "ZXBitArrayBuilder.h"
 #import "ZXBitArrayBuilderTest.h"
+#import "ZXRSSExpandedPair.h"
 
 @implementation ZXBitArrayBuilderTest
 
@@ -36,23 +38,23 @@
   for (int i = 0; i < [pairValues count]; ++i) {
     ZXIntArray *pair = pairValues[i];
 
-    ZXDataCharacter *leftChar;
+    ZXRSSDataCharacter *leftChar;
     if (i == 0) {
       leftChar = nil;
     } else {
-      leftChar = [[ZXDataCharacter alloc] initWithValue:pair.array[0] checksumPortion:0];
+      leftChar = [[ZXRSSDataCharacter alloc] initWithValue:pair.array[0] checksumPortion:0];
     }
 
-    ZXDataCharacter *rightChar;
+    ZXRSSDataCharacter *rightChar;
     if (i == 0) {
-      rightChar = [[ZXDataCharacter alloc] initWithValue:pair.array[0] checksumPortion:0];
+      rightChar = [[ZXRSSDataCharacter alloc] initWithValue:pair.array[0] checksumPortion:0];
     } else if (pair.length == 2) {
-      rightChar = [[ZXDataCharacter alloc] initWithValue:pair.array[1] checksumPortion:0];
+      rightChar = [[ZXRSSDataCharacter alloc] initWithValue:pair.array[1] checksumPortion:0];
     } else {
       rightChar = nil;
     }
 
-    ZXExpandedPair *expandedPair = [[ZXExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:nil mayBeLast:YES];
+    ZXRSSExpandedPair *expandedPair = [[ZXRSSExpandedPair alloc] initWithLeftChar:leftChar rightChar:rightChar finderPattern:nil mayBeLast:YES];
     [pairs addObject:expandedPair];
   }
 

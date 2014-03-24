@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXErrorCorrectionLevel.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
 #import "ZXQRCodeVersion.h"
 #import "ZXQRCodeVersionTestCase.h"
 
@@ -37,10 +37,10 @@
     XCTAssertTrue(version.alignmentPatternCenters.length > 0);
   }
   XCTAssertEqual(dimension, version.dimensionForVersion);
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelH]]);
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelL]]);
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelM]]);
-  XCTAssertNotNil([version ecBlocksForLevel:[ZXErrorCorrectionLevel errorCorrectionLevelQ]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelL]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelM]]);
+  XCTAssertNotNil([version ecBlocksForLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelQ]]);
   XCTAssertNotNil([version buildFunctionPattern]);
 }
 

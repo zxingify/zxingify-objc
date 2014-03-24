@@ -16,17 +16,17 @@
 
 #import "ZXBitMatrix.h"
 #import "ZXByteArray.h"
-#import "ZXDataMask.h"
 #import "ZXErrors.h"
-#import "ZXFormatInformation.h"
 #import "ZXQRCodeBitMatrixParser.h"
+#import "ZXQRCodeDataMask.h"
+#import "ZXQRCodeFormatInformation.h"
 #import "ZXQRCodeVersion.h"
 
 @interface ZXQRCodeBitMatrixParser ()
 
 @property (nonatomic, strong, readonly) ZXBitMatrix *bitMatrix;
 @property (nonatomic, assign) BOOL shouldMirror;
-@property (nonatomic, strong) ZXFormatInformation *parsedFormatInfo;
+@property (nonatomic, strong) ZXQRCodeFormatInformation *parsedFormatInfo;
 @property (nonatomic, strong) ZXQRCodeVersion *parsedVersion;
 
 @end
@@ -48,7 +48,7 @@
   return self;
 }
 
-- (ZXFormatInformation *)readFormatInformationWithError:(NSError **)error {
+- (ZXQRCodeFormatInformation *)readFormatInformationWithError:(NSError **)error {
   if (self.parsedFormatInfo != nil) {
     return self.parsedFormatInfo;
   }
@@ -78,7 +78,7 @@
     formatInfoBits2 = [self copyBit:i j:8 versionBits:formatInfoBits2];
   }
 
-  self.parsedFormatInfo = [ZXFormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2];
+  self.parsedFormatInfo = [ZXQRCodeFormatInformation decodeFormatInformation:formatInfoBits1 maskedFormatInfo2:formatInfoBits2];
   if (self.parsedFormatInfo != nil) {
     return self.parsedFormatInfo;
   }
@@ -134,7 +134,7 @@
 }
 
 - (ZXByteArray *)readCodewordsWithError:(NSError **)error {
-  ZXFormatInformation *formatInfo = [self readFormatInformationWithError:error];
+  ZXQRCodeFormatInformation *formatInfo = [self readFormatInformationWithError:error];
   if (!formatInfo) {
     return nil;
   }
@@ -146,7 +146,7 @@
 
   // Get the data mask for the format used in this QR Code. This will exclude
   // some bits from reading as we wind through the bit matrix.
-  ZXDataMask *dataMask = [ZXDataMask forReference:[formatInfo dataMask]];
+  ZXQRCodeDataMask *dataMask = [ZXQRCodeDataMask forReference:[formatInfo dataMask]];
   int dimension = self.bitMatrix.height;
   [dataMask unmaskBitMatrix:self.bitMatrix dimension:dimension];
 
@@ -198,7 +198,7 @@
   if (!self.parsedFormatInfo) {
     return; // We have no format information, and have no data mask
   }
-  ZXDataMask *dataMask = [ZXDataMask forReference:self.parsedFormatInfo.dataMask];
+  ZXQRCodeDataMask *dataMask = [ZXQRCodeDataMask forReference:self.parsedFormatInfo.dataMask];
   int dimension = self.bitMatrix.height;
   [dataMask unmaskBitMatrix:self.bitMatrix dimension:dimension];
 }

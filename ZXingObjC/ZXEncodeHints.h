@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#import "ZXCompaction.h"
-#import "ZXDimensions.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXSymbolShapeHint.h"
+#import "ZXDataMatrixSymbolShapeHint.h"
+#import "ZXPDF417Compaction.h"
+#import "ZXPDF417Dimensions.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
 
 /**
  * These are a set of hints that you may pass to Writers to specify their behavior.
  */
 
-@class ZXDimension, ZXSymbolShapeHint;
+@class ZXDataMatrixSymbolShapeHint, ZXDimension;
 
 @interface ZXEncodeHints : NSObject
 
@@ -37,7 +37,7 @@
 /**
  * Specifies the matrix shape for Data Matrix .
  */
-@property (nonatomic, strong) ZXSymbolShapeHint *dataMatrixShape;
+@property (nonatomic, strong) ZXDataMatrixSymbolShapeHint *dataMatrixShape;
 
 /**
  * Specifies a minimum barcode size. Only applicable to Data Matrix now.
@@ -54,7 +54,7 @@
  * For Aztec it represents the minimal percentage of error correction words.
  * Note: an Aztec symbol should have a minimum of 25% EC words.
  */
-@property (nonatomic, strong) ZXErrorCorrectionLevel *errorCorrectionLevel;
+@property (nonatomic, strong) ZXQRCodeErrorCorrectionLevel *errorCorrectionLevel;
 
 /**
  * Specifies what percent of error correction to use.
@@ -78,12 +78,12 @@
 /**
  * Specifies what compaction mode to use for PDF417.
  */
-@property (nonatomic, assign) ZXCompaction pdf417Compaction;
+@property (nonatomic, assign) ZXPDF417Compaction pdf417Compaction;
 
 /**
  * Specifies the minimum and maximum number of rows and columns for PDF417.
  */
-@property (nonatomic, strong) ZXDimensions *pdf417Dimensions;
+@property (nonatomic, strong) ZXPDF417Dimensions *pdf417Dimensions;
 
 /**
  * Specifies the required number of layers for an Aztec code:

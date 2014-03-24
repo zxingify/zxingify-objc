@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-@class ZXEncoderContext;
+@class ZXDataMatrixEncoderContext;
 
 @protocol ZXDataMatrixEncoder <NSObject>
 
 - (int)encodingMode;
-- (void)encode:(ZXEncoderContext *)context;
+- (void)encode:(ZXDataMatrixEncoderContext *)context;
 
 @end

@@ -16,9 +16,9 @@
 
 #import "ZXAI01392xDecoder.h"
 #import "ZXBitArray.h"
-#import "ZXDecodedInformation.h"
 #import "ZXErrors.h"
-#import "ZXGeneralAppIdDecoder.h"
+#import "ZXRSSExpandedDecodedInformation.h"
+#import "ZXRSSExpandedGeneralAppIdDecoder.h"
 
 const int ZX_AI01392x_HEADER_SIZE = 5 + 1 + 2;
 const int ZX_AI01392x_LAST_DIGIT_SIZE = 2;
@@ -34,7 +34,7 @@ const int ZX_AI01392x_LAST_DIGIT_SIZE = 2;
   [self encodeCompressedGtin:buf currentPos:ZX_AI01392x_HEADER_SIZE];
   int lastAIdigit = [self.generalDecoder extractNumericValueFromBitArray:ZX_AI01392x_HEADER_SIZE + ZX_AI01_GTIN_SIZE bits:ZX_AI01392x_LAST_DIGIT_SIZE];
   [buf appendFormat:@"(392%d)", lastAIdigit];
-  ZXDecodedInformation *decodedInformation = [self.generalDecoder decodeGeneralPurposeField:ZX_AI01392x_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI01392x_LAST_DIGIT_SIZE remaining:nil];
+  ZXRSSExpandedDecodedInformation *decodedInformation = [self.generalDecoder decodeGeneralPurposeField:ZX_AI01392x_HEADER_SIZE + ZX_AI01_GTIN_SIZE + ZX_AI01392x_LAST_DIGIT_SIZE remaining:nil];
   [buf appendString:decodedInformation.theNewString];
   return buf;
 }

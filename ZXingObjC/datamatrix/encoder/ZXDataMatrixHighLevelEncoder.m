@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#import "ZXASCIIEncoder.h"
-#import "ZXBase256Encoder.h"
-#import "ZXC40Encoder.h"
+#import "ZXDataMatrixASCIIEncoder.h"
+#import "ZXDataMatrixBase256Encoder.h"
+#import "ZXDataMatrixC40Encoder.h"
+#import "ZXDataMatrixEdifactEncoder.h"
+#import "ZXDataMatrixEncoderContext.h"
 #import "ZXDataMatrixHighLevelEncoder.h"
-#import "ZXEdifactEncoder.h"
-#import "ZXEncoderContext.h"
-#import "ZXSymbolInfo.h"
-#import "ZXSymbolShapeHint.h"
-#import "ZXTextEncoder.h"
-#import "ZXX12Encoder.h"
+#import "ZXDataMatrixSymbolInfo.h"
+#import "ZXDataMatrixSymbolShapeHint.h"
+#import "ZXDataMatrixTextEncoder.h"
+#import "ZXDataMatrixX12Encoder.h"
 
 /**
  * Padding character
@@ -130,20 +130,20 @@ static NSString *MACRO_TRAILER = nil;
 }
 
 + (NSString *)encodeHighLevel:(NSString *)msg {
-  return [self encodeHighLevel:msg shape:[ZXSymbolShapeHint forceNone] minSize:nil maxSize:nil];
+  return [self encodeHighLevel:msg shape:[ZXDataMatrixSymbolShapeHint forceNone] minSize:nil maxSize:nil];
 }
 
-+ (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXSymbolShapeHint *)shape
++ (NSString *)encodeHighLevel:(NSString *)msg shape:(ZXDataMatrixSymbolShapeHint *)shape
                       minSize:(ZXDimension *)minSize maxSize:(ZXDimension *)maxSize {
   //the codewords 0..255 are encoded as Unicode characters
-  NSArray *encoders = @[[[ZXASCIIEncoder alloc] init],
-                        [[ZXC40Encoder alloc] init],
-                        [[ZXTextEncoder alloc] init],
-                        [[ZXX12Encoder alloc] init],
-                        [[ZXEdifactEncoder alloc] init],
-                        [[ZXBase256Encoder alloc] init]];
+  NSArray *encoders = @[[[ZXDataMatrixASCIIEncoder alloc] init],
+                        [[ZXDataMatrixC40Encoder alloc] init],
+                        [[ZXDataMatrixTextEncoder alloc] init],
+                        [[ZXDataMatrixX12Encoder alloc] init],
+                        [[ZXDataMatrixEdifactEncoder alloc] init],
+                        [[ZXDataMatrixBase256Encoder alloc] init]];
 
-  ZXEncoderContext *context = [[ZXEncoderContext alloc] initWithMessage:msg];
+  ZXDataMatrixEncoderContext *context = [[ZXDataMatrixEncoderContext alloc] initWithMessage:msg];
   context.symbolShape = shape;
   [context setSizeConstraints:minSize maxSize:maxSize];
 

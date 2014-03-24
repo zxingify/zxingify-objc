@@ -15,8 +15,8 @@
  */
 
 #import "ZXAztecHighLevelEncoder.h"
+#import "ZXAztecState.h"
 #import "ZXByteArray.h"
-#import "ZXState.h"
 
 NSArray *ZX_AZTEC_MODE_NAMES = nil;
 
@@ -148,7 +148,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 }
 
 - (ZXBitArray *)encode {
-  NSArray *states = @[[ZXState initialState]];
+  NSArray *states = @[[ZXAztecState initialState]];
   for (int index = 0; index < self.text.length; index++) {
     int pairCode;
     int nextChar = index + 1 < self.text.length ? self.text.array[index + 1] : 0;
@@ -179,7 +179,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
     }
   }
   // We are left with a set of states.  Find the shortest one.
-  ZXState *minState = [[states sortedArrayUsingComparator:^NSComparisonResult(ZXState *a, ZXState *b) {
+  ZXAztecState *minState = [[states sortedArrayUsingComparator:^NSComparisonResult(ZXAztecState *a, ZXAztecState *b) {
     return a.bitCount - b.bitCount;
   }] firstObject];
   // Convert it to a bit array, and return.
@@ -191,7 +191,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 // non-optimal states.
 - (NSArray *)updateStateListForChar:(NSArray *)states index:(int)index {
   NSMutableArray *result = [NSMutableArray array];
-  for (ZXState *state in states) {
+  for (ZXAztecState *state in states) {
     [self updateStateForChar:state index:index result:result];
   }
   return [self simplifyStates:result];
@@ -200,10 +200,10 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 // Return a set of states that represent the possible ways of updating this
 // state for the next character.  The resulting set of states are added to
 // the "result" list.
-- (void)updateStateForChar:(ZXState *)state index:(int)index result:(NSMutableArray *)result {
+- (void)updateStateForChar:(ZXAztecState *)state index:(int)index result:(NSMutableArray *)result {
   unichar ch = (unichar) (self.text.array[index] & 0xFF);
   BOOL charInCurrentTable = ZX_AZTEC_CHAR_MAP[state.mode][ch] > 0;
-  ZXState *stateNoBinary = nil;
+  ZXAztecState *stateNoBinary = nil;
   for (int mode = 0; mode <= ZX_AZTEC_MODE_PUNCT; mode++) {
     int charInMode = ZX_AZTEC_CHAR_MAP[mode][ch];
     if (charInMode > 0) {
@@ -217,14 +217,14 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
         // any other mode except possibly digit (which uses only 4 bits).  Any
         // other latch would be equally successful *after* this character, and
         // so wouldn't save any bits.
-        ZXState *latch_state = [stateNoBinary latchAndAppend:mode value:charInMode];
+        ZXAztecState *latch_state = [stateNoBinary latchAndAppend:mode value:charInMode];
         [result addObject:latch_state];
       }
       // Try generating the character by switching to its mode.
       if (!charInCurrentTable && ZX_AZTEC_SHIFT_TABLE[state.mode][mode] >= 0) {
         // It never makes sense to temporarily shift to another mode if the
         // character exists in the current mode.  That can never save bits.
-        ZXState *shift_state = [stateNoBinary shiftAndAppend:mode value:charInMode];
+        ZXAztecState *shift_state = [stateNoBinary shiftAndAppend:mode value:charInMode];
         [result addObject:shift_state];
       }
     }
@@ -233,21 +233,21 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
     // It's never worthwhile to go into binary shift mode if you're not already
     // in binary shift mode, and the character exists in your current mode.
     // That can never save bits over just outputting the char in the current mode.
-    ZXState *binaryState = [state addBinaryShiftChar:index];
+    ZXAztecState *binaryState = [state addBinaryShiftChar:index];
     [result addObject:binaryState];
   }
 }
 
 - (NSArray *)updateStateListForPair:(NSArray *)states index:(int)index pairCode:(int)pairCode {
   NSMutableArray *result = [NSMutableArray array];
-  for (ZXState *state in states) {
+  for (ZXAztecState *state in states) {
     [self updateStateForPair:state index:index pairCode:pairCode result:result];
   }
   return [self simplifyStates:result];
 }
 
-- (void)updateStateForPair:(ZXState *)state index:(int)index pairCode:(int)pairCode result:(NSMutableArray *)result {
-  ZXState *stateNoBinary = [state endBinaryShift:index];
+- (void)updateStateForPair:(ZXAztecState *)state index:(int)index pairCode:(int)pairCode result:(NSMutableArray *)result {
+  ZXAztecState *stateNoBinary = [state endBinaryShift:index];
   // Possibility 1.  Latch to ZX_AZTEC_MODE_PUNCT, and then append this code
   [result addObject:[stateNoBinary latchAndAppend:ZX_AZTEC_MODE_PUNCT value:pairCode]];
   if (state.mode != ZX_AZTEC_MODE_PUNCT) {
@@ -257,7 +257,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
   }
   if (pairCode == 3 || pairCode == 4) {
     // both characters are in DIGITS.  Sometimes better to just add two digits
-    ZXState *digit_state = [[stateNoBinary
+    ZXAztecState *digit_state = [[stateNoBinary
                              latchAndAppend:ZX_AZTEC_MODE_DIGIT value:16 - pairCode]  // period or comma in DIGIT
                             latchAndAppend:ZX_AZTEC_MODE_DIGIT value:1];             // space in DIGIT
     [result addObject:digit_state];
@@ -265,17 +265,17 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
   if (state.binaryShiftByteCount > 0) {
     // It only makes sense to do the characters as binary if we're already
     // in binary mode.
-    ZXState *binaryState = [[state addBinaryShiftChar:index] addBinaryShiftChar:index + 1];
+    ZXAztecState *binaryState = [[state addBinaryShiftChar:index] addBinaryShiftChar:index + 1];
     [result addObject:binaryState];
   }
 }
 
 - (NSArray *)simplifyStates:(NSArray *)states {
   NSMutableArray *result = [NSMutableArray array];
-  for (ZXState *newState in states) {
+  for (ZXAztecState *newState in states) {
     BOOL add = YES;
     NSArray *resultCopy = [NSArray arrayWithArray:result];
-    for (ZXState *oldState in resultCopy) {
+    for (ZXAztecState *oldState in resultCopy) {
       if ([oldState isBetterThanOrEqualTo:newState]) {
         add = NO;
         break;

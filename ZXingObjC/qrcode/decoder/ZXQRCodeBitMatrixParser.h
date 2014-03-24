@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXBitMatrix, ZXByteArray, ZXFormatInformation, ZXQRCodeVersion;
+@class ZXBitMatrix, ZXByteArray, ZXQRCodeFormatInformation, ZXQRCodeVersion;
 
 @interface ZXQRCodeBitMatrixParser : NSObject
 
@@ -31,7 +31,7 @@
  * @return nil if both format information locations cannot be parsed as
  * the valid encoding of format information
  */
-- (ZXFormatInformation *)readFormatInformationWithError:(NSError **)error;
+- (ZXQRCodeFormatInformation *)readFormatInformationWithError:(NSError **)error;
 
 /**
  * Reads version information from one of its two locations within the QR Code.

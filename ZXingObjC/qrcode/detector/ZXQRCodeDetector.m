@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-#import "ZXAlignmentPattern.h"
-#import "ZXAlignmentPatternFinder.h"
 #import "ZXBitMatrix.h"
 #import "ZXDecodeHints.h"
 #import "ZXDetectorResult.h"
 #import "ZXErrors.h"
-#import "ZXFinderPatternFinder.h"
-#import "ZXFinderPatternInfo.h"
 #import "ZXGridSampler.h"
 #import "ZXIntArray.h"
 #import "ZXMathUtils.h"
 #import "ZXPerspectiveTransform.h"
+#import "ZXQRCodeAlignmentPattern.h"
+#import "ZXQRCodeAlignmentPatternFinder.h"
 #import "ZXQRCodeDetector.h"
 #import "ZXQRCodeFinderPattern.h"
+#import "ZXQRCodeFinderPatternFinder.h"
+#import "ZXQRCodeFinderPatternInfo.h"
 #import "ZXQRCodeVersion.h"
 #import "ZXResultPoint.h"
 #import "ZXResultPointCallback.h"
@@ -55,8 +55,8 @@
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error {
   self.resultPointCallback = hints == nil ? nil : hints.resultPointCallback;
 
-  ZXFinderPatternFinder *finder = [[ZXFinderPatternFinder alloc] initWithImage:self.image resultPointCallback:self.resultPointCallback];
-  ZXFinderPatternInfo *info = [finder find:hints error:error];
+  ZXQRCodeFinderPatternFinder *finder = [[ZXQRCodeFinderPatternFinder alloc] initWithImage:self.image resultPointCallback:self.resultPointCallback];
+  ZXQRCodeFinderPatternInfo *info = [finder find:hints error:error];
   if (!info) {
     return nil;
   }
@@ -64,7 +64,7 @@
   return [self processFinderPatternInfo:info error:error];
 }
 
-- (ZXDetectorResult *)processFinderPatternInfo:(ZXFinderPatternInfo *)info error:(NSError **)error {
+- (ZXDetectorResult *)processFinderPatternInfo:(ZXQRCodeFinderPatternInfo *)info error:(NSError **)error {
   ZXQRCodeFinderPattern *topLeft = info.topLeft;
   ZXQRCodeFinderPattern *topRight = info.topRight;
   ZXQRCodeFinderPattern *bottomLeft = info.bottomLeft;
@@ -86,7 +86,7 @@
   }
   int modulesBetweenFPCenters = [provisionalVersion dimensionForVersion] - 7;
 
-  ZXAlignmentPattern *alignmentPattern = nil;
+  ZXQRCodeAlignmentPattern *alignmentPattern = nil;
   if (provisionalVersion.alignmentPatternCenters.length > 0) {
     float bottomRightX = [topRight x] - [topLeft x] + [bottomLeft x];
     float bottomRightY = [topRight y] - [topLeft y] + [bottomLeft y];
@@ -302,7 +302,7 @@
   return NAN;
 }
 
-- (ZXAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor error:(NSError **)error {
+- (ZXQRCodeAlignmentPattern *)findAlignmentInRegion:(float)overallEstModuleSize estAlignmentX:(int)estAlignmentX estAlignmentY:(int)estAlignmentY allowanceFactor:(float)allowanceFactor error:(NSError **)error {
   int allowance = (int)(allowanceFactor * overallEstModuleSize);
   int alignmentAreaLeftX = MAX(0, estAlignmentX - allowance);
   int alignmentAreaRightX = MIN(self.image.width - 1, estAlignmentX + allowance);
@@ -318,7 +318,7 @@
     return nil;
   }
 
-  ZXAlignmentPatternFinder *alignmentFinder = [[ZXAlignmentPatternFinder alloc] initWithImage:self.image
+  ZXQRCodeAlignmentPatternFinder *alignmentFinder = [[ZXQRCodeAlignmentPatternFinder alloc] initWithImage:self.image
                                                                                        startX:alignmentAreaLeftX
                                                                                        startY:alignmentAreaTopY
                                                                                         width:alignmentAreaRightX - alignmentAreaLeftX

@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-#import "ZXCompaction.h"
+#import "ZXPDF417Compaction.h"
 
-@class ZXBarcodeMatrix, ZXIntArray;
+@class ZXPDF417BarcodeMatrix, ZXIntArray;
 
 /**
  * Top-level class for the logic part of the PDF417 implementation.
  */
 @interface ZXPDF417 : NSObject
 
-@property (nonatomic, strong, readonly) ZXBarcodeMatrix *barcodeMatrix;
+@property (nonatomic, strong, readonly) ZXPDF417BarcodeMatrix *barcodeMatrix;
 @property (nonatomic, assign) BOOL compact;
-@property (nonatomic, assign) ZXCompaction compaction;
+@property (nonatomic, assign) ZXPDF417Compaction compaction;
 @property (nonatomic, assign) NSStringEncoding encoding;
 
 - (id)initWithCompact:(BOOL)compact;

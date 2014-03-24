@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXByteArray, ZXDecodeHints, ZXDecoderResult, ZXErrorCorrectionLevel, ZXQRCodeVersion;
+@class ZXByteArray, ZXDecodeHints, ZXDecoderResult, ZXQRCodeErrorCorrectionLevel, ZXQRCodeVersion;
 
 /**
  * QR Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -26,7 +26,7 @@
 
 + (ZXDecoderResult *)decode:(ZXByteArray *)bytes
                     version:(ZXQRCodeVersion *)version
-                    ecLevel:(ZXErrorCorrectionLevel *)ecLevel
+                    ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel
                       hints:(ZXDecodeHints *)hints
                       error:(NSError **)error;
 

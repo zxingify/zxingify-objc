@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXByteArray, ZXErrorCorrectionLevel, ZXQRCodeVersion;
+@class ZXByteArray, ZXQRCodeErrorCorrectionLevel, ZXQRCodeVersion;
 
 /**
  * Encapsulates a block of data within a QR Code. QR Codes may split their data into
@@ -39,6 +39,6 @@
  * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
  *         QR Code
  */
-+ (NSArray *)dataBlocks:(ZXByteArray *)rawCodewords version:(ZXQRCodeVersion *)version ecLevel:(ZXErrorCorrectionLevel *)ecLevel;
++ (NSArray *)dataBlocks:(ZXByteArray *)rawCodewords version:(ZXQRCodeVersion *)version ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel;
 
 @end

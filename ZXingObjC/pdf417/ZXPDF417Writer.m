@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#import "ZXBarcodeMatrix.h"
 #import "ZXBitMatrix.h"
 #import "ZXByteArray.h"
-#import "ZXCompaction.h"
 #import "ZXEncodeHints.h"
 #import "ZXPDF417.h"
+#import "ZXPDF417BarcodeMatrix.h"
+#import "ZXPDF417Compaction.h"
 #import "ZXPDF417Writer.h"
 
 /**
@@ -42,7 +42,7 @@ const int ZX_PDF417_WHITE_SPACE = 30;
     encoder.compact = hints.pdf417Compact;
     encoder.compaction = hints.pdf417Compaction;
     if (hints.pdf417Dimensions != nil) {
-      ZXDimensions *dimensions = hints.pdf417Dimensions;
+      ZXPDF417Dimensions *dimensions = hints.pdf417Dimensions;
       [encoder setDimensionsWithMaxCols:dimensions.maxCols
                                 minCols:dimensions.minCols
                                 maxRows:dimensions.maxRows

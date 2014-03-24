@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXSymbolInfo;
+@class ZXDataMatrixSymbolInfo;
 
 /**
  * Error Correction Code for ECC200.
@@ -28,6 +28,6 @@
  * @param symbolInfo information about the symbol to be encoded
  * @return the codewords with interleaved error correction.
  */
-+ (NSString *)encodeECC200:(NSString *)codewords symbolInfo:(ZXSymbolInfo *)symbolInfo;
++ (NSString *)encodeECC200:(NSString *)codewords symbolInfo:(ZXDataMatrixSymbolInfo *)symbolInfo;
 
 @end

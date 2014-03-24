@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@class ZXBitMatrix, ZXErrorCorrectionLevel, ZXIntArray, ZXQRCodeECB, ZXQRCodeECBlocks;
+@class ZXBitMatrix, ZXIntArray, ZXQRCodeECB, ZXQRCodeECBlocks, ZXQRCodeErrorCorrectionLevel;
 
 /**
  * See ISO 18004:2006 Annex D
@@ -27,7 +27,7 @@
 @property (nonatomic, assign, readonly) int totalCodewords;
 @property (nonatomic, assign, readonly) int dimensionForVersion;
 
-- (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXErrorCorrectionLevel *)ecLevel;
+- (ZXQRCodeECBlocks *)ecBlocksForLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel;
 + (ZXQRCodeVersion *)provisionalVersionForDimension:(int)dimension;
 + (ZXQRCodeVersion *)versionForNumber:(int)versionNumber;
 + (ZXQRCodeVersion *)decodeVersionInformation:(int)versionBits;

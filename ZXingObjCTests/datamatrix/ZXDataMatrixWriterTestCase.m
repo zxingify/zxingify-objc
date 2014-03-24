@@ -20,7 +20,7 @@
 
 - (void)testDataMatrixImageWriter {
   ZXEncodeHints *hints = [ZXEncodeHints hints];
-  hints.dataMatrixShape = [ZXSymbolShapeHint forceSquare];
+  hints.dataMatrixShape = [ZXDataMatrixSymbolShapeHint forceSquare];
 
   int bigEnough = 64;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
@@ -32,7 +32,7 @@
 
 - (void)testDataMatrixWriter {
   ZXEncodeHints *hints = [ZXEncodeHints hints];
-  hints.dataMatrixShape = [ZXSymbolShapeHint forceSquare];
+  hints.dataMatrixShape = [ZXDataMatrixSymbolShapeHint forceSquare];
 
   int bigEnough = 14;
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];

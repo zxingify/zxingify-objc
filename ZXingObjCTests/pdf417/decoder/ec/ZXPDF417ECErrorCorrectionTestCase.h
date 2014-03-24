@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#import "AbstractErrorCorrectionTestCase.h"
+#import "ZXPDF417AbstractErrorCorrectionTestCase.h"
 
-@interface ZXPDF417ECErrorCorrectionTestCase : AbstractErrorCorrectionTestCase
+@interface ZXPDF417ECErrorCorrectionTestCase : ZXPDF417AbstractErrorCorrectionTestCase
 
 @end

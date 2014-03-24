@@ -15,20 +15,20 @@
  */
 
 #import "ZXBitArray.h"
-#import "ZXBlockPair.h"
 #import "ZXByteArray.h"
 #import "ZXByteMatrix.h"
 #import "ZXCharacterSetECI.h"
 #import "ZXEncodeHints.h"
 #import "ZXErrors.h"
-#import "ZXErrorCorrectionLevel.h"
 #import "ZXGenericGF.h"
 #import "ZXIntArray.h"
-#import "ZXMaskUtil.h"
-#import "ZXMatrixUtil.h"
-#import "ZXMode.h"
 #import "ZXQRCode.h"
+#import "ZXQRCodeBlockPair.h"
 #import "ZXQRCodeEncoder.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
+#import "ZXQRCodeMaskUtil.h"
+#import "ZXQRCodeMatrixUtil.h"
+#import "ZXQRCodeMode.h"
 #import "ZXQRCodeVersion.h"
 #import "ZXReedSolomonEncoder.h"
 
@@ -49,17 +49,17 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
 // Basically it applies four rules and summate all penalties.
 + (int)calculateMaskPenalty:(ZXByteMatrix *)matrix {
-  return [ZXMaskUtil applyMaskPenaltyRule1:matrix]
-    + [ZXMaskUtil applyMaskPenaltyRule2:matrix]
-    + [ZXMaskUtil applyMaskPenaltyRule3:matrix]
-    + [ZXMaskUtil applyMaskPenaltyRule4:matrix];
+  return [ZXQRCodeMaskUtil applyMaskPenaltyRule1:matrix]
+    + [ZXQRCodeMaskUtil applyMaskPenaltyRule2:matrix]
+    + [ZXQRCodeMaskUtil applyMaskPenaltyRule3:matrix]
+    + [ZXQRCodeMaskUtil applyMaskPenaltyRule4:matrix];
 }
 
-+ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error {
++ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel error:(NSError **)error {
   return [self encode:content ecLevel:ecLevel hints:nil error:error];
 }
 
-+ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints error:(NSError **)error {
++ (ZXQRCode *)encode:(NSString *)content ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel hints:(ZXEncodeHints *)hints error:(NSError **)error {
   // Determine what character encoding has been specified by the caller, if any
   NSStringEncoding encoding = hints == nil ? 0 : hints.encoding;
   if (encoding == 0) {
@@ -68,14 +68,14 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 
   // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
   // multiple modes / segments even if that were more efficient. Twould be nice.
-  ZXMode *mode = [self chooseMode:content encoding:encoding];
+  ZXQRCodeMode *mode = [self chooseMode:content encoding:encoding];
 
   // This will store the header information, like mode and
   // length, as well as "header" segments like an ECI segment.
   ZXBitArray *headerBits = [[ZXBitArray alloc] init];
 
   // Append ECI segment if applicable
-  if ([mode isEqual:[ZXMode byteMode]] && ZX_DEFAULT_BYTE_MODE_ENCODING != encoding) {
+  if ([mode isEqual:[ZXQRCodeMode byteMode]] && ZX_DEFAULT_BYTE_MODE_ENCODING != encoding) {
     ZXCharacterSetECI *eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
     if (eci != nil) {
       [self appendECI:eci bits:headerBits];
@@ -117,7 +117,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   ZXBitArray *headerAndDataBits = [[ZXBitArray alloc] init];
   [headerAndDataBits appendBitArray:headerBits];
   // Find "length" of main segment and write it
-  int numLetters = [mode isEqual:[ZXMode byteMode]] ? [dataBits sizeInBytes] : (int)[content length];
+  int numLetters = [mode isEqual:[ZXQRCodeMode byteMode]] ? [dataBits sizeInBytes] : (int)[content length];
   if (![self appendLengthInfo:numLetters version:version mode:mode bits:headerAndDataBits error:error]) {
     return nil;
   }
@@ -155,7 +155,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   [qrCode setMaskPattern:maskPattern];
 
   // Build the matrix and set it to "qrCode".
-  if (![ZXMatrixUtil buildMatrix:finalBits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix error:error]) {
+  if (![ZXQRCodeMatrixUtil buildMatrix:finalBits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix error:error]) {
     return nil;
   }
   [qrCode setMatrix:matrix];
@@ -170,7 +170,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return -1;
 }
 
-+ (ZXMode *)chooseMode:(NSString *)content {
++ (ZXQRCodeMode *)chooseMode:(NSString *)content {
   return [self chooseMode:content encoding:-1];
 }
 
@@ -178,9 +178,9 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
  * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
  * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
  */
-+ (ZXMode *)chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding {
++ (ZXQRCodeMode *)chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding {
   if (NSShiftJISStringEncoding == encoding) {
-    return [self isOnlyDoubleByteKanji:content] ? [ZXMode kanjiMode] : [ZXMode byteMode];
+    return [self isOnlyDoubleByteKanji:content] ? [ZXQRCodeMode kanjiMode] : [ZXQRCodeMode byteMode];
   }
   BOOL hasNumeric = NO;
   BOOL hasAlphanumeric = NO;
@@ -191,16 +191,16 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
     } else if ([self alphanumericCode:c] != -1) {
       hasAlphanumeric = YES;
     } else {
-      return [ZXMode byteMode];
+      return [ZXQRCodeMode byteMode];
     }
   }
   if (hasAlphanumeric) {
-    return [ZXMode alphanumericMode];
+    return [ZXQRCodeMode alphanumericMode];
   }
   if (hasNumeric) {
-    return [ZXMode numericMode];
+    return [ZXQRCodeMode numericMode];
   }
-  return [ZXMode byteMode];
+  return [ZXQRCodeMode byteMode];
 }
 
 + (BOOL)isOnlyDoubleByteKanji:(NSString *)content {
@@ -219,12 +219,12 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return YES;
 }
 
-+ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXErrorCorrectionLevel *)ecLevel version:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
++ (int)chooseMaskPattern:(ZXBitArray *)bits ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel version:(ZXQRCodeVersion *)version matrix:(ZXByteMatrix *)matrix error:(NSError **)error {
   int minPenalty = INT_MAX;
   int bestMaskPattern = -1;
 
   for (int maskPattern = 0; maskPattern < ZX_NUM_MASK_PATTERNS; maskPattern++) {
-    if (![ZXMatrixUtil buildMatrix:bits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix error:error]) {
+    if (![ZXQRCodeMatrixUtil buildMatrix:bits ecLevel:ecLevel version:version maskPattern:maskPattern matrix:matrix error:error]) {
       return -1;
     }
     int penalty = [self calculateMaskPenalty:matrix];
@@ -236,7 +236,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return bestMaskPattern;
 }
 
-+ (ZXQRCodeVersion *)chooseVersion:(int)numInputBits ecLevel:(ZXErrorCorrectionLevel *)ecLevel error:(NSError **)error {
++ (ZXQRCodeVersion *)chooseVersion:(int)numInputBits ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel error:(NSError **)error {
   // In the following comments, we use numbers of Version 7-H.
   for (int versionNum = 1; versionNum <= 40; versionNum++) {
     ZXQRCodeVersion *version = [ZXQRCodeVersion versionForNumber:versionNum];
@@ -259,7 +259,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return nil;
 }
 
-+ (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion *)version mode:(ZXMode *)mode {
++ (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion *)version mode:(ZXQRCodeMode *)mode {
   int modeInfoBits = 4;
   int charCountBits = [mode characterCountBits:version];
   int headerBits = modeInfoBits + charCountBits;
@@ -372,7 +372,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
     ZXByteArray *dataBytes = [[ZXByteArray alloc] initWithLength:size];
     [bits toBytes:8 * dataBytesOffset array:dataBytes offset:0 numBytes:size];
     ZXByteArray *ecBytes = [self generateECBytes:dataBytes numEcBytesInBlock:numEcBytesInBlock[0]];
-    [blocks addObject:[[ZXBlockPair alloc] initWithData:dataBytes errorCorrection:ecBytes]];
+    [blocks addObject:[[ZXQRCodeBlockPair alloc] initWithData:dataBytes errorCorrection:ecBytes]];
 
     maxNumDataBytes = MAX(maxNumDataBytes, size);
     maxNumEcBytes = MAX(maxNumEcBytes, numEcBytesInBlock[0]);
@@ -389,7 +389,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 
   // First, place data blocks.
   for (int i = 0; i < maxNumDataBytes; ++i) {
-    for (ZXBlockPair *block in blocks) {
+    for (ZXQRCodeBlockPair *block in blocks) {
       ZXByteArray *dataBytes = block.dataBytes;
       NSUInteger length = dataBytes.length;
       if (i < length) {
@@ -399,7 +399,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   }
   // Then, place error correction blocks.
   for (int i = 0; i < maxNumEcBytes; ++i) {
-    for (ZXBlockPair *block in blocks) {
+    for (ZXQRCodeBlockPair *block in blocks) {
       ZXByteArray *ecBytes = block.errorCorrectionBytes;
       int length = ecBytes.length;
       if (i < length) {
@@ -433,14 +433,14 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return ecBytes;
 }
 
-+ (void)appendModeInfo:(ZXMode *)mode bits:(ZXBitArray *)bits {
++ (void)appendModeInfo:(ZXQRCodeMode *)mode bits:(ZXBitArray *)bits {
   [bits appendBits:[mode bits] numBits:4];
 }
 
 /**
  * Append length info. On success, store the result in "bits".
  */
-+ (BOOL)appendLengthInfo:(int)numLetters version:(ZXQRCodeVersion *)version mode:(ZXMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error {
++ (BOOL)appendLengthInfo:(int)numLetters version:(ZXQRCodeVersion *)version mode:(ZXQRCodeMode *)mode bits:(ZXBitArray *)bits error:(NSError **)error {
   int numBits = [mode characterCountBits:version];
   if (numLetters >= (1 << numBits)) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%d is bigger than %d", numLetters, ((1 << numBits) - 1)]};
@@ -452,16 +452,16 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return YES;
 }
 
-+ (BOOL)appendBytes:(NSString *)content mode:(ZXMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error {
-  if ([mode isEqual:[ZXMode numericMode]]) {
++ (BOOL)appendBytes:(NSString *)content mode:(ZXQRCodeMode *)mode bits:(ZXBitArray *)bits encoding:(NSStringEncoding)encoding error:(NSError **)error {
+  if ([mode isEqual:[ZXQRCodeMode numericMode]]) {
     [self appendNumericBytes:content bits:bits];
-  } else if ([mode isEqual:[ZXMode alphanumericMode]]) {
+  } else if ([mode isEqual:[ZXQRCodeMode alphanumericMode]]) {
     if (![self appendAlphanumericBytes:content bits:bits error:error]) {
       return NO;
     }
-  } else if ([mode isEqual:[ZXMode byteMode]]) {
+  } else if ([mode isEqual:[ZXQRCodeMode byteMode]]) {
     [self append8BitBytes:content bits:bits encoding:encoding];
-  } else if ([mode isEqual:[ZXMode kanjiMode]]) {
+  } else if ([mode isEqual:[ZXQRCodeMode kanjiMode]]) {
     if (![self appendKanjiBytes:content bits:bits error:error]) {
       return NO;
     }
@@ -556,7 +556,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 }
 
 + (void)appendECI:(ZXCharacterSetECI *)eci bits:(ZXBitArray *)bits {
-  [bits appendBits:[[ZXMode eciMode] bits] numBits:4];
+  [bits appendBits:[[ZXQRCodeMode eciMode] bits] numBits:4];
   [bits appendBits:[eci value] numBits:8];
 }
 

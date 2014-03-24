@@ -18,9 +18,7 @@
 #import "ZXBoolArray.h"
 #import "ZXByteArray.h"
 #import "ZXDecoderResult.h"
-#import "ZXErrorCorrectionLevel.h"
 #import "ZXErrors.h"
-#import "ZXFormatInformation.h"
 #import "ZXGenericGF.h"
 #import "ZXIntArray.h"
 #import "ZXQRCodeBitMatrixParser.h"
@@ -28,6 +26,8 @@
 #import "ZXQRCodeDecodedBitStreamParser.h"
 #import "ZXQRCodeDecoder.h"
 #import "ZXQRCodeDecoderMetaData.h"
+#import "ZXQRCodeErrorCorrectionLevel.h"
+#import "ZXQRCodeFormatInformation.h"
 #import "ZXQRCodeVersion.h"
 #import "ZXReedSolomonDecoder.h"
 
@@ -116,11 +116,11 @@
   if (!version) {
     return nil;
   }
-  ZXFormatInformation *formatInfo = [parser readFormatInformationWithError:error];
+  ZXQRCodeFormatInformation *formatInfo = [parser readFormatInformationWithError:error];
   if (!formatInfo) {
     return nil;
   }
-  ZXErrorCorrectionLevel *ecLevel = formatInfo.errorCorrectionLevel;
+  ZXQRCodeErrorCorrectionLevel *ecLevel = formatInfo.errorCorrectionLevel;
 
   ZXByteArray *codewords = [parser readCodewordsWithError:error];
   if (!codewords) {
