@@ -57,6 +57,9 @@
     longitude = NAN;
   } else {
     NSUInteger semicolon = [geoString rangeOfString:@";"].location;
+    if (semicolon == NSNotFound) {
+      return nil;
+    }
     latitude = [[geoString substringToIndex:semicolon] doubleValue];
     longitude = [[geoString substringFromIndex:semicolon + 1] doubleValue];
   }

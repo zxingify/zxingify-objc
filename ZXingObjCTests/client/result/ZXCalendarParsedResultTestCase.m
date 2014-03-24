@@ -143,6 +143,16 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
                  longitude:-45.678];
 }
 
+- (void)testBadGeo {
+  // Not parsed as VEVENT
+  ZXResult *fakeResult = [[ZXResult alloc] initWithText:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+                                                        @"GEO:-12.345\r\n"
+                                                        @"END:VEVENT\r\nEND:VCALENDAR"
+                                               rawBytes:nil resultPoints:nil format:kBarcodeFormatQRCode];
+  ZXParsedResult *result = [ZXResultParser parseResult:fakeResult];
+  XCTAssertEqual(kParsedResultTypeURI, result.type);
+}
+
 - (void)testOrganizer {
   [self doTestWithContents:@"BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
                            @"DTSTART:20080504T123456Z\r\n"
