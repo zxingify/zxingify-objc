@@ -121,8 +121,12 @@
   ZXIntArray *result = [[ZXIntArray alloc] initWithLength:barcodeMetadata.rowCount];
   for (ZXPDF417Codeword *codeword in [self codewords]) {
     if ((id)codeword != [NSNull null]) {
-      result.array[[codeword rowNumber]]++;
-    }
+      int rowNumber = codeword.rowNumber;
+      if (rowNumber >= result.length) {
+        return nil;
+      }
+      result.array[rowNumber]++;
+    } // else throw exception?
   }
   return result;
 }
