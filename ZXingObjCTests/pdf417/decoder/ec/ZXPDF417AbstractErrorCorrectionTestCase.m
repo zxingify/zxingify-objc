@@ -31,23 +31,4 @@
   }
 }
 
-/*
-- (ZXIntArray *)erase:(ZXIntArray *)received howMany:(int)howMany {
-  ZXBoolArray *erased = [[ZXBoolArray alloc] initWithLength:received.length];
-  ZXIntArray *erasures = [[ZXIntArray alloc] initWithLength:howMany];
-  int erasureOffset = 0;
-  for (int j = 0; j < howMany; j++) {
-    int location = arc4random() % received.length;
-    if (erased.array[location]) {
-      j--;
-    } else {
-      erased.array[location] = YES;
-      received.array[location] = 0;
-      erasures.array[erasureOffset++] = location;
-    }
-  }
-  return erasures;
-}
-*/
-
 @end

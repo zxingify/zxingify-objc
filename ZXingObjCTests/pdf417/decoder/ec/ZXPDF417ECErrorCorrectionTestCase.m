@@ -83,7 +83,8 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 
 - (void)testTooManyErrors {
   ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
-  [self corrupt:received howMany:MAX_ERRORS + 3]; // +3 since the algo can actually correct 2 more than it should here
+  // +3 since the algorithm can actually correct 2 more than it should here
+  [self corrupt:received howMany:MAX_ERRORS + 3];
 
   if ([self checkDecode:received]) {
     XCTFail(@"Should not have decoded");
