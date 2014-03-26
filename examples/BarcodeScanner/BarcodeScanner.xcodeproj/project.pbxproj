@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0217454218E35BD100864750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362716CC14C4001E03E4 /* QuartzCore.framework */; };
+		0217454318E35BEF00864750 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362116CC14B2001E03E4 /* CoreMedia.framework */; };
 		0248362016CC1493001E03E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248361F16CC1493001E03E4 /* CoreGraphics.framework */; };
-		0248362216CC14B2001E03E4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362116CC14B2001E03E4 /* CoreMedia.framework */; };
 		0248362416CC14B9001E03E4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362316CC14B9001E03E4 /* CoreVideo.framework */; };
 		0248362616CC14BF001E03E4 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362516CC14BF001E03E4 /* ImageIO.framework */; };
-		0248362816CC14C4001E03E4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0248362716CC14C4001E03E4 /* QuartzCore.framework */; };
 		024D10E0156EAB6F00FE6872 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10DF156EAB6F00FE6872 /* UIKit.framework */; };
 		024D10E2156EAB6F00FE6872 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024D10E1156EAB6F00FE6872 /* Foundation.framework */; };
 		02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C6AF8B156EBEF10052B145 /* AudioToolbox.framework */; };
@@ -99,11 +99,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0217454318E35BEF00864750 /* CoreMedia.framework in Frameworks */,
+				0217454218E35BD100864750 /* QuartzCore.framework in Frameworks */,
 				25FFF6A61839839400C2E985 /* libZXingObjC-iOS.a in Frameworks */,
-				0248362816CC14C4001E03E4 /* QuartzCore.framework in Frameworks */,
 				0248362616CC14BF001E03E4 /* ImageIO.framework in Frameworks */,
 				0248362416CC14B9001E03E4 /* CoreVideo.framework in Frameworks */,
-				0248362216CC14B2001E03E4 /* CoreMedia.framework in Frameworks */,
 				0248362016CC1493001E03E4 /* CoreGraphics.framework in Frameworks */,
 				25404737166AC2EA00E13304 /* AVFoundation.framework in Frameworks */,
 				02C6AF8C156EBEF10052B145 /* AudioToolbox.framework in Frameworks */,

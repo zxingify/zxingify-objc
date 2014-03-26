@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import <ImageIO/ImageIO.h>
 #import "ZXBinaryBitmap.h"
 #import "ZXCapture.h"
 #import "ZXCaptureDelegate.h"
@@ -29,13 +30,7 @@
 @property (nonatomic, strong) CALayer *binaryLayer;
 @property (nonatomic, assign) BOOL cameraIsReady;
 @property (nonatomic, assign) int captureDeviceIndex;
-
-#ifdef OS_OBJECT_HAVE_OBJC_SUPPORT
-@property (nonatomic, strong) __attribute__((NSObject)) dispatch_queue_t captureQueue;
-#else
-@property (nonatomic, assign) dispatch_queue_t captureQueue;
-#endif
-
+@property (nonatomic, strong) dispatch_queue_t captureQueue;
 @property (nonatomic, assign) BOOL hardStop;
 @property (nonatomic, strong) AVCaptureDeviceInput *input;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *layer;
@@ -77,11 +72,6 @@
   if (_lastScannedImage) {
     CGImageRelease(_lastScannedImage);
   }
-
-#ifndef OS_OBJECT_HAVE_OBJC_SUPPORT
-  dispatch_release(_captureQueue);
-  _captureQueue = NULL;
-#endif
 }
 
 #pragma mark - Property Getters

@@ -7,12 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0206966618CE5A1A00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
-		0206966818CE5A2300132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
-		0206966918CE5A2A00132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
-		0206966A18CE5A2A00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
-		0206966D18CE5A2C00132957 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966718CE5A2300132957 /* CoreMedia.framework */; };
-		0206966E18CE5A2C00132957 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0206966518CE5A1A00132957 /* AVFoundation.framework */; };
 		0210FB5318E0A5C800B1F4CE /* ZXAztecDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CEE166A999D00E13304 /* ZXAztecDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0210FB5418E0A5C800B1F4CE /* ZXAztecDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CF1166A999D00E13304 /* ZXAztecDetector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0210FB5518E0A5C800B1F4CE /* ZXAztecBinaryShiftToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B85318D230CC0005E7EC /* ZXAztecBinaryShiftToken.h */; };
@@ -243,6 +237,25 @@
 		0210FC3618E0AA8500B1F4CE /* ZXResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403FDD166AA00700E13304 /* ZXResultPointCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0210FC3718E0AA8500B1F4CE /* ZXRGBLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 251FCDE916CC8F53000C27E5 /* ZXRGBLuminanceSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0210FC3818E0AA8500B1F4CE /* ZXWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403FDE166AA00700E13304 /* ZXWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0217451018E3582600864750 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217450F18E3582600864750 /* AVFoundation.framework */; };
+		0217451118E3582C00864750 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217450F18E3582600864750 /* AVFoundation.framework */; };
+		0217451218E3582C00864750 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217450F18E3582600864750 /* AVFoundation.framework */; };
+		0217451818E3585C00864750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217451718E3585C00864750 /* QuartzCore.framework */; };
+		0217451918E3586600864750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217451718E3585C00864750 /* QuartzCore.framework */; };
+		0217451A18E3586600864750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217451718E3585C00864750 /* QuartzCore.framework */; };
+		0217452118E358F500864750 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217451F18E358EE00864750 /* CoreMedia.framework */; };
+		0217452218E358F600864750 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217451F18E358EE00864750 /* CoreMedia.framework */; };
+		0217452318E358F600864750 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217451F18E358EE00864750 /* CoreMedia.framework */; };
+		0217453518E35AEA00864750 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217453418E35AEA00864750 /* ImageIO.framework */; };
+		0217453618E35AEE00864750 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217453418E35AEA00864750 /* ImageIO.framework */; };
+		0217453818E35AF800864750 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217453718E35AF800864750 /* CoreVideo.framework */; };
+		0217453918E35AFF00864750 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217453718E35AF800864750 /* CoreVideo.framework */; };
+		0217453B18E35B2B00864750 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217453A18E35B2B00864750 /* CoreGraphics.framework */; };
+		0217453C18E35B2F00864750 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217453A18E35B2B00864750 /* CoreGraphics.framework */; };
+		0217454618E35C1000864750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217454518E35C1000864750 /* QuartzCore.framework */; };
+		0217454818E35C2700864750 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217454718E35C2700864750 /* CoreMedia.framework */; };
+		0217454918E35C3700864750 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217454718E35C2700864750 /* CoreMedia.framework */; };
+		0217454A18E35C3E00864750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0217454518E35C1000864750 /* QuartzCore.framework */; };
 		0218B84E18D230B70005E7EC /* ZXAztecToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B84B18D230B70005E7EC /* ZXAztecToken.h */; };
 		0218B84F18D230B70005E7EC /* ZXAztecToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 0218B84B18D230B70005E7EC /* ZXAztecToken.h */; };
 		0218B85018D230B70005E7EC /* ZXAztecToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B84C18D230B70005E7EC /* ZXAztecToken.m */; };
@@ -268,6 +281,7 @@
 		0218B87818D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */; };
 		0218B87918D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */; };
 		0218B87A18D23A170005E7EC /* ZXAztecHighLevelEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */; };
+		0228E71418E3562F004EF5D6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540438F166AB91700E13304 /* Cocoa.framework */; };
 		023E696B18C0EF26001FF123 /* ZXAztecBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FEF166AA0F100E13304 /* ZXAztecBlackBox1TestCase.m */; };
 		023E696C18C0EF26001FF123 /* ZXAztecBlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FF1166AA0F100E13304 /* ZXAztecBlackBox2TestCase.m */; };
 		023E696D18C0EF26001FF123 /* ZXAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2540400E166AA0F100E13304 /* ZXAbstractBlackBoxTestCase.m */; };
@@ -383,7 +397,6 @@
 		024A231818D3747C006AE14A /* ZXQRCodeDecoderMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */; };
 		024A231C18D3B292006AE14A /* ZXAztecDetectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 024A231B18D3B292006AE14A /* ZXAztecDetectorTest.m */; };
 		024A231D18D3B292006AE14A /* ZXAztecDetectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 024A231B18D3B292006AE14A /* ZXAztecDetectorTest.m */; };
-		0262578018CFA49800E2395E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0262576918CFA12000E2395E /* XCTest.framework */; };
 		028BB96B18D9E8D100BDF709 /* ZXBoolArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 028BB96618D9E8D100BDF709 /* ZXBoolArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028BB96C18D9E8D100BDF709 /* ZXBoolArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 028BB96618D9E8D100BDF709 /* ZXBoolArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028BB96D18D9E8D100BDF709 /* ZXBoolArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 028BB96718D9E8D100BDF709 /* ZXBoolArray.m */; };
@@ -710,13 +723,7 @@
 		2540413B166AA0F100E13304 /* ZXQRCodeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040C8166AA0F100E13304 /* ZXQRCodeTestCase.m */; };
 		25404142166AA0F100E13304 /* ZXQRCodeWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D6166AA0F100E13304 /* ZXQRCodeWriterTestCase.m */; };
 		25404146166AA16200E13304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404145166AA16200E13304 /* UIKit.framework */; };
-		2540414F166AA33700E13304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540414E166AA33700E13304 /* CoreGraphics.framework */; };
-		25404150166AA33E00E13304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540414E166AA33700E13304 /* CoreGraphics.framework */; };
-		2540415C166AA86900E13304 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540415B166AA86900E13304 /* ImageIO.framework */; };
-		2540415D166AA87000E13304 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540415B166AA86900E13304 /* ImageIO.framework */; };
-		2540415F166AAA2F00E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540415E166AAA2F00E13304 /* CoreVideo.framework */; };
 		25404160166AAAAB00E13304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404145166AA16200E13304 /* UIKit.framework */; };
-		25404161166AAAD900E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540415E166AAA2F00E13304 /* CoreVideo.framework */; };
 		2540417D166AADAC00E13304 /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404166166AADAC00E13304 /* libZXingObjC-osx.a */; };
 		2540418F166AAE6000E13304 /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CEF166A999D00E13304 /* ZXAztecDecoder.m */; };
 		25404190166AAE6000E13304 /* ZXAztecDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CF2166A999D00E13304 /* ZXAztecDetector.m */; };
@@ -945,14 +952,8 @@
 		2540437E166AB8B800E13304 /* ZXQRCodeMatrixUtilTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040C6166AA0F100E13304 /* ZXQRCodeMatrixUtilTestCase.m */; };
 		2540437F166AB8B800E13304 /* ZXQRCodeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040C8166AA0F100E13304 /* ZXQRCodeTestCase.m */; };
 		25404386166AB8B800E13304 /* ZXQRCodeWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 254040D6166AA0F100E13304 /* ZXQRCodeWriterTestCase.m */; };
-		25404388166AB8CF00E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404387166AB8CF00E13304 /* CoreVideo.framework */; };
-		25404389166AB8D600E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404387166AB8CF00E13304 /* CoreVideo.framework */; };
 		25404390166AB91700E13304 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540438F166AB91700E13304 /* Cocoa.framework */; };
-		25404395166AB95700E13304 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404394166AB95700E13304 /* ApplicationServices.framework */; };
-		25404397166AB96000E13304 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404394166AB95700E13304 /* ApplicationServices.framework */; };
 		254043B5166ABA6B00E13304 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540438F166AB91700E13304 /* Cocoa.framework */; };
-		254043B6166ABA7500E13304 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404394166AB95700E13304 /* ApplicationServices.framework */; };
-		254043B7166ABA7800E13304 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404387166AB8CF00E13304 /* CoreVideo.framework */; };
 		2540452B166ABAF000E13304 /* ZXAztecDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CEE166A999D00E13304 /* ZXAztecDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2540452C166ABAF000E13304 /* ZXAztecDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CF1166A999D00E13304 /* ZXAztecDetector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2540452D166ABAF000E13304 /* ZXAztecDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 25403CF3166A999D00E13304 /* ZXAztecDetectorResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1254,12 +1255,6 @@
 		254046F9166ABBED00E13304 /* ZXMultiFormatWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FD6166AA00700E13304 /* ZXMultiFormatWriter.m */; };
 		254046FA166ABBED00E13304 /* ZXResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FD9166AA00700E13304 /* ZXResult.m */; };
 		254046FB166ABBED00E13304 /* ZXResultPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403FDC166AA00700E13304 /* ZXResultPoint.m */; };
-		254046FD166ABC1600E13304 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254046FC166ABC1600E13304 /* QuartzCore.framework */; };
-		254046FE166ABC2100E13304 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254046FC166ABC1600E13304 /* QuartzCore.framework */; };
-		254046FF166ABC2600E13304 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254046FC166ABC1600E13304 /* QuartzCore.framework */; };
-		25404701166ABC3F00E13304 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404700166ABC3F00E13304 /* QTKit.framework */; };
-		25404702166ABC4600E13304 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404700166ABC3F00E13304 /* QTKit.framework */; };
-		25404703166ABC4B00E13304 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404700166ABC3F00E13304 /* QTKit.framework */; };
 		2540471B166AC21000E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540471A166AC21000E13304 /* AVFoundation.framework */; };
 		2540471C166AC21D00E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2540471A166AC21000E13304 /* AVFoundation.framework */; };
 		2542996E16D3331F00D4C045 /* ZXPlanarYUVLuminanceSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2542996C16D3331F00D4C045 /* ZXPlanarYUVLuminanceSource.m */; };
@@ -1658,8 +1653,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0206966518CE5A1A00132957 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		0206966718CE5A2300132957 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		0217450F18E3582600864750 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		0217451718E3585C00864750 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		0217451F18E358EE00864750 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		0217453418E35AEA00864750 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0217453718E35AF800864750 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		0217453A18E35B2B00864750 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		0217454518E35C1000864750 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0217454718E35C2700864750 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		0218B84B18D230B70005E7EC /* ZXAztecToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecToken.h; path = encoder/ZXAztecToken.h; sourceTree = "<group>"; };
 		0218B84C18D230B70005E7EC /* ZXAztecToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecToken.m; path = encoder/ZXAztecToken.m; sourceTree = "<group>"; };
 		0218B85318D230CC0005E7EC /* ZXAztecBinaryShiftToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecBinaryShiftToken.h; path = encoder/ZXAztecBinaryShiftToken.h; sourceTree = "<group>"; };
@@ -1674,10 +1675,6 @@
 		024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDecoderMetaData.m; sourceTree = "<group>"; };
 		024A231A18D3B292006AE14A /* ZXAztecDetectorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDetectorTest.h; sourceTree = "<group>"; };
 		024A231B18D3B292006AE14A /* ZXAztecDetectorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDetectorTest.m; sourceTree = "<group>"; };
-		0262575418CFA03200E2395E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		0262575618CFA03200E2395E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		0262575818CFA03200E2395E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		0262576918CFA12000E2395E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		028BB96618D9E8D100BDF709 /* ZXBoolArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXBoolArray.h; sourceTree = "<group>"; };
 		028BB96718D9E8D100BDF709 /* ZXBoolArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXBoolArray.m; sourceTree = "<group>"; };
 		028BB96818D9E8D100BDF709 /* ZXByteArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXByteArray.h; sourceTree = "<group>"; };
@@ -2296,18 +2293,11 @@
 		254040D5166AA0F100E13304 /* ZXQRCodeWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeWriterTestCase.h; sourceTree = "<group>"; };
 		254040D6166AA0F100E13304 /* ZXQRCodeWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeWriterTestCase.m; sourceTree = "<group>"; };
 		25404145166AA16200E13304 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2540414E166AA33700E13304 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		2540415B166AA86900E13304 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		2540415E166AAA2F00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		25404166166AADAC00E13304 /* libZXingObjC-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZXingObjC-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25404178166AADAC00E13304 /* Unit Tests OS X.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests OS X.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2540418D166AADEF00E13304 /* osx-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "osx-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		25404387166AB8CF00E13304 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		2540438F166AB91700E13304 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		25404394166AB95700E13304 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/ApplicationServices.framework; sourceTree = DEVELOPER_DIR; };
 		2540439E166ABA0A00E13304 /* ZXingObjC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZXingObjC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		254046FC166ABC1600E13304 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		25404700166ABC3F00E13304 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/QTKit.framework; sourceTree = DEVELOPER_DIR; };
 		2540471A166AC21000E13304 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2542996B16D3331F00D4C045 /* ZXPlanarYUVLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPlanarYUVLuminanceSource.h; sourceTree = "<group>"; };
 		2542996C16D3331F00D4C045 /* ZXPlanarYUVLuminanceSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPlanarYUVLuminanceSource.m; sourceTree = "<group>"; };
@@ -2384,10 +2374,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2540471B166AC21000E13304 /* AVFoundation.framework in Frameworks */,
-				2540414F166AA33700E13304 /* CoreGraphics.framework in Frameworks */,
-				25404161166AAAD900E13304 /* CoreVideo.framework in Frameworks */,
+				0217453B18E35B2B00864750 /* CoreGraphics.framework in Frameworks */,
+				0217454818E35C2700864750 /* CoreMedia.framework in Frameworks */,
+				0217453818E35AF800864750 /* CoreVideo.framework in Frameworks */,
+				0217453518E35AEA00864750 /* ImageIO.framework in Frameworks */,
 				25403CB7166A96FA00E13304 /* Foundation.framework in Frameworks */,
-				2540415C166AA86900E13304 /* ImageIO.framework in Frameworks */,
+				0217454618E35C1000864750 /* QuartzCore.framework in Frameworks */,
 				25404146166AA16200E13304 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2397,10 +2389,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2540471C166AC21D00E13304 /* AVFoundation.framework in Frameworks */,
-				25404150166AA33E00E13304 /* CoreGraphics.framework in Frameworks */,
-				2540415F166AAA2F00E13304 /* CoreVideo.framework in Frameworks */,
+				0217453C18E35B2F00864750 /* CoreGraphics.framework in Frameworks */,
+				0217454918E35C3700864750 /* CoreMedia.framework in Frameworks */,
+				0217453918E35AFF00864750 /* CoreVideo.framework in Frameworks */,
 				25403CC9166A96FA00E13304 /* Foundation.framework in Frameworks */,
-				2540415D166AA87000E13304 /* ImageIO.framework in Frameworks */,
+				0217453618E35AEE00864750 /* ImageIO.framework in Frameworks */,
+				0217454A18E35C3E00864750 /* QuartzCore.framework in Frameworks */,
 				25404160166AAAAB00E13304 /* UIKit.framework in Frameworks */,
 				25403CCC166A96FA00E13304 /* libZXingObjC-iOS.a in Frameworks */,
 			);
@@ -2410,13 +2404,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0206966D18CE5A2C00132957 /* CoreMedia.framework in Frameworks */,
-				25404395166AB95700E13304 /* ApplicationServices.framework in Frameworks */,
+				0217451018E3582600864750 /* AVFoundation.framework in Frameworks */,
 				25404390166AB91700E13304 /* Cocoa.framework in Frameworks */,
-				25404701166ABC3F00E13304 /* QTKit.framework in Frameworks */,
-				254046FF166ABC2600E13304 /* QuartzCore.framework in Frameworks */,
-				0206966E18CE5A2C00132957 /* AVFoundation.framework in Frameworks */,
-				25404388166AB8CF00E13304 /* CoreVideo.framework in Frameworks */,
+				0217452318E358F600864750 /* CoreMedia.framework in Frameworks */,
+				0217451A18E3586600864750 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2424,14 +2415,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0262578018CFA49800E2395E /* XCTest.framework in Frameworks */,
-				0206966A18CE5A2A00132957 /* AVFoundation.framework in Frameworks */,
-				25404702166ABC4600E13304 /* QTKit.framework in Frameworks */,
-				254046FE166ABC2100E13304 /* QuartzCore.framework in Frameworks */,
-				25404397166AB96000E13304 /* ApplicationServices.framework in Frameworks */,
-				25404389166AB8D600E13304 /* CoreVideo.framework in Frameworks */,
+				0217451118E3582C00864750 /* AVFoundation.framework in Frameworks */,
+				0228E71418E3562F004EF5D6 /* Cocoa.framework in Frameworks */,
+				0217452218E358F600864750 /* CoreMedia.framework in Frameworks */,
+				0217451818E3585C00864750 /* QuartzCore.framework in Frameworks */,
 				2540417D166AADAC00E13304 /* libZXingObjC-osx.a in Frameworks */,
-				0206966918CE5A2A00132957 /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2439,13 +2427,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0206966818CE5A2300132957 /* CoreMedia.framework in Frameworks */,
-				0206966618CE5A1A00132957 /* AVFoundation.framework in Frameworks */,
-				25404703166ABC4B00E13304 /* QTKit.framework in Frameworks */,
-				254046FD166ABC1600E13304 /* QuartzCore.framework in Frameworks */,
-				254043B7166ABA7800E13304 /* CoreVideo.framework in Frameworks */,
-				254043B6166ABA7500E13304 /* ApplicationServices.framework in Frameworks */,
+				0217451218E3582C00864750 /* AVFoundation.framework in Frameworks */,
 				254043B5166ABA6B00E13304 /* Cocoa.framework in Frameworks */,
+				0217452118E358F500864750 /* CoreMedia.framework in Frameworks */,
+				0217451918E3586600864750 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2459,17 +2444,6 @@
 				024A231B18D3B292006AE14A /* ZXAztecDetectorTest.m */,
 			);
 			path = detector;
-			sourceTree = "<group>";
-		};
-		0262575318CFA03200E2395E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				0262576918CFA12000E2395E /* XCTest.framework */,
-				0262575418CFA03200E2395E /* XCTest.framework */,
-				0262575618CFA03200E2395E /* Foundation.framework */,
-				0262575818CFA03200E2395E /* UIKit.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		02BDA2ED1803109E0039B326 /* Supporting Files */ = {
@@ -2520,7 +2494,6 @@
 				25403CB9166A96FA00E13304 /* Supporting Files */,
 				25403CB5166A96FA00E13304 /* iOS Frameworks */,
 				2540438A166AB8EA00E13304 /* OS X Frameworks */,
-				0262575318CFA03200E2395E /* Frameworks */,
 				25403CB4166A96FA00E13304 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -2541,10 +2514,12 @@
 			isa = PBXGroup;
 			children = (
 				2540471A166AC21000E13304 /* AVFoundation.framework */,
-				2540414E166AA33700E13304 /* CoreGraphics.framework */,
-				2540415E166AAA2F00E13304 /* CoreVideo.framework */,
+				0217453A18E35B2B00864750 /* CoreGraphics.framework */,
+				0217454718E35C2700864750 /* CoreMedia.framework */,
+				0217453718E35AF800864750 /* CoreVideo.framework */,
 				25403CB6166A96FA00E13304 /* Foundation.framework */,
-				2540415B166AA86900E13304 /* ImageIO.framework */,
+				0217453418E35AEA00864750 /* ImageIO.framework */,
+				0217454518E35C1000864750 /* QuartzCore.framework */,
 				25404145166AA16200E13304 /* UIKit.framework */,
 			);
 			name = "iOS Frameworks";
@@ -3597,13 +3572,10 @@
 		2540438A166AB8EA00E13304 /* OS X Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				25404394166AB95700E13304 /* ApplicationServices.framework */,
-				0206966518CE5A1A00132957 /* AVFoundation.framework */,
+				0217450F18E3582600864750 /* AVFoundation.framework */,
 				2540438F166AB91700E13304 /* Cocoa.framework */,
-				0206966718CE5A2300132957 /* CoreMedia.framework */,
-				25404387166AB8CF00E13304 /* CoreVideo.framework */,
-				25404700166ABC3F00E13304 /* QTKit.framework */,
-				254046FC166ABC1600E13304 /* QuartzCore.framework */,
+				0217451F18E358EE00864750 /* CoreMedia.framework */,
+				0217451718E3585C00864750 /* QuartzCore.framework */,
 			);
 			name = "OS X Frameworks";
 			sourceTree = "<group>";
@@ -5498,6 +5470,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -5513,7 +5486,6 @@
 				DSTROOT = /tmp/ZXingObjC.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "ZXingObjC-iOS";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
@@ -5535,7 +5507,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Distribution;
@@ -5543,17 +5514,11 @@
 		02AF34721672527F003B9255 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -5562,7 +5527,6 @@
 		02AF34731672527F003B9255 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5574,7 +5538,6 @@
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -5597,12 +5560,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = ZXingObjC;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
@@ -5632,6 +5595,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -5653,6 +5617,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -5668,7 +5633,6 @@
 				DSTROOT = /tmp/ZXingObjC.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "ZXingObjC-iOS";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
@@ -5686,7 +5650,6 @@
 				DSTROOT = /tmp/ZXingObjC.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "ZXingObjC-iOS";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
@@ -5708,7 +5671,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -5726,7 +5688,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-iOS-Prefix.pch";
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -5734,16 +5695,10 @@
 		25404188166AADAD00E13304 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -5752,17 +5707,11 @@
 		25404189166AADAD00E13304 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -5771,7 +5720,6 @@
 		2540418B166AADAD00E13304 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -5782,7 +5730,6 @@
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -5797,7 +5744,6 @@
 		2540418C166AADAD00E13304 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5809,7 +5755,6 @@
 				GCC_PREFIX_HEADER = "ZXingObjCTests/Supporting Files/Tests-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "ZXingObjCTests/Supporting Files/ZXingObjCTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -5831,12 +5776,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = ZXingObjC;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
@@ -5854,12 +5799,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = ZXingObjC;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;

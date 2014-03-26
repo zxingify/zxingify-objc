@@ -18,16 +18,19 @@ The following barcodes are currently supported for both encoding and decoding:
 * Aztec ('beta' quality)
 * PDF 417 ('alpha' quality)
 
-ZXingObjC currently has feature parity with ZXing version 2.0.
+ZXingObjC currently has feature parity with ZXing version 3.0.
 
-Usage
-----
+## Requirements
+
+ZXingObjC requires Xcode 5, targeting either iOS 6.0 and above, or Mac OS X 10.8 Mountain Lion and above.
+
+## Usage
 
 Encoding:
 
 ```objc
-NSError* error = nil;
-ZXMultiFormatWriter* writer = [ZXMultiFormatWriter writer];
+NSError *error = nil;
+ZXMultiFormatWriter *writer = [ZXMultiFormatWriter writer];
 ZXBitMatrix* result = [writer encode:@"A string to encode"
                               format:kBarcodeFormatQRCode
                                width:500
@@ -38,7 +41,7 @@ if (result) {
 
   // This CGImageRef image can be placed in a UIImage, NSImage, or written to a file.
 } else {
-  NSString* errorMessage = [error localizedDescription];
+  NSString *errorMessage = [error localizedDescription];
 }
 ```
 
@@ -47,23 +50,23 @@ Decoding:
 ```objc
 CGImageRef imageToDecode;  // Given a CGImage in which we are looking for barcodes
 
-ZXLuminanceSource* source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:imageToDecode] autorelease];
-ZXBinaryBitmap* bitmap = [ZXBinaryBitmap binaryBitmapWithBinarizer:[ZXHybridBinarizer binarizerWithSource:source]];
+ZXLuminanceSource *source = [[[ZXCGImageLuminanceSource alloc] initWithCGImage:imageToDecode] autorelease];
+ZXBinaryBitmap *bitmap = [ZXBinaryBitmap binaryBitmapWithBinarizer:[ZXHybridBinarizer binarizerWithSource:source]];
 
-NSError* error = nil;
+NSError *error = nil;
 
 // There are a number of hints we can give to the reader, including
 // possible formats, allowed lengths, and the string encoding.
-ZXDecodeHints* hints = [ZXDecodeHints hints];
+ZXDecodeHints *hints = [ZXDecodeHints hints];
 
-ZXMultiFormatReader* reader = [ZXMultiFormatReader reader];
-ZXResult* result = [reader decode:bitmap
+ZXMultiFormatReader *reader = [ZXMultiFormatReader reader];
+ZXResult *result = [reader decode:bitmap
                             hints:hints
                             error:&error];
 if (result) {
   // The coded result as a string. The raw data can be accessed with
   // result.rawBytes and result.length.
-  NSString* contents = result.text;
+  NSString *contents = result.text;
 
   // The barcode format, such as a QR code or UPC-A
   ZXBarcodeFormat format = result.barcodeFormat;
@@ -73,46 +76,23 @@ if (result) {
 }
 ```
 
-Examples
---------
+## Installation
+
+The recommended way to install ZXingObjC is with [CocoaPods](http://cocoapods.org), a dependency mamanger for Objective-C projects. After installing CocoaPods just add ZXingObjC to your Podfile:
+
+```ruby
+platform :ios, '7.0'
+pod 'ZXingObjC', '~> 3.0'
+```
+
+## Examples
 
 ZXingObjC includes several example applications found in "examples" folder:
 
 * BarcodeScanner - An iOS application that captures video from the camera, scans for barcodes and displays results on screen.
+* BarcodeScannerOSX - An OS X application that captures video from the camera, scans for barcodes and displays results on screen.
 * QrCodeTest - A basic QR code generator that accepts input, encodes it as a QR code, and displays it on screen.
 
-Getting Started
----------------
-> As a simpler alternative to adding files directly, you can consider using [CocoaPods](http://cocoapods.org) to add ZXingObjC as a dependency.
-
-1. [Download ZXingObjC](https://github.com/TheLevelUp/ZXingObjC/tarball/master) or clone it from git: `git clone git://github.com/TheLevelUp/ZXingObjC.git`.
-
-2. Drag the ZXingObjC folder onto Xcode. Make sure "Copy items" is checked before clicking "Add".
-
-3. Selecting your project in the left sidebar, select your target, and choose the "Build Phases" tab. Under "Link Binary With Libraries", add the appropriate frameworks for your architecture:
-
-  For an iOS app:
-    * AVFoundation.framework
-    * CoreGraphics.framework
-    * CoreMedia.framework
-    * CoreVideo.framework
-    * ImageIO.framework
-    * QuartzCore.framework
-
-  For a Mac app:
-    * ApplicationServices.framework
-    * CoreMedia.framework
-    * CoreVideo.framework
-    * QuartzCore.framework
-    * QTKit.framework
-
-4. Import the ZXingObjC framework header:
-
-```obj-c
-#import "ZXingObjC.h"
-```
-
-License
--------
+## License
 
 ZXingObjC is available under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html).

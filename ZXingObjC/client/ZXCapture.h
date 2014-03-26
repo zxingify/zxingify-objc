@@ -15,7 +15,6 @@
  */
 
 #import <AVFoundation/AVFoundation.h>
-#import <QuartzCore/QuartzCore.h>
 
 @protocol ZXCaptureDelegate, ZXReader;
 @class ZXDecodeHints;

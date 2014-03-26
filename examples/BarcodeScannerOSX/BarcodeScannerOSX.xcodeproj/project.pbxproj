@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0228E6FB18E351CA004EF5D6 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC93020139D875D00DA0D4F /* CoreMedia.framework */; };
 		026A32EC18C128C8002C3566 /* libZXingObjC-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 026A32E518C128B0002C3566 /* libZXingObjC-osx.a */; };
-		026A32EF18C12A7B002C3566 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 026A32EE18C12A7B002C3566 /* CoreVideo.framework */; };
 		026A32F118C12A8C002C3566 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 026A32F018C12A8C002C3566 /* QuartzCore.framework */; };
-		2FC93021139D875D00DA0D4F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC93020139D875D00DA0D4F /* CoreMedia.framework */; };
-		2FC93025139D8CC500DA0D4F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC93024139D8CC500DA0D4F /* AudioToolbox.framework */; };
 		E9C967D3137B516200C6D18B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C967D2137B516200C6D18B /* Cocoa.framework */; };
 		E9C967DD137B516200C6D18B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9C967DB137B516200C6D18B /* InfoPlist.strings */; };
 		E9C967DF137B516200C6D18B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E9C967DE137B516200C6D18B /* main.m */; };
@@ -90,13 +88,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0228E6FB18E351CA004EF5D6 /* CoreMedia.framework in Frameworks */,
 				026A32F118C12A8C002C3566 /* QuartzCore.framework in Frameworks */,
-				026A32EF18C12A7B002C3566 /* CoreVideo.framework in Frameworks */,
 				026A32EC18C128C8002C3566 /* libZXingObjC-osx.a in Frameworks */,
 				E9C967F8137B51A700C6D18B /* AVFoundation.framework in Frameworks */,
-				2FC93025139D8CC500DA0D4F /* AudioToolbox.framework in Frameworks */,
 				E9C967D3137B516200C6D18B /* Cocoa.framework in Frameworks */,
-				2FC93021139D875D00DA0D4F /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,9 +103,9 @@
 			isa = PBXGroup;
 			children = (
 				026A32E118C128B0002C3566 /* libZXingObjC-iOS.a */,
-				026A32E318C128B0002C3566 /* Unit Tests iOS.octest */,
+				026A32E318C128B0002C3566 /* Unit Tests iOS.xctest */,
 				026A32E518C128B0002C3566 /* libZXingObjC-osx.a */,
-				026A32E718C128B0002C3566 /* Unit Tests OS X.octest */,
+				026A32E718C128B0002C3566 /* Unit Tests OS X.xctest */,
 				026A32E918C128B0002C3566 /* ZXingObjC.framework */,
 			);
 			name = Products;
@@ -229,10 +225,10 @@
 			remoteRef = 026A32E018C128B0002C3566 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		026A32E318C128B0002C3566 /* Unit Tests iOS.octest */ = {
+		026A32E318C128B0002C3566 /* Unit Tests iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Unit Tests iOS.octest";
+			path = "Unit Tests iOS.xctest";
 			remoteRef = 026A32E218C128B0002C3566 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -243,10 +239,10 @@
 			remoteRef = 026A32E418C128B0002C3566 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		026A32E718C128B0002C3566 /* Unit Tests OS X.octest */ = {
+		026A32E718C128B0002C3566 /* Unit Tests OS X.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Unit Tests OS X.octest";
+			path = "Unit Tests OS X.xctest";
 			remoteRef = 026A32E618C128B0002C3566 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -349,9 +345,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -379,8 +374,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Release;
 		};
