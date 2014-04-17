@@ -49,7 +49,9 @@
 
   self.capture.delegate = self;
   self.capture.layer.frame = self.view.bounds;
-  self.capture.scanRect = self.scanRectView.frame;
+
+  CGAffineTransform captureSizeTransform = CGAffineTransformMakeScale(320 / self.view.frame.size.width, 480 / self.view.frame.size.height);
+  self.capture.scanRect = CGRectApplyAffineTransform(self.scanRectView.frame, captureSizeTransform);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
