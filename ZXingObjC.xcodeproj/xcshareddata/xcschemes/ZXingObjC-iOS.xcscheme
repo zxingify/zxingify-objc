@@ -37,6 +37,341 @@
                BlueprintName = "Unit Tests iOS"
                ReferencedContainer = "container:ZXingObjC.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AI01_3103_DecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AI01_3202_3203_DecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AI01_3X0X_1X_DecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AbstractBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "AbstractDecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AbstractErrorCorrectionTestCase">
+               </Test>
+               <Test
+                  Identifier = "AbstractNegativeBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "AnyAIDecoderTest">
+               </Test>
+               <Test
+                  Identifier = "AztecBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "AztecBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "BitVectorTestCase">
+               </Test>
+               <Test
+                  Identifier = "CodabarBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code128BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code128BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code128BlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39BlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code39ExtendedBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "Code93BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "DataMatrixBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "DataMatrixBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN13BlackBox5BlurryTestCase">
+               </Test>
+               <Test
+                  Identifier = "EAN8BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "FalsePositives2BlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "FalsePositivesBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "ITFBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "ITFBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "PDF417BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "PDF417BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "PDF417BlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "PDF417BlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "PartialBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox5TestCase">
+               </Test>
+               <Test
+                  Identifier = "QRCodeBlackBox6TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSS14BlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSS14BlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedBlackBox3TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2binaryTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2resultTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedImage2stringTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedInternalTestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedStackedBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedStackedBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "RSSExpandedStackedInternalTestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox3ReflectiveTestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox4TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox5TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCABlackBox6BlurryTestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEANExtensionBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEBlackBox1TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEBlackBox2TestCase">
+               </Test>
+               <Test
+                  Identifier = "UPCEBlackBox3ReflectiveTestCase">
+               </Test>
+               <Test
+                  Identifier = "UnsupportedBlackBoxTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXAddressBookParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXAztecEncoderTest">
+               </Test>
+               <Test
+                  Identifier = "ZXBinaryUtilTest">
+               </Test>
+               <Test
+                  Identifier = "ZXBitArrayBuilderTest">
+               </Test>
+               <Test
+                  Identifier = "ZXBitArrayTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXBitMatrixTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXBitSourceTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXCalendarParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXCodaBarWriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXDataMaskTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXDataMatrixDecodedBitStreamParserTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXDataMatrixErrorCorrectionTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXDataMatrixWriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXEAN13WriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXEAN8WriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXEANManufacturerOrgSupportTest">
+               </Test>
+               <Test
+                  Identifier = "ZXEmailAddressParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXEncoderTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXErrorCorrectionLevelTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXExpandedInformationDecoderTest">
+               </Test>
+               <Test
+                  Identifier = "ZXExpandedProductParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXFieldParserTest">
+               </Test>
+               <Test
+                  Identifier = "ZXFormatInformationTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXGeoParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXHighLevelEncodeTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXISBNParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXMaskUtilTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXMatrixUtilTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXModeTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXPDF417DetectorTest">
+               </Test>
+               <Test
+                  Identifier = "ZXPDF417ECErrorCorrectionTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXParsedReaderResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXPerspectiveTransformTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXPlacementTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXProductParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXQRCodeDecodedBitStreamParserTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXQRCodeTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXQRCodeVersionTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXQRCodeWriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXSMSMMSParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXStringUtilsTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXSymbolInfoTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXTelParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXUPCAWriterTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXURIParsedResultTestCase">
+               </Test>
+               <Test
+                  Identifier = "ZXWifiParsedResultTestCase">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

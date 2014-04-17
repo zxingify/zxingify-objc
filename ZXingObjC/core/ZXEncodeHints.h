@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
+#ifdef _ZXINGOBJC_PDF417_
 #import "ZXCompaction.h"
-#import "ZXDimensions.h"
-#import "ZXErrorCorrectionLevel.h"
-#import "ZXSymbolShapeHint.h"
+#endif
 
 /**
  * These are a set of hints that you may pass to Writers to specify their behavior.
  */
 
-@class ZXDimension, ZXSymbolShapeHint;
+@class ZXDimension, ZXErrorCorrectionLevel, ZXSymbolShapeHint;
 
 @interface ZXEncodeHints : NSObject
 
@@ -75,6 +74,7 @@
  */
 @property (nonatomic, assign) BOOL pdf417Compact;
 
+#ifdef _ZXINGOBJC_PDF417_
 /**
  * Specifies what compaction mode to use for PDF417.
  */
@@ -84,5 +84,6 @@
  * Specifies the minimum and maximum number of rows and columns for PDF417.
  */
 @property (nonatomic, strong) ZXDimensions *pdf417Dimensions;
+#endif
 
 @end
