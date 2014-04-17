@@ -178,9 +178,9 @@
 			isa = PBXGroup;
 			children = (
 				25FFF69B1839837F00C2E985 /* libZXingObjC-iOS.a */,
-				25FFF69D1839837F00C2E985 /* ZXingObjCTests-iOS.octest */,
+				25FFF69D1839837F00C2E985 /* Unit Tests iOS.xctest */,
 				25FFF69F1839837F00C2E985 /* libZXingObjC-osx.a */,
-				25FFF6A11839837F00C2E985 /* ZXingObjCTests-osx.octest */,
+				25FFF6A11839837F00C2E985 /* Unit Tests OS X.xctest */,
 				25FFF6A31839837F00C2E985 /* ZXingObjC.framework */,
 			);
 			name = Products;
@@ -247,10 +247,10 @@
 			remoteRef = 25FFF69A1839837F00C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25FFF69D1839837F00C2E985 /* ZXingObjCTests-iOS.octest */ = {
+		25FFF69D1839837F00C2E985 /* Unit Tests iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-iOS.octest";
+			path = "Unit Tests iOS.xctest";
 			remoteRef = 25FFF69C1839837F00C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -261,10 +261,10 @@
 			remoteRef = 25FFF69E1839837F00C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25FFF6A11839837F00C2E985 /* ZXingObjCTests-osx.octest */ = {
+		25FFF6A11839837F00C2E985 /* Unit Tests OS X.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-osx.octest";
+			path = "Unit Tests OS X.xctest";
 			remoteRef = 25FFF6A01839837F00C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -361,6 +361,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -387,6 +388,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

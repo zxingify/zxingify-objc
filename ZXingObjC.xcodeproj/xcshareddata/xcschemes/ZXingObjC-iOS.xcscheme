@@ -39,6 +39,15 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "024D10DA156EAB6F00FE6872"
+            BuildableName = "BarcodeScanner.app"
+            BlueprintName = "BarcodeScanner"
+            ReferencedContainer = "container:examples/BarcodeScanner/BarcodeScanner.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
