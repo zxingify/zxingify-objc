@@ -24,8 +24,8 @@
 #import "ZXUPCEANReader.h"
 #import "ZXUPCEANExtensionSupport.h"
 
-#define MAX_AVG_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f)
-#define MAX_INDIVIDUAL_VARIANCE (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f)
+static int MAX_AVG_VARIANCE;
+static int MAX_INDIVIDUAL_VARIANCE;
 
 /**
  * Start/end guard pattern.
@@ -90,6 +90,11 @@ const int L_AND_G_PATTERNS[L_AND_G_PATTERNS_LEN][L_AND_G_PATTERNS_SUB_LEN] = {
 @end
 
 @implementation ZXUPCEANReader
+
++ (void)initialize {
+  MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f);
+  MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+}
 
 - (id)init {
   if (self = [super init]) {
