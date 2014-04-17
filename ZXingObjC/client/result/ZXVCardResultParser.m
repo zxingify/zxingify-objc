@@ -318,15 +318,14 @@ static NSCharacterSet *SEMICOLON_OR_COMMA = nil;
   if (names != nil) {
     for (NSMutableArray *list in names) {
       NSString *name = list[0];
-      NSMutableArray *components = [NSMutableArray arrayWithCapacity:5];
-      NSUInteger start = 0;
-      NSUInteger end;
-      while ((end = [name rangeOfString:@";" options:NSLiteralSearch range:NSMakeRange(start, [name length] - start)].location) != NSNotFound && end > 0) {
-        [components addObject:[name substringWithRange:NSMakeRange(start, [name length] - end - 1)]];
-        start = end + 1;
+      NSArray *allComponents = [name componentsSeparatedByString:@";"];
+      NSMutableArray *components = [NSMutableArray array];
+      for (NSString *component in allComponents) {
+        if ([component length] > 0) {
+          [components addObject:component];
+        }
       }
 
-      [components addObject:[name substringFromIndex:start]];
       NSMutableString *newName = [NSMutableString stringWithCapacity:100];
       [self maybeAppendComponent:components i:3 newName:newName];
       [self maybeAppendComponent:components i:1 newName:newName];
