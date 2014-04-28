@@ -30,10 +30,10 @@
 @property (nonatomic, assign) BOOL cameraIsReady;
 @property (nonatomic, assign) int captureDeviceIndex;
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+#ifdef OS_OBJECT_HAVE_OBJC_SUPPORT
 @property (nonatomic, strong) __attribute__((NSObject)) dispatch_queue_t captureQueue;
 #else
-@property (nonatomic, strong) dispatch_queue_t captureQueue;
+@property (nonatomic, assign) dispatch_queue_t captureQueue;
 #endif
 
 @property (nonatomic, assign) BOOL hardStop;
@@ -77,6 +77,11 @@
   if (_lastScannedImage) {
     CGImageRelease(_lastScannedImage);
   }
+
+#ifndef OS_OBJECT_HAVE_OBJC_SUPPORT
+  dispatch_release(_captureQueue);
+  _captureQueue = NULL;
+#endif
 }
 
 #pragma mark - Property Getters
