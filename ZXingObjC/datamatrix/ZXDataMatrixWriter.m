@@ -20,7 +20,6 @@
 #import "ZXDataMatrixErrorCorrection.h"
 #import "ZXDataMatrixHighLevelEncoder.h"
 #import "ZXDataMatrixSymbolInfo.h"
-#import "ZXDataMatrixSymbolShapeHint.h"
 #import "ZXDataMatrixWriter.h"
 #import "ZXDimension.h"
 #import "ZXEncodeHints.h"

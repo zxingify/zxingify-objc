@@ -21,7 +21,6 @@
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXDecodeHints.h"
 #import "ZXHybridBinarizer.h"
-#import "ZXMultiFormatReader.h"
 #import "ZXReader.h"
 #import "ZXResult.h"
 
@@ -57,7 +56,11 @@
     _onScreen = NO;
     _orderInSkip = 0;
     _orderOutSkip = 0;
-    _reader = [ZXMultiFormatReader reader];
+
+    if (NSClassFromString(@"ZXMultiFormatReader")) {
+      _reader = [NSClassFromString(@"ZXMultiFormatReader") performSelector:@selector(reader)];
+    }
+
     _rotation = 0.0f;
     _running = NO;
     _sessionPreset = AVCaptureSessionPresetMedium;

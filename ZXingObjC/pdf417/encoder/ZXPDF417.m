@@ -526,7 +526,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
 - (id)initWithCompact:(BOOL)compact {
   if (self = [super init]) {
     _compact = compact;
-    _compaction = ZXCompactionAuto;
+    _compaction = ZXPDF417CompactionAuto;
     _encoding = ZX_PDF417_DEFAULT_ENCODING;
     _minCols = 2;
     _maxCols = 30;

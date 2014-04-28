@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXDataMatrixSymbolShapeHint.h"
+#import "ZXEncodeHints.h"
 
 @class ZXDataMatrixSymbolInfo, ZXDimension;
 

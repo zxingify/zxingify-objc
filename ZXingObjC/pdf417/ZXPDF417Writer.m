@@ -19,7 +19,7 @@
 #import "ZXEncodeHints.h"
 #import "ZXPDF417.h"
 #import "ZXPDF417BarcodeMatrix.h"
-#import "ZXPDF417Compaction.h"
+#import "ZXPDF417Dimensions.h"
 #import "ZXPDF417Writer.h"
 
 /**

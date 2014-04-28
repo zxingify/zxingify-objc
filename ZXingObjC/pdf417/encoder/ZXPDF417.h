@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXPDF417Compaction.h"
+#import "ZXEncodeHints.h"
 
 @class ZXPDF417BarcodeMatrix, ZXIntArray;
 

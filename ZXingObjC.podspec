@@ -1,18 +1,52 @@
 Pod::Spec.new do |s|
-  s.name                        = "ZXingObjC"
-  s.version                     = "2.2.8"
-  s.summary                     = "An Objective-C Port of ZXing."
-  s.homepage                    = "https://github.com/TheLevelUp/ZXingObjC"
-  s.author                      = "ZXing team (http://code.google.com/p/zxing/people/list) and TheLevelUp"
+  s.name = 'ZXingObjC'
+  s.version = '3.0.0-alpha.1'
+  s.summary = 'An Objective-C Port of the ZXing barcode framework.'
+  s.homepage = 'https://github.com/TheLevelUp/ZXingObjC'
+  s.author = 'ZXingObjC team'
+  s.license = { :type => 'Apache License 2.0', :file => 'COPYING' }
+  s.source = { :git => 'https://github.com/TheLevelUp/ZXingObjC.git', :tag => "#{s.version}" }
+  s.source_files = 'ZXingObjC/**/*.{h,m}'
+  s.requires_arc = true
+  s.xcconfig = { "OTHER_LDFLAGS" => "-ObjC" }
 
-  s.license                     = { :type => 'Apache License 2.0', :file => 'COPYING' }
+  s.ios.deployment_target = '6.0'
+  s.osx.deployment_target = '10.8'
 
-  s.source                      = { :git => "https://github.com/TheLevelUp/ZXingObjC.git", :tag => "2.2.8" }
-  s.ios.deployment_target 	= '5.0'
-  s.osx.deployment_target 	= '10.7'
+  s.ios.frameworks = 'AVFoundation', 'CoreGraphics', 'CoreMedia', 'CoreVideo', 'ImageIO', 'QuartzCore'
+  s.osx.frameworks = 'AVFoundation', 'CoreMedia', 'QuartzCore'
 
-  s.source_files                = 'ZXingObjC/**/*.{h,m}'
-  s.requires_arc                = true
+  s.subspec 'Aztec' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/aztec/*.{h,m}'
+  end
 
-  s.frameworks                  = 'ImageIO', 'CoreGraphics', 'CoreVideo', 'CoreMedia', 'QuartzCore', 'AVFoundation', 'AudioToolbox'
+  s.subspec 'Core' do |ss|
+    ss.source_files = 'ZXingObjC/client/*.{h,m}', 'ZXingObjC/common/**/*.{h,m}', 'ZXingObjC/core/*.{h,m}', 'ZXingObjC/multi/*.{h,m}'
+  end
+
+  s.subspec 'DataMatrix' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/datamatrix/**/*.{h,m}'
+  end
+
+  s.subspec 'MaxiCode' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/maxicode/**/*.{h,m}'
+  end
+
+  s.subspec 'OneD' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/oned/**/*.{h,m}'
+  end
+
+  s.subspec 'QRCode' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/qrcode/**/*.{h,m}'
+  end
+
+  s.subspec 'ResultParsers' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/client/result/*.{h,m}'
+  end
 end

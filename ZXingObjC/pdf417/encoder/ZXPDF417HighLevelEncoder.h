@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXPDF417Compaction.h"
+#import "ZXEncodeHints.h"
 
 extern const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING;
 

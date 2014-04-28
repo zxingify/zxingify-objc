@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 ZXing authors
+ * Copyright 2014 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-/**
- * Enumeration for DataMatrix symbol shape hint. It can be used to force square or rectangular
- * symbols.
- */
-typedef enum {
-  ZXDataMatrixSymbolShapeHintForceNone,
-  ZXDataMatrixSymbolShapeHintForceSquare,
-  ZXDataMatrixSymbolShapeHintForceRectangle
-} ZXDataMatrixSymbolShapeHint;
+#ifndef _ZXINGOBJC_PDF417_
+
+#define _ZXINGOBJC_PDF417_
+
+#import "ZXModulusGF.h"
+#import "ZXPDF417.h"
+#import "ZXPDF417BarcodeMatrix.h"
+#import "ZXPDF417Common.h"
+#import "ZXPDF417Detector.h"
+#import "ZXPDF417DetectorResult.h"
+#import "ZXPDF417Dimensions.h"
+#import "ZXPDF417ECErrorCorrection.h"
+#import "ZXPDF417Reader.h"
+#import "ZXPDF417ResultMetadata.h"
+#import "ZXPDF417ScanningDecoder.h"
+#import "ZXPDF417Writer.h"
+
+#endif

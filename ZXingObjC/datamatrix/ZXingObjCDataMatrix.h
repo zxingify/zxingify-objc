@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2014 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#ifndef _ZXINGOBJC_DATAMATRIX_
 
-#ifndef _ZXINGOBJC_
+#define _ZXINGOBJC_DATAMATRIX_
 
-#define _ZXINGOBJC_
-
-#import "ZXingObjCAztec.h"
-#import "ZXingObjCCore.h"
-#import "ZXingObjCDataMatrix.h"
-#import "ZXingObjCMaxiCode.h"
-#import "ZXingObjCOneD.h"
-#import "ZXingObjCQRCode.h"
-#import "ZXingObjCPDF417.h"
-#import "ZXingObjCResultParsers.h"
-
-#import "ZXMultiFormatReader.h"
-#import "ZXMultiFormatWriter.h"
+#import "ZXDataMatrixDecoder.h"
+#import "ZXDataMatrixDefaultPlacement.h"
+#import "ZXDataMatrixDetector.h"
+#import "ZXDataMatrixErrorCorrection.h"
+#import "ZXDataMatrixHighLevelEncoder.h"
+#import "ZXDataMatrixReader.h"
+#import "ZXDataMatrixSymbolInfo.h"
+#import "ZXDataMatrixVersion.h"
+#import "ZXDataMatrixWriter.h"
 
 #endif

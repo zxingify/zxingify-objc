@@ -17,7 +17,6 @@
 #import "ZXBitMatrix.h"
 #import "ZXDecodeHints.h"
 #import "ZXErrors.h"
-#import "ZXOneDReader.h"
 #import "ZXQRCodeFinderPattern.h"
 #import "ZXQRCodeFinderPatternInfo.h"
 #import "ZXQRCodeFinderPatternFinder.h"
@@ -27,6 +26,8 @@
 const int ZX_CENTER_QUORUM = 2;
 const int ZX_FINDER_PATTERN_MIN_SKIP = 3;
 const int ZX_FINDER_PATTERN_MAX_MODULES = 57;
+
+const int ZX_QR_CODE_INTEGER_MATH_SHIFT = 8;
 
 @interface ZXQRCodeFinderPatternFinder ()
 
@@ -171,13 +172,13 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   if (totalModuleSize < 7) {
     return NO;
   }
-  int moduleSize = (totalModuleSize << ZX_ONED_INTEGER_MATH_SHIFT) / 7;
+  int moduleSize = (totalModuleSize << ZX_QR_CODE_INTEGER_MATH_SHIFT) / 7;
   int maxVariance = moduleSize / 2;
-  return abs(moduleSize - (stateCount[0] << ZX_ONED_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(moduleSize - (stateCount[1] << ZX_ONED_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(3 * moduleSize - (stateCount[2] << ZX_ONED_INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
-    abs(moduleSize - (stateCount[3] << ZX_ONED_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(moduleSize - (stateCount[4] << ZX_ONED_INTEGER_MATH_SHIFT)) < maxVariance;
+  return abs(moduleSize - (stateCount[0] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
+    abs(moduleSize - (stateCount[1] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
+    abs(3 * moduleSize - (stateCount[2] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
+    abs(moduleSize - (stateCount[3] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
+    abs(moduleSize - (stateCount[4] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance;
 }
 
 /**

@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-#import "ZXDataMatrixSymbolShapeHint.h"
-#import "ZXPDF417Compaction.h"
-#import "ZXPDF417Dimensions.h"
-#import "ZXQRCodeErrorCorrectionLevel.h"
+/**
+ * Enumeration for DataMatrix symbol shape hint. It can be used to force square or rectangular
+ * symbols.
+ */
+typedef enum {
+  ZXDataMatrixSymbolShapeHintForceNone,
+  ZXDataMatrixSymbolShapeHintForceSquare,
+  ZXDataMatrixSymbolShapeHintForceRectangle
+} ZXDataMatrixSymbolShapeHint;
+
+typedef enum {
+  ZXPDF417CompactionAuto,
+  ZXPDF417CompactionText,
+  ZXPDF417CompactionByte,
+  ZXPDF417CompactionNumeric
+} ZXPDF417Compaction;
+
+@class ZXDimension, ZXPDF417Dimensions, ZXQRCodeErrorCorrectionLevel;
 
 /**
  * These are a set of hints that you may pass to Writers to specify their behavior.
  */
-
-@class ZXDimension;
-
 @interface ZXEncodeHints : NSObject
 
 + (id)hints;

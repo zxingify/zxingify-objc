@@ -157,12 +157,12 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
 
   // User selected encoding mode
   ZXByteArray *bytes = nil; //Fill later and only if needed
-  if (compaction == ZXCompactionText) {
+  if (compaction == ZXPDF417CompactionText) {
     [self encodeText:msg startpos:p count:(int)len buffer:sb initialSubmode:textSubMode];
-  } else if (compaction == ZXCompactionByte) {
+  } else if (compaction == ZXPDF417CompactionByte) {
     bytes = [self bytesForMessage:msg encoding:encoding];
     [self encodeBinary:bytes startpos:p count:(int)msg.length startmode:ZX_PDF417_BYTE_COMPACTION buffer:sb];
-  } else if (compaction == ZXCompactionNumeric) {
+  } else if (compaction == ZXPDF417CompactionNumeric) {
     [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_NUMERIC];
     [self encodeNumeric:msg startpos:p count:(int)len buffer:sb];
   } else {
