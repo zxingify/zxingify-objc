@@ -1,12 +1,11 @@
 Pod::Spec.new do |s|
   s.name = 'ZXingObjC'
-  s.version = '3.0.0-alpha.1'
+  s.version = '3.0.0'
   s.summary = 'An Objective-C Port of the ZXing barcode framework.'
   s.homepage = 'https://github.com/TheLevelUp/ZXingObjC'
   s.author = 'ZXingObjC team'
   s.license = { :type => 'Apache License 2.0', :file => 'COPYING' }
   s.source = { :git => 'https://github.com/TheLevelUp/ZXingObjC.git', :tag => "#{s.version}" }
-  s.source_files = 'ZXingObjC/**/*.{h,m}'
   s.requires_arc = true
   s.xcconfig = { "OTHER_LDFLAGS" => "-ObjC" }
 
@@ -16,9 +15,15 @@ Pod::Spec.new do |s|
   s.ios.frameworks = 'AVFoundation', 'CoreGraphics', 'CoreMedia', 'CoreVideo', 'ImageIO', 'QuartzCore'
   s.osx.frameworks = 'AVFoundation', 'CoreMedia', 'QuartzCore'
 
+  s.default_subspec = 'All'
+
+  s.subspec 'All' do |ss|
+    ss.source_files = 'ZXingObjC/**/*.{h,m}'
+  end
+
   s.subspec 'Aztec' do |ss|
     ss.dependency 'ZXingObjC/Core'
-    ss.source_files = 'ZXingObjC/aztec/*.{h,m}'
+    ss.source_files = 'ZXingObjC/aztec/**/*.{h,m}'
   end
 
   s.subspec 'Core' do |ss|
@@ -37,16 +42,11 @@ Pod::Spec.new do |s|
 
   s.subspec 'OneD' do |ss|
     ss.dependency 'ZXingObjC/Core'
-    ss.source_files = 'ZXingObjC/oned/**/*.{h,m}'
+    ss.source_files = 'ZXingObjC/oned/**/*.{h,m}', 'ZXingObjC/client/result/*.{h,m}'
   end
 
   s.subspec 'QRCode' do |ss|
     ss.dependency 'ZXingObjC/Core'
     ss.source_files = 'ZXingObjC/qrcode/**/*.{h,m}'
-  end
-
-  s.subspec 'ResultParsers' do |ss|
-    ss.dependency 'ZXingObjC/Core'
-    ss.source_files = 'ZXingObjC/client/result/*.{h,m}'
   end
 end

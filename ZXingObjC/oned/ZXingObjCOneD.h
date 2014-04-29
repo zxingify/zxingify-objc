@@ -18,6 +18,8 @@
 
 #define _ZXINGOBJC_ONED_
 
+// OneD
+
 #import "ZXAbstractExpandedDecoder.h"
 #import "ZXAbstractRSSReader.h"
 #import "ZXCodaBarReader.h"
@@ -47,5 +49,44 @@
 #import "ZXUPCEANReader.h"
 #import "ZXUPCEANWriter.h"
 #import "ZXUPCEReader.h"
+
+// Result Parsers
+
+#import "ZXAddressBookAUResultParser.h"
+#import "ZXAddressBookDoCoMoResultParser.h"
+#import "ZXAddressBookParsedResult.h"
+#import "ZXBizcardResultParser.h"
+#import "ZXBookmarkDoCoMoResultParser.h"
+#import "ZXCalendarParsedResult.h"
+#import "ZXEmailAddressParsedResult.h"
+#import "ZXEmailAddressResultParser.h"
+#import "ZXEmailDoCoMoResultParser.h"
+#import "ZXExpandedProductParsedResult.h"
+#import "ZXExpandedProductResultParser.h"
+#import "ZXGeoParsedResult.h"
+#import "ZXGeoResultParser.h"
+#import "ZXISBNParsedResult.h"
+#import "ZXISBNResultParser.h"
+#import "ZXParsedResult.h"
+#import "ZXParsedResultType.h"
+#import "ZXProductParsedResult.h"
+#import "ZXProductResultParser.h"
+#import "ZXResultParser.h"
+#import "ZXSMSMMSResultParser.h"
+#import "ZXSMSParsedResult.h"
+#import "ZXSMSTOMMSTOResultParser.h"
+#import "ZXSMTPResultParser.h"
+#import "ZXTelParsedResult.h"
+#import "ZXTelResultParser.h"
+#import "ZXTextParsedResult.h"
+#import "ZXURIParsedResult.h"
+#import "ZXURIResultParser.h"
+#import "ZXURLTOResultParser.h"
+#import "ZXVCardResultParser.h"
+#import "ZXVEventResultParser.h"
+#import "ZXVINParsedResult.h"
+#import "ZXVINResultParser.h"
+#import "ZXWifiParsedResult.h"
+#import "ZXWifiResultParser.h"
 
 #endif

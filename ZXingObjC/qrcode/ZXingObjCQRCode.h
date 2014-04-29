@@ -20,7 +20,6 @@
 
 #define _ZXINGOBJC_QRCODE_
 
-#import "ZXByteMatrix.h"
 #import "ZXQRCode.h"
 #import "ZXQRCodeAlignmentPattern.h"
 #import "ZXQRCodeDecoder.h"

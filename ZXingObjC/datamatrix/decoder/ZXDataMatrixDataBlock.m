@@ -17,7 +17,6 @@
 #import "ZXByteArray.h"
 #import "ZXDataMatrixDataBlock.h"
 #import "ZXDataMatrixVersion.h"
-#import "ZXQRCodeVersion.h"
 
 @implementation ZXDataMatrixDataBlock
 

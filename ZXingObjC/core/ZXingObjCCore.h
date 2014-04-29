@@ -51,6 +51,7 @@
 #import "ZXBarcodeFormat.h"
 #import "ZXBinarizer.h"
 #import "ZXBinaryBitmap.h"
+#import "ZXByteMatrix.h"
 #import "ZXDecodeHints.h"
 #import "ZXDimension.h"
 #import "ZXEncodeHints.h"
