@@ -27,7 +27,6 @@
 #import "ZXingObjCOneD.h"
 #import "ZXingObjCQRCode.h"
 #import "ZXingObjCPDF417.h"
-#import "ZXingObjCResultParsers.h"
 
 #import "ZXMultiFormatReader.h"
 #import "ZXMultiFormatWriter.h"
