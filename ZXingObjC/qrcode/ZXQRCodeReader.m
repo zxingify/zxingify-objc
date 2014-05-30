@@ -200,6 +200,7 @@
       if (++transitions == 5) {
         break;
       }
+      inBlack = !inBlack;
     }
     x++;
     y++;
