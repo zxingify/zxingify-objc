@@ -43,7 +43,8 @@
                                  error:nil];
 
   if (result) {
-    self.imageView.image = [UIImage imageWithCGImage:[ZXImage imageWithMatrix:result].cgimage];
+    ZXImage *image = [ZXImage imageWithMatrix:result];
+    self.imageView.image = [UIImage imageWithCGImage:image.cgimage];
   } else {
     self.imageView.image = nil;
   }
