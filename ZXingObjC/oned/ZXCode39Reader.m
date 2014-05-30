@@ -26,6 +26,7 @@ unichar ZX_CODE39_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
   'X', 'Y', 'Z', '-', '.', ' ', '*', '$', '/', '+', '%'};
 NSString *ZX_CODE39_ALPHABET_STRING = nil;
 
+
 /**
  * These represent the encodings of characters, as patterns of wide and narrow bars.
  * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
@@ -51,7 +52,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
 
 @implementation ZXCode39Reader
 
-+ (void)initialize {
++ (void)load {
   ZX_CODE39_ALPHABET_STRING = [[NSString alloc] initWithCharacters:ZX_CODE39_ALPHABET
                                                             length:sizeof(ZX_CODE39_ALPHABET) / sizeof(unichar)];
 }

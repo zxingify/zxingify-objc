@@ -88,7 +88,7 @@ int ZX_AZTEC_SHIFT_TABLE[ZX_AZTEC_SHIFT_TABLE_SIZE][ZX_AZTEC_SHIFT_TABLE_SIZE];
 
 @implementation ZXAztecHighLevelEncoder
 
-+ (void)initialize {
++ (void)load {
   ZX_AZTEC_MODE_NAMES = @[@"UPPER", @"LOWER", @"DIGIT", @"MIXED", @"PUNCT"];
 
   memset(ZX_AZTEC_CHAR_MAP, 0, ZX_AZTEC_CHAR_MAP_HEIGHT * ZX_AZTEC_CHAR_MAP_WIDTH * sizeof(int));
