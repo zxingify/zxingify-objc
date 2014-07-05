@@ -78,7 +78,7 @@ if (result) {
 
 ## Installation
 
-The recommended way to install ZXingObjC is with [CocoaPods](http://cocoapods.org), a dependency mamanger for Objective-C projects. After installing CocoaPods just add ZXingObjC to your Podfile:
+The recommended way to install ZXingObjC is with [CocoaPods](http://cocoapods.org), a dependency mananger for Objective-C projects. After installing CocoaPods just add ZXingObjC to your Podfile:
 
 ```ruby
 platform :ios, '7.0'
