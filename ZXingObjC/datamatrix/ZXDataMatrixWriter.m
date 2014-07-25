@@ -73,7 +73,7 @@
   [placement place];
 
   //4. step: low-level encoding
-  return [self encodeLowLevel:placement symbolInfo:symbolInfo];
+  return [self encodeLowLevel:placement symbolInfo:symbolInfo width:width height:height];
 }
 
 /**
@@ -83,7 +83,7 @@
  * @param symbolInfo The symbol info to encode.
  * @return The bit matrix generated.
  */
-- (ZXBitMatrix *)encodeLowLevel:(ZXDataMatrixDefaultPlacement *)placement symbolInfo:(ZXDataMatrixSymbolInfo *)symbolInfo {
+- (ZXBitMatrix *)encodeLowLevel:(ZXDataMatrixDefaultPlacement *)placement symbolInfo:(ZXDataMatrixSymbolInfo *)symbolInfo width:(int)width height:(int)height {
   int symbolWidth = symbolInfo.symbolDataWidth;
   int symbolHeight = symbolInfo.symbolDataHeight;
 
@@ -129,7 +129,7 @@
     }
   }
 
-  return [self convertByteMatrixToBitMatrix:matrix];
+  return [self convertByteMatrixToBitMatrix:matrix width:width height:height];
 }
 
 /**
@@ -138,21 +138,25 @@
  * @param matrix The input matrix.
  * @return The output matrix.
  */
-- (ZXBitMatrix *)convertByteMatrixToBitMatrix:(ZXByteMatrix *)matrix {
-  int matrixWidgth = matrix.width;
-  int matrixHeight = matrix.height;
+- (ZXBitMatrix *)convertByteMatrixToBitMatrix:(ZXByteMatrix *)input width:(int)width height:(int)height {
+  int inputWidth = input.width;
+  int inputHeight = input.height;
+  int outputWidth = MAX(width, inputWidth);
+  int outputHeight = MAX(height, inputHeight);
 
-  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:matrixWidgth height:matrixHeight];
-  [output clear];
-  for (int i = 0; i < matrixWidgth; i++) {
-    for (int j = 0; j < matrixHeight; j++) {
-      // Zero is white in the bytematrix
-      if ([matrix getX:i y:j] == 1) {
-        [output setX:i y:j];
+  int multiple = MIN(outputWidth / inputWidth, outputHeight / inputHeight);
+  int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
+  int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
+
+  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight];
+
+  for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
+    for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
+      if ([input getX:inputX y:inputY] == 1) {
+        [output setRegionAtLeft:outputX top:outputY width:multiple height:multiple];
       }
     }
   }
-
   return output;
 }
 
