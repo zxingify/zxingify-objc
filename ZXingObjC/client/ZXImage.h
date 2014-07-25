@@ -27,5 +27,6 @@
 - (size_t)width;
 - (size_t)height;
 + (ZXImage *)imageWithMatrix:(ZXBitMatrix *)matrix;
++ (ZXImage *)imageWithMatrix:(ZXBitMatrix *)matrix onColor:(CGColorRef)onColor offColor:(CGColorRef)offColor;
 
 @end

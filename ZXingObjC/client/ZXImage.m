@@ -65,17 +65,39 @@
 }
 
 + (ZXImage *)imageWithMatrix:(ZXBitMatrix *)matrix {
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+
+  CGFloat blackComponents[] = {0.0f, 1.0f};
+  CGColorRef black = CGColorCreate(colorSpace, blackComponents);
+  CGFloat whiteComponents[] = {1.0f, 1.0f};
+  CGColorRef white = CGColorCreate(colorSpace, whiteComponents);
+
+  CFRelease(colorSpace);
+
+  ZXImage *result = [self imageWithMatrix:matrix onColor:black offColor:white];
+
+  CGColorRelease(white);
+  CGColorRelease(black);
+
+  return result;
+}
+
++ (ZXImage *)imageWithMatrix:(ZXBitMatrix *)matrix onColor:(CGColorRef)onColor offColor:(CGColorRef)offColor {
+  int8_t onIntensities[4], offIntensities[4];
+
+  [self setColorIntensities:onIntensities color:onColor];
+  [self setColorIntensities:offIntensities color:offColor];
+
   int width = matrix.width;
   int height = matrix.height;
   int8_t *bytes = (int8_t *)malloc(width * height * 4);
-  for(int y = 0; y < height; y++) {
-    for(int x = 0; x < width; x++) {
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
       BOOL bit = [matrix getX:x y:y];
-      int8_t intensity = bit ? 0 : 255;
-      for(int i = 0; i < 3; i++) {
+      for (int i = 0; i < 4; i++) {
+        int8_t intensity = bit ? onIntensities[i] : offIntensities[i];
         bytes[y * width * 4 + x * 4 + i] = intensity;
       }
-      bytes[y * width * 4 + x * 4 + 3] = 255;
     }
   }
 
@@ -90,6 +112,24 @@
 
   CFRelease(image);
   return zxImage;
+}
+
++ (void)setColorIntensities:(int8_t *)intensities color:(CGColorRef)color {
+  memset(intensities, 0, 4);
+
+  size_t numberOfComponents = CGColorGetNumberOfComponents(color);
+  const CGFloat *components = CGColorGetComponents(color);
+
+  if (numberOfComponents == 4) {
+    for (int i = 0; i < 4; i++) {
+      intensities[i] = components[i] * 255;
+    }
+  } else if (numberOfComponents == 2) {
+    for (int i = 0; i < 3; i++) {
+      intensities[i] = components[0] * 255;
+    }
+    intensities[3] = components[1] * 255;
+  }
 }
 
 @end
