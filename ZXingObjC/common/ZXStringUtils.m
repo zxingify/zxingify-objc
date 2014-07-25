@@ -21,7 +21,8 @@
 @implementation ZXStringUtils
 
 + (NSStringEncoding)guessEncoding:(ZXByteArray *)bytes hints:(ZXDecodeHints *)hints {
-  BOOL assumeShiftJIS = CFStringGetSystemEncoding() == NSShiftJISStringEncoding || CFStringGetSystemEncoding() == NSJapaneseEUCStringEncoding;
+  NSStringEncoding systemEncoding = CFStringConvertEncodingToNSStringEncoding(CFStringGetSystemEncoding());
+  BOOL assumeShiftJIS = systemEncoding == NSShiftJISStringEncoding || systemEncoding == NSJapaneseEUCStringEncoding;
 
   if (hints != nil) {
     NSStringEncoding encoding = hints.encoding;
@@ -181,7 +182,7 @@
     return NSUTF8StringEncoding;
   }
   // Otherwise, we take a wild guess with platform encoding
-  return CFStringGetSystemEncoding();
+  return systemEncoding;
 }
 
 @end
