@@ -66,7 +66,7 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
     _location = location;
     _organizer = organizer;
     _attendees = attendees;
-    _description = description;
+    _resultDescription = description;
     _latitude = latitude;
     _longitude = longitude;
   }
@@ -158,6 +158,10 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
   NSDateFormatter *format = [[NSDateFormatter alloc] init];
   format.dateFormat = @"yyyyMMdd'T'HHmmss";
   return format;
+}
+
+- (NSString *)description {
+  return self.resultDescription;
 }
 
 @end
