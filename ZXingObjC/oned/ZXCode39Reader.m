@@ -121,7 +121,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     lastPatternSize += theCounters.array[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-  if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
+  if (nextStart != end && (whiteSpaceAfterEnd << 1) < lastPatternSize) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
