@@ -46,8 +46,8 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
 @implementation ZXMultiFinderPatternFinder
 
 /**
- * Returns the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
- * those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
+ * Returns the 3 best `ZXFinderPattern`s from our list of candidates. The "best" are
+ * those that have been detected at least ZXCENTER_QUORUM times, and whose module
  * size differs from the average among those patterns the least
  */
 - (NSArray *)selectBestPatternsWithError:(NSError **)error {

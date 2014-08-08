@@ -34,7 +34,7 @@
 - (ZXDecoderResult *)decode:(NSArray *)image error:(NSError **)error;
 
 /**
- * Decodes a Data Matrix Code represented as a {@link BitMatrix}. A 1 or "true" is taken
+ * Decodes a Data Matrix Code represented as a ZXBitMatrix. A 1 or "true" is taken
  * to mean a black module.
  *
  * @param bits booleans representing white/black Data Matrix Code modules

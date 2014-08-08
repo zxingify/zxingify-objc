@@ -76,8 +76,9 @@
 }
 
 /**
- * Appends the given pattern to the target array starting at pos.
- *
+ * @param target encode black/white pattern into this array
+ * @param pos position to start encoding at in target
+ * @param pattern lengths of black/white runs to encode *
  * @param startColor starting color - false for white, true for black
  * @return the number of elements added to target.
  */
@@ -104,6 +105,7 @@
  * Encode the contents to boolean array expression of one-dimensional barcode.
  * Start code and end code should be included in result, and side margins should not be included.
  *
+ * @param contents barcode contents to encode
  * @return a ZXBoolArray of horizontal pixels (false = white, true = black)
  */
 - (ZXBoolArray *)encode:(NSString *)contents {

@@ -149,7 +149,7 @@
  * @param centerJ center of the section that appears to cross an alignment pattern
  * @param maxCount maximum reasonable number of modules that should be
  * observed in any reading state, based on the results of the horizontal scan
- * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
+ * @return vertical center of alignment pattern, or `NAN` if not found
  */
 - (float)crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
   int maxI = self.image.height;

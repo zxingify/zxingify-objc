@@ -37,8 +37,8 @@
 
 /**
  * @param version version in question
- * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
- *         count of characters that will follow encoded in this Mode
+ * @return number of bits used, in this QR Code symbol `ZXQRCodeVersion`, to encode the
+ *   count of characters that will follow encoded in this Mode
  */
 + (ZXQRCodeMode *)terminatorMode; // Not really a mode...
 + (ZXQRCodeMode *)numericMode;

@@ -31,6 +31,9 @@
  * Attempts to parse the raw ZXResult's contents as a particular type
  * of information (email, URL, etc.) and return a ZXParsedResult encapsulating
  * the result of parsing.
+ *
+ * @param result the raw ZXResult to parse
+ * @return ZXParsedResult encapsulating the parsing result
  */
 - (ZXParsedResult *)parse:(ZXResult *)result;
 

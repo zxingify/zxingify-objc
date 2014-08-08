@@ -28,7 +28,7 @@
 @property (nonatomic, strong, readonly) ZXIntArray *coefficients;
 
 /**
- * @param field the {@link GenericGF} instance representing the field to use
+ * @param field the ZXGenericGF instance representing the field to use
  * to perform computations
  * @param coefficients coefficients as ints representing elements of GF(size), arranged
  * from most significant (highest-power term) coefficient to least significant
