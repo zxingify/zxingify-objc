@@ -97,7 +97,7 @@
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"r_{i-1} was zero"};
 
       if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
-      return NO;
+      return nil;
     }
     r = rLastLast;
     ZXGenericGFPoly *q = [self.field zero];
@@ -125,7 +125,7 @@
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"sigmaTilde(0) was zero"};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXReedSolomonError userInfo:userInfo];
-    return NO;
+    return nil;
   }
 
   int inverse = [self.field inverse:sigmaTildeAtZero];

@@ -717,7 +717,7 @@ const float ZX_PDF417_HEIGHT = 2.0f; //mm
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Unable to fit message in columns"};
 
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
-    return NO;
+    return nil;
   }
 
   return dimension;
