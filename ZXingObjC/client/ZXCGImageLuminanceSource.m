@@ -220,9 +220,11 @@
 
       // ImageIO premultiplies all PNGs, so we have to "un-premultiply them":
       // http://code.google.com/p/cocos2d-iphone/issues/detail?id=697#c26
-      red   =   red > 0 ? ((red   << 20) / (alpha << 2)) >> 10 : 0;
-      green = green > 0 ? ((green << 20) / (alpha << 2)) >> 10 : 0;
-      blue  =  blue > 0 ? ((blue  << 20) / (alpha << 2)) >> 10 : 0;
+      if (alpha != 0xFF) {
+        red   =   red > 0 ? ((red   << 20) / (alpha << 2)) >> 10 : 0;
+        green = green > 0 ? ((green << 20) / (alpha << 2)) >> 10 : 0;
+        blue  =  blue > 0 ? ((blue  << 20) / (alpha << 2)) >> 10 : 0;
+      }
 
       if (red == green && green == blue) {
         rgbPixelOut = red;
