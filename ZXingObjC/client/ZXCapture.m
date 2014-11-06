@@ -75,6 +75,18 @@
   if (_lastScannedImage) {
     CGImageRelease(_lastScannedImage);
   }
+
+  if (_session && _session.inputs) {
+    for(AVCaptureInput *input in _session.inputs) {
+      [_session removeInput:input];
+    }
+  }
+
+  if (_session && _session.outputs) {
+    for(AVCaptureOutput *output in _session.outputs) {
+      [_session removeOutput:output];
+    }
+  }
 }
 
 #pragma mark - Property Getters
@@ -261,9 +273,7 @@
       abort();
     }
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      [self.session startRunning];
-    });
+    [self.session startRunning];
   }
   self.running = YES;
 }
@@ -276,9 +286,7 @@
   if (self.session.running) {
     [self.layer removeFromSuperlayer];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      [self.session stopRunning];
-    });
+    [self.session stopRunning];
   }
 
   self.running = NO;
