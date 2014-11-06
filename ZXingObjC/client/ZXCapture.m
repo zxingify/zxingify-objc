@@ -264,7 +264,7 @@
   }
 
   if (self.delegate || self.luminanceLayer || self.binaryLayer) {
-    [self output];
+    (void)[self output];
   }
 
   if (!self.session.running) {
