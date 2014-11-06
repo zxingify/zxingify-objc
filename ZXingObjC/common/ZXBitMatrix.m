@@ -79,22 +79,22 @@
 
 - (BOOL)getX:(int)x y:(int)y {
   NSInteger offset = y * self.rowSize + (x >> 5);
-  return ((self.bits[offset] >> (x & 0x1f)) & 1) != 0;
+  return ((_bits[offset] >> (x & 0x1f)) & 1) != 0;
 }
 
 - (void)setX:(int)x y:(int)y {
   NSInteger offset = y * self.rowSize + (x >> 5);
-  self.bits[offset] |= 1 << (x & 0x1f);
+  _bits[offset] |= 1 << (x & 0x1f);
 }
 
 - (void)flipX:(int)x y:(int)y {
   NSUInteger offset = y * self.rowSize + (x >> 5);
-  self.bits[offset] ^= 1 << (x & 0x1f);
+  _bits[offset] ^= 1 << (x & 0x1f);
 }
 
 - (void)clear {
   NSInteger max = self.bitsSize;
-  memset(self.bits, 0, max * sizeof(int32_t));
+  memset(_bits, 0, max * sizeof(int32_t));
 }
 
 - (void)setRegionAtLeft:(int)left top:(int)top width:(int)aWidth height:(int)aHeight {
@@ -113,7 +113,7 @@
   for (NSUInteger y = top; y < bottom; y++) {
     NSUInteger offset = y * self.rowSize;
     for (NSInteger x = left; x < right; x++) {
-      self.bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
+      _bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
     }
   }
 }
@@ -126,7 +126,7 @@
   }
   int offset = y * self.rowSize;
   for (int x = 0; x < self.rowSize; x++) {
-    [row setBulk:x << 5 newBits:self.bits[offset + x]];
+    [row setBulk:x << 5 newBits:_bits[offset + x]];
   }
 
   return row;
@@ -134,7 +134,7 @@
 
 - (void)setRowAtY:(int)y row:(ZXBitArray *)row {
   for (NSUInteger i = 0; i < self.rowSize; i++) {
-    self.bits[(y * self.rowSize) + i] = row.bits[i];
+    _bits[(y * self.rowSize) + i] = row.bits[i];
   }
 }
 
@@ -161,7 +161,7 @@
 
   for (int y = 0; y < self.height; y++) {
     for (int x32 = 0; x32 < self.rowSize; x32++) {
-      int32_t theBits = self.bits[y * self.rowSize + x32];
+      int32_t theBits = _bits[y * self.rowSize + x32];
       if (theBits != 0) {
         if (y < top) {
           top = y;
@@ -203,7 +203,7 @@
 
 - (ZXIntArray *)topLeftOnBit {
   int bitsOffset = 0;
-  while (bitsOffset < self.bitsSize && self.bits[bitsOffset] == 0) {
+  while (bitsOffset < self.bitsSize && _bits[bitsOffset] == 0) {
     bitsOffset++;
   }
   if (bitsOffset == self.bitsSize) {
@@ -212,7 +212,7 @@
   int y = bitsOffset / self.rowSize;
   int x = (bitsOffset % self.rowSize) << 5;
 
-  int32_t theBits = self.bits[bitsOffset];
+  int32_t theBits = _bits[bitsOffset];
   int32_t bit = 0;
   while ((theBits << (31 - bit)) == 0) {
     bit++;
@@ -223,7 +223,7 @@
 
 - (ZXIntArray *)bottomRightOnBit {
   int bitsOffset = self.bitsSize - 1;
-  while (bitsOffset >= 0 && self.bits[bitsOffset] == 0) {
+  while (bitsOffset >= 0 && _bits[bitsOffset] == 0) {
     bitsOffset--;
   }
   if (bitsOffset < 0) {
@@ -233,7 +233,7 @@
   int y = bitsOffset / self.rowSize;
   int x = (bitsOffset % self.rowSize) << 5;
 
-  int32_t theBits = self.bits[bitsOffset];
+  int32_t theBits = _bits[bitsOffset];
   int32_t bit = 31;
   while ((theBits >> bit) == 0) {
     bit--;
@@ -249,7 +249,7 @@
   }
   ZXBitMatrix *other = (ZXBitMatrix *)o;
   for (int i = 0; i < self.bitsSize; i++) {
-    if (self.bits[i] != other.bits[i]) {
+    if (_bits[i] != other.bits[i]) {
       return NO;
     }
   }
@@ -262,7 +262,7 @@
   hash = 31 * hash + self.height;
   hash = 31 * hash + self.rowSize;
   for (NSUInteger i = 0; i < self.bitsSize; i++) {
-    hash = 31 * hash + self.bits[i];
+    hash = 31 * hash + _bits[i];
   }
   return hash;
 }

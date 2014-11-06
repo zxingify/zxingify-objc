@@ -37,8 +37,9 @@
 - (ZXByteArray *)rowAtY:(int)y row:(ZXByteArray *)row {
   row = [self.delegate rowAtY:y row:row];
   int width = self.width;
+  int8_t *rowArray = row.array;
   for (int i = 0; i < width; i++) {
-    row.array[i] = (int8_t) (255 - (row.array[i] & 0xFF));
+    rowArray[i] = (int8_t) (255 - (rowArray[i] & 0xFF));
   }
   return row;
 }
@@ -47,8 +48,10 @@
   ZXByteArray *matrix = [self.delegate matrix];
   int length = self.width * self.height;
   ZXByteArray *invertedMatrix = [[ZXByteArray alloc] initWithLength:length];
+  int8_t *invertedMatrixArray = invertedMatrix.array;
+  int8_t *matrixArray = matrix.array;
   for (int i = 0; i < length; i++) {
-    invertedMatrix.array[i] = (int8_t) (255 - (matrix.array[i] & 0xFF));
+    invertedMatrixArray[i] = (int8_t) (255 - (matrixArray[i] & 0xFF));
   }
   return invertedMatrix;
 }
