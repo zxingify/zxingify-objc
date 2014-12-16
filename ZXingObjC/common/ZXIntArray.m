@@ -40,7 +40,7 @@
   }
   va_end(args);
 
-  if (self = [self initWithLength:length]) {
+  if ((self = [self initWithLength:length]) && (length > 0)) {
     va_list args;
     va_start(args, int1);
     int i = 0;
