@@ -50,7 +50,7 @@ const int ZX_AZTEC_WORD_SIZE[] = {
   BOOL compact;
   int layers;
   int totalBitsInLayer;
-  int wordSize;
+  int wordSize = ZX_AZTEC_WORD_SIZE[0];
   ZXBitArray *stuffedBits;
   if (userSpecifiedLayers != ZX_AZTEC_DEFAULT_LAYERS) {
     compact = userSpecifiedLayers < 0;
