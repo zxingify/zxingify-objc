@@ -20,7 +20,11 @@
 
 - (id)initWithLength:(unsigned int)length {
   if (self = [super init]) {
-    _array = (int8_t *)calloc(length, sizeof(BOOL));
+    if (length > 0) {
+        _array = (int8_t *)calloc(length, sizeof(int8_t));
+    } else {
+        _array = NULL;
+    }
     _length = length;
   }
 
@@ -36,7 +40,7 @@
   }
   va_end(args);
 
-  if (self = [self initWithLength:length]) {
+  if ((self = [self initWithLength:length]) && (length > 0)) {
     va_list args;
     va_start(args, byte1);
     int i = 0;

@@ -147,6 +147,9 @@
     int firstBit = i > firstInt ? 0 : start & 0x1F;
     int lastBit = i < lastInt ? 31 : end & 0x1F;
     int32_t mask;
+    if (lastBit > 31) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Bit-shift operand does not support more than 31 bits" userInfo:nil];
+    }
     if (firstBit == 0 && lastBit == 31) {
       mask = -1;
     } else {
@@ -177,6 +180,9 @@
     int firstBit = i > firstInt ? 0 : start & 0x1F;
     int lastBit = i < lastInt ? 31 : end & 0x1F;
     int32_t mask;
+    if (lastBit > 31) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Bit-shift operand does not support more than 31 bits" userInfo:nil];
+    }
     if (firstBit == 0 && lastBit == 31) {
       mask = -1;
     } else {
