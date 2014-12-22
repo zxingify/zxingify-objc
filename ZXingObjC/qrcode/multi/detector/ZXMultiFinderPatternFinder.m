@@ -63,7 +63,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
    * Begin HE modifications to safely detect multiple codes of equal size
    */
   if (size == 3) {
-    return @[@[_possibleCenters[0], _possibleCenters[1], _possibleCenters[2]]];
+    return @[[@[_possibleCenters[0], _possibleCenters[1], _possibleCenters[2]] mutableCopy]];
   }
 
   [_possibleCenters sortUsingFunction:moduleSizeCompare context:nil];
