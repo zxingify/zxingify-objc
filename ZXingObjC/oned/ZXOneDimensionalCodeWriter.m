@@ -31,8 +31,6 @@
 
 - (BOOL)isLongLinePattern:(const int[])pattern
 {
-    if (!self.showLongLines)
-        return NO;
     if (pattern == ZX_UPC_EAN_MIDDLE_PATTERN)
         return YES;
     if (pattern == ZX_UPC_EAN_START_END_PATTERN)
@@ -72,6 +70,7 @@
   }
 
   self.longLinePositions = [NSMutableArray new];
+  self.showLongLines = NO;
   if (format == kBarcodeFormatEan13) {
     self.showLongLines = YES;
   }
@@ -105,9 +104,11 @@
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
     if (code.array[inputX]) {
       int barcodeHeight = outputHeight;
-      // if the position is not in the list for long lines we shorten the line by 5%
-      if (![self containsPos:inputX]) {
-          barcodeHeight = (int) ((float) outputHeight * 0.95f);
+      if (self.showLongLines) {
+        // if the position is not in the list for long lines we shorten the line by 10%
+        if (![self containsPos:inputX]) {
+            barcodeHeight = (int) ((float) outputHeight * 0.90f);
+        }
       }
       [output setRegionAtLeft:outputX top:0 width:multiple height:barcodeHeight];
     }
