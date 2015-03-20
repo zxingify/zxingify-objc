@@ -327,6 +327,8 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
+  if (!self.running) return;
+
   @autoreleasepool {
     if (!self.cameraIsReady) {
       self.cameraIsReady = YES;
