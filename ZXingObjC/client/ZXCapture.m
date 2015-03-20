@@ -284,8 +284,6 @@
   }
 
   if (self.session.running) {
-    [self.layer removeFromSuperlayer];
-
     [self.session stopRunning];
   }
 
