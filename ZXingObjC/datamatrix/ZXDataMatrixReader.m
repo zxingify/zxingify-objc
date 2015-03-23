@@ -135,7 +135,7 @@
     return nil;
   }
 
-  int nudge = moduleSize >> 1;
+  int nudge = moduleSize / 2;
   top += nudge;
   left += nudge;
 

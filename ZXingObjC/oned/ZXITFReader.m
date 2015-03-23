@@ -153,7 +153,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     }
     // Split them into each array
     for (int k = 0; k < 5; k++) {
-      int twoK = k << 1;
+      int twoK = 2 * k;
       counterBlack.array[k] = counterDigitPair.array[twoK];
       counterWhite.array[k] = counterDigitPair.array[twoK + 1];
     }
@@ -193,7 +193,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     return nil;
   }
 
-  self.narrowLineWidth = (startPattern.array[1] - startPattern.array[0]) >> 2;
+  self.narrowLineWidth = (startPattern.array[1] - startPattern.array[0]) / 4;
 
   if (![self validateQuietZone:row startPattern:startPattern.array[0]]) {
     return nil;

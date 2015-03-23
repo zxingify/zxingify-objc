@@ -334,7 +334,7 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   for (int i = startIndex; i < startIndex + length; i++) {
     res <<= 1;
     if (rawbits.array[i]) {
-      res++;
+      res |= 0x01;
     }
   }
   return res;

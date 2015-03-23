@@ -42,7 +42,7 @@
     int32_t x = 1;
     for (int i = 0; i < self.size; i++) {
       _expTable[i] = x;
-      x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
+      x <<= 1; // we're assuming the generator alpha is 2
       if (x >= self.size) {
         x ^= (int32_t)self.primitive;
         x &= (int32_t)self.size - 1;

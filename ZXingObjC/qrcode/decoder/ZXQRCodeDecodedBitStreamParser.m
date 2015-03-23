@@ -205,7 +205,7 @@ const int ZX_GB2312_SUBSET = 1;
 }
 
 + (BOOL)decodeByteSegment:(ZXBitSource *)bits result:(NSMutableString *)result count:(int)count currentCharacterSetECI:(ZXCharacterSetECI *)currentCharacterSetECI byteSegments:(NSMutableArray *)byteSegments hints:(ZXDecodeHints *)hints {
-  if (count << 3 > bits.available) {
+  if (8 * count > bits.available) {
     return NO;
   }
 

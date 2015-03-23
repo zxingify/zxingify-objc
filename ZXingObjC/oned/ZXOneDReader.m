@@ -100,7 +100,7 @@
   }
 
   for (int x = 0; x < maxLines; x++) {
-    int rowStepsAboveOrBelow = (x + 1) >> 1;
+    int rowStepsAboveOrBelow = (x + 1) / 2;
     BOOL isAbove = (x & 0x01) == 0;
     int rowNumber = middle + rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
     if (rowNumber < 0 || rowNumber >= height) {

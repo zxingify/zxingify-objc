@@ -79,7 +79,7 @@ static NSArray *ZX_VERSIONS = nil;
     return nil;
   }
 
-  return [self versionForNumber:(dimension - 17) >> 2];
+  return [self versionForNumber:(dimension - 17) / 4];
 }
 
 + (ZXQRCodeVersion *)versionForNumber:(int)versionNumber {

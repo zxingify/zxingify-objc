@@ -51,7 +51,7 @@
           _luminances.array[offset + x] = (int8_t) r;
         } else {
           // Calculate luminance cheaply, favoring green.
-          _luminances.array[offset + x] = (int8_t) ((r + g + g + b) >> 2);
+          _luminances.array[offset + x] = (int8_t) ((r + g + g + b) / 4);
         }
       }
     }

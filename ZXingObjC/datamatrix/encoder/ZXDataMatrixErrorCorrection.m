@@ -74,7 +74,7 @@ static int ZX_LOG[256], ZX_ALOG[256];
   for (int i = 0; i < 255; i++) {
     ZX_ALOG[i] = p;
     ZX_LOG[p] = i;
-    p <<= 1;
+    p *= 2;
     if (p >= 256) {
       p ^= ZX_MODULO_VALUE;
     }

@@ -48,7 +48,7 @@
     }
     _width = width;
     _height = height;
-    _rowSize = (_width + 31) >> 5;
+    _rowSize = (_width + 31) / 32;
     _bitsSize = _rowSize * _height;
     _bits = (int32_t *)malloc(_bitsSize * sizeof(int32_t));
     [self clear];
@@ -78,17 +78,17 @@
 }
 
 - (BOOL)getX:(int)x y:(int)y {
-  NSInteger offset = y * self.rowSize + (x >> 5);
+  NSInteger offset = y * self.rowSize + (x / 32);
   return ((_bits[offset] >> (x & 0x1f)) & 1) != 0;
 }
 
 - (void)setX:(int)x y:(int)y {
-  NSInteger offset = y * self.rowSize + (x >> 5);
+  NSInteger offset = y * self.rowSize + (x / 32);
   _bits[offset] |= 1 << (x & 0x1f);
 }
 
 - (void)flipX:(int)x y:(int)y {
-  NSUInteger offset = y * self.rowSize + (x >> 5);
+  NSUInteger offset = y * self.rowSize + (x / 32);
   _bits[offset] ^= 1 << (x & 0x1f);
 }
 
@@ -113,7 +113,7 @@
   for (NSUInteger y = top; y < bottom; y++) {
     NSUInteger offset = y * self.rowSize;
     for (NSInteger x = left; x < right; x++) {
-      _bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
+      _bits[offset + (x / 32)] |= 1 << (x & 0x1f);
     }
   }
 }
@@ -126,7 +126,7 @@
   }
   int offset = y * self.rowSize;
   for (int x = 0; x < self.rowSize; x++) {
-    [row setBulk:x << 5 newBits:_bits[offset + x]];
+    [row setBulk:x * 32 newBits:_bits[offset + x]];
   }
 
   return row;
@@ -210,7 +210,7 @@
     return nil;
   }
   int y = bitsOffset / self.rowSize;
-  int x = (bitsOffset % self.rowSize) << 5;
+  int x = (bitsOffset % self.rowSize) * 32;
 
   int32_t theBits = _bits[bitsOffset];
   int32_t bit = 0;
@@ -231,7 +231,7 @@
   }
 
   int y = bitsOffset / self.rowSize;
-  int x = (bitsOffset % self.rowSize) << 5;
+  int x = (bitsOffset % self.rowSize) * 32;
 
   int32_t theBits = _bits[bitsOffset];
   int32_t bit = 31;

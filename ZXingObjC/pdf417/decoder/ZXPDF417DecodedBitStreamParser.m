@@ -195,9 +195,9 @@ static NSArray *ZX_PDF417_EXP900 = nil;
  */
 + (int)textCompaction:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   // 2 character per codeword
-  ZXIntArray *textCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) << 1];
+  ZXIntArray *textCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) * 2];
   // Used to hold the byte compaction value if there is a mode shift
-  ZXIntArray *byteCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) << 1];
+  ZXIntArray *byteCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) * 2];
 
   int index = 0;
   BOOL end = NO;

@@ -411,7 +411,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
   if (leftToRight) {
     endColumn = startColumn + codewordBitCount;
   } else {
-    for (int i = 0; i < [moduleBitCount count] >> 1; i++) {
+    for (int i = 0; i < [moduleBitCount count] / 2; i++) {
       int tmpCount = [moduleBitCount[i] intValue];
       moduleBitCount[i] = moduleBitCount[[moduleBitCount count] - 1 - i];
       moduleBitCount[[moduleBitCount count] - 1 - i] = @(tmpCount);

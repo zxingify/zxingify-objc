@@ -597,7 +597,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
       }
       count = 8;
     }
-    int offset = i >> 1;
+    int offset = i / 2;
     if ((i & 0x01) == 0) {
       self.oddCounts.array[offset] = count;
       self.oddRoundingErrors[offset] = value - count;

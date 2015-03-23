@@ -69,7 +69,7 @@ const int ZX_PDF417_COMMON_CODEWORD_TABLE[];
   int first = 0;
   int upto = ZX_PDF417_SYMBOL_TABLE_LEN;
   while (first < upto) {
-    int mid = (first + upto) >> 1; // Compute mid point.
+    int mid = (first + upto) / 2; // Compute mid point.
     if (symbol < ZX_PDF417_SYMBOL_TABLE[mid]) {
       upto = mid; // continue search in bottom half.
     } else if (symbol > ZX_PDF417_SYMBOL_TABLE[mid]) {

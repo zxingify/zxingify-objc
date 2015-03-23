@@ -161,7 +161,7 @@
 + (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize error:(NSError **)error {
   int tltrCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleSize];
   int tlblCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleSize];
-  int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
+  int dimension = ((tltrCentersDimension + tlblCentersDimension) / 2) + 7;
 
   switch (dimension & 0x03) {
   case 0:
@@ -261,7 +261,7 @@
 
   int dx = abs(toX - fromX);
   int dy = abs(toY - fromY);
-  int error = -dx >> 1;
+  int error = -dx / 2;
   int xstep = fromX < toX ? 1 : -1;
   int ystep = fromY < toY ? 1 : -1;
 
