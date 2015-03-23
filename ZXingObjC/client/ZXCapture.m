@@ -77,13 +77,13 @@
   }
 
   if (_session && _session.inputs) {
-    for(AVCaptureInput *input in _session.inputs) {
+    for (AVCaptureInput *input in _session.inputs) {
       [_session removeInput:input];
     }
   }
 
   if (_session && _session.outputs) {
-    for(AVCaptureOutput *output in _session.outputs) {
+    for (AVCaptureOutput *output in _session.outputs) {
       [_session removeOutput:output];
     }
   }

@@ -332,7 +332,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
       max = ZX_UPC_EAN_L_PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
         int pattern[counters.length];
-        for(int j = 0; j < counters.length; j++){
+        for (int j = 0; j < counters.length; j++){
           pattern[j] = ZX_UPC_EAN_L_PATTERNS[i][j];
         }
 
@@ -347,7 +347,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
       max = ZX_UPC_EAN_L_AND_G_PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
         int pattern[counters.length];
-        for(int j = 0; j< counters.length; j++){
+        for (int j = 0; j< counters.length; j++){
           pattern[j] = ZX_UPC_EAN_L_AND_G_PATTERNS[i][j];
         }
 

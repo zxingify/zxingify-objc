@@ -160,7 +160,7 @@ const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
   for (NSArray *patternArray in patterns) {
     int patternLen = (int)[patternArray count];
     int pattern[patternLen];
-    for(int i = 0; i < patternLen; i++) {
+    for (int i = 0; i < patternLen; i++) {
       pattern[i] = [patternArray[i] intValue];
     }
 
