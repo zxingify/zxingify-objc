@@ -14,24 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXMathUtils.h"
-
-@implementation ZXMathUtils
-
-+ (int)round:(float)d {
-  return (int) (d + (d < 0.0f ? -0.5f : 0.5f));
-}
-
-+ (float)distance:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
-  float xDiff = aX - bX;
-  float yDiff = aY - bY;
-  return sqrtf(xDiff * xDiff + yDiff * yDiff);
-}
-
-+ (float)distanceInt:(int)aX aY:(int)aY bX:(int)bX bY:(int)bY {
-  int xDiff = aX - bX;
-  int yDiff = aY - bY;
-  return sqrtf(xDiff * xDiff + yDiff * yDiff);
-}
+@interface ZXMathUtilsTestCase : XCTestCase
 
 @end

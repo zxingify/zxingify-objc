@@ -15,23 +15,24 @@
  */
 
 #import "ZXMathUtils.h"
+#import "ZXMathUtilsTestCase.h"
 
-@implementation ZXMathUtils
+@implementation ZXMathUtilsTestCase
 
-+ (int)round:(float)d {
-  return (int) (d + (d < 0.0f ? -0.5f : 0.5f));
-}
+- (void)testRound {
+  XCTAssertEqual(-1, [ZXMathUtils round:-1.0f]);
+  XCTAssertEqual(0, [ZXMathUtils round:0.0f]);
+  XCTAssertEqual(1, [ZXMathUtils round:1.0f]);
 
-+ (float)distance:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {
-  float xDiff = aX - bX;
-  float yDiff = aY - bY;
-  return sqrtf(xDiff * xDiff + yDiff * yDiff);
-}
+  XCTAssertEqual(2, [ZXMathUtils round:1.9f]);
+  XCTAssertEqual(2, [ZXMathUtils round:2.1f]);
 
-+ (float)distanceInt:(int)aX aY:(int)aY bX:(int)bX bY:(int)bY {
-  int xDiff = aX - bX;
-  int yDiff = aY - bY;
-  return sqrtf(xDiff * xDiff + yDiff * yDiff);
+  XCTAssertEqual(3, [ZXMathUtils round:2.5f]);
+
+  XCTAssertEqual(-2, [ZXMathUtils round:-1.9f]);
+  XCTAssertEqual(-2, [ZXMathUtils round:-2.1f]);
+
+  XCTAssertEqual(-3, [ZXMathUtils round:-2.5f]); // This differs from Math.round()
 }
 
 @end
