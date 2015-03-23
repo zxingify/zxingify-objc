@@ -390,16 +390,29 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
 + (void)encodeNumeric:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb {
   int idx = 0;
   NSMutableString *tmp = [NSMutableString stringWithCapacity:count / 3 + 1];
+  NSDecimalNumber *num900 = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:900] decimalValue]];
+  NSDecimalNumber *num0 = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:0] decimalValue]];
   while (idx < count - 1) {
     [tmp setString:@""];
     int len = MIN(44, count - idx);
     NSString *part = [@"1" stringByAppendingString:[msg substringWithRange:NSMakeRange(startpos + idx, len)]];
-    long long bigint = [part longLongValue];
+    NSDecimalNumber *bigint = [NSDecimalNumber decimalNumberWithString:part];
     do {
-      long c = bigint % 900;
-      [tmp appendFormat:@"%C", (unichar) c];
-      bigint /= 900;
-    } while (bigint != 0);
+      NSRoundingMode roundingMode = ((bigint.floatValue < 0) ^ (num900.floatValue < 0)) ? NSRoundUp : NSRoundDown;
+      NSDecimalNumber *quotient = [bigint decimalNumberByDividingBy:num900
+                                                       withBehavior:[NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:roundingMode
+                                                                                                                           scale:0
+                                                                                                                raiseOnExactness:NO
+                                                                                                                 raiseOnOverflow:NO
+                                                                                                                raiseOnUnderflow:NO
+                                                                                                             raiseOnDivideByZero:NO]];
+
+      NSDecimalNumber *subtractAmount = [quotient decimalNumberByMultiplyingBy:num900];
+      NSDecimalNumber *remainder = [bigint decimalNumberBySubtracting:subtractAmount];
+
+      [tmp appendFormat:@"%C", (unichar)[remainder longValue]];
+      bigint = quotient;
+    } while (![bigint isEqualToNumber:num0]);
 
     //Reverse temporary string
     for (int i = (int)tmp.length - 1; i >= 0; i--) {
