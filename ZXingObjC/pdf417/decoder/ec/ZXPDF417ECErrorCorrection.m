@@ -52,12 +52,14 @@
   }
 
   ZXModulusPoly *knownErrors = self.field.one;
-  for (int i = 0; i < erasures.length; i++) {
-    int erasure = erasures.array[i];
-    int b = [self.field exp:received.length - 1 - erasure];
-    // Add (1 - bx) term:
-    ZXModulusPoly *term = [[ZXModulusPoly alloc] initWithField:self.field coefficients:[[ZXIntArray alloc] initWithInts:[self.field subtract:0 b:b], 1, -1]];
-    knownErrors = [knownErrors multiply:term];
+  if (erasures) {
+    for (int i = 0; i < erasures.length; i++) {
+      int erasure = erasures.array[i];
+      int b = [self.field exp:received.length - 1 - erasure];
+      // Add (1 - bx) term:
+      ZXModulusPoly *term = [[ZXModulusPoly alloc] initWithField:self.field coefficients:[[ZXIntArray alloc] initWithInts:[self.field subtract:0 b:b], 1, -1]];
+      knownErrors = [knownErrors multiply:term];
+    }
   }
 
   ZXModulusPoly *syndrome = [[ZXModulusPoly alloc] initWithField:self.field coefficients:S];
