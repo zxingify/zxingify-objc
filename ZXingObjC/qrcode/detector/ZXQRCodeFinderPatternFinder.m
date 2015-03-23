@@ -27,8 +27,6 @@ const int ZX_CENTER_QUORUM = 2;
 const int ZX_FINDER_PATTERN_MIN_SKIP = 3;
 const int ZX_FINDER_PATTERN_MAX_MODULES = 57;
 
-const int ZX_QR_CODE_INTEGER_MATH_SHIFT = 8;
-
 @interface ZXQRCodeFinderPatternFinder ()
 
 NSInteger centerCompare(id center1, id center2, void *context);
@@ -160,7 +158,6 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
 + (BOOL)foundPatternCross:(const int[])stateCount {
   int totalModuleSize = 0;
-
   for (int i = 0; i < 5; i++) {
     int count = stateCount[i];
     if (count == 0) {
@@ -168,17 +165,18 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     }
     totalModuleSize += count;
   }
-
   if (totalModuleSize < 7) {
     return NO;
   }
-  int moduleSize = (totalModuleSize << ZX_QR_CODE_INTEGER_MATH_SHIFT) / 7;
-  int maxVariance = moduleSize / 2;
-  return abs(moduleSize - (stateCount[0] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(moduleSize - (stateCount[1] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(3 * moduleSize - (stateCount[2] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
-    abs(moduleSize - (stateCount[3] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(moduleSize - (stateCount[4] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance;
+  float moduleSize = totalModuleSize / 7.0f;
+  float maxVariance = moduleSize / 2.0f;
+  // Allow less than 50% variance from 1-1-3-1-1 proportions
+  return
+    ABS(moduleSize - stateCount[0]) < maxVariance &&
+    ABS(moduleSize - stateCount[1]) < maxVariance &&
+    ABS(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
+    ABS(moduleSize - stateCount[3]) < maxVariance &&
+    ABS(moduleSize - stateCount[4]) < maxVariance;
 }
 
 /**

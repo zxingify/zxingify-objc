@@ -17,8 +17,8 @@
 #import "ZXAbstractRSSReader.h"
 #import "ZXIntArray.h"
 
-static int ZX_RSS_MAX_AVG_VARIANCE;
-static int ZX_RSS_MAX_INDIVIDUAL_VARIANCE;
+static float ZX_RSS_MAX_AVG_VARIANCE = 0.2f;
+static float ZX_RSS_MAX_INDIVIDUAL_VARIANCE = 0.45f;
 
 float const ZX_RSS_MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
 float const ZX_RSS_MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
@@ -49,11 +49,6 @@ const int ZX_RSS_EXPANDED_FINDER_PATTERNS[ZX_RSS_EXPANDED_FINDER_PATTERNS_LEN][Z
 };
 
 @implementation ZXAbstractRSSReader
-
-+ (void)initialize {
-  ZX_RSS_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
-  ZX_RSS_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.45f);
-}
 
 - (id)init {
   if (self = [super init]) {

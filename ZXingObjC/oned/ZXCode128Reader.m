@@ -135,8 +135,8 @@ const int ZX_CODE128_CODE_PATTERNS[ZX_CODE128_CODE_PATTERNS_LEN][7] = {
   {2, 3, 3, 1, 1, 1, 2}
 };
 
-static int ZX_CODE128_MAX_AVG_VARIANCE = -1;
-static int ZX_CODE128_MAX_INDIVIDUAL_VARIANCE = -1;
+static float ZX_CODE128_MAX_AVG_VARIANCE = 0.25f;
+static float ZX_CODE128_MAX_INDIVIDUAL_VARIANCE = 0.7f;
 
 const int ZX_CODE128_CODE_SHIFT = 98;
 const int ZX_CODE128_CODE_CODE_C = 99;
@@ -154,16 +154,6 @@ const int ZX_CODE128_CODE_STOP = 106;
 
 @implementation ZXCode128Reader
 
-+ (void)initialize {
-  if (ZX_CODE128_MAX_AVG_VARIANCE == -1) {
-    ZX_CODE128_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
-  }
-
-  if (ZX_CODE128_MAX_INDIVIDUAL_VARIANCE == -1) {
-    ZX_CODE128_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
-  }
-}
-
 - (ZXIntArray *)findStartPattern:(ZXBitArray *)row {
   int width = row.size;
   int rowOffset = [row nextSet:0];
@@ -180,10 +170,10 @@ const int ZX_CODE128_CODE_STOP = 106;
       array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        int bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
+        float bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
         int bestMatch = -1;
         for (int startCode = ZX_CODE128_CODE_START_A; startCode <= ZX_CODE128_CODE_START_C; startCode++) {
-          int variance = [ZXOneDReader patternMatchVariance:counters pattern:ZX_CODE128_CODE_PATTERNS[startCode] maxIndividualVariance:ZX_CODE128_MAX_INDIVIDUAL_VARIANCE];
+          float variance = [ZXOneDReader patternMatchVariance:counters pattern:ZX_CODE128_CODE_PATTERNS[startCode] maxIndividualVariance:ZX_CODE128_MAX_INDIVIDUAL_VARIANCE];
           if (variance < bestVariance) {
             bestVariance = variance;
             bestMatch = startCode;
@@ -216,11 +206,11 @@ const int ZX_CODE128_CODE_STOP = 106;
   if (![ZXOneDReader recordPattern:row start:rowOffset counters:counters]) {
     return -1;
   }
-  int bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
+  float bestVariance = ZX_CODE128_MAX_AVG_VARIANCE;
   int bestMatch = -1;
 
   for (int d = 0; d < ZX_CODE128_CODE_PATTERNS_LEN; d++) {
-    int variance = [ZXOneDReader patternMatchVariance:counters pattern:ZX_CODE128_CODE_PATTERNS[d] maxIndividualVariance:ZX_CODE128_MAX_INDIVIDUAL_VARIANCE];
+    float variance = [ZXOneDReader patternMatchVariance:counters pattern:ZX_CODE128_CODE_PATTERNS[d] maxIndividualVariance:ZX_CODE128_MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = d;
