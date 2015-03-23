@@ -194,34 +194,34 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  * @return true if proportions are withing expected limits
  */
 - (BOOL)crossCheckDiagonal:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
-  int maxI = self.image.height;
-  int maxJ = self.image.width;
   int stateCount[5] = {0, 0, 0, 0, 0};
 
   // Start counting up, left from center finding black center mass
   int i = 0;
-  while (startI - i >= 0 && [self.image getX:centerJ - i y:startI - i]) {
+  while (startI >= i && centerJ >= i && [self.image getX:centerJ - i y:startI - i]) {
     stateCount[2]++;
     i++;
   }
 
-  if ((startI - i < 0) || (centerJ - i < 0)) {
+  if (startI < i || centerJ < i) {
     return NO;
   }
 
   // Continue up, left finding white space
-  while ((startI - i >= 0) && (centerJ - i >= 0) && ![self.image getX:centerJ - i y:startI - i] && stateCount[1] <= maxCount) {
+  while (startI >= i && centerJ >= i && ![self.image getX:centerJ - i y:startI - i] &&
+         stateCount[1] <= maxCount) {
     stateCount[1]++;
     i++;
   }
 
   // If already too many modules in this state or ran off the edge:
-  if ((startI - i < 0) || (centerJ - i < 0) || stateCount[1] > maxCount) {
+  if (startI < i || centerJ < i || stateCount[1] > maxCount) {
     return NO;
   }
 
   // Continue up, left finding black border
-  while ((startI - i >= 0) && (centerJ - i >= 0) && [self.image getX:centerJ - i y:startI - i] && stateCount[0] <= maxCount) {
+  while (startI >= i && centerJ >= i && [self.image getX:centerJ - i y:startI - i] &&
+         stateCount[0] <= maxCount) {
     stateCount[0]++;
     i++;
   }
@@ -229,28 +229,33 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     return NO;
   }
 
+  int maxI = self.image.height;
+  int maxJ = self.image.width;
+
   // Now also count down, right from center
   i = 1;
-  while ((startI + i < maxI) && (centerJ + i < maxJ) && [self.image getX:centerJ + i y:startI + i]) {
+  while (startI + i < maxI && centerJ + i < maxJ && [self.image getX:centerJ + i y:startI + i]) {
     stateCount[2]++;
     i++;
   }
 
   // Ran off the edge?
-  if ((startI + i >= maxI) || (centerJ + i >= maxJ)) {
+  if (startI + i >= maxI || centerJ + i >= maxJ) {
     return NO;
   }
 
-  while ((startI + i < maxI) && (centerJ + i < maxJ) && ![self.image getX:centerJ + i y:startI + i] && stateCount[3] < maxCount) {
+  while (startI + i < maxI && centerJ + i < maxJ && ![self.image getX:centerJ + i y:startI + i] &&
+         stateCount[3] < maxCount) {
     stateCount[3]++;
     i++;
   }
 
-  if ((startI + i >= maxI) || (centerJ + i >= maxJ) || stateCount[3] >= maxCount) {
+  if (startI + i >= maxI || centerJ + i >= maxJ || stateCount[3] >= maxCount) {
     return NO;
   }
 
-  while ((startI + i < maxI) && (centerJ + i < maxJ) && [self.image getX:centerJ + i y:startI + i] && stateCount[4] < maxCount) {
+  while (startI + i < maxI && centerJ + i < maxJ && [self.image getX:centerJ + i y:startI + i] &&
+         stateCount[4] < maxCount) {
     stateCount[4]++;
     i++;
   }
