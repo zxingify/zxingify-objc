@@ -63,6 +63,8 @@ const unichar ZX_PDF417_MIXED_CHARS[] = {
 
 const int ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 
+const NSStringEncoding ZX_PDF417_DECODING_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
+
 /**
  * Table containing values for the exponent of 900.
  * This is used in the numeric compaction decode algorithm.
@@ -84,6 +86,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
 
 + (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
   NSMutableString *result = [NSMutableString stringWithCapacity:codewords.length * 2];
+  NSStringEncoding encoding = ZX_PDF417_DECODING_DEFAULT_ENCODING;
   // Get compaction mode
   int codeIndex = 1;
   int code = codewords.array[codeIndex++];
@@ -96,7 +99,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
     case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-      codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
+      codeIndex = [self byteCompaction:code codewords:codewords encoding:encoding codeIndex:codeIndex result:result];
       break;
     case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
       codeIndex = [self numericCompaction:codewords codeIndex:codeIndex result:result];
@@ -108,8 +111,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     case ZX_PDF417_ECI_CHARSET: {
       ZXCharacterSetECI *charsetECI =
         [ZXCharacterSetECI characterSetECIByValue:codewords.array[codeIndex++]];
-      NSStringEncoding encoding = charsetECI.encoding;
-      // TODO actually use encoding!
+      encoding = charsetECI.encoding;
       break;
     }
     case ZX_PDF417_ECI_GENERAL_PURPOSE:
@@ -306,6 +308,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
             priorToShiftMode = subMode;
             subMode = ZXPDF417ModePunctShift;
           } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            // TODO Does this need to use the current character encoding? See other occurrences below
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
             subMode = ZXPDF417ModeAlpha;
@@ -425,17 +428,22 @@ static NSArray *ZX_PDF417_EXP900 = nil;
  *
  * @param mode      The byte compaction mode i.e. 901 or 924
  * @param codewords The array of codewords (data + error)
+ * @param encoding  Currently active character encoding
  * @param codeIndex The current index into the codeword array.
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-+ (int)byteCompaction:(int)mode codewords:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)byteCompaction:(int)mode
+            codewords:(ZXIntArray *)codewords
+             encoding:(NSStringEncoding)encoding
+            codeIndex:(int)codeIndex
+               result:(NSMutableString *)result {
+  NSMutableData *decodedBytes = [NSMutableData data];
   if (mode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH) {
     // Total number of Byte Compaction characters to be encoded
     // is not a multiple of 6
     int count = 0;
     long long value = 0;
-    unichar decodedData[6] = {0, 0, 0, 0, 0, 0};
     ZXIntArray *byteCompactedCodewords = [[ZXIntArray alloc] initWithLength:6];
     BOOL end = NO;
     int nextCode = codewords.array[codeIndex++];
@@ -459,10 +467,10 @@ static NSArray *ZX_PDF417_EXP900 = nil;
           // Decode every 5 codewords
           // Convert to Base 256
           for (int j = 0; j < 6; ++j) {
-            decodedData[5 - j] = (unichar) (value % 256);
-            value >>= 8;
+            int8_t byte = (int8_t) (value >> (8 * (5 - j)));
+            [decodedBytes appendBytes:&byte length:1];
           }
-          [result appendString:[[NSString alloc] initWithCharacters:decodedData length:6]];
+          value = 0;
           count = 0;
         }
       }
@@ -477,7 +485,8 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     // the last group of codewords is interpreted directly
     // as one byte per codeword, without compaction.
     for (int i = 0; i < count; i++) {
-      [result appendFormat:@"%C", (unichar)byteCompactedCodewords.array[i]];
+      int8_t byte = (int8_t)byteCompactedCodewords.array[i];
+      [decodedBytes appendBytes:&byte length:1];
     }
   } else if (mode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6) {
     // Total number of Byte Compaction characters to be encoded
@@ -506,16 +515,16 @@ static NSArray *ZX_PDF417_EXP900 = nil;
       if ((count % 5 == 0) && (count > 0)) {
         // Decode every 5 codewords
         // Convert to Base 256
-        unichar decodedData[6];
         for (int j = 0; j < 6; ++j) {
-          decodedData[5 - j] = (unichar)(value & 0xFF);
-          value >>= 8;
+          int8_t byte = (int8_t) (value >> (8 * (5 - j)));
+          [decodedBytes appendBytes:&byte length:1];
         }
-        [result appendString:[NSString stringWithCharacters:decodedData length:6]];
+        value = 0;
         count = 0;
       }
     }
   }
+  [result appendString:[[NSString alloc] initWithData:decodedBytes encoding:encoding]];
   return codeIndex;
 }
 
