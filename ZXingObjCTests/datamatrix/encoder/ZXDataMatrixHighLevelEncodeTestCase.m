@@ -269,6 +269,11 @@ static NSArray *TEST_SYMBOLS;
   XCTAssertEqualObjects(@"240 13 33 88 181 64 78 124 59 105 105 105", visualized);
 }
 
+- (void)testX12Unlatch {
+  NSString *visualized = [self encodeHighLevel:@"*DTCP01"];
+  XCTAssertEqualObjects(@"238 9 10 104 141 254 50 129", visualized);
+}
+
 - (void)testBug3048549 {
   //There was an IllegalArgumentException for an illegal character here because
   //of an encoding problem of the character 0x0060 in Java source code.
