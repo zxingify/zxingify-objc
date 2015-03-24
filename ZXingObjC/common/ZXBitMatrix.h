@@ -144,7 +144,10 @@
 
 - (NSString *)descriptionWithSetString:(NSString *)setString unsetString:(NSString *)unsetString;
 
+/**
+ * @deprecated call descriptionWithSetString:unsetString: only, which uses \n line separator always
+ */
 - (NSString *)descriptionWithSetString:(NSString *)setString unsetString:(NSString *)unsetString
-                         lineSeparator:(NSString *)lineSeparator;
+                         lineSeparator:(NSString *)lineSeparator DEPRECATED_ATTRIBUTE;
 
 @end

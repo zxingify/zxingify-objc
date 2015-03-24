@@ -169,7 +169,7 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
 
   XCTAssertEqualObjects(emptyMatrix24, [ZXBitMatrix parse:@"  \n  \n  \n  \n" setString:@"x" unsetString:@" "]);
 
-  XCTAssertEqualObjects(centerMatrix, [ZXBitMatrix parse:[centerMatrix descriptionWithSetString:@"x" unsetString:@"." lineSeparator:@"\n"] setString:@"x" unsetString:@"."]);
+  XCTAssertEqualObjects(centerMatrix, [ZXBitMatrix parse:[centerMatrix descriptionWithSetString:@"x" unsetString:@"."] setString:@"x" unsetString:@"."]);
 }
 
 - (void)testUnset {

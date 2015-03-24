@@ -352,7 +352,10 @@
 }
 
 - (NSString *)descriptionWithSetString:(NSString *)setString unsetString:(NSString *)unsetString {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   return [self descriptionWithSetString:setString unsetString:unsetString lineSeparator:@"\n"];
+#pragma GCC diagnostic pop
 }
 
 - (NSString *)descriptionWithSetString:(NSString *)setString unsetString:(NSString *)unsetString
