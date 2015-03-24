@@ -98,8 +98,10 @@ static NSArray *ZX_PDF417_EXP900 = nil;
       break;
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
-    case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
       codeIndex = [self byteCompaction:code codewords:codewords encoding:encoding codeIndex:codeIndex result:result];
+      break;
+    case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+      [result appendFormat:@"%C", (unichar)codewords.array[codeIndex++]];
       break;
     case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
       codeIndex = [self numericCompaction:codewords codeIndex:codeIndex result:result];
