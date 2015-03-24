@@ -72,10 +72,11 @@
   int available = context.symbolInfo.dataCapacity - [context codewordCount];
   int count = (int)buffer.length;
   context.pos -= count;
-  if (context.remainingCharacters != 1 || available != 1) {
+  if (context.remainingCharacters > 1 || available > 1 ||
+      context.remainingCharacters != available) {
     [context writeCodeword:[ZXDataMatrixHighLevelEncoder x12Unlatch]];
   }
-  if (count > 0) {
+  if (context.newEncoding < 0) {
     [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
   }
 }
