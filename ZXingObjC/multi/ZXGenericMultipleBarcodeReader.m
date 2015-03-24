@@ -124,7 +124,9 @@ const int ZX_MAX_DEPTH = 4;
   }
   NSMutableArray *newResultPoints = [NSMutableArray arrayWithCapacity:[oldResultPoints count]];
   for (ZXResultPoint *oldPoint in oldResultPoints) {
-    [newResultPoints addObject:[[ZXResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset]];
+    if ((id)oldPoint != [NSNull null]) {
+      [newResultPoints addObject:[[ZXResultPoint alloc] initWithX:[oldPoint x] + xOffset y:[oldPoint y] + yOffset]];
+    }
   }
 
   ZXResult *newResult = [ZXResult resultWithText:result.text rawBytes:result.rawBytes resultPoints:newResultPoints format:result.barcodeFormat];
