@@ -535,6 +535,8 @@
 		02B4884A17F5F10000E6285D /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 25FE5D4416D1997C00826CDB /* Resources */; };
 		02DD02611AC07BD2009E4D65 /* ZXMathUtilsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD02601AC07BD2009E4D65 /* ZXMathUtilsTestCase.m */; };
 		02DD02621AC07BD2009E4D65 /* ZXMathUtilsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD02601AC07BD2009E4D65 /* ZXMathUtilsTestCase.m */; };
+		02DD02951AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD02941AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m */; };
+		02DD02961AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD02941AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m */; };
 		2504D9D016FFD2E200DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
 		2504D9D116FFD3A100DF8882 /* ZXAztecCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2504D9D316FFD3B300DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
@@ -2214,6 +2216,8 @@
 		02BDA2F01803109E0039B326 /* ZXingObjCTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ZXingObjCTests-Info.plist"; sourceTree = "<group>"; };
 		02DD02601AC07BD2009E4D65 /* ZXMathUtilsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMathUtilsTestCase.m; sourceTree = "<group>"; };
 		02DD02631AC07BE8009E4D65 /* ZXMathUtilsTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXMathUtilsTestCase.h; sourceTree = "<group>"; };
+		02DD02931AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXPlanarYUVLuminanceSourceTestCase.h; sourceTree = "<group>"; };
+		02DD02941AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPlanarYUVLuminanceSourceTestCase.m; sourceTree = "<group>"; };
 		2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecCode.h; path = encoder/ZXAztecCode.h; sourceTree = "<group>"; };
 		2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecCode.m; path = encoder/ZXAztecCode.m; sourceTree = "<group>"; };
 		2504D9DA16FFD4CD00DF8882 /* ZXAztecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecEncoder.h; path = encoder/ZXAztecEncoder.h; sourceTree = "<group>"; };
@@ -3144,6 +3148,8 @@
 				254040B0166AA0F100E13304 /* qrcode */,
 				25FE5D4416D1997C00826CDB /* Resources */,
 				02BDA2ED1803109E0039B326 /* Supporting Files */,
+				02DD02931AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.h */,
+				02DD02941AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m */,
 			);
 			path = ZXingObjCTests;
 			sourceTree = "<group>";
@@ -5624,6 +5630,7 @@
 				254040DF166AA0F100E13304 /* ZXParsedReaderResultTestCase.m in Sources */,
 				254040E0166AA0F100E13304 /* ZXProductParsedResultTestCase.m in Sources */,
 				254040E1166AA0F100E13304 /* ZXSMSMMSParsedResultTestCase.m in Sources */,
+				02DD02951AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m in Sources */,
 				254040E2166AA0F100E13304 /* ZXTelParsedResultTestCase.m in Sources */,
 				254040E3166AA0F100E13304 /* ZXURIParsedResultTestCase.m in Sources */,
 				254040E4166AA0F100E13304 /* ZXWifiParsedResultTestCase.m in Sources */,
@@ -5978,6 +5985,7 @@
 				25404321166AB8B800E13304 /* ZXGeoParsedResultTestCase.m in Sources */,
 				25404322166AB8B800E13304 /* ZXISBNParsedResultTestCase.m in Sources */,
 				25404323166AB8B800E13304 /* ZXParsedReaderResultTestCase.m in Sources */,
+				02DD02961AC1C3B5009E4D65 /* ZXPlanarYUVLuminanceSourceTestCase.m in Sources */,
 				25404324166AB8B800E13304 /* ZXProductParsedResultTestCase.m in Sources */,
 				25404325166AB8B800E13304 /* ZXSMSMMSParsedResultTestCase.m in Sources */,
 				25404326166AB8B800E13304 /* ZXTelParsedResultTestCase.m in Sources */,
