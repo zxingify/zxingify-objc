@@ -220,6 +220,10 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
 
   int numDataCodewords = [self.ddata nbDatablocks];
   int numCodewords = rawbits.length / codewordSize;
+  if (numCodewords < numDataCodewords) {
+    if (error) *error = ZXFormatErrorInstance();
+    return 0;
+  }
   int offset = rawbits.length % codewordSize;
   int numECCodewords = numCodewords - numDataCodewords;
 
