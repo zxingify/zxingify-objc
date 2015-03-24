@@ -72,7 +72,6 @@
 + (ZXBitMatrix *)parse:(NSString *)stringRepresentation
              setString:(NSString *)setString
            unsetString:(NSString *)unsetString {
-  int pos = 0;
   if (!stringRepresentation) {
     @throw [NSException exceptionWithName:@"IllegalArgumentException"
                                    reason:@"stringRepresentation is required"
@@ -84,9 +83,10 @@
   int rowStartPos = 0;
   int rowLength = -1;
   int nRows = 0;
+  int pos = 0;
   while (pos < stringRepresentation.length) {
-    if ([[stringRepresentation substringWithRange:NSMakeRange(pos, 1)] isEqualToString:@"\n"] ||
-        [[stringRepresentation substringWithRange:NSMakeRange(pos, 1)] isEqualToString:@"\r"]) {
+    if ([stringRepresentation characterAtIndex:pos] == '\n' ||
+        [stringRepresentation characterAtIndex:pos] == '\r') {
       if (bitsPos > rowStartPos) {
         if(rowLength == -1) {
           rowLength = bitsPos - rowStartPos;

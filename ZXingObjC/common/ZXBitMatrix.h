@@ -83,10 +83,10 @@
 - (void)flipX:(int)x y:(int)y;
 
 /**
- * XOR for ZXBitMatrix.
- * Flip the bit in this ZXBitMatrix if the corresponding mask bit is set.
+ * Exclusive-or (XOR): Flip the bit in this ZXBitMatrix if the corresponding
+ * mask bit is set.
  *
- * @param mask
+ * @param mask XOR mask
  */
 - (void)xor:(ZXBitMatrix *)mask;
 

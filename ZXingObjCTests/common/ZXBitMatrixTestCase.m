@@ -163,7 +163,9 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
   @try {
     [ZXBitMatrix parse:@"   \n xy\n   \n" setString:@"x" unsetString:@" "];
     XCTFail(@"Failure expected");
-  } @catch (NSException *expected) { }
+  } @catch (NSException *expected) {
+    // good
+  }
 
   XCTAssertEqualObjects(emptyMatrix24, [ZXBitMatrix parse:@"  \n  \n  \n  \n" setString:@"x" unsetString:@" "]);
 
@@ -210,12 +212,16 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
   @try {
     [(ZXBitMatrix *)[emptyMatrix copy] xor:badMatrix];
     XCTFail(@"Failure expected");
-  } @catch (NSException *expected) { }
+  } @catch (NSException *expected) {
+    // good
+  }
 
   @try {
     [(ZXBitMatrix *)[badMatrix copy] xor:emptyMatrix];
     XCTFail(@"Failure expected");
-  } @catch (NSException *expected) { }
+  } @catch (NSException *expected) {
+    // good
+  }
 }
 
 - (void)testXOR:(ZXBitMatrix *)dataMatrix flipMatrix:(ZXBitMatrix *)flipMatrix expectedMatrix:(ZXBitMatrix *)expectedMatrix {

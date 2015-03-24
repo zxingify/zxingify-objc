@@ -18,7 +18,7 @@
 
 const int DECODER_RANDOM_TEST_ITERATIONS = 3;
 const int DECODER_TEST_ITERATIONS = 10;
-const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
+const int ZXReedSolomonTestCase_RANDOM_SEED = 0xDEADBEEF;
 
 @implementation ZXReedSolomonTestCase
 
@@ -393,6 +393,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
 }
 
 + (void)corrupt:(ZXIntArray *)received howMany:(int)howMany max:(int)max {
+  srand(ZXReedSolomonTestCase_RANDOM_SEED);
   ZXBoolArray *corrupted = [[ZXBoolArray alloc] initWithLength:received.length];
   // temp
   if (howMany == 1) {
@@ -418,7 +419,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
   ZXIntArray *message = [[ZXIntArray alloc] initWithLength:dataSize + ecSize];
   ZXIntArray *dataWords = [[ZXIntArray alloc] initWithLength:dataSize];
   ZXIntArray *ecWords = [[ZXIntArray alloc] initWithLength:ecSize];
-  srand(ReedSolomonTestCase_RANDOM_SEED);
+  srand(ZXReedSolomonTestCase_RANDOM_SEED);
   int iterations = field.size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
   for (int i = 0; i < iterations; i++) {
     // generate random data
@@ -455,7 +456,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
   ZXReedSolomonDecoder *decoder = [[ZXReedSolomonDecoder alloc] initWithField:field];
   ZXIntArray *message = [[ZXIntArray alloc] initWithLength:dataWords.length + ecWords.length];
   int maxErrors = ecWords.length / 2;
-  srand(ReedSolomonTestCase_RANDOM_SEED);
+  srand(ZXReedSolomonTestCase_RANDOM_SEED);
   int iterations = field.size > 256 ? 1 : DECODER_TEST_ITERATIONS;
   for (int j = 0; j < iterations; j++) {
     for (int i = 0; i < ecWords.length; i++) {

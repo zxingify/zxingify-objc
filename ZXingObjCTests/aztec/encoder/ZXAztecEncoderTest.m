@@ -17,7 +17,7 @@
 #import "ZXAztecEncoderTest.h"
 #import "ZXBoolArray.h"
 
-unsigned int ZXAztecEncoderTest_RANDOM_SEED = 0;
+unsigned int ZXAztecEncoderTest_RANDOM_SEED = 0xDEADBEEF;
 
 @interface ZXAztecEncoder (PrivateMethods)
 
