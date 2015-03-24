@@ -533,13 +533,21 @@ static NSArray *ZX_PDF417_EXP900 = nil;
         end = YES;
       }
     }
-    if (count % ZX_PDF417_MAX_NUMERIC_CODEWORDS == 0 || code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH || end) {
-      NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
-      if (s == nil) {
-        return -1;
+    if (count % ZX_PDF417_MAX_NUMERIC_CODEWORDS == 0 ||
+        code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH ||
+        end) {
+      // Re-invoking Numeric Compaction mode (by using codeword 902
+      // while in Numeric Compaction mode) serves  to terminate the
+      // current Numeric Compaction mode grouping as described in 5.4.4.2,
+      // and then to start a new one grouping.
+      if (count > 0) {
+        NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
+        if (s == nil) {
+          return -1;
+        }
+        [result appendString:s];
+        count = 0;
       }
-      [result appendString:s];
-      count = 0;
     }
   }
   return codeIndex;
