@@ -114,7 +114,7 @@ unichar ZX_PDF417_MIXED_TABLE[ZX_PDF417_MIXED_TABLE_LEN];
 const int ZX_PDF417_PUNCTUATION_LEN = 128;
 unichar ZX_PDF417_PUNCTUATION[ZX_PDF417_PUNCTUATION_LEN];
 
-const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x80000400;
+const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
 
 @implementation ZXPDF417HighLevelEncoder
 
@@ -144,7 +144,9 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
   //the codewords 0..928 are encoded as Unicode characters
   NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
 
-  if (ZX_PDF417_DEFAULT_ENCODING != encoding) {
+  if (encoding == 0) {
+    encoding = ZX_PDF417_DEFAULT_ENCODING;
+  } else if (ZX_PDF417_DEFAULT_ENCODING != encoding) {
     ZXCharacterSetECI *eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
     if (![self encodingECI:eci.value sb:sb error:error]) {
       return nil;
