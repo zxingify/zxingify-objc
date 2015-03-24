@@ -537,18 +537,6 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
     if (numericCount >= 13) {
       return idx - startpos;
     }
-    int textCount = 0;
-    while (textCount < 5 && [self isText:ch]) {
-      textCount++;
-      int i = idx + textCount;
-      if (i >= len) {
-        break;
-      }
-      ch = [msg characterAtIndex:i];
-    }
-    if (textCount >= 5) {
-      return idx - startpos;
-    }
     ch = [msg characterAtIndex:idx];
 
     //Check if character is encodable
