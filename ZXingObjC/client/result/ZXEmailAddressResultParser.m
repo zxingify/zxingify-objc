@@ -24,6 +24,8 @@ static NSCharacterSet *ZX_EMAIL_ADDRESS_RESULT_COMMA = nil;
 @implementation ZXEmailAddressResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXEmailAddressResultParser class]) return;
+
   ZX_EMAIL_ADDRESS_RESULT_COMMA = [NSCharacterSet characterSetWithCharactersInString:@","];
 }
 

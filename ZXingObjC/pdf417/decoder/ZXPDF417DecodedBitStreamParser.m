@@ -74,6 +74,8 @@ static NSArray *ZX_PDF417_EXP900 = nil;
 @implementation ZXPDF417DecodedBitStreamParser
 
 + (void)initialize {
+  if ([self class] != [ZXPDF417DecodedBitStreamParser class]) return;
+
   NSMutableArray *exponents = [NSMutableArray arrayWithCapacity:16];
   [exponents addObject:[NSDecimalNumber one]];
   NSDecimalNumber *nineHundred = [NSDecimalNumber decimalNumberWithString:@"900"];

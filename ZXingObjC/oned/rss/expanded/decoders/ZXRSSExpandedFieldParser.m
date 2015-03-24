@@ -26,6 +26,8 @@ static NSArray *FOUR_DIGIT_DATA_LENGTH = nil;
 @implementation ZXRSSExpandedFieldParser
 
 + (void)initialize {
+  if ([self class] != [ZXRSSExpandedFieldParser class]) return;
+
   if (VARIABLE_LENGTH == nil) {
     VARIABLE_LENGTH = [[NSObject alloc] init];
   }

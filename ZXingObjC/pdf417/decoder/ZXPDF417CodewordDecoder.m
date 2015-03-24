@@ -22,6 +22,8 @@ static float ZX_PDF417_RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN][ZX_PDF417_BARS_I
 @implementation ZXPDF417CodewordDecoder
 
 + (void)initialize {
+  if ([self class] != [ZXPDF417CodewordDecoder class]) return;
+
   // Pre-computes the symbol ratio table.
   for (int i = 0; i < ZX_PDF417_SYMBOL_TABLE_LEN; i++) {
     int currentSymbol = ZX_PDF417_SYMBOL_TABLE[i];

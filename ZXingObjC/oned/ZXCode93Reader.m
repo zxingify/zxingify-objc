@@ -50,6 +50,8 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 @implementation ZXCode93Reader
 
 + (void)initialize {
+  if ([self class] != [ZXCode93Reader class]) return;
+
   ZX_CODE93_ALPHABET_STRING = [[NSString alloc] initWithCharacters:ZX_CODE93_ALPHABET
                                                             length:sizeof(ZX_CODE93_ALPHABET) / sizeof(unichar)];
 }

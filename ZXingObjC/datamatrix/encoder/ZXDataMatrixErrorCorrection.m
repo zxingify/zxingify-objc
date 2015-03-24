@@ -69,6 +69,8 @@ static int ZX_LOG[256], ZX_ALOG[256];
 @implementation ZXDataMatrixErrorCorrection
 
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixErrorCorrection class]) return;
+
   //Create log and antilog table
   int p = 1;
   for (int i = 0; i < 255; i++) {

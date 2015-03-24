@@ -26,6 +26,8 @@ static unichar ZX_CODA_DEFAULT_GUARD;
 @implementation ZXCodaBarWriter
 
 + (void)initialize {
+  if ([self class] != [ZXCodaBarWriter class]) return;
+
   ZX_CODA_DEFAULT_GUARD = ZX_CODA_START_END_CHARS[0];
 }
 

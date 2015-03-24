@@ -66,6 +66,8 @@ enum {
 @implementation ZXDataMatrixDecodedBitStreamParser
 
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixDecodedBitStreamParser class]) return;
+
   memcpy(TEXT_SHIFT2_SET_CHARS, C40_SHIFT2_SET_CHARS, sizeof(C40_SHIFT2_SET_CHARS));
 }
 

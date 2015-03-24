@@ -59,6 +59,8 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
 @implementation ZXResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXResultParser class]) return;
+
   ZX_PARSERS = @[[[ZXBookmarkDoCoMoResultParser alloc] init],
                  [[ZXAddressBookDoCoMoResultParser alloc] init],
                  [[ZXEmailDoCoMoResultParser alloc] init],

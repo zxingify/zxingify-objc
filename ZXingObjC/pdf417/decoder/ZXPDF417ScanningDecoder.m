@@ -40,6 +40,8 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
 @implementation ZXPDF417ScanningDecoder
 
 + (void)initialize {
+  if ([self class] != [ZXPDF417ScanningDecoder class]) return;
+
   errorCorrection = [[ZXPDF417ECErrorCorrection alloc] init];
 }
 

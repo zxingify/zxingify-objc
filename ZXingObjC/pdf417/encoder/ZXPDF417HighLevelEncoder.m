@@ -119,6 +119,8 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
 @implementation ZXPDF417HighLevelEncoder
 
 + (void)initialize {
+  if ([self class] != [ZXPDF417HighLevelEncoder class]) return;
+
   //Construct inverse lookups
   for (int i = 0; i < ZX_PDF417_MIXED_TABLE_LEN; i++) {
     ZX_PDF417_MIXED_TABLE[i] = 0xFF;

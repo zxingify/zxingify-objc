@@ -23,6 +23,8 @@ static NSRegularExpression *ZX_ATEXT_ALPHANUMERIC = nil;
 @implementation ZXEmailDoCoMoResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXEmailDoCoMoResultParser class]) return;
+
   ZX_ATEXT_ALPHANUMERIC = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+$"
                                                                options:0 error:nil];
 }

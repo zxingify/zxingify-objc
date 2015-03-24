@@ -30,6 +30,8 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
 @implementation ZXCalendarParsedResult
 
 + (void)initialize {
+  if ([self class] != [ZXCalendarParsedResult class]) return;
+
   ZX_DATE_TIME = [[NSRegularExpression alloc] initWithPattern:@"[0-9]{8}(T[0-9]{6}Z?)?"
                                                       options:0
                                                         error:nil];
