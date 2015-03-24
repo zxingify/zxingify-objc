@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXCharacterSetECI.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXIntArray.h"
@@ -33,6 +34,9 @@ const int ZX_PDF417_TEXT_COMPACTION_MODE_LATCH = 900;
 const int ZX_PDF417_BYTE_COMPACTION_MODE_LATCH = 901;
 const int ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH = 902;
 const int ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6 = 924;
+const int ZX_PDF417_ECI_USER_DEFINED = 925;
+const int ZX_PDF417_ECI_GENERAL_PURPOSE = 926;
+const int ZX_PDF417_ECI_CHARSET = 927;
 const int ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
 const int ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
 const int ZX_PDF417_MACRO_PDF417_TERMINATOR = 922;
@@ -100,6 +104,21 @@ static NSArray *ZX_PDF417_EXP900 = nil;
         if (error) *error = ZXFormatErrorInstance();
         return nil;
       }
+      break;
+    case ZX_PDF417_ECI_CHARSET: {
+      ZXCharacterSetECI *charsetECI =
+        [ZXCharacterSetECI characterSetECIByValue:codewords.array[codeIndex++]];
+      NSStringEncoding encoding = charsetECI.encoding;
+      // TODO actually use encoding!
+      break;
+    }
+    case ZX_PDF417_ECI_GENERAL_PURPOSE:
+      // Can't do anything with generic ECI; skip its 2 characters
+      codeIndex += 2;
+      break;
+    case ZX_PDF417_ECI_USER_DEFINED:
+      // Can't do anything with user ECI; skip its 1 character
+      codeIndex ++;
       break;
     case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
       codeIndex = [self decodeMacroBlock:codewords codeIndex:codeIndex resultMetadata:resultMetadata];

@@ -82,17 +82,17 @@ const int ZX_PDF417_LATCH_TO_BYTE = 924;
 /**
  * identifier for a user defined Extended Channel Interpretation (ECI)
  */
-const int ZX_PDF417_ECI_USER_DEFINED = 925;
+const int ZX_PDF417_HIGH_LEVEL_ECI_USER_DEFINED = 925;
 
 /**
  * identifier for a general purpose ECO format
  */
-const int ZX_PDF417_ECI_GENERAL_PURPOSE = 926;
+const int ZX_PDF417_HIGH_LEVEL_ECI_GENERAL_PURPOSE = 926;
 
 /**
  * identifier for an ECI of a character set of code page
  */
-const int ZX_PDF417_ECI_CHARSET = 927;
+const int ZX_PDF417_HIGH_LEVEL_ECI_CHARSET = 927;
 
 /**
  * Raw code table for text compaction Mixed sub-mode
@@ -565,14 +565,14 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
 
 + (BOOL)encodingECI:(int)eci sb:(NSMutableString *)sb error:(NSError **)error {
   if (eci >= 0 && eci < 900) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_CHARSET];
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_HIGH_LEVEL_ECI_CHARSET];
     [sb appendFormat:@"%C", (unichar) eci];
   } else if (eci < 810900) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_GENERAL_PURPOSE];
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_HIGH_LEVEL_ECI_GENERAL_PURPOSE];
     [sb appendFormat:@"%C", (unichar) (eci / 900 - 1)];
     [sb appendFormat:@"%C", (unichar) (eci % 900)];
   } else if (eci < 811800) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_USER_DEFINED];
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_HIGH_LEVEL_ECI_USER_DEFINED];
     [sb appendFormat:@"%C", (unichar) (810900 - eci)];
   } else {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"ECI number not in valid range from 0..811799, but was %d", eci]};
