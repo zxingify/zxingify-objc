@@ -42,14 +42,18 @@
 
 @property (nonatomic, assign, readonly) int32_t *bits;
 
+/**
+ * @return The row size of the matrix
+ */
+@property (nonatomic, assign, readonly) int rowSize;
+
 // A helper to construct a square matrix.
-+ (ZXBitMatrix *)bitMatrixWithDimension:(int)dimension;
-
-+ (ZXBitMatrix *)bitMatrixWithWidth:(int)width height:(int)height;
-
 - (id)initWithDimension:(int)dimension;
-
 - (id)initWithWidth:(int)width height:(int)height;
+
++ (ZXBitMatrix *)parse:(NSString *)stringRepresentation
+             setString:(NSString *)setString
+           unsetString:(NSString *)unsetString;
 
 /**
  * Gets the requested bit, where true means black.
@@ -68,6 +72,8 @@
  */
 - (void)setX:(int)x y:(int)y;
 
+- (void)unsetX:(int)x y:(int)y;
+
 /**
  * Flips the given bit.
  *
@@ -75,6 +81,14 @@
  * @param y The vertical component (i.e. which row)
  */
 - (void)flipX:(int)x y:(int)y;
+
+/**
+ * XOR for ZXBitMatrix.
+ * Flip the bit in this ZXBitMatrix if the corresponding mask bit is set.
+ *
+ * @param mask
+ */
+- (void)xor:(ZXBitMatrix *)mask;
 
 /**
  * Clears all bits (sets to false).
@@ -127,5 +141,10 @@
 - (ZXIntArray *)topLeftOnBit;
 
 - (ZXIntArray *)bottomRightOnBit;
+
+- (NSString *)descriptionWithSetString:(NSString *)setString unsetString:(NSString *)unsetString;
+
+- (NSString *)descriptionWithSetString:(NSString *)setString unsetString:(NSString *)unsetString
+                         lineSeparator:(NSString *)lineSeparator;
 
 @end

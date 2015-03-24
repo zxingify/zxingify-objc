@@ -16,4 +16,6 @@
 
 @interface ZXReedSolomonTestCase : XCTestCase
 
++ (void)corrupt:(ZXIntArray *)received howMany:(int)howMany max:(int)max;
+
 @end

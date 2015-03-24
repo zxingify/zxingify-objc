@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2015 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXPDF417AbstractErrorCorrectionTestCase.h"
-#import "ZXReedSolomonTestCase.h"
-
-@implementation ZXPDF417AbstractErrorCorrectionTestCase
-
-- (void)corrupt:(ZXIntArray *)received howMany:(int)howMany {
-  [ZXReedSolomonTestCase corrupt:received howMany:howMany max:929];
-}
+@interface ZXAztecDecoderTest : XCTestCase
 
 @end

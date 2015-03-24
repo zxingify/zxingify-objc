@@ -392,7 +392,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
   [self testEncodeDecodeRandom:[ZXGenericGF AztecData12] dataSize:3072 ecSize:1023];
 }
 
-- (void)corrupt:(ZXIntArray *)received howMany:(int)howMany max:(int)max {
++ (void)corrupt:(ZXIntArray *)received howMany:(int)howMany max:(int)max {
   ZXBoolArray *corrupted = [[ZXBoolArray alloc] initWithLength:received.length];
   // temp
   if (howMany == 1) {
@@ -465,7 +465,7 @@ const int ReedSolomonTestCase_RANDOM_SEED = 3735928559;
       }
       memcpy(message.array, dataWords.array, dataWords.length * sizeof(int32_t));
       memcpy(message.array + dataWords.length, ecWords.array, ecWords.length * sizeof(int32_t));
-      [self corrupt:message howMany:i max:field.size];
+      [[self class] corrupt:message howMany:i max:field.size];
 
       NSError *error;
       if (![decoder decode:message twoS:ecWords.length error:&error]) {

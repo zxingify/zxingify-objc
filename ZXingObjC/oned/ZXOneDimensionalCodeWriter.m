@@ -66,7 +66,7 @@
   int multiple = outputWidth / fullWidth;
   int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
 
-  ZXBitMatrix *output = [ZXBitMatrix bitMatrixWithWidth:outputWidth height:outputHeight];
+  ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight];
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
     if (code.array[inputX]) {
       [output setRegionAtLeft:outputX top:0 width:multiple height:outputHeight];
