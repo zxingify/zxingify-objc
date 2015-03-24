@@ -85,6 +85,9 @@ const int ZX_MAX_DEPTH = 4;
   float maxX = 0.0f;
   float maxY = 0.0f;
   for (ZXResultPoint *point in resultPoints) {
+    if ((id)point == [NSNull null]) {
+      continue;
+    }
     float x = [point x];
     float y = [point y];
     if (x < minX) {
