@@ -79,10 +79,6 @@ static NSArray *ZX_PDF417_EXP900 = nil;
 }
 
 + (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
-  if (!codewords) {
-    if (error) *error = ZXNotFoundErrorInstance();
-    return nil;
-  }
   NSMutableString *result = [NSMutableString stringWithCapacity:codewords.length * 2];
   // Get compaction mode
   int codeIndex = 1;
@@ -100,18 +96,22 @@ static NSArray *ZX_PDF417_EXP900 = nil;
       break;
     case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
       codeIndex = [self numericCompaction:codewords codeIndex:codeIndex result:result];
+      if (codeIndex < 0) {
+        if (error) *error = ZXFormatErrorInstance();
+        return nil;
+      }
       break;
     case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
       codeIndex = [self decodeMacroBlock:codewords codeIndex:codeIndex resultMetadata:resultMetadata];
       if (codeIndex < 0) {
-        if (error) *error = ZXNotFoundErrorInstance();
+        if (error) *error = ZXFormatErrorInstance();
         return nil;
       }
       break;
     case ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
     case ZX_PDF417_MACRO_PDF417_TERMINATOR:
       // Should not see these outside a macro block
-      if (error) *error = ZXNotFoundErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     default:
       // Default to text compaction. During testing numerous barcodes
@@ -124,12 +124,12 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     if (codeIndex < codewords.length) {
       code = codewords.array[codeIndex++];
     } else {
-      if (error) *error = ZXNotFoundErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
   }
   if ([result length] == 0) {
-    if (error) *error = ZXNotFoundErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
   ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:nil text:result byteSegments:nil ecLevel:ecLevel];
@@ -536,7 +536,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     if (count % ZX_PDF417_MAX_NUMERIC_CODEWORDS == 0 || code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH || end) {
       NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
       if (s == nil) {
-        return INT_MAX;
+        return -1;
       }
       [result appendString:s];
       count = 0;

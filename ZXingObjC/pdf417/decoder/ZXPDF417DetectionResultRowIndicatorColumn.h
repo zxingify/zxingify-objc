@@ -23,7 +23,7 @@
 @property (nonatomic, assign, readonly) BOOL isLeft;
 
 - (id)initWithBoundingBox:(ZXPDF417BoundingBox *)boundingBox isLeft:(BOOL)isLeft;
-- (ZXIntArray *)rowHeights;
+- (BOOL)getRowHeights:(ZXIntArray **)rowHeights;
 - (int)adjustCompleteIndicatorColumnRowNumbers:(ZXPDF417BarcodeMetadata *)barcodeMetadata;
 - (ZXPDF417BarcodeMetadata *)barcodeMetadata;
 

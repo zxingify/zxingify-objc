@@ -24,7 +24,8 @@
               imageTopRight:(ZXResultPoint *)imageTopRight
            imageBottomRight:(ZXResultPoint *)imageBottomRight
            minCodewordWidth:(int)minCodewordWidth
-           maxCodewordWidth:(int)maxCodewordWidth;
+           maxCodewordWidth:(int)maxCodewordWidth
+                      error:(NSError **)error;
 - (NSString *)description:(NSArray *)barcodeMatrix;
 
 @end
