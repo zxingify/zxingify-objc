@@ -38,11 +38,7 @@
       subject = [subject substringToIndex:colon];
     }
   }
-  NSString *mailtoURI = [@"mailto:" stringByAppendingString:emailAddress];
-  return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
-                                                                      subject:subject
-                                                                         body:body
-                                                                    mailtoURI:mailtoURI];
+  return [[ZXEmailAddressParsedResult alloc] initWithTos:@[emailAddress] ccs:nil bccs:nil subject:subject body:body];
 }
 
 @end

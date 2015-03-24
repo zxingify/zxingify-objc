@@ -19,24 +19,39 @@
 
 @implementation ZXEmailAddressParsedResult
 
-- (id)initWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI {
+- (id)initWithTo:(NSString *)to {
+  return [self initWithTos:@[to] ccs:nil bccs:nil subject:nil body:nil];
+}
+
+- (id)initWithTos:(NSArray *)tos
+              ccs:(NSArray *)ccs
+             bccs:(NSArray *)bccs
+          subject:(NSString *)subject
+             body:(NSString *)body {
   if (self = [super initWithType:kParsedResultTypeEmailAddress]) {
-    _emailAddress = emailAddress;
+    _tos = tos;
+    _ccs = ccs;
+    _bccs = bccs;
     _subject = subject;
     _body = body;
-    _mailtoURI = mailtoURI;
   }
 
   return self;
 }
 
-+ (id)emailAddressParsedResultWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body mailtoURI:(NSString *)mailtoURI {
-  return [[self alloc] initWithEmailAddress:emailAddress subject:subject body:body mailtoURI:mailtoURI];
+- (NSString *)emailAddress {
+  return !self.tos || self.tos.count == 0 ? nil : self.tos[0];
+}
+
+- (NSString *)mailtoURI {
+  return @"mailto:";
 }
 
 - (NSString *)displayResult {
   NSMutableString *result = [NSMutableString stringWithCapacity:30];
-  [ZXParsedResult maybeAppend:self.emailAddress result:result];
+  [ZXParsedResult maybeAppendArray:self.tos result:result];
+  [ZXParsedResult maybeAppendArray:self.ccs result:result];
+  [ZXParsedResult maybeAppendArray:self.bccs result:result];
   [ZXParsedResult maybeAppend:self.subject result:result];
   [ZXParsedResult maybeAppend:self.body result:result];
   return result;
