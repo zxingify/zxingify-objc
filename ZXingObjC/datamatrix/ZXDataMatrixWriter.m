@@ -50,11 +50,17 @@
   ZXDimension *maxSize = nil;
   if (hints != nil) {
     shape = hints.dataMatrixShape;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     ZXDimension *requestedMinSize = hints.minSize;
+#pragma GCC diagnostic pop
     if (requestedMinSize != nil) {
       minSize = requestedMinSize;
     }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     ZXDimension *requestedMaxSize = hints.maxSize;
+#pragma GCC diagnostic pop
     if (requestedMaxSize != nil) {
       maxSize = requestedMaxSize;
     }

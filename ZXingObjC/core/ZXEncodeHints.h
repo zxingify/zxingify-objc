@@ -52,13 +52,18 @@ typedef enum {
 
 /**
  * Specifies a minimum barcode size. Only applicable to Data Matrix now.
+ *
+ * @deprecated use width/height params in
+ * ZXDataMatrixWriter encode:format:width:height:error:
  */
-@property (nonatomic, strong) ZXDimension *minSize;
+@property (nonatomic, strong) ZXDimension *minSize DEPRECATED_ATTRIBUTE;
 
 /**
  * Specifies a maximum barcode size. Only applicable to Data Matrix now.
+ *
+ * @deprecated without replacement
  */
-@property (nonatomic, strong) ZXDimension *maxSize;
+@property (nonatomic, strong) ZXDimension *maxSize DEPRECATED_ATTRIBUTE;
 
 /**
  * Specifies what degree of error correction to use, for example in QR Codes.
