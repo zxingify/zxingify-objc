@@ -31,6 +31,7 @@
 @property (nonatomic, copy, readonly) NSString *emailAddress DEPRECATED_ATTRIBUTE;
 
 /**
+ * @return "mailto:"
  * @deprecated without replacement
  */
 @property (nonatomic, copy, readonly) NSString *mailtoURI DEPRECATED_ATTRIBUTE;
