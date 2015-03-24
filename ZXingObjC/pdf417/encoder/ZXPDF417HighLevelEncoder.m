@@ -394,7 +394,7 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
   NSMutableString *tmp = [NSMutableString stringWithCapacity:count / 3 + 1];
   NSDecimalNumber *num900 = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:900] decimalValue]];
   NSDecimalNumber *num0 = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:0] decimalValue]];
-  while (idx < count - 1) {
+  while (idx < count) {
     [tmp setString:@""];
     int len = MIN(44, count - idx);
     NSString *part = [@"1" stringByAppendingString:[msg substringWithRange:NSMakeRange(startpos + idx, len)]];
