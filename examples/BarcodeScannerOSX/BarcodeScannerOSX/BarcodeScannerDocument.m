@@ -26,6 +26,10 @@
 
 #pragma mark - NSDocument Methods
 
+- (void)dealloc {
+  [self.capture.layer removeFromSuperlayer];
+}
+
 - (NSString *)windowNibName {
 	return @"BarcodeScannerDocument";
 }

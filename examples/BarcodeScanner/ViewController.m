@@ -29,6 +29,10 @@
 
 #pragma mark - View Controller Methods
 
+- (void)dealloc {
+  [self.capture.layer removeFromSuperlayer];
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
 
