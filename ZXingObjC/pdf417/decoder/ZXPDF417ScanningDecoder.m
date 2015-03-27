@@ -340,7 +340,7 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
     if (result) {
       return result;
     } else if (e.code != ZXChecksumError) {
-      if (*error) *error = e;
+      if (error) *error = e;
       return nil;
     }
     if (ambiguousIndexCount.length == 0) {
