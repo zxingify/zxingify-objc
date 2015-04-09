@@ -45,7 +45,7 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
        durationString:(NSString *)durationString location:(NSString *)location organizer:(NSString *)organizer
             attendees:(NSArray *)attendees description:(NSString *)description latitude:(double)latitude
             longitude:(double)longitude {
-  if (self = [super initWithType:kParsedResultTypeCalendar]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeCalendar]) {
     _summary = summary;
     _start = [self parseDate:startString];
 

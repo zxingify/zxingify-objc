@@ -24,7 +24,7 @@
 }
 
 - (id)initWithNetworkEncryption:(NSString *)networkEncryption ssid:(NSString *)ssid password:(NSString *)password hidden:(BOOL)hidden {
-  if (self = [super initWithType:kParsedResultTypeWifi]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeWifi]) {
     _ssid = ssid;
     _networkEncryption = networkEncryption;
     _password = password;

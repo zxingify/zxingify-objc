@@ -20,7 +20,7 @@
 @implementation ZXGeoParsedResult
 
 - (id)initWithLatitude:(double)latitude longitude:(double)longitude altitude:(double)altitude query:(NSString *)query {
-  if (self = [super initWithType:kParsedResultTypeGeo]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeGeo]) {
     _latitude = latitude;
     _longitude = longitude;
     _altitude = altitude;

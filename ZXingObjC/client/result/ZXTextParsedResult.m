@@ -20,7 +20,7 @@
 @implementation ZXTextParsedResult
 
 - (id)initWithText:(NSString *)text language:(NSString *)language {
-  if (self = [super initWithType:kParsedResultTypeText]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeText]) {
     _text = text;
     _language = language;
   }

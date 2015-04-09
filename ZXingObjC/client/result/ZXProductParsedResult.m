@@ -23,7 +23,7 @@
 }
 
 - (id)initWithProductID:(NSString *)productID normalizedProductID:(NSString *)normalizedProductID {
-  if (self = [super initWithType:kParsedResultTypeProduct]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeProduct]) {
     _normalizedProductID = normalizedProductID;
     _productID = productID;
   }

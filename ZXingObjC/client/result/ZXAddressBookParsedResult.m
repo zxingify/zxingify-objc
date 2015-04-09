@@ -32,7 +32,7 @@
          emailTypes:(NSArray *)emailTypes instantMessenger:(NSString *)instantMessenger note:(NSString *)note
           addresses:(NSArray *)addresses addressTypes:(NSArray *)addressTypes org:(NSString *)org
            birthday:(NSString *)birthday title:(NSString *)title urls:(NSArray *)urls geo:(NSArray *)geo {
-  if (self = [super initWithType:kParsedResultTypeAddressBook]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeAddressBook]) {
     _names = names;
     _nicknames = nicknames;
     _pronunciation = pronunciation;

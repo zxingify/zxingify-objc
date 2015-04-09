@@ -28,7 +28,7 @@
              bccs:(NSArray *)bccs
           subject:(NSString *)subject
              body:(NSString *)body {
-  if (self = [super initWithType:kParsedResultTypeEmailAddress]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeEmailAddress]) {
     _tos = tos;
     _ccs = ccs;
     _bccs = bccs;
