@@ -49,6 +49,10 @@ const int ZX_MAX_DEPTH = 4;
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
+  else {
+      *error = nil;
+  }
+    
   return results;
 }
 
