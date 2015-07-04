@@ -86,7 +86,7 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  * @param row row of black/white values to decode
  * @param counters the counts of runs of observed black/white/black/... values
  * @param rowOffset horizontal offset to start decoding from
- * @param patterns the set of patterns to use to decode -- sometimes different encodings
+ * @param patternType the set of patterns to use to decode -- sometimes different encodings
  * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
  * be used
  * @return horizontal offset of first pixel beyond the decoded digit
@@ -107,7 +107,7 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  *
  * @param row row of black/white values to search
  * @param startRange start/end offset of start guard pattern
- * @param resultString NSMutableString to append decoded chars to
+ * @param result NSMutableString to append decoded chars to
  * @return horizontal offset of first pixel after the "middle" that was decoded
  * @return -1 if decoding could not complete successfully
  */
