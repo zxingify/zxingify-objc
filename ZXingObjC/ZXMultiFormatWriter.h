@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXWriter.h"
+#import "core/ZXWriter.h"
 
 /**
  * This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat
