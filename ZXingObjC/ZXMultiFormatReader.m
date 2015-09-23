@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#import "ZXAztecReader.h"
 #import "ZXBinaryBitmap.h"
-#import "ZXDataMatrixReader.h"
 #import "ZXDecodeHints.h"
 #import "ZXErrors.h"
 #import "ZXMaxiCodeReader.h"
@@ -108,12 +106,6 @@
     if ([hints containsFormat:kBarcodeFormatQRCode]) {
       [self.readers addObject:[[ZXQRCodeReader alloc] init]];
     }
-    if ([hints containsFormat:kBarcodeFormatDataMatrix]) {
-      [self.readers addObject:[[ZXDataMatrixReader alloc] init]];
-    }
-    if ([hints containsFormat:kBarcodeFormatAztec]) {
-      [self.readers addObject:[[ZXAztecReader alloc] init]];
-    }
     if ([hints containsFormat:kBarcodeFormatPDF417]) {
       [self.readers addObject:[[ZXPDF417Reader alloc] init]];
     }
@@ -129,8 +121,6 @@
       [self.readers addObject:[[ZXMultiFormatOneDReader alloc] initWithHints:hints]];
     }
     [self.readers addObject:[[ZXQRCodeReader alloc] init]];
-    [self.readers addObject:[[ZXDataMatrixReader alloc] init]];
-    [self.readers addObject:[[ZXAztecReader alloc] init]];
     [self.readers addObject:[[ZXPDF417Reader alloc] init]];
     [self.readers addObject:[[ZXMaxiCodeReader alloc] init]];
     if (tryHarder) {
