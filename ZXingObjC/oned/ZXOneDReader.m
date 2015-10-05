@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import <CoreGraphics/CoreGraphics.h>
 #import "ZXBinaryBitmap.h"
 #import "ZXBitArray.h"
 #import "ZXDecodeHints.h"
@@ -23,6 +24,13 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 #import "ZXBitMatrix.h"
+
+typedef NS_ENUM(NSInteger, ZXPathDirection) {
+  ZXPathDirectionTopLeft,
+  ZXPathDirectionTopRight,
+  ZXPathDirectionBottomLeft,
+  ZXPathDirectionBottomRight
+};
 
 @implementation ZXOneDReader
 
@@ -184,6 +192,9 @@
     }
   }
   
+  CGPoint finalAnchorPointTopLeftBound = [self findNewAnchorTowards:ZXPathDirectionTopLeft currentPosition:CGPointMake(posX, topLeftBound) matrix:matrix];
+  NSLog(@"(%f,%f)", finalAnchorPointTopLeftBound.x, finalAnchorPointTopLeftBound.y);
+  
   result.resultPoints[0] = [ZXResultPoint resultPointWithX:posX y:topLeftBound];
   result.resultPoints[1] = [ZXResultPoint resultPointWithX:posX y:bottomLeftBound];
   
@@ -216,6 +227,39 @@
       [self mirrorResultPoints:result.resultPoints width:image.width height:image.height];
     }
   }
+}
+
+- (CGPoint)findTopLeftBound {
+  return CGPointMake(0,0);
+}
+
+- (CGPoint)findNewAnchorTowards:(ZXPathDirection)direction currentPosition:(CGPoint)currentPosition matrix:(ZXBitMatrix *)matrix
+{
+  CGPoint finalAnchor = CGPointZero;
+  BOOL didSidestepRight = NO;
+  int x = currentPosition.x;
+  finalAnchor.x = x;
+  
+  for (int y = currentPosition.y; y < matrix.height; y++) {
+    BOOL black = [matrix getX:x y:y];
+    finalAnchor.y = y;
+    if (!black) {
+      // could be a rotated image, let's do a sidestep reset if we found a new anchor point
+      if (didSidestepRight) {
+        finalAnchor.y--;
+        break;
+      }
+      if (direction == ZXPathDirectionTopLeft) {
+        y--;
+        x++;
+        didSidestepRight = YES;
+      }
+    } else {
+      didSidestepRight = NO;
+    }
+  }
+  
+  return finalAnchor;
 }
 
 - (void)mirrorResultPoints:(NSMutableArray *)resultPoints width:(int)width height:(int)height {
