@@ -25,6 +25,9 @@
 #import "ZXResultPoint.h"
 #import "ZXBitMatrix.h"
 
+#define DEGREES_TO_RADIANS(degrees)(degrees * M_PI / 180)
+#define RADIANS_TO_DEGREES(radians)(radians * 180 / M_PI)
+
 typedef NS_ENUM(NSInteger, ZXPathDirection) {
   ZXPathDirectionTopLeft,
   ZXPathDirectionTopRight,
@@ -147,6 +150,7 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
           }
         }
         [self getBarcodeRectangleFromImage:image result:result];
+        result.angle = [self getAngleFromResultPoints:result.resultPoints imageWidth:width imageHeight:height];
         return result;
       }
     }
@@ -154,6 +158,23 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
 
   if (error) *error = ZXNotFoundErrorInstance();
   return nil;
+}
+
+- (float)getAngleFromResultPoints:(NSArray *)resultPoints imageWidth:(int)imageWidth imageHeight:(int)imageHeight {
+  ZXResultPoint *startBottomLeftOfBarcode = resultPoints[1]; // bottomLeft
+  ZXResultPoint *startBottomRightOfBarcode = resultPoints[3]; // bottomRight
+  CGPoint startPoint = CGPointMake(startBottomLeftOfBarcode.x, startBottomLeftOfBarcode.y);
+  CGPoint endPoint = CGPointMake(startBottomRightOfBarcode.x, startBottomRightOfBarcode.y);
+  return [self angleBetweenStartPoint:startPoint endPoint:endPoint];
+}
+
+- (CGFloat)angleBetweenStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint {
+  CGPoint originPoint = CGPointMake(endPoint.x - startPoint.x, endPoint.y - startPoint.y);
+  float radians = atan2f(originPoint.y, originPoint.x);
+  float degrees = RADIANS_TO_DEGREES(radians);
+  // correct discontinuity
+  degrees = 360.0 - (degrees > 0.0 ? degrees : (360.0 + degrees));
+  return degrees;
 }
 
 - (void)getBarcodeRectangleFromImage:(ZXBinaryBitmap *)image result:(ZXResult *)result {
@@ -172,54 +193,17 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
   
   ZXBitMatrix *matrix = [image blackMatrixWithError:nil];
   
-  // getting topLeft and bottomLeft bound
-  int posX = p1.x;
-  int topLeftBound = 0;
-  int bottomLeftBound = 0;
-  for (int posY = p1.y; posY > 0; posY--) {
-    BOOL black = [matrix getX:posX y:posY];
-    if (!black) {
-      topLeftBound = ++posY;
-      break;
-    }
-  }
-  posX = p1.x;
-  for (int posY = p1.y; posY <= matrix.height; posY++) {
-    BOOL black = [matrix getX:posX y:posY];
-    if (!black) {
-      bottomLeftBound = posY;
-      break;
-    }
-  }
+  CGPoint topLeftBoundPoint = [self findBoundaryTowards:ZXPathDirectionTopLeft startingPoint:CGPointMake(p1.x, p1.y) matrix:matrix];
+  CGPoint bottomLeftBoundPoint = [self findBoundaryTowards:ZXPathDirectionBottomLeft startingPoint:CGPointMake(p1.x, p1.y) matrix:matrix];
   
-  CGPoint finalAnchorPointTopLeftBound = [self findNewAnchorTowards:ZXPathDirectionTopLeft currentPosition:CGPointMake(posX, topLeftBound) matrix:matrix];
-  NSLog(@"(%f,%f)", finalAnchorPointTopLeftBound.x, finalAnchorPointTopLeftBound.y);
+  result.resultPoints[0] = [ZXResultPoint resultPointWithX:topLeftBoundPoint.x y:topLeftBoundPoint.y];
+  result.resultPoints[1] = [ZXResultPoint resultPointWithX:bottomLeftBoundPoint.x y:bottomLeftBoundPoint.y];
   
-  result.resultPoints[0] = [ZXResultPoint resultPointWithX:posX y:topLeftBound];
-  result.resultPoints[1] = [ZXResultPoint resultPointWithX:posX y:bottomLeftBound];
+  CGPoint topRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionTopRight startingPoint:CGPointMake(p2.x, p2.y) matrix:matrix];
+  CGPoint bottomRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionBottomRight startingPoint:CGPointMake(p2.x, p2.y) matrix:matrix];
   
-  // getting topRight and bottomRight bound
-  posX = p2.x - 1;
-  int topRightBound = 0;
-  int bottomRightBound = 0;
-  for (int posY = p2.y; posY > 0; posY--) {
-    BOOL black = [matrix getX:posX y:posY];
-    if (!black) {
-      topRightBound = ++posY;
-      break;
-    }
-  }
-  posX = p2.x - 1;
-  for (int posY = p2.y; posY <= matrix.height; posY++) {
-    BOOL black = [matrix getX:posX y:posY];
-    if (!black) {
-      bottomRightBound = posY;
-      break;
-    }
-  }
-  
-  ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:posX + 1 y:topRightBound];
-  ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:posX + 1 y:bottomRightBound];
+  ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:topRightBoundPoint.x y:topRightBoundPoint.y];
+  ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:bottomRightBoundPoint.x y:bottomRightBoundPoint.y];
   [result addResultPoints:@[p3, p4]];
   
   if (mirrored) {
@@ -229,37 +213,129 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
   }
 }
 
-- (CGPoint)findTopLeftBound {
-  return CGPointMake(0,0);
-}
+- (CGPoint)findBoundaryTowards:(ZXPathDirection)direction startingPoint:(CGPoint)startingPoint matrix:(ZXBitMatrix *)matrix {
+  CGPoint finalBoundary = CGPointMake(startingPoint.x, startingPoint.y);
 
-- (CGPoint)findNewAnchorTowards:(ZXPathDirection)direction currentPosition:(CGPoint)currentPosition matrix:(ZXBitMatrix *)matrix
-{
-  CGPoint finalAnchor = CGPointZero;
-  BOOL didSidestepRight = NO;
-  int x = currentPosition.x;
-  finalAnchor.x = x;
-  
-  for (int y = currentPosition.y; y < matrix.height; y++) {
-    BOOL black = [matrix getX:x y:y];
-    finalAnchor.y = y;
-    if (!black) {
-      // could be a rotated image, let's do a sidestep reset if we found a new anchor point
-      if (didSidestepRight) {
-        finalAnchor.y--;
-        break;
+  // a bit ugly, maybe do this recursive
+  for (;;) {
+    if (direction == ZXPathDirectionTopLeft) {
+      if ([self aboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        continue;
       }
-      if (direction == ZXPathDirectionTopLeft) {
-        y--;
-        x++;
-        didSidestepRight = YES;
+      if ([self leftAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x--;
+        continue;
       }
-    } else {
-      didSidestepRight = NO;
+      if ([self rightAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x--;
+        continue;
+      }
+      break;
+    }
+    if (direction == ZXPathDirectionTopRight) {
+      if ([self aboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        continue;
+      }
+      if ([self rightAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x++;
+        continue;
+      }
+      break;
+    }
+    if (direction == ZXPathDirectionBottomLeft) {
+      if ([self belowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        continue;
+      }
+      if ([self leftBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x--;
+        continue;
+      }
+      break;
+    }
+    if (direction == ZXPathDirectionBottomRight) {
+      if ([self belowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        continue;
+      }
+      if ([self rightBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x++;
+        continue;
+      }
+      break;
     }
   }
-  
-  return finalAnchor;
+  return finalBoundary;
+}
+
+- (BOOL)aboveIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x y:point.y-1];
+}
+
+- (BOOL)belowIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x y:point.y+1];
+}
+
+- (BOOL)leftIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x-1 y:point.y];
+}
+
+- (BOOL)rightIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x+1 y:point.y];
+}
+
+- (BOOL)leftAboveIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x-1 y:point.y-1];
+}
+
+- (BOOL)rightAboveIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x+1 y:point.y-1];
+}
+
+- (BOOL)leftBelowIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x-1 y:point.y+1];
+}
+
+- (BOOL)rightBelowIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x+1 y:point.y+1];
 }
 
 - (void)mirrorResultPoints:(NSMutableArray *)resultPoints width:(int)width height:(int)height {
