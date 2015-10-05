@@ -183,7 +183,7 @@
       ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage];
       ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];
       BOOL misread;
-      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:NO misread:&misread]) {
+      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata expectedBarcodeLocation:barcodeLocationPoints tryHarder:NO misread:&misread]) {
         passedCounts.array[x]++;
       } else if (misread) {
         misreadCounts.array[x]++;
@@ -191,7 +191,7 @@
         NSLog(@"could not read at rotation %f", rotation);
       }
 
-      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:YES misread:&misread]) {
+      if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata expectedBarcodeLocation:barcodeLocationPoints tryHarder:YES misread:&misread]) {
         tryHarderCounts.array[x]++;
       } else if (misread) {
         tryHarderMisreadCounts.array[x]++;
@@ -255,7 +255,7 @@
   }
 }
 
-- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
+- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata expectedBarcodeLocation:(NSArray *)expectedBarcodeLocation tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
   NSString *suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
   *misread = NO;
 
@@ -294,8 +294,28 @@
       return NO;
     }
   }
+    
+    if (expectedBarcodeLocation) {
+        for (ZXResultPoint *point in result.resultPoints) {
+            if (![self pointHasMatchInArray:expectedBarcodeLocation point:point]) {
+                return NO;
+            }
+        }
+    }
 
   return YES;
+}
+
+- (BOOL)pointHasMatchInArray:(NSArray *)barcodeLocation point:(ZXResultPoint *)point {
+    int x = point.x;
+    int y = point.y;
+    for (NSValue *value in barcodeLocation) {
+        CGPoint expected = value.CGPointValue;
+        if (x == expected.x && y == expected.y) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (NSString *)readFileAsString:(NSString *)file encoding:(NSStringEncoding)encoding {
