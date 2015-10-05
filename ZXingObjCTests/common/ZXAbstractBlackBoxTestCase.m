@@ -163,6 +163,19 @@
     if ([fileManager fileExistsAtPath:[expectedMetadataFile path]]) {
       expectedMetadata = [NSMutableDictionary dictionaryWithContentsOfFile:[expectedMetadataFile path]];
     }
+      
+      NSMutableArray *barcodeLocationPoints = [[NSMutableArray alloc] init];
+      NSString *expectedLocationTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:[NSString stringWithFormat:@"%@_loc", fileBaseName] ofType:@"txt" inDirectory:self.testBase];
+      if (expectedLocationTextFile) {
+          NSString *barcodeLocation = [NSString stringWithContentsOfFile:expectedLocationTextFile encoding:NSUTF8StringEncoding error:nil];
+          NSArray *barcodeLocationComponents = [barcodeLocation componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+          for (NSString *pointString in barcodeLocationComponents) {
+              CGPoint point = [self pointFromString:pointString];
+              NSValue *value = [NSValue valueWithCGPoint:point];
+              NSLog(@"%@", value);
+              [barcodeLocationPoints addObject:value];
+          }
+      }
 
     for (int x = 0; x < testCount; x++) {
       float rotation = [(ZXTestResult *)self.testResults[x] rotation];
@@ -291,6 +304,14 @@
     NSLog(@"String contents of file %@ end with a newline. This may not be intended and cause a test failure", file);
   }
   return stringContents;
+}
+
+- (CGPoint)pointFromString:(NSString *)point {
+    point = [point substringWithRange:NSMakeRange(1, point.length - 2)];
+    NSArray *points = [point componentsSeparatedByString:@","];
+    NSInteger x = [points[0] integerValue];
+    NSInteger y = [points[1] integerValue];
+    return CGPointMake(x, y);
 }
 
 // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage

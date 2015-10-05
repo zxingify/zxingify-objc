@@ -22,6 +22,7 @@
 #import "ZXOneDReader.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
+#import "ZXBitMatrix.h"
 
 @implementation ZXOneDReader
 
@@ -129,13 +130,17 @@
       if (result) {
         if (attempt == 1) {
           [result putMetadata:kResultMetadataTypeOrientation value:@180];
-          NSMutableArray *points = [result resultPoints];
-          if (points != nil) {
-            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
-                                                       y:[(ZXResultPoint *)points[0] y]];
-            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
-                                                       y:[(ZXResultPoint *)points[1] y]];
-          }
+            NSLog(@"barcode found at row: %@", result.resultPoints);
+          [self getBarcodeRectangleFromImage:image result:result];
+          //NSMutableArray *points = [result resultPoints];
+//          if (points != nil) {
+//            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
+//                                                       y:[(ZXResultPoint *)points[0] y]];
+//            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
+//                                                       y:[(ZXResultPoint *)points[1] y]];
+//          }
+//          NSLog(@"%ix%i", width, height);
+          NSLog(@"points: %@", result.resultPoints);
         }
         return result;
       }
@@ -144,6 +149,64 @@
 
   if (error) *error = ZXNotFoundErrorInstance();
   return nil;
+}
+
+// binaryBitmap is mirrored...why?
+// we need a good algorithm for getting the facts straight
+- (void)getBarcodeRectangleFromImage:(ZXBinaryBitmap *)image result:(ZXResult *)result {
+    if (!result.resultPoints) {
+        return;
+    }
+    ZXResultPoint *p1 = result.resultPoints[0];
+    ZXResultPoint *p2 = result.resultPoints[1];
+    
+    ZXBitMatrix *matrix = [image blackMatrixWithError:nil];
+    int posX = p1.x;
+    int topLeftBound = 0;
+    int bottomLeftBound;
+    for (int posY = p1.y; posY > 0; posY--) {
+        BOOL black = [matrix getX:posX y:posY];
+        if (!black) {
+            bottomLeftBound = posY++;
+//            NSLog(@"bottomLeftBoundFound at (%i,%i)", posX, bottomLeftBound);
+            break;
+        }
+    }
+    for (int posY = p1.y; posY <= matrix.height; posY++) {
+        BOOL black = [matrix getX:posX y:posY];
+        if (!black) {
+            topLeftBound = posY--;
+//            NSLog(@"topLeftBoundFound at (%i,%i)", posX, topLeftBound);
+            break;
+        }
+    }
+    result.resultPoints[1] = [ZXResultPoint resultPointWithX:posX y:matrix.height - bottomLeftBound];
+    result.resultPoints[0] = [ZXResultPoint resultPointWithX:posX y:matrix.height - topLeftBound];
+    
+    
+    posX = p2.x - 1;
+    int bottomRightBound;
+    int topRightBound = 0;
+    for (int posY = p2.y; posY > 0; posY--) {
+        BOOL black = [matrix getX:posX y:posY];
+        if (!black) {
+            bottomRightBound = posY++;
+//            NSLog(@"bottomRightBoundFound at (%i,%i)", posX, bottomRightBound);
+            break;
+        }
+    }
+    for (int posY = p2.y; posY <= matrix.height; posY++) {
+        BOOL black = [matrix getX:posX y:posY];
+        if (!black) {
+            topRightBound = posY--;
+//            NSLog(@"topRightBoundFound at (%i,%i)", posX, topRightBound);
+            break;
+        }
+    }
+    ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:posX++ y:matrix.height - bottomRightBound];
+    ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:posX++ y:matrix.height - topRightBound];
+    [result addResultPoints:@[p3, p4]];
+    NSLog(@"");
 }
 
 /**
