@@ -172,7 +172,6 @@
       for (NSString *pointString in barcodeLocationComponents) {
         CGPoint point = [self pointFromString:pointString];
         NSValue *value = [NSValue valueWithCGPoint:point];
-        NSLog(@"%@", value);
         [barcodeLocationPoints addObject:value];
       }
     }

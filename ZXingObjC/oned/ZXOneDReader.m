@@ -130,10 +130,15 @@
       if (result) {
         if (attempt == 1) {
           [result putMetadata:kResultMetadataTypeOrientation value:@180];
+          NSMutableArray *points = [result resultPoints];
+          if (points != nil) {
+            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
+                                                       y:height - [(ZXResultPoint *)points[0] y]];
+            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
+                                                       y:height - [(ZXResultPoint *)points[1] y]];
+          }
         }
         [self getBarcodeRectangleFromImage:image result:result];
-        // debugging output, remove me
-        NSLog(@"points: %@", result.resultPoints);
         return result;
       }
     }
@@ -154,8 +159,8 @@
     mirrored = YES;
   }
   
-  ZXResultPoint *p1 = result.resultPoints[0];
-  ZXResultPoint *p2 = result.resultPoints[1];
+  ZXResultPoint *p1 = mirrored ? result.resultPoints[1] : result.resultPoints[0];
+  ZXResultPoint *p2 = mirrored ? result.resultPoints[0] : result.resultPoints[1];
   
   ZXBitMatrix *matrix = [image blackMatrixWithError:nil];
   
