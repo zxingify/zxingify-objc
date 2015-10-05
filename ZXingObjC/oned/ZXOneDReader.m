@@ -130,18 +130,10 @@
       if (result) {
         if (attempt == 1) {
           [result putMetadata:kResultMetadataTypeOrientation value:@180];
-            NSLog(@"barcode found at row: %@", result.resultPoints);
-          [self getBarcodeRectangleFromImage:image result:result];
-          //NSMutableArray *points = [result resultPoints];
-//          if (points != nil) {
-//            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
-//                                                       y:[(ZXResultPoint *)points[0] y]];
-//            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
-//                                                       y:[(ZXResultPoint *)points[1] y]];
-//          }
-//          NSLog(@"%ix%i", width, height);
-          NSLog(@"points: %@", result.resultPoints);
         }
+        [self getBarcodeRectangleFromImage:image result:result];
+        // debugging output, remove me
+        NSLog(@"points: %@", result.resultPoints);
         return result;
       }
     }
@@ -151,62 +143,86 @@
   return nil;
 }
 
-// binaryBitmap is mirrored...why?
-// we need a good algorithm for getting the facts straight
 - (void)getBarcodeRectangleFromImage:(ZXBinaryBitmap *)image result:(ZXResult *)result {
-    if (!result.resultPoints) {
-        return;
+  if (!result.resultPoints) {
+    return;
+  }
+  
+  BOOL mirrored = NO;
+  NSNumber *orientation = [result.resultMetadata objectForKey:@(kResultMetadataTypeOrientation)];
+  if (orientation && orientation.integerValue == 180) {
+    mirrored = YES;
+  }
+  
+  ZXResultPoint *p1 = result.resultPoints[0];
+  ZXResultPoint *p2 = result.resultPoints[1];
+  
+  ZXBitMatrix *matrix = [image blackMatrixWithError:nil];
+  
+  // getting topLeft and bottomLeft bound
+  int posX = p1.x;
+  int topLeftBound = 0;
+  int bottomLeftBound = 0;
+  for (int posY = p1.y; posY > 0; posY--) {
+    BOOL black = [matrix getX:posX y:posY];
+    if (!black) {
+      topLeftBound = ++posY;
+      break;
     }
-    ZXResultPoint *p1 = result.resultPoints[0];
-    ZXResultPoint *p2 = result.resultPoints[1];
-    
-    ZXBitMatrix *matrix = [image blackMatrixWithError:nil];
-    int posX = p1.x;
-    int topLeftBound = 0;
-    int bottomLeftBound;
-    for (int posY = p1.y; posY > 0; posY--) {
-        BOOL black = [matrix getX:posX y:posY];
-        if (!black) {
-            bottomLeftBound = posY++;
-//            NSLog(@"bottomLeftBoundFound at (%i,%i)", posX, bottomLeftBound);
-            break;
-        }
+  }
+  posX = p1.x;
+  for (int posY = p1.y; posY <= matrix.height; posY++) {
+    BOOL black = [matrix getX:posX y:posY];
+    if (!black) {
+      bottomLeftBound = posY;
+      break;
     }
-    for (int posY = p1.y; posY <= matrix.height; posY++) {
-        BOOL black = [matrix getX:posX y:posY];
-        if (!black) {
-            topLeftBound = posY--;
-//            NSLog(@"topLeftBoundFound at (%i,%i)", posX, topLeftBound);
-            break;
-        }
+  }
+  
+  result.resultPoints[0] = [ZXResultPoint resultPointWithX:posX y:topLeftBound];
+  result.resultPoints[1] = [ZXResultPoint resultPointWithX:posX y:bottomLeftBound];
+  
+  // getting topRight and bottomRight bound
+  posX = p2.x - 1;
+  int topRightBound = 0;
+  int bottomRightBound = 0;
+  for (int posY = p2.y; posY > 0; posY--) {
+    BOOL black = [matrix getX:posX y:posY];
+    if (!black) {
+      topRightBound = ++posY;
+      break;
     }
-    result.resultPoints[1] = [ZXResultPoint resultPointWithX:posX y:matrix.height - bottomLeftBound];
-    result.resultPoints[0] = [ZXResultPoint resultPointWithX:posX y:matrix.height - topLeftBound];
-    
-    
-    posX = p2.x - 1;
-    int bottomRightBound;
-    int topRightBound = 0;
-    for (int posY = p2.y; posY > 0; posY--) {
-        BOOL black = [matrix getX:posX y:posY];
-        if (!black) {
-            bottomRightBound = posY++;
-//            NSLog(@"bottomRightBoundFound at (%i,%i)", posX, bottomRightBound);
-            break;
-        }
+  }
+  posX = p2.x - 1;
+  for (int posY = p2.y; posY <= matrix.height; posY++) {
+    BOOL black = [matrix getX:posX y:posY];
+    if (!black) {
+      bottomRightBound = posY;
+      break;
     }
-    for (int posY = p2.y; posY <= matrix.height; posY++) {
-        BOOL black = [matrix getX:posX y:posY];
-        if (!black) {
-            topRightBound = posY--;
-//            NSLog(@"topRightBoundFound at (%i,%i)", posX, topRightBound);
-            break;
-        }
+  }
+  
+  ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:posX + 1 y:topRightBound];
+  ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:posX + 1 y:bottomRightBound];
+  [result addResultPoints:@[p3, p4]];
+  
+  if (mirrored) {
+    if (result.resultPoints != nil) {
+      [self mirrorResultPoints:result.resultPoints width:image.width height:image.height];
     }
-    ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:posX++ y:matrix.height - bottomRightBound];
-    ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:posX++ y:matrix.height - topRightBound];
-    [result addResultPoints:@[p3, p4]];
-    NSLog(@"");
+  }
+}
+
+- (void)mirrorResultPoints:(NSMutableArray *)resultPoints width:(int)width height:(int)height {
+  NSArray *resultPointsCopy = resultPoints.mutableCopy;
+  resultPoints[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[3] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[3] y]];
+  resultPoints[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[2] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[2] y]];
+  resultPoints[2] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[1] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[1] y]];
+  resultPoints[3] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[0] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[0] y]];
 }
 
 /**
