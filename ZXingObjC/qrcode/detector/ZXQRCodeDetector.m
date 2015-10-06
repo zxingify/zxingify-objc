@@ -203,7 +203,7 @@
 }
 
 /**
- * See sizeOfBlackWhiteBlackRun:fromY:toX:toY: computes the total width of
+ * See sizeOfBlackWhiteBlackRun:fromY:toX:toY: <p>computes the total width of
  * a finder pattern by looking for a black-white-black run from the center in the direction
  * of another point (another finder pattern center), and in the opposite direction too.</p>
  */
