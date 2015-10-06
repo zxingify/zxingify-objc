@@ -19,7 +19,8 @@
 @interface ZXMultiAbstractBlackBoxTestCase : ZXAbstractBlackBoxTestCase
 
 @property (nonatomic, strong, readonly) id<ZXMultipleBarcodeReader> multipleBarcodeReader;
+@property (nonatomic, copy, readonly) NSArray *expectedFormats;
 
-- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXMultipleBarcodeReader>)multipleBarcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat;
+- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix multipleBarcodeReader:(id<ZXMultipleBarcodeReader>)multipleBarcodeReader expectedFormats:(NSArray*)expectedFormats;
 
 @end

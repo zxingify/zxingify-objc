@@ -23,11 +23,11 @@
 @synthesize testBase = _testBase;
 @synthesize testResults = _testResults;
 
-- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXMultipleBarcodeReader>)multipleBarcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat {
+- (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix multipleBarcodeReader:(id<ZXMultipleBarcodeReader>)multipleBarcodeReader expectedFormats:(NSArray*)expectedFormats {
     if (self = [super initWithInvocation:invocation]) {
         _testBase = testBasePathSuffix;
         _multipleBarcodeReader = multipleBarcodeReader;
-        _expectedFormat = expectedFormat;
+        _expectedFormats = expectedFormats;
         _testResults = [NSMutableArray array];
     }
     
@@ -35,6 +35,7 @@
 }
 
 - (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
+    NSArray *expectedTexts = [expectedText componentsSeparatedByString:@";"];
     NSString *suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
     *misread = NO;
     
@@ -43,13 +44,15 @@
         hints.tryHarder = YES;
     }
     
-    NSArray *results = [self.multipleBarcodeReader decodeMultiple:source hints:hints error:nil];
+    NSError *error;
+    NSArray *results = [self.multipleBarcodeReader decodeMultiple:source hints:hints error:&error];
     if (!results) {
         return NO;
     }
     
     for (ZXResult *result in results) {
-        if (self.expectedFormat != result.barcodeFormat) {
+        NSPredicate *containsFormatPredicate = [NSPredicate predicateWithFormat:@"self.intValue == %d", result.barcodeFormat];
+        if ([self.expectedFormats filteredArrayUsingPredicate:containsFormatPredicate].count == 0) {
             NSLog(@"Format mismatch: expected '%@' but got '%@'%@",
                   [[self class] barcodeFormatAsString:self.expectedFormat], [[self class] barcodeFormatAsString:result.barcodeFormat], suffix);
             *misread = YES;
@@ -57,7 +60,7 @@
         }
         
         NSString *resultText = result.text;
-        if (![expectedText isEqualToString:resultText]) {
+        if (![expectedTexts containsObject:resultText]) {
             NSLog(@"Content mismatch: expected '%@' but got '%@'%@", expectedText, resultText, suffix);
             *misread = YES;
             return NO;
