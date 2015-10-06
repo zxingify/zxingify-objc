@@ -271,7 +271,7 @@
   CGContextRef context = CGBitmapContextCreate(NULL,
                                                rotatedRect.size.width,
                                                rotatedRect.size.height,
-                                               CGImageGetBitsPerComponent(self.image),
+                                               8,
                                                0,
                                                colorSpace,
                                                kCGBitmapAlphaInfoMask & kCGImageAlphaPremultipliedFirst);
