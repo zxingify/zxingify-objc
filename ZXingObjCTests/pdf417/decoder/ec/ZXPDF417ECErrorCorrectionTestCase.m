@@ -94,7 +94,7 @@ static int MAX_ERRORS;
 }
 
 - (BOOL)checkDecode:(ZXIntArray *)received erasures:(ZXIntArray *)erasures {
-  if (![self.ec decode:received numECCodewords:ECC_BYTES erasures:erasures]) {
+  if ([self.ec decode:received numECCodewords:ECC_BYTES erasures:erasures] == -1) {
     return NO;
   }
 
