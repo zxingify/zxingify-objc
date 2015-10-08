@@ -140,13 +140,18 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
       ZXResult *result = [self decodeRow:rowNumber row:row hints:hints error:nil];
       if (result) {
         if (attempt == 1) {
-          [result putMetadata:kResultMetadataTypeOrientation value:@180];
+          // not true for whole image, only the found points are reversed as the row was reversed
+//          [result putMetadata:kResultMetadataTypeOrientation value:@180];
           NSMutableArray *points = [result resultPoints];
           if (points != nil) {
+//            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
+//                                                       y:height - [(ZXResultPoint *)points[0] y]];
+//            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
+//                                                       y:height - [(ZXResultPoint *)points[1] y]];
             points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
-                                                       y:height - [(ZXResultPoint *)points[0] y]];
+                                                       y:[(ZXResultPoint *)points[0] y]];
             points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
-                                                       y:height - [(ZXResultPoint *)points[1] y]];
+                                                       y:[(ZXResultPoint *)points[1] y]];
           }
         }
         [self getBarcodeRectangleFromImage:image result:result];
@@ -215,7 +220,6 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
 
 - (CGPoint)findBoundaryTowards:(ZXPathDirection)direction startingPoint:(CGPoint)startingPoint matrix:(ZXBitMatrix *)matrix {
   CGPoint finalBoundary = CGPointMake(startingPoint.x, startingPoint.y);
-
   // a bit ugly, maybe do this recursive
   for (;;) {
     if (direction == ZXPathDirectionTopLeft) {

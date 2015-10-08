@@ -304,7 +304,7 @@
   if (expectedBarcodeLocation.count > 0) {
     for (ZXResultPoint *point in result.resultPoints) {
       if (![self pointHasMatchInArray:expectedBarcodeLocation point:point rotation:rotation]) {
-        NSLog(@"Wrong barcode location: expected '%@' but got '%@'", expectedBarcodeLocation, result.resultPoints);
+        NSLog(@"Wrong barcode location: expected '%@' but got '%@', %@", expectedBarcodeLocation, result.resultPoints, suffix);
         *misread = YES;
         return NO;
       }
