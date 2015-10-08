@@ -49,22 +49,19 @@ const int ZX_MAX_DEPTH = 4;
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
-  else {
-      *error = nil;
-  }
-    
+
   return results;
 }
 
-- (BOOL)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
+- (void)doDecodeMultiple:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints results:(NSMutableArray *)results
                  xOffset:(int)xOffset yOffset:(int)yOffset currentDepth:(int)currentDepth error:(NSError **)error {
   if (currentDepth > ZX_MAX_DEPTH) {
-    return YES;
+    return;
   }
 
   ZXResult *result = [self.delegate decode:image hints:hints error:error];
   if (!result) {
-    return NO;
+    return;
   }
 
   BOOL alreadyFound = NO;
@@ -78,8 +75,8 @@ const int ZX_MAX_DEPTH = 4;
     [results addObject:[self translateResultPoints:result xOffset:xOffset yOffset:yOffset]];
   }
   NSMutableArray *resultPoints = [result resultPoints];
-  if (resultPoints == nil || [resultPoints count] == 0) {
-    return YES;
+  if (resultPoints == nil || resultPoints.count == 0) {
+    return;
   }
   int width = [image width];
   int height = [image height];
@@ -119,8 +116,6 @@ const int ZX_MAX_DEPTH = 4;
   if (maxY < height - ZX_MIN_DIMENSION_TO_RECUR) {
     [self doDecodeMultiple:[image crop:0 top:(int)maxY width:width height:height - (int)maxY] hints:hints results:results xOffset:xOffset yOffset:yOffset + (int)maxY currentDepth:currentDepth + 1 error:error];
   }
-
-  return YES;
 }
 
 - (ZXResult *)translateResultPoints:(ZXResult *)result xOffset:(int)xOffset yOffset:(int)yOffset {

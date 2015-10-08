@@ -2161,6 +2161,7 @@
 		0218B86C18D23A090005E7EC /* ZXAztecState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecState.m; path = encoder/ZXAztecState.m; sourceTree = "<group>"; };
 		0218B87318D23A170005E7EC /* ZXAztecHighLevelEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecHighLevelEncoder.h; path = encoder/ZXAztecHighLevelEncoder.h; sourceTree = "<group>"; };
 		0218B87418D23A170005E7EC /* ZXAztecHighLevelEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecHighLevelEncoder.m; path = encoder/ZXAztecHighLevelEncoder.m; sourceTree = "<group>"; };
+		0224F41E1BC6BB8400B0E1F9 /* ZXGenericMultipleBarcodeReaderTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXGenericMultipleBarcodeReaderTestCase.h; sourceTree = "<group>"; };
 		024A231118D3747C006AE14A /* ZXQRCodeDecoderMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXQRCodeDecoderMetaData.h; sourceTree = "<group>"; };
 		024A231218D3747C006AE14A /* ZXQRCodeDecoderMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXQRCodeDecoderMetaData.m; sourceTree = "<group>"; };
 		024A231A18D3B292006AE14A /* ZXAztecDetectorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDetectorTest.h; sourceTree = "<group>"; };
@@ -3071,6 +3072,7 @@
 		074684301BC3B9F400E47A35 /* multi */ = {
 			isa = PBXGroup;
 			children = (
+				0224F41E1BC6BB8400B0E1F9 /* ZXGenericMultipleBarcodeReaderTestCase.h */,
 				074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */,
 			);
 			path = multi;
@@ -3844,8 +3846,6 @@
 				25404011166AA0F100E13304 /* reedsolomon */,
 				2540400D166AA0F100E13304 /* ZXAbstractBlackBoxTestCase.h */,
 				2540400E166AA0F100E13304 /* ZXAbstractBlackBoxTestCase.m */,
-				074684341BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.h */,
-				074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */,
 				2540400F166AA0F100E13304 /* ZXAbstractNegativeBlackBoxTestCase.h */,
 				25404010166AA0F100E13304 /* ZXAbstractNegativeBlackBoxTestCase.m */,
 				2540401C166AA0F100E13304 /* ZXBitArrayTestCase.h */,
@@ -3856,6 +3856,8 @@
 				25404021166AA0F100E13304 /* ZXBitSourceBuilder.m */,
 				25404022166AA0F100E13304 /* ZXBitSourceTestCase.h */,
 				25404023166AA0F100E13304 /* ZXBitSourceTestCase.m */,
+				074684341BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.h */,
+				074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */,
 				25404024166AA0F100E13304 /* ZXPerspectiveTransformTestCase.h */,
 				25404025166AA0F100E13304 /* ZXPerspectiveTransformTestCase.m */,
 				25404026166AA0F100E13304 /* ZXStringUtilsTestCase.h */,
