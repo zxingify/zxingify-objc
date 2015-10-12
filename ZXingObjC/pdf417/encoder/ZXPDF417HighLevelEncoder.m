@@ -369,7 +369,7 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
     unichar chars[charsLen];
     memset(chars, 0, charsLen * sizeof(unichar));
     while ((startpos + count - idx) >= 6) {
-      long t = 0;
+      long long t = 0;
       for (int i = 0; i < 6; i++) {
         t <<= 8;
         t += bytes.array[idx + i] & 0xff;

@@ -46,7 +46,7 @@
 
   // Try to get force shape & min / max size
   ZXDataMatrixSymbolShapeHint shape = ZXDataMatrixSymbolShapeHintForceNone;
-  ZXDimension *minSize = [[ZXDimension alloc] initWithWidth:width height:height];
+  ZXDimension *minSize = nil;
   ZXDimension *maxSize = nil;
   if (hints != nil) {
     shape = hints.dataMatrixShape;
@@ -141,7 +141,7 @@
 /**
  * Convert the ZXByteMatrix to ZXBitMatrix.
  *
- * @param matrix The input matrix.
+ * @param input The input matrix.
  * @return The output matrix.
  */
 - (ZXBitMatrix *)convertByteMatrixToBitMatrix:(ZXByteMatrix *)input width:(int)width height:(int)height {

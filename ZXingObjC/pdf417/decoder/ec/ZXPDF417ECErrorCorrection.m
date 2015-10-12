@@ -76,7 +76,9 @@
   //sigma = [sigma multiply:knownErrors];
 
   ZXIntArray *errorLocations = [self findErrorLocations:sigma];
-  if (!errorLocations) return -1;
+  if (!errorLocations) {
+    return -1;
+  }
   ZXIntArray *errorMagnitudes = [self findErrorMagnitudes:omega errorLocator:sigma errorLocations:errorLocations];
 
   for (int i = 0; i < errorLocations.length; i++) {

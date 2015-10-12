@@ -33,13 +33,13 @@
  */
 + (ZXQRCodeMode *)forBits:(int)bits;
 
-- (int)characterCountBits:(ZXQRCodeVersion *)version;
-
 /**
  * @param version version in question
  * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
  *         count of characters that will follow encoded in this Mode
  */
+- (int)characterCountBits:(ZXQRCodeVersion *)version;
+
 + (ZXQRCodeMode *)terminatorMode; // Not really a mode...
 + (ZXQRCodeMode *)numericMode;
 + (ZXQRCodeMode *)alphanumericMode;
