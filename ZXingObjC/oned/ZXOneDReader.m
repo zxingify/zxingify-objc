@@ -141,13 +141,9 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
       if (result) {
         if (attempt == 1) {
           // not true for whole image, only the found points are reversed as the row was reversed
-//          [result putMetadata:kResultMetadataTypeOrientation value:@180];
+          // [result putMetadata:kResultMetadataTypeOrientation value:@180];
           NSMutableArray *points = [result resultPoints];
           if (points != nil) {
-//            points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
-//                                                       y:height - [(ZXResultPoint *)points[0] y]];
-//            points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
-//                                                       y:height - [(ZXResultPoint *)points[1] y]];
             points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
                                                        y:[(ZXResultPoint *)points[0] y]];
             points[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[1] x]
@@ -155,6 +151,17 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
           }
         }
         [self getBarcodeRectangleFromImage:image result:result];
+        // validate points
+        if (result.resultPoints) {
+          ZXResultPoint *topLeft = result.resultPoints[0];
+          ZXResultPoint *topRight = result.resultPoints[2];
+          ZXResultPoint *bottomLeft = result.resultPoints[1];
+          ZXResultPoint *bottomRight = result.resultPoints[3];
+          if (topLeft.y == bottomLeft.y || topRight.y == bottomRight.y) {
+            // was not able to detect correct points
+            return nil;
+          }
+        }
         result.angle = [self getAngleFromResultPoints:result.resultPoints imageWidth:width imageHeight:height];
         return result;
       }
