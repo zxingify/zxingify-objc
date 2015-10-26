@@ -44,9 +44,7 @@
   self.capture.camera = self.capture.back;
   self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
   ZXDecodeHints *hints = [ZXDecodeHints hints];
-  [hints addPossibleFormat:kBarcodeFormatEan8];
   hints.tryHarder = YES;
-  // hints.pureBarcode = YES;
   self.capture.hints = hints;
   // self.capture.rotation = 90.0f;
 
