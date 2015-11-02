@@ -152,6 +152,7 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
         }
         [self getBarcodeRectangleFromImage:image result:result];
         // validate points
+        // TODO we should only validate points if we need the correct position of the barcode
         if (result.resultPoints) {
           ZXResultPoint *topLeft = result.resultPoints[0];
           ZXResultPoint *topRight = result.resultPoints[2];
@@ -184,8 +185,6 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
   CGPoint originPoint = CGPointMake(endPoint.x - startPoint.x, endPoint.y - startPoint.y);
   float radians = atan2f(originPoint.y, originPoint.x);
   float degrees = RADIANS_TO_DEGREES(radians);
-  // correct discontinuity
-  degrees = 360.0 - (degrees > 0.0 ? degrees : (360.0 + degrees));
   return degrees;
 }
 
@@ -211,8 +210,8 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
   result.resultPoints[0] = [ZXResultPoint resultPointWithX:topLeftBoundPoint.x y:topLeftBoundPoint.y];
   result.resultPoints[1] = [ZXResultPoint resultPointWithX:bottomLeftBoundPoint.x y:bottomLeftBoundPoint.y];
   
-  CGPoint topRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionTopRight startingPoint:CGPointMake(p2.x, p2.y) matrix:matrix];
-  CGPoint bottomRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionBottomRight startingPoint:CGPointMake(p2.x, p2.y) matrix:matrix];
+  CGPoint topRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionTopRight startingPoint:CGPointMake(p2.x - 1, p2.y) matrix:matrix];
+  CGPoint bottomRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionBottomRight startingPoint:CGPointMake(p2.x - 1, p2.y) matrix:matrix];
   
   ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:topRightBoundPoint.x y:topRightBoundPoint.y];
   ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:bottomRightBoundPoint.x y:bottomRightBoundPoint.y];
@@ -227,7 +226,6 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
 
 - (CGPoint)findBoundaryTowards:(ZXPathDirection)direction startingPoint:(CGPoint)startingPoint matrix:(ZXBitMatrix *)matrix {
   CGPoint finalBoundary = CGPointMake(startingPoint.x, startingPoint.y);
-  // a bit ugly, maybe do this recursive
   for (;;) {
     if (direction == ZXPathDirectionTopLeft) {
       if ([self aboveIsBlack:finalBoundary matrix:matrix]) {
