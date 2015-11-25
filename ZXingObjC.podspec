@@ -21,32 +21,43 @@ Pod::Spec.new do |s|
     ss.source_files = 'ZXingObjC/**/*.{h,m}'
   end
 
+  s.subspec 'Core' do |ss|
+    ss.source_files = 'ZXingObjC/*.{h,m}', 'ZXingObjC/client/*.{h,m}', 'ZXingObjC/common/**/*.{h,m}', 'ZXingObjC/core/**/*.{h,m}', 'ZXingObjC/multi/**/*.{h,m}'
+  end
+
   s.subspec 'Aztec' do |ss|
     ss.dependency 'ZXingObjC/Core'
     ss.source_files = 'ZXingObjC/aztec/**/*.{h,m}'
-  end
-
-  s.subspec 'Core' do |ss|
-    ss.source_files = 'ZXingObjC/client/*.{h,m}', 'ZXingObjC/common/**/*.{h,m}', 'ZXingObjC/core/*.{h,m}', 'ZXingObjC/multi/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS ZXINGOBJC_AZTEC" }
   end
 
   s.subspec 'DataMatrix' do |ss|
     ss.dependency 'ZXingObjC/Core'
     ss.source_files = 'ZXingObjC/datamatrix/**/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS ZXINGOBJC_DATAMATRIX" }
   end
 
   s.subspec 'MaxiCode' do |ss|
     ss.dependency 'ZXingObjC/Core'
     ss.source_files = 'ZXingObjC/maxicode/**/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS ZXINGOBJC_MAXICODE" }
   end
 
   s.subspec 'OneD' do |ss|
     ss.dependency 'ZXingObjC/Core'
-    ss.source_files = 'ZXingObjC/oned/**/*.{h,m}', 'ZXingObjC/client/result/*.{h,m}'
+    ss.source_files = 'ZXingObjC/oned/**/*.{h,m}', 'ZXingObjC/client/result/**/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS ZXINGOBJC_ONED" }
+  end
+
+  s.subspec 'PDF417' do |ss|
+    ss.dependency 'ZXingObjC/Core'
+    ss.source_files = 'ZXingObjC/pdf417/**/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS ZXINGOBJC_PDF417" }
   end
 
   s.subspec 'QRCode' do |ss|
     ss.dependency 'ZXingObjC/Core'
     ss.source_files = 'ZXingObjC/qrcode/**/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS ZXINGOBJC_QRCODE" }
   end
 end
