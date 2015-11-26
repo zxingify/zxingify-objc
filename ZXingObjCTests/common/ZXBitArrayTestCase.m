@@ -94,6 +94,7 @@
 
 - (void)testGetNextSet5 {
   for (int i = 0; i < 10; i++) {
+    srand(0xDEADBEEF);
     ZXBitArray *array = [[ZXBitArray alloc] initWithSize:(arc4random() % 100) + 1];
     int numSet = arc4random() % 20;
     for (int j = 0; j < numSet; j++) {

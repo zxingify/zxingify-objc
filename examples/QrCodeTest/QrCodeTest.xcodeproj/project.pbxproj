@@ -25,6 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		027E588A1ABC5D4200C334CA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 25FFF6A7183983D400C2E985 /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB72547F1A523C9200EFF81B;
+			remoteInfo = "iOS Framework";
+		};
 		25FFF6AF183983D400C2E985 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 25FFF6A7183983D400C2E985 /* ZXingObjC.xcodeproj */;
@@ -174,10 +181,11 @@
 			isa = PBXGroup;
 			children = (
 				25FFF6B0183983D400C2E985 /* libZXingObjC-iOS.a */,
-				25FFF6B2183983D400C2E985 /* ZXingObjCTests-iOS.octest */,
+				25FFF6B2183983D400C2E985 /* Unit Tests iOS.xctest */,
 				25FFF6B4183983D400C2E985 /* libZXingObjC-osx.a */,
-				25FFF6B6183983D400C2E985 /* ZXingObjCTests-osx.octest */,
+				25FFF6B6183983D400C2E985 /* Unit Tests OS X.xctest */,
 				25FFF6B8183983D400C2E985 /* ZXingObjC.framework */,
+				027E588B1ABC5D4200C334CA /* ZXingObjC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -209,7 +217,7 @@
 		022B185114D1B5FE000503E2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "Draconis Software";
 				TargetAttributes = {
 					022B185914D1B5FE000503E2 = {
@@ -241,6 +249,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		027E588B1ABC5D4200C334CA /* ZXingObjC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ZXingObjC.framework;
+			remoteRef = 027E588A1ABC5D4200C334CA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		25FFF6B0183983D400C2E985 /* libZXingObjC-iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -248,10 +263,10 @@
 			remoteRef = 25FFF6AF183983D400C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25FFF6B2183983D400C2E985 /* ZXingObjCTests-iOS.octest */ = {
+		25FFF6B2183983D400C2E985 /* Unit Tests iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-iOS.octest";
+			path = "Unit Tests iOS.xctest";
 			remoteRef = 25FFF6B1183983D400C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -262,10 +277,10 @@
 			remoteRef = 25FFF6B3183983D400C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25FFF6B6183983D400C2E985 /* ZXingObjCTests-osx.octest */ = {
+		25FFF6B6183983D400C2E985 /* Unit Tests OS X.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "ZXingObjCTests-osx.octest";
+			path = "Unit Tests OS X.xctest";
 			remoteRef = 25FFF6B5183983D400C2E985 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -333,9 +348,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -367,9 +384,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

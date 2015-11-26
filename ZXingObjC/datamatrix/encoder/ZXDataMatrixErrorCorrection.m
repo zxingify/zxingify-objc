@@ -69,12 +69,14 @@ static int ZX_LOG[256], ZX_ALOG[256];
 @implementation ZXDataMatrixErrorCorrection
 
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixErrorCorrection class]) return;
+
   //Create log and antilog table
   int p = 1;
   for (int i = 0; i < 255; i++) {
     ZX_ALOG[i] = p;
     ZX_LOG[p] = i;
-    p <<= 1;
+    p *= 2;
     if (p >= 256) {
       p ^= ZX_MODULO_VALUE;
     }
@@ -96,6 +98,9 @@ static int ZX_LOG[256], ZX_ALOG[256];
     if (sb.length > capacity) {
       [sb deleteCharactersInRange:NSMakeRange(capacity, sb.length - capacity)];
     }
+    while (sb.length < capacity) {
+      [sb appendFormat:@"%C", (unichar)0];
+    }
     int dataSizes[blockCount];
     int errorSizes[blockCount];
     int startPos[blockCount];
@@ -115,7 +120,8 @@ static int ZX_LOG[256], ZX_ALOG[256];
       NSString *ecc = [self createECCBlock:temp numECWords:errorSizes[block]];
       int pos = 0;
       for (int e = block; e < errorSizes[block] * blockCount; e += blockCount) {
-        [sb replaceCharactersInRange:NSMakeRange(symbolInfo.dataCapacity + e, 1) withString:[ecc substringWithRange:NSMakeRange(pos++, 1)]];
+        [sb replaceCharactersInRange:NSMakeRange(symbolInfo.dataCapacity + e, 1)
+                          withString:[ecc substringWithRange:NSMakeRange(pos++, 1)]];
       }
     }
   }

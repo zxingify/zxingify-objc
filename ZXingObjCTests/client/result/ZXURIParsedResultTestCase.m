@@ -92,6 +92,7 @@
    "0ZAKOAB32/.8:J501GJJTTWOA+5/6$MIYBERPZ41NJ6-WSG/*Z48ZH*LSAOEM*IXP81L:$F*W08Z60CR*C*P.JEEVI1F02J07L6+"
    "W4L1G$/IC*$16GK6A+:I1-:LJ:Z-P3NW6Z6ADFB-F2AKE$2DWN23GYCYEWX9S8L+LF$VXEKH7/R48E32PU+A:9H:8O5"
                      title:nil];
+  [self doTestWithContents:@"opc.tcp://test.samplehost.com:4841" uri:@"opc.tcp://test.samplehost.com:4841" title:nil];
 }
 
 - (void)doTestWithContents:(NSString *)contents uri:(NSString *)uri title:(NSString *)title {

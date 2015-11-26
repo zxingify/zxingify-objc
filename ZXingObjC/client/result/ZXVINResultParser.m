@@ -23,6 +23,8 @@ static NSRegularExpression *ZX_AZ09 = nil;
 @implementation ZXVINResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXVINResultParser class]) return;
+
   ZX_IOQ = [[NSRegularExpression alloc] initWithPattern:@"[IOQ]" options:0 error:nil];
   ZX_AZ09 = [[NSRegularExpression alloc] initWithPattern:@"[A-Z0-9]{17}" options:0 error:nil];
 }

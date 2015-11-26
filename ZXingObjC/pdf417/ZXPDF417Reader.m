@@ -78,7 +78,8 @@
                                                        imageTopRight:imageTopRight
                                                     imageBottomRight:imageBottomRight
                                                     minCodewordWidth:[self minCodewordWidth:points]
-                                                    maxCodewordWidth:[self maxCodewordWidth:points]];
+                                                    maxCodewordWidth:[self maxCodewordWidth:points]
+                                                               error:error];
     if (!decoderResult) {
       return nil;
     }

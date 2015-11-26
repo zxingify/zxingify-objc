@@ -21,6 +21,8 @@ static NSArray *TEST_SYMBOLS;
 @implementation ZXDataMatrixHighLevelEncodeTestCase
 
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixHighLevelEncodeTestCase class]) return;
+
   TEST_SYMBOLS = @[[[ZXDataMatrixSymbolInfo alloc] initWithRectangular:NO dataCapacity:3 errorCodewords:5 matrixWidth:8 matrixHeight:8 dataRegions:1],
                    [[ZXDataMatrixSymbolInfo alloc] initWithRectangular:NO dataCapacity:5 errorCodewords:7 matrixWidth:10 matrixHeight:10 dataRegions:1],
                    /*rect*/[[ZXDataMatrixSymbolInfo alloc] initWithRectangular:YES dataCapacity:5 errorCodewords:7 matrixWidth:16 matrixHeight:6 dataRegions:1],
@@ -267,6 +269,16 @@ static NSArray *TEST_SYMBOLS;
 
   visualized = [self encodeHighLevel:@"CREX-TAN:hhh"];
   XCTAssertEqualObjects(@"240 13 33 88 181 64 78 124 59 105 105 105", visualized);
+}
+
+- (void)testX12Unlatch {
+  NSString *visualized = [self encodeHighLevel:@"*DTCP01"];
+  XCTAssertEqualObjects(@"238 9 10 104 141 254 50 129", visualized);
+}
+
+- (void)testX12Unlatch2 {
+  NSString *visualized = [self encodeHighLevel:@"*DTCP0"];
+  XCTAssertEqualObjects(@"238 9 10 104 141", visualized);
 }
 
 - (void)testBug3048549 {

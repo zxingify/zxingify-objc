@@ -125,7 +125,7 @@
 /*
 + (NSArray *)elements:(NSArray *)eDist N:(int)N K:(int)K {
   NSMutableArray *widths = [NSMutableArray arrayWithCapacity:[eDist count] + 2];
-  int twoK = K << 1;
+  int twoK = 2 * K;
   [widths addObject:@1];
   int i;
   int minEven = 10;

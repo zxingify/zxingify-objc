@@ -91,7 +91,7 @@
 @implementation ZXDataMask100
 
 - (BOOL)isMasked:(int)i j:(int)j {
-  return (((int)((unsigned int)i >> 1) + (j / 3)) & 0x01) == 0;
+  return (((i / 2) + (j /3)) & 0x01) == 0;
 }
 
 @end

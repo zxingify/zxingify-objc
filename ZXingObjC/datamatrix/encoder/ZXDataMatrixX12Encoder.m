@@ -70,17 +70,13 @@
 - (void)handleEOD:(ZXDataMatrixEncoderContext *)context buffer:(NSMutableString *)buffer {
   [context updateSymbolInfo];
   int available = context.symbolInfo.dataCapacity - [context codewordCount];
-  NSUInteger count = buffer.length;
-  if (count == 2) {
+  int count = (int)buffer.length;
+  context.pos -= count;
+  if (context.remainingCharacters > 1 || available > 1 ||
+      context.remainingCharacters != available) {
     [context writeCodeword:[ZXDataMatrixHighLevelEncoder x12Unlatch]];
-    context.pos -= 2;
-    [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
-  } else if (count == 1) {
-    context.pos--;
-    if (available > 1) {
-      [context writeCodeword:[ZXDataMatrixHighLevelEncoder x12Unlatch]];
-    }
-    //NOP - No unlatch necessary
+  }
+  if (context.newEncoding < 0) {
     [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
   }
 }

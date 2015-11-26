@@ -59,6 +59,8 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
 @implementation ZXResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXResultParser class]) return;
+
   ZX_PARSERS = @[[[ZXBookmarkDoCoMoResultParser alloc] init],
                  [[ZXAddressBookDoCoMoResultParser alloc] init],
                  [[ZXEmailDoCoMoResultParser alloc] init],
@@ -269,8 +271,8 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
         // No terminating end character? uh, done. Set i such that loop terminates and break
         i = [rawText length];
         more = NO;
-      } else if ([rawText characterAtIndex:i - 1] == '\\') {
-        // semicolon was escaped so continue
+      } else if ([self countPrecedingBackslashes:rawText pos:i] % 2 != 0) {
+        // semicolon was escaped (odd count of preceding backslashes) so continue
         i++;
       } else {
         // found a match
@@ -293,6 +295,18 @@ static unichar ZX_BYTE_ORDER_MARK = L'\ufeff';
     return nil;
   }
   return matches;
+}
+
++ (int)countPrecedingBackslashes:(NSString *)s pos:(NSInteger)pos {
+  int count = 0;
+  for (NSInteger i = pos - 1; i >= 0; i--) {
+    if ([s characterAtIndex:i] == '\\') {
+      count++;
+    } else {
+      break;
+    }
+  }
+  return count;
 }
 
 + (NSString *)matchSinglePrefixedField:(NSString *)prefix rawText:(NSString *)rawText endChar:(unichar)endChar trim:(BOOL)trim {

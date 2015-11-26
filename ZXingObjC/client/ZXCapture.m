@@ -77,13 +77,13 @@
   }
 
   if (_session && _session.inputs) {
-    for(AVCaptureInput *input in _session.inputs) {
+    for (AVCaptureInput *input in _session.inputs) {
       [_session removeInput:input];
     }
   }
 
   if (_session && _session.outputs) {
-    for(AVCaptureOutput *output in _session.outputs) {
+    for (AVCaptureOutput *output in _session.outputs) {
       [_session removeOutput:output];
     }
   }
@@ -284,8 +284,6 @@
   }
 
   if (self.session.running) {
-    [self.layer removeFromSuperlayer];
-
     [self.session stopRunning];
   }
 
@@ -329,6 +327,8 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
+  if (!self.running) return;
+
   @autoreleasepool {
     if (!self.cameraIsReady) {
       self.cameraIsReady = YES;

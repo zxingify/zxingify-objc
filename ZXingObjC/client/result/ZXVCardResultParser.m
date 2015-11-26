@@ -32,6 +32,8 @@ static NSCharacterSet *ZX_SEMICOLON_OR_COMMA = nil;
 @implementation ZXVCardResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXVCardResultParser class]) return;
+
   ZX_BEGIN_VCARD = [[NSRegularExpression alloc] initWithPattern:@"BEGIN:VCARD" options:NSRegularExpressionCaseInsensitive error:nil];
   ZX_VCARD_LIKE_DATE = [[NSRegularExpression alloc] initWithPattern:@"\\d{4}-?\\d{2}-?\\d{2}" options:0 error:nil];
   ZX_CR_LF_SPACE_TAB = [[NSRegularExpression alloc] initWithPattern:@"\r\n[ \t]" options:0 error:nil];

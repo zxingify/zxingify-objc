@@ -271,7 +271,7 @@
   CGContextRef context = CGBitmapContextCreate(NULL,
                                                rotatedRect.size.width,
                                                rotatedRect.size.height,
-                                               CGImageGetBitsPerComponent(self.image),
+                                               8,
                                                0,
                                                colorSpace,
                                                kCGBitmapAlphaInfoMask & kCGImageAlphaPremultipliedFirst);
@@ -303,6 +303,11 @@
   CGImageRelease(rotatedImage);
 
   return result;
+}
+
+- (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height {
+  CGImageRef croppedImageRef = CGImageCreateWithImageInRect(self.image, CGRectMake(left, top, width, height));
+  return [[ZXCGImageLuminanceSource alloc] initWithCGImage:croppedImageRef];
 }
 
 @end

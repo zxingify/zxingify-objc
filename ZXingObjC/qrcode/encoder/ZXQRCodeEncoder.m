@@ -269,7 +269,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 }
 
 + (BOOL)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits error:(NSError **)error {
-  int capacity = numDataBytes << 3;
+  int capacity = numDataBytes * 8;
   if ([bits size] > capacity) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"data bits cannot fit in the QR Code %d > %d", [bits size], capacity]};
 

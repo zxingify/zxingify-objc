@@ -37,6 +37,6 @@ extern const int ZX_PDF417_MODULES_IN_STOP_PATTERN;
  *
  * @return the codeword corresponding to the symbol.
  */
-+ (int)codeword:(long)symbol;
++ (int)codeword:(int)symbol;
 
 @end

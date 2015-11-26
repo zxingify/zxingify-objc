@@ -23,6 +23,8 @@ static NSRegularExpression *ZX_ATEXT_ALPHANUMERIC = nil;
 @implementation ZXEmailDoCoMoResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXEmailDoCoMoResultParser class]) return;
+
   ZX_ATEXT_ALPHANUMERIC = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+$"
                                                                options:0 error:nil];
 }
@@ -32,21 +34,19 @@ static NSRegularExpression *ZX_ATEXT_ALPHANUMERIC = nil;
   if (![rawText hasPrefix:@"MATMSG:"]) {
     return nil;
   }
-  NSArray *rawTo = [[self class] matchDoCoMoPrefixedField:@"TO:" rawText:rawText trim:YES];
-  if (rawTo == nil) {
+  NSArray *tos = [[self class] matchDoCoMoPrefixedField:@"TO:" rawText:rawText trim:YES];
+  if (tos == nil) {
     return nil;
   }
-  NSString *to = rawTo[0];
-  if (![[self class] isBasicallyValidEmailAddress:to]) {
-    return nil;
+  for (NSString *to in tos) {
+    if (![[self class] isBasicallyValidEmailAddress:to]) {
+      return nil;
+    }
   }
   NSString *subject = [[self class] matchSingleDoCoMoPrefixedField:@"SUB:" rawText:rawText trim:NO];
   NSString *body = [[self class] matchSingleDoCoMoPrefixedField:@"BODY:" rawText:rawText trim:NO];
 
-  return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:to
-                                                                      subject:subject
-                                                                         body:body
-                                                                    mailtoURI:[@"mailto:" stringByAppendingString:to]];
+  return [[ZXEmailAddressParsedResult alloc] initWithTos:tos ccs:nil bccs:nil subject:subject body:body];
 }
 
 + (BOOL)isBasicallyValidEmailAddress:(NSString *)email {

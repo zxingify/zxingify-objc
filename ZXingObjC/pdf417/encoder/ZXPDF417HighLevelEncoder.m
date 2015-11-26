@@ -82,17 +82,17 @@ const int ZX_PDF417_LATCH_TO_BYTE = 924;
 /**
  * identifier for a user defined Extended Channel Interpretation (ECI)
  */
-const int ZX_PDF417_ECI_USER_DEFINED = 925;
+const int ZX_PDF417_HIGH_LEVEL_ECI_USER_DEFINED = 925;
 
 /**
  * identifier for a general purpose ECO format
  */
-const int ZX_PDF417_ECI_GENERAL_PURPOSE = 926;
+const int ZX_PDF417_HIGH_LEVEL_ECI_GENERAL_PURPOSE = 926;
 
 /**
  * identifier for an ECI of a character set of code page
  */
-const int ZX_PDF417_ECI_CHARSET = 927;
+const int ZX_PDF417_HIGH_LEVEL_ECI_CHARSET = 927;
 
 /**
  * Raw code table for text compaction Mixed sub-mode
@@ -114,11 +114,13 @@ unichar ZX_PDF417_MIXED_TABLE[ZX_PDF417_MIXED_TABLE_LEN];
 const int ZX_PDF417_PUNCTUATION_LEN = 128;
 unichar ZX_PDF417_PUNCTUATION[ZX_PDF417_PUNCTUATION_LEN];
 
-const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x80000400;
+const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
 
 @implementation ZXPDF417HighLevelEncoder
 
 + (void)initialize {
+  if ([self class] != [ZXPDF417HighLevelEncoder class]) return;
+
   //Construct inverse lookups
   for (int i = 0; i < ZX_PDF417_MIXED_TABLE_LEN; i++) {
     ZX_PDF417_MIXED_TABLE[i] = 0xFF;
@@ -144,7 +146,9 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
   //the codewords 0..928 are encoded as Unicode characters
   NSMutableString *sb = [NSMutableString stringWithCapacity:msg.length];
 
-  if (ZX_PDF417_DEFAULT_ENCODING != encoding) {
+  if (encoding == 0) {
+    encoding = ZX_PDF417_DEFAULT_ENCODING;
+  } else if (ZX_PDF417_DEFAULT_ENCODING != encoding) {
     ZXCharacterSetECI *eci = [ZXCharacterSetECI characterSetECIByEncoding:encoding];
     if (![self encodingECI:eci.value sb:sb error:error]) {
       return nil;
@@ -365,7 +369,7 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
     unichar chars[charsLen];
     memset(chars, 0, charsLen * sizeof(unichar));
     while ((startpos + count - idx) >= 6) {
-      long t = 0;
+      long long t = 0;
       for (int i = 0; i < 6; i++) {
         t <<= 8;
         t += bytes.array[idx + i] & 0xff;
@@ -390,16 +394,29 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
 + (void)encodeNumeric:(NSString *)msg startpos:(int)startpos count:(int)count buffer:(NSMutableString *)sb {
   int idx = 0;
   NSMutableString *tmp = [NSMutableString stringWithCapacity:count / 3 + 1];
-  while (idx < count - 1) {
+  NSDecimalNumber *num900 = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:900] decimalValue]];
+  NSDecimalNumber *num0 = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithInt:0] decimalValue]];
+  while (idx < count) {
     [tmp setString:@""];
     int len = MIN(44, count - idx);
     NSString *part = [@"1" stringByAppendingString:[msg substringWithRange:NSMakeRange(startpos + idx, len)]];
-    long long bigint = [part longLongValue];
+    NSDecimalNumber *bigint = [NSDecimalNumber decimalNumberWithString:part];
     do {
-      long c = bigint % 900;
-      [tmp appendFormat:@"%C", (unichar) c];
-      bigint /= 900;
-    } while (bigint != 0);
+      NSRoundingMode roundingMode = ((bigint.floatValue < 0) ^ (num900.floatValue < 0)) ? NSRoundUp : NSRoundDown;
+      NSDecimalNumber *quotient = [bigint decimalNumberByDividingBy:num900
+                                                       withBehavior:[NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:roundingMode
+                                                                                                                           scale:0
+                                                                                                                raiseOnExactness:NO
+                                                                                                                 raiseOnOverflow:NO
+                                                                                                                raiseOnUnderflow:NO
+                                                                                                             raiseOnDivideByZero:NO]];
+
+      NSDecimalNumber *subtractAmount = [quotient decimalNumberByMultiplyingBy:num900];
+      NSDecimalNumber *remainder = [bigint decimalNumberBySubtracting:subtractAmount];
+
+      [tmp appendFormat:@"%C", (unichar)[remainder longValue]];
+      bigint = quotient;
+    } while (![bigint isEqualToNumber:num0]);
 
     //Reverse temporary string
     for (int i = (int)tmp.length - 1; i >= 0; i--) {
@@ -522,18 +539,6 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
     if (numericCount >= 13) {
       return idx - startpos;
     }
-    int textCount = 0;
-    while (textCount < 5 && [self isText:ch]) {
-      textCount++;
-      int i = idx + textCount;
-      if (i >= len) {
-        break;
-      }
-      ch = [msg characterAtIndex:i];
-    }
-    if (textCount >= 5) {
-      return idx - startpos;
-    }
     ch = [msg characterAtIndex:idx];
 
     //Check if character is encodable
@@ -552,14 +557,14 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = (NSStringEncoding) 0x8000040
 
 + (BOOL)encodingECI:(int)eci sb:(NSMutableString *)sb error:(NSError **)error {
   if (eci >= 0 && eci < 900) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_CHARSET];
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_HIGH_LEVEL_ECI_CHARSET];
     [sb appendFormat:@"%C", (unichar) eci];
   } else if (eci < 810900) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_GENERAL_PURPOSE];
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_HIGH_LEVEL_ECI_GENERAL_PURPOSE];
     [sb appendFormat:@"%C", (unichar) (eci / 900 - 1)];
     [sb appendFormat:@"%C", (unichar) (eci % 900)];
   } else if (eci < 811800) {
-    [sb appendFormat:@"%C", (unichar) ZX_PDF417_ECI_USER_DEFINED];
+    [sb appendFormat:@"%C", (unichar) ZX_PDF417_HIGH_LEVEL_ECI_USER_DEFINED];
     [sb appendFormat:@"%C", (unichar) (810900 - eci)];
   } else {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"ECI number not in valid range from 0..811799, but was %d", eci]};

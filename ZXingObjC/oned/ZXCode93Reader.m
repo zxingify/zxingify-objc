@@ -50,6 +50,8 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
 @implementation ZXCode93Reader
 
 + (void)initialize {
+  if ([self class] != [ZXCode93Reader class]) return;
+
   ZX_CODE93_ALPHABET_STRING = [[NSString alloc] initWithCharacters:ZX_CODE93_ALPHABET
                                                             length:sizeof(ZX_CODE93_ALPHABET) / sizeof(unichar)];
 }
@@ -180,20 +182,16 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
   int32_t *array = counters.array;
   int pattern = 0;
   for (int i = 0; i < max; i++) {
-    int scaledShifted = (array[i] << ZX_ONED_INTEGER_MATH_SHIFT) * 9 / sum;
-    int scaledUnshifted = scaledShifted >> ZX_ONED_INTEGER_MATH_SHIFT;
-    if ((scaledShifted & 0xFF) > 0x7F) {
-      scaledUnshifted++;
-    }
-    if (scaledUnshifted < 1 || scaledUnshifted > 4) {
+    int scaled = round(array[i] * 9.0f / sum);
+    if (scaled < 1 || scaled > 4) {
       return -1;
     }
     if ((i & 0x01) == 0) {
-      for (int j = 0; j < scaledUnshifted; j++) {
+      for (int j = 0; j < scaled; j++) {
         pattern = (pattern << 1) | 0x01;
       }
     } else {
-      pattern <<= scaledUnshifted;
+      pattern <<= scaled;
     }
   }
   return pattern;

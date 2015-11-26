@@ -25,8 +25,8 @@
 #import "ZXUPCEANReader.h"
 #import "ZXUPCEANExtensionSupport.h"
 
-static int ZX_UPC_EAN_MAX_AVG_VARIANCE;
-static int ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE;
+static float ZX_UPC_EAN_MAX_AVG_VARIANCE = 0.48f;
+static float ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE = 0.7f;
 
 /**
  * Start/end guard pattern.
@@ -95,11 +95,6 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
 @end
 
 @implementation ZXUPCEANReader
-
-+ (void)initialize {
-  ZX_UPC_EAN_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f);
-  ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
-}
 
 - (id)init {
   if (self = [super init]) {
@@ -329,7 +324,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
     if (error) *error = ZXNotFoundErrorInstance();
     return -1;
   }
-  int bestVariance = ZX_UPC_EAN_MAX_AVG_VARIANCE;
+  float bestVariance = ZX_UPC_EAN_MAX_AVG_VARIANCE;
   int bestMatch = -1;
   int max = 0;
   switch (patternType) {
@@ -337,11 +332,11 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
       max = ZX_UPC_EAN_L_PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
         int pattern[counters.length];
-        for(int j = 0; j < counters.length; j++){
+        for (int j = 0; j < counters.length; j++){
           pattern[j] = ZX_UPC_EAN_L_PATTERNS[i][j];
         }
 
-        int variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE];
+        float variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE];
         if (variance < bestVariance) {
           bestVariance = variance;
           bestMatch = i;
@@ -352,11 +347,11 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
       max = ZX_UPC_EAN_L_AND_G_PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
         int pattern[counters.length];
-        for(int j = 0; j< counters.length; j++){
+        for (int j = 0; j< counters.length; j++){
           pattern[j] = ZX_UPC_EAN_L_AND_G_PATTERNS[i][j];
         }
 
-        int variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE];
+        float variance = [self patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_UPC_EAN_MAX_INDIVIDUAL_VARIANCE];
         if (variance < bestVariance) {
           bestVariance = variance;
           bestMatch = i;

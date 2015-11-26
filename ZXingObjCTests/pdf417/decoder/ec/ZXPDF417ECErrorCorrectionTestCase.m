@@ -27,11 +27,8 @@
 static ZXIntArray *PDF417_TEST = nil;
 static ZXIntArray *PDF417_TEST_WITH_EC = nil;
 static int ECC_BYTES;
-// Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:
-// l + 2f <= 2^(s+1) - 3
-const int EC_LEVEL = 5;
-const int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
-const int MAX_ERRORS = ERROR_LIMIT / 2;
+static int ERROR_LIMIT;
+static int MAX_ERRORS;
 
 + (void)initialize {
   /** See ISO 15438, Annex Q */
@@ -49,6 +46,8 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
       322, 317, 273, 194, 917, 237, 420, 859, 340, 115, 222, 808, 866, 836, 417, 121, 833, 459, 64, 159, -1];
 
   ECC_BYTES = PDF417_TEST_WITH_EC.length - PDF417_TEST.length;
+  ERROR_LIMIT = ECC_BYTES;
+  MAX_ERRORS = ERROR_LIMIT / 2;
 }
 
 - (id)initWithInvocation:(NSInvocation *)invocation {
@@ -83,8 +82,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 
 - (void)testTooManyErrors {
   ZXIntArray *received = [PDF417_TEST_WITH_EC copy];
-  // +3 since the algorithm can actually correct 2 more than it should here
-  [self corrupt:received howMany:MAX_ERRORS + 3];
+  [self corrupt:received howMany:MAX_ERRORS + 1];
 
   if ([self checkDecode:received]) {
     XCTFail(@"Should not have decoded");
@@ -96,7 +94,7 @@ const int MAX_ERRORS = ERROR_LIMIT / 2;
 }
 
 - (BOOL)checkDecode:(ZXIntArray *)received erasures:(ZXIntArray *)erasures {
-  if (![self.ec decode:received numECCodewords:ECC_BYTES erasures:erasures]) {
+  if ([self.ec decode:received numECCodewords:ECC_BYTES erasures:erasures] == -1) {
     return NO;
   }
 

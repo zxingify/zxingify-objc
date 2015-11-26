@@ -136,7 +136,7 @@ const int ZX_N4 = 10;
     intermediate = (y + x) % 3;
     break;
   case 4:
-    intermediate = ((int)((unsigned int)y >> 1) + (x / 3)) & 0x1;
+    intermediate = ((y / 2) + (x / 3)) & 0x1;
     break;
   case 5:
     temp = y * x;

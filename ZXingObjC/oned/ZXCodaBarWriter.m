@@ -21,32 +21,52 @@
 const unichar ZX_CODA_START_END_CHARS[] = {'A', 'B', 'C', 'D'};
 const unichar ZX_CODA_ALT_START_END_CHARS[] = {'T', 'N', '*', 'E'};
 const unichar ZX_CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED[] = {'/', ':', '+', '.'};
+static unichar ZX_CODA_DEFAULT_GUARD;
 
 @implementation ZXCodaBarWriter
 
++ (void)initialize {
+  if ([self class] != [ZXCodaBarWriter class]) return;
+
+  ZX_CODA_DEFAULT_GUARD = ZX_CODA_START_END_CHARS[0];
+}
+
 - (ZXBoolArray *)encode:(NSString *)contents {
   if ([contents length] < 2) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:@"Codabar should start/end with start/stop symbols"
-                                 userInfo:nil];
-  }
-
-  // Verify input and calculate decoded length.
-  unichar firstChar = [[contents uppercaseString] characterAtIndex:0];
-  unichar lastChar = [[contents uppercaseString] characterAtIndex:contents.length - 1];
-  BOOL startsEndsNormal =
-    [ZXCodaBarReader arrayContains:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar) key:firstChar] &&
-    [ZXCodaBarReader arrayContains:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar) key:lastChar];
-  BOOL startsEndsAlt =
-    [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:firstChar] &&
-    [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:lastChar];
-  if (!(startsEndsNormal || startsEndsAlt)) {
-    NSString *reason = [NSString stringWithFormat:@"Codabar should start/end with %@, or start/end with %@",
-                        [NSString stringWithCharacters:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar)],
-                        [NSString stringWithCharacters:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar)]];
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:reason
-                                 userInfo:nil];
+    // Can't have a start/end guard, so tentatively add default guards
+    contents = [NSString stringWithFormat:@"%C%@%C", ZX_CODA_DEFAULT_GUARD, contents, ZX_CODA_DEFAULT_GUARD];
+  } else {
+    // Verify input and calculate decoded length.
+    unichar firstChar = [[contents uppercaseString] characterAtIndex:0];
+    unichar lastChar = [[contents uppercaseString] characterAtIndex:contents.length - 1];
+    BOOL startsNormal = [ZXCodaBarReader arrayContains:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar) key:firstChar];
+    BOOL endsNormal = [ZXCodaBarReader arrayContains:ZX_CODA_START_END_CHARS length:sizeof(ZX_CODA_START_END_CHARS) / sizeof(unichar) key:lastChar];
+    BOOL startsAlt = [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:firstChar];
+    BOOL endsAlt = [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:lastChar];
+    if (startsNormal) {
+      if (!endsNormal) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"Invalid start/end guards: %@", contents]
+                                     userInfo:nil];
+      }
+      // else already has valid start/end
+    } else if (startsAlt) {
+      if (!endsAlt) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"Invalid start/end guards: %@", contents]
+                                     userInfo:nil];
+      }
+      // else already has valid start/end
+    } else {
+      // Doesn't start with a guard
+      if (endsNormal || endsAlt) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"Invalid start/end guards: %@", contents]
+                                     userInfo:nil];
+      }
+      // else doesn't end with guard either, so add a default
+      contents = [NSString stringWithFormat:@"%C%@%C", ZX_CODA_DEFAULT_GUARD, contents, ZX_CODA_DEFAULT_GUARD];
+    }
   }
 
   // The start character and the end character are decoded to 10 length each.

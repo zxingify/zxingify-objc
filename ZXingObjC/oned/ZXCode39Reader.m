@@ -121,7 +121,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     lastPatternSize += theCounters.array[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-  if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
+  if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
@@ -182,7 +182,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     } else {
       if (counterPosition == patternLength - 1) {
         if ([self toNarrowWidePattern:counters] == ZX_CODE39_ASTERISK_ENCODING &&
-            [row isRange:MAX(0, patternStart - ((i - patternStart) >> 1)) end:patternStart value:NO]) {
+            [row isRange:MAX(0, patternStart - ((i - patternStart) / 2)) end:patternStart value:NO]) {
           return [[ZXIntArray alloc] initWithInts:patternLength, i, -1];
         }
         patternStart += array[0] + array[1];
@@ -233,7 +233,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
         int counter = array[i];
         if (array[i] > maxNarrowCounter) {
           wideCounters--;
-          if ((counter << 1) >= totalWideCountersWidth) {
+          if ((counter * 2) >= totalWideCountersWidth) {
             return -1;
           }
         }

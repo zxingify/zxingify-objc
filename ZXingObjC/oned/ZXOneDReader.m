@@ -23,9 +23,6 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-const int ZX_ONED_INTEGER_MATH_SHIFT = 8;
-const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_SHIFT;
-
 @implementation ZXOneDReader
 
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error {
@@ -103,7 +100,7 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
   }
 
   for (int x = 0; x < maxLines; x++) {
-    int rowStepsAboveOrBelow = (x + 1) >> 1;
+    int rowStepsAboveOrBelow = (x + 1) / 2;
     BOOL isAbove = (x & 0x01) == 0;
     int rowNumber = middle + rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
     if (rowNumber < 0 || rowNumber >= height) {
@@ -218,12 +215,9 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
  * @param counters observed counters
  * @param pattern expected pattern
  * @param maxIndividualVariance The most any counter can differ before we give up
- * @return ratio of total variance between counters and pattern compared to total pattern size,
- *  where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
- *  the total variance between counters and patterns equals the pattern length, higher values mean
- *  even more variance
+ * @return ratio of total variance between counters and pattern compared to total pattern size
  */
-+ (int)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (float)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(float)maxIndividualVariance {
   int numCounters = counters.length;
   int total = 0;
   int patternLength = 0;
@@ -235,18 +229,18 @@ const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_ONED_INTEGER_MATH_
   }
 
   if (total < patternLength || patternLength == 0) {
-    return INT_MAX;
+    return FLT_MAX;
   }
-  int unitBarWidth = (total << ZX_ONED_INTEGER_MATH_SHIFT) / patternLength;
-  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> ZX_ONED_INTEGER_MATH_SHIFT;
-  int totalVariance = 0;
+  float unitBarWidth = (float) total / patternLength;
+  maxIndividualVariance *= unitBarWidth;
 
+  float totalVariance = 0.0f;
   for (int x = 0; x < numCounters; x++) {
-    int counter = array[x] << ZX_ONED_INTEGER_MATH_SHIFT;
-    int scaledPattern = pattern[x] * unitBarWidth;
-    int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
+    int counter = array[x];
+    float scaledPattern = pattern[x] * unitBarWidth;
+    float variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
-      return INT_MAX;
+      return FLT_MAX;
     }
     totalVariance += variance;
   }

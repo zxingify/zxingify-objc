@@ -19,42 +19,59 @@
 #import "ZXEmailDoCoMoResultParser.h"
 #import "ZXResult.h"
 
+static NSCharacterSet *ZX_EMAIL_ADDRESS_RESULT_COMMA = nil;
+
 @implementation ZXEmailAddressResultParser
+
++ (void)initialize {
+  if ([self class] != [ZXEmailAddressResultParser class]) return;
+
+  ZX_EMAIL_ADDRESS_RESULT_COMMA = [NSCharacterSet characterSetWithCharactersInString:@","];
+}
 
 - (ZXParsedResult *)parse:(ZXResult *)result {
   NSString *rawText = [ZXResultParser massagedText:result];
-  NSString *emailAddress;
   if ([rawText hasPrefix:@"mailto:"] || [rawText hasPrefix:@"MAILTO:"]) {
     // If it starts with mailto:, assume it is definitely trying to be an email address
-    emailAddress = [rawText substringFromIndex:7];
-    NSUInteger queryStart = [emailAddress rangeOfString:@"?"].location;
+    NSString *hostEmail = [rawText substringFromIndex:7];
+    NSUInteger queryStart = [hostEmail rangeOfString:@"?"].location;
     if (queryStart != NSNotFound) {
-      emailAddress = [emailAddress substringToIndex:queryStart];
+      hostEmail = [hostEmail substringToIndex:queryStart];
     }
-    emailAddress = [[self class] urlDecode:emailAddress];
+    hostEmail = [[self class] urlDecode:hostEmail];
+    NSArray *tos;
+    if (hostEmail.length > 0) {
+      tos = [hostEmail componentsSeparatedByCharactersInSet:ZX_EMAIL_ADDRESS_RESULT_COMMA];
+    }
     NSMutableDictionary *nameValues = [self parseNameValuePairs:rawText];
+    NSArray *ccs;
+    NSArray *bccs;
     NSString *subject = nil;
     NSString *body = nil;
     if (nameValues != nil) {
-      if ([emailAddress length] == 0) {
-        emailAddress = nameValues[@"to"];
+      if (!tos) {
+        NSString *tosString = nameValues[@"to"];
+        if (tosString) {
+          tos = [tosString componentsSeparatedByCharactersInSet:ZX_EMAIL_ADDRESS_RESULT_COMMA];
+        }
+      }
+      NSString *ccString = nameValues[@"cc"];
+      if (ccString) {
+        ccs = [ccString componentsSeparatedByCharactersInSet:ZX_EMAIL_ADDRESS_RESULT_COMMA];
+      }
+      NSString *bccString = nameValues[@"bcc"];
+      if (bccString) {
+        bccs = [bccString componentsSeparatedByCharactersInSet:ZX_EMAIL_ADDRESS_RESULT_COMMA];
       }
       subject = nameValues[@"subject"];
       body = nameValues[@"body"];
     }
-    return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
-                                                                        subject:subject
-                                                                           body:body
-                                                                      mailtoURI:rawText];
+    return [[ZXEmailAddressParsedResult alloc] initWithTos:tos ccs:ccs bccs:bccs subject:subject body:body];
   } else {
     if (![ZXEmailDoCoMoResultParser isBasicallyValidEmailAddress:rawText]) {
       return nil;
     }
-    emailAddress = rawText;
-    return [ZXEmailAddressParsedResult emailAddressParsedResultWithEmailAddress:emailAddress
-                                                                        subject:nil
-                                                                           body:nil
-                                                                      mailtoURI:[@"mailto:" stringByAppendingString:emailAddress]];
+    return [[ZXEmailAddressParsedResult alloc] initWithTo:rawText];
   }
 }
 

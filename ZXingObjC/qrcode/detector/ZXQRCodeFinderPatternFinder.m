@@ -27,8 +27,6 @@ const int ZX_CENTER_QUORUM = 2;
 const int ZX_FINDER_PATTERN_MIN_SKIP = 3;
 const int ZX_FINDER_PATTERN_MAX_MODULES = 57;
 
-const int ZX_QR_CODE_INTEGER_MATH_SHIFT = 8;
-
 @interface ZXQRCodeFinderPatternFinder ()
 
 NSInteger centerCompare(id center1, id center2, void *context);
@@ -160,7 +158,6 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
 
 + (BOOL)foundPatternCross:(const int[])stateCount {
   int totalModuleSize = 0;
-
   for (int i = 0; i < 5; i++) {
     int count = stateCount[i];
     if (count == 0) {
@@ -168,17 +165,18 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     }
     totalModuleSize += count;
   }
-
   if (totalModuleSize < 7) {
     return NO;
   }
-  int moduleSize = (totalModuleSize << ZX_QR_CODE_INTEGER_MATH_SHIFT) / 7;
-  int maxVariance = moduleSize / 2;
-  return abs(moduleSize - (stateCount[0] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(moduleSize - (stateCount[1] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(3 * moduleSize - (stateCount[2] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
-    abs(moduleSize - (stateCount[3] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance &&
-    abs(moduleSize - (stateCount[4] << ZX_QR_CODE_INTEGER_MATH_SHIFT)) < maxVariance;
+  float moduleSize = totalModuleSize / 7.0f;
+  float maxVariance = moduleSize / 2.0f;
+  // Allow less than 50% variance from 1-1-3-1-1 proportions
+  return
+    ABS(moduleSize - stateCount[0]) < maxVariance &&
+    ABS(moduleSize - stateCount[1]) < maxVariance &&
+    ABS(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
+    ABS(moduleSize - stateCount[3]) < maxVariance &&
+    ABS(moduleSize - stateCount[4]) < maxVariance;
 }
 
 /**
@@ -194,34 +192,34 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  * @return true if proportions are withing expected limits
  */
 - (BOOL)crossCheckDiagonal:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
-  int maxI = self.image.height;
-  int maxJ = self.image.width;
   int stateCount[5] = {0, 0, 0, 0, 0};
 
   // Start counting up, left from center finding black center mass
   int i = 0;
-  while (startI - i >= 0 && [self.image getX:centerJ - i y:startI - i]) {
+  while (startI >= i && centerJ >= i && [self.image getX:centerJ - i y:startI - i]) {
     stateCount[2]++;
     i++;
   }
 
-  if ((startI - i < 0) || (centerJ - i < 0)) {
+  if (startI < i || centerJ < i) {
     return NO;
   }
 
   // Continue up, left finding white space
-  while ((startI - i >= 0) && (centerJ - i >= 0) && ![self.image getX:centerJ - i y:startI - i] && stateCount[1] <= maxCount) {
+  while (startI >= i && centerJ >= i && ![self.image getX:centerJ - i y:startI - i] &&
+         stateCount[1] <= maxCount) {
     stateCount[1]++;
     i++;
   }
 
   // If already too many modules in this state or ran off the edge:
-  if ((startI - i < 0) || (centerJ - i < 0) || stateCount[1] > maxCount) {
+  if (startI < i || centerJ < i || stateCount[1] > maxCount) {
     return NO;
   }
 
   // Continue up, left finding black border
-  while ((startI - i >= 0) && (centerJ - i >= 0) && [self.image getX:centerJ - i y:startI - i] && stateCount[0] <= maxCount) {
+  while (startI >= i && centerJ >= i && [self.image getX:centerJ - i y:startI - i] &&
+         stateCount[0] <= maxCount) {
     stateCount[0]++;
     i++;
   }
@@ -229,28 +227,33 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
     return NO;
   }
 
+  int maxI = self.image.height;
+  int maxJ = self.image.width;
+
   // Now also count down, right from center
   i = 1;
-  while ((startI + i < maxI) && (centerJ + i < maxJ) && [self.image getX:centerJ + i y:startI + i]) {
+  while (startI + i < maxI && centerJ + i < maxJ && [self.image getX:centerJ + i y:startI + i]) {
     stateCount[2]++;
     i++;
   }
 
   // Ran off the edge?
-  if ((startI + i >= maxI) || (centerJ + i >= maxJ)) {
+  if (startI + i >= maxI || centerJ + i >= maxJ) {
     return NO;
   }
 
-  while ((startI + i < maxI) && (centerJ + i < maxJ) && ![self.image getX:centerJ + i y:startI + i] && stateCount[3] < maxCount) {
+  while (startI + i < maxI && centerJ + i < maxJ && ![self.image getX:centerJ + i y:startI + i] &&
+         stateCount[3] < maxCount) {
     stateCount[3]++;
     i++;
   }
 
-  if ((startI + i >= maxI) || (centerJ + i >= maxJ) || stateCount[3] >= maxCount) {
+  if (startI + i >= maxI || centerJ + i >= maxJ || stateCount[3] >= maxCount) {
     return NO;
   }
 
-  while ((startI + i < maxI) && (centerJ + i < maxJ) && [self.image getX:centerJ + i y:startI + i] && stateCount[4] < maxCount) {
+  while (startI + i < maxI && centerJ + i < maxJ && [self.image getX:centerJ + i y:startI + i] &&
+         stateCount[4] < maxCount) {
     stateCount[4]++;
     i++;
   }

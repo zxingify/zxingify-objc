@@ -22,7 +22,7 @@
 @implementation ZXBitArrayBuilder
 
 + (ZXBitArray *)buildBitArray:(NSArray *)pairs {
-  int charNumber = ((int)[pairs count] << 1) - 1;
+  int charNumber = ((int)[pairs count]  * 2) - 1;
   if ([pairs[pairs.count - 1] rightChar] == nil) {
     charNumber -= 1;
   }

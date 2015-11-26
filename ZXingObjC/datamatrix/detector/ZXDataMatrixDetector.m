@@ -333,7 +333,7 @@
 
   int dx = abs(toX - fromX);
   int dy = abs(toY - fromY);
-  int error = -dx >> 1;
+  int error = -dx / 2;
   int ystep = fromY < toY ? 1 : -1;
   int xstep = fromX < toX ? 1 : -1;
   int transitions = 0;

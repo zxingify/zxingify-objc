@@ -79,7 +79,7 @@ static NSArray *ZX_VERSIONS = nil;
     return nil;
   }
 
-  return [self versionForNumber:(dimension - 17) >> 2];
+  return [self versionForNumber:(dimension - 17) / 4];
 }
 
 + (ZXQRCodeVersion *)versionForNumber:(int)versionNumber {
@@ -150,6 +150,8 @@ static NSArray *ZX_VERSIONS = nil;
  * See ISO 18004:2006 6.5.1 Table 9
  */
 + (void)initialize {
+  if ([self class] != [ZXQRCodeVersion class]) return;
+
   ZX_VERSIONS = @[[ZXQRCodeVersion ZXQRCodeVersionWithVersionNumber:1
                                          alignmentPatternCenters:[[ZXIntArray alloc] initWithLength:0]
                                                        ecBlocks1:[ZXQRCodeECBlocks ecBlocksWithEcCodewordsPerBlock:7  ecBlocks:[ZXQRCodeECB ecbWithCount:1 dataCodewords:19]]

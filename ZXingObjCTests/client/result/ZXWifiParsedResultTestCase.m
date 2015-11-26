@@ -51,6 +51,10 @@
   [self doTestWithContents:@"WIFI:S:TenChars;P:hello\\:there;T:WEP;;" ssid:@"TenChars" password:@"hello:there" type:@"WEP"];
 }
 
+- (void)testEscape {
+  [self doTestWithContents:@"WIFI:T:WPA;S:test;P:my_password\\\\;;" ssid:@"test" password:@"my_password\\" type:@"WPA"];
+}
+
 /**
  * Given the string contents for the barcode, check that it matches our expectations
  */

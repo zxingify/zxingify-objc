@@ -143,6 +143,93 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
   [self testRotate180Width:8 height:5];
 }
 
+- (void)testParse {
+  ZXBitMatrix *emptyMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  ZXBitMatrix *fullMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  [fullMatrix setRegionAtLeft:0 top:0 width:3 height:3];
+  ZXBitMatrix *centerMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  [centerMatrix setRegionAtLeft:1 top:1 width:1 height:1];
+  ZXBitMatrix *emptyMatrix24 = [[ZXBitMatrix alloc] initWithWidth:2 height:4];
+
+  XCTAssertEqualObjects(emptyMatrix, [ZXBitMatrix parse:@"   \n   \n   \n" setString:@"x" unsetString:@" "]);
+  XCTAssertEqualObjects(emptyMatrix, [ZXBitMatrix parse:@"   \n   \r\r\n   \n\r" setString:@"x" unsetString:@" "]);
+  XCTAssertEqualObjects(emptyMatrix, [ZXBitMatrix parse:@"   \n   \n   " setString:@"x" unsetString:@" "]);
+
+  XCTAssertEqualObjects(fullMatrix, [ZXBitMatrix parse:@"xxx\nxxx\nxxx\n" setString:@"x" unsetString:@" "]);
+
+  XCTAssertEqualObjects(centerMatrix, [ZXBitMatrix parse:@"   \n x \n   \n" setString:@"x" unsetString:@" "]);
+  XCTAssertEqualObjects(centerMatrix, [ZXBitMatrix parse:@"      \n  x   \n      \n" setString:@"x " unsetString:@"  "]);
+
+  @try {
+    [ZXBitMatrix parse:@"   \n xy\n   \n" setString:@"x" unsetString:@" "];
+    XCTFail(@"Failure expected");
+  } @catch (NSException *expected) {
+    // good
+  }
+
+  XCTAssertEqualObjects(emptyMatrix24, [ZXBitMatrix parse:@"  \n  \n  \n  \n" setString:@"x" unsetString:@" "]);
+
+  XCTAssertEqualObjects(centerMatrix, [ZXBitMatrix parse:[centerMatrix descriptionWithSetString:@"x" unsetString:@"."] setString:@"x" unsetString:@"."]);
+}
+
+- (void)testUnset {
+  ZXBitMatrix *emptyMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  ZXBitMatrix *matrix = [emptyMatrix copy];
+  [matrix setX:1 y:1];
+  XCTAssertNotEqualObjects(emptyMatrix, matrix);
+  [matrix unsetX:1 y:1];
+  XCTAssertEqualObjects(emptyMatrix, matrix);
+  [matrix unsetX:1 y:1];
+  XCTAssertEqualObjects(emptyMatrix, matrix);
+}
+
+- (void)testXOR {
+  ZXBitMatrix *emptyMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  ZXBitMatrix *fullMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  [fullMatrix setRegionAtLeft:0 top:0 width:3 height:3];
+  ZXBitMatrix *centerMatrix = [[ZXBitMatrix alloc] initWithWidth:3 height:3];
+  [centerMatrix setRegionAtLeft:1 top:1 width:1 height:1];
+  ZXBitMatrix *invertedCenterMatrix = [fullMatrix copy];
+  [invertedCenterMatrix unsetX:1 y:1];
+  ZXBitMatrix *badMatrix = [[ZXBitMatrix alloc] initWithWidth:4 height:4];
+
+  [self testXOR:emptyMatrix flipMatrix:emptyMatrix expectedMatrix:emptyMatrix];
+  [self testXOR:emptyMatrix flipMatrix:centerMatrix expectedMatrix:centerMatrix];
+  [self testXOR:emptyMatrix flipMatrix:fullMatrix expectedMatrix:fullMatrix];
+
+  [self testXOR:centerMatrix flipMatrix:emptyMatrix expectedMatrix:centerMatrix];
+  [self testXOR:centerMatrix flipMatrix:centerMatrix expectedMatrix:emptyMatrix];
+  [self testXOR:centerMatrix flipMatrix:fullMatrix expectedMatrix:invertedCenterMatrix];
+
+  [self testXOR:invertedCenterMatrix flipMatrix:emptyMatrix expectedMatrix:invertedCenterMatrix];
+  [self testXOR:invertedCenterMatrix flipMatrix:centerMatrix expectedMatrix:fullMatrix];
+  [self testXOR:invertedCenterMatrix flipMatrix:fullMatrix expectedMatrix:centerMatrix];
+
+  [self testXOR:fullMatrix flipMatrix:emptyMatrix expectedMatrix:fullMatrix];
+  [self testXOR:fullMatrix flipMatrix:centerMatrix expectedMatrix:invertedCenterMatrix];
+  [self testXOR:fullMatrix flipMatrix:fullMatrix expectedMatrix:emptyMatrix];
+
+  @try {
+    [(ZXBitMatrix *)[emptyMatrix copy] xor:badMatrix];
+    XCTFail(@"Failure expected");
+  } @catch (NSException *expected) {
+    // good
+  }
+
+  @try {
+    [(ZXBitMatrix *)[badMatrix copy] xor:emptyMatrix];
+    XCTFail(@"Failure expected");
+  } @catch (NSException *expected) {
+    // good
+  }
+}
+
+- (void)testXOR:(ZXBitMatrix *)dataMatrix flipMatrix:(ZXBitMatrix *)flipMatrix expectedMatrix:(ZXBitMatrix *)expectedMatrix {
+  ZXBitMatrix *matrix = [dataMatrix copy];
+  [matrix xor:flipMatrix];
+  XCTAssertEqualObjects(expectedMatrix, matrix);
+}
+
 - (void)testRotate180Width:(int)width height:(int)height {
   ZXBitMatrix *input = [self inputWithWidth:width height:height];
   [input rotate180];

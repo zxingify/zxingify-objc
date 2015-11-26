@@ -77,8 +77,9 @@
   NSUInteger max = [(ZXDataMatrixDataBlock *)result[0] codewords].length;
   for (int i = longerBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < [result count]; j++) {
-      int iOffset = specialVersion && j > 7 ? i - 1 : i;
-      [(ZXDataMatrixDataBlock *)result[j] codewords].array[iOffset] = rawCodewords.array[rawCodewordsOffset++];
+      int jOffset = specialVersion ? (j + 8) % [result count] : j;
+      int iOffset = specialVersion && jOffset > 7 ? i - 1 : i;
+      [(ZXDataMatrixDataBlock *)result[jOffset] codewords].array[iOffset] = rawCodewords.array[rawCodewordsOffset++];
     }
   }
 

@@ -26,6 +26,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		027E587A1ABC5BBC00C334CA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 25FFF6921839837E00C2E985 /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB72547F1A523C9200EFF81B;
+			remoteInfo = "iOS Framework";
+		};
 		25FFF69A1839837F00C2E985 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 25FFF6921839837E00C2E985 /* ZXingObjC.xcodeproj */;
@@ -182,6 +189,7 @@
 				25FFF69F1839837F00C2E985 /* libZXingObjC-osx.a */,
 				25FFF6A11839837F00C2E985 /* Unit Tests OS X.xctest */,
 				25FFF6A31839837F00C2E985 /* ZXingObjC.framework */,
+				027E587B1ABC5BBC00C334CA /* ZXingObjC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,7 +221,7 @@
 		024D10D2156EAB6E00FE6872 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "Draconis Software";
 			};
 			buildConfigurationList = 024D10D5156EAB6E00FE6872 /* Build configuration list for PBXProject "BarcodeScanner" */;
@@ -240,6 +248,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		027E587B1ABC5BBC00C334CA /* ZXingObjC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ZXingObjC.framework;
+			remoteRef = 027E587A1ABC5BBC00C334CA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		25FFF69B1839837F00C2E985 /* libZXingObjC-iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -340,9 +355,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -375,9 +392,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

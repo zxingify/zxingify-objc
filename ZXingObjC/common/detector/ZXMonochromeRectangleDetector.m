@@ -40,38 +40,38 @@ const int ZX_MONOCHROME_MAX_MODULES = 32;
 - (NSArray *)detectWithError:(NSError **)error {
   int height = [self.image height];
   int width = [self.image width];
-  int halfHeight = height >> 1;
-  int halfWidth = width >> 1;
-  int deltaY = MAX(1, height / (ZX_MONOCHROME_MAX_MODULES << 3) > 1);
-  int deltaX = MAX(1, width / (ZX_MONOCHROME_MAX_MODULES << 3) > 1);
+  int halfHeight = height / 2;
+  int halfWidth = width / 2;
+  int deltaY = MAX(1, height / (ZX_MONOCHROME_MAX_MODULES * 8) > 1);
+  int deltaX = MAX(1, width / (ZX_MONOCHROME_MAX_MODULES * 8) > 1);
 
   int top = 0;
   int bottom = height;
   int left = 0;
   int right = width;
   ZXResultPoint *pointA = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
-                                              centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 1];
+                                              centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth / 2];
   if (!pointA) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   top = (int)[pointA y] - 1;
   ZXResultPoint *pointB = [self findCornerFromCenter:halfWidth deltaX:-deltaX left:left right:right
-                                              centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight >> 1];
+                                              centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight / 2];
   if (!pointB) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   left = (int)[pointB x] - 1;
   ZXResultPoint *pointC = [self findCornerFromCenter:halfWidth deltaX:deltaX left:left right:right
-                                              centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight >> 1];
+                                              centerY:halfHeight deltaY:0 top:top bottom:bottom maxWhiteRun:halfHeight / 2];
   if (!pointC) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
   right = (int)[pointC x] + 1;
   ZXResultPoint *pointD = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
-                                              centerY:halfHeight deltaY:deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 1];
+                                              centerY:halfHeight deltaY:deltaY top:top bottom:bottom maxWhiteRun:halfWidth / 2];
   if (!pointD) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
@@ -79,7 +79,7 @@ const int ZX_MONOCHROME_MAX_MODULES = 32;
   bottom = (int)[pointD y] + 1;
 
   pointA = [self findCornerFromCenter:halfWidth deltaX:0 left:left right:right
-                              centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth >> 2];
+                              centerY:halfHeight deltaY:-deltaY top:top bottom:bottom maxWhiteRun:halfWidth / 4];
   if (!pointA) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
@@ -162,7 +162,7 @@ const int ZX_MONOCHROME_MAX_MODULES = 32;
  *  (e.g. only white was found)
  */
 - (NSArray *)blackWhiteRange:(int)fixedDimension maxWhiteRun:(int)maxWhiteRun minDim:(int)minDim maxDim:(int)maxDim horizontal:(BOOL)horizontal {
-  int center = (minDim + maxDim) >> 1;
+  int center = (minDim + maxDim) / 2;
 
   int start = center;
   while (start >= minDim) {

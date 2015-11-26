@@ -18,14 +18,29 @@
 
 @interface ZXEmailAddressParsedResult : ZXParsedResult
 
-@property (nonatomic, copy, readonly) NSString *body;
-@property (nonatomic, copy, readonly) NSString *emailAddress;
-@property (nonatomic, copy, readonly) NSString *mailtoURI;
+@property (nonatomic, copy, readonly) NSArray *tos;
+@property (nonatomic, copy, readonly) NSArray *ccs;
+@property (nonatomic, copy, readonly) NSArray *bccs;
 @property (nonatomic, copy, readonly) NSString *subject;
+@property (nonatomic, copy, readonly) NSString *body;
 
-- (id)initWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject body:(NSString *)body
-                 mailtoURI:(NSString *)mailtoURI;
-+ (id)emailAddressParsedResultWithEmailAddress:(NSString *)emailAddress subject:(NSString *)subject
-                                          body:(NSString *)body mailtoURI:(NSString *)mailtoURI;
+/**
+ * @return first elements of tos or nil if none
+ * @deprecated use tos
+ */
+@property (nonatomic, copy, readonly) NSString *emailAddress DEPRECATED_ATTRIBUTE;
+
+/**
+ * @return "mailto:"
+ * @deprecated without replacement
+ */
+@property (nonatomic, copy, readonly) NSString *mailtoURI DEPRECATED_ATTRIBUTE;
+
+- (id)initWithTo:(NSString *)to;
+- (id)initWithTos:(NSArray *)tos
+              ccs:(NSArray *)ccs
+             bccs:(NSArray *)bccs
+          subject:(NSString *)subject
+             body:(NSString *)body;
 
 @end

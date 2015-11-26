@@ -28,7 +28,7 @@
  * detecting any one of them.
  *
  * That is, instead of passing an ZXReader a caller might pass
- * [[ZXByQuadrantReader alloc] initWithDelegate:reader]</code>.
+ * <code>[[ZXByQuadrantReader alloc] initWithDelegate:reader]</code>.
  */
 @interface ZXGenericMultipleBarcodeReader : NSObject <ZXMultipleBarcodeReader>
 

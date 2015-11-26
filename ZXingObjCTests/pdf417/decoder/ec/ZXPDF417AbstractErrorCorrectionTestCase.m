@@ -15,20 +15,12 @@
  */
 
 #import "ZXPDF417AbstractErrorCorrectionTestCase.h"
+#import "ZXReedSolomonTestCase.h"
 
 @implementation ZXPDF417AbstractErrorCorrectionTestCase
 
 - (void)corrupt:(ZXIntArray *)received howMany:(int)howMany {
-  ZXBoolArray *corrupted = [[ZXBoolArray alloc] initWithLength:received.length];
-  for (int j = 0; j < howMany; j++) {
-    int location = arc4random() % received.length;
-    if (corrupted.array[location]) {
-      j--;
-    } else {
-      corrupted.array[location] = YES;
-      received.array[location] = (int32_t)(arc4random() % 929);
-    }
-  }
+  [ZXReedSolomonTestCase corrupt:received howMany:howMany max:929];
 }
 
 @end

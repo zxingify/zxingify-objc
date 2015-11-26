@@ -91,7 +91,7 @@
     return self.parsedVersion;
   }
   int dimension = self.bitMatrix.height;
-  int provisionalVersion = (dimension - 17) >> 2;
+  int provisionalVersion = (dimension - 17) / 4;
   if (provisionalVersion <= 6) {
     return [ZXQRCodeVersion versionForNumber:provisionalVersion];
   }

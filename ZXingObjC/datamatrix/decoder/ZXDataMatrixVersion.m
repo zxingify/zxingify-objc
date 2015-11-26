@@ -101,6 +101,8 @@ static NSArray *VERSIONS = nil;
  * See ISO 16022:2006 5.5.1 Table 7
  */
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixVersion class]) return;
+
   VERSIONS = @[[[ZXDataMatrixVersion alloc] initWithVersionNumber:1
                                                    symbolSizeRows:10
                                                 symbolSizeColumns:10

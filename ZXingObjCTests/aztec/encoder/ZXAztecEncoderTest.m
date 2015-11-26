@@ -17,7 +17,7 @@
 #import "ZXAztecEncoderTest.h"
 #import "ZXBoolArray.h"
 
-unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
+unsigned int ZXAztecEncoderTest_RANDOM_SEED = 0xDEADBEEF;
 
 @interface ZXAztecEncoder (PrivateMethods)
 
@@ -112,22 +112,24 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
 }
 
 - (void)testAztecWriter {
-  NSString *sampleData = [NSString stringWithFormat:@"%c 1 sample data.", 0x20AC];
-  [self testWriter:sampleData encoding:NSISOLatin1StringEncoding eccPercent:25 compact:YES layers:2];
-  [self testWriter:@"\u20AC 1 sample data." encoding:(NSStringEncoding) 0x8000020F eccPercent:25 compact:YES layers:2];
-  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:25 compact:YES layers:2];
-  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:100 compact:YES layers:3];
-  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:300 compact:YES layers:4];
-  [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:500 compact:NO layers:5];
-  // Test AztecWriter defaults
-  NSString *data = @"In ut magna vel mauris malesuada";
-  ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
-  ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 error:nil];
-  ZXAztecCode *aztec = [ZXAztecEncoder encode:[self stringToByteArray:data]
-                                minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT
-                          userSpecifiedLayers:ZX_AZTEC_DEFAULT_LAYERS];
-  ZXBitMatrix *expectedMatrix = aztec.matrix;
-  XCTAssertEqualObjects(matrix, expectedMatrix);
+  for (int i = 0; i < 1000; i++) {
+    NSString *sampleData = [NSString stringWithFormat:@"%c 1 sample data.", 0x20AC];
+    [self testWriter:sampleData encoding:NSISOLatin1StringEncoding eccPercent:25 compact:YES layers:2];
+    [self testWriter:@"\u20AC 1 sample data." encoding:(NSStringEncoding) 0x8000020F eccPercent:25 compact:YES layers:2];
+    [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:25 compact:YES layers:2];
+    [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:100 compact:YES layers:3];
+    [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:300 compact:YES layers:4];
+    [self testWriter:sampleData encoding:NSUTF8StringEncoding eccPercent:500 compact:NO layers:5];
+    // Test AztecWriter defaults
+    NSString *data = @"In ut magna vel mauris malesuada";
+    ZXAztecWriter *writer = [[ZXAztecWriter alloc] init];
+    ZXBitMatrix *matrix = [writer encode:data format:kBarcodeFormatAztec width:0 height:0 error:nil];
+    ZXAztecCode *aztec = [ZXAztecEncoder encode:[self stringToByteArray:data]
+                                  minECCPercent:ZX_AZTEC_DEFAULT_EC_PERCENT
+                            userSpecifiedLayers:ZX_AZTEC_DEFAULT_LAYERS];
+    ZXBitMatrix *expectedMatrix = aztec.matrix;
+    XCTAssertEqualObjects(matrix, expectedMatrix);
+  }
 }
 
 // synthetic tests (encode-decode round-trip)
@@ -458,9 +460,9 @@ unsigned int ZXAztecEncoderTest_RANDOM_SEED = 3735928559;
   ZXAztecDetectorResult *r = [[ZXAztecDetectorResult alloc] initWithBits:matrix points:@[] compact:aztec.compact nbDatablocks:aztec.codeWords nbLayers:aztec.layers];
   ZXDecoderResult *res = [[[ZXAztecDecoder alloc] init] decode:r error:nil];
   XCTAssertEqualObjects(expectedData, res.text);
-  // Check error correction by introducing up to eccPercent errors
+  // Check error correction by introducing up to eccPercent/2 errors
   srand(ZXAztecEncoderTest_RANDOM_SEED);
-  NSInteger ecWords = aztec.codeWords * eccPercent / 100;
+  NSInteger ecWords = aztec.codeWords * eccPercent / 100 / 2;
   for (NSInteger i = 0; i < ecWords; i++) {
     // don't touch the core
     int x = rand() % 2 > 0 ?

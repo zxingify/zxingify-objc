@@ -19,6 +19,7 @@
 #import "ZXDecodeHints.h"
 #import "ZXErrors.h"
 #import "ZXResult.h"
+#import "ZXResultPoint.h"
 
 @interface ZXByQuadrantReader ()
 
@@ -46,9 +47,11 @@
   int halfWidth = width / 2;
   int halfHeight = height / 2;
 
-  ZXBinaryBitmap *topLeft = [image crop:0 top:0 width:halfWidth height:halfHeight];
+  // No need to call makeAbsolute as results will be relative to original top left here
   NSError *decodeError = nil;
-  ZXResult *result = [self.delegate decode:topLeft hints:hints error:&decodeError];
+  ZXResult *result = [self.delegate decode:[image crop:0 top:0 width:halfWidth height:halfHeight]
+                                     hints:hints
+                                     error:&decodeError];
   if (result) {
     return result;
   } else if (decodeError.code != ZXNotFoundError) {
@@ -56,30 +59,36 @@
     return nil;
   }
 
-  ZXBinaryBitmap *topRight = [image crop:halfWidth top:0 width:halfWidth height:halfHeight];
   decodeError = nil;
-  result = [self.delegate decode:topRight hints:hints error:&decodeError];
+  result = [self.delegate decode:[image crop:halfWidth top:0 width:halfWidth height:halfHeight]
+                           hints:hints
+                           error:&decodeError];
   if (result) {
+    [self makeAbsolute:result.resultPoints leftOffset:halfWidth topOffset:0];
     return result;
   } else if (decodeError.code != ZXNotFoundError) {
     if (error) *error = decodeError;
     return nil;
   }
 
-  ZXBinaryBitmap *bottomLeft = [image crop:0 top:halfHeight width:halfWidth height:halfHeight];
   decodeError = nil;
-  result = [self.delegate decode:bottomLeft hints:hints error:&decodeError];
+  result = [self.delegate decode:[image crop:0 top:halfHeight width:halfWidth height:halfHeight]
+                           hints:hints
+                           error:&decodeError];
   if (result) {
+    [self makeAbsolute:result.resultPoints leftOffset:0 topOffset:halfHeight];
     return result;
   } else if (decodeError.code != ZXNotFoundError) {
     if (error) *error = decodeError;
     return nil;
   }
 
-  ZXBinaryBitmap *bottomRight = [image crop:halfWidth top:halfHeight width:halfWidth height:halfHeight];
   decodeError = nil;
-  result = [self.delegate decode:bottomRight hints:hints error:&decodeError];
+  result = [self.delegate decode:[image crop:halfWidth top:halfHeight width:halfWidth height:halfHeight]
+                           hints:hints
+                           error:&decodeError];
   if (result) {
+    [self makeAbsolute:result.resultPoints leftOffset:halfWidth topOffset:halfHeight];
     return result;
   } else if (decodeError.code != ZXNotFoundError) {
     if (error) *error = decodeError;
@@ -89,11 +98,24 @@
   int quarterWidth = halfWidth / 2;
   int quarterHeight = halfHeight / 2;
   ZXBinaryBitmap *center = [image crop:quarterWidth top:quarterHeight width:halfWidth height:halfHeight];
-  return [self.delegate decode:center hints:hints error:error];
+  result = [self.delegate decode:center hints:hints error:error];
+  if (result) {
+    [self makeAbsolute:result.resultPoints leftOffset:quarterWidth topOffset:quarterHeight];
+  }
+  return result;
 }
 
 - (void)reset {
   [self.delegate reset];
+}
+
+- (void)makeAbsolute:(NSMutableArray *)points leftOffset:(int)leftOffset topOffset:(int)topOffset {
+  if (points) {
+    for (int i = 0; i < points.count; i++) {
+      ZXResultPoint *relative = points[i];
+      points[i] = [[ZXResultPoint alloc] initWithX:relative.x + leftOffset y:relative.y + topOffset];
+    }
+  }
 }
 
 @end

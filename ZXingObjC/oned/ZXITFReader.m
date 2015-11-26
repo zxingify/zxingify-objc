@@ -22,8 +22,8 @@
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
 
-static int ZX_ITF_MAX_AVG_VARIANCE;
-static int ZX_ITF_MAX_INDIVIDUAL_VARIANCE;
+static float ZX_ITF_MAX_AVG_VARIANCE = 0.38f;
+static float ZX_ITF_MAX_INDIVIDUAL_VARIANCE = 0.78f;
 
 static const int ZX_ITF_W = 3; // Pixel width of a wide line
 static const int ZX_ITF_N = 1; // Pixel width of a narrow line
@@ -64,11 +64,6 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
 @end
 
 @implementation ZXITFReader
-
-+ (void)initialize {
-  ZX_ITF_MAX_AVG_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-  ZX_ITF_MAX_INDIVIDUAL_VARIANCE = (int)(ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
-}
 
 - (id)init {
   if (self = [super init]) {
@@ -158,7 +153,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     }
     // Split them into each array
     for (int k = 0; k < 5; k++) {
-      int twoK = k << 1;
+      int twoK = 2 * k;
       counterBlack.array[k] = counterDigitPair.array[twoK];
       counterWhite.array[k] = counterDigitPair.array[twoK + 1];
     }
@@ -198,7 +193,7 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     return nil;
   }
 
-  self.narrowLineWidth = (startPattern.array[1] - startPattern.array[0]) >> 2;
+  self.narrowLineWidth = (startPattern.array[1] - startPattern.array[0]) / 4;
 
   if (![self validateQuietZone:row startPattern:startPattern.array[0]]) {
     return nil;
@@ -337,15 +332,15 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
  * @return The decoded digit or -1 if digit cannot be decoded
  */
 - (int)decodeDigit:(ZXIntArray *)counters {
-  int bestVariance = ZX_ITF_MAX_AVG_VARIANCE; // worst variance we'll accept
+  float bestVariance = ZX_ITF_MAX_AVG_VARIANCE; // worst variance we'll accept
   int bestMatch = -1;
   int max = ZX_ITF_PATTERNS_LEN;
   for (int i = 0; i < max; i++) {
     int pattern[counters.length];
-    for(int ind = 0; ind < counters.length; ind++){
+    for (int ind = 0; ind < counters.length; ind++){
       pattern[ind] = ZX_ITF_PATTERNS[i][ind];
     }
-    int variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_ITF_MAX_INDIVIDUAL_VARIANCE];
+    float variance = [ZXOneDReader patternMatchVariance:counters pattern:pattern maxIndividualVariance:ZX_ITF_MAX_INDIVIDUAL_VARIANCE];
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = i;

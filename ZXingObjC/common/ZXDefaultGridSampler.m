@@ -55,7 +55,7 @@
     return nil;
   }
   ZXBitMatrix *bits = [[ZXBitMatrix alloc] initWithWidth:dimensionX height:dimensionY];
-  int pointsLen = dimensionX << 1;
+  int pointsLen = 2 * dimensionX;
   float pointsf[pointsLen];
   memset(pointsf, 0, pointsLen * sizeof(float));
 
@@ -63,7 +63,7 @@
     int max = dimensionX << 1;
     float iValue = (float)y + 0.5f;
     for (int x = 0; x < max; x += 2) {
-      pointsf[x] = (float) (x >> 1) + 0.5f;
+      pointsf[x] = (float) (x / 2) + 0.5f;
       pointsf[x + 1] = iValue;
     }
     [transform transformPoints:pointsf pointsLen:pointsLen];
@@ -80,7 +80,7 @@
       }
 
       if ([image getX:xx y:yy]) {
-        [bits setX:x >> 1 y:y];
+        [bits setX:x / 2 y:y];
       }
     }
   }

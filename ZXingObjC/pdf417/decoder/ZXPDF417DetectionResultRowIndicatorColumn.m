@@ -112,10 +112,11 @@
   return (int) (averageRowHeight + 0.5);
 }
 
-- (ZXIntArray *)rowHeights {
+- (BOOL)getRowHeights:(ZXIntArray **)rowHeights {
   ZXPDF417BarcodeMetadata *barcodeMetadata = [self barcodeMetadata];
   if (!barcodeMetadata) {
-    return nil;
+    *rowHeights = nil;
+    return YES;
   }
   [self adjustIncompleteIndicatorColumnRowNumbers:barcodeMetadata];
   ZXIntArray *result = [[ZXIntArray alloc] initWithLength:barcodeMetadata.rowCount];
@@ -123,12 +124,14 @@
     if ((id)codeword != [NSNull null]) {
       int rowNumber = codeword.rowNumber;
       if (rowNumber >= result.length) {
-        return nil;
+        *rowHeights = nil;
+        return NO;
       }
       result.array[rowNumber]++;
     } // else throw exception?
   }
-  return result;
+  *rowHeights = result;
+  return YES;
 }
 
 // TODO maybe we should add missing codewords to store the correct row number to make

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "ZXCharacterSetECI.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXIntArray.h"
@@ -33,6 +34,9 @@ const int ZX_PDF417_TEXT_COMPACTION_MODE_LATCH = 900;
 const int ZX_PDF417_BYTE_COMPACTION_MODE_LATCH = 901;
 const int ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH = 902;
 const int ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6 = 924;
+const int ZX_PDF417_ECI_USER_DEFINED = 925;
+const int ZX_PDF417_ECI_GENERAL_PURPOSE = 926;
+const int ZX_PDF417_ECI_CHARSET = 927;
 const int ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
 const int ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
 const int ZX_PDF417_MACRO_PDF417_TERMINATOR = 922;
@@ -48,7 +52,7 @@ const int ZX_PDF417_PS = 29;
 const int ZX_PDF417_PAL = 29;
 
 const unichar ZX_PDF417_PUNCT_CHARS[] = {
-  ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
+  ';', '<', '>', '@', '[', '\\', ']', '_', '`', '~', '!',
   '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
   '(', ')', '?', '{', '}', '\''};
 
@@ -59,6 +63,8 @@ const unichar ZX_PDF417_MIXED_CHARS[] = {
 
 const int ZX_PDF417_NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 
+const NSStringEncoding ZX_PDF417_DECODING_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
+
 /**
  * Table containing values for the exponent of 900.
  * This is used in the numeric compaction decode algorithm.
@@ -68,6 +74,8 @@ static NSArray *ZX_PDF417_EXP900 = nil;
 @implementation ZXPDF417DecodedBitStreamParser
 
 + (void)initialize {
+  if ([self class] != [ZXPDF417DecodedBitStreamParser class]) return;
+
   NSMutableArray *exponents = [NSMutableArray arrayWithCapacity:16];
   [exponents addObject:[NSDecimalNumber one]];
   NSDecimalNumber *nineHundred = [NSDecimalNumber decimalNumberWithString:@"900"];
@@ -79,11 +87,8 @@ static NSArray *ZX_PDF417_EXP900 = nil;
 }
 
 + (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error {
-  if (!codewords) {
-    if (error) *error = ZXNotFoundErrorInstance();
-    return nil;
-  }
   NSMutableString *result = [NSMutableString stringWithCapacity:codewords.length * 2];
+  NSStringEncoding encoding = ZX_PDF417_DECODING_DEFAULT_ENCODING;
   // Get compaction mode
   int codeIndex = 1;
   int code = codewords.array[codeIndex++];
@@ -95,23 +100,43 @@ static NSArray *ZX_PDF417_EXP900 = nil;
       break;
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH:
     case ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6:
+      codeIndex = [self byteCompaction:code codewords:codewords encoding:encoding codeIndex:codeIndex result:result];
+      break;
     case ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-      codeIndex = [self byteCompaction:code codewords:codewords codeIndex:codeIndex result:result];
+      [result appendFormat:@"%C", (unichar)codewords.array[codeIndex++]];
       break;
     case ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH:
       codeIndex = [self numericCompaction:codewords codeIndex:codeIndex result:result];
+      if (codeIndex < 0) {
+        if (error) *error = ZXFormatErrorInstance();
+        return nil;
+      }
+      break;
+    case ZX_PDF417_ECI_CHARSET: {
+      ZXCharacterSetECI *charsetECI =
+        [ZXCharacterSetECI characterSetECIByValue:codewords.array[codeIndex++]];
+      encoding = charsetECI.encoding;
+      break;
+    }
+    case ZX_PDF417_ECI_GENERAL_PURPOSE:
+      // Can't do anything with generic ECI; skip its 2 characters
+      codeIndex += 2;
+      break;
+    case ZX_PDF417_ECI_USER_DEFINED:
+      // Can't do anything with user ECI; skip its 1 character
+      codeIndex ++;
       break;
     case ZX_PDF417_BEGIN_MACRO_PDF417_CONTROL_BLOCK:
       codeIndex = [self decodeMacroBlock:codewords codeIndex:codeIndex resultMetadata:resultMetadata];
       if (codeIndex < 0) {
-        if (error) *error = ZXNotFoundErrorInstance();
+        if (error) *error = ZXFormatErrorInstance();
         return nil;
       }
       break;
     case ZX_PDF417_BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
     case ZX_PDF417_MACRO_PDF417_TERMINATOR:
       // Should not see these outside a macro block
-      if (error) *error = ZXNotFoundErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     default:
       // Default to text compaction. During testing numerous barcodes
@@ -124,12 +149,12 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     if (codeIndex < codewords.length) {
       code = codewords.array[codeIndex++];
     } else {
-      if (error) *error = ZXNotFoundErrorInstance();
+      if (error) *error = ZXFormatErrorInstance();
       return nil;
     }
   }
   if ([result length] == 0) {
-    if (error) *error = ZXNotFoundErrorInstance();
+    if (error) *error = ZXFormatErrorInstance();
     return nil;
   }
   ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:nil text:result byteSegments:nil ecLevel:ecLevel];
@@ -195,9 +220,9 @@ static NSArray *ZX_PDF417_EXP900 = nil;
  */
 + (int)textCompaction:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
   // 2 character per codeword
-  ZXIntArray *textCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) << 1];
+  ZXIntArray *textCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) * 2];
   // Used to hold the byte compaction value if there is a mode shift
-  ZXIntArray *byteCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) << 1];
+  ZXIntArray *byteCompactionData = [[ZXIntArray alloc] initWithLength:(codewords.array[0] - codeIndex) * 2];
 
   int index = 0;
   BOOL end = NO;
@@ -287,6 +312,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
             priorToShiftMode = subMode;
             subMode = ZXPDF417ModePunctShift;
           } else if (subModeCh == ZX_PDF417_MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
+            // TODO Does this need to use the current character encoding? See other occurrences below
             [result appendFormat:@"%C", (unichar)byteCompactionData.array[i]];
           } else if (subModeCh == ZX_PDF417_TEXT_COMPACTION_MODE_LATCH) {
             subMode = ZXPDF417ModeAlpha;
@@ -406,17 +432,22 @@ static NSArray *ZX_PDF417_EXP900 = nil;
  *
  * @param mode      The byte compaction mode i.e. 901 or 924
  * @param codewords The array of codewords (data + error)
+ * @param encoding  Currently active character encoding
  * @param codeIndex The current index into the codeword array.
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-+ (int)byteCompaction:(int)mode codewords:(ZXIntArray *)codewords codeIndex:(int)codeIndex result:(NSMutableString *)result {
++ (int)byteCompaction:(int)mode
+            codewords:(ZXIntArray *)codewords
+             encoding:(NSStringEncoding)encoding
+            codeIndex:(int)codeIndex
+               result:(NSMutableString *)result {
+  NSMutableData *decodedBytes = [NSMutableData data];
   if (mode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH) {
     // Total number of Byte Compaction characters to be encoded
     // is not a multiple of 6
     int count = 0;
     long long value = 0;
-    unichar decodedData[6] = {0, 0, 0, 0, 0, 0};
     ZXIntArray *byteCompactedCodewords = [[ZXIntArray alloc] initWithLength:6];
     BOOL end = NO;
     int nextCode = codewords.array[codeIndex++];
@@ -440,10 +471,10 @@ static NSArray *ZX_PDF417_EXP900 = nil;
           // Decode every 5 codewords
           // Convert to Base 256
           for (int j = 0; j < 6; ++j) {
-            decodedData[5 - j] = (unichar) (value % 256);
-            value >>= 8;
+            int8_t byte = (int8_t) (value >> (8 * (5 - j)));
+            [decodedBytes appendBytes:&byte length:1];
           }
-          [result appendString:[[NSString alloc] initWithCharacters:decodedData length:6]];
+          value = 0;
           count = 0;
         }
       }
@@ -458,7 +489,8 @@ static NSArray *ZX_PDF417_EXP900 = nil;
     // the last group of codewords is interpreted directly
     // as one byte per codeword, without compaction.
     for (int i = 0; i < count; i++) {
-      [result appendFormat:@"%C", (unichar)byteCompactedCodewords.array[i]];
+      int8_t byte = (int8_t)byteCompactedCodewords.array[i];
+      [decodedBytes appendBytes:&byte length:1];
     }
   } else if (mode == ZX_PDF417_BYTE_COMPACTION_MODE_LATCH_6) {
     // Total number of Byte Compaction characters to be encoded
@@ -487,16 +519,16 @@ static NSArray *ZX_PDF417_EXP900 = nil;
       if ((count % 5 == 0) && (count > 0)) {
         // Decode every 5 codewords
         // Convert to Base 256
-        unichar decodedData[6];
         for (int j = 0; j < 6; ++j) {
-          decodedData[5 - j] = (unichar)(value & 0xFF);
-          value >>= 8;
+          int8_t byte = (int8_t) (value >> (8 * (5 - j)));
+          [decodedBytes appendBytes:&byte length:1];
         }
-        [result appendString:[NSString stringWithCharacters:decodedData length:6]];
+        value = 0;
         count = 0;
       }
     }
   }
+  [result appendString:[[NSString alloc] initWithData:decodedBytes encoding:encoding]];
   return codeIndex;
 }
 
@@ -533,13 +565,21 @@ static NSArray *ZX_PDF417_EXP900 = nil;
         end = YES;
       }
     }
-    if (count % ZX_PDF417_MAX_NUMERIC_CODEWORDS == 0 || code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH || end) {
-      NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
-      if (s == nil) {
-        return INT_MAX;
+    if (count % ZX_PDF417_MAX_NUMERIC_CODEWORDS == 0 ||
+        code == ZX_PDF417_NUMERIC_COMPACTION_MODE_LATCH ||
+        end) {
+      // Re-invoking Numeric Compaction mode (by using codeword 902
+      // while in Numeric Compaction mode) serves  to terminate the
+      // current Numeric Compaction mode grouping as described in 5.4.4.2,
+      // and then to start a new one grouping.
+      if (count > 0) {
+        NSString *s = [self decodeBase900toBase10:numericCodewords count:count];
+        if (s == nil) {
+          return -1;
+        }
+        [result appendString:s];
+        count = 0;
       }
-      [result appendString:s];
-      count = 0;
     }
   }
   return codeIndex;
