@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 
 #ifndef _ZXINGOBJC_
+
 #define _ZXINGOBJC_
 
 #import "ZXingObjCCore.h"
