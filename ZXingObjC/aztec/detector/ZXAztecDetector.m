@@ -190,14 +190,14 @@
   return YES;
 }
 
-int expectedCornerBits[] = {
+static int expectedCornerBits[] = {
   0xee0,  // 07340  XXX .XX X.. ...
   0x1dc,  // 00734  ... XXX .XX X..
   0x83b,  // 04073  X.. ... XXX .XX
   0x707,  // 03407 .XX X.. ... XXX
 };
 
-int bitCount(uint32_t i) {
+static int bitCount(uint32_t i) {
   i = i - ((i >> 1) & 0x55555555);
   i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
   return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
