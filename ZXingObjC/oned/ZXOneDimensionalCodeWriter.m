@@ -18,8 +18,33 @@
 #import "ZXBoolArray.h"
 #import "ZXEncodeHints.h"
 #import "ZXOneDimensionalCodeWriter.h"
+#import "ZXUPCAReader.h"
+
+@interface ZXOneDimensionalCodeWriter ()
+
+@property NSMutableArray *longLinePositions;
+@property BOOL showLongLines;
+
+@end
 
 @implementation ZXOneDimensionalCodeWriter
+
+- (BOOL)isLongLinePattern:(const int[])pattern
+{
+    if (pattern == ZX_UPC_EAN_MIDDLE_PATTERN)
+        return YES;
+    if (pattern == ZX_UPC_EAN_START_END_PATTERN)
+        return YES;
+    return NO;
+}
+
+- (BOOL)isLongLineAtPosition:(int)pos
+{
+    for (NSNumber *number in self.longLinePositions)
+        if ([number intValue] == pos)
+            return YES;
+    return NO;
+}
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height error:(NSError **)error {
   return [self encode:contents format:format width:width height:height hints:nil error:error];
@@ -42,6 +67,15 @@
     @throw [NSException exceptionWithName:NSInvalidArgumentException
                                    reason:[NSString stringWithFormat:@"Negative size is not allowed. Input: %dx%d", width, height]
                                  userInfo:nil];
+  }
+
+  self.longLinePositions = [NSMutableArray new];
+  self.showLongLines = NO;
+  if (format == kBarcodeFormatEan13) {
+    self.showLongLines = YES;
+  }
+  if (format == kBarcodeFormatEan8) {
+    self.showLongLines = YES;
   }
 
   int sidesMargin = [self defaultMargin];
@@ -69,7 +103,14 @@
   ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight];
   for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
     if (code.array[inputX]) {
-      [output setRegionAtLeft:outputX top:0 width:multiple height:outputHeight];
+      int barcodeHeight = outputHeight;
+      if (self.showLongLines) {
+        // if the position is not in the list for long lines we shorten the line by 10%
+        if (![self isLongLineAtPosition:inputX]) {
+            barcodeHeight = (int) ((float) outputHeight * 0.90f);
+        }
+      }
+      [output setRegionAtLeft:outputX top:0 width:multiple height:barcodeHeight];
     }
   }
   return output;
@@ -86,6 +127,9 @@
   int numAdded = 0;
   for (int i = 0; i < patternLen; i++) {
     for (int j = 0; j < pattern[i]; j++) {
+      if ([self isLongLinePattern:pattern]) {
+        [self.longLinePositions addObject:[NSNumber numberWithInt:pos]];
+      }
       target.array[pos++] = color;
     }
     numAdded += pattern[i];
