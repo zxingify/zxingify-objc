@@ -26,7 +26,7 @@ const NSString *ZX_STOP = @"1100011101011";
 
 @interface ZXCode128WriterTestCase ()
 
-@property (nonatomic, strong) id<ZXWriter> writer;
+@property (nonatomic, strong) ZXCode128Writer *writer;
 
 @end
 
@@ -86,6 +86,53 @@ const NSString *ZX_STOP = @"1100011101011";
     [builder appendString:[matrix getX:i y:0] ? @"1" : @"0"];
   }
   return builder;
+}
+
+- (void)testEncodeWithWrongFormatReturnsError {
+    NSString *toEncode = [NSString stringWithFormat:@"%C123", (unichar)L'\u00f2'];
+    NSError *error;
+    ZXBitMatrix *result = [self.writer encode:toEncode
+                                                        format:kBarcodeFormatEan8
+                                                         width:0
+                                                        height:0
+                                                         error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithTooShortContentReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [self.writer encode:@"" error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithTooLongContentReturnsError {
+    NSError *error;
+    NSString *content = [[NSString string] stringByPaddingToLength:81 withString:@"A" startingAtIndex:0];
+    ZXBoolArray *result = [self.writer encode:content error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithBadContentReturnsError {
+    NSError *error;
+    NSString *content = [[NSString string] stringByPaddingToLength:80 withString:@"🐜" startingAtIndex:0];
+    ZXBoolArray *result = [self.writer encode:content error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
 }
 
 @end

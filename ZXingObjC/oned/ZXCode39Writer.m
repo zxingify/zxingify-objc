@@ -19,21 +19,29 @@
 #import "ZXCode39Reader.h"
 #import "ZXCode39Writer.h"
 #import "ZXIntArray.h"
+#import "ZXErrors.h"
 
 @implementation ZXCode39Writer
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatCode39) {
-    [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_39."];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can only encode CODE_39, but got %d", format]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (ZXBoolArray *)encode:(NSString *)contents {
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError **)error  {
   int length = (int)[contents length];
   if (length > 80) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Requested contents should be less than 80 digits long, but got %d", length];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Requested contents should be less than 80 digits long, but got %d", length]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
 
   ZXIntArray *widths = [[ZXIntArray alloc] initWithLength:9];
@@ -41,7 +49,11 @@
   for (int i = 0; i < length; i++) {
     NSUInteger indexInString = [ZX_CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
     if (indexInString == NSNotFound) {
-      [NSException raise:NSInvalidArgumentException format:@"Bad contents: %@", contents];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Bad contents: %@", contents]};
+        
+        *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+        
+        return nil;
     }
     [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
     codeWidth += [widths sum];

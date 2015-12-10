@@ -17,6 +17,7 @@
 #import "ZXBoolArray.h"
 #import "ZXCodaBarReader.h"
 #import "ZXCodaBarWriter.h"
+#import "ZXErrors.h"
 
 const unichar ZX_CODA_START_END_CHARS[] = {'A', 'B', 'C', 'D'};
 const unichar ZX_CODA_ALT_START_END_CHARS[] = {'T', 'N', '*', 'E'};
@@ -31,7 +32,7 @@ static unichar ZX_CODA_DEFAULT_GUARD;
   ZX_CODA_DEFAULT_GUARD = ZX_CODA_START_END_CHARS[0];
 }
 
-- (ZXBoolArray *)encode:(NSString *)contents {
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError *__autoreleasing *)error {
   if ([contents length] < 2) {
     // Can't have a start/end guard, so tentatively add default guards
     contents = [NSString stringWithFormat:@"%C%@%C", ZX_CODA_DEFAULT_GUARD, contents, ZX_CODA_DEFAULT_GUARD];
@@ -45,24 +46,30 @@ static unichar ZX_CODA_DEFAULT_GUARD;
     BOOL endsAlt = [ZXCodaBarReader arrayContains:ZX_CODA_ALT_START_END_CHARS length:sizeof(ZX_CODA_ALT_START_END_CHARS) / sizeof(unichar) key:lastChar];
     if (startsNormal) {
       if (!endsNormal) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"Invalid start/end guards: %@", contents]
-                                     userInfo:nil];
+          NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid start/end guards: %@", contents]};
+          
+          *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+          
+          return nil;
       }
       // else already has valid start/end
     } else if (startsAlt) {
       if (!endsAlt) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"Invalid start/end guards: %@", contents]
-                                     userInfo:nil];
+          NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid start/end guards: %@", contents]};
+          
+          *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+          
+          return nil;
       }
       // else already has valid start/end
     } else {
       // Doesn't start with a guard
       if (endsNormal || endsAlt) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"Invalid start/end guards: %@", contents]
-                                     userInfo:nil];
+          NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid start/end guards: %@", contents]};
+          
+          *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+          
+          return nil;
       }
       // else doesn't end with guard either, so add a default
       contents = [NSString stringWithFormat:@"%C%@%C", ZX_CODA_DEFAULT_GUARD, contents, ZX_CODA_DEFAULT_GUARD];
@@ -78,9 +85,11 @@ static unichar ZX_CODA_DEFAULT_GUARD;
     } else if ([ZXCodaBarReader arrayContains:ZX_CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED length:4 key:[contents characterAtIndex:i]]) {
       resultLength += 10;
     } else {
-      @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                     reason:[NSString stringWithFormat:@"Cannot encode : '%C'", [contents characterAtIndex:i]]
-                                   userInfo:nil];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Cannot encode : '%C'", [contents characterAtIndex:i]]};
+        
+        *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+        
+        return nil;
     }
   }
   // A blank is placed between each character.

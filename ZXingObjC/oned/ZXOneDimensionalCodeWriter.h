@@ -23,7 +23,7 @@
  */
 @interface ZXOneDimensionalCodeWriter : NSObject <ZXWriter>
 
-- (ZXBoolArray *)encode:(NSString *)contents;
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError **)error;
 - (int)appendPattern:(ZXBoolArray *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor;
 - (int)defaultMargin;
 
