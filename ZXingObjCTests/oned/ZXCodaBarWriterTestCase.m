@@ -60,4 +60,53 @@
   return [[[ZXCodaBarWriter alloc] init] encode:input format:kBarcodeFormatCodabar width:0 height:0 error:nil];
 }
 
+- (void)testEncodeWithInvalidEndGuardForValidNormalStartGuardReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [[[ZXCodaBarWriter alloc] init] encode:@"A1" error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithInvalidEndGuardForValidAlternativeStartGuardReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [[[ZXCodaBarWriter alloc] init] encode:@"T1" error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithInvalidStartGuardForValidNormalEndGuardReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [[[ZXCodaBarWriter alloc] init] encode:@"LA" error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithInvalidStartGuardForValidAlternativeEndGuardReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [[[ZXCodaBarWriter alloc] init] encode:@"LT" error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+- (void)testEncodeWithInvalidCharacterReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [[[ZXCodaBarWriter alloc] init] encode:@"TXT" error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
 @end

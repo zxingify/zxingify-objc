@@ -18,6 +18,7 @@
 #import "ZXBoolArray.h"
 #import "ZXEAN8Writer.h"
 #import "ZXUPCEANReader.h"
+#import "ZXErrors.h"
 
 const int ZX_EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
@@ -25,7 +26,11 @@ const int ZX_EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatEan8) {
-    [NSException raise:NSInvalidArgumentException format:@"Can only encode EAN_8"];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can only encode EAN_8, but got %d", format]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
@@ -33,9 +38,13 @@ const int ZX_EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
 /**
  * Returns a byte array of horizontal pixels (FALSE = white, TRUE = black)
  */
-- (ZXBoolArray *)encode:(NSString *)contents {
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError **)error {
   if ([contents length] != 8) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", (int)[contents length]];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Requested contents should be 8 digits long, but got %d", (int)[contents length]]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
 
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_EAN8_CODE_WIDTH];

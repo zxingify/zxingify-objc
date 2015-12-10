@@ -23,7 +23,7 @@ NSError *ZXChecksumErrorInstance() {
 }
 
 NSError *ZXFormatErrorInstance() {
-  NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"This barcode does not confirm to the format's rules"};
+  NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"This barcode does not conform to the format's rules"};
 
   return [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXFormatError userInfo:userInfo];
 }

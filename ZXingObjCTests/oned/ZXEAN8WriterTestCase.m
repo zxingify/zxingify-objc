@@ -30,4 +30,29 @@
   }
 }
 
+- (void)testEncodeWithWrongFormatReturnsError {
+    NSError *error;
+    ZXBitMatrix *result = [[[ZXEAN8Writer alloc] init] encode:@"96385074"
+                                                        format:kBarcodeFormatEan13
+                                                         width:0
+                                                        height:0
+                                                         error:&error];
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
+- (void)testEncodeWithWrongContentLengthReturnsError {
+    NSError *error;
+    ZXBoolArray *result = [[[ZXEAN8Writer alloc] init] encode:@"12345" error:&error];
+    
+    XCTAssertNil(result);
+    
+    if (!error || error.code != ZXWriterError) {
+        XCTFail(@"ZXWriterError expected");
+    }
+}
+
 @end

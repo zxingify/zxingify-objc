@@ -19,6 +19,7 @@
 #import "ZXEAN13Reader.h"
 #import "ZXEAN13Writer.h"
 #import "ZXUPCEANReader.h"
+#import "ZXErrors.h"
 
 const int ZX_EAN13_CODE_WIDTH = 3 + // start guard
   (7 * 6) + // left bars
@@ -30,23 +31,30 @@ const int ZX_EAN13_CODE_WIDTH = 3 + // start guard
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatEan13) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Can only encode EAN_13, but got %d", format]
-                                 userInfo:nil];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can only encode EAN_13, but got %d", format]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      return nil;
   }
 
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (ZXBoolArray *)encode:(NSString *)contents {
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError **)error {
   if ([contents length] != 13) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Requested contents should be 13 digits long, but got %d", (int)[contents length]];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Requested contents should be 13 digits long, but got %d", (int)[contents length]]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
 
   if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Contents do not pass checksum"];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Contents do not pass checksum"};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
 
   int firstDigit = [[contents substringToIndex:1] intValue];

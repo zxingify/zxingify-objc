@@ -17,6 +17,7 @@
 #import "ZXBoolArray.h"
 #import "ZXITFReader.h"
 #import "ZXITFWriter.h"
+#import "ZXErrors.h"
 
 const int ZX_ITF_WRITER_START_PATTERN[] = {1, 1, 1, 1};
 const int ZX_ITF_WRITER_END_PATTERN[] = {3, 1, 1};
@@ -25,19 +26,31 @@ const int ZX_ITF_WRITER_END_PATTERN[] = {3, 1, 1};
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatITF) {
-    [NSException raise:NSInvalidArgumentException format:@"Can only encode ITF"];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can only encode ITF, but got %d", format]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
 
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (ZXBoolArray *)encode:(NSString *)contents {
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError **)error {
   int length = (int)[contents length];
   if (length % 2 != 0) {
-    [NSException raise:NSInvalidArgumentException format:@"The length of the input should be even"];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The length of the input should be even"};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
   if (length > 80) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d", length];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Requested contents should be less than 80 digits long, but got %d", length]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
 
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:9 + 9 * length];

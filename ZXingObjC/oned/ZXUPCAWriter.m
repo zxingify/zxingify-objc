@@ -16,6 +16,7 @@
 
 #import "ZXEAN13Writer.h"
 #import "ZXUPCAWriter.h"
+#import "ZXErrors.h"
 
 @implementation ZXUPCAWriter
 
@@ -35,18 +36,20 @@
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatUPCA) {
-    @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                   reason:[NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]
-                                 userInfo:nil];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
-  return [self.subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints error:error];
+  return [self.subWriter encode:[self preencode:contents error:error] format:kBarcodeFormatEan13 width:width height:height hints:hints error:error];
 }
 
 /**
  * Transform a UPC-A code into the equivalent EAN-13 code, and add a check digit if it is not
  * already present.
  */
-- (NSString *)preencode:(NSString *)contents {
+- (NSString *)preencode:(NSString *)contents error:(NSError **)error {
   NSUInteger length = [contents length];
   if (length == 11) {
     int sum = 0;
@@ -57,9 +60,11 @@
 
     contents = [contents stringByAppendingFormat:@"%d", (1000 - sum) % 10];
   } else if (length != 12) {
-     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                    reason:[NSString stringWithFormat:@"Requested contents should be 11 or 12 digits long, but got %ld", (unsigned long)[contents length]]
-                                  userInfo:nil];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Requested contents should be 11 or 12 digits long, but got %ld", (unsigned long)[contents length]]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
   return [NSString stringWithFormat:@"0%@", contents];
 }

@@ -17,6 +17,7 @@
 #import "ZXBoolArray.h"
 #import "ZXCode128Reader.h"
 #import "ZXCode128Writer.h"
+#import "ZXErrors.h"
 
 // Dummy characters used to specify control characters in input
 const unichar ZX_CODE128_ESCAPE_FNC_1 = L'\u00f1';
@@ -28,16 +29,24 @@ const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
   if (format != kBarcodeFormatCode128) {
-    [NSException raise:NSInvalidArgumentException format:@"Can only encode CODE_128"];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can only encode CODE_128, but got %d", format]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
   return [super encode:contents format:format width:width height:height hints:hints error:error];
 }
 
-- (ZXBoolArray *)encode:(NSString *)contents {
+- (ZXBoolArray *)encode:(NSString *)contents error:(NSError **)error {
   int length = (int)[contents length];
   // Check length
   if (length < 1 || length > 80) {
-    [NSException raise:NSInvalidArgumentException format:@"Contents length should be between 1 and 80 characters, but got %d", length];
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Contents length should be between 1 and 80 characters, but got %d", length]};
+      
+      *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+      
+      return nil;
   }
   // Check content
   for (int i = 0; i < length; i++) {
@@ -50,7 +59,10 @@ const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
         case ZX_CODE128_ESCAPE_FNC_4:
           break;
         default:
-          [NSException raise:NSInvalidArgumentException format:@"Bad character in input: %C", c];
+              *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo: @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Contents length should be between 1 and 80 characters, but got %d", length]}];
+              
+              return nil;
+              break;
       }
     }
   }
