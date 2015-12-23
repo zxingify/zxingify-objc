@@ -63,11 +63,6 @@
 
     _rotation = 0.0f;
     _running = NO;
-	if([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]){
-	  _sessionPreset = AVCaptureSessionPreset1920x1080;
-	} else {
-	  _sessionPreset = AVCaptureSessionPreset1280x720;
-	}
     _transform = CGAffineTransformIdentity;
     _scanRect = CGRectZero;
   }
@@ -526,6 +521,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 - (AVCaptureSession *)session {
   if (!_session) {
     _session = [[AVCaptureSession alloc] init];
+    if([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]){
+      _sessionPreset = AVCaptureSessionPreset1920x1080;
+    } else {
+      _sessionPreset = AVCaptureSessionPreset1280x720;
+    }
     [self replaceInput];
   }
 
