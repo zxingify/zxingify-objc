@@ -113,8 +113,13 @@
 	CGFloat scaleVideo, scaleVideoX, scaleVideoY;
 	CGFloat videoSizeX, videoSizeY;
 	CGRect transformedVideoRect = self.scanRectView.frame;
-	videoSizeX = 360;
-	videoSizeY = 480;
+	if([self.capture.sessionPreset isEqualToString:AVCaptureSessionPreset1920x1080]) {
+		videoSizeX = 1080;
+		videoSizeY = 1920;
+	} else {
+		videoSizeX = 720;
+		videoSizeY = 1280;
+	}
 	if(UIInterfaceOrientationIsPortrait(orientation)) {
 		scaleVideoX = self.view.frame.size.width / videoSizeX;
 		scaleVideoY = self.view.frame.size.height / videoSizeY;

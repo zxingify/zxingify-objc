@@ -63,7 +63,11 @@
 
     _rotation = 0.0f;
     _running = NO;
-    _sessionPreset = AVCaptureSessionPresetMedium;
+	if([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]){
+	  _sessionPreset = AVCaptureSessionPreset1920x1080;
+	} else {
+	  _sessionPreset = AVCaptureSessionPreset1280x720;
+	}
     _transform = CGAffineTransformIdentity;
     _scanRect = CGRectZero;
   }
