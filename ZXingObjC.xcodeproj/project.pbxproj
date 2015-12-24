@@ -541,10 +541,10 @@
 		02DD029B1AC1C648009E4D65 /* ZXPDF417EncoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD02991AC1C648009E4D65 /* ZXPDF417EncoderTestCase.m */; };
 		02DD029F1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD029E1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m */; };
 		02DD02A01AC1DBAD009E4D65 /* ZXAztecDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD029E1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m */; };
-		074684321BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; settings = {ASSET_TAGS = (); }; };
-		074684331BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; settings = {ASSET_TAGS = (); }; };
-		074684361BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; settings = {ASSET_TAGS = (); }; };
-		074684371BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; settings = {ASSET_TAGS = (); }; };
+		074684321BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; };
+		074684331BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; };
+		074684361BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; };
+		074684371BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; };
 		2504D9D016FFD2E200DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
 		2504D9D116FFD3A100DF8882 /* ZXAztecCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2504D9D316FFD3B300DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
@@ -6581,6 +6581,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6690,6 +6691,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6723,6 +6725,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;

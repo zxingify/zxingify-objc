@@ -25,7 +25,9 @@
 
 @end
 
-@implementation ViewController
+@implementation ViewController {
+	CGAffineTransform _captureSizeTransform;
+}
 
 #pragma mark - View Controller Methods
 
@@ -39,9 +41,7 @@
   self.capture = [[ZXCapture alloc] init];
   self.capture.camera = self.capture.back;
   self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
-  self.capture.rotation = 90.0f;
 
-  self.capture.layer.frame = self.view.bounds;
   [self.view.layer addSublayer:self.capture.layer];
 
   [self.view bringSubviewToFront:self.scanRectView];
@@ -52,14 +52,95 @@
   [super viewWillAppear:animated];
 
   self.capture.delegate = self;
-  self.capture.layer.frame = self.view.bounds;
 
-  CGAffineTransform captureSizeTransform = CGAffineTransformMakeScale(320 / self.view.frame.size.width, 480 / self.view.frame.size.height);
-  self.capture.scanRect = CGRectApplyAffineTransform(self.scanRectView.frame, captureSizeTransform);
+  [self applyOrientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
   return toInterfaceOrientation == UIInterfaceOrientationPortrait;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self applyOrientation];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator {
+	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context)
+	{
+		[self applyOrientation];
+	}];
+}
+
+#pragma mark - Private
+- (void)applyOrientation {
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+	float scanRectRotation;
+	float captureRotation;
+
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+			captureRotation = 0;
+			scanRectRotation = 90;
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			captureRotation = 90;
+			scanRectRotation = 180;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			captureRotation = 270;
+			scanRectRotation = 0;
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			captureRotation = 180;
+			scanRectRotation = 270;
+			break;
+		default:
+			captureRotation = 0;
+			scanRectRotation = 90;
+			break;
+	}
+	[self applyRectOfInterest:orientation];
+	CGAffineTransform transform = CGAffineTransformMakeRotation((CGFloat) (captureRotation / 180 * M_PI));
+	[self.capture setTransform:transform];
+	[self.capture setRotation:scanRectRotation];
+	self.capture.layer.frame = self.view.frame;
+}
+
+- (void)applyRectOfInterest:(UIInterfaceOrientation)orientation {
+	CGFloat scaleVideo, scaleVideoX, scaleVideoY;
+	CGFloat videoSizeX, videoSizeY;
+	CGRect transformedVideoRect = self.scanRectView.frame;
+	if([self.capture.sessionPreset isEqualToString:AVCaptureSessionPreset1920x1080]) {
+		videoSizeX = 1080;
+		videoSizeY = 1920;
+	} else {
+		videoSizeX = 720;
+		videoSizeY = 1280;
+	}
+	if(UIInterfaceOrientationIsPortrait(orientation)) {
+		scaleVideoX = self.view.frame.size.width / videoSizeX;
+		scaleVideoY = self.view.frame.size.height / videoSizeY;
+		scaleVideo = MAX(scaleVideoX, scaleVideoY);
+		if(scaleVideoX > scaleVideoY) {
+			transformedVideoRect.origin.y += (scaleVideo * videoSizeY - self.view.frame.size.height) / 2;
+		} else {
+			transformedVideoRect.origin.x += (scaleVideo * videoSizeX - self.view.frame.size.width) / 2;
+		}
+	} else {
+		scaleVideoX = self.view.frame.size.width / videoSizeY;
+		scaleVideoY = self.view.frame.size.height / videoSizeX;
+		scaleVideo = MAX(scaleVideoX, scaleVideoY);
+		if(scaleVideoX > scaleVideoY) {
+			transformedVideoRect.origin.y += (scaleVideo * videoSizeX - self.view.frame.size.height) / 2;
+		} else {
+			transformedVideoRect.origin.x += (scaleVideo * videoSizeY - self.view.frame.size.width) / 2;
+		}
+	}
+	_captureSizeTransform = CGAffineTransformMakeScale(1/scaleVideo, 1/scaleVideo);
+	self.capture.scanRect = CGRectApplyAffineTransform(transformedVideoRect, _captureSizeTransform);
 }
 
 #pragma mark - Private Methods
@@ -124,9 +205,22 @@
 - (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result {
   if (!result) return;
 
+	CGAffineTransform inverse = CGAffineTransformInvert(_captureSizeTransform);
+	NSMutableArray *points = [[NSMutableArray alloc] init];
+	NSString *location = @"";
+	for (ZXResultPoint *resultPoint in result.resultPoints) {
+		CGPoint cgPoint = CGPointMake(resultPoint.x, resultPoint.y);
+		CGPoint transformedPoint = CGPointApplyAffineTransform(cgPoint, inverse);
+		transformedPoint = [self.scanRectView convertPoint:transformedPoint toView:self.scanRectView.window];
+		NSValue* windowPointValue = [NSValue valueWithCGPoint:transformedPoint];
+		location = [NSString stringWithFormat:@"%@ (%f, %f)", location, transformedPoint.x, transformedPoint.y];
+		[points addObject:windowPointValue];
+	}
+
+
   // We got a result. Display information about the result onscreen.
   NSString *formatString = [self barcodeFormatToString:result.barcodeFormat];
-  NSString *display = [NSString stringWithFormat:@"Scanned!\n\nFormat: %@\n\nContents:\n%@", formatString, result.text];
+  NSString *display = [NSString stringWithFormat:@"Scanned!\n\nFormat: %@\n\nContents:\n%@\nLocation: %@", formatString, result.text, location];
   [self.decodedLabel performSelectorOnMainThread:@selector(setText:) withObject:display waitUntilDone:YES];
 
   // Vibrate
