@@ -511,8 +511,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   }
 
   if (self.input) {
-    self.session.sessionPreset = self.sessionPreset;
     [self.session addInput:self.input];
+	if ([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+		_sessionPreset = AVCaptureSessionPreset1920x1080;
+	} else {
+		_sessionPreset = AVCaptureSessionPreset1280x720;
+	}
+	self.session.sessionPreset = self.sessionPreset;
   }
 
   [self.session commitConfiguration];
@@ -521,11 +526,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 - (AVCaptureSession *)session {
   if (!_session) {
     _session = [[AVCaptureSession alloc] init];
-    if([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]){
-      _sessionPreset = AVCaptureSessionPreset1920x1080;
-    } else {
-      _sessionPreset = AVCaptureSessionPreset1280x720;
-    }
     [self replaceInput];
   }
 
