@@ -8,7 +8,7 @@ The following barcodes are currently supported for both encoding and decoding:
 * UPC-A and UPC-E
 * EAN-8 and EAN-13
 * Code 39
-* Code 93
+* Code 93 (not implemented yet)
 * Code 128
 * ITF
 * Codabar
