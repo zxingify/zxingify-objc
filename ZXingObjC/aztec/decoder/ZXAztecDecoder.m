@@ -23,6 +23,7 @@
 #import "ZXGenericGF.h"
 #import "ZXIntArray.h"
 #import "ZXReedSolomonDecoder.h"
+#import "ZXByteArray.h"
 
 typedef enum {
   ZXAztecTableUpper = 0,
@@ -79,9 +80,16 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   if (!correctedBits) {
     return nil;
   }
-
-  NSString *result = [[self class] encodedData:correctedBits];
-  return [[ZXDecoderResult alloc] initWithRawBytes:nil text:result byteSegments:nil ecLevel:nil];
+    NSMutableArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray: correctedBits];
+    NSString *result = [[self class] encodedData:correctedBits];
+    
+    NSUInteger rawBytesSize = [rawBytes count];
+    ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
+    for (int i = 0; i < rawBytesSize; i++) {
+        rawBytesReturned.array[i] = (int8_t)[rawBytes[i] intValue];
+    }
+    
+    return [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
 }
 
 + (NSString *)highLevelDecode:(ZXBoolArray *)correctedBits {
@@ -342,6 +350,30 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
     }
   }
   return res;
+}
+
+/**
+ * Reads a code of length 8 in an array of bits, padding with zeros
+ */
++ (int) readByte:(ZXBoolArray *) rawbits startIndex:(int) startIndex {
+    int n = rawbits.length - startIndex;
+    if (n >= 8) {
+        return (int) [self readCode:rawbits startIndex:startIndex length:8];
+    }
+    return (int) ([self readCode:rawbits startIndex:startIndex length:n] << (8 - n));
+}
+
+/**
+ * Packs a bit array into bytes, most significant bit first
+ */
++ (NSMutableArray *) convertBoolArrayToByteArray:(ZXBoolArray *) boolArr {
+    NSMutableArray *byteArr = [[NSMutableArray alloc] init];
+    int byteArrLength = (boolArr.length + 7) / 8;
+    for (int i = 0; i < byteArrLength; i++) {
+        int code = [self readByte:boolArr startIndex:8 * i];
+        [byteArr addObject:@(code)];
+    }
+    return byteArr;
 }
 
 - (int)totalBitsInLayer:(int)layers compact:(BOOL)compact {
