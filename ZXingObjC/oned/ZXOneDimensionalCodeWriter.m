@@ -45,7 +45,7 @@
   }
 
   int sidesMargin = [self defaultMargin];
-  if (hints && hints.margin) {
+  if (hints && hints.margin && hints.margin.intValue >= sidesMargin) {
     sidesMargin = hints.margin.intValue;
   }
 
@@ -59,11 +59,12 @@
 - (ZXBitMatrix *)renderResult:(ZXBoolArray *)code width:(int)width height:(int)height sidesMargin:(int)sidesMargin {
   int inputWidth = code.length;
   // Add quiet zone on both sides.
-  int fullWidth = inputWidth + sidesMargin;
+  int fullWidth = inputWidth + sidesMargin * 2;
   int outputWidth = MAX(width, fullWidth);
   int outputHeight = MAX(1, height);
 
   int multiple = outputWidth / fullWidth;
+  outputWidth = fullWidth * multiple;
   int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
 
   ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:outputWidth height:outputHeight];
