@@ -19,7 +19,7 @@
 @protocol ZXCaptureDelegate, ZXReader;
 @class ZXDecodeHints;
 
-@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction>
+@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction, CALayerDelegate>
 
 @property (nonatomic, assign) int camera;
 @property (nonatomic, strong) AVCaptureDevice *captureDevice;
