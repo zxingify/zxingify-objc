@@ -84,7 +84,7 @@ The recommended way to install ZXingObjC is with [CocoaPods](http://cocoapods.or
 
 ```ruby
 platform :ios, '7.0'
-pod 'ZXingObjC', '~> 3.0'
+pod 'ZXingObjC', '~> 3.2.0'
 ```
 
 #### Carthage
@@ -92,7 +92,7 @@ pod 'ZXingObjC', '~> 3.0'
 Alternatively, ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
 
 ```ogdl
-github "TheLevelUp/ZXingObjC" ~> 3.0
+github "TheLevelUp/ZXingObjC" ~> 3.2.0
 ```
 
 ## Examples
