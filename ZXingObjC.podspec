@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'ZXingObjC'
-  s.version = '3.1.0'
+  s.version = '3.2.0'
   s.summary = 'An Objective-C Port of the ZXing barcode framework.'
   s.homepage = 'https://github.com/TheLevelUp/ZXingObjC'
   s.author = 'ZXingObjC team'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.xcconfig = { "OTHER_LDFLAGS" => "-ObjC" }
 
-  s.ios.deployment_target = '6.0'
+  s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.8'
 
   s.ios.frameworks = 'AVFoundation', 'CoreGraphics', 'CoreMedia', 'CoreVideo', 'ImageIO', 'QuartzCore'
