@@ -19,7 +19,11 @@
 @protocol ZXCaptureDelegate, ZXReader;
 @class ZXDecodeHints;
 
-@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction>
+@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction
+#if defined(__MAC_10_12) && __MAC_OS_X_VERSION_MAX_ALLOWED >= __MAC_10_12 || defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+, CALayerDelegate
+#endif
+>
 
 @property (nonatomic, assign) int camera;
 @property (nonatomic, strong) AVCaptureDevice *captureDevice;
