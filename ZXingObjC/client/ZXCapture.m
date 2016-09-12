@@ -512,12 +512,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
   if (self.input) {
     [self.session addInput:self.input];
-	if ([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
-		_sessionPreset = AVCaptureSessionPreset1920x1080;
-	} else {
-		_sessionPreset = AVCaptureSessionPreset1280x720;
-	}
-	self.session.sessionPreset = self.sessionPreset;
+#if TARGET_OS_IPHONE
+    if ([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+      _sessionPreset = AVCaptureSessionPreset1920x1080;
+    } else {
+      _sessionPreset = AVCaptureSessionPreset1280x720;
+    }
+#else
+    _sessionPreset = AVCaptureSessionPreset1280x720;
+#endif
+    self.session.sessionPreset = self.sessionPreset;
   }
 
   [self.session commitConfiguration];
