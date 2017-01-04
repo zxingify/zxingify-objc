@@ -553,8 +553,6 @@
 		2172BAFE1E1C6091004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
 		2172BAFF1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2172BB001E1C6091004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
-		2172BB061E1D9F33004327CB /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */; };
-		2172BB071E1D9F34004327CB /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */; };
 		2504D9D016FFD2E200DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
 		2504D9D116FFD3A100DF8882 /* ZXAztecCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2504D9D316FFD3B300DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
@@ -2246,8 +2244,6 @@
 		074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiAbstractBlackBoxTestCase.m; sourceTree = "<group>"; };
 		2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEWriter.h; sourceTree = "<group>"; };
 		2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEWriter.m; sourceTree = "<group>"; };
-		2172BB011E1D8A7B004327CB /* ZXUPCEWriterTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEWriterTestCase.h; sourceTree = "<group>"; };
-		2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEWriterTestCase.m; sourceTree = "<group>"; };
 		2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecCode.h; path = encoder/ZXAztecCode.h; sourceTree = "<group>"; };
 		2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecCode.m; path = encoder/ZXAztecCode.m; sourceTree = "<group>"; };
 		2504D9DA16FFD4CD00DF8882 /* ZXAztecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecEncoder.h; path = encoder/ZXAztecEncoder.h; sourceTree = "<group>"; };
@@ -4000,8 +3996,6 @@
 				25404094166AA0F100E13304 /* ZXUPCEBlackBox2TestCase.m */,
 				25404095166AA0F100E13304 /* ZXUPCEBlackBox3ReflectiveTestCase.h */,
 				25404096166AA0F100E13304 /* ZXUPCEBlackBox3ReflectiveTestCase.m */,
-				2172BB011E1D8A7B004327CB /* ZXUPCEWriterTestCase.h */,
-				2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */,
 			);
 			path = oned;
 			sourceTree = "<group>";
@@ -5727,7 +5721,6 @@
 				25404116166AA0F100E13304 /* ZXBinaryUtil.m in Sources */,
 				25404117166AA0F100E13304 /* ZXBinaryUtilTest.m in Sources */,
 				25404118166AA0F100E13304 /* ZXBitArrayBuilderTest.m in Sources */,
-				2172BB061E1D9F33004327CB /* ZXUPCEWriterTestCase.m in Sources */,
 				25404119166AA0F100E13304 /* ZXRSSExpandedInformationDecoderTest.m in Sources */,
 				25404126166AA0F100E13304 /* ZXCodaBarWriterTestCase.m in Sources */,
 				255E986C18DF258C000A2681 /* ZXCode128WriterTestCase.m in Sources */,
@@ -6088,7 +6081,6 @@
 				25404358166AB8B800E13304 /* ZXRSSExpandedImage2stringTestCase.m in Sources */,
 				25404359166AB8B800E13304 /* ZXRSSExpandedInternalTestCase.m in Sources */,
 				2540435A166AB8B800E13304 /* ZXBinaryUtil.m in Sources */,
-				2172BB071E1D9F34004327CB /* ZXUPCEWriterTestCase.m in Sources */,
 				2540435B166AB8B800E13304 /* ZXBinaryUtilTest.m in Sources */,
 				2540435C166AB8B800E13304 /* ZXBitArrayBuilderTest.m in Sources */,
 				255E986D18DF258C000A2681 /* ZXCode128WriterTestCase.m in Sources */,

@@ -23,29 +23,9 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
 }
 
 - (ZXBoolArray *)encode:(NSString *)contents {
-  switch ([contents length]) {
-    case 7: {
-      NSError *error;
-      int check = [ZXUPCEANReader getStandardUPCEANChecksum:[ZXUPCEReader convertUPCEtoUPCA:contents] error:&error];
-      if (error) {
-        @throw error;
-      }
-      contents = [NSString stringWithFormat:@"%@%i", contents, check];
-      break;
-    }
-    case 8: {
-      if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents error:nil]) {
-        @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                       reason:@"Contents do not pass checksum"
-                                     userInfo:nil];
-      }
-    }
-  }
-
-  int firstDigit = [[contents substringToIndex:1] intValue];
-  if (firstDigit != 0 && firstDigit != 1) {
+  if ([contents length] != 8) {
     @throw [NSException exceptionWithName:@"IllegalArgumentException"
-                                   reason:@"Number system must be 0 or 1"
+                                   reason:[NSString stringWithFormat:@"Requested contents should be 8 digits long, but got %d", (int)[contents length]]
                                  userInfo:nil];
   }
 
@@ -53,6 +33,7 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
   int parities = CHECK_DIGIT_ENCODINGS[checkDigit];
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_UPCE_CODE_WIDTH];
   int pos = 0;
+
   pos += [self appendPattern:result pos:pos pattern:ZX_UPC_EAN_START_END_PATTERN patternLen:ZX_UPC_EAN_START_END_PATTERN_LEN startColor:YES];
 
   for (int i = 1; i <= 6; i++) {

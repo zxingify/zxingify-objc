@@ -44,7 +44,7 @@ const int ZX_EAN13_CODE_WIDTH = 3 + // start guard
                 format:@"Requested contents should be 13 digits long, but got %d", (int)[contents length]];
   }
 
-  if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents error:nil]) {
+  if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
     [NSException raise:NSInvalidArgumentException
                 format:@"Contents do not pass checksum"];
   }
