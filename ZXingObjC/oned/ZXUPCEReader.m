@@ -46,13 +46,13 @@ const int CHECK_DIGIT_ENCODINGS[] = {
   0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25
 };
 
-const int ZX_UCPE_MIDDLE_END_PATTERN_LEN = 6;
+const int ZX_UPCE_MIDDLE_END_PATTERN_LEN = 6;
 
 /**
  * The pattern that marks the middle, and end, of a UPC-E pattern.
  * There is no "second half" to a UPC-E barcode.
  */
-const int ZX_UCPE_MIDDLE_END_PATTERN[] = {1, 1, 1, 1, 1, 1};
+const int ZX_UPCE_MIDDLE_END_PATTERN[] = {1, 1, 1, 1, 1, 1};
 
 /**
  * See ZX_UCPE_L_AND_G_PATTERNS; these values similarly represent patterns of
@@ -113,8 +113,8 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
   return [ZXUPCEANReader findGuardPattern:row
                                 rowOffset:endStart
                                whiteFirst:YES
-                                  pattern:ZX_UCPE_MIDDLE_END_PATTERN
-                               patternLen:sizeof(ZX_UCPE_MIDDLE_END_PATTERN) / sizeof(int)
+                                  pattern:ZX_UPCE_MIDDLE_END_PATTERN
+                               patternLen:sizeof(ZX_UPCE_MIDDLE_END_PATTERN) / sizeof(int)
                                     error:error];
 }
 

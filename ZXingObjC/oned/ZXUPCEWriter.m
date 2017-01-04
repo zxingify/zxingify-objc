@@ -63,7 +63,7 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
     pos += [self appendPattern:result pos:pos pattern:ZX_UPC_EAN_L_AND_G_PATTERNS[digit] patternLen:ZX_UPC_EAN_L_PATTERNS_SUB_LEN startColor:NO];
   }
 
-  [self appendPattern:result pos:pos pattern:ZX_UCPE_MIDDLE_END_PATTERN patternLen:ZX_UCPE_MIDDLE_END_PATTERN_LEN startColor:NO];
+  [self appendPattern:result pos:pos pattern:ZX_UPCE_MIDDLE_END_PATTERN patternLen:ZX_UPCE_MIDDLE_END_PATTERN_LEN startColor:NO];
 
   return result;
 }
