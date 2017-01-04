@@ -62,7 +62,9 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  * @return YES iff string of digits passes the UPC/EAN checksum algorithm
  * @return NO if the string does not contain only digits
  */
-+ (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
++ (BOOL)checkStandardUPCEANChecksum:(NSString *)s error:(NSError **)error;
+
++ (int)getStandardUPCEANChecksum:(NSString *)s error:(NSError **)error;
 
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error;
 
