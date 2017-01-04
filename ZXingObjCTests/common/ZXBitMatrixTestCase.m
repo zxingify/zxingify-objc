@@ -242,6 +242,15 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
   }
 }
 
+-(NSString *)matrixToString:(ZXBitMatrix *)result {
+  XCTAssertEqual(1, result.height);
+  NSMutableString *builer = @"";
+  for (int i = 0; i < result.width; i++) {
+    [builder appendString:(result getX:i y:0) ? '1' : '0'];
+  }
+  return builder;
+}
+
 - (ZXBitMatrix *)expectedWithWidth:(int)width height:(int)height {
   ZXBitMatrix *result = [[ZXBitMatrix alloc] initWithWidth:width height:height];
   for (int i = 0; i < BIT_MATRIX_POINTS.length; i += 2) {
