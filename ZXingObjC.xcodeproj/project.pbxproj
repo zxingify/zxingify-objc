@@ -545,17 +545,16 @@
 		074684331BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; };
 		074684361BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; };
 		074684371BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; };
-		2172BAF91E1C6087004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; };
+		2172BAF91E1C6087004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2172BAFA1E1C6087004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
-		2172BAFB1E1C6090004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; };
+		2172BAFB1E1C6090004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2172BAFC1E1C6090004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
-		2172BAFD1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; };
+		2172BAFD1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2172BAFE1E1C6091004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
-		2172BAFF1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; };
+		2172BAFF1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2172BB001E1C6091004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
-		2172BB031E1D8A7C004327CB /* ZXUPCEWriterTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BB011E1D8A7B004327CB /* ZXUPCEWriterTestCase.h */; };
-		2172BB041E1D8A7C004327CB /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */; };
-		2172BB051E1D8A89004327CB /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */; };
+		2172BB061E1D9F33004327CB /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */; };
+		2172BB071E1D9F34004327CB /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BB021E1D8A7C004327CB /* ZXUPCEWriterTestCase.m */; };
 		2504D9D016FFD2E200DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
 		2504D9D116FFD3A100DF8882 /* ZXAztecCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2504D9D316FFD3B300DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
@@ -4475,7 +4474,6 @@
 				0210FB5518E0A5C800B1F4CE /* ZXAztecBinaryShiftToken.h in Headers */,
 				0210FB5918E0A5C900B1F4CE /* ZXAztecSimpleToken.h in Headers */,
 				0210FBC118E0A8DA00B1F4CE /* ZXAI01393xDecoder.h in Headers */,
-				2172BB031E1D8A7C004327CB /* ZXUPCEWriterTestCase.h in Headers */,
 				0210FB5A18E0A5C900B1F4CE /* ZXAztecState.h in Headers */,
 				0210FBFB18E0A97200B1F4CE /* ZXPDF417CodewordDecoder.h in Headers */,
 				0210FBA518E0A7C700B1F4CE /* ZXDataMatrixC40Encoder.h in Headers */,
@@ -5573,7 +5571,6 @@
 				25403F3D166A9EB500E13304 /* ZXModulusGF.m in Sources */,
 				25403F3F166A9EB500E13304 /* ZXModulusPoly.m in Sources */,
 				25403F41166A9EB500E13304 /* ZXPDF417ECErrorCorrection.m in Sources */,
-				2172BB041E1D8A7C004327CB /* ZXUPCEWriterTestCase.m in Sources */,
 				25403F45166A9EB500E13304 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
 				25403F49166A9EB500E13304 /* ZXPDF417Detector.m in Sources */,
 				25403F4B166A9EB500E13304 /* ZXPDF417BarcodeMatrix.m in Sources */,
@@ -5730,6 +5727,7 @@
 				25404116166AA0F100E13304 /* ZXBinaryUtil.m in Sources */,
 				25404117166AA0F100E13304 /* ZXBinaryUtilTest.m in Sources */,
 				25404118166AA0F100E13304 /* ZXBitArrayBuilderTest.m in Sources */,
+				2172BB061E1D9F33004327CB /* ZXUPCEWriterTestCase.m in Sources */,
 				25404119166AA0F100E13304 /* ZXRSSExpandedInformationDecoderTest.m in Sources */,
 				25404126166AA0F100E13304 /* ZXCodaBarWriterTestCase.m in Sources */,
 				255E986C18DF258C000A2681 /* ZXCode128WriterTestCase.m in Sources */,
@@ -5934,7 +5932,6 @@
 				25404213166AAE6000E13304 /* ZXModulusGF.m in Sources */,
 				2519AB4B17FE5C2E00A71C45 /* ZXPDF417ResultMetadata.m in Sources */,
 				25404214166AAE6000E13304 /* ZXModulusPoly.m in Sources */,
-				2172BB051E1D8A89004327CB /* ZXUPCEWriterTestCase.m in Sources */,
 				25404215166AAE6000E13304 /* ZXPDF417ECErrorCorrection.m in Sources */,
 				25404217166AAE6000E13304 /* ZXPDF417DecodedBitStreamParser.m in Sources */,
 				25404219166AAE6000E13304 /* ZXPDF417Detector.m in Sources */,
@@ -6091,6 +6088,7 @@
 				25404358166AB8B800E13304 /* ZXRSSExpandedImage2stringTestCase.m in Sources */,
 				25404359166AB8B800E13304 /* ZXRSSExpandedInternalTestCase.m in Sources */,
 				2540435A166AB8B800E13304 /* ZXBinaryUtil.m in Sources */,
+				2172BB071E1D9F34004327CB /* ZXUPCEWriterTestCase.m in Sources */,
 				2540435B166AB8B800E13304 /* ZXBinaryUtilTest.m in Sources */,
 				2540435C166AB8B800E13304 /* ZXBitArrayBuilderTest.m in Sources */,
 				255E986D18DF258C000A2681 /* ZXCode128WriterTestCase.m in Sources */,

@@ -256,7 +256,7 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
   }
   int sum = 0;
 
-  for (int i = length - 2; i >= 0; i -= 2) {
+  for (int i = length - 1; i >= 0; i -= 2) {
       int digit = (int)[s characterAtIndex:i] - (int)'0';
       if (digit < 0 || digit > 9) {
           if(error) *error = ZXFormatErrorInstance();

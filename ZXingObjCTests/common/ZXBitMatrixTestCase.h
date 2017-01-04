@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+@class ZXBitMatrix;
+
 @interface ZXBitMatrixTestCase : XCTestCase
 
--(NSString *)matrixToString:(ZXBitMatrix *)result;
++(NSString *)matrixToString:(ZXBitMatrix *)result;
 
 @end

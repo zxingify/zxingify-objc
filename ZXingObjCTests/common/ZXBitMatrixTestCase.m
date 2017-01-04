@@ -242,11 +242,10 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
   }
 }
 
--(NSString *)matrixToString:(ZXBitMatrix *)result {
-  XCTAssertEqual(1, result.height);
-  NSMutableString *builer = @"";
++(NSString *)matrixToString:(ZXBitMatrix *)result {
+  NSMutableString *builder;
   for (int i = 0; i < result.width; i++) {
-    [builder appendString:(result getX:i y:0) ? '1' : '0'];
+    [builder appendString:[result getX:i y:0] ? @"1" : @"0"];
   }
   return builder;
 }

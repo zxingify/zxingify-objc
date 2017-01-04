@@ -29,7 +29,7 @@
   XCTAssertEqual(testStr, [ZXBitMatrixTestCase matrixToString:result]);
 }
 
--(void)testAddChecksumAndEncode() {
+-(void)testAddChecksumAndEncode {
   NSString *testStr = @"0000000000010101110010100111000101101011110110111001011101010100000000000";
   ZXBitMatrix *result = [[[ZXUPCEWriter alloc] init] encode:@"0509689"
                                                      format:kBarcodeFormatUPCE
