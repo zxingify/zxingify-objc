@@ -18,8 +18,8 @@
 #import "ZXOneDReader.h"
 
 typedef enum {
-	ZX_UPC_EAN_PATTERNS_L_PATTERNS = 0,
-	ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS
+  ZX_UPC_EAN_PATTERNS_L_PATTERNS = 0,
+  ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS
 } ZX_UPC_EAN_PATTERNS;
 
 extern const int ZX_UPC_EAN_START_END_PATTERN_LEN;
@@ -62,9 +62,7 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  * @return YES iff string of digits passes the UPC/EAN checksum algorithm
  * @return NO if the string does not contain only digits
  */
-+ (BOOL)checkStandardUPCEANChecksum:(NSString *)s error:(NSError **)error;
-
-+ (int)getStandardUPCEANChecksum:(NSString *)s error:(NSError **)error;
++ (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
 
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error;
 
