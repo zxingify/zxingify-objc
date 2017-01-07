@@ -29,6 +29,7 @@
 #import "ZXEAN13Writer.h"
 #import "ZXITFWriter.h"
 #import "ZXUPCAWriter.h"
+#import "ZXUPCEWriter.h"
 #endif
 #if defined(ZXINGOBJC_DATAMATRIX) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXDataMatrixWriter.h"
@@ -64,6 +65,10 @@
 
     case kBarcodeFormatUPCA:
       writer = [[ZXUPCAWriter alloc] init];
+      break;
+
+    case kBarcodeFormatUPCE:
+      writer = [[ZXUPCEWriter alloc] init];
       break;
 
     case kBarcodeFormatCode39:

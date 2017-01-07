@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-#import "ZXBarcodeFormat.h"
-#import "ZXUPCEANReader.h"
+#import "ZXUPCEANWriter.h"
 
-extern const int CHECK_DIGIT_ENCODINGS[];
-extern const int ZX_UPCE_MIDDLE_END_PATTERN_LEN;
-extern const int ZX_UPCE_MIDDLE_END_PATTERN[];
-
-/**
- * Implements decoding of the UPC-E format.
- *
- * http://www.barcodeisland.com/upce.phtml is a great reference for UPC-E information.
- */
-@interface ZXUPCEReader : ZXUPCEANReader
-
-+ (NSString *)convertUPCEtoUPCA:(NSString *)upce;
+@interface ZXUPCEWriter : ZXUPCEANWriter
 
 @end
