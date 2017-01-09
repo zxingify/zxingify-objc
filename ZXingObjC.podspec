@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |ss|
     ss.source_files = 'ZXingObjC/*.{h,m}', 'ZXingObjC/client/*.{h,m}', 'ZXingObjC/common/**/*.{h,m}', 'ZXingObjC/core/**/*.{h,m}', 'ZXingObjC/multi/**/*.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "ZXINGOBJC_USE_SUBSPECS" }		 
   end
 
   s.subspec 'Aztec' do |ss|
