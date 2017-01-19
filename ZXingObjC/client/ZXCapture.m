@@ -530,11 +530,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 - (AVCaptureSession *)session {
   if (!_session) {
     _session = [[AVCaptureSession alloc] init];
+#if TARGET_OS_IPHONE
     if ([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
       _sessionPreset = AVCaptureSessionPreset1920x1080;
     } else {
       _sessionPreset = AVCaptureSessionPreset1280x720;
     }
+#else
+      _sessionPreset = AVCaptureSessionPreset1280x720;
+#endif
     [self replaceInput];
   }
   return _session;
