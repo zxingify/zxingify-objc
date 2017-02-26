@@ -307,7 +307,9 @@
 
 - (ZXLuminanceSource *)crop:(int)left top:(int)top width:(int)width height:(int)height {
   CGImageRef croppedImageRef = CGImageCreateWithImageInRect(self.image, CGRectMake(left, top, width, height));
-  return [[ZXCGImageLuminanceSource alloc] initWithCGImage:croppedImageRef];
+  ZXCGImageLuminanceSource *result = [[ZXCGImageLuminanceSource alloc] initWithCGImage:croppedImageRef];
+  CGImageRelease(croppedImageRef);
+  return result;
 }
 
 @end
