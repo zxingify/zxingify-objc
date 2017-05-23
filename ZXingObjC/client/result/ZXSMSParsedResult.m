@@ -33,7 +33,7 @@
 }
 
 - (id)initWithNumbers:(NSArray *)numbers vias:(NSArray *)vias subject:(NSString *)subject body:(NSString *)body {
-  if (self = [super initWithType:kParsedResultTypeSMS]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeSMS]) {
     _numbers = numbers;
     _vias = vias;
     _subject = subject;

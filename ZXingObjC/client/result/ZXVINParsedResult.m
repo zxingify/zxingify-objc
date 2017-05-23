@@ -22,7 +22,7 @@
 vehicleDescriptorSection:(NSString *)vehicleDescriptorSection vehicleIdentifierSection:(NSString *)vehicleIdentifierSection
       countryCode:(NSString *)countryCode vehicleAttributes:(NSString *)vehicleAttributes modelYear:(int)modelYear
         plantCode:(unichar)plantCode sequentialNumber:(NSString *)sequentialNumber {
-  if (self = [super initWithType:kParsedResultTypeVIN]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeVIN]) {
     _vin = vin;
     _worldManufacturerID = worldManufacturerID;
     _vehicleDescriptorSection = vehicleDescriptorSection;

@@ -19,7 +19,7 @@
 @implementation ZXTelParsedResult
 
 - (id)initWithNumber:(NSString *)number telURI:(NSString *)telURI title:(NSString *)title {
-  if (self = [super initWithType:kParsedResultTypeTel]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeTel]) {
     _number = number;
     _telURI = telURI;
     _title = title;

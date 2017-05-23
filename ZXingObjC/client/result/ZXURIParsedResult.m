@@ -28,7 +28,7 @@ static NSRegularExpression *ZX_USER_IN_HOST = nil;
 }
 
 - (id)initWithUri:(NSString *)uri title:(NSString *)title {
-  if (self = [super initWithType:kParsedResultTypeURI]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeURI]) {
     _uri = [self massageURI:uri];
     _title = title;
   }

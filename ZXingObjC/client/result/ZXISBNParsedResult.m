@@ -19,7 +19,7 @@
 @implementation ZXISBNParsedResult
 
 - (id)initWithIsbn:(NSString *)isbn {
-  if (self = [super initWithType:kParsedResultTypeISBN]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeISBN]) {
     _isbn = isbn;
   }
 

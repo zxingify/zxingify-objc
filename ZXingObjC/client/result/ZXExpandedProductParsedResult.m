@@ -33,7 +33,7 @@ NSString * const ZX_POUND = @"LB";
        expirationDate:(NSString *)expirationDate weight:(NSString *)weight weightType:(NSString *)weightType
       weightIncrement:(NSString *)weightIncrement price:(NSString *)price priceIncrement:(NSString *)priceIncrement
         priceCurrency:(NSString *)priceCurrency uncommonAIs:(NSMutableDictionary *)uncommonAIs {
-  if (self = [super initWithType:kParsedResultTypeProduct]) {
+  if (self = [super initWithZXParsedResultType:kParsedResultTypeProduct]) {
     _rawText = rawText;
     _productID = productID;
     _sscc = sscc;

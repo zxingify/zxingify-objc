@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign, readonly) ZXParsedResultType type;
 
-- (id)initWithType:(ZXParsedResultType)type;
+- (id)initWithZXParsedResultType:(ZXParsedResultType)type;
 + (id)parsedResultWithType:(ZXParsedResultType)type;
 - (NSString *)displayResult;
 + (void)maybeAppend:(NSString *)value result:(NSMutableString *)result;
