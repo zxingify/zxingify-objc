@@ -8,7 +8,7 @@ The following barcodes are currently supported for both encoding and decoding:
 * UPC-A and UPC-E
 * EAN-8 and EAN-13
 * Code 39
-* Code 93
+* Code 93 (not implemented yet)
 * Code 128
 * ITF
 * Codabar
@@ -78,11 +78,21 @@ if (result) {
 
 ## Installation
 
+#### CocoaPods
+
 The recommended way to install ZXingObjC is with [CocoaPods](http://cocoapods.org), a dependency mananger for Objective-C projects. After installing CocoaPods just add ZXingObjC to your Podfile:
 
 ```ruby
 platform :ios, '7.0'
-pod 'ZXingObjC', '~> 3.0'
+pod 'ZXingObjC', '~> 3.2.1'
+```
+
+#### Carthage
+
+Alternatively, ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
+
+```ogdl
+github "TheLevelUp/ZXingObjC" ~> 3.2.1
 ```
 
 ## Examples

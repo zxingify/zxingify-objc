@@ -17,6 +17,10 @@
 #import "ZXBarcodeFormat.h"
 #import "ZXUPCEANReader.h"
 
+extern const int CHECK_DIGIT_ENCODINGS[];
+extern const int ZX_UPCE_MIDDLE_END_PATTERN_LEN;
+extern const int ZX_UPCE_MIDDLE_END_PATTERN[];
+
 /**
  * Implements decoding of the UPC-E format.
  *

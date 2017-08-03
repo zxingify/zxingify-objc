@@ -541,10 +541,19 @@
 		02DD029B1AC1C648009E4D65 /* ZXPDF417EncoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD02991AC1C648009E4D65 /* ZXPDF417EncoderTestCase.m */; };
 		02DD029F1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD029E1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m */; };
 		02DD02A01AC1DBAD009E4D65 /* ZXAztecDecoderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DD029E1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m */; };
-		074684321BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; settings = {ASSET_TAGS = (); }; };
-		074684331BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; settings = {ASSET_TAGS = (); }; };
-		074684361BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; settings = {ASSET_TAGS = (); }; };
-		074684371BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; settings = {ASSET_TAGS = (); }; };
+		03BEBDDE1E59982F0081FA0F /* mac-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BEBDDD1E59982F0081FA0F /* mac-Info.plist */; };
+		074684321BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; };
+		074684331BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */; };
+		074684361BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; };
+		074684371BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */; };
+		2172BAF91E1C6087004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2172BAFA1E1C6087004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
+		2172BAFB1E1C6090004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2172BAFC1E1C6090004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
+		2172BAFD1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2172BAFE1E1C6091004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
+		2172BAFF1E1C6091004327CB /* ZXUPCEWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2172BB001E1C6091004327CB /* ZXUPCEWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */; };
 		2504D9D016FFD2E200DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
 		2504D9D116FFD3A100DF8882 /* ZXAztecCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2504D9D316FFD3B300DF8882 /* ZXAztecCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */; };
@@ -2233,9 +2242,12 @@
 		02DD02991AC1C648009E4D65 /* ZXPDF417EncoderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417EncoderTestCase.m; sourceTree = "<group>"; };
 		02DD029D1AC1DBAD009E4D65 /* ZXAztecDecoderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXAztecDecoderTest.h; sourceTree = "<group>"; };
 		02DD029E1AC1DBAD009E4D65 /* ZXAztecDecoderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXAztecDecoderTest.m; sourceTree = "<group>"; };
+		03BEBDDD1E59982F0081FA0F /* mac-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mac-Info.plist"; sourceTree = SOURCE_ROOT; };
 		074684311BC3BA3C00E47A35 /* ZXGenericMultipleBarcodeReaderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGenericMultipleBarcodeReaderTestCase.m; sourceTree = "<group>"; };
 		074684341BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMultiAbstractBlackBoxTestCase.h; sourceTree = "<group>"; };
 		074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiAbstractBlackBoxTestCase.m; sourceTree = "<group>"; };
+		2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXUPCEWriter.h; sourceTree = "<group>"; };
+		2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXUPCEWriter.m; sourceTree = "<group>"; };
 		2504D9CD16FFD2E200DF8882 /* ZXAztecCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecCode.h; path = encoder/ZXAztecCode.h; sourceTree = "<group>"; };
 		2504D9CE16FFD2E200DF8882 /* ZXAztecCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZXAztecCode.m; path = encoder/ZXAztecCode.m; sourceTree = "<group>"; };
 		2504D9DA16FFD4CD00DF8882 /* ZXAztecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXAztecEncoder.h; path = encoder/ZXAztecEncoder.h; sourceTree = "<group>"; };
@@ -3175,6 +3187,7 @@
 			isa = PBXGroup;
 			children = (
 				DB7254821A523C9200EFF81B /* ios-Info.plist */,
+				03BEBDDD1E59982F0081FA0F /* mac-Info.plist */,
 				25403CE1166A979700E13304 /* ios-Prefix.pch */,
 				2540418D166AADEF00E13304 /* osx-Prefix.pch */,
 			);
@@ -3534,6 +3547,8 @@
 				25403EA9166A9DF300E13304 /* ZXUPCEANWriter.m */,
 				25403EAA166A9DF300E13304 /* ZXUPCEReader.h */,
 				25403EAB166A9DF300E13304 /* ZXUPCEReader.m */,
+				2172BAF71E1C6087004327CB /* ZXUPCEWriter.h */,
+				2172BAF81E1C6087004327CB /* ZXUPCEWriter.m */,
 			);
 			path = oned;
 			sourceTree = "<group>";
@@ -4454,6 +4469,7 @@
 				0210FB8C18E0A62200B1F4CE /* ZXGenericGFPoly.h in Headers */,
 				0294D14D190ED90B00BBACCB /* ZXRGBLuminanceSource.h in Headers */,
 				0210FBAC18E0A82500B1F4CE /* ZXDataMatrixSymbolInfo144.h in Headers */,
+				2172BAF91E1C6087004327CB /* ZXUPCEWriter.h in Headers */,
 				0210FB5F18E0A5FC00B1F4CE /* ZXAbstractDoCoMoResultParser.h in Headers */,
 				0294D13B190ED90B00BBACCB /* ZXResult.h in Headers */,
 				0210FC1418E0A9F700B1F4CE /* ZXQRCodeFormatInformation.h in Headers */,
@@ -4698,6 +4714,7 @@
 				0294D14E190ED90B00BBACCB /* ZXRGBLuminanceSource.h in Headers */,
 				255E492C18143AC600A03A28 /* ZXITFWriter.h in Headers */,
 				255E492D18143AC600A03A28 /* ZXMultiFormatOneDReader.h in Headers */,
+				2172BAFB1E1C6090004327CB /* ZXUPCEWriter.h in Headers */,
 				0294D13C190ED90B00BBACCB /* ZXResult.h in Headers */,
 				255E492E18143AC600A03A28 /* ZXMultiFormatUPCEANReader.h in Headers */,
 				255E492F18143AC600A03A28 /* ZXOneDimensionalCodeWriter.h in Headers */,
@@ -4942,6 +4959,7 @@
 				255E48E018143A8800A03A28 /* ZXQRCodeAlignmentPattern.h in Headers */,
 				0294D14F190ED90B00BBACCB /* ZXRGBLuminanceSource.h in Headers */,
 				0218B85718D230CC0005E7EC /* ZXAztecBinaryShiftToken.h in Headers */,
+				2172BAFD1E1C6091004327CB /* ZXUPCEWriter.h in Headers */,
 				255E48E118143A8800A03A28 /* ZXQRCodeAlignmentPatternFinder.h in Headers */,
 				0294D13D190ED90B00BBACCB /* ZXResult.h in Headers */,
 				255E48E218143A8800A03A28 /* ZXQRCodeFinderPatternFinder.h in Headers */,
@@ -5186,6 +5204,7 @@
 				DB7259B81A5245F300EFF81B /* ZXRSSPair.h in Headers */,
 				DB7259711A5244FC00EFF81B /* ZXDimension.h in Headers */,
 				DB7259FF1A52475700EFF81B /* ZXQRCode.h in Headers */,
+				2172BAFF1E1C6091004327CB /* ZXUPCEWriter.h in Headers */,
 				DB7259E71A5246DF00EFF81B /* ZXPDF417Dimensions.h in Headers */,
 				DB72596D1A5244FC00EFF81B /* ZXBinarizer.h in Headers */,
 				DB72598F1A52454B00EFF81B /* ZXDataMatrixX12Encoder.h in Headers */,
@@ -5359,6 +5378,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03BEBDDE1E59982F0081FA0F /* mac-Info.plist in Resources */,
 				25FE5D4516D1997C00826CDB /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5531,6 +5551,7 @@
 				25403EF3166A9DF400E13304 /* ZXEAN13Reader.m in Sources */,
 				25403EF5166A9DF400E13304 /* ZXEAN13Writer.m in Sources */,
 				25403EF7166A9DF400E13304 /* ZXEAN8Reader.m in Sources */,
+				2172BAFA1E1C6087004327CB /* ZXUPCEWriter.m in Sources */,
 				25403EF9166A9DF400E13304 /* ZXEAN8Writer.m in Sources */,
 				25389B8C18010B9A00772392 /* ZXPDF417DetectorResult.m in Sources */,
 				25403EFB166A9DF400E13304 /* ZXEANManufacturerOrgSupport.m in Sources */,
@@ -5891,6 +5912,7 @@
 				25404200166AAE6000E13304 /* ZXEAN13Reader.m in Sources */,
 				25404201166AAE6000E13304 /* ZXEAN13Writer.m in Sources */,
 				25404202166AAE6000E13304 /* ZXEAN8Reader.m in Sources */,
+				2172BAFC1E1C6090004327CB /* ZXUPCEWriter.m in Sources */,
 				25404203166AAE6000E13304 /* ZXEAN8Writer.m in Sources */,
 				25389B8D18010B9A00772392 /* ZXPDF417DetectorResult.m in Sources */,
 				25404204166AAE6000E13304 /* ZXEANManufacturerOrgSupport.m in Sources */,
@@ -6251,6 +6273,7 @@
 				254046BB166ABBED00E13304 /* ZXEAN8Reader.m in Sources */,
 				254046BC166ABBED00E13304 /* ZXEAN8Writer.m in Sources */,
 				254046BD166ABBED00E13304 /* ZXEANManufacturerOrgSupport.m in Sources */,
+				2172BAFE1E1C6091004327CB /* ZXUPCEWriter.m in Sources */,
 				254046BE166ABBED00E13304 /* ZXITFReader.m in Sources */,
 				254046BF166ABBED00E13304 /* ZXITFWriter.m in Sources */,
 				25389B7617FFCA2700772392 /* ZXPDF417DetectionResultRowIndicatorColumn.m in Sources */,
@@ -6478,6 +6501,7 @@
 				DB7257DA1A52420400EFF81B /* ZXEAN13Reader.m in Sources */,
 				DB7257DB1A52420400EFF81B /* ZXEAN13Writer.m in Sources */,
 				DB7257DC1A52420400EFF81B /* ZXEAN8Reader.m in Sources */,
+				2172BB001E1C6091004327CB /* ZXUPCEWriter.m in Sources */,
 				DB7257DD1A52420400EFF81B /* ZXEAN8Writer.m in Sources */,
 				DB7257DE1A52420400EFF81B /* ZXPDF417DetectorResult.m in Sources */,
 				DB7257DF1A52420400EFF81B /* ZXEANManufacturerOrgSupport.m in Sources */,
@@ -6589,9 +6613,11 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -6611,6 +6637,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/ZXingObjC.dst;
+				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
@@ -6672,15 +6699,17 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
-				);
+				DYLIB_INSTALL_NAME_BASE = "$(INSTALL_PATH)";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "mac-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@rpath/../Frameworks/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zxing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ZXingObjC;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
@@ -6698,6 +6727,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6709,6 +6739,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -6731,9 +6762,11 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -6753,6 +6786,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/ZXingObjC.dst;
+				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
@@ -6770,6 +6804,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/ZXingObjC.dst;
+				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
@@ -6871,15 +6906,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
-				);
+				DYLIB_INSTALL_NAME_BASE = "$(INSTALL_PATH)";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "mac-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@rpath/../Frameworks/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zxing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ZXingObjC;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
@@ -6894,15 +6931,17 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
-				);
+				DYLIB_INSTALL_NAME_BASE = "$(INSTALL_PATH)";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "osx-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "mac-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@rpath/../Frameworks/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zxing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ZXingObjC;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
@@ -6925,6 +6964,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
@@ -6967,6 +7007,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";
@@ -7005,6 +7046,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-Prefix.pch";

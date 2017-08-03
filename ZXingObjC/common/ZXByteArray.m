@@ -31,7 +31,7 @@
   return self;
 }
 
-- (id)initWithBytes:(int8_t)byte1, ... {
+- (id)initWithBytes:(int)byte1, ... {
   va_list args;
   va_start(args, byte1);
   unsigned int length = 0;
@@ -63,7 +63,7 @@
   NSMutableString *s = [NSMutableString stringWithFormat:@"length=%u, array=(", self.length];
 
   for (int i = 0; i < self.length; i++) {
-    [s appendFormat:@"%d", self.array[i]];
+    [s appendFormat:@"%hhx", self.array[i]];
     if (i < self.length - 1) {
       [s appendString:@", "];
     }
