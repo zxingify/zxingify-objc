@@ -93,7 +93,7 @@ github "TheLevelUp/ZXingObjC" ~> 3.2.1
 
 #### CocoaPods
 
-The recommended way to install ZXingObjC is with [CocoaPods](http://cocoapods.org), a dependency mananger for Objective-C projects. After installing CocoaPods just add ZXingObjC to your Podfile:
+[CocoaPods](http://cocoapods.org) is a dependency manager for Swift and Objective-C Cocoa projects. After installing CocoaPods add ZXingObjC to your Podfile:
 
 ```ruby
 platform :ios, '7.0'
