@@ -88,7 +88,7 @@ We highly recommend Carthage as module manager.
 Alternatively, ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
 
 ```ogdl
-github "TheLevelUp/ZXingObjC" ~> 3.2.1
+github "TheLevelUp/ZXingObjC" ~> 3.2
 ```
 
 #### CocoaPods
@@ -96,8 +96,8 @@ github "TheLevelUp/ZXingObjC" ~> 3.2.1
 [CocoaPods](http://cocoapods.org) is a dependency manager for Swift and Objective-C Cocoa projects. After installing CocoaPods add ZXingObjC to your Podfile:
 
 ```ruby
-platform :ios, '7.0'
-pod 'ZXingObjC', '~> 3.2.1'
+platform :ios, '8.0'
+pod 'ZXingObjC', '~> 3.2.2'
 ```
 
 ## Examples
