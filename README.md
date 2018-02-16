@@ -25,7 +25,7 @@ Sorry, this project had some sort of winter sleep for a long time. There were al
 
 ## Requirements
 
-ZXingObjC requires Xcode 8.3.3, targeting either iOS 8.0 and above, or Mac OS X 10.8 Mountain Lion and above.
+ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 8.0 and above, or Mac OS X 10.8 Mountain Lion and above.
 
 ## Usage
 
