@@ -37,7 +37,7 @@ ZXBitMatrix* result = [writer encode:@"A string to encode"
                               height:500
                                error:&error];
 if (result) {
-  CGImageRef image = [[ZXImage imageWithMatrix:result] cgimage];
+  CGImageRef image = CGImageRetain([[ZXImage imageWithMatrix:result] cgimage]);
 
   // This CGImageRef image can be placed in a UIImage, NSImage, or written to a file.
 } else {
