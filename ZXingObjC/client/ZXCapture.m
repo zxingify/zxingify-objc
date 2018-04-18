@@ -177,7 +177,12 @@
   _torch = torch;
 
   [self.input.device lockForConfiguration:nil];
-  self.input.device.torchMode = self.torch ? AVCaptureTorchModeOn : AVCaptureTorchModeOff;
+  
+  AVCaptureTorchMode torchMode = self.torch ? AVCaptureTorchModeOn : AVCaptureTorchModeOff;
+  if ([self.input.device isTorchModeSupported:torchMode]) {
+    self.input.device.torchMode = torchMode;
+  }
+  
   [self.input.device unlockForConfiguration];
 }
 
