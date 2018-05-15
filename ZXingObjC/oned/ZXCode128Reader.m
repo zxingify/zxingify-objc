@@ -236,7 +236,7 @@ const int ZX_CODE128_CODE_STOP = 106;
   int startCode = startPatternInfo.array[2];
   int codeSet;
 
-  NSMutableArray *rawCodes = [NSMutableArray arrayWithObject:@(startCode)];
+  NSMutableArray *rawCodes = [@[@(startCode)] mutableCopy];
 
   switch (startCode) {
   case ZX_CODE128_CODE_START_A:
@@ -480,6 +480,9 @@ const int ZX_CODE128_CODE_STOP = 106;
         }
       }
       break;
+
+      default:
+        break;
     }
 
     // Unshift back to another code set if we were shifted
