@@ -87,7 +87,7 @@ We highly recommend Carthage as module manager.
 
 #### Carthage
 
-Alternatively, ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
+ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
 
 ```ogdl
 github "TheLevelUp/ZXingObjC" ~> 3.2
