@@ -59,11 +59,11 @@
 }
 
 - (void)addPossibleFormat:(ZXBarcodeFormat)format {
-  [self.barcodeFormats addObject:[NSNumber numberWithInt:format]];
+  [self.barcodeFormats addObject:@(format)];
 }
 
 - (BOOL)containsFormat:(ZXBarcodeFormat)format {
-  return [self.barcodeFormats containsObject:[NSNumber numberWithInt:format]];
+  return [self.barcodeFormats containsObject:@(format)];
 }
 
 - (int)numberOfPossibleFormats {
@@ -71,7 +71,7 @@
 }
 
 - (void)removePossibleFormat:(ZXBarcodeFormat)format {
-  [self.barcodeFormats removeObject:[NSNumber numberWithInt:format]];
+  [self.barcodeFormats removeObject:@(format)];
 }
 
 @end

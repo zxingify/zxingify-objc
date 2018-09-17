@@ -185,10 +185,8 @@
     i++;
   }
 
-  if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
-    return NO;
-  }
-  return YES;
+  return counterPosition == numCounters ||
+          (counterPosition == numCounters - 1 && i == end);
 }
 
 + (BOOL)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters {
@@ -201,10 +199,7 @@
     }
   }
 
-  if (numTransitionsLeft >= 0 || ![self recordPattern:row start:start + 1 counters:counters]) {
-    return NO;
-  }
-  return YES;
+  return !(numTransitionsLeft >= 0 || ![self recordPattern:row start:start + 1 counters:counters]);
 }
 
 /**
