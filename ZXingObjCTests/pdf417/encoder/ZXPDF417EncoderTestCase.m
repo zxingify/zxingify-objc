@@ -55,4 +55,11 @@
   XCTAssertEqualObjects(expected, encoded);
 }
 
+- (void)testEncodeAutoWithSpecialChars {
+  // just check if this does not throw an error
+  NSError *error;
+  [ZXPDF417HighLevelEncoder encodeHighLevel:@"1%§s ?aG$" compaction:ZXPDF417CompactionAuto encoding:NSUTF8StringEncoding error:&error];
+  XCTAssertNil(error);
+}
+
 @end

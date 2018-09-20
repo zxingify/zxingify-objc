@@ -160,11 +160,10 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
   int textSubMode = ZX_PDF417_SUBMODE_ALPHA;
 
   // User selected encoding mode
-  ZXByteArray *bytes = nil; //Fill later and only if needed
   if (compaction == ZXPDF417CompactionText) {
     [self encodeText:msg startpos:p count:(int)len buffer:sb initialSubmode:textSubMode];
   } else if (compaction == ZXPDF417CompactionByte) {
-    bytes = [self bytesForMessage:msg encoding:encoding];
+    ZXByteArray *bytes = [self bytesForMessage:msg encoding:encoding];
     [self encodeBinary:bytes startpos:p count:(int)msg.length startmode:ZX_PDF417_BYTE_COMPACTION buffer:sb];
   } else if (compaction == ZXPDF417CompactionNumeric) {
     [sb appendFormat:@"%C", (unichar) ZX_PDF417_LATCH_TO_NUMERIC];
@@ -190,21 +189,20 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
           textSubMode = [self encodeText:msg startpos:p count:t buffer:sb initialSubmode:textSubMode];
           p += t;
         } else {
-          if (bytes == NULL) {
-            bytes = [self bytesForMessage:msg encoding:encoding];
-          }
-          int b = [self determineConsecutiveBinaryCount:msg bytes:bytes startpos:p error:error];
+          int b = [self determineConsecutiveBinaryCount:msg startpos:p encoding:encoding error:error];
           if (b == -1) {
             return nil;
           } else if (b == 0) {
             b = 1;
           }
-          if (b == 1 && encodingMode == ZX_PDF417_TEXT_COMPACTION) {
+          NSString *submsg = [msg substringWithRange:NSMakeRange(p, b)];
+          ZXByteArray *bytes = [self bytesForMessage:submsg encoding:encoding];
+          if (bytes.length ==1 && encodingMode == ZX_PDF417_TEXT_COMPACTION) {
             //Switch for one byte (instead of latch)
-            [self encodeBinary:bytes startpos:p count:1 startmode:ZX_PDF417_TEXT_COMPACTION buffer:sb];
+            [self encodeBinary:bytes startpos:0 count:1 startmode:ZX_PDF417_TEXT_COMPACTION buffer:sb];
           } else {
             //Mode latch performed by encodeBinary
-            [self encodeBinary:bytes startpos:p count:b startmode:encodingMode buffer:sb];
+            [self encodeBinary:bytes startpos:0 count:bytes.length startmode:encodingMode buffer:sb];
             encodingMode = ZX_PDF417_BYTE_COMPACTION;
             textSubMode = ZX_PDF417_SUBMODE_ALPHA; //Reset after latch
           }
@@ -516,11 +514,12 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
  * Determines the number of consecutive characters that are encodable using binary compaction.
  *
  * @param msg      the message
- * @param bytes    the message converted to a byte array
  * @param startpos the start position within the message
+ * @param encoding the charset used to convert the message to a byte array
  * @return the requested character count
  */
-+ (int)determineConsecutiveBinaryCount:(NSString *)msg bytes:(ZXByteArray *)bytes startpos:(int)startpos error:(NSError **)error {
++ (int)determineConsecutiveBinaryCount:(NSString *)msg startpos:(int)startpos encoding:(NSStringEncoding)encoding error:(NSError **)error {
+
   NSUInteger len = msg.length;
   int idx = startpos;
   while (idx < len) {
@@ -540,11 +539,8 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
       return idx - startpos;
     }
     ch = [msg characterAtIndex:idx];
-
-    //Check if character is encodable
-    //Sun returns a ASCII 63 (?) for a character that cannot be mapped. Let's hope all
-    //other VMs do the same
-    if (bytes.array[idx] == 63 && ch != '?') {
+    NSString *chString = [NSString stringWithFormat: @"%c", ch];
+    if (![chString canBeConvertedToEncoding:encoding]) {
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Non-encodable character detected: %c (Unicode: %C)", ch, (unichar)ch]};
 
       if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
