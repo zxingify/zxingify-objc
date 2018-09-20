@@ -7,7 +7,7 @@ The following barcodes are currently supported for both encoding and decoding:
 * UPC-A and UPC-E
 * EAN-8 and EAN-13
 * Code 39
-* Code 93 (not implemented yet)
+* Code 93
 * Code 128
 * ITF
 * Codabar
@@ -15,9 +15,9 @@ The following barcodes are currently supported for both encoding and decoding:
 * QR Code
 * Data Matrix
 * Aztec ('beta' quality)
-* PDF 417 ('alpha' quality)
+* PDF 417 ('beta' quality)
 
-ZXingObjC currently has feature parity with ZXing version 3.0.
+ZXingObjC currently has feature parity with ZXing version 3.2.0.
 
 ## Roadmap
 
@@ -90,7 +90,7 @@ We highly recommend Carthage as module manager.
 ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
 
 ```ogdl
-github "TheLevelUp/ZXingObjC" ~> 3.2
+github "TheLevelUp/ZXingObjC" ~> 3.3
 ```
 
 #### CocoaPods
