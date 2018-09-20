@@ -35,10 +35,10 @@
   if ((self = [self initWithLength:length]) && (length > 0)) {
     va_list args;
     va_start(args, byte1);
-    _array[0] = byte1;
+    _array[0] = (int8_t) byte1;
     for (int i = 1; i < length; i++) {
       int byte = va_arg(args, int);
-      _array[i++] = byte;
+      _array[i++] = (int8_t) byte;
     }
     va_end(args);
   }

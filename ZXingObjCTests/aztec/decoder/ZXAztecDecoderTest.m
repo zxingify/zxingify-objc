@@ -125,7 +125,7 @@
 - (void)assertEqualByteArrays:(ZXByteArray *)actual expected:(ZXByteArray *)expected {
   XCTAssertEqual(actual.length, expected.length);
   for(int i = 0; i < actual.length; i++) {
-    XCTAssertEqual(actual.array[i], expected.array[i]);
+    XCTAssertEqual(actual.array[i], expected.array[i], @"Failed at %d", i);
   }
 }
 
