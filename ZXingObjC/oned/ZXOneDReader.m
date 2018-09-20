@@ -83,7 +83,10 @@
  *
  * @param image The image to decode
  * @param hints Any hints that were requested
- * @return The contents of the decoded barcode or nil if an error occurs
+ * @return The contents of the decoded barcode or nil if:
+ *  - no potential barcode is found
+ *  - a potential barcode is found but does not pass its checksum
+ *  - a potential barcode is found but format is invalid
  */
 - (ZXResult *)doDecode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error {
   int width = image.width;

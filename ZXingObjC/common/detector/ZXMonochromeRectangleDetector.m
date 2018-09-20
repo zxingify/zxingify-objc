@@ -103,7 +103,7 @@ const int ZX_MONOCHROME_MAX_MODULES = 32;
  * @param bottom maximum value of y
  * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
  *  the barcode
- * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
+ * @return a ZXResultPoint encapsulating the corner that was found
  *  or nil if such a point cannot be found
  */
 - (ZXResultPoint *)findCornerFromCenter:(int)centerX deltaX:(int)deltaX left:(int)left right:(int)right centerY:(int)centerY deltaY:(int)deltaY top:(int)top bottom:(int)bottom maxWhiteRun:(int)maxWhiteRun {

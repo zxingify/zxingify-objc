@@ -22,27 +22,27 @@
 @interface ZXAztecCode : NSObject
 
 /**
- * Number of data codewords
+ * @return number of data codewords
  */
 @property (nonatomic, assign) int codeWords;
 
 /**
- * Compact or full symbol indicator
+ * @return YES if compact instead of full mode
  */
 @property (nonatomic, assign, getter = isCompact) BOOL compact;
 
 /**
- * Number of levels
+ * @return number of levels
  */
 @property (nonatomic, assign) int layers;
 
 /**
- * The symbol image
+ * @return the symbol image
  */
 @property (nonatomic, strong) ZXBitMatrix *matrix;
 
 /**
- * Size in pixels (width and height)
+ * @return size in pixels (width and height)
  */
 @property (nonatomic, assign) int size;
 

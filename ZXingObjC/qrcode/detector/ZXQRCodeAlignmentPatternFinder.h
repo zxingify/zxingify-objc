@@ -23,7 +23,7 @@
  *
  * At the moment this only looks for the bottom-right alignment pattern.
  *
- * This is mostly a simplified copy of {@link FinderPatternFinder}. It is copied,
+ * This is mostly a simplified copy of ZXFinderPatternFinder. It is copied,
  * pasted and stripped down here for maximum performance but does unfortunately duplicate
  * some code.
  *
