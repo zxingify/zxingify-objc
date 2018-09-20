@@ -179,8 +179,9 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
  * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
  */
 + (ZXQRCodeMode *)chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding {
-  if (NSShiftJISStringEncoding == encoding) {
-    return [self isOnlyDoubleByteKanji:content] ? [ZXQRCodeMode kanjiMode] : [ZXQRCodeMode byteMode];
+  if (NSShiftJISStringEncoding == encoding && [self isOnlyDoubleByteKanji:content]) {
+    // Choose Kanji mode if all input are double-byte characters
+    return [ZXQRCodeMode kanjiMode];
   }
   BOOL hasNumeric = NO;
   BOOL hasAlphanumeric = NO;
