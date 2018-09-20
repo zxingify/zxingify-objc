@@ -235,9 +235,20 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
         break;
       case 'b':
         if (next >= 'A' && next <= 'E') {
+          // %A to %E map to control codes ESC to USep
           decodedChar = (unichar)(next - 38);
-        } else if (next >= 'F' && next <= 'W') {
+        } else if (next >= 'F' && next <= 'J') {
+          // %F to %J map to ; < = > ?
           decodedChar = (unichar)(next - 11);
+        } else if (next >= 'K' && next <= 'O') {
+          // %K to %O map to [ \ ] ^ _
+          decodedChar = (unichar) (next + 16);
+        } else if (next >= 'P' && next <= 'S') {
+          // %P to %S map to { | } ~
+          decodedChar = (unichar) (next + 43);
+        } else if (next >= 'T' && next <= 'Z') {
+          // %T to %Z all map to DEL (127)
+          decodedChar = 127;
         } else {
           return nil;
         }
