@@ -19,10 +19,6 @@ The following barcodes are currently supported for both encoding and decoding:
 
 ZXingObjC currently has feature parity with ZXing version 3.2.0.
 
-## Roadmap
-
-Sorry, this project had some sort of winter sleep for a long time. There were also some ideas to rewrite this project in Swift. Instead of rewriting the project in Swift as a whole, we planned to keep up feature parity with zxing-core at first, then rewrite the capture module as well as the examples in Swift. From this new starting point, we are going to replace classes step-by-step with new Swift implementations. We do not want to create a new barcode scanner but to keep the code as similar as possible to zxing-core.
-
 ## Requirements
 
 ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 8.0 and above, or Mac OS X 10.8 Mountain Lion and above.
