@@ -348,18 +348,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
 
     CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-
     CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-    CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:self.rotation];
-    CGImageRelease(videoFrameImage);
 
     // If scanRect is set, crop the current image to include only the desired rect
     if (!CGRectIsEmpty(self.scanRect)) {
-      CGImageRef croppedImage = CGImageCreateWithImageInRect(rotatedImage, self.scanRect);
-      CFRelease(rotatedImage);
-      rotatedImage = croppedImage;
+      CGImageRef croppedImage = CGImageCreateWithImageInRect(videoFrameImage, self.scanRect);
+      CGImageRelease(videoFrameImage);
+      videoFrameImage = croppedImage;
     }
 
+    CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:self.rotation];
+    CGImageRelease(videoFrameImage);
     self.lastScannedImage = rotatedImage;
 
     if (self.captureToFilename) {
