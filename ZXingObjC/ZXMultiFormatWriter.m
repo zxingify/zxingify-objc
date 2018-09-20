@@ -24,6 +24,7 @@
 #if defined(ZXINGOBJC_ONED) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXCodaBarWriter.h"
 #import "ZXCode39Writer.h"
+#import "ZXCode93Writer.h"
 #import "ZXCode128Writer.h"
 #import "ZXEAN8Writer.h"
 #import "ZXEAN13Writer.h"
@@ -73,6 +74,10 @@
 
     case kBarcodeFormatCode39:
       writer = [[ZXCode39Writer alloc] init];
+      break;
+
+    case kBarcodeFormatCode93:
+      writer = [[ZXCode93Writer alloc] init];
       break;
 
     case kBarcodeFormatCode128:
