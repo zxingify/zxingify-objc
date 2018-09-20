@@ -21,5 +21,6 @@
 
 - (id)initWithLength:(unsigned int)length;
 - (id)initWithBytes:(int)byte1, ...;
+- (id)initWithLength:(unsigned int)length bytes:(int)byte1, ...;
 
 @end
