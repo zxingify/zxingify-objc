@@ -62,4 +62,11 @@
   XCTAssertNil(error);
 }
 
+- (void)testEncodeIso88591WithSpecialChars {
+  // just check if this does not throw an error
+  NSError *error;
+  [ZXPDF417HighLevelEncoder encodeHighLevel:@"asdfg§asd" compaction:ZXPDF417CompactionAuto encoding:NSISOLatin1StringEncoding error:&error];
+  XCTAssertNil(error);
+}
+
 @end

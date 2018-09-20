@@ -195,7 +195,7 @@ const NSStringEncoding ZX_PDF417_DEFAULT_ENCODING = NSISOLatin1StringEncoding;
           } else if (b == 0) {
             b = 1;
           }
-          NSString *submsg = [msg substringWithRange:NSMakeRange(p, p + b)];
+          NSString *submsg = [msg substringWithRange:NSMakeRange(p, b)];
           ZXByteArray *bytes = [self bytesForMessage:submsg encoding:encoding];
           if (bytes.length ==1 && encodingMode == ZX_PDF417_TEXT_COMPACTION) {
             //Switch for one byte (instead of latch)
