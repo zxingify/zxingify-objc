@@ -19,6 +19,9 @@
 #import "ZXUPCEReader.h"
 #import "ZXBoolArray.h"
 
+// start guard 3
+// bars 7 * 6
+// end guard 6
 const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
 
 @implementation ZXUPCEWriter
