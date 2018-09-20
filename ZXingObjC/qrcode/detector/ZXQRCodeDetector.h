@@ -29,20 +29,21 @@
 - (id)initWithImage:(ZXBitMatrix *)image;
 
 /**
- * Detects a QR Code in an image, simply.
+ * Detects a QR Code in an image.
  *
- * @return ZXDetectorResult encapsulating results of detecting a QR Code or nil
- * if no QR Code can be found
+ * @return ZXDetectorResult encapsulating results of detecting a QR Code or nil if:
+ *   - no QR Code can be found
+ *   - a QR Code cannot be decoded
  */
 - (ZXDetectorResult *)detectWithError:(NSError **)error;
 
 /**
- * Detects a QR Code in an image, simply.
+ * Detects a QR Code in an image.
  *
  * @param hints optional hints to detector
- * @return ZXDetectorResult encapsulating results of detecting a QR Code
- * @return nil if QR Code cannot be found
- * @return nil if a QR Code cannot be decoded
+ * @return ZXDetectorResult encapsulating results of detecting a QR Code or nil if:
+ *   - QR Code cannot be found
+ *   - a QR Code cannot be decoded
  */
 - (ZXDetectorResult *)detect:(ZXDecodeHints *)hints error:(NSError **)error;
 
@@ -51,6 +52,11 @@
 /**
  * Computes an average estimated module size based on estimated derived from the positions
  * of the three finder patterns.
+ *
+ * @param topLeft detected top-left finder pattern center
+ * @param topRight detected top-right finder pattern center
+ * @param bottomLeft detected bottom-left finder pattern center
+ * @return estimated module size
  */
 - (float)calculateModuleSize:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft;
 

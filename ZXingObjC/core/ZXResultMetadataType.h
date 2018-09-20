@@ -35,7 +35,7 @@ typedef enum {
 
   /**
    * 2D barcode formats typically encode text, but allow for a sort of 'byte mode'
-   * which is sometimes used to encode binary data. While {@link Result} makes available
+   * which is sometimes used to encode binary data. While ZXResult makes available
    * the complete raw bytes in the barcode for these formats, it does not offer the bytes
    * from the byte segments alone.
    *

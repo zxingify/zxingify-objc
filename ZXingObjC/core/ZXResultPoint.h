@@ -28,12 +28,16 @@
 + (id)resultPointWithX:(float)x y:(float)y;
 
 /**
- * Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
- * BC < AC and the angle between BC and BA is less than 180 degrees.
+ * Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC
+ * and BC is less than AC, and the angle between BC and BA is less than 180 degrees.
+ *
+ * @param patterns array of three ZXResultPoints to order
  */
 + (void)orderBestPatterns:(NSMutableArray *)patterns;
 
 /**
+ * @param pattern1 first pattern
+ * @param pattern2 second pattern
  * @return distance between two points
  */
 + (float)distance:(ZXResultPoint *)pattern1 pattern2:(ZXResultPoint *)pattern2;
