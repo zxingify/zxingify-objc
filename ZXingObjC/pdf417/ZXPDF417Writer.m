@@ -77,9 +77,8 @@ const int ZX_PDF417_WHITE_SPACE = 30;
     return nil;
   }
 
-  int lineThickness = 2;
   int aspectRatio = 4;
-  NSArray *originalScale = [[encoder barcodeMatrix] scaledMatrixWithXScale:lineThickness yScale:aspectRatio * lineThickness];
+  NSArray *originalScale = [[encoder barcodeMatrix] scaledMatrixWithXScale:1 yScale:aspectRatio];
   BOOL rotated = NO;
   if ((height > width) ^ ([(ZXByteArray *)originalScale[0] length] < [originalScale count])) {
     originalScale = [self rotateArray:originalScale];
@@ -98,7 +97,7 @@ const int ZX_PDF417_WHITE_SPACE = 30;
 
   if (scale > 1) {
     NSArray *scaledMatrix =
-      [[encoder barcodeMatrix] scaledMatrixWithXScale:scale * lineThickness yScale:scale * aspectRatio * lineThickness];
+      [[encoder barcodeMatrix] scaledMatrixWithXScale:scale yScale:scale * aspectRatio];
     if (rotated) {
       scaledMatrix = [self rotateArray:scaledMatrix];
     }
