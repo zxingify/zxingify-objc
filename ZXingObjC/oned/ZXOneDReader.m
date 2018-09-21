@@ -153,20 +153,21 @@ typedef NS_ENUM(NSInteger, ZXPathDirection) {
                                                        y:[(ZXResultPoint *)points[1] y]];
           }
         }
+        if (hints.accurateBarcodePosition) {
         [self getBarcodeRectangleFromImage:image result:result];
-        // validate points
-        // TODO we should only validate points if we need the correct position of the barcode
-        if (result.resultPoints) {
-          ZXResultPoint *topLeft = result.resultPoints[0];
-          ZXResultPoint *topRight = result.resultPoints[2];
-          ZXResultPoint *bottomLeft = result.resultPoints[1];
-          ZXResultPoint *bottomRight = result.resultPoints[3];
-          if (topLeft.y == bottomLeft.y || topRight.y == bottomRight.y) {
-            // was not able to detect correct points
-            return nil;
+          // validate points
+          if (result.resultPoints) {
+            ZXResultPoint *topLeft = result.resultPoints[0];
+            ZXResultPoint *topRight = result.resultPoints[2];
+            ZXResultPoint *bottomLeft = result.resultPoints[1];
+            ZXResultPoint *bottomRight = result.resultPoints[3];
+            if (topLeft.y == bottomLeft.y || topRight.y == bottomRight.y) {
+              // was not able to detect correct points
+              return nil;
+            }
           }
+          result.angle = [self getAngleFromResultPoints:result.resultPoints imageWidth:width imageHeight:height];
         }
-        result.angle = [self getAngleFromResultPoints:result.resultPoints imageWidth:width imageHeight:height];
         return result;
       }
     }
