@@ -116,6 +116,79 @@
   XCTAssertEqualObjects(expected, [qrCode description]);
 }
 
+- (void)testEncodeKanjiMode {
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.encoding = NSShiftJISStringEncoding;
+  // Nihon in Kanji
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"\u65e5\u672c" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelM] hints:hints error:nil];
+  NSString *expected =
+  @"<<\n"
+  " mode: KANJI\n"
+  " ecLevel: M\n"
+  " version: 1\n"
+  " maskPattern: 0\n"
+  " matrix:\n"
+  " 1 1 1 1 1 1 1 0 0 1 0 1 0 0 1 1 1 1 1 1 1\n"
+  " 1 0 0 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 0 0 1\n"
+  " 1 0 1 1 1 0 1 0 0 1 1 1 1 0 1 0 1 1 1 0 1\n"
+  " 1 0 1 1 1 0 1 0 0 0 0 0 1 0 1 0 1 1 1 0 1\n"
+  " 1 0 1 1 1 0 1 0 1 1 1 1 1 0 1 0 1 1 1 0 1\n"
+  " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n"
+  " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
+  " 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0\n"
+  " 1 0 1 0 1 0 1 0 0 0 1 0 1 0 0 0 1 0 0 1 0\n"
+  " 1 1 0 1 0 0 0 1 0 1 1 1 0 1 0 1 0 1 0 0 0\n"
+  " 0 1 0 0 0 0 1 1 1 1 1 1 0 1 1 1 0 1 0 1 0\n"
+  " 1 1 1 0 0 1 0 1 0 0 0 1 1 1 0 1 1 0 1 0 0\n"
+  " 0 1 1 0 0 1 1 0 1 1 0 1 0 1 1 1 0 1 0 0 1\n"
+  " 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 1 0 1\n"
+  " 1 1 1 1 1 1 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1\n"
+  " 1 0 0 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 1 1\n"
+  " 1 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 0 1 0 1\n"
+  " 1 0 1 1 1 0 1 0 0 0 0 1 0 1 0 1 0 1 0 1 0\n"
+  " 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 0 1 0 1\n"
+  " 1 0 0 0 0 0 1 0 0 0 0 1 1 1 0 1 1 1 0 1 0\n" 
+  " 1 1 1 1 1 1 1 0 1 1 0 1 0 1 1 1 0 0 1 0 0\n"
+  ">>\n";
+  XCTAssertEqualObjects(expected, [qrCode description]);
+}
+
+- (void)testEncodeShiftjisNumeric {
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.encoding = NSShiftJISStringEncoding;
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"0123" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelM] hints:hints error:nil];
+  NSString *expected =
+  @"<<\n"
+  " mode: NUMERIC\n"
+  " ecLevel: M\n"
+  " version: 1\n"
+  " maskPattern: 2\n"
+  " matrix:\n"
+  " 1 1 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 1 1\n"
+  " 1 0 0 0 0 0 1 0 0 1 0 0 1 0 1 0 0 0 0 0 1\n"
+  " 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 0 1 1 1 0 1\n"
+  " 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1\n"
+  " 1 0 1 1 1 0 1 0 1 1 0 1 1 0 1 0 1 1 1 0 1\n"
+  " 1 0 0 0 0 0 1 0 1 1 0 0 1 0 1 0 0 0 0 0 1\n"
+  " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n"
+  " 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0\n"
+  " 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 0\n"
+  " 1 1 0 0 0 1 0 0 1 0 1 0 1 0 0 1 0 0 1 0 0\n"
+  " 0 1 1 0 1 1 1 1 0 1 1 1 0 1 0 0 1 1 0 1 1\n"
+  " 1 0 1 1 0 1 0 1 0 0 1 0 0 0 0 1 1 0 1 0 0\n"
+  " 0 0 1 0 0 1 1 1 0 0 0 1 0 1 0 0 1 0 1 0 0\n"
+  " 0 0 0 0 0 0 0 0 1 1 0 1 1 1 1 0 0 1 0 0 0\n"
+  " 1 1 1 1 1 1 1 0 0 0 1 0 1 0 1 1 0 0 0 0 0\n"
+  " 1 0 0 0 0 0 1 0 1 1 0 1 1 1 1 0 0 1 0 1 0\n"
+  " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 0 1 0 0 1 0 0\n"
+  " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 1 0 0 1 0 0\n"
+  " 1 0 1 1 1 0 1 0 1 1 0 1 0 1 0 0 1 1 1 0 0\n"
+  " 1 0 0 0 0 0 1 0 0 0 1 0 0 0 0 1 1 0 1 1 0\n"
+  " 1 1 1 1 1 1 1 0 1 1 0 1 0 1 0 0 1 1 1 0 0\n"
+  ">>\n";
+  XCTAssertEqualObjects(expected, [qrCode description]);
+}
+
 - (void)testSimpleUTF8ECI {
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.encoding = NSUTF8StringEncoding;

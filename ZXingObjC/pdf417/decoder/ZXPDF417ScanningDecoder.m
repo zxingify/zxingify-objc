@@ -382,7 +382,8 @@ static ZXPDF417ECErrorCorrection *errorCorrection;
           int rowNumber = codeword.rowNumber;
           if (rowNumber >= 0) {
             if (rowNumber >= barcodeMatrix.count) {
-              return nil;
+              // We have more rows than the barcode metadata allows for, ignore them.
+              continue;
             }
             [(ZXPDF417BarcodeValue *)barcodeMatrix[rowNumber][column] setValue:codeword.value];
           }

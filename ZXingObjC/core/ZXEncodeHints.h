@@ -73,6 +73,12 @@ typedef enum {
 @property (nonatomic, strong) ZXQRCodeErrorCorrectionLevel *errorCorrectionLevel;
 
 /**
+ * Specifies what degree of error correction to use, for example in PDF417 Codes.
+ * For PDF417 valid values are 0 to 8.
+ */
+@property (nonatomic, strong) NSNumber *errorCorrectionLevelPDF417;
+
+/**
  * Specifies what percent of error correction to use.
  * For Aztec it represents the minimal percentage of error correction words.
  * Note: an Aztec symbol should have a minimum of 25% EC words.

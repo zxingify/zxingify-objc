@@ -22,29 +22,31 @@
  */
 @interface ZXQRCodeDecoder : NSObject
 
+- (ZXDecoderResult *)decode:(NSArray *)image error:(NSError **)error;
+
 /**
  * Convenience method that can decode a QR Code represented as a 2D array of booleans.
  * "true" is taken to mean a black module.
  *
  * @param image booleans representing white/black QR Code modules
- * @return text and bytes encoded within the QR Code
- * @return nil if the QR Code cannot be decoded
- * @return nil if error correction fails
- */
-- (ZXDecoderResult *)decode:(NSArray *)image error:(NSError **)error;
-
-/**
- * Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.
- *
- * @param bits booleans representing white/black QR Code modules
- * @return text and bytes encoded within the QR Code
- * @return nil if the QR Code cannot be decoded
- * @return nil if error correction fails
+ * @param hints decoding hints that should be used to influence decoding
+ * @return text and bytes encoded within the QR Code or nil if:
+ *   - the QR Code cannot be decoded
+ *   - error correction fails
  */
 - (ZXDecoderResult *)decode:(NSArray *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits error:(NSError **)error;
 
+/**
+ * Decodes a QR Code represented as a ZXBitMatrix. A 1 or "true" is taken to mean a black module.
+ *
+ * @param bits booleans representing white/black QR Code modules
+ * @param hints decoding hints that should be used to influence decoding
+ * @return text and bytes encoded within the QR Code
+ * @return nil if the QR Code cannot be decoded
+ * @return nil if error correction fails
+ */
 - (ZXDecoderResult *)decodeMatrix:(ZXBitMatrix *)bits hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end

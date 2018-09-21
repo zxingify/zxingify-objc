@@ -31,8 +31,10 @@
  * Locates and decodes a barcode in some format within an image.
  *
  * @param image image of barcode to decode
- * @return String which the barcode encodes or nil if
- *  the barcode cannot be located or decoded for any reason
+ * @return String which the barcode encodes or nil if:
+ *   - no potential barcode is found
+ *   - a potential barcode is found but does not pass its checksum
+ *   - a potential barcode is found but format is invalid
  */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image error:(NSError **)error;
 
@@ -41,12 +43,13 @@
  * hints, each possibly associated to some data, which may help the implementation decode.
  *
  * @param image image of barcode to decode
- * @param hints passed as a {@link java.util.Map} from {@link com.google.zxing.DecodeHintType}
- * to arbitrary data. The
+ * @param hints passed as a ZXDecodeHints. The
  * meaning of the data depends upon the hint type. The implementation may or may not do
  * anything with these hints.
  * @return String which the barcode encodes or nil if
- *  the barcode cannot be located or decoded for any reason
+ *   - no potential barcode is found
+ *   - a potential barcode is found but does not pass its checksum
+ *   - a potential barcode is found but format is invalid
  */
 - (ZXResult *)decode:(ZXBinaryBitmap *)image hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
