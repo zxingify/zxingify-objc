@@ -80,13 +80,13 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   if (!correctedBits) {
     return nil;
   }
-    NSMutableArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray: correctedBits];
+    ZXByteArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray:correctedBits];
     NSString *result = [[self class] encodedData:correctedBits];
     
-    NSUInteger rawBytesSize = [rawBytes count];
+    NSUInteger rawBytesSize = rawBytes.length;
     ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
     for (int i = 0; i < rawBytesSize; i++) {
-        rawBytesReturned.array[i] = (int8_t)[rawBytes[i] intValue];
+        rawBytesReturned.array[i] = (int8_t)rawBytes.array[i];
     }
     
     return [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
@@ -355,23 +355,23 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
 /**
  * Reads a code of length 8 in an array of bits, padding with zeros
  */
-+ (int) readByte:(ZXBoolArray *) rawbits startIndex:(int) startIndex {
++ (int8_t) readByte:(ZXBoolArray *) rawbits startIndex:(int) startIndex {
     int n = rawbits.length - startIndex;
     if (n >= 8) {
-        return (int) [self readCode:rawbits startIndex:startIndex length:8];
+        return (int8_t) [self readCode:rawbits startIndex:startIndex length:8];
     }
-    return (int) ([self readCode:rawbits startIndex:startIndex length:n] << (8 - n));
+    return (int8_t) ([self readCode:rawbits startIndex:startIndex length:n] << (8 - n));
 }
 
 /**
  * Packs a bit array into bytes, most significant bit first
  */
-+ (NSMutableArray *) convertBoolArrayToByteArray:(ZXBoolArray *) boolArr {
-    NSMutableArray *byteArr = [[NSMutableArray alloc] init];
++ (ZXByteArray *)convertBoolArrayToByteArray:(ZXBoolArray *) boolArr {
     int byteArrLength = (boolArr.length + 7) / 8;
+    ZXByteArray *byteArr = [[ZXByteArray alloc] initWithLength:byteArrLength];
     for (int i = 0; i < byteArrLength; i++) {
-        int code = [self readByte:boolArr startIndex:8 * i];
-        [byteArr addObject:@(code)];
+        int8_t code = [self readByte:boolArr startIndex:8 * i];
+        byteArr.array[i] = code;
     }
     return byteArr;
 }
