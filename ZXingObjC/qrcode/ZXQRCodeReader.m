@@ -142,6 +142,10 @@
     // Special case, where bottom-right module wasn't black so we found something else in the last row
     // Assume it's a square, so use height as the width
     right = left + (bottom - top);
+    if (right >= image.width) {
+      // Abort if that would not make sense -- off image
+      return nil;
+    }
   }
 
   int matrixWidth = round((right - left + 1) / moduleSize);
