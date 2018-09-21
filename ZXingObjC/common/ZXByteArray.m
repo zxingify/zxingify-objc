@@ -38,7 +38,7 @@
     _array[0] = (int8_t) byte1;
     for (int i = 1; i < length; i++) {
       int byte = va_arg(args, int);
-      _array[i++] = (int8_t) byte;
+      _array[i] = (int8_t) byte;
     }
     va_end(args);
   }

@@ -34,7 +34,7 @@
     _array[0] = value1 == 1 ? true : false;
     for (int i = 1; i < length; i++) {
       int value = va_arg(args, int);
-      _array[i++] = value == 1 ? true : false;
+      _array[i] = value == 1 ? true : false;
     }
     va_end(args);
   }
