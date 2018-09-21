@@ -43,7 +43,7 @@
 @implementation ZXDataMask001
 
 - (BOOL)isMasked:(int)i j:(int)j {
-  return (i & 0x01) == 0;
+  return (i * j) % 6 == 0;
 }
 
 @end
@@ -125,7 +125,7 @@
 
 - (BOOL)isMasked:(int)i j:(int)j {
   int temp = i * j;
-  return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
+  return ((temp + (temp % 3)) & 0x01) == 0;
 }
 
 @end
@@ -141,7 +141,7 @@
 @implementation ZXDataMask111
 
 - (BOOL)isMasked:(int)i j:(int)j {
-  return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
+  return ((i + j + ((i * j) % 3)) & 0x01) == 0;
 }
 
 @end
