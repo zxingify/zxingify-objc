@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import <CoreGraphics/CoreGraphics.h>
 #import "ZXBinaryBitmap.h"
 #import "ZXBitArray.h"
 #import "ZXDecodeHints.h"
@@ -22,6 +23,17 @@
 #import "ZXOneDReader.h"
 #import "ZXResult.h"
 #import "ZXResultPoint.h"
+#import "ZXBitMatrix.h"
+
+#define DEGREES_TO_RADIANS(degrees)(degrees * M_PI / 180)
+#define RADIANS_TO_DEGREES(radians)(radians * 180 / M_PI)
+
+typedef NS_ENUM(NSInteger, ZXPathDirection) {
+  ZXPathDirectionTopLeft,
+  ZXPathDirectionTopRight,
+  ZXPathDirectionBottomLeft,
+  ZXPathDirectionBottomRight
+};
 
 @implementation ZXOneDReader
 
@@ -131,7 +143,8 @@
       ZXResult *result = [self decodeRow:rowNumber row:row hints:hints error:nil];
       if (result) {
         if (attempt == 1) {
-          [result putMetadata:kResultMetadataTypeOrientation value:@180];
+          // not true for whole image, only the found points are reversed as the row was reversed
+          // [result putMetadata:kResultMetadataTypeOrientation value:@180];
           NSMutableArray *points = [result resultPoints];
           if (points != nil) {
             points[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)points[0] x]
@@ -140,6 +153,21 @@
                                                        y:[(ZXResultPoint *)points[1] y]];
           }
         }
+        if (hints.accurateBarcodePosition) {
+        [self getBarcodeRectangleFromImage:image result:result];
+          // validate points
+          if (result.resultPoints) {
+            ZXResultPoint *topLeft = result.resultPoints[0];
+            ZXResultPoint *topRight = result.resultPoints[2];
+            ZXResultPoint *bottomLeft = result.resultPoints[1];
+            ZXResultPoint *bottomRight = result.resultPoints[3];
+            if (topLeft.y == bottomLeft.y || topRight.y == bottomRight.y) {
+              // was not able to detect correct points
+              return nil;
+            }
+          }
+          result.angle = [self getAngleFromResultPoints:result.resultPoints imageWidth:width imageHeight:height];
+        }
         return result;
       }
     }
@@ -147,6 +175,192 @@
 
   if (error) *error = ZXNotFoundErrorInstance();
   return nil;
+}
+
+- (float)getAngleFromResultPoints:(NSArray *)resultPoints imageWidth:(int)imageWidth imageHeight:(int)imageHeight {
+  ZXResultPoint *startBottomLeftOfBarcode = resultPoints[1]; // bottomLeft
+  ZXResultPoint *startBottomRightOfBarcode = resultPoints[3]; // bottomRight
+  CGPoint startPoint = CGPointMake(startBottomLeftOfBarcode.x, startBottomLeftOfBarcode.y);
+  CGPoint endPoint = CGPointMake(startBottomRightOfBarcode.x, startBottomRightOfBarcode.y);
+  return [self angleBetweenStartPoint:startPoint endPoint:endPoint];
+}
+
+- (CGFloat)angleBetweenStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint {
+  CGPoint originPoint = CGPointMake(endPoint.x - startPoint.x, endPoint.y - startPoint.y);
+  float radians = atan2f(originPoint.y, originPoint.x);
+  float degrees = RADIANS_TO_DEGREES(radians);
+  return degrees;
+}
+
+- (void)getBarcodeRectangleFromImage:(ZXBinaryBitmap *)image result:(ZXResult *)result {
+  if (!result.resultPoints) {
+    return;
+  }
+  
+  BOOL mirrored = NO;
+  NSNumber *orientation = [result.resultMetadata objectForKey:@(kResultMetadataTypeOrientation)];
+  if (orientation && orientation.integerValue == 180) {
+    mirrored = YES;
+  }
+  
+  ZXResultPoint *p1 = mirrored ? result.resultPoints[1] : result.resultPoints[0];
+  ZXResultPoint *p2 = mirrored ? result.resultPoints[0] : result.resultPoints[1];
+  
+  ZXBitMatrix *matrix = [image blackMatrixWithError:nil];
+  
+  CGPoint topLeftBoundPoint = [self findBoundaryTowards:ZXPathDirectionTopLeft startingPoint:CGPointMake(p1.x, p1.y) matrix:matrix];
+  CGPoint bottomLeftBoundPoint = [self findBoundaryTowards:ZXPathDirectionBottomLeft startingPoint:CGPointMake(p1.x, p1.y) matrix:matrix];
+  
+  result.resultPoints[0] = [ZXResultPoint resultPointWithX:topLeftBoundPoint.x y:topLeftBoundPoint.y];
+  result.resultPoints[1] = [ZXResultPoint resultPointWithX:bottomLeftBoundPoint.x y:bottomLeftBoundPoint.y];
+  
+  CGPoint topRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionTopRight startingPoint:CGPointMake(p2.x - 1, p2.y) matrix:matrix];
+  CGPoint bottomRightBoundPoint = [self findBoundaryTowards:ZXPathDirectionBottomRight startingPoint:CGPointMake(p2.x - 1, p2.y) matrix:matrix];
+  
+  ZXResultPoint *p3 = [ZXResultPoint resultPointWithX:topRightBoundPoint.x y:topRightBoundPoint.y];
+  ZXResultPoint *p4 = [ZXResultPoint resultPointWithX:bottomRightBoundPoint.x y:bottomRightBoundPoint.y];
+  [result addResultPoints:@[p3, p4]];
+  
+  if (mirrored) {
+    if (result.resultPoints != nil) {
+      [self mirrorResultPoints:result.resultPoints width:image.width height:image.height];
+    }
+  }
+}
+
+- (CGPoint)findBoundaryTowards:(ZXPathDirection)direction startingPoint:(CGPoint)startingPoint matrix:(ZXBitMatrix *)matrix {
+  CGPoint finalBoundary = CGPointMake(startingPoint.x, startingPoint.y);
+  for (;;) {
+    if (direction == ZXPathDirectionTopLeft) {
+      if ([self aboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        continue;
+      }
+      if ([self leftAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x--;
+        continue;
+      }
+      break;
+    }
+    if (direction == ZXPathDirectionTopRight) {
+      if ([self aboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        continue;
+      }
+      if ([self rightAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftAboveIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y--;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x++;
+        continue;
+      }
+      break;
+    }
+    if (direction == ZXPathDirectionBottomLeft) {
+      if ([self belowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        continue;
+      }
+      if ([self leftBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x--;
+        continue;
+      }
+      break;
+    }
+    if (direction == ZXPathDirectionBottomRight) {
+      if ([self belowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        continue;
+      }
+      if ([self rightBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x++;
+        continue;
+      }
+      if ([self leftBelowIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.y++;
+        finalBoundary.x--;
+        continue;
+      }
+      if ([self rightIsBlack:finalBoundary matrix:matrix]) {
+        finalBoundary.x++;
+        continue;
+      }
+      break;
+    }
+  }
+  return finalBoundary;
+}
+
+- (BOOL)aboveIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x y:point.y-1];
+}
+
+- (BOOL)belowIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x y:point.y+1];
+}
+
+- (BOOL)leftIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x-1 y:point.y];
+}
+
+- (BOOL)rightIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x+1 y:point.y];
+}
+
+- (BOOL)leftAboveIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x-1 y:point.y-1];
+}
+
+- (BOOL)rightAboveIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x+1 y:point.y-1];
+}
+
+- (BOOL)leftBelowIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x-1 y:point.y+1];
+}
+
+- (BOOL)rightBelowIsBlack:(CGPoint)point matrix:(ZXBitMatrix *)matrix {
+  return [matrix getX:point.x+1 y:point.y+1];
+}
+
+- (void)mirrorResultPoints:(NSMutableArray *)resultPoints width:(int)width height:(int)height {
+  NSArray *resultPointsCopy = resultPoints.mutableCopy;
+  resultPoints[0] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[3] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[3] y]];
+  resultPoints[1] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[2] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[2] y]];
+  resultPoints[2] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[1] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[1] y]];
+  resultPoints[3] = [[ZXResultPoint alloc] initWithX:width - [(ZXResultPoint *)resultPointsCopy[0] x]
+                                                   y:height - [(ZXResultPoint *)resultPointsCopy[0] y]];
 }
 
 /**

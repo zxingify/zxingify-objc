@@ -185,8 +185,11 @@ const int ZX_UPC_EAN_L_AND_G_PATTERNS[ZX_UPC_EAN_L_AND_G_PATTERNS_LEN][ZX_UPC_EA
     return nil;
   }
 
-  float left = (float)(NSMaxRange(startGuardRange) + startGuardRange.location) / 2.0f;
-  float right = (float)(NSMaxRange(endRange) + endRange.location) / 2.0f;
+  //float left = (float)(NSMaxRange(startGuardRange) + startGuardRange.location) / 2.0f;
+  //float right = (float)(NSMaxRange(endRange) + endRange.location) / 2.0f;
+  float left = startGuardRange.location;
+  float right = NSMaxRange(endRange);
+  
   ZXBarcodeFormat format = [self barcodeFormat];
 
   ZXResult *decodeResult = [ZXResult resultWithText:resultString

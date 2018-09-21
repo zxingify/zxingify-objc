@@ -53,6 +53,7 @@
     result.returnCodaBarStartEnd = self.returnCodaBarStartEnd;
     result.resultPointCallback = self.resultPointCallback;
     result.tryHarder = self.tryHarder;
+    result.accurateBarcodePosition = self.accurateBarcodePosition;
   }
 
   return result;
