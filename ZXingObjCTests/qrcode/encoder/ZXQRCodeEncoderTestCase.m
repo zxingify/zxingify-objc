@@ -189,6 +189,20 @@
   XCTAssertEqualObjects(expected, [qrCode description]);
 }
 
+- (void)testEncodeWithVersion {
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.qrVersion = @7;
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"ABCDEF" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH] hints:hints error:nil];
+  XCTAssertTrue([qrCode.description containsString:@" version: 7\n"]);
+}
+
+- (void)testEncodeWithVersionTooSmall {
+  ZXEncodeHints *hints = [ZXEncodeHints hints];
+  hints.qrVersion = @3;
+  ZXQRCode *qrCode = [ZXQRCodeEncoder encode:@"THISMESSAGEISTOOLONGFORAQRCODEVERSION3" ecLevel:[ZXQRCodeErrorCorrectionLevel errorCorrectionLevelH] hints:hints error:nil];
+  XCTAssertNil(qrCode);
+}
+
 - (void)testSimpleUTF8ECI {
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.encoding = NSUTF8StringEncoding;

@@ -115,4 +115,10 @@ typedef enum {
  */
 @property (nonatomic, strong) NSNumber *aztecLayers;
 
+/**
+ * Specifies the exact version of QR code to be encoded. An integer. If the data specified
+ * cannot fit within the required version, nil we be returned.
+ */
+@property (nonatomic, strong) NSNumber *qrVersion;
+
 @end
