@@ -38,22 +38,15 @@
 
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-    _luminances = [[ZXByteArray alloc] initWithLength:width * height];
-    for (int y = 0; y < height; y++) {
-      int offset = y * width;
-      for (int x = 0; x < width; x++) {
-        int pixel = pixels[offset + x];
-        int r = (pixel >> 16) & 0xff;
-        int g = (pixel >> 8) & 0xff;
-        int b = pixel & 0xff;
-        if (r == g && g == b) {
-          // Image is already greyscale, so pick any channel.
-          _luminances.array[offset + x] = (int8_t) r;
-        } else {
-          // Calculate luminance cheaply, favoring green.
-          _luminances.array[offset + x] = (int8_t) ((r + g + g + b) / 4);
-        }
-      }
+    int size = width * height;
+    _luminances = [[ZXByteArray alloc] initWithLength:size];
+    for (int offset = 0; offset < size; offset++) {
+      int pixel = pixels[offset];
+      int r = (pixel >> 16) & 0xff; // red
+      int g2 = (pixel >> 7) & 0x1fe; // 2 * green
+      int b = pixel & 0xff; // blue
+      // Calculate green-favouring average cheaply
+      _luminances.array[offset] = (int8_t) ((r + g2 + b) / 4);
     }
   }
 
