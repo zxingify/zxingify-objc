@@ -270,6 +270,20 @@
     hints.tryHarder = YES;
   }
 
+  if (expectedBarcodeLocation.count > 0) {
+    hints.accurateBarcodePosition = YES;
+    if (rotation == 180.0f) {
+      // mirror expectedBarcodeLocation
+      NSMutableArray *mirroredBarcodeLocation = [[NSMutableArray alloc] init];
+      for (__strong NSValue *object in expectedBarcodeLocation) {
+        NSValue *mirroredPoint = [NSValue valueWithPoint:CGPointMake(source.width - object.pointValue.x,
+                                                                     source.height - object.pointValue.y)];
+        [mirroredBarcodeLocation addObject:mirroredPoint];
+      }
+      expectedBarcodeLocation = mirroredBarcodeLocation;
+    }
+  }
+
   ZXResult *result = [self.barcodeReader decode:source hints:hints error:nil];
   if (!result) {
     return NO;
@@ -328,16 +342,14 @@
 - (BOOL)pointHasMatchInArray:(NSArray *)barcodeLocation point:(ZXResultPoint *)point rotation:(int)rotation {
   int x = point.x;
   int y = point.y;
-  BOOL rotated = rotation == 180;
+  int delta = 2;
+  if (rotation == 180.0f) {
+    delta = 8;
+  }
   for (NSValue *value in barcodeLocation) {
     CGPoint expected = value.pointValue;
-    BOOL isExpectedX = x == expected.x;
-    BOOL isExpectedY = y == expected.y;
-    // due to grey pixels we want to have a small delta of our expected points for a rotated barcode
-    if (rotated) {
-      isExpectedX = (x == expected.x || x+1 == expected.x || x-1 == expected.x || x+2 == expected.x || x-2 == expected.x);
-      isExpectedY = (y == expected.y || y+1 == expected.y || y-1 == expected.y || y+2 == expected.y || y-2 == expected.y);
-    }
+    BOOL isExpectedX = expected.x - delta <= x && x <= expected.x + delta;
+    BOOL isExpectedY = expected.y - delta <= y && y <= expected.y + delta;
     if (isExpectedX && isExpectedY) {
       return YES;
     }
