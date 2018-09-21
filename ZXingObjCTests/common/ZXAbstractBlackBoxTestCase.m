@@ -171,7 +171,7 @@
       NSArray *barcodeLocationComponents = [barcodeLocation componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
       for (NSString *pointString in barcodeLocationComponents) {
         CGPoint point = [self pointFromString:pointString];
-        NSValue *value = [NSValue valueWithCGPoint:point];
+        NSValue *value = [NSValue valueWithPoint:point];
         [barcodeLocationPoints addObject:value];
       }
     }
@@ -330,7 +330,7 @@
   int y = point.y;
   BOOL rotated = rotation == 180;
   for (NSValue *value in barcodeLocation) {
-    CGPoint expected = value.CGPointValue;
+    CGPoint expected = value.pointValue;
     BOOL isExpectedX = x == expected.x;
     BOOL isExpectedY = y == expected.y;
     // due to grey pixels we want to have a small delta of our expected points for a rotated barcode
