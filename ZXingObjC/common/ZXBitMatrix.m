@@ -277,8 +277,8 @@
     }
   }
 
-  NSInteger width = right - left;
-  NSInteger height = bottom - top;
+  NSInteger width = right - left + 1;
+  NSInteger height = bottom - top + 1;
 
   if (width < 0 || height < 0) {
     return nil;
