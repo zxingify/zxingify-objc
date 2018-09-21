@@ -176,7 +176,6 @@
       }
     }
     
-    
     NSString *expectedAngleTextFile = [[NSBundle bundleForClass:[self class]] pathForResource:[NSString stringWithFormat:@"%@_ang", fileBaseName] ofType:@"txt" inDirectory:self.testBase];
     NSString *expectedAngle = [[NSString alloc] init];
     if (expectedAngleTextFile) {
@@ -275,12 +274,12 @@
     if (rotation == 180.0f) {
       // mirror expectedBarcodeLocation
       NSMutableArray *mirroredBarcodeLocation = [[NSMutableArray alloc] init];
-      for (__strong NSValue *object in expectedBarcodeLocation) {
-        NSValue *mirroredPoint = [NSValue valueWithPoint:CGPointMake(source.width - object.pointValue.x,
-                                                                     source.height - object.pointValue.y)];
-        [mirroredBarcodeLocation addObject:mirroredPoint];
+      for (NSValue *object in expectedBarcodeLocation) {
+        CGPoint mirroredPoint = CGPointMake(source.width - object.pointValue.x,
+                                            source.height - object.pointValue.y);
+        [mirroredBarcodeLocation addObject:[NSValue valueWithPoint:mirroredPoint]];
       }
-      expectedBarcodeLocation = mirroredBarcodeLocation;
+      expectedBarcodeLocation = [mirroredBarcodeLocation copy];
     }
   }
 
@@ -326,9 +325,15 @@
   }
   
   if (expectedAngle.length > 0) {
-    // float to string comparison, a bit hacky...
-    expectedAngle = [NSString stringWithFormat:@"%.2f", [expectedAngle floatValue]];
-    NSString *actualAngle = [NSString stringWithFormat:@"%.2f", result.angle];
+    // rotate if necessary
+    if (rotation == 180.0f) {
+      // float to string comparison, a bit hacky...
+      expectedAngle = [NSString stringWithFormat:@"%.f", [expectedAngle floatValue] + 180.0f];
+    } else {
+      // float to string comparison, a bit hacky...
+      expectedAngle = [NSString stringWithFormat:@"%.f", [expectedAngle floatValue]];
+    }
+    NSString *actualAngle = [NSString stringWithFormat:@"%.f", result.angle];
     if (![expectedAngle isEqualToString:actualAngle]) {
       NSLog(@"Wrong barcode angle: expected '%@' but got '%@'", expectedAngle, actualAngle);
       *misread = YES;
@@ -342,9 +347,9 @@
 - (BOOL)pointHasMatchInArray:(NSArray *)barcodeLocation point:(ZXResultPoint *)point rotation:(int)rotation {
   int x = point.x;
   int y = point.y;
-  int delta = 2;
+  int delta = 4;
   if (rotation == 180.0f) {
-    delta = 8;
+    delta = 12;
   }
   for (NSValue *value in barcodeLocation) {
     CGPoint expected = value.pointValue;
