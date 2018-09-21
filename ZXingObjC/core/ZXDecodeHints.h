@@ -78,6 +78,14 @@
 @property (nonatomic, assign) BOOL tryHarder;
 
 /**
+ * Spend more time on trying to figure out the accurate barcode position for one-dimensional
+ * barcodes. If this is set, all four corners as well as the angle (if the barcode is slightly
+ * twisted) will be received. If it was not possible to retrieve all four coordinates, nil is
+ * returned as result.
+ */
+@property (nonatomic, assign) BOOL accurateBarcodePosition;
+
+/**
  * Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.
  * Maps to an ZXIntArray of the allowed extension lengths, for example [2], [5], or [2, 5].
  * If it is optional to have an extension, do not set this hint. If this is set,
