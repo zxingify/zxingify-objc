@@ -528,8 +528,6 @@ const int ZX_CODE128_CODE_STOP = 106;
     }
   }
 
-  //  float left = (float)(startPatternInfo.array[1] + startPatternInfo.array[0]) / 2.0f;
-  //  float right = lastStart + lastPatternSize / 2.0f;
   float left = startPatternInfo.array[0];
   float right = lastStart + lastPatternSize;
     
