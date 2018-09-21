@@ -236,7 +236,7 @@ const int ZX_CODE128_CODE_STOP = 106;
   int startCode = startPatternInfo.array[2];
   int codeSet;
 
-  NSMutableArray *rawCodes = [NSMutableArray arrayWithObject:@(startCode)];
+  NSMutableArray *rawCodes = [@[@(startCode)] mutableCopy];
 
   switch (startCode) {
   case ZX_CODE128_CODE_START_A:
@@ -286,13 +286,11 @@ const int ZX_CODE128_CODE_STOP = 106;
 
     [rawCodes addObject:@(code)];
 
-    // Remember whether the last code was printable or not (excluding ZX_CODE128_CODE_STOP)
+    // Remember whether the last code was printable or not
+    // and Add to checksum computation
+    // (excluding ZX_CODE128_CODE_STOP)
     if (code != ZX_CODE128_CODE_STOP) {
       lastCharacterWasPrintable = YES;
-    }
-
-    // Add to checksum computation (if not ZX_CODE128_CODE_STOP of course)
-    if (code != ZX_CODE128_CODE_STOP) {
       multiplier++;
       checksumTotal += multiplier * code;
     }
@@ -310,13 +308,23 @@ const int ZX_CODE128_CODE_STOP = 106;
       return nil;
     }
 
+    bool wasAlreadyAppended = NO;
+    if(hints.substitutions != nil && hints.substitutions.count > 0) {
+        NSString *signCandidate = [hints.substitutions valueForKey:[NSString stringWithFormat:@"%d", code]];
+        if (signCandidate != nil) {
+            // Substitute
+            [result appendString:signCandidate];
+            wasAlreadyAppended = YES;
+        }
+    }
+
     switch (codeSet) {
     case ZX_CODE128_CODE_CODE_A:
       if (code < 64) {
         if (shiftUpperMode == upperMode) {
-          [result appendFormat:@"%C", (unichar)(' ' + code)];
+          if(!wasAlreadyAppended) [result appendFormat:@"%C", (unichar)(' ' + code)];
         } else {
-          [result appendFormat:@"%C", (unichar)(' ' + code + 128)];
+          if(!wasAlreadyAppended) [result appendFormat:@"%C", (unichar)(' ' + code + 128)];
         }
         shiftUpperMode = NO;
       } else if (code < 96) {
@@ -380,9 +388,9 @@ const int ZX_CODE128_CODE_STOP = 106;
     case ZX_CODE128_CODE_CODE_B:
       if (code < 96) {
         if (shiftUpperMode == upperMode) {
-          [result appendFormat:@"%C", (unichar)(' ' + code)];
+          if(!wasAlreadyAppended) [result appendFormat:@"%C", (unichar)(' ' + code)];
         } else {
-          [result appendFormat:@"%C", (unichar)(' ' + code + 128)];
+          if(!wasAlreadyAppended) [result appendFormat:@"%C", (unichar)(' ' + code + 128)];
         }
         shiftUpperMode = NO;
       } else {
@@ -436,10 +444,12 @@ const int ZX_CODE128_CODE_STOP = 106;
       break;
     case ZX_CODE128_CODE_CODE_C:
       if (code < 100) {
-        if (code < 10) {
-          [result appendString:@"0"];
+        if(!wasAlreadyAppended) {
+          if (code < 10) {
+            [result appendString:@"0"];
+          }
+          [result appendFormat:@"%d", code];
         }
-        [result appendFormat:@"%d", code];
       } else {
         if (code != ZX_CODE128_CODE_STOP) {
           lastCharacterWasPrintable = NO;
@@ -470,6 +480,9 @@ const int ZX_CODE128_CODE_STOP = 106;
         }
       }
       break;
+
+      default:
+        break;
     }
 
     // Unshift back to another code set if we were shifted
