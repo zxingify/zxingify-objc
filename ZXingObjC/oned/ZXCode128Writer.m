@@ -24,6 +24,14 @@ const unichar ZX_CODE128_ESCAPE_FNC_2 = L'\u00f2';
 const unichar ZX_CODE128_ESCAPE_FNC_3 = L'\u00f3';
 const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
 
+// Results of minimal lookahead for Code C
+typedef enum {
+  ZXCTypeUncodable = 0,
+  ZXCTypeOneDigit,
+  ZXCTypeTwoDigits,
+  ZXCTypeFNC1
+} ZXCType;
+
 @implementation ZXCode128Writer
 
 - (ZXBitMatrix *)encode:(NSString *)contents format:(ZXBarcodeFormat)format width:(int)width height:(int)height hints:(ZXEncodeHints *)hints error:(NSError **)error {
@@ -63,13 +71,7 @@ const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
 
   while (position < length) {
     //Select code to use
-    int requiredDigitCount = codeSet == ZX_CODE128_CODE_CODE_C ? 2 : 4;
-    int newCodeSet;
-    if ([self isDigits:contents start:position length:requiredDigitCount]) {
-      newCodeSet = ZX_CODE128_CODE_CODE_C;
-    } else {
-      newCodeSet = ZX_CODE128_CODE_CODE_B;
-    }
+    int newCodeSet = [self chooseCodeFrom:contents position:position oldCode:codeSet];
 
     //Get the pattern index
     int patternIndex;
@@ -170,19 +172,82 @@ const unichar ZX_CODE128_ESCAPE_FNC_4 = L'\u00f4';
   return result;
 }
 
-- (BOOL)isDigits:(NSString *)value start:(int)start length:(unsigned int)length {
-  int end = start + length;
+- (ZXCType)findCTypeIn:(NSString *)value start:(int)start {
   int last = (int)[value length];
-  for (int i = start; i < end && i < last; i++) {
-    unichar c = [value characterAtIndex:i];
-    if (c < '0' || c > '9') {
-      if (c != ZX_CODE128_ESCAPE_FNC_1) {
-        return NO;
-      }
-      end++; // ignore FNC_1
-    }
+  if (start >= last) {
+    return ZXCTypeUncodable;
   }
-  return end <= last; // end > last if we've run out of string
+  unichar c = [value characterAtIndex:start];
+  if (c == ZX_CODE128_ESCAPE_FNC_1) {
+    return ZXCTypeFNC1;
+  }
+  if (c < '0' || c > '9') {
+    return ZXCTypeUncodable;
+  }
+  if (start + 1 >= last) {
+    return ZXCTypeOneDigit;
+  }
+  c = [value characterAtIndex:start + 1];
+  if (c < '0' || c > '9') {
+    return ZXCTypeOneDigit;
+  }
+  return ZXCTypeTwoDigits;
+}
+
+- (int)chooseCodeFrom:(NSString *)contents position:(int)position oldCode:(int)oldCode {
+  ZXCType lookahead = [self findCTypeIn:contents start:position];
+  if (lookahead == ZXCTypeOneDigit) {
+    return ZX_CODE128_CODE_CODE_B;
+  }
+  if (lookahead == ZXCTypeUncodable) {
+    if (position < contents.length) {
+      unichar c = [contents characterAtIndex:position];
+      if (c < ' ' || (oldCode == ZX_CODE128_CODE_CODE_A && c < '`')) {
+        // can continue in code A, encodes ASCII 0 to 95
+        return ZX_CODE128_CODE_CODE_A;
+      }
+    }
+    return ZX_CODE128_CODE_CODE_B; // no choice
+  }
+  if (oldCode == ZX_CODE128_CODE_CODE_C) { // can continue in code C
+    return ZX_CODE128_CODE_CODE_C;
+  }
+  if (oldCode == ZX_CODE128_CODE_CODE_B) {
+    if (lookahead == ZXCTypeFNC1) {
+      return ZX_CODE128_CODE_CODE_B; // can continue in code B
+    }
+    // Seen two consecutive digits, see what follows
+    lookahead = [self findCTypeIn:contents start:position + 2];
+    if (lookahead == ZXCTypeUncodable || lookahead == ZXCTypeOneDigit) {
+      return ZX_CODE128_CODE_CODE_B; // not worth switching now
+    }
+    if (lookahead == ZXCTypeFNC1) { // two digits, then FNC_1...
+      lookahead = [self findCTypeIn:contents start:position + 3];
+      if (lookahead == ZXCTypeTwoDigits) { // then two more digits, switch
+        return ZX_CODE128_CODE_CODE_C;
+      } else {
+        return ZX_CODE128_CODE_CODE_B; // otherwise not worth switching
+      }
+    }
+    // At this point, there are at least 4 consecutive digits.
+    // Look ahead to choose whether to switch now or on the next round.
+    int index = position + 4;
+    while ((lookahead = [self findCTypeIn:contents start:index]) == ZXCTypeTwoDigits) {
+      index += 2;
+    }
+    if (lookahead == ZXCTypeOneDigit) { // odd number of digits, switch later
+      return ZX_CODE128_CODE_CODE_B;
+    }
+    return ZX_CODE128_CODE_CODE_C; // even number of digits, switch now
+  }
+  // Here oldCode == 0, which means we are choosing the initial code
+  if (lookahead == ZXCTypeFNC1) { // ignore FNC_1
+    lookahead = [self findCTypeIn:contents start:position + 1];
+  }
+  if (lookahead == ZXCTypeTwoDigits) { // at least two digits, start in code C
+    return ZX_CODE128_CODE_CODE_C;
+  }
+  return ZX_CODE128_CODE_CODE_B;
 }
 
 @end

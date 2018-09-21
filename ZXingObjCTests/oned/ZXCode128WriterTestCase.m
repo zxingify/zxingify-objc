@@ -15,18 +15,22 @@
  */
 
 #import "ZXCode128WriterTestCase.h"
+#import "ZXCode128Reader.h"
 
 const NSString *ZX_FNC1 = @"11110101110";
 const NSString *ZX_FNC2 = @"11110101000";
 const NSString *ZX_FNC3 = @"10111100010";
 const NSString *ZX_FNC4 = @"10111101110";
 const NSString *ZX_START_CODE_B = @"11010010000";
+const NSString *ZX_START_CODE_C = @"11010011100";
+const NSString *ZX_SWITCH_CODE_B = @"10111101110";
 const NSString *ZX_QUIET_SPACE = @"00000";
 const NSString *ZX_STOP = @"1100011101011";
 
 @interface ZXCode128WriterTestCase ()
 
 @property (nonatomic, strong) id<ZXWriter> writer;
+@property (nonatomic, strong) ZXCode128Reader *reader;
 
 @end
 
@@ -34,6 +38,7 @@ const NSString *ZX_STOP = @"1100011101011";
 
 - (void)setUp {
   self.writer = [[ZXCode128Writer alloc] init];
+  self.reader = [[ZXCode128Reader alloc] init];
 }
 
 - (void)testEncodeWithFunc3 {
@@ -60,8 +65,8 @@ const NSString *ZX_STOP = @"1100011101011";
 
 - (void)testEncodeWithFunc1 {
   NSString *toEncode = [NSString stringWithFormat:@"%C123", (unichar)L'\u00f1'];
-  //                                                                                                                   "1"            "2"             "3"          check digit 61
-  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_B, ZX_FNC1, @"10011100110", @"11001110010", @"11001011100", @"11001000010", ZX_STOP, ZX_QUIET_SPACE];
+  //                                                                                                                   "12"                             "3"        check digit 92
+  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_C, ZX_FNC1, @"10110011100", ZX_SWITCH_CODE_B, @"11001011100", @"10101111000", ZX_STOP, ZX_QUIET_SPACE];
 
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 
@@ -78,6 +83,16 @@ const NSString *ZX_STOP = @"1100011101011";
 
   NSString *actual = [self matrixToString:result];
   XCTAssertEqualObjects(actual, expected);
+}
+
+- (void)testRoundtrip {
+  NSString *toEncode = [NSString stringWithFormat:@"%C10958%C17160526", (unichar)L'\u00f1',  (unichar)L'\u00f1'];
+  NSString *expected = @"1095817160526";
+  ZXBitMatrix *encResult = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
+  ZXBitArray *row = [encResult rowAtY:0 row:nil];
+  ZXResult *decResult = [self.reader decodeRow:0 row:row hints:nil error:nil];
+  NSString *actual = decResult.text;
+  XCTAssertEqualObjects(expected, actual);
 }
 
 - (NSString *)matrixToString:(ZXBitMatrix *)matrix {
