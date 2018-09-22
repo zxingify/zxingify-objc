@@ -53,21 +53,32 @@
   return self;
 }
 
+- (id)initWithPixels:(int8_t *)pixels width:(int)width height:(int)height {
+  if (self = [super initWithWidth:width height:height]) {
+    _dataWidth = width;
+    _dataHeight = height;
+    _left = 0;
+    _top = 0;
+    _luminances = [[ZXByteArray alloc] initWithArray:pixels length:width * height];
+  }
+  return self;
+}
+
 - (id)initWithPixels:(ZXByteArray *)pixels dataWidth:(int)dataWidth dataHeight:(int)dataHeight
                 left:(int)left top:(int)top width:(int)width height:(int)height {
-  if (self = [super initWithWidth:width height:height]) {
-    if (left + self.width > dataWidth || top + self.height > dataHeight) {
-      [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
+    if (self = [super initWithWidth:width height:height]) {
+        if (left + self.width > dataWidth || top + self.height > dataHeight) {
+            [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
+        }
+        
+        _luminances = pixels;
+        _dataWidth = dataWidth;
+        _dataHeight = dataHeight;
+        _left = left;
+        _top = top;
     }
-
-    _luminances = pixels;
-    _dataWidth = dataWidth;
-    _dataHeight = dataHeight;
-    _left = left;
-    _top = top;
-  }
-
-  return self;
+    
+    return self;
 }
 
 - (ZXByteArray *)rowAtY:(int)y row:(ZXByteArray *)row {

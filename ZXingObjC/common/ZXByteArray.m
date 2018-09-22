@@ -31,6 +31,14 @@
   return self;
 }
 
+- (id)initWithArray:(int8_t *)array length:(unsigned int)length {
+    if (self = [super init]) {
+        _array = array;
+        _length = length;
+    }
+    return self;
+}
+
 - (id)initWithLength:(unsigned int)length bytes:(int)byte1, ... {
   if ((self = [self initWithLength:length]) && (length > 0)) {
     va_list args;

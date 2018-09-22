@@ -127,6 +127,16 @@
   }
 }
 
+- (void)testSetRange {
+    ZXBitArray *array = [[ZXBitArray alloc] initWithSize:64];
+    [array setRange:28 end:36];
+    XCTAssertFalse([array get:27]);
+    for (int i = 28; i < 36; i++) {
+        XCTAssertTrue([array get:i]);
+    }
+    XCTAssertFalse([array get:36]);
+}
+
 - (void)testClear {
   ZXBitArray *array = [[ZXBitArray alloc] initWithSize:32];
   for (int i = 0; i < 32; i++) {
@@ -136,6 +146,15 @@
   for (int i = 0; i < 32; i++) {
     XCTAssertFalse([array get:i]);
   }
+}
+
+- (void)testFlip {
+    ZXBitArray *array = [[ZXBitArray alloc] initWithSize:32];
+    XCTAssertFalse([array get:5]);
+    [array flip:5];
+    XCTAssertTrue([array get:5]);
+    [array flip:5];
+    XCTAssertFalse([array get:5]);
 }
 
 - (void)testGetArray {
@@ -177,6 +196,23 @@
     ZXIntArray *newBitsNew = [newBitArray bitArray];
     XCTAssertTrue([self arraysAreEqual:newBitsOriginal right:newBitsNew size:size / 32 + 1]);
   }
+}
+
+- (void)testEquals {
+    ZXBitArray *a = [[ZXBitArray alloc] initWithSize:32];
+    ZXBitArray *b = [[ZXBitArray alloc] initWithSize:32];
+    XCTAssertEqualObjects(a, b);
+    XCTAssertEqual(a.hash, b.hash);
+    
+    XCTAssertNotEqualObjects(a, [[ZXBitArray alloc] initWithSize:31]);
+  
+    [a set:16];
+    XCTAssertNotEqualObjects(a, b);
+    XCTAssertNotEqual(a.hash, b.hash);
+    
+    [b set:16];
+    XCTAssertEqualObjects(a, b);
+    XCTAssertEqual(a.hash, b.hash);
 }
 
 - (ZXIntArray *)reverseOriginal:(ZXIntArray *)oldBits size:(int)size {

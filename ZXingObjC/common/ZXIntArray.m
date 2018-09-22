@@ -53,6 +53,25 @@
   return self;
 }
 
+- (BOOL)isEqual:(id)o {
+    if (![o isKindOfClass:[self class]]) {
+        return NO;
+    }
+    ZXIntArray *other = (ZXIntArray *) o;
+    if (other == self) {
+        return YES;
+    }
+    if (other.length != self.length) {
+        return NO;
+    }
+    for (int i = 0; i < self.length; i++) {
+        if (other.array[i] != self.array[i]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 - (id)copyWithZone:(NSZone *)zone {
   ZXIntArray *copy = [[ZXIntArray allocWithZone:zone] initWithLength:self.length];
   memcpy(copy.array, self.array, self.length * sizeof(int32_t));

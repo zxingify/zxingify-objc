@@ -249,11 +249,27 @@
     return NO;
   }
   ZXBitArray *other = (ZXBitArray *)o;
-  return self.size == other.size && memcmp(self.bits, other.bits, self.bitsLength) != 0;
+  if (self.size != other.size) {
+    return NO;
+  }
+  for (int i = 0; i < self.bitsLength; i++) {
+    if (self.bits[i] != other.bits[i]) {
+      return NO;
+    }
+  }
+  return YES;
 }
 
 - (NSUInteger)hash {
-  return 31 * self.size;
+  if (self.bitsLength == 0) {
+    return 31 * self.size;
+  }
+  
+  NSUInteger bitsHash = 1;
+  for (int i = 0; i < self.bitsLength; i++) {
+    bitsHash = 31 * bitsHash + self.bits[i];
+  }
+  return 31 * self.size + bitsHash;
 }
 
 - (void)reverse {
