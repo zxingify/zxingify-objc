@@ -20,6 +20,7 @@
 @property (nonatomic, assign, readonly) unsigned int length;
 
 - (id)initWithLength:(unsigned int)length;
+- (id)initWithArray:(int8_t *)array length:(unsigned int)length;
 - (id)initWithBytes:(int)byte1, ...;
 - (id)initWithLength:(unsigned int)length bytes:(int)byte1, ...;
 

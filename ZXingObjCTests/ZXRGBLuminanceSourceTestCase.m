@@ -39,6 +39,26 @@ static ZXRGBLuminanceSource *SOURCE = nil;
     XCTAssertEqual(0x7F, row.array[0]);
 }
 
+- (void)testMatrix {
+    ZXByteArray *matrix = [SOURCE matrix];
+    int8_t pixels[9] = {
+        0x00, 0x7F, 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F
+    };
+    for (int i = 0; i < matrix.length; i++) {
+        XCTAssertEqual(matrix.array[i], pixels[i]);
+    }
+}
+
+- (void)testGetRow {
+    ZXByteArray *row = [SOURCE rowAtY:2 row:nil];
+    int8_t pixels[3] = {
+        0x3F, 0x7F, 0x3F
+    };
+    for (int i = 0; i < row.length; i++) {
+        XCTAssertEqual(row.array[i], pixels[i]);
+    }
+}
+
 - (void)testDescription {
     XCTAssertEqualObjects(@"#+ \n#+#\n#+#\n", [SOURCE description]);
 }

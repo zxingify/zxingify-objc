@@ -204,6 +204,23 @@
     XCTAssertFalse([array get:0]);
 }
 
+- (void)testEquals {
+    ZXBitArray *a = [[ZXBitArray alloc] initWithSize:32];
+    ZXBitArray *b = [[ZXBitArray alloc] initWithSize:32];
+    XCTAssertEqualObjects(a, b);
+    XCTAssertEqual(a.hash, b.hash);
+    
+    XCTAssertNotEqualObjects(a, [[ZXBitArray alloc] initWithSize:31]);
+  
+    [a set:16];
+    XCTAssertNotEqualObjects(a, b);
+    XCTAssertNotEqual(a.hash, b.hash);
+    
+    [b set:16];
+    XCTAssertEqualObjects(a, b);
+    XCTAssertEqual(a.hash, b.hash);
+}
+
 - (ZXIntArray *)reverseOriginal:(ZXIntArray *)oldBits size:(int)size {
   ZXIntArray *newBits = [[ZXIntArray alloc] initWithLength:oldBits.length];
   for (int i = 0; i < size; i++) {
