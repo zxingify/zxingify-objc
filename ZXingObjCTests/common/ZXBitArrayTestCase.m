@@ -198,12 +198,6 @@
   }
 }
 
-- (void)testClone {
-    ZXBitArray *array = [[ZXBitArray alloc] initWithSize:32];
-    [[array copy] set:0];
-    XCTAssertFalse([array get:0]);
-}
-
 - (void)testEquals {
     ZXBitArray *a = [[ZXBitArray alloc] initWithSize:32];
     ZXBitArray *b = [[ZXBitArray alloc] initWithSize:32];
