@@ -14,6 +14,7 @@ The following barcodes are currently supported for both encoding and decoding:
 * RSS-14 (all variants)
 * QR Code
 * Data Matrix
+* Maxicode
 * Aztec ('beta' quality)
 * PDF 417 ('beta' quality)
 
