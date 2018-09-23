@@ -188,6 +188,7 @@
       ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage];
       ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];
       BOOL misread;
+      
       if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata expectedBarcodeLocation:barcodeLocationPoints expectedAngle:expectedAngle tryHarder:NO misread:&misread]) {
         passedCounts.array[x]++;
       } else if (misread) {
@@ -265,12 +266,16 @@
   *misread = NO;
 
   ZXDecodeHints *hints = [ZXDecodeHints hints];
+  ZXDecodeHints *pureHints = [ZXDecodeHints hints];
+  pureHints.pureBarcode = YES;
   if (tryHarder) {
     hints.tryHarder = YES;
+    pureHints.tryHarder = YES;
   }
 
   if (expectedBarcodeLocation.count > 0) {
     hints.accurateBarcodePosition = YES;
+    pureHints.accurateBarcodePosition = YES;
     if (rotation == 180.0f) {
       // mirror expectedBarcodeLocation
       NSMutableArray *mirroredBarcodeLocation = [[NSMutableArray alloc] init];
@@ -283,7 +288,10 @@
     }
   }
 
-  ZXResult *result = [self.barcodeReader decode:source hints:hints error:nil];
+  ZXResult *result = [self.barcodeReader decode:source hints:pureHints error:nil];
+  if (!result) {
+    result = [self.barcodeReader decode:source hints:hints error:nil];
+  }
   if (!result) {
     return NO;
   }
