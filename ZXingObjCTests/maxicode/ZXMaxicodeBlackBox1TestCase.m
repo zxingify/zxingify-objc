@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-#import "ZXDataMatrixBlackBox1TestCase.h"
+#import "ZXMaxicodeBlackBox1TestCase.h"
 
-@implementation ZXDataMatrixBlackBox1TestCase
+@implementation ZXMaxicodeBlackBox1TestCase
 
 - (id)initWithInvocation:(NSInvocation *)invocation {
   self = [super initWithInvocation:invocation
-                testBasePathSuffix:@"Resources/blackbox/datamatrix-1"
+                testBasePathSuffix:@"Resources/blackbox/maxicode-1"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
-                    expectedFormat:kBarcodeFormatDataMatrix];
+                    expectedFormat:kBarcodeFormatMaxiCode];
 
   if (self) {
-    [self addTest:21 tryHarderCount:21 rotation:0.0f];
-    [self addTest:21 tryHarderCount:21 rotation:90.0f];
-    [self addTest:21 tryHarderCount:21 rotation:180.0f];
-    [self addTest:21 tryHarderCount:21 rotation:270.0f];
+    [self addTest:5 tryHarderCount:5 rotation:0.0f];
+//    [self addTest:5 tryHarderCount:5 rotation:90.0f];
+//    [self addTest:5 tryHarderCount:5 rotation:180.0f];
+//    [self addTest:5 tryHarderCount:5 rotation:270.0f];
   }
 
   return self;
