@@ -238,6 +238,13 @@
       if (rgbPixelOut > 255) {
         rgbPixelOut = 255;
       }
+      
+      // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
+      // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
+      // barcode image. Force any such pixel to be white:
+      if (rgbPixelOut == 0 && alpha == 0) {
+        rgbPixelOut = 255;
+      }
 
       self->_data[i] = rgbPixelOut;
     }
