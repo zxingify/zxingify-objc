@@ -80,16 +80,19 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   if (!correctedBits) {
     return nil;
   }
-    ZXByteArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray:correctedBits];
-    NSString *result = [[self class] encodedData:correctedBits];
-    
-    NSUInteger rawBytesSize = rawBytes.length;
-    ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
-    for (int i = 0; i < rawBytesSize; i++) {
-        rawBytesReturned.array[i] = (int8_t)rawBytes.array[i];
-    }
-    
-    return [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
+  ZXByteArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray:correctedBits];
+  NSString *result = [[self class] encodedData:correctedBits];
+  
+  NSUInteger rawBytesSize = rawBytes.length;
+  ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
+  for (int i = 0; i < rawBytesSize; i++) {
+    rawBytesReturned.array[i] = (int8_t)rawBytes.array[i];
+  }
+  
+  ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
+  decoderResult.numBits = correctedBits.length;
+  
+  return decoderResult;
 }
 
 + (NSString *)highLevelDecode:(ZXBoolArray *)correctedBits {

@@ -29,10 +29,15 @@
   return [self initWithText:text rawBytes:rawBytes resultPoints:resultPoints format:format timestamp:CFAbsoluteTimeGetCurrent()];
 }
 
+- (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
+  return [self initWithText:text rawBytes:rawBytes numBits:numBits resultPoints:resultPoints format:format timestamp:CFAbsoluteTimeGetCurrent()];
+}
+
 - (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
   if (self = [super init]) {
     _text = text;
     _rawBytes = rawBytes;
+    _numBits = rawBytes == nil ? 0 : 8 * rawBytes.length;
     _resultPoints = [resultPoints mutableCopy];
     _barcodeFormat = format;
     _resultMetadata = nil;
@@ -42,12 +47,34 @@
   return self;
 }
 
+- (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
+  if (self = [super init]) {
+    _text = text;
+    _rawBytes = rawBytes;
+    _numBits = numBits;
+    _resultPoints = [resultPoints mutableCopy];
+    _barcodeFormat = format;
+    _resultMetadata = nil;
+    _timestamp = timestamp;
+  }
+  
+  return self;
+}
+
 + (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
   return [[self alloc] initWithText:text rawBytes:rawBytes resultPoints:resultPoints format:format];
 }
 
++ (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format {
+  return [[self alloc] initWithText:text rawBytes:rawBytes numBits:numBits resultPoints:resultPoints format:format];
+}
+
 + (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
   return [[self alloc] initWithText:text rawBytes:rawBytes resultPoints:resultPoints format:format timestamp:timestamp];
+}
+
++ (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp {
+  return [[self alloc] initWithText:text rawBytes:rawBytes numBits:numBits resultPoints:resultPoints format:format timestamp:timestamp];
 }
 
 - (void)putMetadata:(ZXResultMetadataType)type value:(id)value {
