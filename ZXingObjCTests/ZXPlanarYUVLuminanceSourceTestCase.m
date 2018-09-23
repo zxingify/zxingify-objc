@@ -47,8 +47,13 @@ static int8_t Y[COLS * ROWS];
 - (void)testCrop {
   ZXPlanarYUVLuminanceSource *source =
     [[ZXPlanarYUVLuminanceSource alloc] initWithYuvData:(int8_t *)YUV yuvDataLen:COLS * ROWS dataWidth:COLS dataHeight:ROWS left:1 top:1 width:COLS-2 height:ROWS-2 reverseHorizontal:NO];
+  XCTAssertTrue([source cropSupported]);
+  ZXByteArray *cropMatrix = [source matrix];
   for (int r = 0; r < ROWS-2; r++) {
     [self assertEqualsExpected:Y expectedFrom:(r + 1) * COLS + 1 actual:[source rowAtY:r row:nil].array actualFrom:0 length:COLS-2];
+  }
+  for (int r = 0; r < ROWS-2; r++) {
+    [self assertEqualsExpected:Y expectedFrom:(r + 1) * COLS + 1 actual:cropMatrix.array actualFrom:r * (COLS - 2) length:COLS-2];
   }
 }
 

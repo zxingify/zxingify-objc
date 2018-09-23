@@ -28,6 +28,7 @@
             saSequence:(int)saSequence saParity:(int)saParity {
   if (self = [super init]) {
     _rawBytes = rawBytes;
+    _numBits = rawBytes == nil ? 0 : 8 * rawBytes.length;
     _text = text;
     _byteSegments = byteSegments;
     _ecLevel = ecLevel;

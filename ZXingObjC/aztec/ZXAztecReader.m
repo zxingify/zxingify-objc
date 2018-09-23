@@ -68,7 +68,7 @@
     }
   }
 
-  ZXResult *result = [ZXResult resultWithText:decoderResult.text rawBytes:decoderResult.rawBytes resultPoints:points format:kBarcodeFormatAztec];
+  ZXResult *result = [ZXResult resultWithText:decoderResult.text rawBytes:decoderResult.rawBytes numBits:decoderResult.numBits resultPoints:points format:kBarcodeFormatAztec];
 
   NSMutableArray *byteSegments = decoderResult.byteSegments;
   if (byteSegments != nil) {
