@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXOneDReader.h"
-
-extern const unichar ZX_CODE93_ALPHABET[];
-extern const NSString *ZX_CODE93_ALPHABET_STRING;
-extern const int ZX_CODE93_CHARACTER_ENCODINGS[];
-
-/**
- * Decodes Code 93 barcodes.
- */
-@interface ZXCode93Reader : ZXOneDReader
+@interface ZXCode93WriterTestCase : XCTestCase
 
 @end
