@@ -176,7 +176,10 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
       [result appendFormat:@"%C", lastChar];
       break;
   }
-  [result appendFormat:@"%C", [upce characterAtIndex:7]];
+  // Only append check digit in conversion if supplied
+  if (upce.length >= 8) {
+    [result appendFormat:@"%C", [upce characterAtIndex:7]];
+  }
   return result;
 }
 

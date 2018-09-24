@@ -38,7 +38,7 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
   switch (length) {
     case 7:
       // No check digit present, calculate it and add it
-      contents = [contents stringByAppendingString:[NSString stringWithFormat:@"%d", [ZXUPCEANReader standardUPCEANChecksum:contents]]];
+      contents = [contents stringByAppendingString:[NSString stringWithFormat:@"%d", [ZXUPCEANReader standardUPCEANChecksum:[ZXUPCEReader convertUPCEtoUPCA:contents]]]];
       break;
     case 8:
       if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
@@ -51,6 +51,13 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
       @throw [NSException exceptionWithName:@"IllegalArgumentException"
                                      reason:[NSString stringWithFormat:@"Requested contents should be 7 or 8 digits long, but got %d", (int)[contents length]]
                                    userInfo:nil];
+  }
+
+  int firstDigit = [[contents substringWithRange:NSMakeRange(0, 1)] intValue];
+  if (firstDigit != 0 && firstDigit != 1) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Number system must be 0 or 1"
+                                 userInfo:nil];
   }
   
   int checkDigit = [[contents substringWithRange:NSMakeRange(7, 1)] intValue];
