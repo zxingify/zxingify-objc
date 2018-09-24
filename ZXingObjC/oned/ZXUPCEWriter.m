@@ -61,7 +61,7 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
   }
   
   int checkDigit = [[contents substringWithRange:NSMakeRange(7, 1)] intValue];
-  int parities = CHECK_DIGIT_ENCODINGS[checkDigit];
+  int parities = ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_UPCE_CODE_WIDTH];
   int pos = 0;
   
