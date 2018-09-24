@@ -23,7 +23,7 @@
 
 unichar ZX_CODE39_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
   'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-  'X', 'Y', 'Z', '-', '.', ' ', '*', '$', '/', '+', '%'};
+  'X', 'Y', 'Z', '-', '.', ' ', '$', '/', '+', '%'};
 NSString *ZX_CODE39_ALPHABET_STRING = nil;
 
 
@@ -36,8 +36,8 @@ const int ZX_CODE39_CHARACTER_ENCODINGS[] = {
   0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
   0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
   0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
-  0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, // U-*
-  0x0A8, 0x0A2, 0x08A, 0x02A // $-%
+  0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x0A8, // U-$
+  0x0A2, 0x08A, 0x02A // /-%
 };
 
 const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
@@ -249,6 +249,9 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     if (ZX_CODE39_CHARACTER_ENCODINGS[i] == pattern) {
       return ZX_CODE39_ALPHABET[i];
     }
+  }
+  if (pattern == ZX_CODE39_ASTERISK_ENCODING) {
+    return '*';
   }
   return 0;
 }
