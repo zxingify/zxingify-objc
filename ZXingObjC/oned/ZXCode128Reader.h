@@ -18,6 +18,7 @@
 
 extern const int ZX_CODE128_CODE_PATTERNS[][7];
 
+extern const int ZX_CODE128_CODE_START_A;
 extern const int ZX_CODE128_CODE_START_B;
 extern const int ZX_CODE128_CODE_START_C;
 extern const int ZX_CODE128_CODE_CODE_A;
