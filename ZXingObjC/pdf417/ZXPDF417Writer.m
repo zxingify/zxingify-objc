@@ -106,14 +106,13 @@ const int ZX_PDF417_DEFAULT_ERROR_CORRECTION_LEVEL = 2;
   }
 
   if (scale > 1) {
-    NSArray *scaledMatrix =
-      [[encoder barcodeMatrix] scaledMatrixWithXScale:scale yScale:scale * aspectRatio];
+    NSArray *scaledMatrix = [[encoder barcodeMatrix] scaledMatrixWithXScale:scale yScale:scale * aspectRatio];
     if (rotated) {
       scaledMatrix = [self rotateArray:scaledMatrix];
     }
-    return [self bitMatrixFrombitArray:scaledMatrix margin:margin];
+    return [self bitMatrixFromBitArray:scaledMatrix margin:margin];
   }
-  return [self bitMatrixFrombitArray:originalScale margin:margin];
+  return [self bitMatrixFromBitArray:originalScale margin:margin];
 }
 
 /**
@@ -123,13 +122,13 @@ const int ZX_PDF417_DEFAULT_ERROR_CORRECTION_LEVEL = 2;
  * @param margin border around the barcode
  * @return BitMatrix of the input
  */
-- (ZXBitMatrix *)bitMatrixFrombitArray:(NSArray *)input margin:(int)margin {
+- (ZXBitMatrix *)bitMatrixFromBitArray:(NSArray *)input margin:(int)margin {
   // Creates the bitmatrix with extra space for whtespace
   ZXBitMatrix *output = [[ZXBitMatrix alloc] initWithWidth:[(ZXByteArray *)input[0] length] + 2 * margin height:(int)[input count] + 2 * margin];
   [output clear];
-  for (int y = 0, yOutput = output.height - margin; y < [input count]; y++, yOutput--) {
+  for (int y = 0, yOutput = output.height - margin - 1; y < [input count]; y++, yOutput--) {
     for (int x = 0; x < [(ZXByteArray *)input[0] length]; x++) {
-      // Zero is white in the bytematrix
+      // Zero is white in the byte matrix
       if ([(ZXByteArray *)input[y] array][x] == 1) {
         [output setX:x + margin y:yOutput];
       }
