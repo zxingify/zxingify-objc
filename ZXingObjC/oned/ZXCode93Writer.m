@@ -41,12 +41,11 @@
 
   //lenght of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
   int codeWidth = (length + 2 + 2) * 9 + 1;
-
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:codeWidth];
 
   //start character (*)
   [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[47] toReturn:widths];
-  int pos = [self appendPattern:result pos:0 pattern:widths.array patternLen:widths.length startColor:YES];
+  int pos = [self appendPattern:result pos:0 pattern:widths.array patternLen:widths.length];
 
   for (int i = 0; i < length; i++) {
     NSUInteger indexInString = [ZX_CODE93_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
@@ -54,29 +53,36 @@
       [NSException raise:NSInvalidArgumentException format:@"Bad contents: %@", contents];
     }
     [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
-    pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
+    pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length];
   }
 
   //add two checksums
   int check1 = [self computeChecksumIndexFrom:contents withMaxWeight:20];
   [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[check1] toReturn:widths];
-  pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
+  pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length];
 
   //append the contents to reflect the first checksum added
-  [contents stringByAppendingString:[ZX_CODE93_ALPHABET_STRING substringWithRange:NSMakeRange(check1, 1)]];
+  contents = [contents stringByAppendingString:[ZX_CODE93_ALPHABET_STRING substringWithRange:NSMakeRange(check1, 1)]];
+
   int check2 = [self computeChecksumIndexFrom:contents withMaxWeight:15];
   [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[check2] toReturn:widths];
-  pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
-
+  pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length];
 
   //end character (*)
   [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[47] toReturn:widths];
-  [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
+  pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length];
 
   //termination bar (single black bar)
   result.array[pos] = true;
 
   return result;
+}
+
+- (int)appendPattern:(ZXBoolArray *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen {
+  for (int i = 0; i < patternLen; i++) {
+    target.array[pos++] = pattern[i] != 0;
+  }
+  return 9;
 }
 
 - (int)computeChecksumIndexFrom:(NSString *)contents withMaxWeight:(int)maxWeight {
@@ -99,7 +105,7 @@
 - (void)toIntArray:(int)a toReturn:(ZXIntArray *)toReturn {
   for (int i = 0; i < 9; i++) {
     int temp = a & (1 << (8 - i));
-    toReturn.array[i] = temp == 0 ? 1 : 2;
+    toReturn.array[i] = temp == 0 ? 0 : 1;
   }
 }
 

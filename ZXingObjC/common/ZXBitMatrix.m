@@ -353,6 +353,7 @@
   return hash;
 }
 
+// string representation using "X" for set and " " for unset bits
 - (NSString *)description {
   return [self descriptionWithSetString:@"X " unsetString:@"  "];
 }

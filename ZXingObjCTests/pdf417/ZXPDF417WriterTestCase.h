@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXOneDReader.h"
-
-extern const unichar ZX_CODE93_ALPHABET[];
-extern const NSString *ZX_CODE93_ALPHABET_STRING;
-extern const int ZX_CODE93_CHARACTER_ENCODINGS[];
-
-/**
- * Decodes Code 93 barcodes.
- */
-@interface ZXCode93Reader : ZXOneDReader
+@interface ZXPDF417WriterTestCase : XCTestCase
 
 @end
