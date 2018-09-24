@@ -19,6 +19,7 @@
 extern unichar ZX_CODE39_ALPHABET[];
 extern NSString *ZX_CODE39_ALPHABET_STRING;
 extern const int ZX_CODE39_CHARACTER_ENCODINGS[];
+extern const int ZX_CODE39_ASTERISK_ENCODING;
 
 @class ZXDecodeHints, ZXResult;
 
