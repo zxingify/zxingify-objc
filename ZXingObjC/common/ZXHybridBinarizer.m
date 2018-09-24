@@ -89,20 +89,20 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
                             height:(int)height
                        blackPoints:(int **)blackPoints
                             matrix:(ZXBitMatrix *)matrix {
+  int maxYOffset = height - ZX_BLOCK_SIZE;
+  int maxXOffset = width - ZX_BLOCK_SIZE;
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << ZX_BLOCK_SIZE_POWER;
-    int maxYOffset = height - ZX_BLOCK_SIZE;
     if (yoffset > maxYOffset) {
       yoffset = maxYOffset;
     }
+    int top = [self cap:y min:2 max:subHeight - 3];
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << ZX_BLOCK_SIZE_POWER;
-      int maxXOffset = width - ZX_BLOCK_SIZE;
       if (xoffset > maxXOffset) {
         xoffset = maxXOffset;
       }
       int left = [self cap:x min:2 max:subWidth - 3];
-      int top = [self cap:y min:2 max:subHeight - 3];
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
         int *blackRow = blackPoints[top + z];
@@ -148,17 +148,17 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
                          width:(int)width
                         height:(int)height {
   int **blackPoints = (int **)malloc(subHeight * sizeof(int *));
+  int maxYOffset = height - ZX_BLOCK_SIZE;
+  int maxXOffset = width - ZX_BLOCK_SIZE;
   for (int y = 0; y < subHeight; y++) {
     blackPoints[y] = (int *)malloc(subWidth * sizeof(int));
 
     int yoffset = y << ZX_BLOCK_SIZE_POWER;
-    int maxYOffset = height - ZX_BLOCK_SIZE;
     if (yoffset > maxYOffset) {
       yoffset = maxYOffset;
     }
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << ZX_BLOCK_SIZE_POWER;
-      int maxXOffset = width - ZX_BLOCK_SIZE;
       if (xoffset > maxXOffset) {
         xoffset = maxXOffset;
       }
