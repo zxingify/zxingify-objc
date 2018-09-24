@@ -19,7 +19,7 @@
 @implementation ZXEAN13WriterTestCase
 
 - (void)testEncode {
-  NSString *testStr = @"00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+  NSString *testStr = @"00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
   ZXBitMatrix *result = [[[ZXEAN13Writer alloc] init] encode:@"5901234123457"
                                                       format:kBarcodeFormatEan13
                                                        width:(int)testStr.length
@@ -31,7 +31,7 @@
 }
 
 - (void)testAddChecksumAndEncode {
-  NSString *testStr = @"00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+  NSString *testStr = @"00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
   ZXBitMatrix *result = [[[ZXEAN13Writer alloc] init] encode:@"590123412345"
                                                       format:kBarcodeFormatEan13
                                                        width:(int)testStr.length
