@@ -63,11 +63,11 @@
   pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
 
   //append the contents to reflect the first checksum added
-  [contents stringByAppendingString:[ZX_CODE93_ALPHABET_STRING substringWithRange:NSMakeRange(check1, 1)]];
+  contents = [contents stringByAppendingString:[ZX_CODE93_ALPHABET_STRING substringWithRange:NSMakeRange(check1, 1)]];
+
   int check2 = [self computeChecksumIndexFrom:contents withMaxWeight:15];
   [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[check2] toReturn:widths];
   pos += [self appendPattern:result pos:pos pattern:widths.array patternLen:widths.length startColor:YES];
-
 
   //end character (*)
   [self toIntArray:ZX_CODE93_CHARACTER_ENCODINGS[47] toReturn:widths];
@@ -99,7 +99,7 @@
 - (void)toIntArray:(int)a toReturn:(ZXIntArray *)toReturn {
   for (int i = 0; i < 9; i++) {
     int temp = a & (1 << (8 - i));
-    toReturn.array[i] = temp == 0 ? 1 : 2;
+    toReturn.array[i] = temp == 0 ? 0 : 1;
   }
 }
 
