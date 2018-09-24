@@ -21,8 +21,10 @@ const NSString *ZX_FNC1 = @"11110101110";
 const NSString *ZX_FNC2 = @"11110101000";
 const NSString *ZX_FNC3 = @"10111100010";
 const NSString *ZX_FNC4 = @"10111101110";
+const NSString *ZX_START_CODE_A = @"11010000100";
 const NSString *ZX_START_CODE_B = @"11010010000";
 const NSString *ZX_START_CODE_C = @"11010011100";
+const NSString *ZX_SWITCH_CODE_A = @"11101011110";
 const NSString *ZX_SWITCH_CODE_B = @"10111101110";
 const NSString *ZX_QUIET_SPACE = @"00000";
 const NSString *ZX_STOP = @"1100011101011";
@@ -78,6 +80,30 @@ const NSString *ZX_STOP = @"1100011101011";
   NSString *toEncode = [NSString stringWithFormat:@"%C123", (unichar)L'\u00f4'];
   //                                                                                                                   "1"            "2"             "3"          check digit 59
   NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_B, ZX_FNC4, @"10011100110", @"11001110010", @"11001011100", @"11100011010", ZX_STOP, ZX_QUIET_SPACE];
+
+  ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
+
+  NSString *actual = [self matrixToString:result];
+  XCTAssertEqualObjects(actual, expected);
+}
+
+- (void)testEncodeSwitchBetweenCodesetsAAndBStartsWithA {
+  NSString *toEncode = [NSString stringWithFormat:@"\0ABab%C", (unichar) 0x0010];
+  // start with A switch to B and back to A
+  //                                                      "\0"            "A"             "B"             Switch to B     "a"             "b"             Switch to A     "\u0010"        check digit
+  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_A, @"10100001100", @"10100011000", @"10001011000", ZX_SWITCH_CODE_B, @"10010110000", @"10010000110", ZX_SWITCH_CODE_A, @"10100111100", @"11001110100", ZX_STOP, ZX_QUIET_SPACE];
+
+  ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
+
+  NSString *actual = [self matrixToString:result];
+  XCTAssertEqualObjects(actual, expected);
+}
+
+- (void)testEncodeSwitchBetweenCodesetsAAndBStartsWithB {
+  NSString *toEncode = [NSString stringWithFormat:@"ab\0ab", (unichar) 0x0010];
+  // start with B switch to A and back to B
+  //                                                "a"             "b"             Switch to A     "\0             "Switch to B"   "a"             "b"             check digit
+  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_B, @"10010110000", @"10010000110", ZX_SWITCH_CODE_A, @"10100001100", ZX_SWITCH_CODE_B, @"10010110000", @"10010000110", @"11010001110", ZX_STOP, ZX_QUIET_SPACE];
 
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 

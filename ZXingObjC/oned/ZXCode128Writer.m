@@ -50,16 +50,17 @@ typedef enum {
   // Check content
   for (int i = 0; i < length; i++) {
     unichar c = [contents characterAtIndex:i];
-    if (c < ' ' || c > '~') {
-      switch (c) {
-        case ZX_CODE128_ESCAPE_FNC_1:
-        case ZX_CODE128_ESCAPE_FNC_2:
-        case ZX_CODE128_ESCAPE_FNC_3:
-        case ZX_CODE128_ESCAPE_FNC_4:
-          break;
-        default:
+    switch (c) {
+      case ZX_CODE128_ESCAPE_FNC_1:
+      case ZX_CODE128_ESCAPE_FNC_2:
+      case ZX_CODE128_ESCAPE_FNC_3:
+      case ZX_CODE128_ESCAPE_FNC_4:
+        break;
+      default:
+        if (c > 127) {
+          // support for FNC4 isn't implemented, no full Latin-1 character set available at the moment
           [NSException raise:NSInvalidArgumentException format:@"Bad character in input: %C", c];
-      }
+        }
     }
   }
 
@@ -89,13 +90,24 @@ typedef enum {
           patternIndex = ZX_CODE128_CODE_FNC_3;
           break;
         case ZX_CODE128_ESCAPE_FNC_4:
-          patternIndex = ZX_CODE128_CODE_FNC_4_B; // FIXME if this ever outputs Code A
+          if (codeSet == ZX_CODE128_CODE_CODE_A) {
+            patternIndex = ZX_CODE128_CODE_FNC_4_A;
+          } else {
+            patternIndex = ZX_CODE128_CODE_FNC_4_B;
+          }
           break;
         default:
           // Then handle normal characters otherwise
-          if (codeSet == ZX_CODE128_CODE_CODE_B) {
+          if (codeSet == ZX_CODE128_CODE_CODE_A) {
             patternIndex = [contents characterAtIndex:position] - ' ';
-          } else { // CODE_CODE_C
+            if (patternIndex < 0) {
+              // everything below a space character comes behind the underscore in the code patterns table
+              patternIndex += '`';
+            }
+          } else if (codeSet == ZX_CODE128_CODE_CODE_B) {
+            patternIndex = [contents characterAtIndex:position] - ' ';
+          } else {
+            // CODE_CODE_C
             patternIndex = [[contents substringWithRange:NSMakeRange(position, 2)] intValue];
             position++; // Also incremented below
           }
@@ -106,7 +118,9 @@ typedef enum {
       // Do we have a code set?
       if (codeSet == 0) {
         // No, we don't have a code set
-        if (newCodeSet == ZX_CODE128_CODE_CODE_B) {
+        if (newCodeSet == ZX_CODE128_CODE_CODE_A) {
+          patternIndex = ZX_CODE128_CODE_START_A;
+        } else if (newCodeSet == ZX_CODE128_CODE_CODE_B) {
           patternIndex = ZX_CODE128_CODE_START_B;
         } else {
           // CODE_CODE_C

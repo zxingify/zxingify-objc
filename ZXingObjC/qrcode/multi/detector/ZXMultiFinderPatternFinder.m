@@ -155,7 +155,6 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
 
 - (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError **)error {
   BOOL tryHarder = hints != nil && hints.tryHarder;
-  BOOL pureBarcode = hints != nil && hints.pureBarcode;
   int maxI = self.image.height;
   int maxJ = self.image.width;
   // We are looking for black/white/black/white/black modules in
@@ -188,7 +187,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
       } else {
         if ((currentState & 1) == 0) {
           if (currentState == 4) {
-            if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j pureBarcode:pureBarcode]) {
+            if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j]) {
               currentState = 0;
               stateCount[0] = 0;
               stateCount[1] = 0;
@@ -213,7 +212,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
     }
 
     if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount]) {
-      [self handlePossibleCenter:stateCount i:i j:maxJ pureBarcode:pureBarcode];
+      [self handlePossibleCenter:stateCount i:i j:maxJ];
     }
   }
   NSArray *patternInfo = [self selectBestPatternsWithError:error];
