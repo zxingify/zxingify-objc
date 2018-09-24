@@ -18,7 +18,7 @@ The following barcodes are currently supported for both encoding and decoding:
 * Aztec ('beta' quality)
 * PDF 417 ('beta' quality)
 
-ZXingObjC currently has feature parity with ZXing version 3.2.0.
+ZXingObjC currently has feature parity with ZXing version 3.3.0.
 
 ## Requirements
 
