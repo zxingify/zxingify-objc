@@ -36,6 +36,17 @@
                 format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
 
+  for (int i = 0; i < length; i++) {
+    NSUInteger indexInString = [ZX_CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
+    if (indexInString == NSNotFound) {
+      contents = [self tryToConvertToExtendedMode:contents];
+      length = (int)[contents length];
+      if (length > 80) {
+        [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d (extended full ASCII mode)", length];
+      }
+    }
+  }
+
   ZXIntArray *widths = [[ZXIntArray alloc] initWithLength:9];
   int codeWidth = 24 + 1 + length;
   for (int i = 0; i < length; i++) {
@@ -69,6 +80,63 @@
     int temp = a & (1 << (8 - i));
     toReturn.array[i] = temp == 0 ? 1 : 2;
   }
+}
+
+- (NSString *)tryToConvertToExtendedMode:(NSString *)contents {
+  int length = (int)[contents length];
+  NSMutableString *extendedContent = [NSMutableString new];
+
+  for (int i = 0; i < length; i++) {
+    unichar character = [contents characterAtIndex:i];
+    switch (character) {
+      case 0x0000:
+        [extendedContent appendString:@"%U"];
+        break;
+      case ' ':
+      case '-':
+      case '.':
+        [extendedContent appendFormat:@"%C", character];
+        break;
+      case '@':
+        [extendedContent appendString:@"%V"];
+        break;
+      case '`':
+        [extendedContent appendString:@"%W"];
+        break;
+      default:
+        if (character > 0 && character < 27) {
+          [extendedContent appendString:@"$"];
+          [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 1))];
+        } else if (character > 26 && character < ' ') {
+          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 27))];
+        } else if ((character > ' ' && character < '-') || character == '/' || character == ':') {
+          [extendedContent appendString:@"/"];
+          [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 33))];
+        } else if (character > '/' && character < ':') {
+          [extendedContent appendFormat:@"%C", (unichar) ('0' + (character - 48))];
+        } else if (character > ':' && character < '@') {
+          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) ('F' + (character - 59))];
+        } else if (character > '@' && character < '[') {
+          [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 65))];
+        } else if (character > 'Z' && character < '`') {
+          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) ('K' + (character - 91))];
+        } else if (character > '`' && character < '{') {
+          [extendedContent appendString:@"+"];
+          [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 97))];
+        } else if (character > 'z' && character < 128) {
+          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) ('P' + (character - 123))];
+        } else {
+          [NSException raise:NSInvalidArgumentException format:@"Requested content contains a non-encodable character: '%@'", [contents substringWithRange:NSMakeRange(i, 1)]];
+        }
+        break;
+    }
+  }
+
+  return extendedContent;
 }
 
 @end
