@@ -1675,6 +1675,8 @@
 		4B42B8A0215904EB0010C328 /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B89E215904EB0010C328 /* ZXUPCEWriterTestCase.m */; };
 		4B42B8A421590C920010C328 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */; };
 		4B42B8A521590C920010C328 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */; };
+		4B42B8A7215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */; };
+		4B42B8A8215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */; };
 		4B674F132157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B674F142157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B7ACDA52153D8AA001EB8A5 /* ZXCode93Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */; };
@@ -2917,6 +2919,8 @@
 		4B42B8A1215904F30010C328 /* ZXUPCEWriterTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXUPCEWriterTestCase.h; sourceTree = "<group>"; };
 		4B42B8A221590C880010C328 /* ZXITFWriterTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXITFWriterTestCase.h; sourceTree = "<group>"; };
 		4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXITFWriterTestCase.m; sourceTree = "<group>"; };
+		4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode39ExtendedModeTestCase.m; sourceTree = "<group>"; };
+		4B42B8A9215917AD0010C328 /* ZXCode39ExtendedModeTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXCode39ExtendedModeTestCase.h; sourceTree = "<group>"; };
 		4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxicodeBlackBox1TestCase.m; sourceTree = "<group>"; };
 		4B674F112157E82A00F97DEE /* ZXMaxicodeBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxicodeBlackBox1TestCase.h; sourceTree = "<group>"; };
 		4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode93Writer.m; sourceTree = "<group>"; };
@@ -4006,6 +4010,8 @@
 				25404045166AA0F100E13304 /* ZXCode39BlackBox3TestCase.m */,
 				25404046166AA0F100E13304 /* ZXCode39ExtendedBlackBox2TestCase.h */,
 				25404047166AA0F100E13304 /* ZXCode39ExtendedBlackBox2TestCase.m */,
+				4B42B8A9215917AD0010C328 /* ZXCode39ExtendedModeTestCase.h */,
+				4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */,
 				4B9DB44E2158D3EF00A10495 /* ZXCode39WriterTestCase.h */,
 				4B9DB44F2158D3F700A10495 /* ZXCode39WriterTestCase.m */,
 				25404048166AA0F100E13304 /* ZXCode93BlackBox1TestCase.h */,
@@ -5843,6 +5849,7 @@
 				25429A0016D5DFD800D4C045 /* ZXDataMatrixDebugPlacement.m in Sources */,
 				25429A0416D5E0ED00D4C045 /* ZXDataMatrixErrorCorrectionTestCase.m in Sources */,
 				25429A0816D5E21C00D4C045 /* ZXDataMatrixHighLevelEncodeTestCase.m in Sources */,
+				4B42B8A7215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */,
 				25429A0C16D5F4E000D4C045 /* ZXDataMatrixPlacementTestCase.m in Sources */,
 				25429A1016D5F66D00D4C045 /* ZXDataMatrixSymbolInfoTestCase.m in Sources */,
 				2504D9E916FFF2A900DF8882 /* ZXAztecEncoderTest.m in Sources */,
@@ -6213,6 +6220,7 @@
 				25429A0116D5DFD800D4C045 /* ZXDataMatrixDebugPlacement.m in Sources */,
 				25429A0516D5E0ED00D4C045 /* ZXDataMatrixErrorCorrectionTestCase.m in Sources */,
 				25429A0916D5E21C00D4C045 /* ZXDataMatrixHighLevelEncodeTestCase.m in Sources */,
+				4B42B8A8215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */,
 				25429A0D16D5F4E000D4C045 /* ZXDataMatrixPlacementTestCase.m in Sources */,
 				25429A1116D5F66D00D4C045 /* ZXDataMatrixSymbolInfoTestCase.m in Sources */,
 				2504D9E816FFF27C00DF8882 /* ZXAztecEncoderTest.m in Sources */,
