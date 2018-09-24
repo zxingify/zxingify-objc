@@ -105,29 +105,29 @@
         break;
       default:
         if (character > 0 && character < 27) {
-          [extendedContent appendString:@"$"];
+          [extendedContent appendFormat:@"%C", (unichar) '$'];
           [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 1))];
         } else if (character > 26 && character < ' ') {
-          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) '%'];
           [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 27))];
         } else if ((character > ' ' && character < '-') || character == '/' || character == ':') {
-          [extendedContent appendString:@"/"];
+          [extendedContent appendFormat:@"%C", (unichar) '/'];
           [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 33))];
         } else if (character > '/' && character < ':') {
           [extendedContent appendFormat:@"%C", (unichar) ('0' + (character - 48))];
         } else if (character > ':' && character < '@') {
-          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) '%'];
           [extendedContent appendFormat:@"%C", (unichar) ('F' + (character - 59))];
         } else if (character > '@' && character < '[') {
           [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 65))];
         } else if (character > 'Z' && character < '`') {
-          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) '%'];
           [extendedContent appendFormat:@"%C", (unichar) ('K' + (character - 91))];
         } else if (character > '`' && character < '{') {
-          [extendedContent appendString:@"+"];
+          [extendedContent appendFormat:@"%C", (unichar) '+'];
           [extendedContent appendFormat:@"%C", (unichar) ('A' + (character - 97))];
         } else if (character > 'z' && character < 128) {
-          [extendedContent appendString:@"%"];
+          [extendedContent appendFormat:@"%C", (unichar) '%'];
           [extendedContent appendFormat:@"%C", (unichar) ('P' + (character - 123))];
         } else {
           [NSException raise:NSInvalidArgumentException format:@"Requested content contains a non-encodable character: '%@'", [contents substringWithRange:NSMakeRange(i, 1)]];
