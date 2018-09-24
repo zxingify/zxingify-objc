@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#import "ZXEAN13WriterTestCase.h"
+#import "ZXUPCEWriterTestCase.h"
 
-@implementation ZXEAN13WriterTestCase
+@implementation ZXUPCEWriterTestCase
 
 - (void)testEncode {
-  NSString *testStr = @"00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
-  ZXBitMatrix *result = [[[ZXEAN13Writer alloc] init] encode:@"5901234123457"
-                                                      format:kBarcodeFormatEan13
+  NSString *testStr = @"0000000000010101110010100111000101101011110110111001011101010100000000000";
+  ZXBitMatrix *result = [[[ZXUPCEWriter alloc] init] encode:@"05096893"
+                                                      format:kBarcodeFormatUPCE
                                                        width:(int)testStr.length
                                                       height:0
                                                        error:nil];
@@ -31,9 +31,9 @@
 }
 
 - (void)testAddChecksumAndEncode {
-  NSString *testStr = @"00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000";
-  ZXBitMatrix *result = [[[ZXEAN13Writer alloc] init] encode:@"590123412345"
-                                                      format:kBarcodeFormatEan13
+  NSString *testStr = @"0000000000010101110010100111000101101011110110111001011101010100000000000";
+  ZXBitMatrix *result = [[[ZXUPCEWriter alloc] init] encode:@"0509689"
+                                                      format:kBarcodeFormatUPCE
                                                        width:(int)testStr.length
                                                       height:0
                                                        error:nil];

@@ -19,6 +19,13 @@
 #import "ZXIntArray.h"
 #import "ZXUPCEReader.h"
 
+/**
+ * The pattern that marks the middle, and end, of a UPC-E pattern.
+ * There is no "second half" to a UPC-E barcode.
+ */
+const int ZX_UPCE_MIDDLE_END_PATTERN_LEN = 6;
+const int ZX_UPCE_MIDDLE_END_PATTERN[] = {1, 1, 1, 1, 1, 1};
+
 // For an UPC-E barcode, the final digit is represented by the parities used
 // to encode the middle six digits, according to the table below.
 //
@@ -42,17 +49,6 @@
 // in binary:
 //                0    1    1   0   0    1   == 0x19
 //
-const int CHECK_DIGIT_ENCODINGS[] = {
-  0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25
-};
-
-const int ZX_UPCE_MIDDLE_END_PATTERN_LEN = 6;
-
-/**
- * The pattern that marks the middle, and end, of a UPC-E pattern.
- * There is no "second half" to a UPC-E barcode.
- */
-const int ZX_UPCE_MIDDLE_END_PATTERN[] = {1, 1, 1, 1, 1, 1};
 
 /**
  * See ZX_UCPE_L_AND_G_PATTERNS; these values similarly represent patterns of
@@ -176,7 +172,10 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
       [result appendFormat:@"%C", lastChar];
       break;
   }
-  [result appendFormat:@"%C", [upce characterAtIndex:7]];
+  // Only append check digit in conversion if supplied
+  if (upce.length >= 8) {
+    [result appendFormat:@"%C", [upce characterAtIndex:7]];
+  }
   return result;
 }
 

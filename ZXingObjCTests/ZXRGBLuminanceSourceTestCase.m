@@ -40,13 +40,35 @@ static ZXRGBLuminanceSource *SOURCE = nil;
 }
 
 - (void)testMatrix {
-    ZXByteArray *matrix = [SOURCE matrix];
-    int8_t pixels[9] = {
-        0x00, 0x7F, 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F
-    };
-    for (int i = 0; i < matrix.length; i++) {
-        XCTAssertEqual(matrix.array[i], pixels[i]);
-    }
+  ZXByteArray *matrix = [SOURCE matrix];
+  int8_t pixels[9] = {
+    0x00, 0x7F, 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F
+  };
+  for (int i = 0; i < matrix.length; i++) {
+    XCTAssertEqual(matrix.array[i], pixels[i]);
+  }
+}
+
+- (void)testCropFullWidth {
+  ZXLuminanceSource *croppedFullWidth = [SOURCE crop:0 top:1 width:3 height:2];
+  ZXByteArray *matrix = [croppedFullWidth matrix];
+  int8_t pixels[6] = {
+    0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F
+  };
+  for (int i = 0; i < matrix.length; i++) {
+    XCTAssertEqual(matrix.array[i], pixels[i]);
+  }
+}
+
+- (void)testCropCorner {
+  ZXLuminanceSource *croppedCorner = [SOURCE crop:1 top:1 width:2 height:2];
+  ZXByteArray *matrix = [croppedCorner matrix];
+  int8_t pixels[4] = {
+    0x7F, 0x3F, 0x7F, 0x3F
+  };
+  for (int i = 0; i < matrix.length; i++) {
+    XCTAssertEqual(matrix.array[i], pixels[i]);
+  }
 }
 
 - (void)testGetRow {

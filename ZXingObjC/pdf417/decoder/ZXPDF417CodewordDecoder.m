@@ -88,8 +88,10 @@ static float ZX_PDF417_RATIOS_TABLE[ZX_PDF417_SYMBOL_TABLE_LEN][ZX_PDF417_BARS_I
 + (int)closestDecodedValue:(NSArray *)moduleBitCount {
   int bitCountSum = [ZXPDF417Common bitCountSum:moduleBitCount];
   float bitCountRatios[ZX_PDF417_BARS_IN_MODULE];
-  for (int i = 0; i < ZX_PDF417_BARS_IN_MODULE; i++) {
-    bitCountRatios[i] = [moduleBitCount[i] intValue] / (float) bitCountSum;
+  if (bitCountSum > 1) {
+    for (int i = 0; i < ZX_PDF417_BARS_IN_MODULE; i++) {
+      bitCountRatios[i] = [moduleBitCount[i] intValue] / (float) bitCountSum;
+    }
   }
   float bestMatchError = MAXFLOAT;
   int bestMatch = -1;

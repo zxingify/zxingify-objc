@@ -75,6 +75,8 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  */
 + (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
 
++ (int)standardUPCEANChecksum:(NSString *)s;
+
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error;
 
 + (NSRange)findGuardPattern:(ZXBitArray *)row rowOffset:(int)rowOffset whiteFirst:(BOOL)whiteFirst pattern:(const int[])pattern patternLen:(int)patternLen error:(NSError **)error;

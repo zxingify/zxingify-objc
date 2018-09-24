@@ -110,7 +110,7 @@
 
   // If the width matches the full width of the underlying data, perform a single copy.
   if (self.width == self.dataWidth) {
-    memcpy(matrix.array, self.luminances.array + inputOffset, (area - inputOffset) * sizeof(int8_t));
+    memcpy(matrix.array, self.luminances.array + inputOffset, area * sizeof(int8_t));
     return matrix;
   }
 

@@ -23,7 +23,7 @@
 
 - (int)defaultMargin {
   // Use a different default more appropriate for UPC/EAN
-  return ZX_UPC_EAN_START_END_PATTERN_LEN;
+  return 9;
 }
 
 @end

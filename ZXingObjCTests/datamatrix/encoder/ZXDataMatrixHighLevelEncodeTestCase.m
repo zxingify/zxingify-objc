@@ -303,6 +303,11 @@ static NSArray *TEST_SYMBOLS;
   return [[self class] visualize:encoded];
 }
 
+- (void)testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle {
+  NSString *visualized = [self encodeHighLevel:@"*MEMANT-1F-MESTECH"];
+  XCTAssertEqualObjects(@"238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
+}
+
 + (NSString *)visualize:(NSString *)codewords {
   NSMutableString *sb = [NSMutableString string];
   for (int i = 0; i < codewords.length; i++) {
