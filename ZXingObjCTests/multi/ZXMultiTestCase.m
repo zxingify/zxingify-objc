@@ -19,7 +19,6 @@
 @implementation ZXMultiTestCase
 
 - (void)testMulti {
-
   NSString *testBase = @"Resources/blackbox/multi-1";
   NSBundle *classBundle = [NSBundle bundleForClass:[self class]];
   NSString *pathForResource = [classBundle pathForResource:@"1" ofType:@"png" inDirectory:testBase];
