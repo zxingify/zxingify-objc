@@ -30,4 +30,16 @@
   }
 }
 
+- (void)testAddChecksumAndEncode {
+  NSString *testStr = @"0001010001011010111101111010110111010101001110111001010001001011100101000";
+  ZXBitMatrix *result = [[[ZXEAN8Writer alloc] init] encode:@"9638507"
+                                                     format:kBarcodeFormatEan8
+                                                      width:(int)testStr.length
+                                                     height:0
+                                                      error:nil];
+  for (int i = 0; i < testStr.length; i++) {
+    XCTAssertEqual([testStr characterAtIndex:i] == '1', [result getX:i y:0], @"Element %d", i);
+  }
+}
+
 @end
