@@ -23,7 +23,7 @@ extern const int ZX_CODE39_CHARACTER_ENCODINGS[];
 @class ZXDecodeHints, ZXResult;
 
 /**
- * Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.
+ * Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
  */
 @interface ZXCode39Reader : ZXOneDReader
 
