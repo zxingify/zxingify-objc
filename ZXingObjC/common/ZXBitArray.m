@@ -74,9 +74,14 @@
 - (void)ensureCapacity:(int)size {
   if (size > self.bitsLength * 32) {
     int newBitsLength = (size + 31) / 32;
-    self.bits = realloc(self.bits, newBitsLength * sizeof(int32_t));
-    memset(self.bits + self.bitsLength, 0, (newBitsLength - self.bitsLength) * sizeof(int32_t));
 
+    // basically realloc
+    int32_t *newBits = (int32_t *)malloc(newBitsLength * sizeof(int32_t));
+    memcpy(newBits, self.bits, self.bitsLength * sizeof(int32_t));
+    free(self.bits);
+    self.bits = NULL;
+
+    self.bits = newBits;
     self.bitsLength = newBitsLength;
   }
 }
