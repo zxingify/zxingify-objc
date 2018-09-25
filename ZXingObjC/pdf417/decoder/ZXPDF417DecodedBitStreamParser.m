@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
+#import "ZXPDF417DecodedBitStreamParser.h"
 #import "ZXCharacterSetECI.h"
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXIntArray.h"
-#import "ZXPDF417DecodedBitStreamParser.h"
-#import "ZXPDF417ResultMetadata.h"
 
 typedef enum {
   ZXPDF417ModeAlpha = 0,
@@ -263,7 +262,7 @@ static NSArray *ZX_PDF417_EXP900 = nil;
         optionalFieldsLength--;
       }
       NSMutableArray *additionalOptionCodeWords = [NSMutableArray array];
-      for (int i = optionalFieldsStart; optionalFieldsStart < optionalFieldsLength; i++) {
+      for (int i = optionalFieldsStart; i < (optionalFieldsStart + optionalFieldsLength); i++) {
         int code = codewords.array[i];
         [additionalOptionCodeWords addObject:@(code)];
       }

@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-#import "ZXPDF417ResultMetadata.h"
-
-@class ZXDecoderResult, ZXIntArray;
-
-/**
- * This class contains the methods for decoding the PDF417 codewords.
- */
-@interface ZXPDF417DecodedBitStreamParser : NSObject
-
-+ (ZXDecoderResult *)decode:(ZXIntArray *)codewords ecLevel:(NSString *)ecLevel error:(NSError **)error;
-+ (int)decodeMacroBlock:(ZXIntArray *)codewords codeIndex:(int)codeIndex resultMetadata:(ZXPDF417ResultMetadata *)resultMetadata;
+@interface ZXPDF417DecoderTestCase : XCTestCase
 
 @end
