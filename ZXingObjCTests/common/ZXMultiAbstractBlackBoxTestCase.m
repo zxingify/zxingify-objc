@@ -34,7 +34,7 @@
   return self;
 }
 
-- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata expectedBarcodeLocation:(NSArray *)expectedBarcodeLocation expectedAngle:(NSString *)expectedAngle tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
+- (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
   NSArray *expectedTexts = [expectedText componentsSeparatedByString:@";"];
   NSString *suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
   *misread = NO;
