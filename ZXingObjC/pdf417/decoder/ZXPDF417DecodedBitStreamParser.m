@@ -197,49 +197,49 @@ static NSArray *ZX_PDF417_EXP900 = nil;
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
           {
             NSMutableString *fileName = [NSMutableString new];
-            [self textCompaction:codewords codeIndex:codeIndex + 1 result:fileName];
+            codeIndex = [self textCompaction:codewords codeIndex:codeIndex + 1 result:fileName];
             resultMetadata.fileName = fileName;
             break;
           }
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_SENDER:
           {
             NSMutableString *sender = [NSMutableString new];
-            [self textCompaction:codewords codeIndex:codeIndex + 1 result:sender];
+            codeIndex = [self textCompaction:codewords codeIndex:codeIndex + 1 result:sender];
             resultMetadata.sender = sender;
             break;
           }
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
           {
             NSMutableString *addressee = [NSMutableString new];
-            [self textCompaction:codewords codeIndex:codeIndex + 1 result:addressee];
+            codeIndex = [self textCompaction:codewords codeIndex:codeIndex + 1 result:addressee];
             resultMetadata.addressee = addressee;
             break;
           }
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
           {
             NSMutableString *segmentCount = [NSMutableString new];
-            [self numericCompaction:codewords codeIndex:codeIndex + 1 result:segmentCount];
+            codeIndex = [self numericCompaction:codewords codeIndex:codeIndex + 1 result:segmentCount];
             resultMetadata.segmentCount = [segmentCount intValue];
             break;
           }
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
           {
             NSMutableString *timestamp = [NSMutableString new];
-            [self numericCompaction:codewords codeIndex:codeIndex + 1 result:timestamp];
+            codeIndex = [self numericCompaction:codewords codeIndex:codeIndex + 1 result:timestamp];
             resultMetadata.timestamp = [timestamp longLongValue];
             break;
           }
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
           {
             NSMutableString *checksum = [NSMutableString new];
-            [self numericCompaction:codewords codeIndex:codeIndex + 1 result:checksum];
+            codeIndex = [self numericCompaction:codewords codeIndex:codeIndex + 1 result:checksum];
             resultMetadata.checksum = [checksum intValue];
             break;
           }
           case ZX_MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
           {
             NSMutableString *fileSize = [NSMutableString new];
-            [self numericCompaction:codewords codeIndex:codeIndex + 1 result:fileSize];
+            codeIndex = [self numericCompaction:codewords codeIndex:codeIndex + 1 result:fileSize];
             resultMetadata.fileSize = [fileSize longLongValue];
             break;
           }

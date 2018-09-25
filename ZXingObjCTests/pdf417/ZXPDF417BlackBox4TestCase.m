@@ -26,7 +26,7 @@
                     expectedFormat:kBarcodeFormatPDF417];
 
   if (self) {
-    [self.testResults addObject:[[ZXTestResult alloc] initWithMustPassCount:2 tryHarderCount:2 maxMisreads:0 maxTryHarderMisreads:0 rotation:0.0f]];
+    [self.testResults addObject:[[ZXTestResult alloc] initWithMustPassCount:3 tryHarderCount:3 maxMisreads:0 maxTryHarderMisreads:0 rotation:0.0f]];
   }
 
   return self;
