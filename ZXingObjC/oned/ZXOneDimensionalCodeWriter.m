@@ -54,6 +54,18 @@
 }
 
 /**
+ * @return BOOL, YES iff input contains no other characters than digits 0-9.
+ */
+- (BOOL)isNumeric:(NSString *)contents {
+  NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+  if ([contents rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
+    return YES;
+  } else {
+    return NO;
+  }
+}
+
+/**
  * @return a byte array of horizontal pixels (0 = white, 1 = black)
  */
 - (ZXBitMatrix *)renderResult:(ZXBoolArray *)code width:(int)width height:(int)height sidesMargin:(int)sidesMargin {

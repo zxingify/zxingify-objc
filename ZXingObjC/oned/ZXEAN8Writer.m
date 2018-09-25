@@ -53,6 +53,12 @@ const int ZX_EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
                                    userInfo:nil];
   }
 
+  if (![self isNumeric:contents]) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Input should only contain digits 0-9"
+                                 userInfo:nil];
+  }
+
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_EAN8_CODE_WIDTH];
   int pos = 0;
 

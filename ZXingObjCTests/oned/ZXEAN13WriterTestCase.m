@@ -42,4 +42,12 @@
   }
 }
 
+- (void)testEncodeIllegalCharacters {
+  XCTAssertThrows([[[ZXEAN13Writer alloc] init] encode:@"5901234123abc"
+                                                      format:kBarcodeFormatEan13
+                                                       width:0
+                                                      height:0
+                                                       error:nil]);
+}
+
 @end

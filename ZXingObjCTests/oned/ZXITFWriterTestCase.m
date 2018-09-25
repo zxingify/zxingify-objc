@@ -31,5 +31,13 @@
   }
 }
 
+- (void)testEncodeIllegalCharacters {
+  XCTAssertThrows([[[ZXITFWriter alloc] init] encode:@"00123456789abc"
+                                                format:kBarcodeFormatITF
+                                                 width:0
+                                                height:0
+                                                 error:nil]);
+}
+
 @end
 

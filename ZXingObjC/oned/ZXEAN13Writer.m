@@ -58,6 +58,12 @@ const int ZX_EAN13_CODE_WIDTH = 3 + // start guard
                                    userInfo:nil];
   }
 
+  if (![self isNumeric:contents]) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Input should only contain digits 0-9"
+                                 userInfo:nil];
+  }
+
   int firstDigit = [[contents substringToIndex:1] intValue];
   int parities = ZX_EAN13_FIRST_DIGIT_ENCODINGS[firstDigit];
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_EAN13_CODE_WIDTH];

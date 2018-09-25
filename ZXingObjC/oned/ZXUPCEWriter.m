@@ -53,6 +53,12 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
                                    userInfo:nil];
   }
 
+  if (![self isNumeric:contents]) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Input should only contain digits 0-9"
+                                 userInfo:nil];
+  }
+
   int firstDigit = [[contents substringWithRange:NSMakeRange(0, 1)] intValue];
   if (firstDigit != 0 && firstDigit != 1) {
     @throw [NSException exceptionWithName:@"IllegalArgumentException"

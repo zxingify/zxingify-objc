@@ -60,6 +60,12 @@ const int ZX_ITF_WRITER_PATTERNS[ZX_ITF_WRITER_PATTERNS_LEN][5] = {
     [NSException raise:NSInvalidArgumentException format:@"Requested contents should be less than 80 digits long, but got %d", length];
   }
 
+  if (![self isNumeric:contents]) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Input should only contain digits 0-9"
+                                 userInfo:nil];
+  }
+
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:9 + 9 * length];
   int pos = [self appendPattern:result pos:0 pattern:ZX_ITF_WRITER_START_PATTERN patternLen:sizeof(ZX_ITF_WRITER_START_PATTERN)/sizeof(int) startColor:YES];
   for (int i = 0; i < length; i += 2) {

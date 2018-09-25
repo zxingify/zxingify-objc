@@ -42,4 +42,12 @@
   }
 }
 
+- (void)testEncodeIllegalCharacters {
+  XCTAssertThrows([[[ZXUPCEWriter alloc] init] encode:@"05096abc"
+                                                format:kBarcodeFormatUPCE
+                                                 width:0
+                                                height:0
+                                                 error:nil]);
+}
+
 @end
