@@ -96,7 +96,6 @@
     layer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
     layer.affineTransform = self.transform;
     layer.delegate = self;
-    layer.videoGravity = AVLayerVideoGravityResizeAspect;
     layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 
     _layer = layer;
