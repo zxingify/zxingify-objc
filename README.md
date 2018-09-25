@@ -87,7 +87,7 @@ We highly recommend Carthage as module manager.
 ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
 
 ```ogdl
-github "TheLevelUp/ZXingObjC" ~> 3.3
+github "TheLevelUp/ZXingObjC" ~> 3.4
 ```
 
 #### CocoaPods
@@ -104,8 +104,6 @@ pod 'ZXingObjC', '~> 3.2.2'
 ZXingObjC includes several example applications found in "examples" folder:
 
 * BarcodeScanner - An iOS application that captures video from the camera, scans for barcodes and displays results on screen.
-* BarcodeScannerOSX - An OS X application that captures video from the camera, scans for barcodes and displays results on screen.
-* QrCodeTest - A basic QR code generator that accepts input, encodes it as a QR code, and displays it on screen.
 
 ## License
 
