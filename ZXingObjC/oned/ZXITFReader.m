@@ -23,9 +23,10 @@
 #import "ZXResultPoint.h"
 
 static float ZX_ITF_MAX_AVG_VARIANCE = 0.38f;
-static float ZX_ITF_MAX_INDIVIDUAL_VARIANCE = 0.78f;
+static float ZX_ITF_MAX_INDIVIDUAL_VARIANCE = 0.5f;
 
-static const int ZX_ITF_W = 3; // Pixel width of a wide line
+static const int ZX_ITF_W3 = 3; // Pixel width of a 3x wide line
+static const int ZX_ITF_W2 = 2; // Pixel width of a 2x wide line
 static const int ZX_ITF_N = 1; // Pixel width of a narrow line
 
 /** Valid ITF lengths. Anything longer than the largest value is also allowed. */
@@ -38,23 +39,36 @@ const int ZX_ITF_DEFAULT_ALLOWED_LENGTHS[] = { 6, 8, 10, 12, 14 };
  * searching for the END_PATTERN
  */
 const int ZX_ITF_ITF_START_PATTERN[] = {ZX_ITF_N, ZX_ITF_N, ZX_ITF_N, ZX_ITF_N};
-const int ZX_ITF_END_PATTERN_REVERSED[] = {ZX_ITF_N, ZX_ITF_N, ZX_ITF_W};
+const int ZX_ITF_END_PATTERN_REVERSED[2][3] = {
+  { ZX_ITF_N, ZX_ITF_N, ZX_ITF_W2 }, // 2x
+  { ZX_ITF_N, ZX_ITF_N, ZX_ITF_W3 }, // 3x
+};
 
 /**
  * Patterns of Wide / Narrow lines to indicate each digit
  */
-const int ZX_ITF_PATTERNS_LEN = 10;
+const int ZX_ITF_PATTERNS_LEN = 20;
 const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
-  {ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_W, ZX_ITF_N}, // 0
-  {ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W}, // 1
-  {ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W}, // 2
-  {ZX_ITF_W, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_N}, // 3
-  {ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_W}, // 4
-  {ZX_ITF_W, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N}, // 5
-  {ZX_ITF_N, ZX_ITF_W, ZX_ITF_W, ZX_ITF_N, ZX_ITF_N}, // 6
-  {ZX_ITF_N, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_W}, // 7
-  {ZX_ITF_W, ZX_ITF_N, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N}, // 8
-  {ZX_ITF_N, ZX_ITF_W, ZX_ITF_N, ZX_ITF_W, ZX_ITF_N}  // 9
+  {ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_W2, ZX_ITF_N},  // 0
+  {ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W2}, // 1
+  {ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W2}, // 2
+  {ZX_ITF_W2, ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_N},  // 3
+  {ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_W2}, // 4
+  {ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_N},  // 5
+  {ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_N},  // 6
+  {ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_W2}, // 7
+  {ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_N},  // 8
+  {ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_N,  ZX_ITF_W2, ZX_ITF_N},  // 9
+  {ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_W3, ZX_ITF_N},  // 0
+  {ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W3}, // 1
+  {ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W3}, // 2
+  {ZX_ITF_W3, ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_N},  // 3
+  {ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_W3}, // 4
+  {ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_N},  // 5
+  {ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_N},  // 6
+  {ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_W3}, // 7
+  {ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_N},  // 8
+  {ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_N,  ZX_ITF_W3, ZX_ITF_N}   // 9
 };
 
 @interface ZXITFReader ()
@@ -258,6 +272,8 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
  *         block'
  */
 - (ZXIntArray *)decodeEnd:(ZXBitArray *)row {
+  // For convenience, reverse the row and then
+  // search from 'the start' for the end block
   [row reverse];
 
   int endStart = [self skipWhiteSpace:row];
@@ -265,19 +281,35 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     [row reverse];
     return nil;
   }
-  ZXIntArray *endPattern = [self findGuardPattern:row rowOffset:endStart pattern:ZX_ITF_END_PATTERN_REVERSED patternLen:sizeof(ZX_ITF_END_PATTERN_REVERSED)/sizeof(int)];
+
+  ZXIntArray *endPattern = [self findGuardPattern:row rowOffset:endStart pattern:ZX_ITF_END_PATTERN_REVERSED[0] patternLen:sizeof(ZX_ITF_END_PATTERN_REVERSED[0])/sizeof(int)];
+
+  if (!endPattern) {
+    endPattern = [self findGuardPattern:row rowOffset:endStart pattern:ZX_ITF_END_PATTERN_REVERSED[1] patternLen:sizeof(ZX_ITF_END_PATTERN_REVERSED[1])/sizeof(int)];
+  }
+
   if (!endPattern) {
     [row reverse];
     return nil;
   }
+
+  // The start & end patterns must be pre/post fixed by a quiet zone. This
+  // zone must be at least 10 times the width of a narrow line.
+  // ref: http://www.barcode-1.net/i25code.html
   if (![self validateQuietZone:row startPattern:endPattern.array[0]]) {
     [row reverse];
     return nil;
   }
+
+  // Now recalculate the indices of where the 'endblock' starts & stops to
+  // accommodate the reversed nature of the search
   int temp = endPattern.array[0];
   endPattern.array[0] = [row size] - endPattern.array[1];
   endPattern.array[1] = [row size] - temp;
+
+  // Put the row back the right way.
   [row reverse];
+
   return endPattern;
 }
 
@@ -344,10 +376,13 @@ const int ZX_ITF_PATTERNS[ZX_ITF_PATTERNS_LEN][5] = {
     if (variance < bestVariance) {
       bestVariance = variance;
       bestMatch = i;
+    } else if (variance == bestVariance) {
+      // if we find a second 'best match' with the same variance, we can not reliably report to have a suitable match
+      bestMatch = -1;
     }
   }
   if (bestMatch >= 0) {
-    return bestMatch;
+    return bestMatch % 10;
   } else {
     return -1;
   }

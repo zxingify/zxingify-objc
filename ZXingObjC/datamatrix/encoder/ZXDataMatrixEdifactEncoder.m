@@ -67,7 +67,7 @@
       [context updateSymbolInfo];
       int available = context.symbolInfo.dataCapacity - context.codewordCount;
       int remaining = [context remainingCharacters];
-      if (remaining == 0 && available <= 2) {
+      if (remaining <= available && available <= 2) {
         return; //No unlatch
       }
     }

@@ -170,7 +170,7 @@ static NSString *MACRO_TRAILER = nil;
   [context updateSymbolInfo];
   int capacity = context.symbolInfo.dataCapacity;
   if (len < capacity) {
-    if (encodingMode != [self asciiEncodation] && encodingMode != [self base256Encodation]) {
+    if (encodingMode != [self asciiEncodation] && encodingMode != [self base256Encodation] && encodingMode != [self edifactEncodation]) {
       [context writeCodeword:(unichar)0x00fe]; //Unlatch (254)
     }
   }
