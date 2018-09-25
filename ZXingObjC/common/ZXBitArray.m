@@ -78,6 +78,7 @@
     // basically realloc
     int32_t *newBits = (int32_t *)malloc(newBitsLength * sizeof(int32_t));
     memcpy(newBits, self.bits, self.bitsLength * sizeof(int32_t));
+    memset(newBits + self.bitsLength, 0, (newBitsLength - self.bitsLength) * sizeof(int32_t));
     free(self.bits);
     self.bits = NULL;
 
