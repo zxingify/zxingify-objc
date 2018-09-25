@@ -155,6 +155,11 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   return (float)(end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
 }
 
+/**
+ * @param stateCount count of black/white/black/white/black pixels just read
+ * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
+ *         used by finder patterns to be considered a match
+ */
 + (BOOL)foundPatternCross:(const int[])stateCount {
   int totalModuleSize = 0;
   for (int i = 0; i < 5; i++) {
@@ -171,11 +176,114 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float maxVariance = moduleSize / 2.0f;
   // Allow less than 50% variance from 1-1-3-1-1 proportions
   return
-    ABS(moduleSize - stateCount[0]) < maxVariance &&
-    ABS(moduleSize - stateCount[1]) < maxVariance &&
-    ABS(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
-    ABS(moduleSize - stateCount[3]) < maxVariance &&
-    ABS(moduleSize - stateCount[4]) < maxVariance;
+  ABS(moduleSize - stateCount[0]) < maxVariance &&
+  ABS(moduleSize - stateCount[1]) < maxVariance &&
+  ABS(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
+  ABS(moduleSize - stateCount[3]) < maxVariance &&
+  ABS(moduleSize - stateCount[4]) < maxVariance;
+}
+
+/**
+ * @param stateCount count of black/white/black/white/black pixels just read
+ * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
+ *         used by finder patterns to be considered a match
+ */
++ (BOOL)foundPatternDiagonal:(const int[])stateCount {
+  int totalModuleSize = 0;
+  for (int i = 0; i < 5; i++) {
+    int count = stateCount[i];
+    if (count == 0) {
+      return NO;
+    }
+    totalModuleSize += count;
+  }
+  if (totalModuleSize < 7) {
+    return NO;
+  }
+  float moduleSize = totalModuleSize / 7.0f;
+  float maxVariance = moduleSize / 1.333f;
+  // Allow less than 75% variance from 1-1-3-1-1 proportions
+  return
+  ABS(moduleSize - stateCount[0]) < maxVariance &&
+  ABS(moduleSize - stateCount[1]) < maxVariance &&
+  ABS(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
+  ABS(moduleSize - stateCount[3]) < maxVariance &&
+  ABS(moduleSize - stateCount[4]) < maxVariance;
+}
+
+/**
+ * After a vertical and horizontal scan finds a potential finder pattern, this method
+ * "cross-cross-cross-checks" by scanning down diagonally through the center of the possible
+ * finder pattern to see if the same proportion is detected.
+ *
+ * @param centerI row where a finder pattern was detected
+ * @param centerJ center of the section that appears to cross a finder pattern
+ * @param maxCount maximum reasonable number of modules that should be
+ *  observed in any reading state, based on the results of the horizontal scan
+ * @param originalStateCountTotal The original state count total.
+ * @return true if proportions are withing expected limits
+ */
+- (BOOL)crossCheckDiagonal:(int)centerI centerJ:(int)centerJ {
+  int stateCount[5] = {0, 0, 0, 0, 0};
+
+  // Start counting up, left from center finding black center mass
+  int i = 0;
+  while (centerI >= i && centerJ >= i && [self.image getX:centerJ - i y:centerI - i]) {
+    stateCount[2]++;
+    i++;
+  }
+
+  if (stateCount[2] == 0) {
+    return NO;
+  }
+
+  // Continue up, left finding white space
+  while (centerI >= i && centerJ >= i && ![self.image getX:centerJ - i y:centerI - i]) {
+    stateCount[1]++;
+    i++;
+  }
+  if (stateCount[1] == 0) {
+    return NO;
+  }
+
+  // Continue up, left finding black border
+  while (centerI >= i && centerJ >= i && [self.image getX:centerJ - i y:centerI - i]) {
+    stateCount[0]++;
+    i++;
+  }
+  if (stateCount[0] == 0) {
+    return NO;
+  }
+
+  int maxI = self.image.height;
+  int maxJ = self.image.width;
+
+  // Now also count down, right from center
+  i = 1;
+  while (centerI + i < maxI && centerJ + i < maxJ && [self.image getX:centerJ + i y:centerI + i]) {
+    stateCount[2]++;
+    i++;
+  }
+
+  while (centerI + i < maxI && centerJ + i < maxJ && ![self.image getX:centerJ + i y:centerI + i]) {
+    stateCount[3]++;
+    i++;
+  }
+
+  if (stateCount[3] == 0) {
+    return NO;
+  }
+
+  while (centerI + i < maxI && centerJ + i < maxJ && [self.image getX:centerJ + i y:centerI + i]) {
+    stateCount[4]++;
+    i++;
+  }
+
+  if (stateCount[4] == 0) {
+    return NO;
+  }
+
+  return [ZXQRCodeFinderPatternFinder foundPatternDiagonal:stateCount];
 }
 
 /**
@@ -315,7 +423,7 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
   float centerI = [self crossCheckVertical:i centerJ:(int)centerJ maxCount:stateCount[2] originalStateCountTotal:stateCountTotal];
   if (!isnan(centerI)) {
     centerJ = [self crossCheckHorizontal:(int)centerJ centerI:(int)centerI maxCount:stateCount[2] originalStateCountTotal:stateCountTotal];
-    if (!isnan(centerJ)) {
+    if (!isnan(centerJ) && [self crossCheckDiagonal:(int)centerI centerJ:(int)centerJ]) {
       float estimatedModuleSize = (float)stateCountTotal / 7.0f;
       BOOL found = NO;
       int max = (int)[self.possibleCenters count];
