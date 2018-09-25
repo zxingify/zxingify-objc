@@ -74,4 +74,17 @@
   XCTAssertEqualObjects(@"\u963f", result);
 }
 
+- (void)testHanziLevel1 {
+  ZXBitSourceBuilder *builder = [[ZXBitSourceBuilder alloc] init];
+  [builder write:0x0D numBits:4]; // Hanzi mode
+  [builder write:0x01 numBits:4]; // Subset 1 = GB2312 encoding
+  [builder write:0x01 numBits:8]; // 1 characters
+  // A5A2 (U+30A2) => A5A2 - A1A1 = 401, 4*60 + 01 = 0181
+  [builder write:0x0181 numBits:13];
+  NSString *result = [[ZXQRCodeDecodedBitStreamParser decode:[builder toByteArray]
+                                                     version:[ZXQRCodeVersion versionForNumber:1]
+                                                     ecLevel:nil hints:nil error:nil] text];
+  XCTAssertEqualObjects(@"\u30a2", result);
+}
+
 @end
