@@ -491,6 +491,8 @@ const int ZX_CODE128_CODE_STOP = 106;
     }
   }
 
+  int lastPatternSize = nextStart - lastStart;
+
   // Check for ample whitespace following pattern, but, to do this we first need to remember that
   // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
   // to read off. Would be slightly better to properly read. Here we just skip it:
@@ -499,8 +501,6 @@ const int ZX_CODE128_CODE_STOP = 106;
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
-    
-  int lastPatternSize = nextStart - lastStart;
 
   // Pull out from sum the value of the penultimate check code
   checksumTotal -= multiplier * lastCode;
@@ -528,9 +528,9 @@ const int ZX_CODE128_CODE_STOP = 106;
     }
   }
 
-  float left = startPatternInfo.array[0];
-  float right = lastStart + lastPatternSize;
-    
+  float left = (float)(startPatternInfo.array[1] + startPatternInfo.array[0]) / 2.0f;
+  float right = lastStart + lastPatternSize / 2.0f;
+
   NSUInteger rawCodesSize = [rawCodes count];
   ZXByteArray *rawBytes = [[ZXByteArray alloc] initWithLength:(unsigned int)rawCodesSize];
   for (int i = 0; i < rawCodesSize; i++) {

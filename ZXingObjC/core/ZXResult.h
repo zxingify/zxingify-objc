@@ -47,8 +47,6 @@
  */
 @property (nonatomic, strong, readonly) NSMutableArray *resultPoints;
 
-@property (nonatomic) float angle;
-
 /**
  * @return ZXBarcodeFormat representing the format of the barcode that was decoded
  */
