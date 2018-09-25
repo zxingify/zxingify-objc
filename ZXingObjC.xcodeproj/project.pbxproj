@@ -1677,6 +1677,8 @@
 		4B42B8A521590C920010C328 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */; };
 		4B42B8A7215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */; };
 		4B42B8A8215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */; };
+		4B501858215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */; };
+		4B501859215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */; };
 		4B674F132157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B674F142157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B7ACDA52153D8AA001EB8A5 /* ZXCode93Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */; };
@@ -1687,8 +1689,6 @@
 		4B7ACDAB2153D8B8001EB8A5 /* ZXCode93Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */; };
 		4B7ACDAC2153D8B8001EB8A5 /* ZXCode93Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */; };
 		4B7ACDAD2153D8B8001EB8A5 /* ZXCode93Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */; };
-		4B942BB61BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B942BB51BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m */; };
-		4B942BB71BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B942BB51BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m */; };
 		4B9DB4472158C1D800A10495 /* ZXPDF417WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9DB4462158C1D800A10495 /* ZXPDF417WriterTestCase.m */; };
 		4B9DB4482158C1D800A10495 /* ZXPDF417WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9DB4462158C1D800A10495 /* ZXPDF417WriterTestCase.m */; };
 		4B9DB44B2158CCF400A10495 /* ZXMultiTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9DB44A2158CCF400A10495 /* ZXMultiTestCase.m */; };
@@ -2921,12 +2921,12 @@
 		4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXITFWriterTestCase.m; sourceTree = "<group>"; };
 		4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode39ExtendedModeTestCase.m; sourceTree = "<group>"; };
 		4B42B8A9215917AD0010C328 /* ZXCode39ExtendedModeTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXCode39ExtendedModeTestCase.h; sourceTree = "<group>"; };
+		4B501856215A2EA900ACD238 /* ZXPDF417DecoderTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXPDF417DecoderTestCase.h; sourceTree = "<group>"; };
+		4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417DecoderTestCase.m; sourceTree = "<group>"; };
 		4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxicodeBlackBox1TestCase.m; sourceTree = "<group>"; };
 		4B674F112157E82A00F97DEE /* ZXMaxicodeBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxicodeBlackBox1TestCase.h; sourceTree = "<group>"; };
 		4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode93Writer.m; sourceTree = "<group>"; };
 		4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode93Writer.h; sourceTree = "<group>"; };
-		4B942BB41BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN8BlackBox2TestCase.h; sourceTree = "<group>"; };
-		4B942BB51BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN8BlackBox2TestCase.m; sourceTree = "<group>"; };
 		4B9DB4462158C1D800A10495 /* ZXPDF417WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417WriterTestCase.m; sourceTree = "<group>"; };
 		4B9DB4492158C1E300A10495 /* ZXPDF417WriterTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXPDF417WriterTestCase.h; sourceTree = "<group>"; };
 		4B9DB44A2158CCF400A10495 /* ZXMultiTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiTestCase.m; sourceTree = "<group>"; };
@@ -4162,6 +4162,8 @@
 			isa = PBXGroup;
 			children = (
 				254040A7166AA0F100E13304 /* ec */,
+				4B501856215A2EA900ACD238 /* ZXPDF417DecoderTestCase.h */,
+				4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */,
 			);
 			path = decoder;
 			sourceTree = "<group>";
@@ -5817,6 +5819,7 @@
 				25404118166AA0F100E13304 /* ZXBitArrayBuilderTest.m in Sources */,
 				25404119166AA0F100E13304 /* ZXRSSExpandedInformationDecoderTest.m in Sources */,
 				25404126166AA0F100E13304 /* ZXCodaBarWriterTestCase.m in Sources */,
+				4B501858215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m in Sources */,
 				255E986C18DF258C000A2681 /* ZXCode128WriterTestCase.m in Sources */,
 				25404128166AA0F100E13304 /* ZXEAN13WriterTestCase.m in Sources */,
 				25404129166AA0F100E13304 /* ZXEAN8WriterTestCase.m in Sources */,
@@ -6187,6 +6190,7 @@
 				2540435A166AB8B800E13304 /* ZXBinaryUtil.m in Sources */,
 				2540435B166AB8B800E13304 /* ZXBinaryUtilTest.m in Sources */,
 				2540435C166AB8B800E13304 /* ZXBitArrayBuilderTest.m in Sources */,
+				4B501859215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m in Sources */,
 				255E986D18DF258C000A2681 /* ZXCode128WriterTestCase.m in Sources */,
 				2540435D166AB8B800E13304 /* ZXRSSExpandedInformationDecoderTest.m in Sources */,
 				2540436A166AB8B800E13304 /* ZXCodaBarWriterTestCase.m in Sources */,
@@ -6723,7 +6727,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = 3.1.0;
+				FRAMEWORK_VERSION = 3.3.4;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6855,7 +6859,7 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_VERSION = 3.1.0;
+				FRAMEWORK_VERSION = 3.3.4;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -6906,7 +6910,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = 3.1.0;
+				FRAMEWORK_VERSION = 3.3.4;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
