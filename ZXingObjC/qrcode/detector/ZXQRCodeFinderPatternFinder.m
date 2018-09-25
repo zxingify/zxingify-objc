@@ -25,7 +25,7 @@
 
 const int ZX_CENTER_QUORUM = 2;
 const int ZX_FINDER_PATTERN_MIN_SKIP = 3;
-const int ZX_FINDER_PATTERN_MAX_MODULES = 57;
+const int ZX_FINDER_PATTERN_MAX_MODULES = 97;
 
 @interface ZXQRCodeFinderPatternFinder ()
 

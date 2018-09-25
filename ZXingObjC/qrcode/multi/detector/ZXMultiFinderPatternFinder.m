@@ -164,7 +164,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
   // image, and then account for the center being 3 modules in size. This gives the smallest
   // number of pixels the center could be, so skip this often. When trying harder, look for all
   // QR versions regardless of how dense they are.
-  int iSkip = (int)(maxI / (ZX_FINDER_PATTERN_MAX_MODULES * 4.0f) * 3);
+  int iSkip = (3 * maxI) / (4 * ZX_FINDER_PATTERN_MAX_MODULES);
   if (iSkip < ZX_FINDER_PATTERN_MIN_SKIP || tryHarder) {
     iSkip = ZX_FINDER_PATTERN_MIN_SKIP;
   }
