@@ -29,8 +29,10 @@ static ZXGenericGF *FIELD = nil;
 - (void)testPolynomialString {
   XCTAssertEqualObjects(@"0", [FIELD.zero description]);
   XCTAssertEqualObjects(@"-1", [[FIELD buildMonomial:0 coefficient:-1] description]);
-  ZXGenericGFPoly *p = [[ZXGenericGFPoly alloc] initWithField:[ZXGenericGF QrCodeField256] coefficients:[[ZXIntArray alloc] initWithInts:3, 0, -2, 1, 1, -1]];
+  ZXGenericGFPoly *p = [[ZXGenericGFPoly alloc] initWithField:FIELD coefficients:[[ZXIntArray alloc] initWithInts:3, 0, -2, 1, 1, -1]];
   XCTAssertEqualObjects(@"a^25x^4 - ax^2 + x + 1", [p description]);
+  p = [[ZXGenericGFPoly alloc] initWithField:FIELD coefficients:[[ZXIntArray alloc] initWithInts:3, -1]];
+  XCTAssertEqualObjects(@"a^25", [p description]);
 }
 
 - (void)testZero {
