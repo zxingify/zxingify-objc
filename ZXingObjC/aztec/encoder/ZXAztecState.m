@@ -77,8 +77,8 @@
     mode = ZX_AZTEC_MODE_UPPER;
   }
   int deltaBitCount =
-    (self.binaryShiftByteCount == 0 || self.binaryShiftByteCount == 31) ? 18 :
-    (self.binaryShiftByteCount == 62) ? 9 : 8;
+  (self.binaryShiftByteCount == 0 || self.binaryShiftByteCount == 31) ? 18 :
+  (self.binaryShiftByteCount == 62) ? 9 : 8;
   ZXAztecState *result = [[ZXAztecState alloc] initWithToken:token mode:mode binaryBytes:self.binaryShiftByteCount + 1 bitCount:bitCount + deltaBitCount];
   if (result.binaryShiftByteCount == 2047 + 31) {
     // The string is as long as it's allowed to be.  We should end it.
@@ -101,12 +101,28 @@
 // Returns true if "this" state is better (or equal) to be in than "that"
 // state under all possible circumstances.
 - (BOOL)isBetterThanOrEqualTo:(ZXAztecState *)other {
-  int mySize = self.bitCount + (ZX_AZTEC_LATCH_TABLE[self.mode][other.mode] >> 16);
-  if (other.binaryShiftByteCount > 0 &&
-      (self.binaryShiftByteCount == 0 || self.binaryShiftByteCount > other.binaryShiftByteCount)) {
-    mySize += 10;     // Cost of entering Binary Shift mode.
+  int newModeBitCount = self.bitCount + (ZX_AZTEC_LATCH_TABLE[self.mode][other.mode] >> 16);
+  if (self.binaryShiftByteCount < other.binaryShiftByteCount) {
+    // add additional B/S encoding cost of other, if any
+    newModeBitCount += [self calculateBinaryShiftCost:other] - [self calculateBinaryShiftCost:self];
+  } else if (self.binaryShiftByteCount > other.binaryShiftByteCount && other.binaryShiftByteCount > 0) {
+    // maximum possible additional cost (we end up exceeding the 31 byte boundary and other state can stay beneath it)
+    newModeBitCount += 10;
   }
-  return mySize <= other.bitCount;
+  return newModeBitCount <= other.bitCount;
+}
+
+- (int)calculateBinaryShiftCost:(ZXAztecState *)state {
+  if (state.binaryShiftByteCount > 62) {
+    return 21; // B/S with extended length
+  }
+  if (state.binaryShiftByteCount > 31) {
+    return 20; // two B/S
+  }
+  if (state.binaryShiftByteCount > 0) {
+    return 10; // one B/S
+  }
+  return 0;
 }
 
 - (ZXBitArray *)toBitArray:(ZXByteArray *)text {
