@@ -121,4 +121,9 @@ typedef enum {
  */
 @property (nonatomic, strong) NSNumber *qrVersion;
 
+/**
+ * Specifies whether the data should be encoded to the GS1 standard.
+ */
+@property (nonatomic, assign) BOOL gs1Format;
+
 @end

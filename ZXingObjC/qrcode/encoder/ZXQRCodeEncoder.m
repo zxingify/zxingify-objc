@@ -82,6 +82,12 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
     }
   }
 
+  // Append the FNC1 mode header for GS1 formatted data if applicable
+  if (hints.gs1Format) {
+    // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+    [self appendModeInfo:[ZXQRCodeMode fnc1FirstPositionMode] bits:headerBits];
+  }
+
   // (With ECI in place,) Write the mode marker
   [self appendModeInfo:mode bits:headerBits];
 
