@@ -1687,8 +1687,6 @@
 		4B7ACDAB2153D8B8001EB8A5 /* ZXCode93Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */; };
 		4B7ACDAC2153D8B8001EB8A5 /* ZXCode93Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */; };
 		4B7ACDAD2153D8B8001EB8A5 /* ZXCode93Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */; };
-		4B942BB61BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B942BB51BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m */; };
-		4B942BB71BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B942BB51BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m */; };
 		4B9DB4472158C1D800A10495 /* ZXPDF417WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9DB4462158C1D800A10495 /* ZXPDF417WriterTestCase.m */; };
 		4B9DB4482158C1D800A10495 /* ZXPDF417WriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9DB4462158C1D800A10495 /* ZXPDF417WriterTestCase.m */; };
 		4B9DB44B2158CCF400A10495 /* ZXMultiTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9DB44A2158CCF400A10495 /* ZXMultiTestCase.m */; };
@@ -2925,8 +2923,6 @@
 		4B674F112157E82A00F97DEE /* ZXMaxicodeBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxicodeBlackBox1TestCase.h; sourceTree = "<group>"; };
 		4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode93Writer.m; sourceTree = "<group>"; };
 		4B7ACDA92153D8B8001EB8A5 /* ZXCode93Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCode93Writer.h; sourceTree = "<group>"; };
-		4B942BB41BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXEAN8BlackBox2TestCase.h; sourceTree = "<group>"; };
-		4B942BB51BD80E2000A2C08F /* ZXEAN8BlackBox2TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXEAN8BlackBox2TestCase.m; sourceTree = "<group>"; };
 		4B9DB4462158C1D800A10495 /* ZXPDF417WriterTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417WriterTestCase.m; sourceTree = "<group>"; };
 		4B9DB4492158C1E300A10495 /* ZXPDF417WriterTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXPDF417WriterTestCase.h; sourceTree = "<group>"; };
 		4B9DB44A2158CCF400A10495 /* ZXMultiTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMultiTestCase.m; sourceTree = "<group>"; };
@@ -6723,7 +6719,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = 3.1.0;
+				FRAMEWORK_VERSION = 3.3.3;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6855,7 +6851,7 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_VERSION = 3.1.0;
+				FRAMEWORK_VERSION = 3.3.3;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -6906,7 +6902,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = 3.1.0;
+				FRAMEWORK_VERSION = 3.3.3;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
