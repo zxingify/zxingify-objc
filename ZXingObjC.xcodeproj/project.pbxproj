@@ -1679,6 +1679,8 @@
 		4B42B8A8215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */; };
 		4B501858215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */; };
 		4B501859215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */; };
+		4B50185C215A379300ACD238 /* ZXGenericGFPolyTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B50185B215A379200ACD238 /* ZXGenericGFPolyTestCase.m */; };
+		4B50185D215A379300ACD238 /* ZXGenericGFPolyTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B50185B215A379200ACD238 /* ZXGenericGFPolyTestCase.m */; };
 		4B674F132157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B674F142157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B7ACDA52153D8AA001EB8A5 /* ZXCode93Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */; };
@@ -2923,6 +2925,8 @@
 		4B42B8A9215917AD0010C328 /* ZXCode39ExtendedModeTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXCode39ExtendedModeTestCase.h; sourceTree = "<group>"; };
 		4B501856215A2EA900ACD238 /* ZXPDF417DecoderTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXPDF417DecoderTestCase.h; sourceTree = "<group>"; };
 		4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417DecoderTestCase.m; sourceTree = "<group>"; };
+		4B50185A215A378C00ACD238 /* ZXGenericGFPolyTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXGenericGFPolyTestCase.h; sourceTree = "<group>"; };
+		4B50185B215A379200ACD238 /* ZXGenericGFPolyTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGenericGFPolyTestCase.m; sourceTree = "<group>"; };
 		4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxicodeBlackBox1TestCase.m; sourceTree = "<group>"; };
 		4B674F112157E82A00F97DEE /* ZXMaxicodeBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxicodeBlackBox1TestCase.h; sourceTree = "<group>"; };
 		4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode93Writer.m; sourceTree = "<group>"; };
@@ -3943,6 +3947,8 @@
 		25404011166AA0F100E13304 /* reedsolomon */ = {
 			isa = PBXGroup;
 			children = (
+				4B50185A215A378C00ACD238 /* ZXGenericGFPolyTestCase.h */,
+				4B50185B215A379200ACD238 /* ZXGenericGFPolyTestCase.m */,
 				2504D9EA170005FE00DF8882 /* ZXReedSolomonTestCase.h */,
 				2504D9EB170005FE00DF8882 /* ZXReedSolomonTestCase.m */,
 			);
@@ -5727,6 +5733,7 @@
 				023E696E18C0EF26001FF123 /* ZXAbstractNegativeBlackBoxTestCase.m in Sources */,
 				023E696F18C0EF26001FF123 /* ZXTestResult.m in Sources */,
 				023E697018C0EF26001FF123 /* ZXDataMatrixBlackBox1TestCase.m in Sources */,
+				4B50185C215A379300ACD238 /* ZXGenericGFPolyTestCase.m in Sources */,
 				023E697118C0EF26001FF123 /* ZXDataMatrixBlackBox2TestCase.m in Sources */,
 				023E697218C0EF26001FF123 /* ZXFalsePositives2BlackBoxTestCase.m in Sources */,
 				023E697318C0EF26001FF123 /* ZXFalsePositivesBlackBoxTestCase.m in Sources */,
@@ -6098,6 +6105,7 @@
 				023E69A418C0EF55001FF123 /* ZXAbstractNegativeBlackBoxTestCase.m in Sources */,
 				023E69A518C0EF55001FF123 /* ZXTestResult.m in Sources */,
 				023E69A618C0EF55001FF123 /* ZXDataMatrixBlackBox1TestCase.m in Sources */,
+				4B50185D215A379300ACD238 /* ZXGenericGFPolyTestCase.m in Sources */,
 				023E69A718C0EF55001FF123 /* ZXDataMatrixBlackBox2TestCase.m in Sources */,
 				023E69A818C0EF55001FF123 /* ZXFalsePositives2BlackBoxTestCase.m in Sources */,
 				023E69A918C0EF55001FF123 /* ZXFalsePositivesBlackBoxTestCase.m in Sources */,

@@ -206,6 +206,9 @@
 }
 
 - (NSString *)description {
+  if ([self degree] == 0) {
+    return [NSString stringWithFormat:@"%d", [self coefficient:0]];
+  }
   NSMutableString *result = [NSMutableString stringWithCapacity:8 * [self degree]];
   for (int degree = [self degree]; degree >= 0; degree--) {
     int coefficient = [self coefficient:degree];
