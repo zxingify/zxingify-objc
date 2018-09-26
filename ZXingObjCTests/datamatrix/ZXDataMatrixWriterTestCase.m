@@ -18,6 +18,23 @@
 
 @implementation ZXDataMatrixWriterTestCase
 
+- (void)testDataMatrixWriterIssue {
+  NSString *hugeString = @"Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum";
+  ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
+  ZXBitMatrix *matrix = [writer encode:hugeString format:kBarcodeFormatDataMatrix width:0 height:0 hints:nil error:nil];
+  ZXImage *image = [ZXImage imageWithMatrix:matrix];
+  XCTAssertNotNil(image);
+  
+  ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:image.cgimage];
+  ZXBinaryBitmap *bitmap = [ZXBinaryBitmap binaryBitmapWithBinarizer:[ZXHybridBinarizer binarizerWithSource:source]];
+  
+  ZXDataMatrixReader *reader = [[ZXDataMatrixReader alloc] init];
+  ZXDecodeHints *hints = [ZXDecodeHints hints];
+  hints.pureBarcode = YES;
+  ZXResult *result = [reader decode:bitmap hints:hints error:nil];
+  XCTAssertNotNil(result);
+}
+
 - (void)testDataMatrixImageWriter {
   ZXEncodeHints *hints = [ZXEncodeHints hints];
   hints.dataMatrixShape = ZXDataMatrixSymbolShapeHintForceSquare;
