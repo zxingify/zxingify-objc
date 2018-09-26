@@ -218,9 +218,6 @@ NSInteger furthestFromAverageCompare(id center1, id center2, void *context);
  *
  * @param centerI row where a finder pattern was detected
  * @param centerJ center of the section that appears to cross a finder pattern
- * @param maxCount maximum reasonable number of modules that should be
- *  observed in any reading state, based on the results of the horizontal scan
- * @param originalStateCountTotal The original state count total.
  * @return true if proportions are withing expected limits
  */
 - (BOOL)crossCheckDiagonal:(int)centerI centerJ:(int)centerJ {

@@ -140,9 +140,9 @@
 /**
  * Convert the ZXByteMatrix to ZXBitMatrix.
  *
- * @param reqHeight The requested height of the image (in pixels) with the Datamatrix code
- * @param reqWidth The requested width of the image (in pixels) with the Datamatrix code
- * @param input The input matrix.
+ * @param matrix The input matrix.
+ * @param width The requested width of the image (in pixels) with the Datamatrix code
+ * @param height The requested height of the image (in pixels) with the Datamatrix code
  * @return The output matrix.
  */
 - (ZXBitMatrix *)convertByteMatrixToBitMatrix:(ZXByteMatrix *)matrix width:(int)width height:(int)height {
