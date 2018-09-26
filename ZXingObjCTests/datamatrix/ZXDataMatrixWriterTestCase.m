@@ -19,7 +19,7 @@
 @implementation ZXDataMatrixWriterTestCase
 
 - (void)testDataMatrixWriterIssue {
-  NSString *hugeString = @"Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum";
+  NSString *hugeString = @"Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLoremssssssssss asdasdsdsdssdsdsdsdasdasdadasdasdads";
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:hugeString format:kBarcodeFormatDataMatrix width:0 height:0 hints:nil error:nil];
   ZXImage *image = [ZXImage imageWithMatrix:matrix];
