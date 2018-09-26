@@ -64,8 +64,8 @@
 - (ZXDecimal *)decimalByMultiplyingBy:(ZXDecimal *)number {
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
-  const int8_t *left = [self intArrayFromString:[self reverseString:_value]];
-  const int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
+  int8_t *left = [self intArrayFromString:[self reverseString:_value]];
+  int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
 
   int length = (int) _value.length + (int) number.value.length;
   int8_t *result = calloc(length, sizeof(int8_t));
@@ -85,6 +85,10 @@
       }
     }
   }
+
+  free(left);
+  free(right);
+
   NSMutableString *retVal = [NSMutableString string];
   for (int i = 0; i < length; i++) {
     if (result[i] == 0) {
@@ -108,8 +112,8 @@
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
 
-  const int8_t *left = [self intArrayFromString:[self reverseString:_value]];
-  const int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
+  int8_t *left = [self intArrayFromString:[self reverseString:_value]];
+  int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
 
   int length = rightLength + 1;
   if (leftLength > rightLength) {
@@ -119,8 +123,8 @@
   int8_t *result = calloc(length, sizeof(int8_t));
 
   for (int i = 0; i < length - 1; i++) {
-    int leftValue = leftLength >= i ? left[i] : 0;
-    int rightValue = rightLength >= i ? right[i] : 0;
+    int leftValue = leftLength > i ? left[i] : 0;
+    int rightValue = rightLength > i ? right[i] : 0;
 
     int add = leftValue + rightValue + result[i];
     if (add >= 10) {
@@ -131,13 +135,12 @@
     }
   }
 
+  free(left);
+  free(right);
+
   NSMutableString *retVal = [NSMutableString string];
   for (int i = 0; i < length; i++) {
-    if (result[i] == 0) {
-      [retVal appendString:@"0"];
-    } else {
-      [retVal appendFormat:@"%d", result[i]];
-    }
+    [retVal appendFormat:@"%d", result[i]];
   }
 
   retVal = [[self reverseString:retVal] mutableCopy];

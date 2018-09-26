@@ -42,6 +42,12 @@
   XCTAssertEqual(1000000107, [[decimal1 decimalByAdding:decimal2].value intValue]);
 }
 
+- (void)testAdditionWithLarge {
+  ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"231"];
+  ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"999999876"];
+  XCTAssertEqual(1000000107, [[decimal1 decimalByAdding:decimal2].value intValue]);
+}
+
 - (void)testSimpleMultiply {
   ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"10"];
   ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"10"];
