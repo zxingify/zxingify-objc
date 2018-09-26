@@ -96,7 +96,6 @@
     layer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
     layer.affineTransform = self.transform;
     layer.delegate = self;
-    layer.videoGravity = AVLayerVideoGravityResizeAspect;
     layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 
     _layer = layer;
@@ -515,15 +514,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   }
 
   if (self.input) {
-#if TARGET_OS_IPHONE
-    if ([self.input.device supportsAVCaptureSessionPreset:AVCaptureSessionPreset1920x1080]) {
-      _sessionPreset = AVCaptureSessionPreset1920x1080;
-    } else {
-      _sessionPreset = AVCaptureSessionPreset1280x720;
+    if (self.sessionPreset) {
+      self.sessionPreset = AVCaptureSessionPreset1280x720;
     }
-#else
-    _sessionPreset = AVCaptureSessionPreset1280x720;
-#endif
     self.session.sessionPreset = self.sessionPreset;
     [self.session addInput:self.input];
   }
