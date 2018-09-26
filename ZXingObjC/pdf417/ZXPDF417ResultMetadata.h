@@ -23,8 +23,8 @@
 @property (nonatomic, copy) NSString *sender;
 @property (nonatomic, copy) NSString *addressee;
 @property (nonatomic, copy) NSString *fileName;
-@property (nonatomic, assign) long fileSize;
-@property (nonatomic, assign) long timestamp;
+@property (nonatomic, assign) long long fileSize;
+@property (nonatomic, assign) long long timestamp;
 @property (nonatomic, assign) int checksum;
 @property (nonatomic, strong) NSArray *optionalData;
 
