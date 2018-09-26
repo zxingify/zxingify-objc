@@ -141,7 +141,7 @@
   }
 
   retVal = [[self reverseString:retVal] mutableCopy];
-  while ([retVal characterAtIndex:0] == 0) {
+  while ([[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
 
