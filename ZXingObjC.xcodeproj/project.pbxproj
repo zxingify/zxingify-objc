@@ -1685,6 +1685,8 @@
 		4B5D6CBC215B851F00EE122A /* ZXDecimal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D6CBA215B851F00EE122A /* ZXDecimal.m */; };
 		4B5D6CBD215B851F00EE122A /* ZXDecimal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D6CBA215B851F00EE122A /* ZXDecimal.m */; };
 		4B5D6CBE215B851F00EE122A /* ZXDecimal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D6CBA215B851F00EE122A /* ZXDecimal.m */; };
+		4B5D6CC5215B8E7600EE122A /* ZXDecimalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D6CC0215B8E2300EE122A /* ZXDecimalTestCase.m */; };
+		4B5D6CC6215B8E7800EE122A /* ZXDecimalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D6CC0215B8E2300EE122A /* ZXDecimalTestCase.m */; };
 		4B674F132157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B674F142157E84200F97DEE /* ZXMaxicodeBlackBox1TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */; };
 		4B7ACDA52153D8AA001EB8A5 /* ZXCode93Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */; };
@@ -2931,8 +2933,10 @@
 		4B501857215A2EB800ACD238 /* ZXPDF417DecoderTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417DecoderTestCase.m; sourceTree = "<group>"; };
 		4B50185A215A378C00ACD238 /* ZXGenericGFPolyTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXGenericGFPolyTestCase.h; sourceTree = "<group>"; };
 		4B50185B215A379200ACD238 /* ZXGenericGFPolyTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXGenericGFPolyTestCase.m; sourceTree = "<group>"; };
-		4B5D6CB9215B850B00EE122A /* ZXDecimal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXDecimal.h; sourceTree = "<group>"; };
+		4B5D6CB9215B850B00EE122A /* ZXDecimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecimal.h; sourceTree = "<group>"; };
 		4B5D6CBA215B851F00EE122A /* ZXDecimal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecimal.m; sourceTree = "<group>"; };
+		4B5D6CBF215B8E1400EE122A /* ZXDecimalTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXDecimalTestCase.h; sourceTree = "<group>"; };
+		4B5D6CC0215B8E2300EE122A /* ZXDecimalTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXDecimalTestCase.m; sourceTree = "<group>"; };
 		4B674F0F2157E7FD00F97DEE /* ZXMaxicodeBlackBox1TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXMaxicodeBlackBox1TestCase.m; sourceTree = "<group>"; };
 		4B674F112157E82A00F97DEE /* ZXMaxicodeBlackBox1TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXMaxicodeBlackBox1TestCase.h; sourceTree = "<group>"; };
 		4B7ACDA42153D8AA001EB8A5 /* ZXCode93Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCode93Writer.m; sourceTree = "<group>"; };
@@ -3940,6 +3944,8 @@
 				25404021166AA0F100E13304 /* ZXBitSourceBuilder.m */,
 				25404022166AA0F100E13304 /* ZXBitSourceTestCase.h */,
 				25404023166AA0F100E13304 /* ZXBitSourceTestCase.m */,
+				4B5D6CBF215B8E1400EE122A /* ZXDecimalTestCase.h */,
+				4B5D6CC0215B8E2300EE122A /* ZXDecimalTestCase.m */,
 				074684341BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.h */,
 				074684351BC3BC9400E47A35 /* ZXMultiAbstractBlackBoxTestCase.m */,
 				25404024166AA0F100E13304 /* ZXPerspectiveTransformTestCase.h */,
@@ -5824,6 +5830,7 @@
 				2540410A166AA0F100E13304 /* ZXAI01_3103_DecoderTest.m in Sources */,
 				2540410B166AA0F100E13304 /* ZXAI01_3202_3203_DecoderTest.m in Sources */,
 				2540410C166AA0F100E13304 /* ZXAI01_3X0X_1X_DecoderTest.m in Sources */,
+				4B5D6CC5215B8E7600EE122A /* ZXDecimalTestCase.m in Sources */,
 				2540410D166AA0F100E13304 /* ZXAnyAIDecoderTest.m in Sources */,
 				2540410E166AA0F100E13304 /* ZXRSSExpandedFieldParserTest.m in Sources */,
 				25404112166AA0F100E13304 /* ZXRSSExpandedImage2binaryTestCase.m in Sources */,
@@ -6197,6 +6204,7 @@
 				25404338166AB8B800E13304 /* ZXDataMatrixDecodedBitStreamParserTestCase.m in Sources */,
 				2540434D166AB8B800E13304 /* ZXAbstractExpandedDecoderTest.m in Sources */,
 				2540434E166AB8B800E13304 /* ZXAI01_3103_DecoderTest.m in Sources */,
+				4B5D6CC6215B8E7800EE122A /* ZXDecimalTestCase.m in Sources */,
 				2540434F166AB8B800E13304 /* ZXAI01_3202_3203_DecoderTest.m in Sources */,
 				25404350166AB8B800E13304 /* ZXAI01_3X0X_1X_DecoderTest.m in Sources */,
 				25404351166AB8B800E13304 /* ZXAnyAIDecoderTest.m in Sources */,
