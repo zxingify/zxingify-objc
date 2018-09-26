@@ -64,8 +64,8 @@
 - (ZXDecimal *)decimalByMultiplyingBy:(ZXDecimal *)number {
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
-  const int8_t *leftChars = [self intArrayFromString:[self reverseString:_value]];
-  const int8_t *rightChars = [self intArrayFromString:[self reverseString:number.value]];
+  const int8_t *left = [self intArrayFromString:[self reverseString:_value]];
+  const int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
 
   int length = (int) _value.length + (int) number.value.length;
   int8_t *result = calloc(length, sizeof(int8_t));
@@ -74,8 +74,8 @@
     for (int rightIndex = 0; rightIndex < rightLength; rightIndex++) {
       int resultIndex = leftIndex + rightIndex;
 
-      int leftValue = leftChars[leftIndex];
-      int rightValue = rightChars[rightIndex];
+      int leftValue = left[leftIndex];
+      int rightValue = right[rightIndex];
 
       result[resultIndex] = leftValue * rightValue + (resultIndex >= length ? 0 : result[resultIndex]);
 
@@ -105,8 +105,46 @@
 }
 
 - (ZXDecimal *)decimalByAdding:(ZXDecimal *)number {
-  // stub
-  return [ZXDecimal decimalWithString:number.value];
+  int leftLength = (int) _value.length;
+  int rightLength = (int) number.value.length;
+  const int8_t *left = [self intArrayFromString:[self reverseString:_value]];
+  const int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
+
+  int length = (int) _value.length + (int) number.value.length;
+  int8_t *result = calloc(length, sizeof(int8_t));
+
+  for (int leftIndex = 0; leftIndex < leftLength; leftIndex++) {
+    for (int rightIndex = 0; rightIndex < rightLength; rightIndex++) {
+      int resultIndex = leftIndex + rightIndex;
+
+      int leftValue = left[leftIndex];
+      int rightValue = right[rightIndex];
+
+      result[resultIndex] = leftValue * rightValue + (resultIndex >= length ? 0 : result[resultIndex]);
+
+      if (result[resultIndex] > 9) {
+        result[resultIndex + 1] = (result[resultIndex] / 10) + (resultIndex + 1 >= length ? 0 : result[resultIndex + 1]);
+        result[resultIndex] -= (result[resultIndex] / 10) * 10;
+      }
+    }
+  }
+  NSMutableString *retVal = [NSMutableString string];
+  for (int i = 0; i < length; i++) {
+    if (result[i] == 0) {
+      [retVal appendString:@"0"];
+    } else {
+      [retVal appendFormat:@"%d", result[i]];
+    }
+  }
+
+  retVal = [[self reverseString:retVal] mutableCopy];
+  while ([retVal characterAtIndex:0] == 0) {
+    retVal = [[retVal substringFromIndex:1] mutableCopy];
+  }
+
+  free(result);
+
+  return [ZXDecimal decimalWithString:retVal];
 }
 
 @end
