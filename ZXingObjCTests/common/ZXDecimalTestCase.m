@@ -25,21 +25,41 @@
 }
 
 - (void)testSimpleMultiply {
-  ZXDecimal *decimal = [ZXDecimal decimalWithString:@"10"];
-  ZXDecimal *result = [decimal decimalByMultiplyingBy:decimal];
-  XCTAssertEqual(100, [result.value intValue]);
+  ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"10"];
+  ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"10"];
+  XCTAssertEqual(100, [[decimal1 decimalByMultiplyingBy:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"4"];
+  decimal2 = [ZXDecimal decimalWithString:@"4"];
+  XCTAssertEqual(16, [[decimal1 decimalByMultiplyingBy:decimal2].value intValue]);
 }
 
 - (void)testEnhancedMultiply {
   ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"10"];
   ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"20"];
   XCTAssertEqual(200, [[decimal1 decimalByMultiplyingBy:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"12"];
+  decimal2 = [ZXDecimal decimalWithString:@"22"];
+  XCTAssertEqual(264, [[decimal1 decimalByMultiplyingBy:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"10"];
+  decimal2 = [ZXDecimal decimalWithString:@"100"];
+  XCTAssertEqual(1000, [[decimal1 decimalByMultiplyingBy:decimal2].value intValue]);
 }
 
 - (void)testEnhancedMultiplyWithLargeNumber {
   ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"521"];
   ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"321"];
   XCTAssertEqual(167241, [[decimal1 decimalByMultiplyingBy:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"5589723"];
+  decimal2 = [ZXDecimal decimalWithString:@"99987652"];
+  XCTAssertEqualObjects(@"558903278100396", [decimal1 decimalByMultiplyingBy:decimal2].value);
+
+  decimal1 = [ZXDecimal decimalWithString:@"989898989898981"];
+  decimal2 = [ZXDecimal decimalWithString:@"999988885555533"];
+  XCTAssertEqualObjects(@"989887987721629828381735611873", [decimal1 decimalByMultiplyingBy:decimal2].value);
 }
 
 @end

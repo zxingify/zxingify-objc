@@ -40,46 +40,51 @@
 }
 
 - (NSString *)reverseString:(NSString *)string {
-  NSUInteger length = [string length];
-  unichar *data = malloc(sizeof (unichar) * length);
-  int i;
+  int length = (int) [string length];
+  NSMutableString *data = [NSMutableString string];
 
-  for (i = 0; i < length / 2; i++) {
-    unichar startChar = [string characterAtIndex:i];
-    unichar endChar = [string  characterAtIndex:(length - 1) - i];
-
-    data[i] = endChar;
-    data[(length - 1) - i] = startChar;
+  for (int i = 0; i < length; i++) {
+    int pos = (length - 1) - i;
+    NSString* tmp = [string substringWithRange:NSMakeRange(pos, 1)];
+    [data appendString:tmp];
   }
 
-  NSString *reversed = [NSString stringWithCharacters:data length:length];
-  free(data);
+  return data;
+}
 
-  return reversed;
+- (int8_t *)intArrayFromString:(NSString *) string {
+  int length = (int)[string length];
+  int8_t *result = malloc(length * sizeof(int8_t));
+  for (int i = 0; i < length; i++) {
+    result[i] = [[string substringWithRange:NSMakeRange(i, 1 )] intValue];
+  }
+  return result;
 }
 
 - (ZXDecimal *)decimalByMultiplyingBy:(ZXDecimal *)number {
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
-  const char *leftChars = [[self reverseString:_value] UTF8String];
-  const char *rightChars = [[self reverseString:number.value] UTF8String];
+  const int8_t *leftChars = [self intArrayFromString:[self reverseString:_value]];
+  const int8_t *rightChars = [self intArrayFromString:[self reverseString:number.value]];
 
   int length = (int) _value.length + (int) number.value.length;
-  char *result = calloc(length, sizeof(char));
+  int8_t *result = calloc(length, sizeof(int8_t));
 
   for (int leftIndex = 0; leftIndex < leftLength; leftIndex++) {
     for (int rightIndex = 0; rightIndex < rightLength; rightIndex++) {
       int resultIndex = leftIndex + rightIndex;
-      int leftValue = (int) (leftChars[leftIndex] - 48);
-      int rightValue = (int) (rightChars[rightIndex] - 48);
-      result[resultIndex] = leftValue * rightValue;
-      if (((int) result[resultIndex] - 48) > 0) {
-        result[resultIndex] -= (int) (result[resultIndex] - 48) / 10;
-        result[resultIndex + 1] += (int) (result[resultIndex] - 48) / 10;
+
+      int leftValue = leftChars[leftIndex];
+      int rightValue = rightChars[rightIndex];
+
+      result[resultIndex] = leftValue * rightValue + (resultIndex >= length ? 0 : result[resultIndex]);
+
+      if (result[resultIndex] > 9) {
+        result[resultIndex + 1] = (result[resultIndex] / 10) + (resultIndex + 1 >= length ? 0 : result[resultIndex + 1]);
+        result[resultIndex] -= (result[resultIndex] / 10) * 10;
       }
     }
   }
-
   NSMutableString *retVal = [NSMutableString string];
   for (int i = 0; i < length; i++) {
     if (result[i] == 0) {
@@ -90,7 +95,7 @@
   }
 
   retVal = [[self reverseString:retVal] mutableCopy];
-  if ([retVal characterAtIndex:0] == 0) {
+  while ([retVal characterAtIndex:0] == 0) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
 
