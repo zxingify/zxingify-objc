@@ -24,6 +24,24 @@
   XCTAssertEqual(10, [decimal.value intValue]);
 }
 
+- (void)testSimpleAddition {
+  ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"10"];
+  ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"10"];
+  XCTAssertEqual(20, [[decimal1 decimalByAdding:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"4"];
+  decimal2 = [ZXDecimal decimalWithString:@"4"];
+  XCTAssertEqual(8, [[decimal1 decimalByAdding:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"4000"];
+  decimal2 = [ZXDecimal decimalWithString:@"44"];
+  XCTAssertEqual(4044, [[decimal1 decimalByAdding:decimal2].value intValue]);
+
+  decimal1 = [ZXDecimal decimalWithString:@"231"];
+  decimal2 = [ZXDecimal decimalWithString:@"999999876"];
+  XCTAssertEqual(1000000107, [[decimal1 decimalByAdding:decimal2].value intValue]);
+}
+
 - (void)testSimpleMultiply {
   ZXDecimal *decimal1 = [ZXDecimal decimalWithString:@"10"];
   ZXDecimal *decimal2 = [ZXDecimal decimalWithString:@"10"];
