@@ -66,7 +66,7 @@
   return [[NSString alloc] initWithBytesNoCopy:characters length:utf32ByteCount encoding:encoding freeWhenDone:YES];
 }
 
-- (int8_t *)intArrayFromString:(NSString *) string {
+- (int8_t *)intArrayFromString:(NSString *)string {
   int length = (int)[string length];
   int8_t *result = malloc(length * sizeof(int8_t));
   for (int i = 0; i < length; i++) {
