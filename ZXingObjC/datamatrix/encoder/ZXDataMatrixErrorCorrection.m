@@ -64,7 +64,7 @@ const int ZX_FACTORS[16][68] = {
 
 const int ZX_MODULO_VALUE = 0x12D;
 
-static int ZX_LOG[256], ZX_ALOG[256];
+static int ZX_LOG[256], ZX_ALOG[255];
 
 @implementation ZXDataMatrixErrorCorrection
 
@@ -115,7 +115,7 @@ static int ZX_LOG[256], ZX_ALOG[256];
     for (int block = 0; block < blockCount; block++) {
       NSMutableString *temp = [NSMutableString stringWithCapacity:dataSizes[block]];
       for (int d = block; d < symbolInfo.dataCapacity; d += blockCount) {
-        [temp appendFormat:@"%c", [codewords characterAtIndex:d]];
+        [temp appendFormat:@"%C", [codewords characterAtIndex:d]];
       }
       NSString *ecc = [self createECCBlock:temp numECWords:errorSizes[block]];
       int pos = 0;

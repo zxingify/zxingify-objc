@@ -48,8 +48,7 @@
           lastCharSize = [self backtrackOneCharacter:context buffer:buffer removed:removed lastCharSize:lastCharSize];
         }
       }
-      while ((buffer.length % 3) == 1
-             && ((lastCharSize <= 3 && available != 1) || lastCharSize > 3)) {
+      while ((buffer.length % 3) == 1 && (lastCharSize > 3 || available != 1)) {
         lastCharSize = [self backtrackOneCharacter:context buffer:buffer removed:removed lastCharSize:lastCharSize];
       }
       break;
