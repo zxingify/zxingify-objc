@@ -39,17 +39,31 @@
   return [self decimalWithString:[decimalNumber stringValue]];
 }
 
-- (NSString *)reverseString:(NSString *)string {
-  int length = (int) [string length];
-  NSMutableString *data = [NSMutableString string];
-
-  for (int i = 0; i < length; i++) {
-    int pos = (length - 1) - i;
-    NSString* tmp = [string substringWithRange:NSMakeRange(pos, 1)];
-    [data appendString:tmp];
+// @see https://stackoverflow.com/a/22610446/5173688
+- (NSString *)reversedString:(NSString *)string {
+  NSUInteger length = [string length];
+  if (length < 2) {
+    return string;
   }
 
-  return data;
+  NSStringEncoding encoding = NSHostByteOrder() == NS_BigEndian ? NSUTF32BigEndianStringEncoding : NSUTF32LittleEndianStringEncoding;
+  NSUInteger utf32ByteCount = [string lengthOfBytesUsingEncoding:encoding];
+  uint32_t *characters = malloc(utf32ByteCount);
+  if (!characters) {
+    return nil;
+  }
+
+  [string getBytes:characters maxLength:utf32ByteCount usedLength:NULL encoding:encoding options:0 range:NSMakeRange(0, length) remainingRange:NULL];
+
+  NSUInteger utf32Length = utf32ByteCount / sizeof(uint32_t);
+  NSUInteger halfwayPoint = utf32Length / 2;
+  for (NSUInteger i = 0; i < halfwayPoint; ++i) {
+    uint32_t character = characters[utf32Length - i - 1];
+    characters[utf32Length - i - 1] = characters[i];
+    characters[i] = character;
+  }
+
+  return [[NSString alloc] initWithBytesNoCopy:characters length:utf32ByteCount encoding:encoding freeWhenDone:YES];
 }
 
 - (int8_t *)intArrayFromString:(NSString *) string {
@@ -64,8 +78,8 @@
 - (ZXDecimal *)decimalByMultiplyingBy:(ZXDecimal *)number {
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
-  int8_t *left = [self intArrayFromString:[self reverseString:_value]];
-  int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
+  int8_t *left = [self intArrayFromString:[self reversedString:_value]];
+  int8_t *right = [self intArrayFromString:[self reversedString:number.value]];
 
   int length = (int) _value.length + (int) number.value.length;
   int8_t *result = calloc(length, sizeof(int8_t));
@@ -98,7 +112,7 @@
     }
   }
 
-  retVal = [[self reverseString:retVal] mutableCopy];
+  retVal = [[self reversedString:retVal] mutableCopy];
   while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
@@ -115,8 +129,8 @@
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
 
-  int8_t *left = [self intArrayFromString:[self reverseString:_value]];
-  int8_t *right = [self intArrayFromString:[self reverseString:number.value]];
+  int8_t *left = [self intArrayFromString:[self reversedString:_value]];
+  int8_t *right = [self intArrayFromString:[self reversedString:number.value]];
 
   int length = rightLength + 1;
   if (leftLength > rightLength) {
@@ -146,7 +160,7 @@
     [retVal appendFormat:@"%d", result[i]];
   }
 
-  retVal = [[self reverseString:retVal] mutableCopy];
+  retVal = [[self reversedString:retVal] mutableCopy];
   while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
