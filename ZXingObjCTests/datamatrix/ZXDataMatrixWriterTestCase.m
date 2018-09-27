@@ -19,7 +19,7 @@
 @implementation ZXDataMatrixWriterTestCase
 
 - (void)testDataMatrixWriterIssue {
-  NSString *hugeString = @"Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLoremssssssssss asdasdsdsdssdsdsdsdasdasdadasdasdads";
+  NSString *hugeString = @"<MP v=\"022\" U=\"C42FFB11DA74E035CC8C0\" l=\"de-DE\"><P g=\"Mich\" f=\"Must_1\" egk=\"M996218\" b=\"1926\" s=\"M\" /><A lanr=\"165630\" n=\"Drs. X Über\" s=\"Haupt 55\" z=\"01234\" c=\"Am\" p=\"04-12345\" e=\"m.uebl@mein-z.de\" t=\"01-04\" /><O w=\"89\" /><S c=\"412\"><M p=\"2262\" m=\"1\" /><M p=\"7020\" m=\"1\" /><M p=\"772\" t=\"mo:½-1 mi:(½-1)\" i=\"Hello, World\" /><M p=\"984\" v=\"1\" i=\"abds 1x1\" /></S><S c=\"418\"><M p=\"6360\" d=\"1\" /></S></MP>";
   ZXDataMatrixWriter *writer = [[ZXDataMatrixWriter alloc] init];
   ZXBitMatrix *matrix = [writer encode:hugeString format:kBarcodeFormatDataMatrix width:0 height:0 hints:nil error:nil];
   ZXImage *image = [ZXImage imageWithMatrix:matrix];
