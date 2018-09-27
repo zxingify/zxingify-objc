@@ -56,7 +56,7 @@
   int length = (int)[string length];
   int8_t *result = malloc(length * sizeof(int8_t));
   for (int i = 0; i < length; i++) {
-    result[i] = [[string substringWithRange:NSMakeRange(i, 1 )] intValue];
+    result[i] = [[string substringWithRange:NSMakeRange(i, 1)] intValue];
   }
   return result;
 }
@@ -99,12 +99,15 @@
   }
 
   retVal = [[self reverseString:retVal] mutableCopy];
-  while ([[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
+  while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
 
   free(result);
 
+  if (retVal.length == 0) {
+    return [ZXDecimal decimalWithString:@"0"];
+  }
   return [ZXDecimal decimalWithString:retVal];
 }
 
@@ -144,12 +147,15 @@
   }
 
   retVal = [[self reverseString:retVal] mutableCopy];
-  while ([[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
+  while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
 
   free(result);
 
+  if (retVal.length == 0) {
+    return [ZXDecimal decimalWithString:@"0"];
+  }
   return [ZXDecimal decimalWithString:retVal];
 }
 
