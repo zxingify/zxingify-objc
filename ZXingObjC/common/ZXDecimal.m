@@ -45,16 +45,16 @@
   if (length < 2) {
     return string;
   }
-
+  
   NSStringEncoding encoding = NSHostByteOrder() == NS_BigEndian ? NSUTF32BigEndianStringEncoding : NSUTF32LittleEndianStringEncoding;
   NSUInteger utf32ByteCount = [string lengthOfBytesUsingEncoding:encoding];
   uint32_t *characters = malloc(utf32ByteCount);
   if (!characters) {
     return nil;
   }
-
+  
   [string getBytes:characters maxLength:utf32ByteCount usedLength:NULL encoding:encoding options:0 range:NSMakeRange(0, length) remainingRange:NULL];
-
+  
   NSUInteger utf32Length = utf32ByteCount / sizeof(uint32_t);
   NSUInteger halfwayPoint = utf32Length / 2;
   for (NSUInteger i = 0; i < halfwayPoint; ++i) {
@@ -62,7 +62,7 @@
     characters[utf32Length - i - 1] = characters[i];
     characters[i] = character;
   }
-
+  
   return [[NSString alloc] initWithBytesNoCopy:characters length:utf32ByteCount encoding:encoding freeWhenDone:YES];
 }
 
@@ -80,29 +80,29 @@
   int rightLength = (int) number.value.length;
   int8_t *left = [self intArrayFromString:[self reversedString:_value]];
   int8_t *right = [self intArrayFromString:[self reversedString:number.value]];
-
+  
   int length = (int) _value.length + (int) number.value.length;
   int8_t *result = calloc(length, sizeof(int8_t));
-
+  
   for (int leftIndex = 0; leftIndex < leftLength; leftIndex++) {
     for (int rightIndex = 0; rightIndex < rightLength; rightIndex++) {
       int resultIndex = leftIndex + rightIndex;
-
+      
       int leftValue = left[leftIndex];
       int rightValue = right[rightIndex];
-
+      
       result[resultIndex] = leftValue * rightValue + (resultIndex >= length ? 0 : result[resultIndex]);
-
+      
       if (result[resultIndex] > 9) {
         result[resultIndex + 1] = (result[resultIndex] / 10) + (resultIndex + 1 >= length ? 0 : result[resultIndex + 1]);
         result[resultIndex] -= (result[resultIndex] / 10) * 10;
       }
     }
   }
-
+  
   free(left);
   free(right);
-
+  
   NSMutableString *retVal = [NSMutableString string];
   for (int i = 0; i < length; i++) {
     if (result[i] == 0) {
@@ -111,14 +111,14 @@
       [retVal appendFormat:@"%d", result[i]];
     }
   }
-
+  
   retVal = [[self reversedString:retVal] mutableCopy];
   while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
-
+  
   free(result);
-
+  
   if (retVal.length == 0) {
     return [ZXDecimal decimalWithString:@"0"];
   }
@@ -128,21 +128,21 @@
 - (ZXDecimal *)decimalByAdding:(ZXDecimal *)number {
   int leftLength = (int) _value.length;
   int rightLength = (int) number.value.length;
-
+  
   int8_t *left = [self intArrayFromString:[self reversedString:_value]];
   int8_t *right = [self intArrayFromString:[self reversedString:number.value]];
-
+  
   int length = rightLength + 1;
   if (leftLength > rightLength) {
     length = leftLength + 1;
   }
-
+  
   int8_t *result = calloc(length, sizeof(int8_t));
-
+  
   for (int i = 0; i < length - 1; i++) {
     int leftValue = leftLength > i ? left[i] : 0;
     int rightValue = rightLength > i ? right[i] : 0;
-
+    
     int add = leftValue + rightValue + result[i];
     if (add >= 10) {
       result[i] = (add % 10);
@@ -151,22 +151,22 @@
       result[i] = add;
     }
   }
-
+  
   free(left);
   free(right);
-
+  
   NSMutableString *retVal = [NSMutableString string];
   for (int i = 0; i < length; i++) {
     [retVal appendFormat:@"%d", result[i]];
   }
-
+  
   retVal = [[self reversedString:retVal] mutableCopy];
   while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
-
+  
   free(result);
-
+  
   if (retVal.length == 0) {
     return [ZXDecimal decimalWithString:@"0"];
   }
