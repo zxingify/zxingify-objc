@@ -24,8 +24,10 @@
 
 - (id)initWithValue:(NSString *)value;
 
++ (ZXDecimal *)zero;
 + (ZXDecimal *)decimalWithDecimalNumber:(NSDecimalNumber *)decimalNumber;
 + (ZXDecimal *)decimalWithString:(NSString *)string;
++ (ZXDecimal *)decimalWithInt:(int)integer;
 
 - (ZXDecimal *)decimalByMultiplyingBy:(ZXDecimal *)number;
 - (ZXDecimal *)decimalByAdding:(ZXDecimal *)number;

@@ -22,6 +22,18 @@
 - (void)testInitializer {
   ZXDecimal *decimal = [ZXDecimal decimalWithString:@"10"];
   XCTAssertEqual(10, [decimal.value intValue]);
+
+  decimal = [ZXDecimal decimalWithString:@""];
+  XCTAssertEqualObjects(decimal, [ZXDecimal decimalWithInt:0]);
+  XCTAssertEqualObjects([ZXDecimal zero], [ZXDecimal decimalWithInt:0]);
+}
+
+- (void)testZero {
+  ZXDecimal *decimal = [ZXDecimal decimalWithInt:0];
+
+  XCTAssertEqualObjects(decimal,[ZXDecimal decimalWithInt:0]);
+  XCTAssertEqualObjects([decimal decimalByMultiplyingBy:decimal], [ZXDecimal decimalWithInt:0]);
+  XCTAssertEqualObjects([decimal decimalByAdding:decimal], [ZXDecimal decimalWithInt:0]);
 }
 
 - (void)testSimpleAddition {

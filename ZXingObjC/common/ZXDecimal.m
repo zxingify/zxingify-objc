@@ -31,12 +31,33 @@
   return self;
 }
 
++ (ZXDecimal *)zero {
+  return [[self alloc] initWithValue:@"0"];
+}
+
++ (ZXDecimal *)decimalWithInt:(int)integer {
+  return [[self alloc] initWithValue:[NSString stringWithFormat:@"%d", integer]];
+}
+
 + (ZXDecimal *)decimalWithString:(NSString *)string {
-  return [[self alloc] initWithValue:string];
+  if (string.length == 0) {
+    return [[self alloc] initWithValue:@"0"];
+  } else {
+    return [[self alloc] initWithValue:string];
+  }
 }
 
 + (ZXDecimal *)decimalWithDecimalNumber:(NSDecimalNumber *)decimalNumber {
   return [self decimalWithString:[decimalNumber stringValue]];
+}
+
+- (BOOL)isEqual:(id)object {
+  if (object == self)
+    return YES;
+  if (!object || ![object isKindOfClass:[self class]])
+    return NO;
+  ZXDecimal *other = (ZXDecimal *)object;
+  return [other.value isEqual:self.value];
 }
 
 // @see https://stackoverflow.com/a/22610446/5173688
@@ -49,9 +70,6 @@
   NSStringEncoding encoding = NSHostByteOrder() == NS_BigEndian ? NSUTF32BigEndianStringEncoding : NSUTF32LittleEndianStringEncoding;
   NSUInteger utf32ByteCount = [string lengthOfBytesUsingEncoding:encoding];
   uint32_t *characters = malloc(utf32ByteCount);
-  if (!characters) {
-    return nil;
-  }
   
   [string getBytes:characters maxLength:utf32ByteCount usedLength:NULL encoding:encoding options:0 range:NSMakeRange(0, length) remainingRange:NULL];
   
@@ -67,11 +85,26 @@
 }
 
 - (int8_t *)intArrayFromString:(NSString *)string {
-  int length = (int)[string length];
-  int8_t *result = malloc(length * sizeof(int8_t));
-  for (int i = 0; i < length; i++) {
-    result[i] = [[string substringWithRange:NSMakeRange(i, 1)] intValue];
+  NSUInteger length = [string length];
+  if (length < 2) {
+    int8_t *result = malloc(length * sizeof(int8_t));
+    result[0] = [string intValue];
+    return result;
   }
+
+  NSStringEncoding encoding = NSHostByteOrder() == NS_BigEndian ? NSUTF32BigEndianStringEncoding : NSUTF32LittleEndianStringEncoding;
+  NSUInteger utf32ByteCount = [string lengthOfBytesUsingEncoding:encoding];
+  uint32_t *characters = malloc(utf32ByteCount);
+
+  [string getBytes:characters maxLength:utf32ByteCount usedLength:NULL encoding:encoding options:0 range:NSMakeRange(0, length) remainingRange:NULL];
+
+  int8_t *result = malloc(length * sizeof(int8_t));
+
+  NSUInteger utf32Length = utf32ByteCount / sizeof(uint32_t);
+  for (NSUInteger i = 0; i < utf32Length; ++i) {
+    result[i] = (int) characters[i] - '0';
+  }
+
   return result;
 }
 
@@ -113,6 +146,7 @@
   }
   
   retVal = [[self reversedString:retVal] mutableCopy];
+  // remove '0' prefixes
   while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
@@ -161,6 +195,7 @@
   }
   
   retVal = [[self reversedString:retVal] mutableCopy];
+  // remove '0' prefixes
   while (retVal.length > 0 && [[retVal substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"0"]) {
     retVal = [[retVal substringFromIndex:1] mutableCopy];
   }
