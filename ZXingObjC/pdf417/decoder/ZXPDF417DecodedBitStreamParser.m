@@ -19,6 +19,7 @@
 #import "ZXDecoderResult.h"
 #import "ZXErrors.h"
 #import "ZXIntArray.h"
+#import "ZXDecimal.h"
 
 typedef enum {
   ZXPDF417ModeAlpha = 0,
@@ -694,11 +695,13 @@ static NSArray *ZX_PDF417_EXP900 = nil;
    Remove leading 1 =>  Result is 000213298174000
  */
 + (NSString *)decodeBase900toBase10:(ZXIntArray *)codewords count:(int)count {
-  NSDecimalNumber *result = [NSDecimalNumber zero];
+  ZXDecimal *result = [ZXDecimal decimalWithString:@"0"]; // zero
   for (int i = 0; i < count; i++) {
-    result = [result decimalNumberByAdding:[ZX_PDF417_EXP900[count - i - 1] decimalNumberByMultiplyingBy:[NSDecimalNumber decimalNumberWithDecimal:[@(codewords.array[i]) decimalValue]]]];
+    ZXDecimal *toAdd = [ZXDecimal decimalWithDecimalNumber:ZX_PDF417_EXP900[count - i - 1]];
+    ZXDecimal *multiplyWith = [ZXDecimal decimalWithString:[@(codewords.array[i]) stringValue]];
+    result = [result decimalByAdding:[toAdd decimalByMultiplyingBy:multiplyWith]];
   }
-  NSString *resultString = [result stringValue];
+  NSString *resultString = result.value;
   if (![resultString hasPrefix:@"1"]) {
     return nil;
   }
