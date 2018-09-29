@@ -50,10 +50,6 @@
 
   [self.view bringSubviewToFront:self.scanRectView];
   [self.view bringSubviewToFront:self.decodedLabel];
-    
-    [self.capture setLuminance: TRUE];
-    [self.capture.luminance setFrame: CGRectMake(150, 30, 100, 100)];
-    [self.view.layer addSublayer: self.capture.luminance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
