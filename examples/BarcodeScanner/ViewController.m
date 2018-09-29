@@ -131,6 +131,9 @@
 		scaleVideoX = self.view.frame.size.width / videoSizeX;
 		scaleVideoY = self.view.frame.size.height / videoSizeY;
 		
+        // Convert CGPoint under portrait mode to map with orientation of image
+        // because the image will be cropped before rotate
+        // reference: https://github.com/TheLevelUp/ZXingObjC/issues/222
         CGFloat realX = transformedVideoRect.origin.y;
         CGFloat realY = self.view.frame.size.width - transformedVideoRect.size.width - transformedVideoRect.origin.x;
         CGFloat realWidth = transformedVideoRect.size.height;
@@ -142,7 +145,7 @@
 		scaleVideoY = self.view.frame.size.height / videoSizeX;
 	}
     
-	_captureSizeTransform = CGAffineTransformMakeScale(1.0/scaleVideoY, 1.0/scaleVideoX);
+	_captureSizeTransform = CGAffineTransformMakeScale(1.0/scaleVideoX, 1.0/scaleVideoY);
 	self.capture.scanRect = CGRectApplyAffineTransform(transformedVideoRect, _captureSizeTransform);
 }
 
