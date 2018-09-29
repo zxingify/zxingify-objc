@@ -23,6 +23,7 @@
 @property (nonatomic, weak) IBOutlet UIView *scanRectView;
 @property (nonatomic, weak) IBOutlet UILabel *decodedLabel;
 @property (nonatomic) BOOL scanning;
+@property (nonatomic) BOOL isFirstApplyOrientation;
 
 @end
 
@@ -61,6 +62,14 @@
   self.capture.delegate = self;
 
   [self applyOrientation];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    if (_isFirstApplyOrientation) return;
+    _isFirstApplyOrientation = TRUE;
+    [self applyOrientation];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator {
@@ -108,7 +117,7 @@
 }
 
 - (void)applyRectOfInterest:(UIInterfaceOrientation)orientation {
-	CGFloat scaleVideo, scaleVideoX, scaleVideoY;
+	CGFloat scaleVideoX, scaleVideoY;
 	CGFloat videoSizeX, videoSizeY;
 	CGRect transformedVideoRect = self.scanRectView.frame;
 	if([self.capture.sessionPreset isEqualToString:AVCaptureSessionPreset1920x1080]) {
@@ -121,23 +130,19 @@
 	if(UIInterfaceOrientationIsPortrait(orientation)) {
 		scaleVideoX = self.view.frame.size.width / videoSizeX;
 		scaleVideoY = self.view.frame.size.height / videoSizeY;
-		scaleVideo = MAX(scaleVideoX, scaleVideoY);
-		if(scaleVideoX > scaleVideoY) {
-			transformedVideoRect.origin.y += (scaleVideo * videoSizeY - self.view.frame.size.height) / 2;
-		} else {
-			transformedVideoRect.origin.x += (scaleVideo * videoSizeX - self.view.frame.size.width) / 2;
-		}
+		
+        CGFloat realX = transformedVideoRect.origin.y;
+        CGFloat realY = self.view.frame.size.width - transformedVideoRect.size.width - transformedVideoRect.origin.x;
+        CGFloat realWidth = transformedVideoRect.size.height;
+        CGFloat realHeight = transformedVideoRect.size.width;
+        transformedVideoRect = CGRectMake(realX, realY, realWidth, realHeight);
+        
 	} else {
 		scaleVideoX = self.view.frame.size.width / videoSizeY;
 		scaleVideoY = self.view.frame.size.height / videoSizeX;
-		scaleVideo = MAX(scaleVideoX, scaleVideoY);
-		if(scaleVideoX > scaleVideoY) {
-			transformedVideoRect.origin.y += (scaleVideo * videoSizeX - self.view.frame.size.height) / 2;
-		} else {
-			transformedVideoRect.origin.x += (scaleVideo * videoSizeY - self.view.frame.size.width) / 2;
-		}
 	}
-	_captureSizeTransform = CGAffineTransformMakeScale(1/scaleVideo, 1/scaleVideo);
+    
+	_captureSizeTransform = CGAffineTransformMakeScale(1.0/scaleVideoY, 1.0/scaleVideoX);
 	self.capture.scanRect = CGRectApplyAffineTransform(transformedVideoRect, _captureSizeTransform);
 }
 
