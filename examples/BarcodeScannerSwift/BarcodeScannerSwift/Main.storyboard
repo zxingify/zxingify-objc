@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="t6u-rZ-9xd">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="DQp-Wl-wOu">
+            <objects>
+                <viewController id="t6u-rZ-9xd" customClass="ViewController" customModule="BarcodeScannerSwift" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="EU2-Kd-Lf1"/>
+                        <viewControllerLayoutGuide type="bottom" id="vsd-LP-wUm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cej-i4-12n">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qgo-yu-mXB">
+                                <rect key="frame" x="62.5" y="208" width="250" height="250"/>
+                                <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="EKu-ik-U53"/>
+                                    <constraint firstAttribute="width" constant="250" id="YeP-YC-EB9"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold up to a barcode to scan" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MvI-ai-FZ9">
+                                <rect key="frame" x="62.5" y="111" width="250" height="445"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.018318351409999999" blue="0.15975175750000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Qgo-yu-mXB" firstAttribute="centerY" secondItem="cej-i4-12n" secondAttribute="centerY" id="3eH-2F-RId"/>
+                            <constraint firstItem="MvI-ai-FZ9" firstAttribute="centerX" secondItem="cej-i4-12n" secondAttribute="centerX" id="7WN-VY-O0R"/>
+                            <constraint firstItem="Qgo-yu-mXB" firstAttribute="centerX" secondItem="cej-i4-12n" secondAttribute="centerX" id="WKt-dq-H78"/>
+                            <constraint firstItem="MvI-ai-FZ9" firstAttribute="height" secondItem="cej-i4-12n" secondAttribute="height" multiplier="2/3" id="kUl-tY-Izx"/>
+                            <constraint firstItem="MvI-ai-FZ9" firstAttribute="centerY" secondItem="cej-i4-12n" secondAttribute="centerY" id="mg4-5f-SUZ"/>
+                            <constraint firstItem="MvI-ai-FZ9" firstAttribute="width" secondItem="Qgo-yu-mXB" secondAttribute="width" id="nlf-sl-j7e"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="resultLabel" destination="MvI-ai-FZ9" id="g6K-SC-BGH"/>
+                        <outlet property="scanView" destination="Qgo-yu-mXB" id="OWS-DH-SoK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Ik-HT-pJT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="268" y="-235"/>
+        </scene>
+    </scenes>
+</document>
