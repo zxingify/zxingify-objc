@@ -37,6 +37,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
+        capture?.setLuminance(true)
+        capture?.luminance().frame = CGRect(x: 150, y: 30, width: 100, height: 100)
+        self.view.layer.addSublayer(capture!.luminance())
     }
     
     override func viewDidLayoutSubviews() {
@@ -90,7 +94,7 @@ extension ViewController {
             
             case .landscapeLeft:
                 captureRotation = 90
-                scanRectRotation = 190
+                scanRectRotation = 180
                 break
             
             case .landscapeRight:
@@ -116,7 +120,7 @@ extension ViewController {
         
         capture?.transform = captureTranform
         capture?.rotation = CGFloat(scanRectRotation)
-        capture?.layer.frame = view.bounds
+        capture?.layer.frame = view.frame
     }
     
     func applyRectOfInterest(orientation: UIInterfaceOrientation) {
@@ -156,7 +160,8 @@ extension ViewController {
         
         captureSizeTransform = CGAffineTransform(scaleX: 1.0/scaleVideoX, y: 1.0/scaleVideoY)
         guard let _captureSizeTransform = captureSizeTransform else { return }
-        capture?.scanRect.applying(_captureSizeTransform)
+        let transformRect = transformedVideoRect.applying(_captureSizeTransform)
+        capture?.scanRect = transformRect
     }
     
     func barcodeFormatToString(format: ZXBarcodeFormat) -> String {
