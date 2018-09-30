@@ -17,7 +17,6 @@
 import UIKit
 import ZXingObjC
 
-
 class ViewController: UIViewController {
     
     // MARK: Properties
@@ -37,10 +36,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
-        capture?.setLuminance(true)
-        capture?.luminance().frame = CGRect(x: 150, y: 30, width: 100, height: 100)
-        self.view.layer.addSublayer(capture!.luminance())
     }
     
     override func viewDidLayoutSubviews() {
@@ -167,55 +162,55 @@ extension ViewController {
     func barcodeFormatToString(format: ZXBarcodeFormat) -> String {
         switch (format) {
             case kBarcodeFormatAztec:
-                return "Aztec";
+                return "Aztec"
             
             case kBarcodeFormatCodabar:
-                return "CODABAR";
+                return "CODABAR"
             
             case kBarcodeFormatCode39:
-                return "Code 39";
+                return "Code 39"
             
             case kBarcodeFormatCode93:
-                return "Code 93";
+                return "Code 93"
             
             case kBarcodeFormatCode128:
-                return "Code 128";
+                return "Code 128"
             
             case kBarcodeFormatDataMatrix:
-                return "Data Matrix";
+                return "Data Matrix"
             
             case kBarcodeFormatEan8:
-                return "EAN-8";
+                return "EAN-8"
             
             case kBarcodeFormatEan13:
-                return "EAN-13";
+                return "EAN-13"
             
             case kBarcodeFormatITF:
-                return "ITF";
+                return "ITF"
             
             case kBarcodeFormatPDF417:
-                return "PDF417";
+                return "PDF417"
             
             case kBarcodeFormatQRCode:
-                return "QR Code";
+                return "QR Code"
             
             case kBarcodeFormatRSS14:
-                return "RSS 14";
+                return "RSS 14"
             
             case kBarcodeFormatRSSExpanded:
-                return "RSS Expanded";
+                return "RSS Expanded"
             
             case kBarcodeFormatUPCA:
-                return "UPCA";
+                return "UPCA"
             
             case kBarcodeFormatUPCE:
-                return "UPCE";
+                return "UPCE"
             
             case kBarcodeFormatUPCEANExtension:
-                return "UPC/EAN extension";
+                return "UPC/EAN extension"
             
             default:
-                return "Unknown";
+                return "Unknown"
             }
     }
 }
