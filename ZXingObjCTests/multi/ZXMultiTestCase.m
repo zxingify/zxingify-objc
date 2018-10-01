@@ -40,4 +40,30 @@
   XCTAssertEqual(kBarcodeFormatQRCode, results[1].barcodeFormat);
 }
 
+- (void)testMultiTryHarder {
+    NSString *testBase = @"Resources/blackbox/multi-1";
+    NSBundle *classBundle = [NSBundle bundleForClass:[self class]];
+    NSString *pathForResource = [classBundle pathForResource:@"1" ofType:@"png" inDirectory:testBase];
+    NSURL *testImageURL = [NSURL fileURLWithPath:pathForResource];
+
+    ZXImage *testImage = [[ZXImage alloc] initWithURL:testImageURL];
+    ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:testImage.cgimage];
+    ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];
+
+    ZXGenericMultipleBarcodeReader *multiReader = [[ZXGenericMultipleBarcodeReader alloc] initWithDelegate:[ZXMultiFormatReader reader]];
+
+    ZXDecodeHints *hints = [ZXDecodeHints hints];
+    hints.tryHarder = YES;
+
+    NSArray<ZXResult *> *results = [multiReader decodeMultiple:bitmap hints:hints error:nil];
+    XCTAssertNotNil(results);
+    XCTAssertEqual(2, results.count);
+
+    XCTAssertEqualObjects(@"www.airtable.com/jobs", results[0].text);
+    XCTAssertEqual(kBarcodeFormatQRCode, results[0].barcodeFormat);
+
+    XCTAssertEqualObjects(@"031415926531", results[1].text);
+    XCTAssertEqual(kBarcodeFormatUPCA, results[1].barcodeFormat);
+}
+
 @end
