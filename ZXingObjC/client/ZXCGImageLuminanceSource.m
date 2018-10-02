@@ -18,6 +18,7 @@
 #import "ZXByteArray.h"
 #import "ZXCGImageLuminanceSource.h"
 #import "ZXImage.h"
+#import "ZXDecodeHints.h"
 
 @interface ZXCGImageLuminanceSource ()
 
@@ -25,6 +26,7 @@
 @property (nonatomic, assign, readonly) int8_t *data;
 @property (nonatomic, assign, readonly) size_t left;
 @property (nonatomic, assign, readonly) size_t top;
+@property (nonatomic, assign, readonly) ZXCGImageLuminanceSourceInfo *sourceInfo;
 
 @end
 
@@ -117,6 +119,18 @@
 
 - (id)initWithCGImage:(CGImageRef)image {
   return [self initWithCGImage:image left:0 top:0 width:CGImageGetWidth(image) height:CGImageGetHeight(image)];
+}
+
+- (id)initWithCGImage:(CGImageRef)image sourceInfo: (ZXCGImageLuminanceSourceInfo *)sourceInfo {
+    size_t width = CGImageGetWidth(image);
+    size_t height = CGImageGetHeight(image);
+    
+    if (self = [super initWithWidth:(int)width height:(int)height]) {
+        _sourceInfo = sourceInfo;
+        [self initializeWithImage:image left: 0 top: 0 width:width height:height];
+    }
+    
+    return self;
 }
 
 - (id)initWithBuffer:(CVPixelBufferRef)buffer
@@ -229,10 +243,7 @@
       if (red == green && green == blue) {
         rgbPixelOut = red;
       } else {
-        rgbPixelOut = (306 * red +
-                       601 * green +
-                       117 * blue +
-                       (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
+          rgbPixelOut = [self calculateRed: red green: green blue: blue];
       }
 
       if (rgbPixelOut > 255) {
@@ -254,6 +265,24 @@
 
   _top = top;
   _left = left;
+}
+
+- (uint32_t)calculateRed:(uint32_t)red green:(uint32_t)green blue:(uint32_t)blue {
+        // nil or normal
+    if (_sourceInfo == nil || _sourceInfo.type == ZXCGImageLuminanceSourceNormal) {
+        uint32_t ret = (306 * red + 601 * green + 117 * blue + (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
+        return ret;
+        
+        // Method 6 - Shades, ref: http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
+    } else if (_sourceInfo.type == ZXCGImageLuminanceSourceShades) {
+        float conversationFactor = 255.0 / (_sourceInfo.numberOfShades - 1);
+        float averageValue = (red + green + blue) / 3.0;
+        uint32_t result = ((averageValue / conversationFactor) + 0.5) * conversationFactor;
+        return result;
+    }
+    
+    // unknow
+    return 0;
 }
 
 - (BOOL)rotateSupported {

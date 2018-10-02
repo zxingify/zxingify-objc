@@ -364,64 +364,67 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       
       CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
       CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-      
-      // If scanRect is set, crop the current image to include only the desired rect
-      if (!CGRectIsEmpty(self.scanRect)) {
-        CGImageRef croppedImage = CGImageCreateWithImageInRect(videoFrameImage, self.scanRect);
-        CGImageRelease(videoFrameImage);
-        videoFrameImage = croppedImage;
-      }
-      
-      CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:self.rotation];
-      CGImageRelease(videoFrameImage);
-      self.lastScannedImage = rotatedImage;
-      
-      if (self.captureToFilename) {
+      [self decodeImage: videoFrameImage];
+    }
+  }
+}
+
+- (void)decodeImage: (CGImageRef)image {
+    // If scanRect is set, crop the current image to include only the desired rect
+    if (!CGRectIsEmpty(self.scanRect)) {
+        CGImageRef croppedImage = CGImageCreateWithImageInRect(image, self.scanRect);
+        CGImageRelease(image);
+        image = croppedImage;
+    }
+    
+    CGImageRef rotatedImage = [self createRotatedImage:image degrees:self.rotation];
+    CGImageRelease(image);
+    self.lastScannedImage = rotatedImage;
+    
+    if (self.captureToFilename) {
         NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
         CGImageDestinationRef dest = CGImageDestinationCreateWithURL((__bridge CFURLRef)url, (__bridge CFStringRef)@"public.png", 1, nil);
         CGImageDestinationAddImage(dest, rotatedImage, nil);
         CGImageDestinationFinalize(dest);
         CFRelease(dest);
         self.captureToFilename = nil;
-      }
-      
-      ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
-      CGImageRelease(rotatedImage);
-      
-      if (self.luminanceLayer) {
+    }
+    
+    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
+    CGImageRelease(rotatedImage);
+    
+    if (self.luminanceLayer) {
         CGImageRef image = source.image;
         CGImageRetain(image);
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-          self.luminanceLayer.contents = (__bridge id)image;
-          CGImageRelease(image);
+            self.luminanceLayer.contents = (__bridge id)image;
+            CGImageRelease(image);
         });
-      }
-      
-      if (self.binaryLayer || self.delegate) {
+    }
+    
+    if (self.binaryLayer || self.delegate) {
         ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:self.invert ? [source invert] : source];
         
         if (self.binaryLayer) {
-          CGImageRef image = [binarizer createImage];
-          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-            self.binaryLayer.contents = (__bridge id)image;
-            CGImageRelease(image);
-          });
+            CGImageRef image = [binarizer createImage];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+                self.binaryLayer.contents = (__bridge id)image;
+                CGImageRelease(image);
+            });
         }
         
         if (self.delegate) {
-          ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
-          
-          NSError *error;
-          ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
-          if (result) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              [self.delegate captureResult:self result:result];
-            });
-          }
+            ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
+            
+            NSError *error;
+            ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
+            if (result) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate captureResult:self result:result];
+                });
+            }
         }
-      }
     }
-  }
 }
 
 #pragma mark - Private
