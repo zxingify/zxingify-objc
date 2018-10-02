@@ -1709,6 +1709,8 @@
 		4B9E58CF215CDCEB0045E4BD /* ZXDataMatrixWriterAdditionalTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9E58CD215CDCEB0045E4BD /* ZXDataMatrixWriterAdditionalTestCase.m */; };
 		4BFDC4A2215BCF7B00580F5C /* ZXPDF417BlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFDC4A1215BCF7B00580F5C /* ZXPDF417BlackBox5TestCase.m */; };
 		4BFDC4A3215BCF7B00580F5C /* ZXPDF417BlackBox5TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BFDC4A1215BCF7B00580F5C /* ZXPDF417BlackBox5TestCase.m */; };
+		7967E67E2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */; };
+		7967E67F2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7967E67D2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.m */; };
 		DB7257521A52420400EFF81B /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CEF166A999D00E13304 /* ZXAztecDecoder.m */; };
 		DB7257531A52420400EFF81B /* ZXAztecWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2519AB3317FD1EC000A71C45 /* ZXAztecWriter.m */; };
 		DB7257541A52420400EFF81B /* ZXAztecDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CF2166A999D00E13304 /* ZXAztecDetector.m */; };
@@ -2957,6 +2959,8 @@
 		4B9E58D0215CDD320045E4BD /* ZXDataMatrixWriterAdditionalTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXDataMatrixWriterAdditionalTestCase.h; sourceTree = "<group>"; };
 		4BFDC4A1215BCF7B00580F5C /* ZXPDF417BlackBox5TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXPDF417BlackBox5TestCase.m; sourceTree = "<group>"; };
 		4BFDC4A4215BCF9000580F5C /* ZXPDF417BlackBox5TestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZXPDF417BlackBox5TestCase.h; sourceTree = "<group>"; };
+		7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCGImageLuminanceSourceInfo.h; sourceTree = "<group>"; };
+		7967E67D2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXCGImageLuminanceSourceInfo.m; sourceTree = "<group>"; };
 		DB72547F1A523C9200EFF81B /* ZXingObjC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZXingObjC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB7254821A523C9200EFF81B /* ios-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ios-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -3333,6 +3337,8 @@
 				25403D48166A9A0800E13304 /* ZXCaptureDelegate.h */,
 				25403D4B166A9A0800E13304 /* ZXCGImageLuminanceSource.h */,
 				25403D4C166A9A0800E13304 /* ZXCGImageLuminanceSource.m */,
+				7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */,
+				7967E67D2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.m */,
 				25403D4D166A9A0800E13304 /* ZXImage.h */,
 				25403D4E166A9A0800E13304 /* ZXImage.m */,
 			);
@@ -4549,6 +4555,7 @@
 				0210FBE618E0A92900B1F4CE /* ZXITFWriter.h in Headers */,
 				0210FBFA18E0A97200B1F4CE /* ZXPDF417Codeword.h in Headers */,
 				0210FBBC18E0A89500B1F4CE /* ZXMultipleBarcodeReader.h in Headers */,
+				7967E67E2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */,
 				0210FBBD18E0A8A500B1F4CE /* ZXAbstractExpandedDecoder.h in Headers */,
 				0210FB9918E0A62400B1F4CE /* ZXGridSampler.h in Headers */,
 				0210FB9A18E0A62400B1F4CE /* ZXHybridBinarizer.h in Headers */,
@@ -5611,6 +5618,7 @@
 				25403E08166A9CCB00E13304 /* ZXDataMatrixDecodedBitStreamParser.m in Sources */,
 				25403E0A166A9CCB00E13304 /* ZXDataMatrixDecoder.m in Sources */,
 				25403E0C166A9CCB00E13304 /* ZXDataMatrixVersion.m in Sources */,
+				7967E67F2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.m in Sources */,
 				25403E0E166A9CCB00E13304 /* ZXDataMatrixDetector.m in Sources */,
 				25403E10166A9CCB00E13304 /* ZXDataMatrixReader.m in Sources */,
 				25403E1C166A9D4B00E13304 /* ZXMaxiCodeBitMatrixParser.m in Sources */,
