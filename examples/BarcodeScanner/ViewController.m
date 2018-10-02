@@ -50,6 +50,8 @@
 
   [self.view bringSubviewToFront:self.scanRectView];
   [self.view bringSubviewToFront:self.decodedLabel];
+    
+    [self.capture setShadesMode];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

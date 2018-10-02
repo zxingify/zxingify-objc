@@ -125,7 +125,7 @@
 - (void)setShadesMode {
     if (_shadesMode) { return; }
     _shadesMode = TRUE;
-    _shadesValue = 4;
+    _shadesValue = 8;
 }
 
 #pragma mark - Property Setters
@@ -402,7 +402,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     ZXCGImageLuminanceSourceInfo *info;
     if (_shadesMode) {
         info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades: _shadesValue];
-        _shadesValue = ((_shadesValue + 4) > 256 ? 4 : (_shadesValue + 4));
+        _shadesValue = ((_shadesValue + 8) > 256 ? 8 : (_shadesValue + 8));
     }
     ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage
                                                                               sourceInfo: info];

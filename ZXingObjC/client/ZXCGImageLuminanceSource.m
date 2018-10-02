@@ -268,21 +268,28 @@
 }
 
 - (uint32_t)calculateRed:(uint32_t)red green:(uint32_t)green blue:(uint32_t)blue {
-        // normal formula
+    // Normal formula
     if (_sourceInfo == nil || _sourceInfo.type == ZXCGImageLuminanceSourceNormal) {
         uint32_t ret = (306 * red + 601 * green + 117 * blue + (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
         return ret;
-        
-        // shades formula - ref: http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
-    } else if (_sourceInfo.type == ZXCGImageLuminanceSourceShades) {
-        float conversationFactor = 255.0 / (_sourceInfo.numberOfShades - 1);
-        float averageValue = (red + green + blue) / 3.0;
-        uint32_t result = ((averageValue / conversationFactor) + 0.5) * conversationFactor;
-        return result;
     }
     
-    // unknow
-    return 0;
+    switch (_sourceInfo.type) {
+            // shades formula - ref: http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
+        case ZXCGImageLuminanceSourceShades: {
+            float conversationFactor = 255.0 / (_sourceInfo.numberOfShades - 1);
+            float averageValue = (red + green + blue) / 3.0;
+            uint32_t result = ((averageValue / conversationFactor) + 0.5) * conversationFactor;
+            return result;
+        }
+            
+            // ref: https://en.wikipedia.org/wiki/Charge-coupled_device#Color_cameras
+        case ZXCGImageLuminanceSourceDigital:
+            return green;
+            
+        default:
+            return 0;
+    }
 }
 
 - (BOOL)rotateSupported {

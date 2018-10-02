@@ -16,7 +16,8 @@
 
 typedef enum {
     ZXCGImageLuminanceSourceNormal = 0,
-    ZXCGImageLuminanceSourceShades
+    ZXCGImageLuminanceSourceShades,
+    ZXCGImageLuminanceSourceDigital
 } ZXCGImageLuminanceSourceType;
 
 
