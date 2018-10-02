@@ -41,6 +41,9 @@
 @property (nonatomic, assign) BOOL running;
 @property (nonatomic, strong) AVCaptureSession *session;
 
+@property (nonatomic, assign) BOOL shadesMode;
+@property (nonatomic, assign) uint32_t shadesValue;
+
 @end
 
 @implementation ZXCapture
@@ -117,6 +120,12 @@
   }
 
   return _output;
+}
+
+- (void)setShadesMode {
+    if (_shadesMode) { return; }
+    _shadesMode = TRUE;
+    _shadesValue = 4;
 }
 
 #pragma mark - Property Setters
@@ -390,7 +399,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         self.captureToFilename = nil;
     }
     
-    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
+    ZXCGImageLuminanceSourceInfo *info;
+    if (_shadesMode) {
+        info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades: _shadesValue];
+        _shadesValue = ((_shadesValue + 4) > 256 ? 4 : (_shadesValue + 4));
+    }
+    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage
+                                                                              sourceInfo: info];
     CGImageRelease(rotatedImage);
     
     if (self.luminanceLayer) {

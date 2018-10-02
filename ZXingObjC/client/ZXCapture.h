@@ -62,4 +62,6 @@
 - (void)start;
 - (void)stop;
 
+- (void)setShadesMode;
+
 @end
