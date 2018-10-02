@@ -268,12 +268,12 @@
 }
 
 - (uint32_t)calculateRed:(uint32_t)red green:(uint32_t)green blue:(uint32_t)blue {
-        // nil or normal
+        // normal formula
     if (_sourceInfo == nil || _sourceInfo.type == ZXCGImageLuminanceSourceNormal) {
         uint32_t ret = (306 * red + 601 * green + 117 * blue + (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
         return ret;
         
-        // Method 6 - Shades, ref: http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
+        // shades formula - ref: http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
     } else if (_sourceInfo.type == ZXCGImageLuminanceSourceShades) {
         float conversationFactor = 255.0 / (_sourceInfo.numberOfShades - 1);
         float averageValue = (red + green + blue) / 3.0;
