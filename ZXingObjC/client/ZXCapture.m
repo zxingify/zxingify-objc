@@ -41,9 +41,8 @@
 @property (nonatomic, assign) BOOL running;
 @property (nonatomic, strong) AVCaptureSession *session;
 
-@property (nonatomic, assign) BOOL shadesMode;
-@property (nonatomic, assign) uint32_t shadesValue;
-
+@property (nonatomic, assign) BOOL heuristic;
+@property (nonatomic, copy) dispatch_queue_t parallelQueue;
 @end
 
 @implementation ZXCapture
@@ -122,12 +121,6 @@
   return _output;
 }
 
-- (void)setShadesMode {
-    if (_shadesMode) { return; }
-    _shadesMode = TRUE;
-    _shadesValue = 8;
-}
-
 #pragma mark - Property Setters
 
 - (void)setCamera:(int)camera {
@@ -199,6 +192,13 @@
   _transform = transform;
   [self.layer setAffineTransform:transform];
 }
+
+- (void)enableHeuristic {
+    if (_heuristic) { return; }
+    _heuristic = TRUE;
+    _parallelQueue = dispatch_queue_create("com.zxing.parallelQueue", DISPATCH_QUEUE_CONCURRENT);
+}
+
 
 #pragma mark - Back, Front, Torch
 
@@ -399,13 +399,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         self.captureToFilename = nil;
     }
     
-    ZXCGImageLuminanceSourceInfo *info;
-    if (_shadesMode) {
-        info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades: _shadesValue];
-        _shadesValue = ((_shadesValue + 8) > 256 ? 8 : (_shadesValue + 8));
+    if (_heuristic) {
+        [self decodeImageAdv: rotatedImage];
     }
-    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage
-                                                                              sourceInfo: info];
+    
+    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage];
     CGImageRelease(rotatedImage);
     
     if (self.luminanceLayer) {
@@ -440,6 +438,30 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             }
         }
     }
+}
+
+
+/**
+ This function try to make the scalegray image darker to process
+ */
+- (void)decodeImageAdv: (CGImageRef)cgImage {
+    CGImageRef img = CGImageCreateCopy(cgImage);
+    dispatch_async(_parallelQueue, ^{
+        ZXCGImageLuminanceSourceInfo *sourceInfo = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
+        ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: img
+                                            sourceInfo: sourceInfo];
+        CGImageRelease(img);
+        
+        ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource: source];
+        ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
+        NSError *error;
+        ZXResult *result = [self.reader decode:bitmap hints: self.hints error:&error];
+        if (result && [self.delegate respondsToSelector: @selector(captureResult:result:)]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate captureResult:self result:result];
+            });
+        }
+    });
 }
 
 #pragma mark - Private
