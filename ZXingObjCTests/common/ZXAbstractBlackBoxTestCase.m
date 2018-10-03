@@ -167,7 +167,8 @@
     for (int x = 0; x < testCount; x++) {
       float rotation = [(ZXTestResult *)self.testResults[x] rotation];
       ZXImage *rotatedImage = [self rotateImage:image degrees:rotation];
-      ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage.cgimage];
+      ZXLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage.cgimage
+                                                                         sourceInfo: _luminanceSourceInfo];
       ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:[[ZXHybridBinarizer alloc] initWithSource:source]];
       BOOL misread;
       if ([self decode:bitmap rotation:rotation expectedText:expectedText expectedMetadata:expectedMetadata tryHarder:NO misread:&misread]) {
@@ -219,6 +220,7 @@
   if (totalFound > totalMustPass) {
     NSLog(@"  +++ Test too lax by %d images", totalFound - totalMustPass);
   } else if (totalFound < totalMustPass) {
+      NSLog(@"total must pass %d - total found %d", totalMustPass, totalFound);
     NSLog(@"  --- Test failed by %d images", totalMustPass - totalFound);
   }
 
@@ -245,6 +247,13 @@
 - (BOOL)decode:(ZXBinaryBitmap *)source rotation:(float)rotation expectedText:(NSString *)expectedText expectedMetadata:(NSMutableDictionary *)expectedMetadata tryHarder:(BOOL)tryHarder misread:(BOOL *)misread {
   NSString *suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
   *misread = NO;
+    
+    if (_shouldRemoveNewline) {
+        if ([expectedText length] > 0) {
+            NSString *temp = [expectedText substringToIndex: [expectedText length] - 1];
+            expectedText = temp;
+        }
+    }
 
   ZXDecodeHints *hints = [ZXDecodeHints hints];
   ZXDecodeHints *pureHints = [ZXDecodeHints hints];
