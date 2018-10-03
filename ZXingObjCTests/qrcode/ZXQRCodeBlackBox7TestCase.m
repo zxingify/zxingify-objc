@@ -32,14 +32,14 @@
     [self addTest: 1 tryHarderCount: 1 rotation: 270.0f];
   }
     
-    ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
-    [self setLuminanceSourceInfo: info];
-    [self setShouldTruncateNewline: TRUE];
-
   return self;
 }
 
 - (void)testBlackBox {
+    ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
+    [self setLuminanceSourceInfo: info];
+    [self setShouldTruncateNewline: TRUE];
+    
   [super runTests];
 }
 
