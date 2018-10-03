@@ -16,6 +16,7 @@
 
 typedef enum {
     ZXCGImageLuminanceSourceNormal = 0,
+    ZXCGImageLuminanceSourceLuma,
     ZXCGImageLuminanceSourceShades,
     ZXCGImageLuminanceSourceDigital,
     ZXCGImageLuminanceSourceDecomposingMax,
@@ -30,6 +31,8 @@ typedef enum {
 @property (nonatomic, assign, readonly) ZXCGImageLuminanceSourceType type;
 
 - (instancetype)init NS_UNAVAILABLE;
+
+- (instancetype)initWithLuma;
 
 - (instancetype)initWithShades: (uint32_t)numberOfShades;
 

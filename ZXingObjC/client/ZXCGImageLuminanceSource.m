@@ -275,12 +275,21 @@
     }
     
     switch (_sourceInfo.type) {
+        case ZXCGImageLuminanceSourceLuma: {
+            uint32_t result = (red * 0.2126 + green * 0.7152 + blue * 0.0722);
+            return result;
+        }
+            
             // shades formula - ref: http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
         case ZXCGImageLuminanceSourceShades: {
-            float conversationFactor = 255.0 / (_sourceInfo.numberOfShades - 1);
-            float averageValue = (red + green + blue) / 3.0;
-            uint32_t result = ((averageValue / conversationFactor) + 0.5) * conversationFactor;
-            return result;
+            if (_sourceInfo.numberOfShades > 1) {
+                float conversationFactor = 255.0 / (_sourceInfo.numberOfShades - 1);
+                float averageValue = (red + green + blue) / 3.0;
+                uint32_t result = ((averageValue / conversationFactor) + 0.5) * conversationFactor;
+                return result;
+            }
+            
+            return 0;
         }
             
         case ZXCGImageLuminanceSourceDigital:

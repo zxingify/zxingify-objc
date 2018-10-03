@@ -26,6 +26,14 @@
     return self;
 }
 
+- (instancetype)initWithLuma {
+    self = [super init];
+    if (self) {
+        _type = ZXCGImageLuminanceSourceLuma;
+    }
+    return self;
+}
+
 - (instancetype)initWithShades:(uint32_t)numberOfShades {
     self = [super init];
     if (self) {
