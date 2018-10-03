@@ -21,7 +21,7 @@
 @property (nonatomic, copy) NSString *testBase;
 @property (nonatomic, strong) NSMutableArray *testResults;
 @property (nonatomic, strong) ZXCGImageLuminanceSourceInfo *luminanceSourceInfo;
-@property (nonatomic, assign) BOOL shouldRemoveNewline;
+@property (nonatomic, assign) BOOL shouldTruncateNewline;
 
 - (id)initWithInvocation:(NSInvocation *)invocation testBasePathSuffix:(NSString *)testBasePathSuffix barcodeReader:(id<ZXReader>)barcodeReader expectedFormat:(ZXBarcodeFormat)expectedFormat;
 + (NSString *)barcodeFormatAsString:(ZXBarcodeFormat)format;

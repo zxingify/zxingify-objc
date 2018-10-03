@@ -248,8 +248,8 @@
   NSString *suffix = [NSString stringWithFormat:@" (%@rotation: %d)", tryHarder ? @"try harder, " : @"", (int) rotation];
   *misread = NO;
     
-    if (_shouldRemoveNewline) {
-        if ([expectedText length] > 0) {
+    if (_shouldTruncateNewline) {
+        if ([expectedText length] > 0 && [[expectedText substringFromIndex: [expectedText length] - 1] isEqualToString: @"\n"]) {
             NSString *temp = [expectedText substringToIndex: [expectedText length] - 1];
             expectedText = temp;
         }

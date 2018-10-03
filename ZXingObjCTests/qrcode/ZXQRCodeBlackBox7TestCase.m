@@ -34,7 +34,7 @@
     
     ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
     [self setLuminanceSourceInfo: info];
-    [self setShouldRemoveNewline: TRUE];
+    [self setShouldTruncateNewline: TRUE];
 
   return self;
 }
