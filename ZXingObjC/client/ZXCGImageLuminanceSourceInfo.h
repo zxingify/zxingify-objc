@@ -17,7 +17,9 @@
 typedef enum {
     ZXCGImageLuminanceSourceNormal = 0,
     ZXCGImageLuminanceSourceShades,
-    ZXCGImageLuminanceSourceDigital
+    ZXCGImageLuminanceSourceDigital,
+    ZXCGImageLuminanceSourceDecomposingMax,
+    ZXCGImageLuminanceSourceDecomposingMin,
 } ZXCGImageLuminanceSourceType;
 
 
@@ -32,5 +34,11 @@ typedef enum {
 - (instancetype)initWithShades: (uint32_t)numberOfShades;
 
 - (instancetype)initWithNormal;
+
+- (instancetype)initWithDigital;
+
+- (instancetype)initWithDecomposingMax;
+
+- (instancetype)initWithDecomposingMin;
 
 @end

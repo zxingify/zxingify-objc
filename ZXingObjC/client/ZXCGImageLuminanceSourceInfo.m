@@ -35,4 +35,28 @@
     return self;
 }
 
+- (instancetype)initWithDigital {
+    self = [super init];
+    if (self) {
+        _type = ZXCGImageLuminanceSourceDigital;
+    }
+    return self;
+}
+
+- (instancetype)initWithDecomposingMax {
+    self = [super init];
+    if (self) {
+        _type = ZXCGImageLuminanceSourceDecomposingMax;
+    }
+    return self;
+}
+
+- (instancetype)initWithDecomposingMin {
+    self = [super init];
+    if (self) {
+        _type = ZXCGImageLuminanceSourceDecomposingMin;
+    }
+    return self;
+}
+
 @end

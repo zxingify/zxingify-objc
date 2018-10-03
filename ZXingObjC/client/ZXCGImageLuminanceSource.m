@@ -283,9 +283,14 @@
             return result;
         }
             
-            // ref: https://en.wikipedia.org/wiki/Charge-coupled_device#Color_cameras
         case ZXCGImageLuminanceSourceDigital:
             return green;
+            
+        case ZXCGImageLuminanceSourceDecomposingMin:
+            return MIN(MIN(red, green), blue);
+            
+        case ZXCGImageLuminanceSourceDecomposingMax:
+            return MAX(MAX(red, green), blue);
             
         default:
             return 0;
