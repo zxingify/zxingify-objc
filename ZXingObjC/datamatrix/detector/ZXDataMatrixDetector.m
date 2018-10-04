@@ -22,39 +22,6 @@
 #import "ZXResultPoint.h"
 #import "ZXWhiteRectangleDetector.h"
 
-/**
- * Simply encapsulates two points and a number of transitions between them.
- */
-@interface ZXResultPointsAndTransitions : NSObject
-
-@property (nonatomic, strong, readonly) ZXResultPoint *from;
-@property (nonatomic, strong, readonly) ZXResultPoint *to;
-@property (nonatomic, assign, readonly) int transitions;
-
-@end
-
-@implementation ZXResultPointsAndTransitions
-
-- (id)initWithFrom:(ZXResultPoint *)from to:(ZXResultPoint *)to transitions:(int)transitions {
-  if (self = [super init]) {
-    _from = from;
-    _to = to;
-    _transitions = transitions;
-  }
-
-  return self;
-}
-
-- (NSString *)description {
-  return [NSString stringWithFormat:@"%@/%@/%d", self.from, self.to, self.transitions];
-}
-
-- (NSComparisonResult)compare:(ZXResultPointsAndTransitions *)otherObject {
-  return [@(self.transitions) compare:@(otherObject.transitions)];
-}
-
-@end
-
 
 @interface ZXDataMatrixDetector ()
 
@@ -82,11 +49,40 @@
   if (!cornerPoints) {
     return nil;
   }
-  ZXResultPoint *pointA = cornerPoints[0];
-  ZXResultPoint *pointB = cornerPoints[1];
-  ZXResultPoint *pointC = cornerPoints[2];
-  ZXResultPoint *pointD = cornerPoints[3];
 
+  NSMutableArray *points = [self detectSolid1:[cornerPoints mutableCopy]];
+  points = [self detectSolid2:points];
+  points[3] = [self correctTopRight:points];
+  if (!points[3]) {
+    return nil;
+  }
+  points = [self shiftToModuleCenter:points];
+
+  ZXResultPoint *topLeft = points[0];
+  ZXResultPoint *bottomLeft = points[1];
+  ZXResultPoint *bottomRight = points[2];
+  ZXResultPoint *topRight = points[3];
+
+  int dimensionTop = [self transitionsBetween:topLeft to:topRight] + 1;
+  int dimensionRight = [self transitionsBetween:bottomRight to:topRight] + 1;
+
+  if ((dimensionTop & 0x01) == 1) {
+    dimensionTop += 1;
+  }
+  if ((dimensionRight & 0x01) == 1) {
+    dimensionRight += 1;
+  }
+
+  if (4 * dimensionTop < 7 * dimensionRight && 4 * dimensionRight < 7 * dimensionTop) {
+    // The matrix is square
+    dimensionTop = dimensionRight = MAX(dimensionTop, dimensionRight);
+  }
+
+  ZXBitMatrix *bits = [self sampleGrid:self.image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:topRight dimensionX:dimensionTop dimensionY:dimensionRight error:error];
+
+  return [[ZXDetectorResult alloc] initWithBits:bits points:@[topLeft, bottomLeft, bottomRight, topRight]];
+
+  /*
   NSMutableArray *transitions = [NSMutableArray arrayWithCapacity:4];
   [transitions addObject:[self transitionsBetween:pointA to:pointB]];
   [transitions addObject:[self transitionsBetween:pointA to:pointC]];
@@ -142,19 +138,6 @@
     topRight = pointD;
   }
 
-  int dimensionTop = [[self transitionsBetween:topLeft to:topRight] transitions];
-  int dimensionRight = [[self transitionsBetween:bottomRight to:topRight] transitions];
-
-  if ((dimensionTop & 0x01) == 1) {
-    dimensionTop++;
-  }
-  dimensionTop += 2;
-
-  if ((dimensionRight & 0x01) == 1) {
-    dimensionRight++;
-  }
-  dimensionRight += 2;
-
   ZXBitMatrix *bits;
   ZXResultPoint *correctedTopRight;
 
@@ -197,98 +180,95 @@
       return nil;
     }
   }
-  return [[ZXDetectorResult alloc] initWithBits:bits points:@[topLeft, bottomLeft, bottomRight, correctedTopRight]];
+  */
+}
+
+- (ZXResultPoint *)shiftPoint:(ZXResultPoint *)point to:(ZXResultPoint *)to div:(int)div {
+  float x = (to.x - point.x) / (div + 1);
+  float y = (to.y - point.y) / (div + 1);
+  return [[ZXResultPoint alloc] initWithX:point.x + x y:point.y + y];
+}
+
+- (ZXResultPoint *)moveAway:(ZXResultPoint *)point fromX:(float)fromX fromY:(float)fromY {
+  float x = point.x;
+  float y = point.y;
+
+  if (x < fromX) {
+    x -= 1;
+  } else {
+    x += 1;
+  }
+
+  if (y < fromY) {
+    y -= 1;
+  } else {
+    y += 1;
+  }
+
+  return [[ZXResultPoint alloc] initWithX:x y:y];
+}
+
+- (NSMutableArray *)detectSolid1:(NSMutableArray *)cornerPoints {
+  return nil;
+}
+
+- (NSMutableArray *)detectSolid2:(NSMutableArray *)points {
+  return nil;
 }
 
 /**
- * Calculates the position of the white top right module using the output of the rectangle detector
- * for a rectangular matrix
+ * Calculates the corner position of the white top right module.
  */
-- (ZXResultPoint *)correctTopRightRectangular:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight
-                                      topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight
-                                 dimensionTop:(int)dimensionTop dimensionRight:(int)dimensionRight {
-  float corr = [self distance:bottomLeft b:bottomRight] / (float)dimensionTop;
-  int norm = [self distance:topLeft b:topRight];
-  float cos = ([topRight x] - [topLeft x]) / norm;
-  float sin = ([topRight y] - [topLeft y]) / norm;
+- (ZXResultPoint *)correctTopRight:(NSMutableArray *)points {
+  // A..D
+  // |  :
+  // B--C
+  ZXResultPoint *pointA = points[0];
+  ZXResultPoint *pointB = points[1];
+  ZXResultPoint *pointC = points[2];
+  ZXResultPoint *pointD = points[3];
 
-  ZXResultPoint *c1 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
+  // shift points for safe transition detection.
+  int trTop = [self transitionsBetween:pointA to:pointD];
+  int trRight = [self transitionsBetween:pointB to:pointD];
+  ZXResultPoint *pointAs = [self shiftPoint:pointA to:pointB div:(trRight + 1) * 4];
+  ZXResultPoint *pointCs = [self shiftPoint:pointC to:pointB div:(trTop + 1) * 4];
 
-  corr = [self distance:bottomLeft b:topLeft] / (float)dimensionRight;
-  norm = [self distance:bottomRight b:topRight];
-  cos = ([topRight x] - [bottomRight x]) / norm;
-  sin = ([topRight y] - [bottomRight y]) / norm;
+  trTop = [self transitionsBetween:pointAs to:pointD];
+  trRight = [self transitionsBetween:pointCs to:pointD];
 
-  ZXResultPoint *c2 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
+  ZXResultPoint *candidate1 = [[ZXResultPoint alloc] initWithX:pointD.x + (pointC.x - pointB.x) / (trTop + 1)
+                                                             y:pointD.y + (pointC.y - pointB.y) / (trTop + 1)];
 
-  if (![self isValid:c1]) {
-    if ([self isValid:c2]) {
-      return c2;
+  ZXResultPoint *candidate2 = [[ZXResultPoint alloc] initWithX:pointD.x + (pointA.x - pointB.x) / (trRight + 1)
+                                                             y:pointD.y + (pointA.y - pointB.y) / (trRight + 1)];
+
+  if (![self isValid:candidate1]) {
+    if ([self isValid:candidate2]) {
+      return candidate2;
     }
     return nil;
-  } else if (![self isValid:c2]) {
-    return c1;
+  }
+  if (![self isValid:candidate2]) {
+    return candidate1;
   }
 
-  int l1 = abs(dimensionTop - [[self transitionsBetween:topLeft to:c1] transitions]) + abs(dimensionRight - [[self transitionsBetween:bottomRight to:c1] transitions]);
-  int l2 = abs(dimensionTop - [[self transitionsBetween:topLeft to:c2] transitions]) + abs(dimensionRight - [[self transitionsBetween:bottomRight to:c2] transitions]);
+  int sumc1 = [self transitionsBetween:pointAs to:candidate1] + [self transitionsBetween:pointCs to:candidate1];
+  int sumc2 = [self transitionsBetween:pointAs to:candidate2] + [self transitionsBetween:pointCs to:candidate2];
 
-  if (l1 <= l2) {
-    return c1;
+  if (sumc1 > sumc2) {
+    return candidate1;
+  } else {
+    return candidate2;
   }
-
-  return c2;
-}
-
-/**
- * Calculates the position of the white top right module using the output of the rectangle detector
- * for a square matrix
- */
-- (ZXResultPoint *)correctTopRight:(ZXResultPoint *)bottomLeft bottomRight:(ZXResultPoint *)bottomRight
-                           topLeft:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight dimension:(int)dimension {
-  float corr = [self distance:bottomLeft b:bottomRight] / (float)dimension;
-  int norm = [self distance:topLeft b:topRight];
-  float cos = ([topRight x] - [topLeft x]) / norm;
-  float sin = ([topRight y] - [topLeft y]) / norm;
-
-  ZXResultPoint *c1 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
-
-  corr = [self distance:bottomLeft b:topLeft] / (float)dimension;
-  norm = [self distance:bottomRight b:topRight];
-  cos = ([topRight x] - [bottomRight x]) / norm;
-  sin = ([topRight y] - [bottomRight y]) / norm;
-
-  ZXResultPoint *c2 = [[ZXResultPoint alloc] initWithX:[topRight x] + corr * cos y:[topRight y] + corr * sin];
-
-  if (![self isValid:c1]) {
-    if ([self isValid:c2]) {
-      return c2;
-    }
-    return nil;
-  } else if (![self isValid:c2]) {
-    return c1;
-  }
-
-  int l1 = abs([[self transitionsBetween:topLeft to:c1] transitions] - [[self transitionsBetween:bottomRight to:c1] transitions]);
-  int l2 = abs([[self transitionsBetween:topLeft to:c2] transitions] - [[self transitionsBetween:bottomRight to:c2] transitions]);
-
-  return l1 <= l2 ? c1 : c2;
 }
 
 - (BOOL) isValid:(ZXResultPoint *)p {
   return [p x] >= 0 && [p x] < self.image.width && [p y] > 0 && [p y] < self.image.height;
 }
 
-- (int)distance:(ZXResultPoint *)a b:(ZXResultPoint *)b {
-  return [ZXMathUtils round:[ZXResultPoint distance:a pattern2:b]];
-}
-
-/**
- * Increments the Integer associated with a key by one.
- */
-- (void)increment:(NSMutableDictionary *)table key:(ZXResultPoint *)key {
-  NSNumber *value = table[key];
-  table[key] = value == nil ? @1 : @([value intValue] + 1);
+- (NSMutableArray *)shiftToModuleCenter:(NSMutableArray *)points {
+  return nil;
 }
 
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
@@ -316,7 +296,7 @@
 /**
  * Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
  */
-- (ZXResultPointsAndTransitions *)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to {
+- (int)transitionsBetween:(ZXResultPoint *)from to:(ZXResultPoint *)to {
   int fromX = (int)[from x];
   int fromY = (int)[from y];
   int toX = (int)[to x];
@@ -353,7 +333,7 @@
       error -= dx;
     }
   }
-  return [[ZXResultPointsAndTransitions alloc] initWithFrom:from to:to transitions:transitions];
+  return transitions;
 }
 
 @end
