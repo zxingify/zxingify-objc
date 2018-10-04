@@ -81,106 +81,6 @@
   ZXBitMatrix *bits = [self sampleGrid:self.image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:topRight dimensionX:dimensionTop dimensionY:dimensionRight error:error];
 
   return [[ZXDetectorResult alloc] initWithBits:bits points:@[topLeft, bottomLeft, bottomRight, topRight]];
-
-  /*
-  NSMutableArray *transitions = [NSMutableArray arrayWithCapacity:4];
-  [transitions addObject:[self transitionsBetween:pointA to:pointB]];
-  [transitions addObject:[self transitionsBetween:pointA to:pointC]];
-  [transitions addObject:[self transitionsBetween:pointB to:pointD]];
-  [transitions addObject:[self transitionsBetween:pointC to:pointD]];
-  [transitions sortUsingSelector:@selector(compare:)];
-
-  ZXResultPointsAndTransitions *lSideOne = (ZXResultPointsAndTransitions *)transitions[0];
-  ZXResultPointsAndTransitions *lSideTwo = (ZXResultPointsAndTransitions *)transitions[1];
-
-  NSMutableDictionary *pointCount = [NSMutableDictionary dictionary];
-  [self increment:pointCount key:[lSideOne from]];
-  [self increment:pointCount key:[lSideOne to]];
-  [self increment:pointCount key:[lSideTwo from]];
-  [self increment:pointCount key:[lSideTwo to]];
-
-  ZXResultPoint *maybeTopLeft = nil;
-  ZXResultPoint *bottomLeft = nil;
-  ZXResultPoint *maybeBottomRight = nil;
-  for (ZXResultPoint *point in [pointCount allKeys]) {
-    NSNumber *value = pointCount[point];
-    if ([value intValue] == 2) {
-      bottomLeft = point;
-    } else {
-      if (maybeTopLeft == nil) {
-        maybeTopLeft = point;
-      } else {
-        maybeBottomRight = point;
-      }
-    }
-  }
-
-  if (maybeTopLeft == nil || bottomLeft == nil || maybeBottomRight == nil) {
-    if (error) *error = ZXNotFoundErrorInstance();
-    return nil;
-  }
-
-  NSMutableArray *corners = [NSMutableArray arrayWithObjects:maybeTopLeft, bottomLeft, maybeBottomRight, nil];
-  [ZXResultPoint orderBestPatterns:corners];
-
-  ZXResultPoint *bottomRight = corners[0];
-  bottomLeft = corners[1];
-  ZXResultPoint *topLeft = corners[2];
-
-  ZXResultPoint *topRight;
-  if (!pointCount[pointA]) {
-    topRight = pointA;
-  } else if (!pointCount[pointB]) {
-    topRight = pointB;
-  } else if (!pointCount[pointC]) {
-    topRight = pointC;
-  } else {
-    topRight = pointD;
-  }
-
-  ZXBitMatrix *bits;
-  ZXResultPoint *correctedTopRight;
-
-  if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
-    correctedTopRight = [self correctTopRightRectangular:bottomLeft bottomRight:bottomRight topLeft:topLeft topRight:topRight dimensionTop:dimensionTop dimensionRight:dimensionRight];
-    if (correctedTopRight == nil) {
-      correctedTopRight = topRight;
-    }
-
-    dimensionTop = [[self transitionsBetween:topLeft to:correctedTopRight] transitions];
-    dimensionRight = [[self transitionsBetween:bottomRight to:correctedTopRight] transitions];
-
-    if ((dimensionTop & 0x01) == 1) {
-      dimensionTop++;
-    }
-
-    if ((dimensionRight & 0x01) == 1) {
-      dimensionRight++;
-    }
-
-    bits = [self sampleGrid:self.image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionTop dimensionY:dimensionRight error:error];
-    if (!bits) {
-      return nil;
-    }
-  } else {
-    int dimension = MIN(dimensionRight, dimensionTop);
-    correctedTopRight = [self correctTopRight:bottomLeft bottomRight:bottomRight topLeft:topLeft topRight:topRight dimension:dimension];
-    if (correctedTopRight == nil) {
-      correctedTopRight = topRight;
-    }
-
-    int dimensionCorrected = MAX([[self transitionsBetween:topLeft to:correctedTopRight] transitions], [[self transitionsBetween:bottomRight to:correctedTopRight] transitions]);
-    dimensionCorrected++;
-    if ((dimensionCorrected & 0x01) == 1) {
-      dimensionCorrected++;
-    }
-
-    bits = [self sampleGrid:self.image topLeft:topLeft bottomLeft:bottomLeft bottomRight:bottomRight topRight:correctedTopRight dimensionX:dimensionCorrected dimensionY:dimensionCorrected error:error];
-    if (!bits) {
-      return nil;
-    }
-  }
-  */
 }
 
 - (ZXResultPoint *)shiftPoint:(ZXResultPoint *)point to:(ZXResultPoint *)to div:(int)div {
@@ -208,12 +108,89 @@
   return [[ZXResultPoint alloc] initWithX:x y:y];
 }
 
+/**
+ * Detect a solid side which has minimum transition.
+ */
 - (NSMutableArray *)detectSolid1:(NSMutableArray *)cornerPoints {
-  return nil;
+  // 0  2
+  // 1  3
+  ZXResultPoint *pointA = cornerPoints[0];
+  ZXResultPoint *pointB = cornerPoints[1];
+  ZXResultPoint *pointC = cornerPoints[3];
+  ZXResultPoint *pointD = cornerPoints[2];
+
+  int trAB = [self transitionsBetween:pointA to:pointB];
+  int trBC = [self transitionsBetween:pointB to:pointC];
+  int trCD = [self transitionsBetween:pointC to:pointD];
+  int trDA = [self transitionsBetween:pointD to:pointA];
+
+  // 0..3
+  // :  :
+  // 1--2
+  int min = trAB;
+  NSMutableArray *points = [@[pointD, pointA, pointB, pointC] mutableCopy];
+  if (min > trBC) {
+    min = trBC;
+    points[0] = pointA;
+    points[1] = pointB;
+    points[2] = pointC;
+    points[3] = pointD;
+  }
+  if (min > trCD) {
+    min = trCD;
+    points[0] = pointB;
+    points[1] = pointC;
+    points[2] = pointD;
+    points[3] = pointA;
+  }
+  if (min > trDA) {
+    points[0] = pointC;
+    points[1] = pointD;
+    points[2] = pointA;
+    points[3] = pointB;
+  }
+
+  return points;
 }
 
+/**
+ * Detect a second solid side next to first solid side.
+ */
 - (NSMutableArray *)detectSolid2:(NSMutableArray *)points {
-  return nil;
+  // A..D
+  // :  :
+  // B--C
+  ZXResultPoint *pointA = points[0];
+  ZXResultPoint *pointB = points[1];
+  ZXResultPoint *pointC = points[2];
+  ZXResultPoint *pointD = points[3];
+
+  // Transition detection on the edge is not stable.
+  // To safely detect, shift the points to the module center.
+  int tr = [self transitionsBetween:pointA to:pointD];
+  ZXResultPoint *pointBs = [self shiftPoint:pointB to:pointC div:(tr + 1) * 4];
+  ZXResultPoint *pointCs = [self shiftPoint:pointC to:pointB div:(tr + 1) * 4];
+  int trBA = [self transitionsBetween:pointBs to:pointA];
+  int trCD = [self transitionsBetween:pointCs to:pointD];
+
+  // 0..3
+  // |  :
+  // 1--2
+  if (trBA < trCD) {
+    // solid sides: A-B-C
+    points[0] = pointA;
+    points[1] = pointB;
+    points[2] = pointC;
+    points[3] = pointD;
+  } else {
+    // solid sides: B-C-D
+    points[0] = pointB;
+    points[1] = pointC;
+    points[2] = pointD;
+    points[3] = pointA;
+  }
+
+  return points;
 }
 
 /**
@@ -267,8 +244,59 @@
   return [p x] >= 0 && [p x] < self.image.width && [p y] > 0 && [p y] < self.image.height;
 }
 
+/**
+ * Shift the edge points to the module center.
+ */
 - (NSMutableArray *)shiftToModuleCenter:(NSMutableArray *)points {
-  return nil;
+  // A..D
+  // |  :
+  // B--C
+  ZXResultPoint *pointA = points[0];
+  ZXResultPoint *pointB = points[1];
+  ZXResultPoint *pointC = points[2];
+  ZXResultPoint *pointD = points[3];
+
+  // calculate pseudo dimensions
+  int dimH = [self transitionsBetween:pointA to:pointD] + 1;
+  int dimV = [self transitionsBetween:pointC to:pointD] + 1;
+
+  // shift points for safe dimension detection
+  ZXResultPoint *pointAs = [self shiftPoint:pointA to:pointB div:dimV * 4];
+  ZXResultPoint *pointCs = [self shiftPoint:pointC to:pointB div:dimH * 4];
+
+  //  calculate more precise dimensions
+  dimH = [self transitionsBetween:pointAs to:pointD] + 1;
+  dimV = [self transitionsBetween:pointCs to:pointD] + 1;
+  if ((dimH & 0x01) == 1) {
+    dimH += 1;
+  }
+  if ((dimV & 0x01) == 1) {
+    dimV += 1;
+  }
+
+  // WhiteRectangleDetector returns points inside of the rectangle.
+  // I want points on the edges.
+  float centerX = (pointA.x + pointB.x + pointC.x + pointD.x) / 4;
+  float centerY = (pointA.y + pointB.y + pointC.y + pointD.y) / 4;
+  pointA = [self moveAway:pointA fromX:centerX fromY:centerY];
+  pointB = [self moveAway:pointB fromX:centerX fromY:centerY];
+  pointC = [self moveAway:pointC fromX:centerX fromY:centerY];
+  pointD = [self moveAway:pointD fromX:centerX fromY:centerY];
+
+  ZXResultPoint *pointBs;
+  ZXResultPoint *pointDs;
+
+  // shift points to the center of each modules
+  pointAs = [self shiftPoint:pointA to:pointB div:dimV * 4];
+  pointAs = [self shiftPoint:pointAs to:pointD div:dimH * 4];
+  pointBs = [self shiftPoint:pointB to:pointA div:dimV * 4];
+  pointBs = [self shiftPoint:pointBs to:pointC div:dimH * 4];
+  pointCs = [self shiftPoint:pointC to:pointD div:dimV * 4];
+  pointCs = [self shiftPoint:pointCs to:pointB div:dimH * 4];
+  pointDs = [self shiftPoint:pointD to:pointC div:dimV * 4];
+  pointDs = [self shiftPoint:pointDs to:pointA div:dimH * 4];
+
+  return [@[pointAs, pointBs, pointCs, pointDs] mutableCopy];
 }
 
 - (ZXBitMatrix *)sampleGrid:(ZXBitMatrix *)image
