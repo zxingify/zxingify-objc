@@ -104,6 +104,12 @@ pod 'ZXingObjC', '~> 3.5.0'
 ZXingObjC includes several example applications found in "examples" folder:
 
 * BarcodeScanner - An iOS application that captures video from the camera, scans for barcodes and displays results on screen.
+* BarcodeScannerSwift - An iOS application that captures video from the camera, scans for barcodes and displays results on screen, completely rewritten in Swift.
+
+## Kudos
+
+- [cwalcott](https://github.com/cwalcott) initial creator of this project
+- [neacao](https://github.com/neacao) for his unparalleled support lately
 
 ## License
 

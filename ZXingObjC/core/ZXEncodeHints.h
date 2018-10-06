@@ -93,6 +93,11 @@ typedef enum {
 @property (nonatomic, strong) NSNumber *margin;
 
 /**
+ * Specifies if long lines should be drawn, only applies to {`ean13`, `ean8`}.
+ */
+@property (nonatomic, assign) BOOL showLongLines;
+
+/**
  * Specifies whether to use compact mode for PDF417.
  */
 @property (nonatomic, assign) BOOL pdf417Compact;
