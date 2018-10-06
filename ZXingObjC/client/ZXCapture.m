@@ -195,7 +195,7 @@
 
 - (void)enableHeuristic {
   if (_heuristic) { return; }
-  _heuristic = TRUE;
+  _heuristic = YES;
   _parallelQueue = dispatch_queue_create("com.zxing.parallelQueue", DISPATCH_QUEUE_CONCURRENT);
 }
 
@@ -373,7 +373,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       
       CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
       CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-      [self decodeImage: videoFrameImage];
+      [self decodeImage:videoFrameImage];
     }
   }
 }
@@ -400,7 +400,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   }
   
   if (_heuristic) {
-    [self decodeImageAdv: rotatedImage];
+    [self decodeImageAdv:rotatedImage];
   }
   
   ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage];
@@ -415,44 +415,44 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     });
   }
   
-  if (self.binaryLayer || self.delegate) {
-    ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:self.invert ? [source invert] : source];
+  if (!self.binaryLayer && !self.delegate) { return; }
+  
+  ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:self.invert ? [source invert] : source];
+  
+  if (self.binaryLayer) {
+    CGImageRef image = [binarizer createImage];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+      self.binaryLayer.contents = (__bridge id)image;
+      CGImageRelease(image);
+    });
+  }
+  
+  if (self.delegate) {
+    ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
     
-    if (self.binaryLayer) {
-      CGImageRef image = [binarizer createImage];
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-        self.binaryLayer.contents = (__bridge id)image;
-        CGImageRelease(image);
+    NSError *error;
+    ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
+    if (result) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate captureResult:self result:result];
       });
-    }
-    
-    if (self.delegate) {
-      ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
-      
-      NSError *error;
-      ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
-      if (result) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-          [self.delegate captureResult:self result:result];
-        });
-      }
     }
   }
 }
 
 
 /**
- This function try to make the scalegray image darker to process
+ * This function try to make the grayscale image darker to process
  */
 - (void)decodeImageAdv:(CGImageRef)cgImage {
   CGImageRef img = CGImageCreateCopy(cgImage);
   dispatch_async(_parallelQueue, ^{
     ZXCGImageLuminanceSourceInfo *sourceInfo = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
-    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: img
-                                                                              sourceInfo: sourceInfo];
+    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:img
+                                                                              sourceInfo:sourceInfo];
     CGImageRelease(img);
     
-    ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource: source];
+    ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
     ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
     NSError *error;
     ZXResult *result = [self.reader decode:bitmap hints: self.hints error:&error];
