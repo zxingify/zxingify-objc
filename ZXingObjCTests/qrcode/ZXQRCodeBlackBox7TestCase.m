@@ -14,38 +14,31 @@
  * limitations under the License.
  */
 
-#import "ZXQRCodeBlackBox6TestCase.h"
+#import "ZXQRCodeBlackBox7TestCase.h"
+#import <ZXingObjC/ZXingObjC.h>
 
-@implementation ZXQRCodeBlackBox6TestCase
+@implementation ZXQRCodeBlackBox7TestCase
 
-/**
- * These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
- * rotation, which was a weak spot.
- */
 - (id)initWithInvocation:(NSInvocation *)invocation {
   self = [super initWithInvocation:invocation
-                testBasePathSuffix:@"Resources/blackbox/qrcode-6"
+                testBasePathSuffix:@"Resources/blackbox/qrcode-7"
                      barcodeReader:[[ZXMultiFormatReader alloc] init]
                     expectedFormat:kBarcodeFormatQRCode];
 
   if (self) {
-    [self addTest:15 tryHarderCount:15 rotation:0.0f];
-    [self addTest:14 tryHarderCount:14 rotation:90.0f];
-    [self addTest:13 tryHarderCount:13 rotation:180.0f];
-    [self addTest:14 tryHarderCount:14 rotation:270.0f];
+    [self addTest:1 tryHarderCount:1 rotation:0.0f];
+    [self addTest:1 tryHarderCount:1 rotation:90.0f];
+    [self addTest:1 tryHarderCount:1 rotation:180.0f];
+    [self addTest:1 tryHarderCount:1 rotation:270.0f];
   }
-
+    
   return self;
 }
 
 - (void)testBlackBox {
-  [super runTests];
-}
-
-- (void)testBlackBox2 {
-  ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades:16];
+  ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
   [self setLuminanceSourceInfo:info];
-  [self setShouldTruncateNewline:TRUE];
+  [self setShouldTruncateNewline:YES];
   
   [super runTests];
 }

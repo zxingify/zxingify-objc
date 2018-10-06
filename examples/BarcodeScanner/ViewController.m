@@ -50,6 +50,12 @@
 
   [self.view bringSubviewToFront:self.scanRectView];
   [self.view bringSubviewToFront:self.decodedLabel];
+    
+//    [self.capture setBinary: TRUE];
+//    [self.capture.binary setFrame: CGRectMake(150, 30, 100, 100)];
+//    [self.view.layer addSublayer: self.capture.binary];
+    
+    [self.capture enableHeuristic];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

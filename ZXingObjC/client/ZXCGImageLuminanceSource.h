@@ -16,12 +16,14 @@
 
 #import <CoreVideo/CoreVideo.h>
 #import "ZXLuminanceSource.h"
+#import "ZXCGImageLuminanceSourceInfo.h"
 
 @class ZXImage;
 
 @interface ZXCGImageLuminanceSource : ZXLuminanceSource
 
 + (CGImageRef)createImageFromBuffer:(CVImageBufferRef)buffer CF_RETURNS_RETAINED;
+
 + (CGImageRef)createImageFromBuffer:(CVImageBufferRef)buffer
                                left:(size_t)left
                                 top:(size_t)top
@@ -43,6 +45,8 @@
                height:(size_t)height;
 
 - (id)initWithCGImage:(CGImageRef)image;
+
+- (id)initWithCGImage:(CGImageRef)image sourceInfo: (ZXCGImageLuminanceSourceInfo *)sourceInfo;
 
 - (id)initWithBuffer:(CVPixelBufferRef)buffer
                 left:(size_t)left
