@@ -15,12 +15,12 @@
  */
 
 typedef enum {
-    ZXCGImageLuminanceSourceNormal = 0,
-    ZXCGImageLuminanceSourceLuma,
-    ZXCGImageLuminanceSourceShades,
-    ZXCGImageLuminanceSourceDigital,
-    ZXCGImageLuminanceSourceDecomposingMax,
-    ZXCGImageLuminanceSourceDecomposingMin,
+  ZXCGImageLuminanceSourceNormal = 0,
+  ZXCGImageLuminanceSourceLuma,
+  ZXCGImageLuminanceSourceShades,
+  ZXCGImageLuminanceSourceDigital,
+  ZXCGImageLuminanceSourceDecomposingMax,
+  ZXCGImageLuminanceSourceDecomposingMin,
 } ZXCGImageLuminanceSourceType;
 
 

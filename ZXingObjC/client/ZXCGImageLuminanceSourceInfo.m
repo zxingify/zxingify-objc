@@ -19,52 +19,52 @@
 @implementation ZXCGImageLuminanceSourceInfo
 
 - (instancetype)initWithNormal {
-    self = [super init];
-    if (self) {
-        _type = ZXCGImageLuminanceSourceNormal;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    _type = ZXCGImageLuminanceSourceNormal;
+  }
+  return self;
 }
 
 - (instancetype)initWithLuma {
-    self = [super init];
-    if (self) {
-        _type = ZXCGImageLuminanceSourceLuma;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    _type = ZXCGImageLuminanceSourceLuma;
+  }
+  return self;
 }
 
 - (instancetype)initWithShades:(uint32_t)numberOfShades {
-    self = [super init];
-    if (self) {
-        _type = ZXCGImageLuminanceSourceShades;
-        _numberOfShades = numberOfShades;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    _type = ZXCGImageLuminanceSourceShades;
+    _numberOfShades = numberOfShades;
+  }
+  return self;
 }
 
 - (instancetype)initWithDigital {
-    self = [super init];
-    if (self) {
-        _type = ZXCGImageLuminanceSourceDigital;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    _type = ZXCGImageLuminanceSourceDigital;
+  }
+  return self;
 }
 
 - (instancetype)initWithDecomposingMax {
-    self = [super init];
-    if (self) {
-        _type = ZXCGImageLuminanceSourceDecomposingMax;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    _type = ZXCGImageLuminanceSourceDecomposingMax;
+  }
+  return self;
 }
 
 - (instancetype)initWithDecomposingMin {
-    self = [super init];
-    if (self) {
-        _type = ZXCGImageLuminanceSourceDecomposingMin;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    _type = ZXCGImageLuminanceSourceDecomposingMin;
+  }
+  return self;
 }
 
 @end
