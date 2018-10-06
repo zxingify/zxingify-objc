@@ -52,10 +52,11 @@
 
   NSMutableArray *points = [self detectSolid1:[cornerPoints mutableCopy]];
   points = [self detectSolid2:points];
-  points[3] = [self correctTopRight:points];
-  if (!points[3]) {
+  ZXResultPoint *correctedTopRight = [self correctTopRight:points];
+  if (!correctedTopRight) {
     return nil;
   }
+  points[3] = correctedTopRight;
   points = [self shiftToModuleCenter:points];
 
   ZXResultPoint *topLeft = points[0];
