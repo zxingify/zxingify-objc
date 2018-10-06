@@ -26,20 +26,20 @@
                     expectedFormat:kBarcodeFormatQRCode];
 
   if (self) {
-    [self addTest: 1 tryHarderCount: 1 rotation: 0.0f];
-    [self addTest: 1 tryHarderCount: 1 rotation: 90.0f];
-    [self addTest: 1 tryHarderCount: 1 rotation: 180.0f];
-    [self addTest: 1 tryHarderCount: 1 rotation: 270.0f];
+    [self addTest:1 tryHarderCount:1 rotation:0.0f];
+    [self addTest:1 tryHarderCount:1 rotation:90.0f];
+    [self addTest:1 tryHarderCount:1 rotation:180.0f];
+    [self addTest:1 tryHarderCount:1 rotation:270.0f];
   }
     
   return self;
 }
 
 - (void)testBlackBox {
-    ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
-    [self setLuminanceSourceInfo: info];
-    [self setShouldTruncateNewline: TRUE];
-    
+  ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
+  [self setLuminanceSourceInfo:info];
+  [self setShouldTruncateNewline:YES];
+  
   [super runTests];
 }
 
