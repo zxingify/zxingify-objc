@@ -43,11 +43,11 @@
 }
 
 - (void)testBlackBox2 {
-    ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades: 16];
-    [self setLuminanceSourceInfo: info];
-    [self setShouldTruncateNewline: TRUE];
-    
-    [super runTests];
+  ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades:16];
+  [self setLuminanceSourceInfo:info];
+  [self setShouldTruncateNewline:TRUE];
+  
+  [super runTests];
 }
 
 @end
