@@ -41,6 +41,7 @@
   [super viewDidLoad];
 
   self.capture = [[ZXCapture alloc] init];
+    self.capture.sessionPreset = AVCaptureSessionPreset1920x1080;
   self.capture.camera = self.capture.back;
   self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
 
@@ -51,19 +52,15 @@
   [self.view bringSubviewToFront:self.scanRectView];
   [self.view bringSubviewToFront:self.decodedLabel];
     
-//    [self.capture setBinary: TRUE];
-//    [self.capture.binary setFrame: CGRectMake(150, 30, 100, 100)];
-//    [self.view.layer addSublayer: self.capture.binary];
+    [self.capture setLuminance: TRUE];
+    [self.capture.luminance setFrame: CGRectMake(150, 30, 100, 100)];
+    [self.view.layer addSublayer: self.capture.luminance];
     
-    [self.capture enableHeuristic];
+//    [self.capture enableHeuristic];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-
-  self.capture.delegate = self;
-
-  [self applyOrientation];
 }
 
 - (void)viewDidLayoutSubviews {
