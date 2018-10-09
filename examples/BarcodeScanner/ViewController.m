@@ -41,7 +41,7 @@
   [super viewDidLoad];
 
   self.capture = [[ZXCapture alloc] init];
-    self.capture.sessionPreset = AVCaptureSessionPreset1920x1080;
+  self.capture.sessionPreset = AVCaptureSessionPreset1920x1080;
   self.capture.camera = self.capture.back;
   self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
 
@@ -52,11 +52,11 @@
   [self.view bringSubviewToFront:self.scanRectView];
   [self.view bringSubviewToFront:self.decodedLabel];
     
-    [self.capture setLuminance: TRUE];
-    [self.capture.luminance setFrame: CGRectMake(150, 30, 100, 100)];
-    [self.view.layer addSublayer: self.capture.luminance];
+//  [self.capture setLuminance: TRUE];
+//  [self.capture.luminance setFrame: CGRectMake(150, 30, 100, 100)];
+//  [self.view.layer addSublayer: self.capture.luminance];
     
-//    [self.capture enableHeuristic];
+//  [self.capture enableHeuristic];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -108,11 +108,12 @@
 			scanRectRotation = 90;
 			break;
 	}
+    self.capture.layer.frame = self.view.frame;
+    CGAffineTransform transform = CGAffineTransformMakeRotation((CGFloat) (captureRotation / 180 * M_PI));
+    [self.capture setTransform:transform];
+    [self.capture setRotation:scanRectRotation];
+    
 	[self applyRectOfInterest:orientation];
-	CGAffineTransform transform = CGAffineTransformMakeRotation((CGFloat) (captureRotation / 180 * M_PI));
-	[self.capture setTransform:transform];
-	[self.capture setRotation:scanRectRotation];
-	self.capture.layer.frame = self.view.frame;
 }
 
 - (void)applyRectOfInterest:(UIInterfaceOrientation)orientation {
@@ -127,21 +128,21 @@
 		videoSizeY = 1280;
 	}
 	if(UIInterfaceOrientationIsPortrait(orientation)) {
-		scaleVideoX = self.view.frame.size.width / videoSizeX;
-		scaleVideoY = self.view.frame.size.height / videoSizeY;
+		scaleVideoX = self.capture.layer.frame.size.width / videoSizeX;
+		scaleVideoY = self.capture.layer.frame.size.height / videoSizeY;
 		
         // Convert CGPoint under portrait mode to map with orientation of image
         // because the image will be cropped before rotate
         // reference: https://github.com/TheLevelUp/ZXingObjC/issues/222
         CGFloat realX = transformedVideoRect.origin.y;
-        CGFloat realY = self.view.frame.size.width - transformedVideoRect.size.width - transformedVideoRect.origin.x;
+        CGFloat realY = self.capture.layer.frame.size.width - transformedVideoRect.size.width - transformedVideoRect.origin.x;
         CGFloat realWidth = transformedVideoRect.size.height;
         CGFloat realHeight = transformedVideoRect.size.width;
         transformedVideoRect = CGRectMake(realX, realY, realWidth, realHeight);
         
 	} else {
-		scaleVideoX = self.view.frame.size.width / videoSizeY;
-		scaleVideoY = self.view.frame.size.height / videoSizeX;
+		scaleVideoX = self.capture.layer.frame.size.width / videoSizeY;
+		scaleVideoY = self.capture.layer.frame.size.height / videoSizeX;
 	}
     
 	_captureSizeTransform = CGAffineTransformMakeScale(1.0/scaleVideoX, 1.0/scaleVideoY);
