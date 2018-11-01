@@ -1715,7 +1715,7 @@
 		7967E68D21646DC300C28E42 /* ZXCGImageLuminanceSourceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7967E67D2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.m */; };
 		7967E68E21646DCA00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7967E68F21646DCB00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7967E69021646DCB00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */; };
+		7967E69021646DCB00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7967E67C2163B98C00C28E42 /* ZXCGImageLuminanceSourceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		79983A472164756000E311F8 /* ZXQRCodeBlackBox7TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 79983A442164755400E311F8 /* ZXQRCodeBlackBox7TestCase.m */; };
 		79983A482164756100E311F8 /* ZXQRCodeBlackBox7TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 79983A442164755400E311F8 /* ZXQRCodeBlackBox7TestCase.m */; };
 		DB7257521A52420400EFF81B /* ZXAztecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 25403CEF166A999D00E13304 /* ZXAztecDecoder.m */; };
@@ -5119,6 +5119,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7967E69021646DCB00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */,
 				DB7259E11A52466B00EFF81B /* ZXPDF417ScanningDecoder.h in Headers */,
 				DB7259851A52452500EFF81B /* ZXDataMatrixASCIIEncoder.h in Headers */,
 				DB7259AF1A5245B000EFF81B /* ZXRSSExpandedGeneralAppIdDecoder.h in Headers */,
@@ -5307,7 +5308,6 @@
 				DB7259FA1A52474700EFF81B /* ZXQRCodeAlignmentPatternFinder.h in Headers */,
 				DB7259CF1A52461B00EFF81B /* ZXUPCEANExtension2Support.h in Headers */,
 				DB7259E81A5246E400EFF81B /* ZXPDF417ErrorCorrection.h in Headers */,
-				7967E69021646DCB00C28E42 /* ZXCGImageLuminanceSourceInfo.h in Headers */,
 				DB7259F51A52473100EFF81B /* ZXQRCodeErrorCorrectionLevel.h in Headers */,
 				DB7259CA1A52461300EFF81B /* ZXMultiFormatUPCEANReader.h in Headers */,
 				DB7259C21A52460100EFF81B /* ZXEAN13Writer.h in Headers */,
