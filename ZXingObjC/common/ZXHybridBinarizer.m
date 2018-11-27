@@ -17,6 +17,7 @@
 #import "ZXByteArray.h"
 #import "ZXHybridBinarizer.h"
 #import "ZXIntArray.h"
+#import "ZXErrors.h"
 
 // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
 // So this is the smallest dimension in each axis we can accept.
@@ -46,6 +47,11 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
   ZXLuminanceSource *source = [self luminanceSource];
   int width = source.width;
   int height = source.height;
+  if (width == 0 || height == 0) {
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Source is empty"};
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
+    return nil;
+  }
   if (width >= ZX_MINIMUM_DIMENSION && height >= ZX_MINIMUM_DIMENSION) {
     ZXByteArray *luminances = source.matrix;
     int subWidth = width >> ZX_BLOCK_SIZE_POWER;
