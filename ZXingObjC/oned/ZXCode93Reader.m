@@ -236,11 +236,20 @@ const int ZX_CODE93_ASTERISK_ENCODING = 0x15E;
         } else if (next >= 'K' && next <= 'O') {
           // %K to %O map to [ \ ] ^ _
           decodedChar = (unichar) (next + 16);
-        } else if (next >= 'P' && next <= 'S') {
-          // %P to %S map to { | } ~
+        } else if (next >= 'P' && next <= 'T') {
+            // %P to %T map to { | } ~ DEL
           decodedChar = (unichar) (next + 43);
-        } else if (next >= 'T' && next <= 'Z') {
-          // %T to %Z all map to DEL (127)
+        } else if (next == 'U') {
+            // %U map to NUL
+            decodedChar = '\0';
+        } else if (next == 'V') {
+            // %V map to @
+            decodedChar = '@';
+        } else if (next == 'W') {
+            // %W map to `
+            decodedChar = '`';
+        } else if (next >= 'X' && next <= 'Z') {
+            // %X to %Z all map to DEL (127)
           decodedChar = 127;
         } else {
           return nil;
