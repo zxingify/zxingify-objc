@@ -48,15 +48,7 @@
   }
 
   ZXIntArray *widths = [[ZXIntArray alloc] initWithLength:9];
-  int codeWidth = 24 + 1 + length;
-  for (int i = 0; i < length; i++) {
-    NSUInteger indexInString = [ZX_CODE39_ALPHABET_STRING rangeOfString:[contents substringWithRange:NSMakeRange(i, 1)]].location;
-    if (indexInString == NSNotFound) {
-      [NSException raise:NSInvalidArgumentException format:@"Bad contents: %@", contents];
-    }
-    [self toIntArray:ZX_CODE39_CHARACTER_ENCODINGS[indexInString] toReturn:widths];
-    codeWidth += [widths sum];
-  }
+  int codeWidth = 24 + 1 + (13 * length);
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:codeWidth];
   [self toIntArray:ZX_CODE39_ASTERISK_ENCODING toReturn:widths];
   int pos = [self appendPattern:result pos:0 pattern:widths.array patternLen:widths.length startColor:YES];
