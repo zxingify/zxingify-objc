@@ -211,17 +211,23 @@ typedef enum {
 - (int)chooseCodeFrom:(NSString *)contents position:(int)position oldCode:(int)oldCode {
   ZXCType lookahead = [self findCTypeIn:contents start:position];
   if (lookahead == ZXCTypeOneDigit) {
+    if (oldCode == ZX_CODE128_CODE_CODE_A) {
+      return ZX_CODE128_CODE_CODE_A;
+    }
     return ZX_CODE128_CODE_CODE_B;
   }
   if (lookahead == ZXCTypeUncodable) {
     if (position < contents.length) {
       unichar c = [contents characterAtIndex:position];
-      if (c < ' ' || (oldCode == ZX_CODE128_CODE_CODE_A && c < '`')) {
-        // can continue in code A, encodes ASCII 0 to 95
+      if (c < ' ' || (oldCode == ZX_CODE128_CODE_CODE_A && (c < '`' || (c >= ZX_CODE128_ESCAPE_FNC_1 && c <= ZX_CODE128_ESCAPE_FNC_4)))) {
+        // can continue in code A, encodes ASCII 0 to 95 or FNC1 to FNC4
         return ZX_CODE128_CODE_CODE_A;
       }
     }
     return ZX_CODE128_CODE_CODE_B; // no choice
+  }
+  if (oldCode == ZX_CODE128_CODE_CODE_A && lookahead == ZXCTypeFNC1) {
+    return ZX_CODE128_CODE_CODE_A;
   }
   if (oldCode == ZX_CODE128_CODE_CODE_C) { // can continue in code C
     return ZX_CODE128_CODE_CODE_C;
