@@ -20,7 +20,8 @@
 const NSString *ZX_FNC1 = @"11110101110";
 const NSString *ZX_FNC2 = @"11110101000";
 const NSString *ZX_FNC3 = @"10111100010";
-const NSString *ZX_FNC4 = @"10111101110";
+const NSString *ZX_FNC4A = @"11101011110";
+const NSString *ZX_FNC4B = @"10111101110";
 const NSString *ZX_START_CODE_A = @"11010000100";
 const NSString *ZX_START_CODE_B = @"11010010000";
 const NSString *ZX_START_CODE_C = @"11010011100";
@@ -28,6 +29,7 @@ const NSString *ZX_SWITCH_CODE_A = @"11101011110";
 const NSString *ZX_SWITCH_CODE_B = @"10111101110";
 const NSString *ZX_QUIET_SPACE = @"00000";
 const NSString *ZX_STOP = @"1100011101011";
+const NSString *ZX_LF = @"10000110010";
 
 @interface ZXCode128WriterTestCase ()
 
@@ -79,7 +81,19 @@ const NSString *ZX_STOP = @"1100011101011";
 - (void)testEncodeWithFunc4 {
   NSString *toEncode = [NSString stringWithFormat:@"%C123", (unichar)L'\u00f4'];
   //                                                                                                                   "1"            "2"             "3"          check digit 59
-  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_B, ZX_FNC4, @"10011100110", @"11001110010", @"11001011100", @"11100011010", ZX_STOP, ZX_QUIET_SPACE];
+  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_B, ZX_FNC4B, @"10011100110", @"11001110010", @"11001011100", @"11100011010", ZX_STOP, ZX_QUIET_SPACE];
+
+  ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
+
+  NSString *actual = [self matrixToString:result];
+  XCTAssertEqualObjects(actual, expected);
+}
+
+- (void)testEncodeWithFncsAndNumberInCodesetA {
+  NSString *toEncode = [NSString stringWithFormat:@"\n%C%C1\n", (unichar) 0x00f1, 0x00f4];
+  // start with A switch to B and back to A
+  //                                                      "\0"            "A"             "B"             Switch to B     "a"             "b"             Switch to A     "\u0010"        check digit
+  NSString *expected = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@", ZX_QUIET_SPACE, ZX_START_CODE_A, ZX_LF, ZX_FNC1, ZX_FNC4A, @"10011100110", ZX_LF, @"10101111000", ZX_STOP, ZX_QUIET_SPACE];
 
   ZXBitMatrix *result = [self.writer encode:toEncode format:kBarcodeFormatCode128 width:0 height:0 error:nil];
 
