@@ -47,8 +47,8 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
   ZXLuminanceSource *source = [self luminanceSource];
   int width = source.width;
   int height = source.height;
-  if (width == 0 || height == 0) {
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Source is empty"};
+  if (width <= 0 || height <= 0) {
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Source is empty or misbehaving."};
     if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
     return nil;
   }
