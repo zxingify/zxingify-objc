@@ -96,7 +96,7 @@ github "TheLevelUp/ZXingObjC" ~> 3.6
 
 ```ruby
 platform :ios, '8.0'
-pod 'ZXingObjC', '~> 3.6.2'
+pod 'ZXingObjC', '~> 3.6.3'
 ```
 
 ## Examples
