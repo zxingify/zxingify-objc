@@ -114,8 +114,8 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
                                     error:error];
 }
 
-- (BOOL)checkChecksum:(NSString *)s error:(NSError **)error {
-  return [super checkChecksum:[ZXUPCEReader convertUPCEtoUPCA:s] error:error];
++ (BOOL)checkStandardUPCEANChecksum:(NSString *)s {
+    return [super checkStandardUPCEANChecksum:[ZXUPCEReader convertUPCEtoUPCA:s]];
 }
 
 - (BOOL)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {

@@ -1671,7 +1671,6 @@
 		4B2058252155B4F1009146DB /* ZXRGBLuminanceSourceTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B20581C2155B19C009146DB /* ZXRGBLuminanceSourceTestCase.m */; };
 		4B2058262155B4F1009146DB /* ZXRGBLuminanceSourceTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B20581C2155B19C009146DB /* ZXRGBLuminanceSourceTestCase.m */; };
 		4B42B89F215904EB0010C328 /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B89E215904EB0010C328 /* ZXUPCEWriterTestCase.m */; };
-		4B42B8A0215904EB0010C328 /* ZXUPCEWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B89E215904EB0010C328 /* ZXUPCEWriterTestCase.m */; };
 		4B42B8A421590C920010C328 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */; };
 		4B42B8A521590C920010C328 /* ZXITFWriterTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A321590C920010C328 /* ZXITFWriterTestCase.m */; };
 		4B42B8A7215917A40010C328 /* ZXCode39ExtendedModeTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B42B8A6215917A40010C328 /* ZXCode39ExtendedModeTestCase.m */; };
@@ -6166,7 +6165,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B42B8A0215904EB0010C328 /* ZXUPCEWriterTestCase.m in Sources */,
 				023E69A118C0EF55001FF123 /* ZXAztecBlackBox1TestCase.m in Sources */,
 				023E69A218C0EF55001FF123 /* ZXAztecBlackBox2TestCase.m in Sources */,
 				023E69A318C0EF55001FF123 /* ZXAbstractBlackBoxTestCase.m in Sources */,

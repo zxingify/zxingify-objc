@@ -42,6 +42,18 @@
   }
 }
 
+- (void)testAddChecksumAndEncodeWithChecksum {
+    NSString *testStr = @"0000000000010100111010001101001110101011110001101010011101010100000000000";
+    ZXBitMatrix *result = [[[ZXUPCEWriter alloc] init] encode:@"04046008"
+                                                       format:kBarcodeFormatUPCE
+                                                        width:(int)testStr.length
+                                                       height:0
+                                                        error:nil];
+    for (int i = 0; i < testStr.length; i++) {
+        XCTAssertEqual([result getX:i y:0], [testStr characterAtIndex:i] == '1', @"Element %d", i);
+    }
+}
+
 - (void)testEncodeIllegalCharacters {
   XCTAssertThrows([[[ZXUPCEWriter alloc] init] encode:@"05096abc"
                                                 format:kBarcodeFormatUPCE
