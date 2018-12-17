@@ -41,7 +41,7 @@ const int ZX_UPCE_CODE_WIDTH = 3 + (7 * 6) + 6;
       contents = [contents stringByAppendingString:[NSString stringWithFormat:@"%d", [ZXUPCEANReader standardUPCEANChecksum:[ZXUPCEReader convertUPCEtoUPCA:contents]]]];
       break;
     case 8:
-      if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
+      if (![ZXUPCEReader checkStandardUPCEANChecksum:contents]) {
         @throw [NSException exceptionWithName:@"IllegalArgumentException"
                                        reason:@"Contents do not pass checksum"
                                      userInfo:nil];
