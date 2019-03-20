@@ -121,7 +121,15 @@
       if (error) *error = [NSError errorWithDomain:ZXErrorDomain code:ZXWriterError userInfo:@{NSLocalizedDescriptionKey: @"No encoder available for format"}];
       return nil;
   }
-  return [writer encode:contents format:format width:width height:height hints:hints error:error];
+
+  @try {
+    return [writer encode:contents format:format width:width height:height hints:hints error:error];
+  } @catch (NSException *exception) {
+    if (error) {
+        *error = [NSError errorWithDomain:ZXErrorDomain code:ZXWriterError userInfo:@{NSLocalizedDescriptionKey: exception.reason}];
+    }
+    return nil;
+  }
 }
 
 @end
