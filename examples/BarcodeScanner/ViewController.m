@@ -46,7 +46,7 @@
   self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
   self.capture.delegate = self;
   
-  self.scanning = YES;
+  self.scanning = NO;
   
   [self.view.layer addSublayer:self.capture.layer];
   
@@ -208,6 +208,10 @@
 }
 
 #pragma mark - ZXCaptureDelegate Methods
+
+- (void)captureCameraIsReady:(ZXCapture *)capture {
+  self.scanning = YES;
+}
 
 - (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result {
   if (!self.scanning) return;
