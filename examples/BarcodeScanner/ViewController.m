@@ -44,6 +44,7 @@
   self.capture.sessionPreset = AVCaptureSessionPreset1920x1080;
   self.capture.camera = self.capture.back;
   self.capture.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+  self.capture.delegate = self;
   
   self.scanning = YES;
   
