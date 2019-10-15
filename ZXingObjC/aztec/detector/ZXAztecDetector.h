@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXAztecPoint : NSObject
 
 @property (nonatomic, assign, readonly) int x;

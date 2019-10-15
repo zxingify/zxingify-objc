@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXRSSExpandedCurrentParsingState : NSObject
 
 @property (nonatomic, assign) int position;

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Records EAN prefix to GS1 Member Organization, where the member organization
  * correlates strongly with a country. This is an imperfect means of identifying

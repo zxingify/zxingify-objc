@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXBoolArray : NSObject
 
 @property (nonatomic, assign, readonly) BOOL *array;

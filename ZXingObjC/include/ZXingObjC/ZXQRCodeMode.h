@@ -1,0 +1,1 @@
+../../qrcode/decoder/ZXQRCodeMode.h

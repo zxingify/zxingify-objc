@@ -1,0 +1,1 @@
+../../core/ZXingObjCCore.h

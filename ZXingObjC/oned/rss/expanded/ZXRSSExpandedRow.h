@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * One row of an RSS Expanded Stacked symbol, consisting of 1+ expanded pairs.
  */

@@ -1,0 +1,1 @@
+../../multi/ZXGenericMultipleBarcodeReader.h

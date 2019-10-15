@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Drop-in replacement for `NSDecimalNumber`.
  * @see ZXPDF417DecodedBitStreamParser.m#L696

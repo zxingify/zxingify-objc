@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 typedef enum {
   ZXCGImageLuminanceSourceNormal = 0,
   ZXCGImageLuminanceSourceLuma,

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXPDF417ResultMetadata : NSObject
 
 @property (nonatomic, assign) int segmentIndex;
