@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXByteArray : NSObject
 
 @property (nonatomic, assign, readonly) int8_t *array;

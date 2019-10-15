@@ -1,0 +1,5 @@
+module ZXingObjC {
+    umbrella header "ZXingObjC/ZXingObjC.h"
+    export *
+    module * { export * }
+}

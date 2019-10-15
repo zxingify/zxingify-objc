@@ -1,0 +1,1 @@
+../../maxicode/ZXingObjCMaxiCode.h

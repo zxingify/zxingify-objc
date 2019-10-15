@@ -1,0 +1,1 @@
+../../qrcode/multi/ZXQRCodeMultiReader.h

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 extern NSArray *ZX_AZTEC_MODE_NAMES;
 
 extern const int ZX_AZTEC_MODE_UPPER;

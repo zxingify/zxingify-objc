@@ -1,0 +1,1 @@
+../../common/detector/ZXWhiteRectangleDetector.h
