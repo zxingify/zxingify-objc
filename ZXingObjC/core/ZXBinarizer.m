@@ -16,7 +16,7 @@
 
 #import "ZXBinarizer.h"
 
-#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR || TARGET_OS_MACCATALYST
 #import <UIKit/UIKit.h>
 #define ZXBlack [[UIColor blackColor] CGColor]
 #define ZXWhite [[UIColor whiteColor] CGColor]
