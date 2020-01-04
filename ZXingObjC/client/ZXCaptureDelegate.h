@@ -19,13 +19,16 @@
 
 @protocol ZXCaptureDelegate <NSObject>
 
-- (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result;
-
 @optional
 - (void)captureSize:(ZXCapture *)capture
               width:(NSNumber *)width
              height:(NSNumber *)height;
 
 - (void)captureCameraIsReady:(ZXCapture *)capture;
+
+- (void)captureResult:(ZXCapture *)capture result:(ZXResult *)result;
+
+//支持多个条码扫描
+- (void)captureResult:(ZXCapture *)capture results:(NSArray *)results;
 
 @end
