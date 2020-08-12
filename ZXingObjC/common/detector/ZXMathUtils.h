@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXMathUtils : NSObject
 
+/**
+ * Ends up being a bit faster than round(). This merely rounds its
+ * argument to the nearest int, where x.5 rounds up to x+1.
+ *
+ * @param d real value to round
+ * @return nearest int
+ */
 + (int)round:(float)d;
+
 + (float)distance:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY;
+
 + (float)distanceInt:(int)aX aY:(int)aY bX:(int)bX bY:(int)bY;
 
 @end

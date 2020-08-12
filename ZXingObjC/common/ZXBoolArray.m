@@ -27,6 +27,21 @@
   return self;
 }
 
+- (id)initWithLength:(unsigned int)length values:(int)value1, ... {
+  if ((self = [self initWithLength:length]) && (length > 0)) {
+    va_list args;
+    va_start(args, value1);
+    _array[0] = value1 == 1 ? true : false;
+    for (int i = 1; i < length; i++) {
+      int value = va_arg(args, int);
+      _array[i] = value == 1 ? true : false;
+    }
+    va_end(args);
+  }
+
+  return self;
+}
+
 - (void)dealloc {
   if (_array) {
     free(_array);

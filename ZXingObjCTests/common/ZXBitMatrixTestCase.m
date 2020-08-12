@@ -51,6 +51,50 @@ static ZXIntArray *BIT_MATRIX_POINTS = nil;
   }
 }
 
+- (void)testEnclosing {
+    ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:5];
+    XCTAssertNil([matrix enclosingRectangle]);
+    [matrix setRegionAtLeft:1 top:1 width:1 height:1];
+    ZXIntArray *actual = [matrix enclosingRectangle];
+    ZXIntArray *expected = [[ZXIntArray alloc] initWithInts:1, 1, 1, 1, -1];
+    XCTAssertEqualObjects(expected, actual);
+    [matrix setRegionAtLeft:1 top:1 width:3 height:2];
+    actual = [matrix enclosingRectangle];
+    expected = [[ZXIntArray alloc] initWithInts:1, 1, 3, 2, -1];
+    XCTAssertEqualObjects(expected, actual);
+    [matrix setRegionAtLeft:0 top:0 width:5 height:5];
+    actual = [matrix enclosingRectangle];
+    expected = [[ZXIntArray alloc] initWithInts:0, 0, 5, 5, -1];
+    XCTAssertEqualObjects(expected, actual);
+}
+
+- (void)testOnBit {
+    ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithDimension:5];
+    XCTAssertNil([matrix topLeftOnBit]);
+    XCTAssertNil([matrix bottomRightOnBit]);
+    [matrix setRegionAtLeft:1 top:1 width:1 height:1];
+    ZXIntArray *actual = [matrix topLeftOnBit];
+    ZXIntArray *expected = [[ZXIntArray alloc] initWithInts:1, 1, -1];
+    XCTAssertEqualObjects(expected, actual);
+    actual = [matrix bottomRightOnBit];
+    expected = [[ZXIntArray alloc] initWithInts:1, 1, -1];
+    XCTAssertEqualObjects(expected, actual);
+    [matrix setRegionAtLeft:1 top:1 width:3 height:2];
+    actual = [matrix topLeftOnBit];
+    expected = [[ZXIntArray alloc] initWithInts:1, 1, -1];
+    XCTAssertEqualObjects(expected, actual);
+    actual = [matrix bottomRightOnBit];
+    expected = [[ZXIntArray alloc] initWithInts:3, 2, -1];
+    XCTAssertEqualObjects(expected, actual);
+    [matrix setRegionAtLeft:0 top:0 width:5 height:5];
+    actual = [matrix topLeftOnBit];
+    expected = [[ZXIntArray alloc] initWithInts:0, 0, -1];
+    XCTAssertEqualObjects(expected, actual);
+    actual = [matrix bottomRightOnBit];
+    expected = [[ZXIntArray alloc] initWithInts:4, 4, -1];
+    XCTAssertEqualObjects(expected, actual);
+}
+
 - (void)testRectangularMatrix {
   ZXBitMatrix *matrix = [[ZXBitMatrix alloc] initWithWidth:75 height:20];
   XCTAssertEqual(75, matrix.width);

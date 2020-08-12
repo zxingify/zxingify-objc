@@ -153,9 +153,11 @@ const int ZX_GB2312_SUBSET = 1;
   while (count > 0) {
     int twoBytes = [bits readBits:13];
     int assembledTwoBytes = ((twoBytes / 0x060) << 8) | (twoBytes % 0x060);
-    if (assembledTwoBytes < 0x003BF) {
+    if (assembledTwoBytes < 0x00A00) {
+      // In the 0xA1A1 to 0xAAFE range
       assembledTwoBytes += 0x0A1A1;
     } else {
+      // In the 0xB0A1 to 0xFAFE range
       assembledTwoBytes += 0x0A6A1;
     }
     int8_t bytes[2];

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXIntArray : NSObject <NSCopying>
 
 @property (nonatomic, assign, readonly) int32_t *array;

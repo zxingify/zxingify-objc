@@ -113,7 +113,9 @@
   if (points) {
     for (int i = 0; i < points.count; i++) {
       ZXResultPoint *relative = points[i];
-      points[i] = [[ZXResultPoint alloc] initWithX:relative.x + leftOffset y:relative.y + topOffset];
+      if (relative) {
+        points[i] = [[ZXResultPoint alloc] initWithX:relative.x + leftOffset y:relative.y + topOffset];
+      }
     }
   }
 }

@@ -80,16 +80,19 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   if (!correctedBits) {
     return nil;
   }
-    NSMutableArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray: correctedBits];
-    NSString *result = [[self class] encodedData:correctedBits];
-    
-    NSUInteger rawBytesSize = [rawBytes count];
-    ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
-    for (int i = 0; i < rawBytesSize; i++) {
-        rawBytesReturned.array[i] = (int8_t)[rawBytes[i] intValue];
-    }
-    
-    return [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
+  ZXByteArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray:correctedBits];
+  NSString *result = [[self class] encodedData:correctedBits];
+  
+  NSUInteger rawBytesSize = rawBytes.length;
+  ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
+  for (int i = 0; i < rawBytesSize; i++) {
+    rawBytesReturned.array[i] = (int8_t)rawBytes.array[i];
+  }
+  
+  ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
+  decoderResult.numBits = correctedBits.length;
+  
+  return decoderResult;
 }
 
 + (NSString *)highLevelDecode:(ZXBoolArray *)correctedBits {
@@ -144,6 +147,10 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
       NSString *str = [self character:shiftTable code:code];
       if ([str hasPrefix:@"CTRL_"]) {
         // Table changes
+        // ISO/IEC 24778:2008 prescibes ending a shift sequence in the mode from which it was invoked.
+        // That's including when that mode is a shift.
+        // Our test case dlusbs.png for issue #642 exercises that.
+        latchTable = shiftTable;  // Latch the current mode, so as to return to Upper after U/S B/S
         shiftTable = [self table:[str characterAtIndex:5]];
         if ([str characterAtIndex:6] == 'L') {
           latchTable = shiftTable;
@@ -355,23 +362,23 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
 /**
  * Reads a code of length 8 in an array of bits, padding with zeros
  */
-+ (int) readByte:(ZXBoolArray *) rawbits startIndex:(int) startIndex {
++ (int8_t) readByte:(ZXBoolArray *) rawbits startIndex:(int) startIndex {
     int n = rawbits.length - startIndex;
     if (n >= 8) {
-        return (int) [self readCode:rawbits startIndex:startIndex length:8];
+        return (int8_t) [self readCode:rawbits startIndex:startIndex length:8];
     }
-    return (int) ([self readCode:rawbits startIndex:startIndex length:n] << (8 - n));
+    return (int8_t) ([self readCode:rawbits startIndex:startIndex length:n] << (8 - n));
 }
 
 /**
  * Packs a bit array into bytes, most significant bit first
  */
-+ (NSMutableArray *) convertBoolArrayToByteArray:(ZXBoolArray *) boolArr {
-    NSMutableArray *byteArr = [[NSMutableArray alloc] init];
++ (ZXByteArray *)convertBoolArrayToByteArray:(ZXBoolArray *) boolArr {
     int byteArrLength = (boolArr.length + 7) / 8;
+    ZXByteArray *byteArr = [[ZXByteArray alloc] initWithLength:byteArrLength];
     for (int i = 0; i < byteArrLength; i++) {
-        int code = [self readByte:boolArr startIndex:8 * i];
-        [byteArr addObject:@(code)];
+        int8_t code = [self readByte:boolArr startIndex:8 * i];
+        byteArr.array[i] = code;
     }
     return byteArr;
 }

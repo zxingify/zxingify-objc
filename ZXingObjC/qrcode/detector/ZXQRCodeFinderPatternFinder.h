@@ -66,6 +66,6 @@ extern const int ZX_FINDER_PATTERN_MAX_MODULES;
  * @param j end of possible finder pattern in row
  * @return true if a finder pattern candidate was found this time
  */
-- (BOOL)handlePossibleCenter:(const int[])stateCount i:(int)i j:(int)j pureBarcode:(BOOL)pureBarcode;
+- (BOOL)handlePossibleCenter:(const int[])stateCount i:(int)i j:(int)j;
 
 @end

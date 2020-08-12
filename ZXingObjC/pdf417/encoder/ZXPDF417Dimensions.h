@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Data object to specify the minimum and maximum number of rows and columns for a PDF417 barcode.
  */

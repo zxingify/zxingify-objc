@@ -24,6 +24,7 @@
 #if defined(ZXINGOBJC_ONED) || !defined(ZXINGOBJC_USE_SUBSPECS)
 #import "ZXCodaBarWriter.h"
 #import "ZXCode39Writer.h"
+#import "ZXCode93Writer.h"
 #import "ZXCode128Writer.h"
 #import "ZXEAN8Writer.h"
 #import "ZXEAN13Writer.h"
@@ -75,6 +76,10 @@
       writer = [[ZXCode39Writer alloc] init];
       break;
 
+    case kBarcodeFormatCode93:
+      writer = [[ZXCode93Writer alloc] init];
+      break;
+
     case kBarcodeFormatCode128:
       writer = [[ZXCode128Writer alloc] init];
       break;
@@ -116,7 +121,15 @@
       if (error) *error = [NSError errorWithDomain:ZXErrorDomain code:ZXWriterError userInfo:@{NSLocalizedDescriptionKey: @"No encoder available for format"}];
       return nil;
   }
-  return [writer encode:contents format:format width:width height:height hints:hints error:error];
+
+  @try {
+    return [writer encode:contents format:format width:width height:height hints:hints error:error];
+  } @catch (NSException *exception) {
+    if (error) {
+        *error = [NSError errorWithDomain:ZXErrorDomain code:ZXWriterError userInfo:@{NSLocalizedDescriptionKey: exception.reason}];
+    }
+    return nil;
+  }
 }
 
 @end

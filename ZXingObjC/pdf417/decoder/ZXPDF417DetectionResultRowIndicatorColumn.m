@@ -125,7 +125,8 @@
       int rowNumber = codeword.rowNumber;
       if (rowNumber >= result.length) {
         *rowHeights = nil;
-        return NO;
+        // We have more rows than the barcode metadata allows for, ignore them.
+        continue;
       }
       result.array[rowNumber]++;
     } // else throw exception?

@@ -43,6 +43,7 @@
 @property (nonatomic, copy) NSString *sessionPreset;
 @property (nonatomic, assign) BOOL torch;
 @property (nonatomic, assign) CGAffineTransform transform;
+@property (nonatomic, assign) CGFloat captureFramesPerSec;
 
 - (int)back;
 - (int)front;
@@ -60,5 +61,14 @@
 - (void)order_skip;
 - (void)start;
 - (void)stop;
+
+/**
+ * This enables `ZXCapture` to try additional heuristics to decode
+ * the barcode.
+ *
+ * @see `ZXCGImageLuminanceSourceInfo`
+ * Currently: make the grayscale image darker to process
+ */
+- (void)enableHeuristic;
 
 @end

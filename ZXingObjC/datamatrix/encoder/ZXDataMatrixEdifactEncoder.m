@@ -40,6 +40,7 @@
 
       int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
       if (newMode != [self encodingMode]) {
+        // Return to ASCII encodation, which will actually handle latch to new mode
         [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
         break;
       }
@@ -66,7 +67,12 @@
       [context updateSymbolInfo];
       int available = context.symbolInfo.dataCapacity - context.codewordCount;
       int remaining = [context remainingCharacters];
-      if (remaining == 0 && available <= 2) {
+      // The following two lines are a hack inspired by the 'fix' from https://sourceforge.net/p/barcode4j/svn/221/
+      if (remaining > available) {
+        [context updateSymbolInfoWithLength:context.codewordCount + 1];
+        available = context.symbolInfo.dataCapacity - context.codewordCount;
+      }
+      if (remaining <= available && available <= 2) {
         return; //No unlatch
       }
     }

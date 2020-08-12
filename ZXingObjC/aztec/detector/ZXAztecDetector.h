@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXAztecPoint : NSObject
 
 @property (nonatomic, assign, readonly) int x;
@@ -38,7 +40,9 @@
 /**
  * Detects an Aztec Code in an image.
  *
- * @return ZXAztecDetectorResult encapsulating results of detecting an Aztec Code, or nil if no Aztec Code can be found
+ * @param isMirror if true, image is a mirror-image of original
+ * @return ZXAztecDetectorResult encapsulating results of detecting an Aztec Code, or nil if no
+ *   Aztec Code can be found
  */
 - (ZXAztecDetectorResult *)detectWithMirror:(BOOL)isMirror error:(NSError **)error;
 

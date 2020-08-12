@@ -1,0 +1,1 @@
+../../maxicode/decoder/ZXMaxiCodeDecoder.h

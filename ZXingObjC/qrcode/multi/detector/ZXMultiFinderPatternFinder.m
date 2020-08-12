@@ -46,8 +46,8 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
 @implementation ZXMultiFinderPatternFinder
 
 /**
- * Returns the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
- * those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
+ * Returns the 3 best `ZXFinderPattern`s from our list of candidates. The "best" are
+ * those that have been detected at least ZXCENTER_QUORUM times, and whose module
  * size differs from the average among those patterns the least
  */
 - (NSArray *)selectBestPatternsWithError:(NSError **)error {
@@ -155,7 +155,6 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
 
 - (NSArray *)findMulti:(ZXDecodeHints *)hints error:(NSError **)error {
   BOOL tryHarder = hints != nil && hints.tryHarder;
-  BOOL pureBarcode = hints != nil && hints.pureBarcode;
   int maxI = self.image.height;
   int maxJ = self.image.width;
   // We are looking for black/white/black/white/black modules in
@@ -165,7 +164,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
   // image, and then account for the center being 3 modules in size. This gives the smallest
   // number of pixels the center could be, so skip this often. When trying harder, look for all
   // QR versions regardless of how dense they are.
-  int iSkip = (int)(maxI / (ZX_FINDER_PATTERN_MAX_MODULES * 4.0f) * 3);
+  int iSkip = (3 * maxI) / (4 * ZX_FINDER_PATTERN_MAX_MODULES);
   if (iSkip < ZX_FINDER_PATTERN_MIN_SKIP || tryHarder) {
     iSkip = ZX_FINDER_PATTERN_MIN_SKIP;
   }
@@ -188,7 +187,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
       } else {
         if ((currentState & 1) == 0) {
           if (currentState == 4) {
-            if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j pureBarcode:pureBarcode]) {
+            if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount] && [self handlePossibleCenter:stateCount i:i j:j]) {
               currentState = 0;
               stateCount[0] = 0;
               stateCount[1] = 0;
@@ -213,7 +212,7 @@ float const ZX_DIFF_MODSIZE_CUTOFF = 0.5f;
     }
 
     if ([ZXQRCodeFinderPatternFinder foundPatternCross:stateCount]) {
-      [self handlePossibleCenter:stateCount i:i j:maxJ pureBarcode:pureBarcode];
+      [self handlePossibleCenter:stateCount i:i j:maxJ];
     }
   }
   NSArray *patternInfo = [self selectBestPatternsWithError:error];

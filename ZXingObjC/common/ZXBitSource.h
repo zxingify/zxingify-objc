@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @class ZXByteArray;
 
 /**
@@ -26,12 +28,12 @@
 @interface ZXBitSource : NSObject
 
 /**
- * @return index of next bit in current byte which would be read by the next call to {@link #readBits(int)}.
+ * @return index of next bit in current byte which would be read by the next call to `readBits:`.
  */
 @property (nonatomic, assign, readonly) int bitOffset;
 
 /**
- * @return index of next byte in input byte array which would be read by the next call to {@link #readBits(int)}.
+ * @return index of next byte in input byte array which would be read by the next call to `readBits:`.
  */
 @property (nonatomic, assign, readonly) int byteOffset;
 

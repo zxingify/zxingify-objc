@@ -41,6 +41,8 @@
 @property (nonatomic, assign) BOOL running;
 @property (nonatomic, strong) AVCaptureSession *session;
 
+@property (nonatomic, assign) BOOL heuristic;
+@property (nonatomic, copy) dispatch_queue_t parallelQueue;
 @end
 
 @implementation ZXCapture
@@ -56,17 +58,18 @@
     _onScreen = NO;
     _orderInSkip = 0;
     _orderOutSkip = 0;
-
+    _captureFramesPerSec = 3.0f;
+    
     if (NSClassFromString(@"ZXMultiFormatReader")) {
       _reader = [NSClassFromString(@"ZXMultiFormatReader") performSelector:@selector(reader)];
     }
-
+    
     _rotation = 0.0f;
     _running = NO;
     _transform = CGAffineTransformIdentity;
     _scanRect = CGRectZero;
   }
-
+  
   return self;
 }
 
@@ -74,13 +77,13 @@
   if (_lastScannedImage) {
     CGImageRelease(_lastScannedImage);
   }
-
+  
   if (_session && _session.inputs) {
     for (AVCaptureInput *input in _session.inputs) {
       [_session removeInput:input];
     }
   }
-
+  
   if (_session && _session.outputs) {
     for (AVCaptureOutput *output in _session.outputs) {
       [_session removeOutput:output];
@@ -96,9 +99,8 @@
     layer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
     layer.affineTransform = self.transform;
     layer.delegate = self;
-    layer.videoGravity = AVLayerVideoGravityResizeAspect;
     layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-
+    
     _layer = layer;
   }
   return layer;
@@ -108,14 +110,14 @@
   if (!_output) {
     _output = [[AVCaptureVideoDataOutput alloc] init];
     [_output setVideoSettings:@{
-      (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA]
-    }];
+                                (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA]
+                                }];
     [_output setAlwaysDiscardsLateVideoFrames:YES];
     [_output setSampleBufferDelegate:self queue:_captureQueue];
-
+    
     [self.session addOutput:_output];
   }
-
+  
   return _output;
 }
 
@@ -132,7 +134,7 @@
 
 - (void)setDelegate:(id<ZXCaptureDelegate>)delegate {
   _delegate = delegate;
-
+  
   if (delegate) {
     self.hardStop = NO;
   }
@@ -142,7 +144,7 @@
 - (void)setFocusMode:(AVCaptureFocusMode)focusMode {
   if ([self.input.device isFocusModeSupported:focusMode] && self.input.device.focusMode != focusMode) {
     _focusMode = focusMode;
-
+    
     [self.input.device lockForConfiguration:nil];
     self.input.device.focusMode = focusMode;
     [self.input.device unlockForConfiguration];
@@ -153,11 +155,11 @@
   if (_lastScannedImage) {
     CGImageRelease(_lastScannedImage);
   }
-
+  
   if (lastScannedImage) {
     CGImageRetain(lastScannedImage);
   }
-
+  
   _lastScannedImage = lastScannedImage;
 }
 
@@ -175,9 +177,14 @@
 
 - (void)setTorch:(BOOL)torch {
   _torch = torch;
-
+  
   [self.input.device lockForConfiguration:nil];
-  self.input.device.torchMode = self.torch ? AVCaptureTorchModeOn : AVCaptureTorchModeOff;
+  
+  AVCaptureTorchMode torchMode = self.torch ? AVCaptureTorchModeOn : AVCaptureTorchModeOff;
+  if ([self.input.device isTorchModeSupported:torchMode]) {
+    self.input.device.torchMode = torchMode;
+  }
+  
   [self.input.device unlockForConfiguration];
 }
 
@@ -185,6 +192,13 @@
   _transform = transform;
   [self.layer setAffineTransform:transform];
 }
+
+- (void)enableHeuristic {
+  if (_heuristic) { return; }
+  _heuristic = YES;
+  _parallelQueue = dispatch_queue_create("com.zxing.parallelQueue", DISPATCH_QUEUE_CONCURRENT);
+}
+
 
 #pragma mark - Back, Front, Torch
 
@@ -246,7 +260,7 @@
 
 - (void)hard_stop {
   self.hardStop = YES;
-
+  
   if (self.running) {
     [self stop];
   }
@@ -261,17 +275,17 @@
   if (self.hardStop) {
     return;
   }
-
+  
   if (self.delegate || self.luminanceLayer || self.binaryLayer) {
     (void)[self output];
   }
-
+  
   if (!self.session.running) {
     static int i = 0;
     if (++i == -2) {
       abort();
     }
-
+    
     [self.session startRunning];
   }
   self.running = YES;
@@ -281,11 +295,11 @@
   if (!self.running) {
     return;
   }
-
+  
   if (self.session.running) {
     [self.session stopRunning];
   }
-
+  
   self.running = NO;
 }
 
@@ -293,11 +307,11 @@
 
 - (id<CAAction>)actionForLayer:(CALayer *)_layer forKey:(NSString *)event {
   [CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
-
+  
   if ([event isEqualToString:kCAOnOrderIn] || [event isEqualToString:kCAOnOrderOut]) {
     return self;
   }
-
+  
   return nil;
 }
 
@@ -307,7 +321,7 @@
       self.orderInSkip--;
       return;
     }
-
+    
     self.onScreen = YES;
     [self startStop];
   } else if ([key isEqualToString:kCAOnOrderOut]) {
@@ -315,7 +329,7 @@
       self.orderOutSkip--;
       return;
     }
-
+    
     self.onScreen = NO;
     [self startStop];
   }
@@ -327,7 +341,7 @@
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
   if (!self.running) return;
-
+  
   @autoreleasepool {
     if (!self.cameraIsReady) {
       self.cameraIsReady = YES;
@@ -337,97 +351,141 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         });
       }
     }
-
+    
     if (!self.captureToFilename && !self.luminanceLayer && !self.binaryLayer && !self.delegate) {
       return;
     }
-
-    CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-
-    CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
-    CGImageRef rotatedImage = [self createRotatedImage:videoFrameImage degrees:self.rotation];
-    CGImageRelease(videoFrameImage);
-
-    // If scanRect is set, crop the current image to include only the desired rect
-    if (!CGRectIsEmpty(self.scanRect)) {
-      CGImageRef croppedImage = CGImageCreateWithImageInRect(rotatedImage, self.scanRect);
-      CFRelease(rotatedImage);
-      rotatedImage = croppedImage;
+    
+    // reduce CPU usage by around 30%, reference: https://github.com/TheLevelUp/ZXingObjC/issues/314
+    // Default capture 3 frames per second or customize them. if you want lower CPU usage, can adjust captureFramesPerSec to 1.0f make a better performace.
+    float kMinMargin = 1.0 / _captureFramesPerSec;
+    
+    // Gets the timestamp for each frame.
+    CMTime presentTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    
+    static double curFrameTimeStamp = 0;
+    static double lastFrameTimeStamp = 0;
+    
+    curFrameTimeStamp = (double)presentTimeStamp.value / presentTimeStamp.timescale;
+    
+    if (curFrameTimeStamp - lastFrameTimeStamp > kMinMargin) {
+      lastFrameTimeStamp = curFrameTimeStamp;
+      
+      CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
+      CGImageRef videoFrameImage = [ZXCGImageLuminanceSource createImageFromBuffer:videoFrame];
+      [self decodeImage:videoFrameImage];
     }
+  }
+}
 
-    self.lastScannedImage = rotatedImage;
-
-    if (self.captureToFilename) {
-      NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
-      CGImageDestinationRef dest = CGImageDestinationCreateWithURL((__bridge CFURLRef)url, (__bridge CFStringRef)@"public.png", 1, nil);
-      CGImageDestinationAddImage(dest, rotatedImage, nil);
-      CGImageDestinationFinalize(dest);
-      CFRelease(dest);
-      self.captureToFilename = nil;
+- (void)decodeImage: (CGImageRef)image {
+  // If scanRect is set, crop the current image to include only the desired rect
+  if (!CGRectIsEmpty(self.scanRect)) {
+    CGImageRef croppedImage = CGImageCreateWithImageInRect(image, self.scanRect);
+    CGImageRelease(image);
+    image = croppedImage;
+  }
+  
+  CGImageRef rotatedImage = [self createRotatedImage:image degrees:self.rotation];
+  CGImageRelease(image);
+  self.lastScannedImage = rotatedImage;
+  
+  if (self.captureToFilename) {
+    NSURL *url = [NSURL fileURLWithPath:self.captureToFilename];
+    CGImageDestinationRef dest = CGImageDestinationCreateWithURL((__bridge CFURLRef)url, (__bridge CFStringRef)@"public.png", 1, nil);
+    CGImageDestinationAddImage(dest, rotatedImage, nil);
+    CGImageDestinationFinalize(dest);
+    CFRelease(dest);
+    self.captureToFilename = nil;
+  }
+  
+  if (_heuristic) {
+    [self decodeImageAdv:rotatedImage];
+  }
+  
+  ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage: rotatedImage];
+  CGImageRelease(rotatedImage);
+  
+  if (self.luminanceLayer) {
+    CGImageRef image = source.image;
+    CGImageRetain(image);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+      self.luminanceLayer.contents = (__bridge id)image;
+      CGImageRelease(image);
+    });
+  }
+  
+  if (!self.binaryLayer && !self.delegate) { return; }
+  
+  ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
+  
+  if (self.binaryLayer) {
+    CGImageRef image = [binarizer createImage];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+      self.binaryLayer.contents = (__bridge id)image;
+      CGImageRelease(image);
+    });
+  }
+  
+  if (self.delegate) {
+    ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
+    
+    NSError *error;
+    ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
+    if (result) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate captureResult:self result:result];
+      });
+      return;
     }
-
-    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:rotatedImage];
-    CGImageRelease(rotatedImage);
-
-    if (self.luminanceLayer) {
-      CGImageRef image = source.image;
-      CGImageRetain(image);
+  }
+  
+  // Try decoding inverted image
+  if (self.binaryLayer || self.delegate) {
+    ZXHybridBinarizer *invertedBinarizer = [[ZXHybridBinarizer alloc] initWithSource:[source invert]];
+          
+    if (self.binaryLayer) {
+      CGImageRef image = [invertedBinarizer createImage];
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-        self.luminanceLayer.contents = (__bridge id)image;
+        self.binaryLayer.contents = (__bridge id)image;
         CGImageRelease(image);
       });
     }
+          
+    if (self.delegate) {
+      ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:invertedBinarizer];
+              
+      NSError *error;
+      ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
+      if (result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.delegate captureResult:self result:result];
+        });
+      }
+    }
+}
 
-    if (self.binaryLayer || self.delegate) {
-      ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
-          
-      if (self.binaryLayer) {
-        CGImageRef image = [binarizer createImage];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-          self.binaryLayer.contents = (__bridge id)image;
-          CGImageRelease(image);
-        });
-      }
-          
-      if (self.delegate) {
-        ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
-              
-        NSError *error;
-        ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
-        if (result) {
-          dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate captureResult:self result:result];
-          });
-          return;
-        }
-      }
+/**
+ * This function try to make the grayscale image darker to process
+ */
+- (void)decodeImageAdv:(CGImageRef)cgImage {
+  CGImageRef img = CGImageCreateCopy(cgImage);
+  dispatch_async(_parallelQueue, ^{
+    ZXCGImageLuminanceSourceInfo *sourceInfo = [[ZXCGImageLuminanceSourceInfo alloc] initWithDecomposingMin];
+    ZXCGImageLuminanceSource *source = [[ZXCGImageLuminanceSource alloc] initWithCGImage:img
+                                                                              sourceInfo:sourceInfo];
+    CGImageRelease(img);
+    
+    ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
+    ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:binarizer];
+    NSError *error;
+    ZXResult *result = [self.reader decode:bitmap hints: self.hints error:&error];
+    if (result && [self.delegate respondsToSelector: @selector(captureResult:result:)]) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate captureResult:self result:result];
+      });
     }
-      
-    // Try decoding inverted image
-    if (self.binaryLayer || self.delegate) {
-      ZXHybridBinarizer *invertedBinarizer = [[ZXHybridBinarizer alloc] initWithSource:[source invert]];
-          
-      if (self.binaryLayer) {
-        CGImageRef image = [invertedBinarizer createImage];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-          self.binaryLayer.contents = (__bridge id)image;
-          CGImageRelease(image);
-        });
-      }
-          
-      if (self.delegate) {
-        ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:invertedBinarizer];
-              
-        NSError *error;
-        ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
-        if (result) {
-          dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate captureResult:self result:result];
-          });
-        }
-      }
-    }
-  }
+  });
 }
 
 #pragma mark - Private
@@ -439,18 +497,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     return original;
   } else {
     double radians = degrees * M_PI / 180;
-
+    
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
     radians = -1 * radians;
 #endif
-
+    
     size_t _width = CGImageGetWidth(original);
     size_t _height = CGImageGetHeight(original);
-
+    
     CGRect imgRect = CGRectMake(0, 0, _width, _height);
     CGAffineTransform __transform = CGAffineTransformMakeRotation(radians);
     CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, __transform);
-
+    
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL,
                                                  rotatedRect.size.width,
@@ -462,21 +520,21 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CGContextSetAllowsAntialiasing(context, FALSE);
     CGContextSetInterpolationQuality(context, kCGInterpolationNone);
     CGColorSpaceRelease(colorSpace);
-
+    
     CGContextTranslateCTM(context,
                           +(rotatedRect.size.width/2),
                           +(rotatedRect.size.height/2));
     CGContextRotateCTM(context, radians);
-
+    
     CGContextDrawImage(context, CGRectMake(-imgRect.size.width/2,
                                            -imgRect.size.height/2,
                                            imgRect.size.width,
                                            imgRect.size.height),
                        original);
-
+    
     CGImageRef rotatedImage = CGBitmapContextCreateImage(context);
     CFRelease(context);
-
+    
     return rotatedImage;
   }
 }
@@ -485,18 +543,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   if (self.captureDevice) {
     return self.captureDevice;
   }
-
+  
   AVCaptureDevice *zxd = nil;
-
+  
   NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-
+  
   if ([devices count] > 0) {
     if (self.captureDeviceIndex == -1) {
       AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
       if (self.camera == self.front) {
         position = AVCaptureDevicePositionFront;
       }
-
+      
       for (unsigned int i = 0; i < [devices count]; ++i) {
         AVCaptureDevice *dev = [devices objectAtIndex:i];
         if (dev.position == position) {
@@ -506,50 +564,44 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }
       }
     }
-
+    
     if (!zxd && self.captureDeviceIndex != -1) {
       zxd = [devices objectAtIndex:self.captureDeviceIndex];
     }
   }
-
+  
   if (!zxd) {
     zxd = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   }
-
+  
   self.captureDevice = zxd;
-
+  
   return zxd;
 }
 
 - (void)replaceInput {
   [self.session beginConfiguration];
-
+  
   if (self.session && self.input) {
     [self.session removeInput:self.input];
     self.input = nil;
   }
-
+  
   AVCaptureDevice *zxd = [self device];
-
+  
   if (zxd) {
     self.input = [AVCaptureDeviceInput deviceInputWithDevice:zxd error:nil];
     self.focusMode = self.focusMode;
   }
-
+  
   if (self.input) {
-#if TARGET_OS_IPHONE
-    if ([self.input.device supportsAVCaptureSessionPreset:AVCaptureSessionPreset1920x1080]) {
-      _sessionPreset = AVCaptureSessionPreset1920x1080;
-    } else {
-      _sessionPreset = AVCaptureSessionPreset1280x720;
+    if (!self.sessionPreset) {
+      self.sessionPreset = AVCaptureSessionPreset1280x720;
     }
-#else
-    _sessionPreset = AVCaptureSessionPreset1280x720;
-#endif
     self.session.sessionPreset = self.sessionPreset;
     [self.session addInput:self.input];
   }
-
+  
   [self.session commitConfiguration];
 }
 
@@ -568,7 +620,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         (self.onScreen && (self.luminanceLayer || self.binaryLayer))))) {
          [self start];
        }
-
+  
   if (self.running && !self.delegate && !self.onScreen) {
     [self stop];
   }

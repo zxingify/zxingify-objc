@@ -31,9 +31,9 @@
 - (id)initWithCompact:(BOOL)compact;
 
 /**
- * Generates the barcode logic.
- *
- * @param msg        the message to encode
+ * @param msg message to encode
+ * @param errorCorrectionLevel PDF417 error correction level to use or nil if the contents cannot be
+ *   encoded in this format
  */
 - (BOOL)generateBarcodeLogic:(NSString *)msg errorCorrectionLevel:(int)errorCorrectionLevel error:(NSError **)error;
 
@@ -49,6 +49,11 @@
 
 /**
  * Sets max/min row/col values
+ *
+ * @param maxCols maximum allowed columns
+ * @param minCols minimum allowed columns
+ * @param maxRows maximum allowed rows
+ * @param minRows minimum allowed rows
  */
 - (void)setDimensionsWithMaxCols:(int)maxCols minCols:(int)minCols maxRows:(int)maxRows minRows:(int)minRows;
 

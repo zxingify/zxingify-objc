@@ -206,12 +206,19 @@
 }
 
 - (NSString *)description {
+  if (self.zero) {
+    return @"0";
+  }
   NSMutableString *result = [NSMutableString stringWithCapacity:8 * [self degree]];
   for (int degree = [self degree]; degree >= 0; degree--) {
     int coefficient = [self coefficient:degree];
     if (coefficient != 0) {
       if (coefficient < 0) {
-        [result appendString:@" - "];
+        if (degree == [self degree]) {
+          [result appendString:@"-"];
+        } else {
+          [result appendString:@" - "];
+        }
         coefficient = -coefficient;
       } else {
         if ([result length] > 0) {

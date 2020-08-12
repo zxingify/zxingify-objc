@@ -24,6 +24,7 @@
 @interface ZXOneDimensionalCodeWriter : NSObject <ZXWriter>
 
 - (ZXBoolArray *)encode:(NSString *)contents;
+- (BOOL)isNumeric:(NSString *)contents;
 - (int)appendPattern:(ZXBoolArray *)target pos:(int)pos pattern:(const int[])pattern patternLen:(int)patternLen startColor:(BOOL)startColor;
 - (int)defaultMargin;
 

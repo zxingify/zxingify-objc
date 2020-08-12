@@ -57,8 +57,7 @@ const int ZX_LUMINANCE_BUCKETS = 1 << ZX_LUMINANCE_BITS;
   ZXByteArray *localLuminances = [source rowAtY:y row:self.luminances];
   ZXIntArray *localBuckets = self.buckets;
   for (int x = 0; x < width; x++) {
-    int pixel = localLuminances.array[x] & 0xff;
-    localBuckets.array[pixel >> ZX_LUMINANCE_SHIFT]++;
+    localBuckets.array[(localLuminances.array[x] & 0xff) >> ZX_LUMINANCE_SHIFT]++;
   }
   int blackPoint = [self estimateBlackPoint:localBuckets];
   if (blackPoint == -1) {
@@ -66,17 +65,25 @@ const int ZX_LUMINANCE_BUCKETS = 1 << ZX_LUMINANCE_BITS;
     return nil;
   }
 
-  int left = localLuminances.array[0] & 0xff;
-  int center = localLuminances.array[1] & 0xff;
-  for (int x = 1; x < width - 1; x++) {
-    int right = localLuminances.array[x + 1] & 0xff;
-    // A simple -1 4 -1 box filter with a weight of 2.
-    int luminance = ((center * 4) - left - right) >> 1;
-    if (luminance < blackPoint) {
-      [row set:x];
+  if (width < 3) {
+    // Special case for very small images
+    for (int x = 0; x < width; x++) {
+      if ((localLuminances.array[x] & 0xff) < blackPoint) {
+        [row set:x];
+      }
     }
-    left = center;
-    center = right;
+  } else {
+    int left = localLuminances.array[0] & 0xff;
+    int center = localLuminances.array[1] & 0xff;
+    for (int x = 1; x < width - 1; x++) {
+      int right = localLuminances.array[x + 1] & 0xff;
+      // A simple -1 4 -1 box filter with a weight of 2.
+      if (((center * 4) - left - right) / 2 < blackPoint) {
+        [row set:x];
+      }
+      left = center;
+      center = right;
+    }
   }
 
   return row;

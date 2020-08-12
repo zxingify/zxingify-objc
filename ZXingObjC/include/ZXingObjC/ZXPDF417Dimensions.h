@@ -1,0 +1,1 @@
+../../pdf417/encoder/ZXPDF417Dimensions.h

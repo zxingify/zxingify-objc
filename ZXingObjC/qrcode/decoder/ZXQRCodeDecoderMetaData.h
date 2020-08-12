@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Meta-data container for QR Code decoding. Instances of this class may be used to convey information back to the
  * decoding caller. Callers are expected to process this.

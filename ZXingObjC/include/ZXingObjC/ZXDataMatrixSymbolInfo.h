@@ -1,0 +1,1 @@
+../../datamatrix/encoder/ZXDataMatrixSymbolInfo.h

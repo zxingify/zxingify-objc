@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Symbol Character Placement Program. Adapted from Annex M.1 in ISO/IEC 16022:2000(E).
  */

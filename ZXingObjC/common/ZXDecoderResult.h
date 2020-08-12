@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import "ZXByteArray.h"
+
 @class ZXByteArray;
 
 /**
@@ -24,6 +26,7 @@
 @interface ZXDecoderResult : NSObject
 
 @property (nonatomic, strong, readonly) ZXByteArray *rawBytes;
+@property (nonatomic) int numBits;
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, strong, readonly) NSMutableArray *byteSegments;
 @property (nonatomic, copy, readonly) NSString *ecLevel;

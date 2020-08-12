@@ -23,7 +23,7 @@
 
 unichar ZX_CODE39_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
   'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-  'X', 'Y', 'Z', '-', '.', ' ', '*', '$', '/', '+', '%'};
+  'X', 'Y', 'Z', '-', '.', ' ', '$', '/', '+', '%'};
 NSString *ZX_CODE39_ALPHABET_STRING = nil;
 
 
@@ -36,8 +36,8 @@ const int ZX_CODE39_CHARACTER_ENCODINGS[] = {
   0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
   0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
   0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
-  0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, // U-*
-  0x0A8, 0x0A2, 0x08A, 0x02A // $-%
+  0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x0A8, // U-$
+  0x0A2, 0x08A, 0x02A // /-%
 };
 
 const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
@@ -114,14 +114,17 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
     // Read off white space
     nextStart = [row nextSet:nextStart];
   } while (decodedChar != '*');
-  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)];
+  [result deleteCharactersInRange:NSMakeRange([result length] - 1, 1)]; // remove asterisk
 
+  // Look for whitespace after pattern:
   int lastPatternSize = 0;
   for (int i = 0; i < theCounters.length; i++) {
     lastPatternSize += theCounters.array[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-  if (nextStart != end && (whiteSpaceAfterEnd * 2) < lastPatternSize) {
+  // If 50% of last pattern size, following last pattern, is not whitespace, fail
+  // (but if it's whitespace to the very end of the image, that's OK)
+  if (nextStart != end && (whiteSpaceAfterEnd << 1) < lastPatternSize) {
     if (error) *error = ZXNotFoundErrorInstance();
     return nil;
   }
@@ -181,6 +184,7 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
       array[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
+        // Look for whitespace before start pattern, >= 50% of width of start pattern
         if ([self toNarrowWidePattern:counters] == ZX_CODE39_ASTERISK_ENCODING &&
             [row isRange:MAX(0, patternStart - ((i - patternStart) / 2)) end:patternStart value:NO]) {
           return [[ZXIntArray alloc] initWithInts:patternLength, i, -1];
@@ -203,6 +207,8 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
   return nil;
 }
 
+// For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
+// per image when using some of our blackbox images.
 - (int)toNarrowWidePattern:(ZXIntArray *)counters {
   int numCounters = counters.length;
   int maxNarrowCounter = 0;
@@ -229,10 +235,14 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
       }
     }
     if (wideCounters == 3) {
+      // Found 3 wide counters, but are they close enough in width?
+      // We can perform a cheap, conservative check to see if any individual
+      // counter is more than 1.5 times the average:
       for (int i = 0; i < numCounters && wideCounters > 0; i++) {
         int counter = array[i];
         if (array[i] > maxNarrowCounter) {
           wideCounters--;
+          // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
           if ((counter * 2) >= totalWideCountersWidth) {
             return -1;
           }
@@ -250,6 +260,9 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
       return ZX_CODE39_ALPHABET[i];
     }
   }
+  if (pattern == ZX_CODE39_ASTERISK_ENCODING) {
+    return '*';
+  }
   return 0;
 }
 
@@ -264,40 +277,58 @@ const int ZX_CODE39_ASTERISK_ENCODING = 0x094;
       unichar decodedChar = '\0';
 
       switch (c) {
-      case '+':
-        if (next >= 'A' && next <= 'Z') {
-          decodedChar = (unichar)(next + 32);
-        } else {
-          return nil;
-        }
-        break;
-      case '$':
-        if (next >= 'A' && next <= 'Z') {
-          decodedChar = (unichar)(next - 64);
-        } else {
-          return nil;
-        }
-        break;
-      case '%':
-        if (next >= 'A' && next <= 'E') {
-          decodedChar = (unichar)(next - 38);
-        } else if (next >= 'F' && next <= 'W') {
-          decodedChar = (unichar)(next - 11);
-        } else {
-          return nil;
-        }
-        break;
-      case '/':
-        if (next >= 'A' && next <= 'O') {
-          decodedChar = (unichar)(next - 32);
-        } else if (next == 'Z') {
-          decodedChar = ':';
-        } else {
-          return nil;
-        }
-        break;
+        case '+':
+          // +A to +Z map to a to z
+          if (next >= 'A' && next <= 'Z') {
+            decodedChar = (unichar)(next + 32);
+          } else {
+            return nil;
+          }
+          break;
+        case '$':
+          // $A to $Z map to control codes SH to SB
+          if (next >= 'A' && next <= 'Z') {
+            decodedChar = (unichar)(next - 64);
+          } else {
+            return nil;
+          }
+          break;
+        case '%':
+          // %A to %E map to control codes ESC to US
+          if (next >= 'A' && next <= 'E') {
+            decodedChar = (unichar)(next - 38);
+          } else if (next >= 'F' && next <= 'J') {
+            decodedChar = (unichar)(next - 11);
+          } else if (next >= 'K' && next <= 'O') {
+            decodedChar = (unichar) (next + 16);
+          } else if (next >= 'P' && next <= 'T') {
+            decodedChar = (unichar) (next + 43);
+          } else if (next == 'U') {
+            decodedChar = (unichar) 0;
+          } else if (next == 'V') {
+            decodedChar = '@';
+          } else if (next == 'W') {
+            decodedChar = '`';
+          } else if (next == 'X' || next == 'Y' || next == 'Z') {
+            decodedChar = (unichar) 127;
+
+          } else {
+            return nil;
+          }
+          break;
+        case '/':
+          // /A to /O map to ! to , and /Z maps to :
+          if (next >= 'A' && next <= 'O') {
+            decodedChar = (unichar)(next - 32);
+          } else if (next == 'Z') {
+            decodedChar = ':';
+          } else {
+            return nil;
+          }
+          break;
       }
       [decoded appendFormat:@"%C", decodedChar];
+      // bump up i again since we read two characters
       i++;
     } else {
       [decoded appendFormat:@"%C", c];
