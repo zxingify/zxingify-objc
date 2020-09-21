@@ -221,7 +221,7 @@ enum {
       case 0:
         if (cValue < 3) {
           shift = cValue + 1;
-        } else if (cValue < sizeof(C40_BASIC_SET_CHARS) / sizeof(char)) {
+        } else if (cValue < sizeof(C40_BASIC_SET_CHARS) / sizeof(unichar)) {
           unichar c40char = C40_BASIC_SET_CHARS[cValue];
           if (upperShift) {
             [result appendFormat:@"%C", (unichar)(c40char + 128)];
@@ -243,7 +243,7 @@ enum {
         shift = 0;
         break;
       case 2:
-        if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(char)) {
+        if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(unichar)) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
             [result appendFormat:@"%C", (unichar)(c40char + 128)];
@@ -308,7 +308,7 @@ enum {
       case 0:
         if (cValue < 3) {
           shift = cValue + 1;
-        } else if (cValue < sizeof(TEXT_BASIC_SET_CHARS) / sizeof(char)) {
+        } else if (cValue < sizeof(TEXT_BASIC_SET_CHARS) / sizeof(unichar)) {
           unichar textChar = TEXT_BASIC_SET_CHARS[cValue];
           if (upperShift) {
             [result appendFormat:@"%C", (unichar)(textChar + 128)];
@@ -349,7 +349,7 @@ enum {
         shift = 0;
         break;
       case 3:
-        if (cValue < sizeof(TEXT_SHIFT3_SET_CHARS) / sizeof(char)) {
+        if (cValue < sizeof(TEXT_SHIFT3_SET_CHARS) / sizeof(unichar)) {
           unichar textChar = TEXT_SHIFT3_SET_CHARS[cValue];
           if (upperShift) {
             [result appendFormat:@"%C", (unichar)(textChar + 128)];
