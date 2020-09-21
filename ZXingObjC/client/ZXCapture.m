@@ -417,7 +417,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   
   if (!self.binaryLayer && !self.delegate) { return; }
   
-  ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:self.invert ? [source invert] : source];
+  ZXHybridBinarizer *binarizer = [[ZXHybridBinarizer alloc] initWithSource:source];
   
   if (self.binaryLayer) {
     CGImageRef image = [binarizer createImage];
@@ -436,10 +436,34 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       dispatch_async(dispatch_get_main_queue(), ^{
         [self.delegate captureResult:self result:result];
       });
+      return;
     }
   }
+  
+  // Try decoding inverted image
+  if (self.binaryLayer || self.delegate) {
+    ZXHybridBinarizer *invertedBinarizer = [[ZXHybridBinarizer alloc] initWithSource:[source invert]];
+          
+    if (self.binaryLayer) {
+      CGImageRef image = [invertedBinarizer createImage];
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+        self.binaryLayer.contents = (__bridge id)image;
+        CGImageRelease(image);
+      });
+    }
+          
+    if (self.delegate) {
+      ZXBinaryBitmap *bitmap = [[ZXBinaryBitmap alloc] initWithBinarizer:invertedBinarizer];
+              
+      NSError *error;
+      ZXResult *result = [self.reader decode:bitmap hints:self.hints error:&error];
+      if (result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self.delegate captureResult:self result:result];
+        });
+      }
+    }
 }
-
 
 /**
  * This function try to make the grayscale image darker to process
