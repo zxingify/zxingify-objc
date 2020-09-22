@@ -463,6 +463,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         });
       }
     }
+  }
 }
 
 /**
