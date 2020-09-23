@@ -1,0 +1,49 @@
+trigger:
+- master
+
+jobs:
+- job: Xcode
+  pool:
+    vmImage: 'macOS-10.15'
+  strategy:
+    maxParallel: 10
+    matrix:
+      xcode116:
+        DEVELOPER_DIR: /Applications/Xcode_11.6.app
+      xcode12:
+        DEVELOPER_DIR: /Applications/Xcode_12.app
+  steps:
+    - script: |
+        sw_vers
+        xcodebuild -version
+      displayName: Version Informations
+    - script: >
+        set -o pipefail &&
+        xcodebuild -project ZXingObjC.xcodeproj -scheme ZXingObjC-iOS test |
+        xcpretty -r junit -o build/reports/xcodebuild.xml
+      displayName: xcodebuild test
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: JUnit
+        testResultsFiles: build/reports/**
+      condition: succeededOrFailed()
+
+- job: SwiftPM
+  pool:
+    vmImage: 'macOS-10.15'
+  strategy:
+    maxParallel: 10
+    matrix:
+      xcode116:
+        DEVELOPER_DIR: /Applications/Xcode_11.6.app
+      xcode12:
+        DEVELOPER_DIR: /Applications/Xcode_12.app
+  steps:
+    - script: |
+        sw_vers
+        xcodebuild -version
+      displayName: Version Informations
+    - script: >
+        set -o pipefail &&
+        swift build
+      displayName: swift build
