@@ -243,7 +243,7 @@ enum {
         shift = 0;
         break;
       case 2:
-        if (cValue < sizeof(C40_SHIFT2_SET_CHARS) / sizeof(unichar)) {
+        if (cValue < 27) {
           unichar c40char = C40_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
             [result appendFormat:@"%C", (unichar)(c40char + 128)];
@@ -331,7 +331,7 @@ enum {
         break;
       case 2:
           // Shift 2 for Text is the same encoding as C40
-        if (cValue < sizeof(TEXT_SHIFT2_SET_CHARS) / sizeof(unichar)) {
+        if (cValue < 27) {
           unichar textChar = TEXT_SHIFT2_SET_CHARS[cValue];
           if (upperShift) {
             [result appendFormat:@"%C", (unichar)(textChar + 128)];
