@@ -167,10 +167,10 @@ enum {
     } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
       upperShift = YES;
     } else if (oneByte == 236) {  // 05 Macro
-      [result appendFormat:@"[)>%C%C", (unichar)0x001E05, (unichar)0x001D];
+      [result appendFormat:@"[)>%C05%C", (unichar)0x001E, (unichar)0x001D];
       [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", (unichar)0x001E, (unichar)0x0004] atIndex:0];
     } else if (oneByte == 237) {  // 06 Macro
-      [result appendFormat:@"[)>%C%C", (unichar)0x001E06, (unichar)0x001D];
+      [result appendFormat:@"[)>%C06%C", (unichar)0x001E, (unichar)0x001D];
       [resultTrailer insertString:[NSString stringWithFormat:@"%C%C", (unichar)0x001E, (unichar)0x0004] atIndex:0];
     } else if (oneByte == 238) {  // Latch to ANSI X12 encodation
       return ANSIX12_ENCODE;
