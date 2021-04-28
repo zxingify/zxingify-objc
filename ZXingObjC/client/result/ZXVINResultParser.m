@@ -35,7 +35,7 @@ static NSRegularExpression *ZX_AZ09 = nil;
   }
   NSString *rawText = result.text;
   rawText = [[ZX_IOQ stringByReplacingMatchesInString:rawText options:0 range:NSMakeRange(0, rawText.length) withTemplate:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  if ([ZX_AZ09 matchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)] == 0) {
+  if ([ZX_AZ09 numberOfMatchesInString:rawText options:0 range:NSMakeRange(0, rawText.length)] == 0) {
     return nil;
   }
   if (![self checkChecksum:rawText]) {
