@@ -28,7 +28,6 @@ class ViewController: UIViewController {
     
     fileprivate var isScanning: Bool?
     fileprivate var isFirstApplyOrientation: Bool?
-    fileprivate var captureSizeTransform: CGAffineTransform?
     
     
     // MARK: Life Circles
@@ -119,44 +118,27 @@ extension ViewController {
     }
     
     func applyRectOfInterest(orientation: UIInterfaceOrientation) {
-        guard var transformedVideoRect = scanView?.frame,
-            let cameraSessionPreset = capture?.sessionPreset
-            else { return }
+        guard
+            let capture = capture,
+            let captureLayer = capture.layer as? AVCaptureVideoPreviewLayer,
+            let scanRect = scanView?.frame
+        else { return }
         
-        var scaleVideoX, scaleVideoY: CGFloat
-        var videoHeight, videoWidth: CGFloat
-        
-        // Currently support only for 1920x1080 || 1280x720
-        if cameraSessionPreset == AVCaptureSession.Preset.hd1920x1080.rawValue {
-            videoHeight = 1080.0
-            videoWidth = 1920.0
+        let transformedScanRect: CGRect
+        if orientation.isLandscape {
+            transformedScanRect = CGRect(
+                x: scanRect.origin.y,
+                y: scanRect.origin.x,
+                width: scanRect.size.height,
+                height: scanRect.size.width
+            )
         } else {
-            videoHeight = 720.0
-            videoWidth = 1280.0
+            transformedScanRect = scanRect
         }
         
-        if orientation == UIInterfaceOrientation.portrait {
-            scaleVideoX = self.view.frame.width / videoHeight
-            scaleVideoY = self.view.frame.height / videoWidth
-            
-            // Convert CGPoint under portrait mode to map with orientation of image
-            // because the image will be cropped before rotate
-            // reference: https://github.com/TheLevelUp/ZXingObjC/issues/222
-            let realX = transformedVideoRect.origin.y;
-            let realY = self.view.frame.size.width - transformedVideoRect.size.width - transformedVideoRect.origin.x;
-            let realWidth = transformedVideoRect.size.height;
-            let realHeight = transformedVideoRect.size.width;
-            transformedVideoRect = CGRect(x: realX, y: realY, width: realWidth, height: realHeight);
-        
-        } else {
-            scaleVideoX = self.view.frame.width / videoWidth
-            scaleVideoY = self.view.frame.height / videoHeight
-        }
-        
-        captureSizeTransform = CGAffineTransform(scaleX: 1.0/scaleVideoX, y: 1.0/scaleVideoY)
-        guard let _captureSizeTransform = captureSizeTransform else { return }
-        let transformRect = transformedVideoRect.applying(_captureSizeTransform)
-        capture?.scanRect = transformRect
+        let metadataOutputRect = captureLayer.metadataOutputRectConverted(fromLayerRect: transformedScanRect)
+        let rectOfInterest = capture.output.outputRectConverted(fromMetadataOutputRect: metadataOutputRect)
+        capture.scanRect = rectOfInterest
     }
     
     func barcodeFormatToString(format: ZXBarcodeFormat) -> String {
