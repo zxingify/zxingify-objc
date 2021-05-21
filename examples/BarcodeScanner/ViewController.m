@@ -124,36 +124,19 @@
 }
 
 - (void)applyRectOfInterest:(UIInterfaceOrientation)orientation {
-  CGFloat scaleVideoX, scaleVideoY;
-  CGFloat videoSizeX, videoSizeY;
-  CGRect transformedVideoRect = self.scanRectView.frame;
-  if([self.capture.sessionPreset isEqualToString:AVCaptureSessionPreset1920x1080]) {
-    videoSizeX = 1080;
-    videoSizeY = 1920;
-  } else {
-    videoSizeX = 720;
-    videoSizeY = 1280;
-  }
-  if(UIInterfaceOrientationIsPortrait(orientation)) {
-    scaleVideoX = self.capture.layer.frame.size.width / videoSizeX;
-    scaleVideoY = self.capture.layer.frame.size.height / videoSizeY;
+    CGRect transformedScanRect;
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        transformedScanRect = CGRectMake(_scanView.frame.origin.y,
+                                         _scanView.frame.origin.x,
+                                         _scanView.frame.size.height,
+                                         _scanView.frame.size.width);
+    } else {
+        transformedScanRect = _scanView.frame;
+    }
     
-    // Convert CGPoint under portrait mode to map with orientation of image
-    // because the image will be cropped before rotate
-    // reference: https://github.com/TheLevelUp/ZXingObjC/issues/222
-    CGFloat realX = transformedVideoRect.origin.y;
-    CGFloat realY = self.capture.layer.frame.size.width - transformedVideoRect.size.width - transformedVideoRect.origin.x;
-    CGFloat realWidth = transformedVideoRect.size.height;
-    CGFloat realHeight = transformedVideoRect.size.width;
-    transformedVideoRect = CGRectMake(realX, realY, realWidth, realHeight);
-    
-  } else {
-    scaleVideoX = self.capture.layer.frame.size.width / videoSizeY;
-    scaleVideoY = self.capture.layer.frame.size.height / videoSizeX;
-  }
-  
-  _captureSizeTransform = CGAffineTransformMakeScale(1.0/scaleVideoX, 1.0/scaleVideoY);
-  self.capture.scanRect = CGRectApplyAffineTransform(transformedVideoRect, _captureSizeTransform);
+    CGRect metadataOutputRect = [(AVCaptureVideoPreviewLayer *) _capture.layer metadataOutputRectOfInterestForRect:transformedScanRect];
+    CGRect rectOfInterest = [_capture.output rectForMetadataOutputRectOfInterest:metadataOutputRect];
+    _capture.scanRect = rectOfInterest;
 }
 
 #pragma mark - Private Methods
