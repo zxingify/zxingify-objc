@@ -1,1 +1,0 @@
-Thanks to Enrique G-S for contributing many of the EAN-13 test images.

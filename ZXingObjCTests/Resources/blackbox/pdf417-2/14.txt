@@ -1,1 +1,0 @@
-A PDF 417 barcode with ASCII text
