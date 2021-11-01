@@ -1,1 +1,0 @@
-../../qrcode/multi/detector/ZXMultiDetector.h

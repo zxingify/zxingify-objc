@@ -1,1 +1,0 @@
-../../datamatrix/ZXDataMatrixWriter.h

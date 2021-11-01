@@ -1,1 +1,0 @@
-../../pdf417/ZXPDF417ResultMetadata.h

@@ -1,1 +1,0 @@
-../../ZXMultiFormatWriter.h

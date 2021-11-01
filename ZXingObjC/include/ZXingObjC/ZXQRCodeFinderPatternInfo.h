@@ -1,1 +1,0 @@
-../../qrcode/detector/ZXQRCodeFinderPatternInfo.h

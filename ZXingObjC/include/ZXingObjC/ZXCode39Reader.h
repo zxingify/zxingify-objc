@@ -1,1 +1,0 @@
-../../oned/ZXCode39Reader.h

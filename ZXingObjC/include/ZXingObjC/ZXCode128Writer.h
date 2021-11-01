@@ -1,1 +1,0 @@
-../../oned/ZXCode128Writer.h

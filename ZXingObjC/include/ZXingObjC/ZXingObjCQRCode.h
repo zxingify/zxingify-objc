@@ -1,1 +1,0 @@
-../../qrcode/ZXingObjCQRCode.h

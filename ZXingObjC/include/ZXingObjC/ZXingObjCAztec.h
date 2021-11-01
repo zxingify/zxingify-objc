@@ -1,1 +1,0 @@
-../../aztec/ZXingObjCAztec.h

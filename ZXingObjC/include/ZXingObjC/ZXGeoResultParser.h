@@ -1,1 +1,0 @@
-../../client/result/ZXGeoResultParser.h

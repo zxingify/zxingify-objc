@@ -1,1 +1,0 @@
-../../client/ZXCaptureDelegate.h

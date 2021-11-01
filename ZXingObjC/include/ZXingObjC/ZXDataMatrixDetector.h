@@ -1,1 +1,0 @@
-../../datamatrix/detector/ZXDataMatrixDetector.h

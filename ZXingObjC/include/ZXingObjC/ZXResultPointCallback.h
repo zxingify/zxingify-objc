@@ -1,1 +1,0 @@
-../../core/ZXResultPointCallback.h

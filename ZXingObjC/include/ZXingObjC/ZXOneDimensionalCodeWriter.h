@@ -1,1 +1,0 @@
-../../oned/ZXOneDimensionalCodeWriter.h

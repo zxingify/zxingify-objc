@@ -1,1 +1,0 @@
-../../datamatrix/encoder/ZXDataMatrixDefaultPlacement.h

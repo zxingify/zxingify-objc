@@ -1,1 +1,0 @@
-../../qrcode/encoder/ZXQRCode.h
