@@ -65,6 +65,9 @@ let package = Package(
                 .headerSearchPath("qrcode/encoder"),
                 .headerSearchPath("qrcode/multi"),
                 .headerSearchPath("qrcode/multi/detector"),
+            ],
+            linkerSettings: [
+              .unsafeFlags(["-fprofile-instr-generate"])
             ]
         )
     ]

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1000"
+   LastUpgradeVersion = "1320"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,24 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB72547E1A523C9200EFF81B"
-               BuildableName = "ZXingObjC.framework"
-               BlueprintName = "iOS Framework"
-               ReferencedContainer = "container:ZXingObjC.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB7254881A523C9200EFF81B"
-               BuildableName = "iOS FrameworkTests.xctest"
-               BlueprintName = "iOS FrameworkTests"
-               ReferencedContainer = "container:ZXingObjC.xcodeproj">
+               BlueprintIdentifier = "ZXingObjC"
+               BuildableName = "ZXingObjC"
+               BlueprintName = "ZXingObjC"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -41,15 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB72547E1A523C9200EFF81B"
-            BuildableName = "ZXingObjC.framework"
-            BlueprintName = "iOS Framework"
-            ReferencedContainer = "container:ZXingObjC.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
       </Testables>
    </TestAction>
@@ -63,15 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB72547E1A523C9200EFF81B"
-            BuildableName = "ZXingObjC.framework"
-            BlueprintName = "iOS Framework"
-            ReferencedContainer = "container:ZXingObjC.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -82,10 +50,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB72547E1A523C9200EFF81B"
-            BuildableName = "ZXingObjC.framework"
-            BlueprintName = "iOS Framework"
-            ReferencedContainer = "container:ZXingObjC.xcodeproj">
+            BlueprintIdentifier = "ZXingObjC"
+            BuildableName = "ZXingObjC"
+            BlueprintName = "ZXingObjC"
+            ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

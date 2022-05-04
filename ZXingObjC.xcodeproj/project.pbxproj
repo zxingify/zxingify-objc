@@ -3218,7 +3218,6 @@
 				25403CB9166A96FA00E13304 /* Supporting Files */,
 				25403CB5166A96FA00E13304 /* iOS Frameworks */,
 				2540438A166AB8EA00E13304 /* OS X Frameworks */,
-				DB7254801A523C9200EFF81B /* iOS Framework */,
 				25403CB4166A96FA00E13304 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -4369,13 +4368,6 @@
 			path = additional;
 			sourceTree = "<group>";
 		};
-		DB7254801A523C9200EFF81B /* iOS Framework */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "iOS Framework";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -5500,6 +5492,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 25403CA8166A96F900E13304;
