@@ -22,7 +22,7 @@ ZXingObjC currently has feature parity with ZXing version 3.3.3.
 
 ## Requirements
 
-ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 8.0 and above, or Mac OS X 10.8 Mountain Lion and above.
+ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 11.0 and above, or Mac OS X 10.15 Catalina and above.
 
 ## Usage
 
