@@ -22,7 +22,7 @@ ZXingObjC currently has feature parity with ZXing version 3.3.3.
 
 ## Requirements
 
-ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 8.0 and above, or Mac OS X 10.8 Mountain Lion and above.
+ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 11.0 and above, or Mac OS X 10.15 Catalina and above.
 
 ## Usage
 
@@ -95,7 +95,7 @@ github "TheLevelUp/ZXingObjC" ~> 3.6
 [CocoaPods](http://cocoapods.org) is a dependency manager for Swift and Objective-C Cocoa projects. After installing CocoaPods add ZXingObjC to your Podfile:
 
 ```ruby
-platform :ios, '8.0'
+platform :ios, '11.0'
 pod 'ZXingObjC', '~> 3.6.4'
 ```
 
