@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'ZXingObjC'
-  s.version = '3.6.8'
+  s.version = '3.6.9'
   s.summary = 'An Objective-C Port of the ZXing barcode framework.'
   s.homepage = 'https://github.com/zxingify/zxingify-objc'
   s.author = 'zxingify'
@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'All' do |ss|
     ss.source_files = 'ZXingObjC/**/*.{h,m}'
+    ss.exclude_files = 'ZXingObjC/include/**/*.h'
   end
 
   s.subspec 'Core' do |ss|

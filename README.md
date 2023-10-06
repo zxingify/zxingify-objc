@@ -22,7 +22,7 @@ ZXingObjC currently has feature parity with ZXing version 3.3.3.
 
 ## Requirements
 
-ZXingObjC requires Xcode 8.3.3 and above, targeting either iOS 11.0 and above, or Mac OS X 10.15 Catalina and above.
+ZXingObjC requires Xcode 13.0 and above, targeting either iOS 11.0 and above, or Mac OS X 10.15 Catalina and above.
 
 ## Usage
 
@@ -87,7 +87,7 @@ We highly recommend Carthage as module manager.
 ZXingObjC can be installed using [Carthage](https://github.com/Carthage/Carthage). After installing Carthage just add ZXingObjC to your Cartfile:
 
 ```ogdl
-github "zxingify/zxingify-objc" ~> 3.6.8
+github "zxingify/zxingify-objc" ~> 3.6.9
 ```
 
 #### CocoaPods
@@ -96,7 +96,7 @@ github "zxingify/zxingify-objc" ~> 3.6.8
 
 ```ruby
 platform :ios, '11.0'
-pod 'ZXingObjC', '~> 3.6.8'
+pod 'ZXingObjC', '~> 3.6.9'
 ```
 
 ## Examples
