@@ -1,15 +1,15 @@
 Pod::Spec.new do |s|
   s.name = 'ZXingObjC'
-  s.version = '3.6.9'
+  s.version = '3.7.0'
   s.summary = 'An Objective-C Port of the ZXing barcode framework.'
   s.homepage = 'https://github.com/zxingify/zxingify-objc'
   s.author = 'zxingify'
   s.license = { :type => 'Apache License 2.0', :file => 'COPYING' }
-  s.source = { :git => 'https://github.com/zxingify/zxingify-objc.git', :tag => "#{s.version}" }
+  s.source = { :git => 'https://github.com/dpolivy/ZXingObjC.git', :tag => "#{s.version}" }
   s.requires_arc = true
   s.xcconfig = { "OTHER_LDFLAGS" => "-ObjC" }
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.15'
 
   s.ios.frameworks = 'AVFoundation', 'CoreGraphics', 'CoreMedia', 'CoreVideo', 'ImageIO', 'QuartzCore'
