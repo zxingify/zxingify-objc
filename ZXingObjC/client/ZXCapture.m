@@ -301,7 +301,9 @@
       abort();
     }
     
-    [self.session startRunning];
+    dispatch_async(_captureQueue, ^(void) {
+      [self.session startRunning];
+    });
   }
   self.running = YES;
 }
