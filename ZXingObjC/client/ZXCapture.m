@@ -67,6 +67,7 @@
     _rotation = 0.0f;
     _running = NO;
     _transform = CGAffineTransformIdentity;
+    _tryUseUltraWideCamera = NO;
     _scanRect = CGRectZero;
   }
   
@@ -220,6 +221,14 @@
 
 - (BOOL)hasBack {
   AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera]
+    mediaType:AVMediaTypeVideo
+    position:AVCaptureDevicePositionBack];
+  NSArray *devices = [captureDeviceDiscoverySession devices];
+  return [devices count] > 0;
+}
+
+- (BOOL)hasUltraWide {
+  AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInUltraWideCamera]
     mediaType:AVMediaTypeVideo
     position:AVCaptureDevicePositionBack];
   NSArray *devices = [captureDeviceDiscoverySession devices];
@@ -553,7 +562,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   
   AVCaptureDevice *zxd = nil;
   
-  AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera]
+  AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[
+        AVCaptureDeviceTypeBuiltInWideAngleCamera,
+        AVCaptureDeviceTypeBuiltInUltraWideCamera
+        ]
     mediaType:AVMediaTypeVideo
     position:AVCaptureDevicePositionUnspecified];
   NSArray *devices = [captureDeviceDiscoverySession devices];
@@ -568,9 +580,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       for (unsigned int i = 0; i < [devices count]; ++i) {
         AVCaptureDevice *dev = [devices objectAtIndex:i];
         if (dev.position == position) {
+          // The camera matches the position, so pick it for now
           self.captureDeviceIndex = i;
           zxd = dev;
-          break;
+            
+          // If the client doesn't want an Ultrawide camera OR wants
+          // an UltraWide camera and one is found, stop looking
+          if ((!_tryUseUltraWideCamera && dev.deviceType != AVCaptureDeviceTypeBuiltInUltraWideCamera) ||
+              (_tryUseUltraWideCamera && dev.deviceType == AVCaptureDeviceTypeBuiltInUltraWideCamera)) {
+              break;
+          }
         }
       }
     }

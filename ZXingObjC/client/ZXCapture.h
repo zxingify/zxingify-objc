@@ -43,12 +43,14 @@
 @property (nonatomic, copy) NSString *sessionPreset;
 @property (nonatomic, assign) BOOL torch;
 @property (nonatomic, assign) CGAffineTransform transform;
+@property (nonatomic, assign) BOOL tryUseUltraWideCamera;
 @property (nonatomic, assign) CGFloat captureFramesPerSec;
 
 - (int)back;
 - (int)front;
 - (BOOL)hasBack;
 - (BOOL)hasFront;
+- (BOOL)hasUltraWide;
 - (BOOL)hasTorch;
 
 - (CALayer *)binary;
