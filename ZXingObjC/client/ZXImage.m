@@ -109,8 +109,9 @@
     free(bytes);
     
     ZXImage *zxImage = [[ZXImage alloc] initWithCGImageRef:image];
-    
-    CFRelease(image);
+    if (image){
+      CFRelease(image);
+    }
     return zxImage;
 }
 
