@@ -501,7 +501,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
 - (void)reverseCounters:(ZXIntArray *)counters {
   int length = counters.length;
   int32_t *array = counters.array;
-  for(int i = 0; i < length / 2; ++i) {
+  for (int i = 0; i < length / 2; ++i) {
     int tmp = array[i];
     array[i] = array[length - i - 1];
     array[length - i - 1] = tmp;
@@ -597,7 +597,7 @@ const int ZX_FINDER_PATTERN_SEQUENCES[ZX_FINDER_PATTERN_SEQUENCES_LEN][ZX_FINDER
       }
       count = 8;
     }
-    int offset = i >> 1;
+    int offset = i / 2;
     if ((i & 0x01) == 0) {
       self.oddCounts.array[offset] = count;
       self.oddRoundingErrors[offset] = value - count;

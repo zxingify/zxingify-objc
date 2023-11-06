@@ -34,8 +34,29 @@ const int ZX_EAN8_CODE_WIDTH = 3 + (7 * 4) + 5 + (7 * 4) + 3;
  * Returns a byte array of horizontal pixels (FALSE = white, TRUE = black)
  */
 - (ZXBoolArray *)encode:(NSString *)contents {
-  if ([contents length] != 8) {
-    [NSException raise:NSInvalidArgumentException format:@"Requested contents should be 8 digits long, but got %d", (int)[contents length]];
+  int length = (int) [contents length];
+  switch (length) {
+    case 7:
+      // No check digit present, calculate it and add it
+      contents = [contents stringByAppendingString:[NSString stringWithFormat:@"%d", [ZXUPCEANReader standardUPCEANChecksum:contents]]];
+      break;
+    case 8:
+      if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
+        @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                       reason:@"Contents do not pass checksum"
+                                     userInfo:nil];
+      }
+      break;
+    default:
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:[NSString stringWithFormat:@"Requested contents should be 7 or 8 digits long, but got %d", (int)[contents length]]
+                                   userInfo:nil];
+  }
+
+  if (![self isNumeric:contents]) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Input should only contain digits 0-9"
+                                 userInfo:nil];
   }
 
   ZXBoolArray *result = [[ZXBoolArray alloc] initWithLength:ZX_EAN8_CODE_WIDTH];

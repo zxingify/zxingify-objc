@@ -19,11 +19,16 @@
 @implementation ZXCalendarParsedResultTestCase
 
 static double EPSILON = 0.0000000001;
-static NSDateFormatter *DATE_TIME_FORMAT = nil;
 
-+ (void)initialize {
-  DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
-  DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
+- (NSDateFormatter *)makeGMTFormat {
+  NSDateFormatter *format = [[NSDateFormatter alloc] init];
+  format.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
+  format.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+  return format;
+}
+
+- (void)setUp {
+  [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
 }
 
 - (void)testStartEnd {
@@ -256,8 +261,9 @@ static NSDateFormatter *DATE_TIME_FORMAT = nil;
   XCTAssertEqualObjects(description, calResult.description);
   XCTAssertEqualObjects(summary, calResult.summary);
   XCTAssertEqualObjects(location, calResult.location);
-  XCTAssertEqualObjects(startString, [DATE_TIME_FORMAT stringFromDate:calResult.start]);
-  XCTAssertEqualObjects(endString, [DATE_TIME_FORMAT stringFromDate:calResult.end]);
+  NSDateFormatter *format = [self makeGMTFormat];
+  XCTAssertEqualObjects(startString, [format stringFromDate:calResult.start]);
+  XCTAssertEqualObjects(endString, [format stringFromDate:calResult.end]);
   XCTAssertEqualObjects(organizer, calResult.organizer);
   XCTAssertEqualObjects(attendees, calResult.attendees);
   [self assertEqualOrNAN:latitude actual:calResult.latitude];

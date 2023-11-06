@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * This class implements a perspective transform in two dimensions. Given four source and four
  * destination points, it will compute the transformation implied between them. The code is based

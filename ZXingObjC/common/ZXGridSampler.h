@@ -24,7 +24,7 @@
  * Imaging library, but which may not be available in other environments such as J2ME, and vice
  * versa.
  *
- * The implementation used can be controlled by calling {@link #setGridSampler(GridSampler)}
+ * The implementation used can be controlled by calling `setGridSampler:`
  * with an instance of a class which implements this interface.
  */
 @interface ZXGridSampler : NSObject
@@ -46,10 +46,29 @@
 + (ZXGridSampler *)instance;
 
 /**
- * Samples an image for a rectangular matrix of bits of the given dimension.
+ * Samples an image for a rectangular matrix of bits of the given dimension. The sampling
+ * transformation is determined by the coordinates of 4 points, in the original and transformed
+ * image space.
+ *
  * @param image image to sample
  * @param dimensionX width of ZXBitMatrix to sample from image
  * @param dimensionY height of ZXBitMatrix to sample from image
+ * @param p1ToX point 1 preimage X
+ * @param p1ToY point 1 preimage Y
+ * @param p2ToX point 2 preimage X
+ * @param p2ToY point 2 preimage Y
+ * @param p3ToX point 3 preimage X
+ * @param p3ToY point 3 preimage Y
+ * @param p4ToX point 4 preimage X
+ * @param p4ToY point 4 preimage Y
+ * @param p1FromX point 1 image X
+ * @param p1FromY point 1 image Y
+ * @param p2FromX point 2 image X
+ * @param p2FromY point 2 image Y
+ * @param p3FromX point 3 image X
+ * @param p3FromY point 3 image Y
+ * @param p4FromX point 4 image X
+ * @param p4FromY point 4 image Y
  * @return ZXBitMatrix representing a grid of points sampled from the image within a region
  *   defined by the "from" parameters or nil if image can't be sampled, for example, if the transformation defined
  *   by the given points is invalid or results in sampling outside the image boundaries

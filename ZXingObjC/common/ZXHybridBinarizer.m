@@ -17,6 +17,7 @@
 #import "ZXByteArray.h"
 #import "ZXHybridBinarizer.h"
 #import "ZXIntArray.h"
+#import "ZXErrors.h"
 
 // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
 // So this is the smallest dimension in each axis we can accept.
@@ -46,6 +47,11 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
   ZXLuminanceSource *source = [self luminanceSource];
   int width = source.width;
   int height = source.height;
+  if (width <= 0 || height <= 0) {
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Source is empty or misbehaving."};
+    if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXNotFoundError userInfo:userInfo];
+    return nil;
+  }
   if (width >= ZX_MINIMUM_DIMENSION && height >= ZX_MINIMUM_DIMENSION) {
     ZXByteArray *luminances = source.matrix;
     int subWidth = width >> ZX_BLOCK_SIZE_POWER;
@@ -89,20 +95,20 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
                             height:(int)height
                        blackPoints:(int **)blackPoints
                             matrix:(ZXBitMatrix *)matrix {
+  int maxYOffset = height - ZX_BLOCK_SIZE;
+  int maxXOffset = width - ZX_BLOCK_SIZE;
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << ZX_BLOCK_SIZE_POWER;
-    int maxYOffset = height - ZX_BLOCK_SIZE;
     if (yoffset > maxYOffset) {
       yoffset = maxYOffset;
     }
+    int top = [self cap:y min:2 max:subHeight - 3];
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << ZX_BLOCK_SIZE_POWER;
-      int maxXOffset = width - ZX_BLOCK_SIZE;
       if (xoffset > maxXOffset) {
         xoffset = maxXOffset;
       }
       int left = [self cap:x min:2 max:subWidth - 3];
-      int top = [self cap:y min:2 max:subHeight - 3];
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
         int *blackRow = blackPoints[top + z];
@@ -148,17 +154,17 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
                          width:(int)width
                         height:(int)height {
   int **blackPoints = (int **)malloc(subHeight * sizeof(int *));
+  int maxYOffset = height - ZX_BLOCK_SIZE;
+  int maxXOffset = width - ZX_BLOCK_SIZE;
   for (int y = 0; y < subHeight; y++) {
     blackPoints[y] = (int *)malloc(subWidth * sizeof(int));
 
     int yoffset = y << ZX_BLOCK_SIZE_POWER;
-    int maxYOffset = height - ZX_BLOCK_SIZE;
     if (yoffset > maxYOffset) {
       yoffset = maxYOffset;
     }
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << ZX_BLOCK_SIZE_POWER;
-      int maxXOffset = width - ZX_BLOCK_SIZE;
       if (xoffset > maxXOffset) {
         xoffset = maxXOffset;
       }
@@ -197,7 +203,7 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
         //
         // The default assumption is that the block is light/background. Since no estimate for
         // the level of dark pixels exists locally, use half the min for the block.
-        average = min >> 1;
+        average = min / 2;
 
         if (y > 0 && x > 0) {
           // Correct the "white background" assumption for blocks that have neighbors by comparing
@@ -207,8 +213,8 @@ const int ZX_MIN_DYNAMIC_RANGE = 24;
           // the boundaries is used for the interior.
 
           // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-          int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
-                                           blackPoints[y - 1][x - 1]) >> 2;
+          int averageNeighborBlackPoint =
+            (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) + blackPoints[y - 1][x - 1]) / 4;
           if (min < averageNeighborBlackPoint) {
             average = averageNeighborBlackPoint;
           }

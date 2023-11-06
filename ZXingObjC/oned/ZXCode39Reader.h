@@ -19,11 +19,12 @@
 extern unichar ZX_CODE39_ALPHABET[];
 extern NSString *ZX_CODE39_ALPHABET_STRING;
 extern const int ZX_CODE39_CHARACTER_ENCODINGS[];
+extern const int ZX_CODE39_ASTERISK_ENCODING;
 
 @class ZXDecodeHints, ZXResult;
 
 /**
- * Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.
+ * Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.
  */
 @interface ZXCode39Reader : ZXOneDReader
 

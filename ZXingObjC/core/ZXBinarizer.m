@@ -16,7 +16,7 @@
 
 #import "ZXBinarizer.h"
 
-#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR || TARGET_OS_MACCATALYST
 #import <UIKit/UIKit.h>
 #define ZXBlack [[UIColor blackColor] CGColor]
 #define ZXWhite [[UIColor whiteColor] CGColor]
@@ -95,9 +95,9 @@
   r.size.height = 1;
 
   CGContextSetFillColorWithColor(context, ZXWhite);
-  for(int y=0; y<height; y++) {
+  for (int y=0; y<height; y++) {
     r.origin.y = height-1-y;
-    for(int x=0; x<width; x++) {
+    for (int x=0; x<width; x++) {
       if (![matrix getX:x y:y]) {
         r.origin.x = x;
         CGContextFillRect(context, r);

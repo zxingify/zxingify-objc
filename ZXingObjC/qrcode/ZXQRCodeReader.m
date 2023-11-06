@@ -142,6 +142,10 @@
     // Special case, where bottom-right module wasn't black so we found something else in the last row
     // Assume it's a square, so use height as the width
     right = left + (bottom - top);
+    if (right >= image.width) {
+      // Abort if that would not make sense -- off image
+      return nil;
+    }
   }
 
   int matrixWidth = round((right - left + 1) / moduleSize);
@@ -158,7 +162,9 @@
   left += nudge;
 
   // But careful that this does not sample off the edge
-  int nudgedTooFarRight = left + (int) ((matrixWidth - 1) * moduleSize) - (right - 1);
+  // "right" is the farthest-right valid pixel location -- right+1 is not necessarily
+  // This is positive by how much the inner x loop below would be too large
+  int nudgedTooFarRight = left + (int) ((matrixWidth - 1) * moduleSize) - right;
   if (nudgedTooFarRight > 0) {
     if (nudgedTooFarRight > nudge) {
       // Neither way fits; abort
@@ -166,7 +172,8 @@
     }
     left -= nudgedTooFarRight;
   }
-  int nudgedTooFarDown = top + (int) ((matrixHeight - 1) * moduleSize) - (bottom - 1);
+  // See logic above
+  int nudgedTooFarDown = top + (int) ((matrixHeight - 1) * moduleSize) - bottom;
   if (nudgedTooFarDown > 0) {
     if (nudgedTooFarDown > nudge) {
       // Neither way fits; abort

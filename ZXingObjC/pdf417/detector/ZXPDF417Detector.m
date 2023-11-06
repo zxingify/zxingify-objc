@@ -28,10 +28,8 @@
 
 const int ZX_PDF417_INDEXES_START_PATTERN[] = {0, 4, 1, 5};
 const int ZX_PDF417_INDEXES_STOP_PATTERN[] = {6, 2, 7, 3};
-const int ZX_PDF417_INTEGER_MATH_SHIFT = 8;
-const int ZX_PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << ZX_PDF417_INTEGER_MATH_SHIFT;
-const int ZX_PDF417_MAX_AVG_VARIANCE = (int) (ZX_PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-const int ZX_PDF417_MAX_INDIVIDUAL_VARIANCE = (int) (ZX_PDF417_PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+const float ZX_PDF417_MAX_AVG_VARIANCE = 0.42f;
+const float ZX_PDF417_MAX_INDIVIDUAL_VARIANCE = 0.8f;
 
 // B S B S B S B S Bar/Space pattern
 // 11111111 0 1 0 1 0 1 000
@@ -316,13 +314,9 @@ const int ZX_PDF417_BARCODE_MIN_HEIGHT = 10;
  * @param counters observed counters
  * @param pattern expected pattern
  * @param maxIndividualVariance The most any counter can differ before we give up
- * @return ratio of total variance between counters and pattern compared to
- *         total pattern size, where the ratio has been multiplied by 256.
- *         So, 0 means no variance (perfect match); 256 means the total
- *         variance between counters and patterns equals the pattern length,
- *         higher values mean even more variance
+ * @return ratio of total variance between counters and pattern compared to total pattern size
  */
-+ (int)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance {
++ (float)patternMatchVariance:(int *)counters countersSize:(int)countersSize pattern:(const int[])pattern maxIndividualVariance:(float)maxIndividualVariance {
   int numCounters = countersSize;
   int total = 0;
   int patternLength = 0;
@@ -332,18 +326,18 @@ const int ZX_PDF417_BARCODE_MIN_HEIGHT = 10;
   }
 
   if (total < patternLength || patternLength == 0) {
-    return INT_MAX;
+    return FLT_MAX;
   }
-  int unitBarWidth = (total << ZX_PDF417_INTEGER_MATH_SHIFT) / patternLength;
-  maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> ZX_PDF417_INTEGER_MATH_SHIFT;
+  float unitBarWidth = (float) total / patternLength;
+  maxIndividualVariance *= unitBarWidth;
 
-  int totalVariance = 0;
+  float totalVariance = 0.0f;
   for (int x = 0; x < numCounters; x++) {
-    int counter = counters[x] << ZX_PDF417_INTEGER_MATH_SHIFT;
-    int scaledPattern = pattern[x] * unitBarWidth;
-    int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
+    int counter = counters[x];
+    float scaledPattern = pattern[x] * unitBarWidth;
+    float variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
     if (variance > maxIndividualVariance) {
-      return INT_MAX;
+      return FLT_MAX;
     }
     totalVariance += variance;
   }

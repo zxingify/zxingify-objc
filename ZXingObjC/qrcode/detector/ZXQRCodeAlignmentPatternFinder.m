@@ -55,11 +55,11 @@
 
 - (ZXQRCodeAlignmentPattern *)findWithError:(NSError **)error {
   int maxJ = self.startX + self.width;
-  int middleI = self.startY + (self.height >> 1);
+  int middleI = self.startY + (self.height / 2);
   int stateCount[3];
 
   for (int iGen = 0; iGen < self.height; iGen++) {
-    int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) >> 1 : -((iGen + 1) >> 1));
+    int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) / 2 : -((iGen + 1) / 2));
     stateCount[0] = 0;
     stateCount[1] = 0;
     stateCount[2] = 0;
@@ -149,7 +149,7 @@
  * @param centerJ center of the section that appears to cross an alignment pattern
  * @param maxCount maximum reasonable number of modules that should be
  * observed in any reading state, based on the results of the horizontal scan
- * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
+ * @return vertical center of alignment pattern, or `NAN` if not found
  */
 - (float)crossCheckVertical:(int)startI centerJ:(int)centerJ maxCount:(int)maxCount originalStateCountTotal:(int)originalStateCountTotal {
   int maxI = self.image.height;

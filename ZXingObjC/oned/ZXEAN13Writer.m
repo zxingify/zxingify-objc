@@ -39,14 +39,29 @@ const int ZX_EAN13_CODE_WIDTH = 3 + // start guard
 }
 
 - (ZXBoolArray *)encode:(NSString *)contents {
-  if ([contents length] != 13) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Requested contents should be 13 digits long, but got %d", (int)[contents length]];
+  int length = (int) [contents length];
+  switch (length) {
+    case 12:
+      // No check digit present, calculate it and add it
+      contents = [contents stringByAppendingString:[NSString stringWithFormat:@"%d", [ZXUPCEANReader standardUPCEANChecksum:contents]]];
+      break;
+    case 13:
+      if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
+        @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                       reason:@"Contents do not pass checksum"
+                                     userInfo:nil];
+      }
+      break;
+    default:
+      @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                     reason:[NSString stringWithFormat:@"Requested contents should be 12 or 13 digits long, but got %d", (int)[contents length]]
+                                   userInfo:nil];
   }
 
-  if (![ZXUPCEANReader checkStandardUPCEANChecksum:contents]) {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Contents do not pass checksum"];
+  if (![self isNumeric:contents]) {
+    @throw [NSException exceptionWithName:@"IllegalArgumentException"
+                                   reason:@"Input should only contain digits 0-9"
+                                 userInfo:nil];
   }
 
   int firstDigit = [[contents substringToIndex:1] intValue];

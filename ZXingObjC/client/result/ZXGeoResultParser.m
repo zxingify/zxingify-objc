@@ -22,6 +22,8 @@ static NSRegularExpression *ZX_GEO_URL_PATTERN = nil;
 @implementation ZXGeoResultParser
 
 + (void)initialize {
+  if ([self class] != [ZXGeoResultParser class]) return;
+
   ZX_GEO_URL_PATTERN = [[NSRegularExpression alloc] initWithPattern:@"geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?"
                                                             options:NSRegularExpressionCaseInsensitive error:nil];
 

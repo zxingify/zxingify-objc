@@ -70,8 +70,6 @@
 // Multi
 #import "ZXByQuadrantReader.h"
 #import "ZXGenericMultipleBarcodeReader.h"
-#import "ZXMultiDetector.h"
 #import "ZXMultipleBarcodeReader.h"
-#import "ZXQRCodeMultiReader.h"
 
 #endif

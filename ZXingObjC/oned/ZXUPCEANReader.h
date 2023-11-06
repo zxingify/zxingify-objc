@@ -18,8 +18,8 @@
 #import "ZXOneDReader.h"
 
 typedef enum {
-	ZX_UPC_EAN_PATTERNS_L_PATTERNS = 0,
-	ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS
+  ZX_UPC_EAN_PATTERNS_L_PATTERNS = 0,
+  ZX_UPC_EAN_PATTERNS_L_AND_G_PATTERNS
 } ZX_UPC_EAN_PATTERNS;
 
 extern const int ZX_UPC_EAN_START_END_PATTERN_LEN;
@@ -46,11 +46,22 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
 /**
  * Like decodeRow:row:hints:, but allows caller to inform method about where the UPC/EAN start pattern is
  * found. This allows this to be computed once and reused across many implementations.
+ *
+ *
+ * @param rowNumber row index into the image
+ * @param row encoding of the row of the barcode image
+ * @param startGuardRange start/end column where the opening start pattern was found
+ * @param hints optional hints that influence decoding
+ * @return ZXResult encapsulating the result of decoding a barcode in the row or nil if:
+ *   - no potential barcode is found
+ *   - a potential barcode is found but does not pass its checksum
+ *   - a potential barcode is found but format is invalid
  */
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row startGuardRange:(NSRange)startGuardRange hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 /**
- * @return checkStandardUPCEANChecksum:
+ * @param s string of digits to check
+ * @return checkStandardUPCEANChecksum: or nil if the string does not contain only digits
  */
 - (BOOL)checkChecksum:(NSString *)s error:(NSError **)error;
 
@@ -63,6 +74,8 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  * @return NO if the string does not contain only digits
  */
 + (BOOL)checkStandardUPCEANChecksum:(NSString *)s;
+
++ (int)standardUPCEANChecksum:(NSString *)s;
 
 - (NSRange)decodeEnd:(ZXBitArray *)row endStart:(int)endStart error:(NSError **)error;
 
@@ -86,7 +99,7 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  * @param row row of black/white values to decode
  * @param counters the counts of runs of observed black/white/black/... values
  * @param rowOffset horizontal offset to start decoding from
- * @param patterns the set of patterns to use to decode -- sometimes different encodings
+ * @param patternType the set of patterns to use to decode -- sometimes different encodings
  * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
  * be used
  * @return horizontal offset of first pixel beyond the decoded digit
@@ -107,7 +120,7 @@ extern const int ZX_UPC_EAN_L_AND_G_PATTERNS[][4];
  *
  * @param row row of black/white values to search
  * @param startRange start/end offset of start guard pattern
- * @param resultString NSMutableString to append decoded chars to
+ * @param result NSMutableString to append decoded chars to
  * @return horizontal offset of first pixel after the "middle" that was decoded
  * @return -1 if decoding could not complete successfully
  */

@@ -18,14 +18,21 @@
 		02C6AFD7156FCB330052B145 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C6AFD6156FCB330052B145 /* main.m */; };
 		02C6AFDA156FCB4F0052B145 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C6AFD9156FCB4F0052B145 /* ViewController.m */; };
 		02C6AFDD156FCB660052B145 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C6AFDC156FCB660052B145 /* AppDelegate.m */; };
-		02C6AFE0156FCBA00052B145 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02C6AFDE156FCBA00052B145 /* ViewController.xib */; };
 		02C6AFE3156FCBA80052B145 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02C6AFE1156FCBA80052B145 /* InfoPlist.strings */; };
-		25404718166AC1D200E13304 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25404717166AC1D200E13304 /* Default-568h@2x.png */; };
 		25404737166AC2EA00E13304 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25404736166AC2EA00E13304 /* AVFoundation.framework */; };
 		25FFF6A61839839400C2E985 /* libZXingObjC-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25FFF69B1839837F00C2E985 /* libZXingObjC-iOS.a */; };
+		52D7D9D52657C33700EBEE2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52D7D9D42657C33700EBEE2A /* Main.storyboard */; };
+		52D7D9D72657C4A200EBEE2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52D7D9D62657C4A200EBEE2A /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		027E587A1ABC5BBC00C334CA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 25FFF6921839837E00C2E985 /* ZXingObjC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB72547F1A523C9200EFF81B;
+			remoteInfo = "iOS Framework";
+		};
 		25FFF69A1839837F00C2E985 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 25FFF6921839837E00C2E985 /* ZXingObjC.xcodeproj */;
@@ -87,11 +94,11 @@
 		02C6AFD9156FCB4F0052B145 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = SOURCE_ROOT; };
 		02C6AFDB156FCB660052B145 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		02C6AFDC156FCB660052B145 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
-		02C6AFDF156FCBA00052B145 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = SOURCE_ROOT; };
 		02C6AFE2156FCBA80052B145 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
-		25404717166AC1D200E13304 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		25404736166AC2EA00E13304 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		25FFF6921839837E00C2E985 /* ZXingObjC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingObjC.xcodeproj; path = ../../ZXingObjC.xcodeproj; sourceTree = "<group>"; };
+		52D7D9D42657C33700EBEE2A /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = SOURCE_ROOT; };
+		52D7D9D62657C4A200EBEE2A /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,8 +163,8 @@
 				02C6AFDC156FCB660052B145 /* AppDelegate.m */,
 				02C6AFD8156FCB4F0052B145 /* ViewController.h */,
 				02C6AFD9156FCB4F0052B145 /* ViewController.m */,
-				02C6AFDE156FCBA00052B145 /* ViewController.xib */,
-				25404717166AC1D200E13304 /* Default-568h@2x.png */,
+				52D7D9D42657C33700EBEE2A /* Main.storyboard */,
+				52D7D9D62657C4A200EBEE2A /* LaunchScreen.storyboard */,
 				024D10E6156EAB6F00FE6872 /* Supporting Files */,
 			);
 			path = BarcodeScanner;
@@ -182,6 +189,7 @@
 				25FFF69F1839837F00C2E985 /* libZXingObjC-osx.a */,
 				25FFF6A11839837F00C2E985 /* Unit Tests OS X.xctest */,
 				25FFF6A31839837F00C2E985 /* ZXingObjC.framework */,
+				027E587B1ABC5BBC00C334CA /* ZXingObjC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,7 +221,7 @@
 		024D10D2156EAB6E00FE6872 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Draconis Software";
 			};
 			buildConfigurationList = 024D10D5156EAB6E00FE6872 /* Build configuration list for PBXProject "BarcodeScanner" */;
@@ -240,6 +248,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		027E587B1ABC5BBC00C334CA /* ZXingObjC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ZXingObjC.framework;
+			remoteRef = 027E587A1ABC5BBC00C334CA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		25FFF69B1839837F00C2E985 /* libZXingObjC-iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -282,9 +297,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02C6AFE0156FCBA00052B145 /* ViewController.xib in Resources */,
 				02C6AFE3156FCBA80052B145 /* InfoPlist.strings in Resources */,
-				25404718166AC1D200E13304 /* Default-568h@2x.png in Resources */,
+				52D7D9D72657C4A200EBEE2A /* LaunchScreen.storyboard in Resources */,
+				52D7D9D52657C33700EBEE2A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,14 +327,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		02C6AFDE156FCBA00052B145 /* ViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				02C6AFDF156FCBA00052B145 /* en */,
-			);
-			name = ViewController.xib;
-			sourceTree = "<group>";
-		};
 		02C6AFE1156FCBA80052B145 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -335,16 +342,30 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -358,7 +379,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
@@ -370,15 +391,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -386,7 +420,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
@@ -399,6 +433,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -406,7 +441,9 @@
 					"$(SRCROOT)/../../**",
 				);
 				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zxing.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -416,6 +453,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BarcodeScanner-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -423,7 +461,9 @@
 					"$(SRCROOT)/../../**",
 				);
 				INFOPLIST_FILE = "BarcodeScanner-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zxing.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

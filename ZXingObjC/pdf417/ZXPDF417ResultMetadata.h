@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXPDF417ResultMetadata : NSObject
 
 @property (nonatomic, assign) int segmentIndex;
 @property (nonatomic, copy) NSString *fileId;
-@property (nonatomic, strong) NSArray *optionalData;
 @property (nonatomic, assign) BOOL lastSegment;
+@property (nonatomic, assign) int segmentCount;
+@property (nonatomic, copy) NSString *sender;
+@property (nonatomic, copy) NSString *addressee;
+@property (nonatomic, copy) NSString *fileName;
+@property (nonatomic, assign) long long fileSize;
+@property (nonatomic, assign) long long timestamp;
+@property (nonatomic, assign) int checksum;
+@property (nonatomic, strong) NSArray *optionalData;
 
 @end

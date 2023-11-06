@@ -16,6 +16,7 @@
 
 #import "ZXBarcodeFormat.h"
 #import "ZXResultMetadataType.h"
+#import "ZXByteArray.h"
 
 @class ZXByteArray;
 
@@ -33,6 +34,11 @@
  * @return raw bytes encoded by the barcode, if applicable, otherwise nil
  */
 @property (nonatomic, strong, readonly) ZXByteArray *rawBytes;
+
+/**
+ * @return how many bits of `rawBytes` are valid; typically 8 times its length
+ */
+@property (nonatomic) int numBits;
 
 /**
  * @return points related to the barcode in the image. These are typically points
@@ -57,8 +63,11 @@
 
 - (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format;
 - (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp;
+- (id)initWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp;
 + (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format;
++ (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format;
 + (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp;
++ (id)resultWithText:(NSString *)text rawBytes:(ZXByteArray *)rawBytes numBits:(int)numBits resultPoints:(NSArray *)resultPoints format:(ZXBarcodeFormat)format timestamp:(long)timestamp;
 - (void)putMetadata:(ZXResultMetadataType)type value:(id)value;
 - (void)putAllMetadata:(NSMutableDictionary *)metadata;
 - (void)addResultPoints:(NSArray *)newPoints;

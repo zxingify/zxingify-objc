@@ -25,8 +25,8 @@
                     expectedFormat:kBarcodeFormatITF];
 
   if (self) {
-    [self addTest:9 tryHarderCount:13 rotation:0.0f];
-    [self addTest:12 tryHarderCount:13 rotation:180.0f];
+    [self addTest:14 tryHarderCount:14 rotation:0.0f];
+    [self addTest:14 tryHarderCount:14 rotation:180.0f];
   }
 
   return self;

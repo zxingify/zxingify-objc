@@ -25,8 +25,8 @@
 // These values are critical for determining how permissive the decoding
 // will be. All stripe sizes must be within the window these define, as
 // compared to the average stripe size.
-static int ZX_CODA_MAX_ACCEPTABLE;
-static int ZX_CODA_PADDING;
+static float ZX_CODA_MAX_ACCEPTABLE = 2.0f;
+static float ZX_CODA_PADDING = 1.5f;
 
 const unichar ZX_CODA_ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
   '-', '$', ':', '/', '.', '+', 'A', 'B', 'C', 'D', 'T', 'N'};
@@ -64,11 +64,6 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
 @end
 
 @implementation ZXCodaBarReader
-
-+ (void)initialize {
-  ZX_CODA_MAX_ACCEPTABLE = (int) (ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 2.0f);
-  ZX_CODA_PADDING = (int) (ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR * 1.5f);
-}
 
 - (id)init {
   if (self = [super init]) {
@@ -211,15 +206,14 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
   }
 
   // Calculate our allowable size thresholds using fixed-point math.
-  int maxes[4] = {0, 0, 0, 0};
-  int mins[4] = {0, 0, 0, 0};
+  float maxes[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+  float mins[4] = {0.0f, 0.0f, 0.0f, 0.0f};
   // Define the threshold of acceptability to be the midpoint between the
   // average small stripe and the average large stripe. No stripe lengths
   // should be on the "wrong" side of that line.
   for (int i = 0; i < 2; i++) {
-    mins[i] = 0;  // Accept arbitrarily small "short" stripes.
-    mins[i + 2] = ((sizes[i] << ZX_ONED_INTEGER_MATH_SHIFT) / counts[i] +
-                   (sizes[i + 2] << ZX_ONED_INTEGER_MATH_SHIFT) / counts[i + 2]) >> 1;
+    mins[i] = 0.0f;  // Accept arbitrarily small "short" stripes.
+    mins[i + 2] = ((float) sizes[i] / counts[i] + (float) sizes[i + 2] / counts[i + 2]) / 2.0f;
     maxes[i] = mins[i + 2];
     maxes[i + 2] = (sizes[i + 2] * ZX_CODA_MAX_ACCEPTABLE + ZX_CODA_PADDING) / counts[i + 2];
   }
@@ -232,7 +226,7 @@ const unichar ZX_CODA_STARTEND_ENCODING[]  = {'A', 'B', 'C', 'D'};
       // Even j = bars, while odd j = spaces. Categories 2 and 3 are for
       // long stripes, while 0 and 1 are for short stripes.
       int category = (j & 1) + (pattern & 1) * 2;
-      int size = self.counters.array[pos + j] << ZX_ONED_INTEGER_MATH_SHIFT;
+      int size = self.counters.array[pos + j];
       if (size < mins[category] || size > maxes[category]) {
         return NO;
       }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXPDF417CodewordDecoder : NSObject
 
 + (int)decodedValue:(NSArray *)moduleBitCount;

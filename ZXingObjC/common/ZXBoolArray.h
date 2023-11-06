@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 @interface ZXBoolArray : NSObject
 
 @property (nonatomic, assign, readonly) BOOL *array;
 @property (nonatomic, assign, readonly) unsigned int length;
 
 - (id)initWithLength:(unsigned int)length;
+- (id)initWithLength:(unsigned int)length values:(int)value1, ...;
 
 @end

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Encapsulates a set of error-correction blocks in one symbol version. Most versions will
  * use blocks of differing sizes within one version, so, this encapsulates the parameters for

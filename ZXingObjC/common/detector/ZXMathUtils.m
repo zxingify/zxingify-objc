@@ -19,7 +19,7 @@
 @implementation ZXMathUtils
 
 + (int)round:(float)d {
-  return (int)(d + 0.5f);
+  return (int) (d + (d < 0.0f ? -0.5f : 0.5f));
 }
 
 + (float)distance:(float)aX aY:(float)aY bX:(float)bX bY:(float)bY {

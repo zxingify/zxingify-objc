@@ -65,8 +65,8 @@ const int ZX_QUIET_ZONE_SIZE = 4;
   }
   int inputWidth = input.width;
   int inputHeight = input.height;
-  int qrWidth = inputWidth + (quietZone << 1);
-  int qrHeight = inputHeight + (quietZone << 1);
+  int qrWidth = inputWidth + (quietZone * 2);
+  int qrHeight = inputHeight + (quietZone * 2);
   int outputWidth = MAX(width, qrWidth);
   int outputHeight = MAX(height, qrHeight);
 

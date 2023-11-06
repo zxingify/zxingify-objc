@@ -22,6 +22,8 @@ static NSRegularExpression *ZX_USER_IN_HOST = nil;
 @implementation ZXURIParsedResult
 
 + (void)initialize {
+  if ([self class] != [ZXURIParsedResult class]) return;
+
   ZX_USER_IN_HOST = [[NSRegularExpression alloc] initWithPattern:@":/*([^/@]+)@[^/]+" options:0 error:nil];
 }
 

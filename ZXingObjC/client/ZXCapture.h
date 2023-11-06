@@ -19,7 +19,11 @@
 @protocol ZXCaptureDelegate, ZXReader;
 @class ZXDecodeHints;
 
-@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction>
+@interface ZXCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, CAAction
+#if defined(__MAC_10_12) && __MAC_OS_X_VERSION_MAX_ALLOWED >= __MAC_10_12 || defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+, CALayerDelegate
+#endif
+>
 
 @property (nonatomic, assign) int camera;
 @property (nonatomic, strong) AVCaptureDevice *captureDevice;
@@ -39,6 +43,7 @@
 @property (nonatomic, copy) NSString *sessionPreset;
 @property (nonatomic, assign) BOOL torch;
 @property (nonatomic, assign) CGAffineTransform transform;
+@property (nonatomic, assign) CGFloat captureFramesPerSec;
 
 - (int)back;
 - (int)front;
@@ -56,5 +61,14 @@
 - (void)order_skip;
 - (void)start;
 - (void)stop;
+
+/**
+ * This enables `ZXCapture` to try additional heuristics to decode
+ * the barcode.
+ *
+ * @see `ZXCGImageLuminanceSourceInfo`
+ * Currently: make the grayscale image darker to process
+ */
+- (void)enableHeuristic;
 
 @end

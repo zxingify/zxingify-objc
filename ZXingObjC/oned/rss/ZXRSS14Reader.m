@@ -203,7 +203,7 @@ const int ZX_RSS14_INSIDE_ODD_WIDEST[4] = {2,4,6,8};
     } else if (count > 8) {
       count = 8;
     }
-    int offset = i >> 1;
+    int offset = i / 2;
     if ((i & 0x01) == 0) {
       self.oddCounts.array[offset] = count;
       self.oddRoundingErrors[offset] = value - count;

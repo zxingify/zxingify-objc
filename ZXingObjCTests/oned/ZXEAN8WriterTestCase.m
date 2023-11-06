@@ -19,7 +19,7 @@
 @implementation ZXEAN8WriterTestCase
 
 - (void)testEncode {
-  NSString *testStr = @"0001010001011010111101111010110111010101001110111001010001001011100101000";
+  NSString *testStr = @"0000001010001011010111101111010110111010101001110111001010001001011100101000000";
   ZXBitMatrix *result = [[[ZXEAN8Writer alloc] init] encode:@"96385074"
                                                      format:kBarcodeFormatEan8
                                                       width:(int)testStr.length
@@ -28,6 +28,26 @@
   for (int i = 0; i < testStr.length; i++) {
     XCTAssertEqual([testStr characterAtIndex:i] == '1', [result getX:i y:0], @"Element %d", i);
   }
+}
+
+- (void)testAddChecksumAndEncode {
+  NSString *testStr = @"0000001010001011010111101111010110111010101001110111001010001001011100101000000";
+  ZXBitMatrix *result = [[[ZXEAN8Writer alloc] init] encode:@"9638507"
+                                                     format:kBarcodeFormatEan8
+                                                      width:(int)testStr.length
+                                                     height:0
+                                                      error:nil];
+  for (int i = 0; i < testStr.length; i++) {
+    XCTAssertEqual([testStr characterAtIndex:i] == '1', [result getX:i y:0], @"Element %d", i);
+  }
+}
+
+- (void)testEncodeIllegalCharacters {
+  XCTAssertThrows([[[ZXEAN8Writer alloc] init] encode:@"96385abc"
+                                                format:kBarcodeFormatEan8
+                                                 width:0
+                                                height:0
+                                                 error:nil]);
 }
 
 @end

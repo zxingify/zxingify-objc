@@ -24,7 +24,10 @@ static NSRegularExpression *ZX_URL_WITHOUT_PROTOCOL_PATTERN = nil;
 @implementation ZXURIResultParser
 
 + (void)initialize {
-  ZX_URL_WITH_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z0-9]{2,}:"
+  if ([self class] != [ZXURIResultParser class]) return;
+
+  // See http://www.ietf.org/rfc/rfc2396.txt
+  ZX_URL_WITH_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:@"^[a-zA-Z][a-zA-Z0-9+-.]+:"
                                                                       options:0
                                                                         error:nil];
   ZX_URL_WITHOUT_PROTOCOL_PATTERN = [[NSRegularExpression alloc] initWithPattern:

@@ -82,6 +82,12 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
     }
   }
 
+  // Append the FNC1 mode header for GS1 formatted data if applicable
+  if (hints.gs1Format) {
+    // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+    [self appendModeInfo:[ZXQRCodeMode fnc1FirstPositionMode] bits:headerBits];
+  }
+
   // (With ECI in place,) Write the mode marker
   [self appendModeInfo:mode bits:headerBits];
 
@@ -92,24 +98,22 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
     return nil;
   }
 
-  // Hard part: need to know version to know how many bits length takes. But need to know how many
-  // bits it takes to know version. First we take a guess at version by assuming version will be
-  // the minimum, 1:
-
-  int provisionalBitsNeeded = headerBits.size
-    + [mode characterCountBits:[ZXQRCodeVersion versionForNumber:1]]
-    + dataBits.size;
-  ZXQRCodeVersion *provisionalVersion = [self chooseVersion:provisionalBitsNeeded ecLevel:ecLevel error:error];
-  if (!provisionalVersion) {
-    return nil;
+  ZXQRCodeVersion *version = nil;
+  if (hints.qrVersion != nil) {
+    ZXQRCodeVersion *requestedVersion = [ZXQRCodeVersion versionForNumber:[hints.qrVersion intValue]];
+    int bitsNeeded = [self calculateBitsNeededForMode:mode
+                                          headerBits:headerBits
+                                            dataBits:dataBits
+                                             version:requestedVersion];
+    if ([self willFitIn:bitsNeeded version:requestedVersion ecLevel:ecLevel]) {
+      version = requestedVersion;
+    } else {
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Data too big"};
+      if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
+    }
+  } else {
+    version = [self recommendVersionFor:ecLevel mode:mode headerBits:headerBits dataBits:dataBits error:error];
   }
-
-  // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
-
-  int bitsNeeded = headerBits.size
-    + [mode characterCountBits:provisionalVersion]
-    + dataBits.size;
-  ZXQRCodeVersion *version = [self chooseVersion:bitsNeeded ecLevel:ecLevel error:error];
   if (!version) {
     return nil;
   }
@@ -163,6 +167,29 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   return qrCode;
 }
 
++ (ZXQRCodeVersion *)recommendVersionFor:(ZXQRCodeErrorCorrectionLevel *)ecLevel mode:(ZXQRCodeMode *)mode headerBits:(ZXBitArray *)headerBits dataBits:(ZXBitArray *)dataBits error:(NSError **)error {
+  // Hard part: need to know version to know how many bits length takes. But need to know how many
+  // bits it takes to know version. First we take a guess at version by assuming version will be
+  // the minimum, 1:
+  int provisionalBitsNeeded = [self calculateBitsNeededForMode:mode
+                                                    headerBits:headerBits
+                                                      dataBits:dataBits
+                                                       version:[ZXQRCodeVersion versionForNumber:1]];
+
+    // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
+  ZXQRCodeVersion *provisionalVersion = [self chooseVersion:provisionalBitsNeeded ecLevel:ecLevel error:error];
+  int bitsNeeded = [self calculateBitsNeededForMode:mode
+                                         headerBits:headerBits
+                                           dataBits:dataBits
+                                            version:provisionalVersion];
+  return [self chooseVersion:bitsNeeded ecLevel:ecLevel error:error];
+}
+
++ (int)calculateBitsNeededForMode:(ZXQRCodeMode *)mode headerBits:(ZXBitArray *)headerBits dataBits:(ZXBitArray *)dataBits version:(ZXQRCodeVersion *)version {
+  int bitsNeeded = headerBits.size + [mode characterCountBits:version] + dataBits.size;
+  return bitsNeeded;
+}
+
 + (int)alphanumericCode:(int)code {
   if (code < sizeof(ZX_ALPHANUMERIC_TABLE) / sizeof(int)) {
     return ZX_ALPHANUMERIC_TABLE[code];
@@ -176,11 +203,12 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 
 /**
  * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
- * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
+ * if it is Shift_JIS, and the input is only double-byte Kanji, then we return `kanjiMode`.
  */
 + (ZXQRCodeMode *)chooseMode:(NSString *)content encoding:(NSStringEncoding)encoding {
-  if (NSShiftJISStringEncoding == encoding) {
-    return [self isOnlyDoubleByteKanji:content] ? [ZXQRCodeMode kanjiMode] : [ZXQRCodeMode byteMode];
+  if (NSShiftJISStringEncoding == encoding && [self isOnlyDoubleByteKanji:content]) {
+    // Choose Kanji mode if all input are double-byte characters
+    return [ZXQRCodeMode kanjiMode];
   }
   BOOL hasNumeric = NO;
   BOOL hasAlphanumeric = NO;
@@ -240,23 +268,31 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
   // In the following comments, we use numbers of Version 7-H.
   for (int versionNum = 1; versionNum <= 40; versionNum++) {
     ZXQRCodeVersion *version = [ZXQRCodeVersion versionForNumber:versionNum];
-    // numBytes = 196
-    int numBytes = version.totalCodewords;
-    // getNumECBytes = 130
-    ZXQRCodeECBlocks *ecBlocks = [version ecBlocksForLevel:ecLevel];
-    int numEcBytes = ecBlocks.totalECCodewords;
-    // getNumDataBytes = 196 - 130 = 66
-    int numDataBytes = numBytes - numEcBytes;
-    int totalInputBytes = (numInputBits + 7) / 8;
-    if (numDataBytes >= totalInputBytes) {
+    if ([self willFitIn:numInputBits version:version ecLevel:ecLevel]) {
       return version;
     }
   }
-
   NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"Data too big"};
-
   if (error) *error = [[NSError alloc] initWithDomain:ZXErrorDomain code:ZXWriterError userInfo:userInfo];
   return nil;
+}
+
+/**
+ * @return true if the number of input bits will fit in a code with the specified version and
+ * error correction level.
+ */
++ (BOOL)willFitIn:(int)numInputBits version:(ZXQRCodeVersion *)version ecLevel:(ZXQRCodeErrorCorrectionLevel *)ecLevel {
+  // In the following comments, we use numbers of Version 7-H.
+  // numBytes = 196
+  int numBytes = version.totalCodewords;
+  // getNumECBytes = 130
+  ZXQRCodeECBlocks *ecBlocks = [version ecBlocksForLevel:ecLevel];
+  int numEcBytes = ecBlocks.totalECCodewords;
+  // getNumDataBytes = 196 - 130 = 66
+  int numDataBytes = numBytes - numEcBytes;
+  int totalInputBytes = (numInputBits + 7) / 8;
+
+  return numDataBytes >= totalInputBytes;
 }
 
 + (int)totalInputBytes:(int)numInputBits version:(ZXQRCodeVersion *)version mode:(ZXQRCodeMode *)mode {
@@ -269,7 +305,7 @@ const NSStringEncoding ZX_DEFAULT_BYTE_MODE_ENCODING = NSISOLatin1StringEncoding
 }
 
 + (BOOL)terminateBits:(int)numDataBytes bits:(ZXBitArray *)bits error:(NSError **)error {
-  int capacity = numDataBytes << 3;
+  int capacity = numDataBytes * 8;
   if ([bits size] > capacity) {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"data bits cannot fit in the QR Code %d > %d", [bits size], capacity]};
 

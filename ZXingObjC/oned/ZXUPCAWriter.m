@@ -39,29 +39,8 @@
                                    reason:[NSString stringWithFormat:@"Can only encode UPC-A, but got %d", format]
                                  userInfo:nil];
   }
-  return [self.subWriter encode:[self preencode:contents] format:kBarcodeFormatEan13 width:width height:height hints:hints error:error];
-}
-
-/**
- * Transform a UPC-A code into the equivalent EAN-13 code, and add a check digit if it is not
- * already present.
- */
-- (NSString *)preencode:(NSString *)contents {
-  NSUInteger length = [contents length];
-  if (length == 11) {
-    int sum = 0;
-
-    for (int i = 0; i < 11; ++i) {
-      sum += ([contents characterAtIndex:i] - '0') * (i % 2 == 0 ? 3 : 1);
-    }
-
-    contents = [contents stringByAppendingFormat:@"%d", (1000 - sum) % 10];
-  } else if (length != 12) {
-     @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                    reason:[NSString stringWithFormat:@"Requested contents should be 11 or 12 digits long, but got %ld", (unsigned long)[contents length]]
-                                  userInfo:nil];
-  }
-  return [NSString stringWithFormat:@"0%@", contents];
+  // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
+  return [self.subWriter encode:[NSString stringWithFormat:@"0%@", contents] format:kBarcodeFormatEan13 width:width height:height hints:hints error:error];
 }
 
 @end

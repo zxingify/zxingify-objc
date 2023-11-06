@@ -1,0 +1,1 @@
+../../ZXMultiFormatReader.h

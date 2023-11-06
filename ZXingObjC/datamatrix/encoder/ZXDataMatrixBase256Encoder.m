@@ -36,7 +36,8 @@
 
     int newMode = [ZXDataMatrixHighLevelEncoder lookAheadTest:context.message startpos:context.pos currentMode:[self encodingMode]];
     if (newMode != [self encodingMode]) {
-      [context signalEncoderChange:newMode];
+      // Return to ASCII encodation, which will actually handle latch to new mode
+      [context signalEncoderChange:[ZXDataMatrixHighLevelEncoder asciiEncodation]];
       break;
     }
   }

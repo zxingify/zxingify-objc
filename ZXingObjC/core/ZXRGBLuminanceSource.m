@@ -38,43 +38,47 @@
 
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-    _luminances = [[ZXByteArray alloc] initWithLength:width * height];
-    for (int y = 0; y < height; y++) {
-      int offset = y * width;
-      for (int x = 0; x < width; x++) {
-        int pixel = pixels[offset + x];
-        int r = (pixel >> 16) & 0xff;
-        int g = (pixel >> 8) & 0xff;
-        int b = pixel & 0xff;
-        if (r == g && g == b) {
-          // Image is already greyscale, so pick any channel.
-          _luminances.array[offset + x] = (int8_t) r;
-        } else {
-          // Calculate luminance cheaply, favoring green.
-          _luminances.array[offset + x] = (int8_t) ((r + g + g + b) >> 2);
-        }
-      }
+    int size = width * height;
+    _luminances = [[ZXByteArray alloc] initWithLength:size];
+    for (int offset = 0; offset < size; offset++) {
+      int pixel = pixels[offset];
+      int r = (pixel >> 16) & 0xff; // red
+      int g2 = (pixel >> 7) & 0x1fe; // 2 * green
+      int b = pixel & 0xff; // blue
+      // Calculate green-favouring average cheaply
+      _luminances.array[offset] = (int8_t) ((r + g2 + b) / 4);
     }
   }
 
   return self;
 }
 
+- (id)initWithPixels:(int8_t *)pixels width:(int)width height:(int)height {
+  if (self = [super initWithWidth:width height:height]) {
+    _dataWidth = width;
+    _dataHeight = height;
+    _left = 0;
+    _top = 0;
+    _luminances = [[ZXByteArray alloc] initWithArray:pixels length:width * height];
+  }
+  return self;
+}
+
 - (id)initWithPixels:(ZXByteArray *)pixels dataWidth:(int)dataWidth dataHeight:(int)dataHeight
                 left:(int)left top:(int)top width:(int)width height:(int)height {
-  if (self = [super initWithWidth:width height:height]) {
-    if (left + self.width > dataWidth || top + self.height > dataHeight) {
-      [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
+    if (self = [super initWithWidth:width height:height]) {
+        if (left + self.width > dataWidth || top + self.height > dataHeight) {
+            [NSException raise:NSInvalidArgumentException format:@"Crop rectangle does not fit within image data."];
+        }
+        
+        _luminances = pixels;
+        _dataWidth = dataWidth;
+        _dataHeight = dataHeight;
+        _left = left;
+        _top = top;
     }
-
-    _luminances = pixels;
-    _dataWidth = dataWidth;
-    _dataHeight = dataHeight;
-    _left = left;
-    _top = top;
-  }
-
-  return self;
+    
+    return self;
 }
 
 - (ZXByteArray *)rowAtY:(int)y row:(ZXByteArray *)row {
@@ -106,7 +110,7 @@
 
   // If the width matches the full width of the underlying data, perform a single copy.
   if (self.width == self.dataWidth) {
-    memcpy(matrix.array, self.luminances.array + inputOffset, (area - inputOffset) * sizeof(int8_t));
+    memcpy(matrix.array, self.luminances.array + inputOffset, area * sizeof(int8_t));
     return matrix;
   }
 

@@ -31,7 +31,7 @@
   if (self) {
     [self addTest:15 tryHarderCount:15 rotation:0.0f];
     [self addTest:14 tryHarderCount:14 rotation:90.0f];
-    [self addTest:12 tryHarderCount:13 rotation:180.0f];
+    [self addTest:13 tryHarderCount:13 rotation:180.0f];
     [self addTest:14 tryHarderCount:14 rotation:270.0f];
   }
 
@@ -39,6 +39,14 @@
 }
 
 - (void)testBlackBox {
+  [super runTests];
+}
+
+- (void)testBlackBox2 {
+  ZXCGImageLuminanceSourceInfo *info = [[ZXCGImageLuminanceSourceInfo alloc] initWithShades:16];
+  [self setLuminanceSourceInfo:info];
+  [self setShouldTruncateNewline:TRUE];
+  
   [super runTests];
 }
 

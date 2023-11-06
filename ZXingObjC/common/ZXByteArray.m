@@ -31,7 +31,30 @@
   return self;
 }
 
-- (id)initWithBytes:(int8_t)byte1, ... {
+- (id)initWithArray:(int8_t *)array length:(unsigned int)length {
+    if (self = [super init]) {
+        _array = array;
+        _length = length;
+    }
+    return self;
+}
+
+- (id)initWithLength:(unsigned int)length bytes:(int)byte1, ... {
+  if ((self = [self initWithLength:length]) && (length > 0)) {
+    va_list args;
+    va_start(args, byte1);
+    _array[0] = (int8_t) byte1;
+    for (int i = 1; i < length; i++) {
+      int byte = va_arg(args, int);
+      _array[i] = (int8_t) byte;
+    }
+    va_end(args);
+  }
+
+  return self;
+}
+
+- (id)initWithBytes:(int)byte1, ... {
   va_list args;
   va_start(args, byte1);
   unsigned int length = 0;
@@ -63,7 +86,7 @@
   NSMutableString *s = [NSMutableString stringWithFormat:@"length=%u, array=(", self.length];
 
   for (int i = 0; i < self.length; i++) {
-    [s appendFormat:@"%d", self.array[i]];
+    [s appendFormat:@"%hhx", self.array[i]];
     if (i < self.length - 1) {
       [s appendString:@", "];
     }

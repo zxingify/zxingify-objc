@@ -65,9 +65,6 @@
   }
 }
 
-/**
- * Convenience method, not optimized for performance.
- */
 - (void)transformPoints:(float *)xValues yValues:(float *)yValues pointsLen:(int)pointsLen {
   int n = pointsLen;
   for (int i = 0; i < n; i ++) {

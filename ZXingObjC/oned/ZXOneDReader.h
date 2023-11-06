@@ -16,9 +16,6 @@
 
 #import "ZXReader.h"
 
-extern const int ZX_ONED_INTEGER_MATH_SHIFT;
-extern const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR;
-
 @class ZXBitArray, ZXDecodeHints, ZXIntArray, ZXResult;
 
 /**
@@ -29,7 +26,7 @@ extern const int ZX_ONED_PATTERN_MATCH_RESULT_SCALE_FACTOR;
 
 + (BOOL)recordPattern:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters;
 + (BOOL)recordPatternInReverse:(ZXBitArray *)row start:(int)start counters:(ZXIntArray *)counters;
-+ (int)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(int)maxIndividualVariance;
++ (float)patternMatchVariance:(ZXIntArray *)counters pattern:(const int[])pattern maxIndividualVariance:(float)maxIndividualVariance;
 - (ZXResult *)decodeRow:(int)rowNumber row:(ZXBitArray *)row hints:(ZXDecodeHints *)hints error:(NSError **)error;
 
 @end

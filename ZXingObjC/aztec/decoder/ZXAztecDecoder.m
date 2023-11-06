@@ -23,6 +23,7 @@
 #import "ZXGenericGF.h"
 #import "ZXIntArray.h"
 #import "ZXReedSolomonDecoder.h"
+#import "ZXByteArray.h"
 
 typedef enum {
   ZXAztecTableUpper = 0,
@@ -79,9 +80,19 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   if (!correctedBits) {
     return nil;
   }
-
+  ZXByteArray *rawBytes = [ZXAztecDecoder convertBoolArrayToByteArray:correctedBits];
   NSString *result = [[self class] encodedData:correctedBits];
-  return [[ZXDecoderResult alloc] initWithRawBytes:nil text:result byteSegments:nil ecLevel:nil];
+  
+  NSUInteger rawBytesSize = rawBytes.length;
+  ZXByteArray *rawBytesReturned = [[ZXByteArray alloc] initWithLength:(unsigned int)rawBytesSize];
+  for (int i = 0; i < rawBytesSize; i++) {
+    rawBytesReturned.array[i] = (int8_t)rawBytes.array[i];
+  }
+  
+  ZXDecoderResult *decoderResult = [[ZXDecoderResult alloc] initWithRawBytes:rawBytesReturned text:result byteSegments:nil ecLevel:nil];
+  decoderResult.numBits = correctedBits.length;
+  
+  return decoderResult;
 }
 
 + (NSString *)highLevelDecode:(ZXBoolArray *)correctedBits {
@@ -136,6 +147,10 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
       NSString *str = [self character:shiftTable code:code];
       if ([str hasPrefix:@"CTRL_"]) {
         // Table changes
+        // ISO/IEC 24778:2008 prescibes ending a shift sequence in the mode from which it was invoked.
+        // That's including when that mode is a shift.
+        // Our test case dlusbs.png for issue #642 exercises that.
+        latchTable = shiftTable;  // Latch the current mode, so as to return to Upper after U/S B/S
         shiftTable = [self table:[str characterAtIndex:5]];
         if ([str characterAtIndex:6] == 'L') {
           latchTable = shiftTable;
@@ -220,6 +235,10 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
 
   int numDataCodewords = [self.ddata nbDatablocks];
   int numCodewords = rawbits.length / codewordSize;
+  if (numCodewords < numDataCodewords) {
+    if (error) *error = ZXFormatErrorInstance();
+    return 0;
+  }
   int offset = rawbits.length % codewordSize;
   int numECCodewords = numCodewords - numDataCodewords;
 
@@ -334,10 +353,34 @@ static NSString *ZX_AZTEC_DIGIT_TABLE[] = {
   for (int i = startIndex; i < startIndex + length; i++) {
     res <<= 1;
     if (rawbits.array[i]) {
-      res++;
+      res |= 0x01;
     }
   }
   return res;
+}
+
+/**
+ * Reads a code of length 8 in an array of bits, padding with zeros
+ */
++ (int8_t) readByte:(ZXBoolArray *) rawbits startIndex:(int) startIndex {
+    int n = rawbits.length - startIndex;
+    if (n >= 8) {
+        return (int8_t) [self readCode:rawbits startIndex:startIndex length:8];
+    }
+    return (int8_t) ([self readCode:rawbits startIndex:startIndex length:n] << (8 - n));
+}
+
+/**
+ * Packs a bit array into bytes, most significant bit first
+ */
++ (ZXByteArray *)convertBoolArrayToByteArray:(ZXBoolArray *) boolArr {
+    int byteArrLength = (boolArr.length + 7) / 8;
+    ZXByteArray *byteArr = [[ZXByteArray alloc] initWithLength:byteArrLength];
+    for (int i = 0; i < byteArrLength; i++) {
+        int8_t code = [self readByte:boolArr startIndex:8 * i];
+        byteArr.array[i] = code;
+    }
+    return byteArr;
 }
 
 - (int)totalBitsInLayer:(int)layers compact:(BOOL)compact {

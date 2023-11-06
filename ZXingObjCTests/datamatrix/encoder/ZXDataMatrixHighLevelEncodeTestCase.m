@@ -21,6 +21,8 @@ static NSArray *TEST_SYMBOLS;
 @implementation ZXDataMatrixHighLevelEncodeTestCase
 
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixHighLevelEncodeTestCase class]) return;
+
   TEST_SYMBOLS = @[[[ZXDataMatrixSymbolInfo alloc] initWithRectangular:NO dataCapacity:3 errorCodewords:5 matrixWidth:8 matrixHeight:8 dataRegions:1],
                    [[ZXDataMatrixSymbolInfo alloc] initWithRectangular:NO dataCapacity:5 errorCodewords:7 matrixWidth:10 matrixHeight:10 dataRegions:1],
                    /*rect*/[[ZXDataMatrixSymbolInfo alloc] initWithRectangular:YES dataCapacity:5 errorCodewords:7 matrixWidth:16 matrixHeight:6 dataRegions:1],
@@ -269,6 +271,16 @@ static NSArray *TEST_SYMBOLS;
   XCTAssertEqualObjects(@"240 13 33 88 181 64 78 124 59 105 105 105", visualized);
 }
 
+- (void)testX12Unlatch {
+  NSString *visualized = [self encodeHighLevel:@"*DTCP01"];
+  XCTAssertEqualObjects(@"238 9 10 104 141 254 50 129", visualized);
+}
+
+- (void)testX12Unlatch2 {
+  NSString *visualized = [self encodeHighLevel:@"*DTCP0"];
+  XCTAssertEqualObjects(@"238 9 10 104 141", visualized);
+}
+
 - (void)testBug3048549 {
   //There was an IllegalArgumentException for an illegal character here because
   //of an encoding problem of the character 0x0060 in Java source code.
@@ -289,6 +301,11 @@ static NSArray *TEST_SYMBOLS;
   NSString *encoded = [ZXDataMatrixHighLevelEncoder encodeHighLevel:msg];
   //[ZXDecodeHighLevel decode:encoded];
   return [[self class] visualize:encoded];
+}
+
+- (void)testEncodingWithStartAsX12AndLatchToEDIFACTInTheMiddle {
+  NSString *visualized = [self encodeHighLevel:@"*MEMANT-1F-MESTECH"];
+  XCTAssertEqualObjects(@"238 10 99 164 204 254 240 82 220 70 180 209 83 80 80 200", visualized);
 }
 
 + (NSString *)visualize:(NSString *)codewords {

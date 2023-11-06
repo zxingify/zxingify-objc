@@ -30,6 +30,8 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
 @implementation ZXCalendarParsedResult
 
 + (void)initialize {
+  if ([self class] != [ZXCalendarParsedResult class]) return;
+
   ZX_DATE_TIME = [[NSRegularExpression alloc] initWithPattern:@"[0-9]{8}(T[0-9]{6}Z?)?"
                                                       options:0
                                                         error:nil];
@@ -37,12 +39,6 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
   ZX_RFC2445_DURATION = [[NSRegularExpression alloc] initWithPattern:@"P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?"
                                                              options:NSRegularExpressionCaseInsensitive
                                                                error:nil];
-
-//  ZX_DATE_FORMAT = [[NSDateFormatter alloc] init];
-//  ZX_DATE_FORMAT.dateFormat = @"yyyyMMdd";
-//
-//  ZX_DATE_TIME_FORMAT = [[NSDateFormatter alloc] init];
-//  ZX_DATE_TIME_FORMAT.dateFormat = @"yyyyMMdd'T'HHmmss";
 }
 
 - (id)initWithSummary:(NSString *)summary startString:(NSString *)startString endString:(NSString *)endString
@@ -151,6 +147,7 @@ const long ZX_RFC2445_DURATION_FIELD_UNITS[] = {
 - (NSDateFormatter *)buildDateFormat {
   NSDateFormatter *format = [[NSDateFormatter alloc] init];
   format.dateFormat = @"yyyyMMdd";
+  format.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
   return format;
 }
 

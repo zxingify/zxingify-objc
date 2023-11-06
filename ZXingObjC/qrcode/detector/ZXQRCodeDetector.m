@@ -161,7 +161,7 @@
 + (int)computeDimension:(ZXResultPoint *)topLeft topRight:(ZXResultPoint *)topRight bottomLeft:(ZXResultPoint *)bottomLeft moduleSize:(float)moduleSize error:(NSError **)error {
   int tltrCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:topRight] / moduleSize];
   int tlblCentersDimension = [ZXMathUtils round:[ZXResultPoint distance:topLeft pattern2:bottomLeft] / moduleSize];
-  int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
+  int dimension = ((tltrCentersDimension + tlblCentersDimension) / 2) + 7;
 
   switch (dimension & 0x03) {
   case 0:
@@ -203,7 +203,7 @@
 }
 
 /**
- * See sizeOfBlackWhiteBlackRun:fromY:toX:toY: computes the total width of
+ * See sizeOfBlackWhiteBlackRun:fromY:toX:toY: <p>computes the total width of
  * a finder pattern by looking for a black-white-black run from the center in the direction
  * of another point (another finder pattern center), and in the opposite direction too.</p>
  */
@@ -261,7 +261,7 @@
 
   int dx = abs(toX - fromX);
   int dy = abs(toY - fromY);
-  int error = -dx >> 1;
+  int error = -dx / 2;
   int xstep = fromX < toX ? 1 : -1;
   int ystep = fromY < toY ? 1 : -1;
 

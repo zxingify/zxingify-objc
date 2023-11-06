@@ -43,7 +43,7 @@
         firstNonZero++;
       }
       if (firstNonZero == coefficientsLength) {
-        _coefficients = field.zero.coefficients;
+        _coefficients = [[ZXIntArray alloc] initWithLength:1];
       } else {
         _coefficients = [[ZXIntArray alloc] initWithLength:coefficientsLength - firstNonZero];
         for (int i = 0; i < _coefficients.length; i++) {

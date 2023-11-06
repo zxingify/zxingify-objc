@@ -23,7 +23,32 @@
  * The pattern that marks the middle, and end, of a UPC-E pattern.
  * There is no "second half" to a UPC-E barcode.
  */
-const int ZX_UCPE_MIDDLE_END_PATTERN[] = {1, 1, 1, 1, 1, 1};
+const int ZX_UPCE_MIDDLE_END_PATTERN_LEN = 6;
+const int ZX_UPCE_MIDDLE_END_PATTERN[] = {1, 1, 1, 1, 1, 1};
+
+// For an UPC-E barcode, the final digit is represented by the parities used
+// to encode the middle six digits, according to the table below.
+//
+//                Parity of next 6 digits
+//    Digit   0     1     2     3     4     5
+//       0    Even   Even  Even Odd  Odd   Odd
+//       1    Even   Even  Odd  Even Odd   Odd
+//       2    Even   Even  Odd  Odd  Even  Odd
+//       3    Even   Even  Odd  Odd  Odd   Even
+//       4    Even   Odd   Even Even Odd   Odd
+//       5    Even   Odd   Odd  Even Even  Odd
+//       6    Even   Odd   Odd  Odd  Even  Even
+//       7    Even   Odd   Even Odd  Even  Odd
+//       8    Even   Odd   Even Odd  Odd   Even
+//       9    Even   Odd   Odd  Even Odd   Even
+//
+// The encoding is represented by the following array, which is a bit pattern
+// using Odd = 0 and Even = 1. For example, 5 is represented by:
+//
+//              Odd Even Even Odd Odd Even
+// in binary:
+//                0    1    1   0   0    1   == 0x19
+//
 
 /**
  * See ZX_UCPE_L_AND_G_PATTERNS; these values similarly represent patterns of
@@ -84,13 +109,13 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
   return [ZXUPCEANReader findGuardPattern:row
                                 rowOffset:endStart
                                whiteFirst:YES
-                                  pattern:ZX_UCPE_MIDDLE_END_PATTERN
-                               patternLen:sizeof(ZX_UCPE_MIDDLE_END_PATTERN) / sizeof(int)
+                                  pattern:ZX_UPCE_MIDDLE_END_PATTERN
+                               patternLen:sizeof(ZX_UPCE_MIDDLE_END_PATTERN) / sizeof(int)
                                     error:error];
 }
 
-- (BOOL)checkChecksum:(NSString *)s error:(NSError **)error {
-  return [super checkChecksum:[ZXUPCEReader convertUPCEtoUPCA:s] error:error];
++ (BOOL)checkStandardUPCEANChecksum:(NSString *)s {
+    return [super checkStandardUPCEANChecksum:[ZXUPCEReader convertUPCEtoUPCA:s]];
 }
 
 - (BOOL)determineNumSysAndCheckDigit:(NSMutableString *)resultString lgPatternFound:(int)lgPatternFound {
@@ -147,7 +172,10 @@ const int ZX_UCPE_NUMSYS_AND_CHECK_DIGIT_PATTERNS[][10] = {
       [result appendFormat:@"%C", lastChar];
       break;
   }
-  [result appendFormat:@"%C", [upce characterAtIndex:7]];
+  // Only append check digit in conversion if supplied
+  if (upce.length >= 8) {
+    [result appendFormat:@"%C", [upce characterAtIndex:7]];
+  }
   return result;
 }
 

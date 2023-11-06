@@ -27,7 +27,7 @@
 @implementation ZXBitSourceBuilder
 
 - (id)init {
-  if(self = [super init]) {
+  if (self = [super init]) {
     _output = [NSMutableData data];
     _nextByte = 0;
     _bitsLeftInNextByte = 8;

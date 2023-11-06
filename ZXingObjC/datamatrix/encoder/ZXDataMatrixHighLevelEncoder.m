@@ -47,6 +47,8 @@ static NSString *MACRO_TRAILER = nil;
 @implementation ZXDataMatrixHighLevelEncoder
 
 + (void)initialize {
+  if ([self class] != [ZXDataMatrixHighLevelEncoder class]) return;
+
   MACRO_05_HEADER = [[NSString alloc] initWithFormat:@"[)>%C05%C", (unichar)0x001E, (unichar)0x001D];
   MACRO_06_HEADER = [[NSString alloc] initWithFormat:@"[)>%C06%C", (unichar)0x001E, (unichar)0x001D];
   MACRO_TRAILER = [[NSString alloc] initWithFormat:@"%C%C", (unichar)0x001E, (unichar)0x0004];
@@ -168,7 +170,7 @@ static NSString *MACRO_TRAILER = nil;
   [context updateSymbolInfo];
   int capacity = context.symbolInfo.dataCapacity;
   if (len < capacity) {
-    if (encodingMode != [self asciiEncodation] && encodingMode != [self base256Encodation]) {
+    if (encodingMode != [self asciiEncodation] && encodingMode != [self base256Encodation] && encodingMode != [self edifactEncodation]) {
       [context writeCodeword:(unichar)0x00fe]; //Unlatch (254)
     }
   }

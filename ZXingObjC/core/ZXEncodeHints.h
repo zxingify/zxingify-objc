@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+
 /**
  * Enumeration for DataMatrix symbol shape hint. It can be used to force square or rectangular
  * symbols.
@@ -52,13 +54,18 @@ typedef enum {
 
 /**
  * Specifies a minimum barcode size. Only applicable to Data Matrix now.
+ *
+ * @deprecated use width/height params in
+ * ZXDataMatrixWriter encode:format:width:height:error:
  */
-@property (nonatomic, strong) ZXDimension *minSize;
+@property (nonatomic, strong) ZXDimension *minSize DEPRECATED_ATTRIBUTE;
 
 /**
  * Specifies a maximum barcode size. Only applicable to Data Matrix now.
+ *
+ * @deprecated without replacement
  */
-@property (nonatomic, strong) ZXDimension *maxSize;
+@property (nonatomic, strong) ZXDimension *maxSize DEPRECATED_ATTRIBUTE;
 
 /**
  * Specifies what degree of error correction to use, for example in QR Codes.
@@ -66,6 +73,12 @@ typedef enum {
  * Note: an Aztec symbol should have a minimum of 25% EC words.
  */
 @property (nonatomic, strong) ZXQRCodeErrorCorrectionLevel *errorCorrectionLevel;
+
+/**
+ * Specifies what degree of error correction to use, for example in PDF417 Codes.
+ * For PDF417 valid values are 0 to 8.
+ */
+@property (nonatomic, strong) NSNumber *errorCorrectionLevelPDF417;
 
 /**
  * Specifies what percent of error correction to use.
@@ -80,6 +93,11 @@ typedef enum {
  * most 1D formats.
  */
 @property (nonatomic, strong) NSNumber *margin;
+
+/**
+ * Specifies if long lines should be drawn, only applies to {`ean13`, `ean8`}.
+ */
+@property (nonatomic, assign) BOOL showLongLines;
 
 /**
  * Specifies whether to use compact mode for PDF417.
@@ -103,5 +121,16 @@ typedef enum {
  *   a positive number (1, 2, .. 32) specifies a normaol (non-compact) Aztec code
  */
 @property (nonatomic, strong) NSNumber *aztecLayers;
+
+/**
+ * Specifies the exact version of QR code to be encoded. An integer. If the data specified
+ * cannot fit within the required version, nil we be returned.
+ */
+@property (nonatomic, strong) NSNumber *qrVersion;
+
+/**
+ * Specifies whether the data should be encoded to the GS1 standard.
+ */
+@property (nonatomic, assign) BOOL gs1Format;
 
 @end
