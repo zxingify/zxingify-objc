@@ -228,11 +228,15 @@
 }
 
 - (BOOL)hasUltraWide {
+#if TARGET_OS_IPHONE
   AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInUltraWideCamera]
     mediaType:AVMediaTypeVideo
     position:AVCaptureDevicePositionBack];
   NSArray *devices = [captureDeviceDiscoverySession devices];
   return [devices count] > 0;
+#else
+  return NO;
+#endif
 }
 
 - (BOOL)hasTorch {
@@ -566,7 +570,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   
   AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[
         AVCaptureDeviceTypeBuiltInWideAngleCamera,
+#if TARGET_OS_IPHONE
         AVCaptureDeviceTypeBuiltInUltraWideCamera
+#endif
         ]
     mediaType:AVMediaTypeVideo
     position:AVCaptureDevicePositionUnspecified];
@@ -586,12 +592,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
           self.captureDeviceIndex = i;
           zxd = dev;
             
+#if TARGET_OS_IPHONE
           // If the client doesn't want an Ultrawide camera OR wants
           // an UltraWide camera and one is found, stop looking
           if ((!_tryUseUltraWideCamera && dev.deviceType != AVCaptureDeviceTypeBuiltInUltraWideCamera) ||
               (_tryUseUltraWideCamera && dev.deviceType == AVCaptureDeviceTypeBuiltInUltraWideCamera)) {
               break;
           }
+#else
+          break;
+#endif
         }
       }
     }
