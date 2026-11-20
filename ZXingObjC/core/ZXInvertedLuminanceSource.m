@@ -18,7 +18,6 @@
 #import "ZXInvertedLuminanceSource.h"
 
 @interface ZXInvertedLuminanceSource ()
-
 @property (nonatomic, weak, readonly) ZXLuminanceSource *delegate;
 
 @end
